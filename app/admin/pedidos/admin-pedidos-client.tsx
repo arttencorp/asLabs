@@ -639,9 +639,10 @@ export default function AdminPedidosClient() {
 
             {/* Main Content */}
             <Tabs defaultValue="pedidos" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
                 <TabsTrigger value="clientes">Clientes</TabsTrigger>
+                <TabsTrigger value="cotizacion">Cotizaciones</TabsTrigger>
               </TabsList>
 
               {/* Pedidos Tab */}
@@ -1163,6 +1164,21 @@ export default function AdminPedidosClient() {
                       </Table>
                     </div>
                   </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="cotizacion" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <CardTitle>Gestión de Cotizaciones</CardTitle>
+                        <CardDescription>Administra las cotizaciones de los clientes</CardDescription>
+                      </div>
+                      <Dialog> 
+                      </Dialog>
+                    </div>
+                  </CardHeader>
                 </Card>
               </TabsContent>
             </Tabs>
