@@ -72,56 +72,56 @@ export default function ImprimirCotizacion() {
         onImprimir={imprimir}
         tipoDocumento={cotizacion.tipoDocumento}
       />
-
-      <div className={`mx-auto max-w-[210mm] bg-white p-6 text-sm print:p-0 print:text-[11pt] ${esLaboratorio ? "font-sans" : ""}`}>
-        <EncabezadoDocumento
-          tipoDocumento={cotizacion.tipoDocumento}
-          numeroCotizacion={cotizacion.numeroCotizacion}
-        />
-
-        <InformacionCliente
-          razonSocial={cotizacion.razonSocial}
-          dniRuc={cotizacion.dniRuc}
-          direccion={cotizacion.direccion}
-          telefono={cotizacion.telefono}
-          fechaEmision={cotizacion.fechaEmision}
-          fechaVencimiento={cotizacion.fechaVencimiento}
-        />
-
-        <TablaProductos
-          items={cotizacion.items}
-          subtotal={cotizacion.subtotal}
-          impuesto={cotizacion.impuesto}
-          total={cotizacion.total}
-          esLaboratorio={esLaboratorio}
-          preciosConIGV={cotizacion.preciosConIGV}
-        />
-
-        <CondicionesEntrega
-          formaPago={cotizacion.formaPago}
-          total={cotizacion.total}
-          totalTexto={cotizacion.totalTexto}
-          lugarRecojo={cotizacion.lugarRecojo}
-          formaEntrega={cotizacion.formaEntrega}
-          esLaboratorio={esLaboratorio}
-        />
-
-        <TerminosCondiciones
-          terminosCondiciones={cotizacion.terminosCondiciones}
-          esLaboratorio={esLaboratorio}
-        />
-
-        {!esLaboratorio && cotizacion.certificadosCalidad && (
-          <CertificadosCalidad
-            certificadosCalidad={cotizacion.certificadosCalidad}
-            tieneASWG={tieneASWG}
-            tieneASC5={tieneASC5}
+      <div className="print-page">
+        <div className={`mx-auto max-w-[210mm] bg-white p-6 text-sm print:p-0 print:text-[11pt] ${esLaboratorio ? "font-sans" : ""}`}>
+          <EncabezadoDocumento
+            tipoDocumento={cotizacion.tipoDocumento}
+            numeroCotizacion={cotizacion.numeroCotizacion}
           />
-        )}
 
-        <MetodosPago esLaboratorio={esLaboratorio} />
+          <InformacionCliente
+            razonSocial={cotizacion.razonSocial}
+            dniRuc={cotizacion.dniRuc}
+            direccion={cotizacion.direccion}
+            telefono={cotizacion.telefono}
+            fechaEmision={cotizacion.fechaEmision}
+            fechaVencimiento={cotizacion.fechaVencimiento}
+          />
+
+          <TablaProductos
+            items={cotizacion.items}
+            subtotal={cotizacion.subtotal}
+            impuesto={cotizacion.impuesto}
+            total={cotizacion.total}
+            esLaboratorio={esLaboratorio}
+            preciosConIGV={cotizacion.preciosConIGV}
+          />
+
+          <CondicionesEntrega
+            formaPago={cotizacion.formaPago}
+            total={cotizacion.total}
+            totalTexto={cotizacion.totalTexto}
+            lugarRecojo={cotizacion.lugarRecojo}
+            formaEntrega={cotizacion.formaEntrega}
+            esLaboratorio={esLaboratorio}
+          />
+
+          <TerminosCondiciones
+            terminosCondiciones={cotizacion.terminosCondiciones}
+            esLaboratorio={esLaboratorio}
+          />
+
+          {!esLaboratorio && cotizacion.certificadosCalidad && (
+            <CertificadosCalidad
+              certificadosCalidad={cotizacion.certificadosCalidad}
+              tieneASWG={tieneASWG}
+              tieneASC5={tieneASC5}
+            />
+          )}
+
+          <MetodosPago esLaboratorio={esLaboratorio} />
+        </div>
       </div>
-
       {/* Fichas técnicas */}
       {!esLaboratorio && (
         <>

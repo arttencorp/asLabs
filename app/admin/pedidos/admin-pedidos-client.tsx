@@ -699,8 +699,7 @@ export default function AdminPedidosClient() {
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
                 <TabsTrigger value="clientes">Clientes</TabsTrigger>
-                <TabsTrigger value="cotizacion">Cotizaciones</TabsTrigger>
-                <TabsTrigger value="cotizacion">Cotizaciones</TabsTrigger>
+                <TabsTrigger value="cotizacion">Cotizaciones</TabsTrigger> 
               </TabsList>
 
               {/* Pedidos Tab */}

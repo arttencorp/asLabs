@@ -84,7 +84,7 @@ export function useCotizacionImpresion() {
     }
 
     const volverAlInicio = () => {
-        router.push("/")
+        router.push("/admin/pedidos")
     }
 
     const tieneASWG =
