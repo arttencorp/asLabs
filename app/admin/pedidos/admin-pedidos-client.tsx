@@ -695,8 +695,7 @@ export default function AdminPedidosClient() {
             </div>
 
             {/* Main Content */}
-            <Tabs defaultValue="pedidos" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
+            <Tabs defaultValue="pedidos" className="space-y-6"> 
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
                 <TabsTrigger value="clientes">Clientes</TabsTrigger>
