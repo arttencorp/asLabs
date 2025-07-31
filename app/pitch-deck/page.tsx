@@ -35,7 +35,7 @@ export default function PitchDeckPage() {
       <PitchProduct />
       <PitchBusiness />
       <PitchCompetition />
-      <PitchTeam />
+      {/*<PitchTeam /> */}
       <PitchTraction />
       <PitchVision />
       <PitchInvestment />

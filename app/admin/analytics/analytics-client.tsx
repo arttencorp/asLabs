@@ -246,7 +246,7 @@ export default function AnalyticsClient() {
                 {range.label}
               </Button>
             ))}
-            <DateRangePicker dateRange={dateRange} onDateRangeChange={setDateRange} />
+            {/*<DateRangePicker dateRange={dateRange} onDateRangeChange={setDateRange} /> */}
             <Button onClick={exportData} className="bg-green-600 hover:bg-green-700">
               <Download className="w-4 h-4 mr-2" />
               Exportar CSV
