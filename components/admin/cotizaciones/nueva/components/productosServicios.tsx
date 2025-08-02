@@ -156,7 +156,7 @@ export function ProductosServicios({
       </Card>
       
       <div className="mt-6 flex justify-between">
-        <Button variant="outline" onClick={onAnterior} type="button">
+        <Button className="border-gray-800 text-gray-900 hover:bg-gray-100" variant="outline" onClick={onAnterior} type="button">
           Anterior: Información General
         </Button>
         <Button onClick={onSiguiente} type="button">

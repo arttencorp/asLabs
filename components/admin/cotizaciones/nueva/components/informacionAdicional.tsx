@@ -70,7 +70,7 @@ export function InformacionAdicional({
               </SelectContent>
             </Select>
           </div>
-          
+
           <div className="grid gap-2">
             <Label htmlFor="terminosCondiciones">Términos y Condiciones</Label>
             <Textarea
@@ -108,9 +108,9 @@ export function InformacionAdicional({
           </div>
         </CardFooter>
       </Card>
-      
-      <div className="mt-6 flex justify-between">
-        <Button variant="outline" onClick={onAnterior} type="button">
+
+      <div className="mt-6 flex justify-between"> 
+        <Button className="border-gray-800 text-gray-900 hover:bg-gray-100" variant="outline" onClick={onAnterior} type="button">
           Anterior: Productos y Servicios
         </Button>
         <Button onClick={onVistaPrevia} className="gap-2" type="button">
