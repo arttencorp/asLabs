@@ -42,15 +42,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           data: { session },
         } = await supabase!.auth.getSession()
 
-        if (!session) {
-          // If not on login page, redirect to login
+        if (!session) { 
           if (pathname !== "/admin/login") {
             router.push("/admin/login")
           }
           setIsAuthenticated(false)
         } else {
-          setIsAuthenticated(true)
-          // If on login page, redirect to dashboard
+          setIsAuthenticated(true) 
           if (pathname === "/admin/login") {
             router.push("/admin/pedidos")
           }

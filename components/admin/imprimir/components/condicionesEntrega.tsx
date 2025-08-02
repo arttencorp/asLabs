@@ -1,4 +1,4 @@
-import { numeroATexto } from "@/components/admin/cotizaciones/nueva/utils"
+import { numeroATexto } from "@/components/admin/cotizaciones/utils"
 
 interface CondicionesEntregaProps {
   formaPago?: string

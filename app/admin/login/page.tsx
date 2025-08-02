@@ -10,8 +10,7 @@ import { Mail, Lock, AlertCircle } from "lucide-react"
 export default function AdminLogin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [configError, setConfigError] = useState<string | null>(null)
+  const [error, setError] = useState("") 
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 

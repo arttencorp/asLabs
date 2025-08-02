@@ -4,10 +4,10 @@ import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { useCotizacion } from "@/components/admin/cotizaciones/nueva/hooks/useCotizacion"
-import { InformacionGeneral } from "@/components/admin/cotizaciones/nueva/components/informacionGeneral"
-import { ProductosServicios } from "@/components/admin/cotizaciones/nueva/components/productosServicios"
-import { InformacionAdicional } from "@/components/admin/cotizaciones/nueva/components/informacionAdicional"
+import { useCotizacion } from "@/components/admin/cotizaciones/hooks/useCotizacion"
+import { InformacionGeneral } from "@/components/admin/cotizaciones/components/informacionGeneral"
+import { ProductosServicios } from "@/components/admin/cotizaciones/components/productosServicios"
+import { InformacionAdicional } from "@/components/admin/cotizaciones/components/informacionAdicional"
 
 export default function CotizacionesPage() {
     const {
