@@ -1,0 +1,146 @@
+"use client"
+
+import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Search, Edit, Trash2, RefreshCw, Loader2 } from "lucide-react"
+import { formatCurrency, formatDate, getEstadoPedidoColor, getNombreCompleto } from '../utils'
+import type { Pedido } from '../types'
+
+interface PedidosListProps {
+  pedidos: Pedido[]
+  loading: boolean
+  onEdit: (pedido: Pedido) => void
+  onDelete: (id: string) => void
+  onRefresh: () => void
+}
+
+export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: PedidosListProps) {
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const filteredPedidos = pedidos.filter(pedido => {
+    const searchLower = searchTerm.toLowerCase()
+    const nombreCliente = pedido.cotizacion?.persona ? getNombreCompleto(pedido.cotizacion.persona) : ''
+    
+    return (
+      pedido.ped_cod_segui_vac.toLowerCase().includes(searchLower) ||
+      pedido.ped_cod_rastreo_vac?.toLowerCase().includes(searchLower) ||
+      nombreCliente.toLowerCase().includes(searchLower) ||
+      pedido.cotizacion?.cot_num_vac.toLowerCase().includes(searchLower)
+    )
+  })
+
+  const handleDelete = (pedido: Pedido) => {
+    if (confirm(`¿Estás seguro de eliminar el pedido ${pedido.ped_cod_segui_vac}?`)) {
+      onDelete(pedido.ped_id_int)
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle>Lista de Pedidos</CardTitle>
+          <Button variant="outline" onClick={onRefresh} disabled={loading}>
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <RefreshCw className="h-4 w-4 mr-2" />
+            )}
+            {loading ? "Cargando..." : "Actualizar"}
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {/* Search */}
+        <div className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Buscar por código, cliente o cotización..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Código Seguimiento</TableHead>
+                <TableHead>Cotización</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Fecha Pedido</TableHead>
+                <TableHead>Código Rastreo</TableHead>
+                <TableHead>Acciones</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredPedidos.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                    {loading ? "Cargando pedidos..." : "No hay pedidos registrados"}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredPedidos.map((pedido) => (
+                  <TableRow key={pedido.ped_id_int}>
+                    <TableCell className="font-mono font-bold text-blue-600">
+                      {pedido.ped_cod_segui_vac}
+                    </TableCell>
+                    <TableCell className="font-mono">
+                      {pedido.cotizacion?.cot_num_vac || 'N/A'}
+                    </TableCell>
+                    <TableCell>
+                      {pedido.cotizacion?.persona ? 
+                        getNombreCompleto(pedido.cotizacion.persona) : 
+                        'Sin cliente'
+                      }
+                    </TableCell>
+                    <TableCell>
+                      {pedido.estado_pedido && (
+                        <Badge className={getEstadoPedidoColor(pedido.estado_pedido.est_ped_tipo_int)}>
+                          {pedido.estado_pedido.est_ped_desc_vac}
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>{formatDate(pedido.ped_fec_pedido_dt)}</TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {pedido.ped_cod_rastreo_vac || 'Sin código'}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => onEdit(pedido)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(pedido)}
+                          disabled={loading}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

@@ -1,3 +1,4 @@
+import { Cotizacion, EstadoCotizacion, EstadoPedido, FormaPago, Pedido, PedidoForm, Producto } from "@/components/admin/pedidos/types"
 import { createClient } from "@supabase/supabase-js"
 
 // Verificar que las variables de entorno estén configuradas
@@ -28,35 +29,6 @@ export const supabase = createClient(
     },
   },
 )
-
-// ============================================
-// TIPOS PARA SISTEMA ANTIGUO (tabla "clientes")
-// ============================================
-export interface ClienteAntiguo {
-  id: string
-  nombres: string
-  apellidos: string
-  email: string
-  telefono: string
-  direccion: string
-  created_at: string
-  updated_at: string
-}
-
-export interface Pedido {
-  id: string
-  numero_pedido: string
-  codigo_seguimiento: string
-  cliente_id: string
-  productos: string
-  total: number
-  estado: string
-  codigo_rastreo?: string
-  notas?: string
-  fecha_pedido: string
-  fecha_actualizacion: string
-  cliente?: ClienteAntiguo
-}
 
 // ============================================
 // TIPOS PARA SISTEMA NUEVO (tabla "Personas")
@@ -179,174 +151,6 @@ export function generarNumeroPedido(): string {
   const timestamp = Date.now()
   return `PED-${timestamp}`
 }
-
-// ============================================
-// FUNCIONES PARA SISTEMA ANTIGUO (Clientes/Pedidos)
-// ============================================
-
-// Funciones para Clientes (sistema antiguo)
-export async function obtenerClientes(): Promise<ClienteAntiguo[]> {
-  try { 
-    const { data, error } = await supabase.from("clientes").select("*").order("created_at", { ascending: false })
-
-    if (error) {
-      console.error("Error obteniendo clientes:", error)
-      throw new Error(`Error al obtener clientes: ${error.message}`)
-    }
-
-    console.log("Clientes obtenidos:", data?.length || 0)
-    return data || []
-  } catch (error: any) {
-    console.error("Error en obtenerClientes:", error)
-    throw error
-  }
-}
-
-export async function crearCliente(
-  cliente: Omit<ClienteAntiguo, "id" | "created_at" | "updated_at">,
-): Promise<ClienteAntiguo | null> {
-  try { 
-    if (!cliente.nombres?.trim() || !cliente.apellidos?.trim() || !cliente.email?.trim()) {
-      throw new Error("Los campos nombres, apellidos y email son obligatorios")
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(cliente.email.trim())) {
-      throw new Error("El formato del email no es válido")
-    }
-
-    const clienteData = {
-      nombres: cliente.nombres.trim(),
-      apellidos: cliente.apellidos.trim(),
-      email: cliente.email.trim().toLowerCase(),
-      telefono: cliente.telefono?.trim() || "",
-      direccion: cliente.direccion?.trim() || "",
-    }
-
-    const { data, error } = await supabase.from("clientes").insert([clienteData]).select().single()
-
-    if (error) {
-      console.error("Error creando cliente:", error)
-      if (error.code === "23505") {
-        throw new Error("Ya existe un cliente con ese email")
-      }
-      throw new Error(`Error al crear cliente: ${error.message}`)
-    }
-
-    console.log("Cliente creado exitosamente:", data)
-    return data
-  } catch (error: any) {
-    console.error("Error en crearCliente:", error)
-    throw error
-  }
-}
-
-export async function actualizarCliente(id: string, cliente: Partial<ClienteAntiguo>): Promise<ClienteAntiguo | null> {
-  try { 
-    if (!id?.trim()) {
-      throw new Error("ID del cliente es requerido")
-    }
-
-    if (cliente.email && !cliente.email.trim()) {
-      throw new Error("El email no puede estar vacío")
-    }
-
-    if (cliente.email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(cliente.email.trim())) {
-        throw new Error("El formato del email no es válido")
-      }
-    }
-
-    const clienteData: any = {
-      updated_at: new Date().toISOString(),
-    }
-
-    if (cliente.nombres !== undefined) clienteData.nombres = cliente.nombres.trim()
-    if (cliente.apellidos !== undefined) clienteData.apellidos = cliente.apellidos.trim()
-    if (cliente.email !== undefined) clienteData.email = cliente.email.trim().toLowerCase()
-    if (cliente.telefono !== undefined) clienteData.telefono = cliente.telefono.trim()
-    if (cliente.direccion !== undefined) clienteData.direccion = cliente.direccion.trim()
-
-    const { data, error } = await supabase.from("clientes").update(clienteData).eq("id", id).select().single()
-
-    if (error) {
-      console.error("Error actualizando cliente:", error)
-      if (error.code === "23505") {
-        throw new Error("Ya existe un cliente con ese email")
-      }
-      throw new Error(`Error al actualizar cliente: ${error.message}`)
-    }
-
-    console.log("Cliente actualizado exitosamente:", data)
-    return data
-  } catch (error: any) {
-    console.error("Error en actualizarCliente:", error)
-    throw error
-  }
-}
-
-export async function eliminarCliente(id: string): Promise<boolean> {
-  try { 
-    if (!id?.trim()) {
-      throw new Error("ID del cliente es requerido")
-    }
-
-    const { data: pedidos, error: pedidosError } = await supabase
-      .from("pedidos")
-      .select("id")
-      .eq("cliente_id", id)
-      .limit(1)
-
-    if (pedidosError) {
-      console.error("Error verificando pedidos:", pedidosError)
-      throw new Error(`Error al verificar pedidos: ${pedidosError.message}`)
-    }
-
-    if (pedidos && pedidos.length > 0) {
-      throw new Error("No se puede eliminar el cliente porque tiene pedidos asociados")
-    }
-
-    const { error } = await supabase.from("clientes").delete().eq("id", id)
-
-    if (error) {
-      console.error("Error eliminando cliente:", error)
-      throw new Error(`Error al eliminar cliente: ${error.message}`)
-    }
-
-    console.log("Cliente eliminado exitosamente")
-    return true
-  } catch (error: any) {
-    console.error("Error en eliminarCliente:", error)
-    throw error
-  }
-}
-
-// Funciones para Pedidos (resto del código de pedidos...)
-export async function obtenerPedidos(): Promise<Pedido[]> {
-  try { 
-    const { data, error } = await supabase
-      .from("pedidos")
-      .select(`
-        *,
-        cliente:clientes(*)
-      `)
-      .order("fecha_pedido", { ascending: false })
-
-    if (error) {
-      console.error("Error obteniendo pedidos:", error)
-      throw new Error(`Error al obtener pedidos: ${error.message}`)
-    }
-
-    console.log("Pedidos obtenidos:", data?.length || 0)
-    return data || []
-  } catch (error: any) {
-    console.error("Error en obtenerPedidos:", error)
-    throw error
-  }
-}
-
-// ... resto de funciones de pedidos (crearPedido, actualizarPedido, eliminarPedido, obtenerPedidoPorCodigo)
 
 // ============================================
 // FUNCIONES PARA SISTEMA NUEVO (Personas)
@@ -497,6 +301,228 @@ export async function eliminarPersona(id: string): Promise<void> {
 
   } catch (error) {
     console.error('Error eliminando persona:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES PARA SISTEMA NUEVO (Pedidos/Cotizaciones)
+// ============================================
+
+export async function obtenerPedidos(): Promise<Pedido[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
+      `)
+      .order('ped_created_at_dt', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo pedidos:', error)
+    throw error
+  }
+}
+
+export async function obtenerCotizaciones(): Promise<Cotizacion[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones:', error)
+    throw error
+  }
+}
+
+export async function obtenerEstadosPedido(): Promise<EstadoPedido[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Estado_Pedido')
+      .select('*')
+      .order('est_ped_tipo_int', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo estados de pedido:', error)
+    throw error
+  }
+}
+
+export async function obtenerEstadosCotizacion(): Promise<EstadoCotizacion[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Estado_Cotizacion')
+      .select('*')
+      .order('est_cot_tipo_int', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo estados de cotización:', error)
+    throw error
+  }
+}
+
+export async function obtenerFormasPago(): Promise<FormaPago[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Forma_Pago')
+      .select('*')
+      .order('form_pa_tipo_int', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo formas de pago:', error)
+    throw error
+  }
+}
+
+export async function obtenerProductos(): Promise<Producto[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos')
+      .select('*')
+      .order('pro_nomb_vac', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo productos:', error)
+    throw error
+  }
+}
+
+export async function crearPedidoNuevo(pedidoForm: PedidoForm): Promise<Pedido> {
+  try {
+    const codigoSeguimiento = generarCodigoSeguimiento()
+    const fechaActual = new Date().toISOString()
+
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .insert({
+        ped_cod_segui_vac: codigoSeguimiento,
+        ped_cod_rastreo_vac: pedidoForm.codigo_rastreo,
+        ped_fec_pedido_dt: fechaActual,
+        ped_fec_actualizada_dt: fechaActual,
+        ped_imagen_url: pedidoForm.imagen_url,
+        ped_observacion_vac: pedidoForm.observaciones,
+        ped_num_comprob_vac: pedidoForm.numero_comprobante,
+        est_ped_id_int: pedidoForm.estado_id,
+        cot_id_int: pedidoForm.cotizacion_id
+      })
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          )
+        )
+      `)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error creando pedido:', error)
+    throw error
+  }
+}
+
+export async function actualizarPedidoNuevo(id: string, pedidoForm: Partial<PedidoForm>): Promise<Pedido> {
+  try {
+    const updateData: any = {
+      ped_fec_actualizada_dt: new Date().toISOString()
+    }
+
+    if (pedidoForm.estado_id !== undefined) updateData.est_ped_id_int = pedidoForm.estado_id
+    if (pedidoForm.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoForm.codigo_rastreo
+    if (pedidoForm.observaciones !== undefined) updateData.ped_observacion_vac = pedidoForm.observaciones
+    if (pedidoForm.numero_comprobante !== undefined) updateData.ped_num_comprob_vac = pedidoForm.numero_comprobante
+    if (pedidoForm.imagen_url !== undefined) updateData.ped_imagen_url = pedidoForm.imagen_url
+
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .update(updateData)
+      .eq('ped_id_int', id)
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          )
+        )
+      `)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error actualizando pedido:', error)
+    throw error
+  }
+}
+
+export async function eliminarPedidoNuevo(id: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('Pedidos')
+      .delete()
+      .eq('ped_id_int', id)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error eliminando pedido:', error)
     throw error
   }
 }
