@@ -1,11 +1,20 @@
-import { Cotizacion, EstadoCotizacion, EstadoPedido, FormaPago, Pedido, PedidoForm, Producto } from "@/components/admin/pedidos/types"
 import { createClient } from "@supabase/supabase-js"
+import { generarCodigoSeguimiento, generarNumeroCotizacion } from '@/utils'
+import type { 
+  PersonaNatural, 
+  PersonaJuridica, 
+  Persona, 
+  EstadoPedido,
+  EstadoCotizacion,
+  FormaPago,
+  ProductoDatabase
+} from '@/types/database'
+import type { ClientePersona } from '@/utils'
 
-// Verificar que las variables de entorno estén configuradas
+// Configuración cliente Supabase
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Crear cliente de Supabase
 export const supabase = createClient(
   supabaseUrl || "https://placeholder.supabase.co",
   supabaseAnonKey || "placeholder-key",
@@ -31,129 +40,7 @@ export const supabase = createClient(
 )
 
 // ============================================
-// TIPOS PARA SISTEMA NUEVO (tabla "Personas")
-// ============================================
-export interface PersonaNatural {
-  per_nat_id_int: string
-  per_nat_dni_int: number
-  per_nat_nomb_vac: string
-  per_nat_apell_vac: string
-  per_id_int: string
-}
-
-export interface PersonaJuridica {
-  per_jurd_id_int: string
-  per_jurd_ruc_int: number
-  per_jurd_razSocial_vac: string
-  per_id_int: string
-}
-
-export interface Persona {
-  per_id_int: string
-  per_nom_contac_vac: string
-  per_email_vac: string
-  per_telef_int: string
-  per_direc_vac: string
-  per_cultivo_vac: string
-  per_cantidad_int: number
-  per_fec_prob_dt: string
-  per_hec_disp_int: number
-  per_hec_inst_int: number
-  per_created_at_dt: string
-  per_updated_at_dt: string
-  per_observaciones_vac: string
-}
-
-export interface ClientePersona extends Persona {
-  persona_natural?: PersonaNatural
-  persona_juridica?: PersonaJuridica
-  tipo: 'natural' | 'juridica'
-}
-
-export interface ClienteForm {
-  // Datos generales
-  per_nom_contac_vac: string
-  per_email_vac: string
-  per_telef_int: string
-  per_direc_vac: string
-  per_cultivo_vac: string
-  per_cantidad_int: number | null
-  per_fec_prob_dt: string
-  per_hec_disp_int: number | null
-  per_hec_inst_int: number | null
-  per_observaciones_vac: string
-  
-  // Tipo de persona
-  tipo: 'natural' | 'juridica'
-  
-  // Persona Natural
-  per_nat_dni_int?: number | null
-  per_nat_nomb_vac?: string
-  per_nat_apell_vac?: string
-  
-  // Persona Jurídica
-  per_jurd_ruc_int?: number | null
-  per_jurd_razSocial_vac?: string
-}
-
-// Estados de pedido
-export const ESTADOS_PEDIDO = [
-  {
-    id: "recibido",
-    nombre: "Pedido Recibido",
-    descripcion: "Hemos recibido tu pedido y lo estamos procesando",
-    color: "bg-blue-100 text-blue-800 border-blue-200",
-  },
-  {
-    id: "pago_verificado",
-    nombre: "Pago Verificado",
-    descripcion: "Tu pago ha sido confirmado exitosamente",
-    color: "bg-green-100 text-green-800 border-green-200",
-  },
-  {
-    id: "preparando",
-    nombre: "Preparando Pedido",
-    descripcion: "Estamos preparando tus productos para el envío",
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  },
-  {
-    id: "empacando",
-    nombre: "Empacando Pedido",
-    descripcion: "Tus productos están siendo empacados cuidadosamente",
-    color: "bg-orange-100 text-orange-800 border-orange-200",
-  },
-  {
-    id: "enviado",
-    nombre: "Enviado",
-    descripcion: "Tu pedido está en camino a tu dirección",
-    color: "bg-purple-100 text-purple-800 border-purple-200",
-  },
-  {
-    id: "entregado",
-    nombre: "Entregado",
-    descripcion: "Tu pedido ha sido entregado exitosamente",
-    color: "bg-green-100 text-green-800 border-green-200",
-  },
-]
-
-// Función para generar código de seguimiento
-export function generarCodigoSeguimiento(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  let result = ""
-  for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return result
-}
-
-// Función para generar número de pedido
-export function generarNumeroPedido(): string {
-  const timestamp = Date.now()
-  return `PED-${timestamp}`
-}
-
-// ============================================
-// FUNCIONES PARA SISTEMA NUEVO (Personas)
+// FUNCIONES BASE PARA PERSONAS (Clientes)
 // ============================================
 
 export async function obtenerPersonas(): Promise<ClientePersona[]> {
@@ -181,34 +68,54 @@ export async function obtenerPersonas(): Promise<ClientePersona[]> {
   }
 }
 
-export async function crearPersona(clienteForm: ClienteForm): Promise<ClientePersona> {
+export async function crearPersona(personaData: {
+  // Datos generales
+  per_nom_contac_vac: string
+  per_email_vac: string
+  per_telef_int: string
+  per_direc_vac: string
+  per_cultivo_vac: string
+  per_cantidad_int: number | null
+  per_fec_prob_dt: string
+  per_hec_disp_int: number | null
+  per_hec_inst_int: number | null
+  per_observaciones_vac: string
+  tipo: 'natural' | 'juridica'
+  // Persona Natural
+  per_nat_dni_int?: number | null
+  per_nat_nomb_vac?: string
+  per_nat_apell_vac?: string
+  // Persona Jurídica
+  per_jurd_ruc_int?: number | null
+  per_jurd_razSocial_vac?: string
+}): Promise<ClientePersona> {
   try {
     const { data: persona, error: personaError } = await supabase
       .from('Personas')
       .insert({
-        per_nom_contac_vac: clienteForm.per_nom_contac_vac,
-        per_email_vac: clienteForm.per_email_vac,
-        per_telef_int: clienteForm.per_telef_int,
-        per_direc_vac: clienteForm.per_direc_vac,
-        per_cultivo_vac: clienteForm.per_cultivo_vac,
-        per_cantidad_int: clienteForm.per_cantidad_int,
-        per_fec_prob_dt: clienteForm.per_fec_prob_dt,
-        per_hec_disp_int: clienteForm.per_hec_disp_int,
-        per_hec_inst_int: clienteForm.per_hec_inst_int,
-        per_observaciones_vac: clienteForm.per_observaciones_vac
+        per_nom_contac_vac: personaData.per_nom_contac_vac,
+        per_email_vac: personaData.per_email_vac,
+        per_telef_int: personaData.per_telef_int,
+        per_direc_vac: personaData.per_direc_vac,
+        per_cultivo_vac: personaData.per_cultivo_vac,
+        per_cantidad_int: personaData.per_cantidad_int,
+        per_fec_prob_dt: personaData.per_fec_prob_dt,
+        per_hec_disp_int: personaData.per_hec_disp_int,
+        per_hec_inst_int: personaData.per_hec_inst_int,
+        per_observaciones_vac: personaData.per_observaciones_vac
       })
       .select()
       .single()
 
     if (personaError) throw personaError
 
-    if (clienteForm.tipo === 'natural') {
+    if (personaData.tipo === 'natural') {
       const { error: naturalError } = await supabase
         .from('Persona_Natural')
         .insert({
-          per_nat_dni_int: clienteForm.per_nat_dni_int,
-          per_nat_nomb_vac: clienteForm.per_nat_nomb_vac,
-          per_nat_apell_vac: clienteForm.per_nat_apell_vac,
+          per_nat_dni_int: personaData.per_nat_dni_int,
+          per_nat_nomb_vac: personaData.per_nat_nomb_vac,
+          per_nat_apell_vac: personaData.per_nat_apell_vac,
           per_id_int: persona.per_id_int
         })
 
@@ -217,8 +124,8 @@ export async function crearPersona(clienteForm: ClienteForm): Promise<ClientePer
       const { error: juridicaError } = await supabase
         .from('Persona_Juridica')
         .insert({
-          per_jurd_ruc_int: clienteForm.per_jurd_ruc_int,
-          per_jurd_razSocial_vac: clienteForm.per_jurd_razSocial_vac,
+          per_jurd_ruc_int: personaData.per_jurd_ruc_int,
+          per_jurd_razSocial_vac: personaData.per_jurd_razSocial_vac,
           per_id_int: persona.per_id_int
         })
 
@@ -234,34 +141,34 @@ export async function crearPersona(clienteForm: ClienteForm): Promise<ClientePer
   }
 }
 
-export async function actualizarPersona(id: string, clienteForm: ClienteForm): Promise<ClientePersona> {
+export async function actualizarPersona(id: string, personaData: any): Promise<ClientePersona> {
   try {
     const { error: personaError } = await supabase
       .from('Personas')
       .update({
-        per_nom_contac_vac: clienteForm.per_nom_contac_vac,
-        per_email_vac: clienteForm.per_email_vac,
-        per_telef_int: clienteForm.per_telef_int,
-        per_direc_vac: clienteForm.per_direc_vac,
-        per_cultivo_vac: clienteForm.per_cultivo_vac,
-        per_cantidad_int: clienteForm.per_cantidad_int,
-        per_fec_prob_dt: clienteForm.per_fec_prob_dt,
-        per_hec_disp_int: clienteForm.per_hec_disp_int,
-        per_hec_inst_int: clienteForm.per_hec_inst_int,
-        per_observaciones_vac: clienteForm.per_observaciones_vac,
+        per_nom_contac_vac: personaData.per_nom_contac_vac,
+        per_email_vac: personaData.per_email_vac,
+        per_telef_int: personaData.per_telef_int,
+        per_direc_vac: personaData.per_direc_vac,
+        per_cultivo_vac: personaData.per_cultivo_vac,
+        per_cantidad_int: personaData.per_cantidad_int,
+        per_fec_prob_dt: personaData.per_fec_prob_dt,
+        per_hec_disp_int: personaData.per_hec_disp_int,
+        per_hec_inst_int: personaData.per_hec_inst_int,
+        per_observaciones_vac: personaData.per_observaciones_vac,
         per_updated_at_dt: new Date().toISOString()
       })
       .eq('per_id_int', id)
 
     if (personaError) throw personaError
 
-    if (clienteForm.tipo === 'natural') {
+    if (personaData.tipo === 'natural') {
       const { error: naturalError } = await supabase
         .from('Persona_Natural')
         .update({
-          per_nat_dni_int: clienteForm.per_nat_dni_int,
-          per_nat_nomb_vac: clienteForm.per_nat_nomb_vac,
-          per_nat_apell_vac: clienteForm.per_nat_apell_vac
+          per_nat_dni_int: personaData.per_nat_dni_int,
+          per_nat_nomb_vac: personaData.per_nat_nomb_vac,
+          per_nat_apell_vac: personaData.per_nat_apell_vac
         })
         .eq('per_id_int', id)
 
@@ -270,8 +177,8 @@ export async function actualizarPersona(id: string, clienteForm: ClienteForm): P
       const { error: juridicaError } = await supabase
         .from('Persona_Juridica')
         .update({
-          per_jurd_ruc_int: clienteForm.per_jurd_ruc_int,
-          per_jurd_razSocial_vac: clienteForm.per_jurd_razSocial_vac
+          per_jurd_ruc_int: personaData.per_jurd_ruc_int,
+          per_jurd_razSocial_vac: personaData.per_jurd_razSocial_vac
         })
         .eq('per_id_int', id)
 
@@ -306,74 +213,8 @@ export async function eliminarPersona(id: string): Promise<void> {
 }
 
 // ============================================
-// FUNCIONES PARA SISTEMA NUEVO (Pedidos/Cotizaciones)
+// FUNCIONES BASE PARA CATÁLOGOS
 // ============================================
-
-export async function obtenerPedidos(): Promise<Pedido[]> {
-  try {
-    const { data, error } = await supabase
-      .from('Pedidos')
-      .select(`
-        *,
-        estado_pedido:Estado_Pedido(*),
-        cotizacion:Cotizaciones(
-          *,
-          estado_cotizacion:Estado_Cotizacion(*),
-          persona:Personas(
-            *,
-            Persona_Natural(*),
-            Persona_Juridica(*)
-          ),
-          detalle_cotizacion:Detalle_Cotizacion(
-            *,
-            producto:Productos(*)
-          ),
-          informacion_adicional:Informacion_Adicional(
-            *,
-            forma_pago:Forma_Pago(*)
-          )
-        )
-      `)
-      .order('ped_created_at_dt', { ascending: false })
-
-    if (error) throw error
-    return data || []
-  } catch (error) {
-    console.error('Error obteniendo pedidos:', error)
-    throw error
-  }
-}
-
-export async function obtenerCotizaciones(): Promise<Cotizacion[]> {
-  try {
-    const { data, error } = await supabase
-      .from('Cotizaciones')
-      .select(`
-        *,
-        estado_cotizacion:Estado_Cotizacion(*),
-        persona:Personas(
-          *,
-          Persona_Natural(*),
-          Persona_Juridica(*)
-        ),
-        detalle_cotizacion:Detalle_Cotizacion(
-          *,
-          producto:Productos(*)
-        ),
-        informacion_adicional:Informacion_Adicional(
-          *,
-          forma_pago:Forma_Pago(*)
-        )
-      `)
-      .order('cot_fec_emis_dt', { ascending: false })
-
-    if (error) throw error
-    return data || []
-  } catch (error) {
-    console.error('Error obteniendo cotizaciones:', error)
-    throw error
-  }
-}
 
 export async function obtenerEstadosPedido(): Promise<EstadoPedido[]> {
   try {
@@ -420,7 +261,7 @@ export async function obtenerFormasPago(): Promise<FormaPago[]> {
   }
 }
 
-export async function obtenerProductos(): Promise<Producto[]> {
+export async function obtenerProductos(): Promise<ProductoDatabase[]> {
   try {
     const { data, error } = await supabase
       .from('Productos')
@@ -435,7 +276,53 @@ export async function obtenerProductos(): Promise<Producto[]> {
   }
 }
 
-export async function crearPedidoNuevo(pedidoForm: PedidoForm): Promise<Pedido> {
+// ============================================
+// FUNCIONES ESPECÍFICAS DE PEDIDOS
+// ============================================
+
+export async function obtenerPedidos() {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
+      `)
+      .order('ped_created_at_dt', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo pedidos:', error)
+    throw error
+  }
+}
+
+export async function crearPedido(pedidoData: {
+  cotizacion_id: string
+  estado_id: string
+  codigo_rastreo?: string
+  observaciones?: string
+  numero_comprobante?: string
+  imagen_url?: string
+}) {
   try {
     const codigoSeguimiento = generarCodigoSeguimiento()
     const fechaActual = new Date().toISOString()
@@ -444,14 +331,14 @@ export async function crearPedidoNuevo(pedidoForm: PedidoForm): Promise<Pedido> 
       .from('Pedidos')
       .insert({
         ped_cod_segui_vac: codigoSeguimiento,
-        ped_cod_rastreo_vac: pedidoForm.codigo_rastreo,
+        ped_cod_rastreo_vac: pedidoData.codigo_rastreo,
         ped_fec_pedido_dt: fechaActual,
         ped_fec_actualizada_dt: fechaActual,
-        ped_imagen_url: pedidoForm.imagen_url,
-        ped_observacion_vac: pedidoForm.observaciones,
-        ped_num_comprob_vac: pedidoForm.numero_comprobante,
-        est_ped_id_int: pedidoForm.estado_id,
-        cot_id_int: pedidoForm.cotizacion_id
+        ped_imagen_url: pedidoData.imagen_url,
+        ped_observacion_vac: pedidoData.observaciones,
+        ped_num_comprob_vac: pedidoData.numero_comprobante,
+        est_ped_id_int: pedidoData.estado_id,
+        cot_id_int: pedidoData.cotizacion_id
       })
       .select(`
         *,
@@ -475,17 +362,17 @@ export async function crearPedidoNuevo(pedidoForm: PedidoForm): Promise<Pedido> 
   }
 }
 
-export async function actualizarPedidoNuevo(id: string, pedidoForm: Partial<PedidoForm>): Promise<Pedido> {
+export async function actualizarPedido(id: string, pedidoData: any) {
   try {
     const updateData: any = {
       ped_fec_actualizada_dt: new Date().toISOString()
     }
 
-    if (pedidoForm.estado_id !== undefined) updateData.est_ped_id_int = pedidoForm.estado_id
-    if (pedidoForm.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoForm.codigo_rastreo
-    if (pedidoForm.observaciones !== undefined) updateData.ped_observacion_vac = pedidoForm.observaciones
-    if (pedidoForm.numero_comprobante !== undefined) updateData.ped_num_comprob_vac = pedidoForm.numero_comprobante
-    if (pedidoForm.imagen_url !== undefined) updateData.ped_imagen_url = pedidoForm.imagen_url
+    if (pedidoData.estado_id !== undefined) updateData.est_ped_id_int = pedidoData.estado_id
+    if (pedidoData.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoData.codigo_rastreo
+    if (pedidoData.observaciones !== undefined) updateData.ped_observacion_vac = pedidoData.observaciones
+    if (pedidoData.numero_comprobante !== undefined) updateData.ped_num_comprob_vac = pedidoData.numero_comprobante
+    if (pedidoData.imagen_url !== undefined) updateData.ped_imagen_url = pedidoData.imagen_url
 
     const { data, error } = await supabase
       .from('Pedidos')
@@ -513,7 +400,7 @@ export async function actualizarPedidoNuevo(id: string, pedidoForm: Partial<Pedi
   }
 }
 
-export async function eliminarPedidoNuevo(id: string): Promise<void> {
+export async function eliminarPedido(id: string): Promise<void> {
   try {
     const { error } = await supabase
       .from('Pedidos')
@@ -523,6 +410,109 @@ export async function eliminarPedidoNuevo(id: string): Promise<void> {
     if (error) throw error
   } catch (error) {
     console.error('Error eliminando pedido:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES ESPECÍFICAS DE COTIZACIONES
+// ============================================
+
+export async function obtenerCotizaciones() {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones:', error)
+    throw error
+  }
+}
+
+export async function crearCotizacion(cotizacionData: {
+  cliente_id: string
+  fecha_emision: string
+  fecha_vencimiento: string
+  incluye_igv: boolean
+  productos: Array<{
+    producto_id: string
+    cantidad: number
+    precio_historico: number
+  }>
+  forma_pago_id: string
+  lugar_recojo: string
+  forma_entrega: string
+  terminos_condiciones: string
+}) {
+  try {
+    const numeroCotizacion = generarNumeroCotizacion()
+
+    // Crear cotización
+    const { data: cotizacion, error: cotizacionError } = await supabase
+      .from('Cotizaciones')
+      .insert({
+        cot_num_vac: numeroCotizacion,
+        cot_fec_emis_dt: cotizacionData.fecha_emision,
+        cot_fec_venc_dt: cotizacionData.fecha_vencimiento,
+        cot_igv_bol: cotizacionData.incluye_igv,
+        est_cot_id_int: '1', // Borrador por defecto
+        per_id_int: cotizacionData.cliente_id
+      })
+      .select()
+      .single()
+
+    if (cotizacionError) throw cotizacionError
+
+    // Crear detalles
+    const detalles = cotizacionData.productos.map(prod => ({
+      pro_id_int: prod.producto_id,
+      cot_id_int: cotizacion.cot_id_int,
+      det_cot_cant_int: prod.cantidad,
+      det_cot_prec_hist_int: prod.precio_historico
+    }))
+
+    const { error: detalleError } = await supabase
+      .from('Detalle_Cotizacion')
+      .insert(detalles)
+
+    if (detalleError) throw detalleError
+
+    // Crear información adicional
+    const { error: infoError } = await supabase
+      .from('Informacion_Adicional')
+      .insert({
+        inf_ad_lug_recojo_vac: cotizacionData.lugar_recojo,
+        inf_ad_form_entr_vac: cotizacionData.forma_entrega,
+        inf_ad_term_cond_vac: cotizacionData.terminos_condiciones,
+        form_pa_id_int: cotizacionData.forma_pago_id,
+        cot_id_int: cotizacion.cot_id_int
+      })
+
+    if (infoError) throw infoError
+
+    return cotizacion
+  } catch (error) {
+    console.error('Error creando cotización:', error)
     throw error
   }
 }

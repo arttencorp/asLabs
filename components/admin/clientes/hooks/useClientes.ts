@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Cliente, ClienteForm, ClientesStats } from '../types'
+import { obtenerPersonas, crearPersona, actualizarPersona, eliminarPersona } from '@/lib/supabase'
 import { CLIENTE_FORM_INITIAL } from '../constants'
 import { validateClienteForm } from '../utils'
-// Importar funciones de supabase (necesitarás crearlas)
-import { 
-  obtenerPersonas, 
-  crearPersona, 
-  actualizarPersona, 
-  eliminarPersona 
-} from '@/lib/supabase'
+import { formatDate } from '@/utils'
+import type { Cliente, ClienteForm, ClientesStats } from '../types'
 
 export function useClientes() {
   const [clientes, setClientes] = useState<Cliente[]>([])
@@ -160,12 +155,16 @@ export function useClientes() {
     setIsDialogOpen(true)
   }
 
-  // Calcular estadísticas
+  // Calcular estadísticas mejoradas
   const stats: ClientesStats = {
     totalClientes: clientes.length,
     clientesNaturales: clientes.filter(c => c.tipo === 'natural').length,
     clientesJuridicos: clientes.filter(c => c.tipo === 'juridica').length,
-    nuevosEsteMes: 0 // Calcular según fecha
+    nuevosEsteMes: clientes.filter(c => {
+      const fechaActual = new Date()
+      const inicioMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1)
+      return new Date(c.per_created_at_dt) >= inicioMes
+    }).length
   }
 
   return {

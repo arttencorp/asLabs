@@ -1,37 +1,18 @@
-export interface EstadoPedido {
-  est_ped_id_int: string
-  est_ped_desc_vac: string
-  est_ped_tipo_int: number
-}
+import type { 
+  EstadoPedido, 
+  EstadoCotizacion, 
+  FormaPago, 
+  ProductoDatabase 
+} from '@/types/database'
+import type { ClientePersona } from '@/utils'
 
-export interface EstadoCotizacion {
-  est_cot_id_int: string
-  est_cot_desc_vac: string
-  est_cot_tipo_int: number
-}
-
-export interface FormaPago {
-  form_pa_id_int: string
-  form_pa_desc_vac: string
-  form_pa_tipo_int: number
-}
-
-export interface Producto {
-  pro_id_int: string
-  pro_nomb_vac: string
-  pro_desc_vac: string
-  pro_prec_unitario_int: number
-  pro_stock_int: number
-  pro_created_at_dt: string
-  pro_updated_at_dt: string
-}
-
+// Interfaces complejas específicas de pedidos
 export interface DetalleCotizacion {
   pro_id_int: string
   cot_id_int: string
   det_cot_cant_int: number
   det_cot_prec_hist_int: number
-  producto?: Producto
+  producto?: ProductoDatabase
 }
 
 export interface InformacionAdicional {
@@ -62,7 +43,7 @@ export interface Cotizacion {
 export interface Pedido {
   ped_id_int: string
   ped_cod_segui_vac: string
-  ped_cod_rastreo_vac: string
+  ped_cod_rastreo_vac?: string
   ped_fec_pedido_dt: string
   ped_fec_actualizada_dt: string
   ped_imagen_url?: string
@@ -103,49 +84,11 @@ export interface DetalleCotizacionForm {
   precio_historico: number
 }
 
-export interface EstadoPedido {
-  est_ped_id_int: string
-  est_ped_desc_vac: string
-  est_ped_tipo_int: number
+// Stats específicos de pedidos
+export interface PedidosStats {
+  totalPedidos: number
+  pedidosPendientes: number
+  pedidosEntregados: number
+  pedidosCancelados: number
+  ingresoTotal: number
 }
-
-export interface EstadoCotizacion {
-  est_cot_id_int: string
-  est_cot_desc_vac: string
-  est_cot_tipo_int: number
-}
-
-export interface FormaPago {
-  form_pa_id_int: string
-  form_pa_desc_vac: string
-  form_pa_tipo_int: number
-}
-
-export interface Producto {
-  pro_id_int: string
-  pro_nomb_vac: string
-  pro_desc_vac: string
-  pro_prec_unitario_int: number
-  pro_stock_int: number
-  pro_created_at_dt: string
-  pro_updated_at_dt: string
-}
-
-// Tipos para formularios
-export interface PedidoForm {
-  cotizacion_id: string
-  estado_id: string
-  codigo_rastreo: string
-  observaciones: string
-  numero_comprobante: string
-  imagen_url?: string
-}
-
-// Re-exportar tipos de personas del sistema existente
-export type { 
-  PersonaNatural, 
-  PersonaJuridica, 
-  Persona, 
-  ClientePersona, 
-  ClienteForm 
-} from '@/lib/supabase'

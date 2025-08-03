@@ -8,21 +8,25 @@ import {
   obtenerEstadosCotizacion,
   obtenerFormasPago,
   obtenerProductos,
-  crearPedidoNuevo,
-  actualizarPedidoNuevo,
-  eliminarPedidoNuevo,
-  obtenerPersonas // Para obtener clientes
+  crearPedido,
+  actualizarPedido,
+  eliminarPedido,
+  obtenerPersonas
 } from '@/lib/supabase'
+import { calcularTotalCotizacion } from '@/utils'
 import type { 
   Pedido, 
   Cotizacion, 
+  PedidoForm,
+  PedidosStats
+} from '../types'
+import type { 
   EstadoPedido, 
   EstadoCotizacion,
   FormaPago,
-  Producto,
-  PedidoForm,
-  ClientePersona
-} from '../types'
+  ProductoDatabase
+} from '@/types/database'
+import type { ClientePersona } from '@/utils'
 
 export function usePedidos() {
   const [pedidos, setPedidos] = useState<Pedido[]>([])
@@ -30,7 +34,7 @@ export function usePedidos() {
   const [estadosPedido, setEstadosPedido] = useState<EstadoPedido[]>([])
   const [estadosCotizacion, setEstadosCotizacion] = useState<EstadoCotizacion[]>([])
   const [formasPago, setFormasPago] = useState<FormaPago[]>([])
-  const [productos, setProductos] = useState<Producto[]>([])
+  const [productos, setProductos] = useState<ProductoDatabase[]>([])
   const [clientes, setClientes] = useState<ClientePersona[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -85,7 +89,7 @@ export function usePedidos() {
     setError(null)
 
     try {
-      const nuevoPedido = await crearPedidoNuevo(pedidoForm)
+      const nuevoPedido = await crearPedido(pedidoForm)
       setPedidos(prev => [nuevoPedido, ...prev])
       showSuccess(`Pedido ${nuevoPedido.ped_cod_segui_vac} creado exitosamente`)
       return nuevoPedido
@@ -102,7 +106,7 @@ export function usePedidos() {
     setError(null)
 
     try {
-      const pedidoActualizado = await actualizarPedidoNuevo(id, pedidoForm)
+      const pedidoActualizado = await actualizarPedido(id, pedidoForm)
       setPedidos(prev => prev.map(p => p.ped_id_int === id ? pedidoActualizado : p))
       showSuccess(`Pedido actualizado exitosamente`)
       return pedidoActualizado
@@ -119,7 +123,7 @@ export function usePedidos() {
     setError(null)
 
     try {
-      await eliminarPedidoNuevo(id)
+      await eliminarPedido(id)
       setPedidos(prev => prev.filter(p => p.ped_id_int !== id))
       showSuccess("Pedido eliminado exitosamente")
     } catch (error: any) {
@@ -129,6 +133,33 @@ export function usePedidos() {
       setLoading(false)
     }
   }, [showSuccess])
+
+  // Calcular estadísticas mejoradas
+  const stats: PedidosStats = {
+    totalPedidos: pedidos.length,
+    pedidosPendientes: pedidos.filter(p => 
+      p.estado_pedido && ![5, 6].includes(p.estado_pedido.est_ped_tipo_int)
+    ).length,
+    pedidosEntregados: pedidos.filter(p => 
+      p.estado_pedido?.est_ped_tipo_int === 5
+    ).length,
+    pedidosCancelados: pedidos.filter(p => 
+      p.estado_pedido?.est_ped_tipo_int === 6
+    ).length,
+    ingresoTotal: pedidos
+      .filter(p => p.estado_pedido?.est_ped_tipo_int === 5)
+      .reduce((sum, p) => {
+        if (!p.cotizacion?.detalle_cotizacion) return sum
+        const { total } = calcularTotalCotizacion(
+          p.cotizacion.detalle_cotizacion.map(d => ({
+            cantidad: d.det_cot_cant_int,
+            precio: d.det_cot_prec_hist_int
+          })),
+          p.cotizacion.cot_igv_bol
+        )
+        return sum + total
+      }, 0)
+  }
 
   useEffect(() => {
     loadData()
@@ -143,6 +174,7 @@ export function usePedidos() {
     formasPago,
     productos,
     clientes,
+    stats,
     
     // States
     loading,

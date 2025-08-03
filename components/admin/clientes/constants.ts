@@ -1,3 +1,4 @@
+import type { TipoCliente } from '@/constants'
 import { ClienteForm } from "./types"
 
 export const TIPO_CLIENTE = {
@@ -16,7 +17,7 @@ export const CLIENTE_FORM_INITIAL: ClienteForm = {
   per_hec_disp_int: null,
   per_hec_inst_int: null,
   per_observaciones_vac: '',
-  tipo: 'natural',
+  tipo: 'natural' as TipoCliente, // Usar el tipo correcto
   per_nat_dni_int: null,
   per_nat_nomb_vac: '',
   per_nat_apell_vac: '',
