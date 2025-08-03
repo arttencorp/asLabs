@@ -111,7 +111,7 @@ export default function CotizacionesPage() {
             </div>
 
             {/* Tabs principales */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <Tabs value={activeTab} onValueChange={(value: string) => setActiveTab(value)} className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger
                         value="informacion"
