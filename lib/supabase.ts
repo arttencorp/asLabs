@@ -58,9 +58,13 @@ export async function obtenerPersonas(): Promise<ClientePersona[]> {
 
     return personas.map(persona => ({
       ...persona,
-      tipo: persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
-      persona_natural: persona.Persona_Natural[0] || null,
-      persona_juridica: persona.Persona_Juridica[0] || null
+      tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+      persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
+        ? persona.Persona_Natural[0] 
+        : null,
+      persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
+        ? persona.Persona_Juridica[0] 
+        : null
     }))
   } catch (error) {
     console.error('Error obteniendo personas:', error)
@@ -308,7 +312,26 @@ export async function obtenerPedidos() {
       .order('ped_created_at_dt', { ascending: false })
 
     if (error) throw error
-    return data || []
+
+    // Transformar los datos de persona
+    const pedidosTransformados = data?.map(pedido => {
+      if (pedido.cotizacion && pedido.cotizacion.persona) {
+        const persona = pedido.cotizacion.persona
+        pedido.cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
+            ? persona.Persona_Natural[0] 
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
+            ? persona.Persona_Juridica[0] 
+            : null
+        }
+      }
+      return pedido
+    })
+
+    return pedidosTransformados || []
   } catch (error) {
     console.error('Error obteniendo pedidos:', error)
     throw error
@@ -513,6 +536,69 @@ export async function crearCotizacion(cotizacionData: {
     return cotizacion
   } catch (error) {
     console.error('Error creando cotización:', error)
+    throw error
+  }
+}
+
+// ============================================
+// SEGUIMIENTO DE PEDIDOS
+// ============================================
+
+export async function obtenerPedidoPorCodigo(codigoSeguimiento: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
+      `)
+      .eq('ped_cod_segui_vac', codigoSeguimiento)
+      .single()
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null
+      }
+      throw error
+    }
+
+    // Transformar los datos para que coincidan con nuestro tipo ClientePersona
+    if (data && data.cotizacion && data.cotizacion.persona) {
+      const persona = data.cotizacion.persona
+      
+      // Los datos vienen como arrays, necesitamos convertirlos
+      data.cotizacion.persona = {
+        ...persona,
+        tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+        persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
+          ? persona.Persona_Natural[0] 
+          : null,
+        persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
+          ? persona.Persona_Juridica[0] 
+          : null
+      }
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error obteniendo pedido por código:', error)
     throw error
   }
 }

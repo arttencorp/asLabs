@@ -76,27 +76,41 @@ export interface ClientePersona extends Persona {
 }
 
 export function getNombreCompleto(persona: ClientePersona): string {
+  // Verificar si es persona natural y tiene datos
   if (persona.tipo === 'natural' && persona.persona_natural) {
-    return `${persona.persona_natural.per_nat_nomb_vac} ${persona.persona_natural.per_nat_apell_vac}`
+    const { per_nat_nomb_vac, per_nat_apell_vac } = persona.persona_natural
+    if (per_nat_nomb_vac && per_nat_apell_vac) {
+      return `${per_nat_nomb_vac} ${per_nat_apell_vac}`.trim()
+    }
   }
   
+  // Verificar si es persona jurídica y tiene datos
   if (persona.tipo === 'juridica' && persona.persona_juridica) {
-    return persona.persona_juridica.per_jurd_razSocial_vac
+    const { per_jurd_razSocial_vac } = persona.persona_juridica
+    if (per_jurd_razSocial_vac) {
+      return per_jurd_razSocial_vac.trim()
+    }
   }
   
-  return persona.per_nom_contac_vac || 'Sin nombre'
+  // Fallback al nombre de contacto si existe
+  if (persona.per_nom_contac_vac && persona.per_nom_contac_vac.trim()) {
+    return persona.per_nom_contac_vac.trim()
+  }
+  
+  // Último fallback
+  return 'Cliente sin nombre'
 }
 
 export function getDocumentoCliente(persona: ClientePersona): string {
-  if (persona.tipo === 'natural' && persona.persona_natural) {
+  if (persona.tipo === 'natural' && persona.persona_natural?.per_nat_dni_int) {
     return `DNI: ${persona.persona_natural.per_nat_dni_int}`
   }
   
-  if (persona.tipo === 'juridica' && persona.persona_juridica) {
+  if (persona.tipo === 'juridica' && persona.persona_juridica?.per_jurd_ruc_int) {
     return `RUC: ${persona.persona_juridica.per_jurd_ruc_int}`
   }
   
-  return '-'
+  return 'Sin documento'
 }
 
 // Estado helpers
