@@ -13,7 +13,7 @@ export const CLIENTE_FORM_INITIAL: ClienteForm = {
   per_direc_vac: '',
   per_cultivo_vac: '',
   per_cantidad_int: null,
-  per_fec_prob_dt: '',
+  per_fec_prob_dt: null,
   per_hec_disp_int: null,
   per_hec_inst_int: null,
   per_observaciones_vac: '',

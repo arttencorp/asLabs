@@ -103,7 +103,9 @@ export async function crearPersona(personaData: {
         per_direc_vac: personaData.per_direc_vac,
         per_cultivo_vac: personaData.per_cultivo_vac,
         per_cantidad_int: personaData.per_cantidad_int,
-        per_fec_prob_dt: personaData.per_fec_prob_dt,
+         per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
+        ? personaData.per_fec_prob_dt 
+        : null,
         per_hec_disp_int: personaData.per_hec_disp_int,
         per_hec_inst_int: personaData.per_hec_inst_int,
         per_observaciones_vac: personaData.per_observaciones_vac
@@ -156,7 +158,9 @@ export async function actualizarPersona(id: string, personaData: any): Promise<C
         per_direc_vac: personaData.per_direc_vac,
         per_cultivo_vac: personaData.per_cultivo_vac,
         per_cantidad_int: personaData.per_cantidad_int,
-        per_fec_prob_dt: personaData.per_fec_prob_dt,
+         per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
+        ? personaData.per_fec_prob_dt 
+        : null,
         per_hec_disp_int: personaData.per_hec_disp_int,
         per_hec_inst_int: personaData.per_hec_inst_int,
         per_observaciones_vac: personaData.per_observaciones_vac,
