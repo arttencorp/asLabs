@@ -1,6 +1,6 @@
 import { Cliente, ClienteForm } from './types'
 
-export const formatClienteName = (cliente: Cliente): string => {
+export const formatClienteName = (cliente: Cliente): string | null => {
   if (cliente.tipo === 'natural' && cliente.persona_natural) {
     return `${cliente.persona_natural.per_nat_nomb_vac} ${cliente.persona_natural.per_nat_apell_vac}`
   }
@@ -9,10 +9,10 @@ export const formatClienteName = (cliente: Cliente): string => {
     return cliente.persona_juridica.per_jurd_razSocial_vac
   }
   
-  return cliente.per_nom_contac_vac
+  return cliente.per_nom_contac_vac || null
 }
 
-export const formatClienteDocument = (cliente: Cliente): string => {
+export const formatClienteDocument = (cliente: Cliente): string | null => {
   if (cliente.tipo === 'natural' && cliente.persona_natural) {
     return `DNI: ${cliente.persona_natural.per_nat_dni_int}`
   }
@@ -21,7 +21,7 @@ export const formatClienteDocument = (cliente: Cliente): string => {
     return `RUC: ${cliente.persona_juridica.per_jurd_ruc_int}`
   }
   
-  return '-'
+  return null
 }
 
 export const validateClienteForm = (form: ClienteForm): string[] => {

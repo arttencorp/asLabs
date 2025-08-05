@@ -90,7 +90,7 @@ export function useClientes() {
     try {
       const clienteActualizado = await actualizarPersona(editingCliente.per_id_int, clienteForm)
       if (clienteActualizado) {
-        setClientes(clientes.map((c) => 
+        setClientes(clientes.map((c) =>
           c.per_id_int === editingCliente.per_id_int ? clienteActualizado : c
         ))
         showSuccess(`Cliente actualizado exitosamente`)
@@ -128,7 +128,6 @@ export function useClientes() {
 
   const openEditDialog = (cliente: Cliente) => {
     setEditingCliente(cliente)
-    // Mapear datos del cliente al formulario
     setClienteForm({
       per_nom_contac_vac: cliente.per_nom_contac_vac,
       per_email_vac: cliente.per_email_vac,
@@ -141,11 +140,11 @@ export function useClientes() {
       per_hec_inst_int: cliente.per_hec_inst_int,
       per_observaciones_vac: cliente.per_observaciones_vac,
       tipo: cliente.tipo,
-      per_nat_dni_int: cliente.persona_natural?.per_nat_dni_int || null,
-      per_nat_nomb_vac: cliente.persona_natural?.per_nat_nomb_vac || '',
-      per_nat_apell_vac: cliente.persona_natural?.per_nat_apell_vac || '',
-      per_jurd_ruc_int: cliente.persona_juridica?.per_jurd_ruc_int || null,
-      per_jurd_razSocial_vac: cliente.persona_juridica?.per_jurd_razSocial_vac || ''
+      per_nat_dni_int: cliente.persona_natural?.per_nat_dni_int ?? null,
+      per_nat_nomb_vac: cliente.persona_natural?.per_nat_nomb_vac ?? null,
+      per_nat_apell_vac: cliente.persona_natural?.per_nat_apell_vac ?? null,
+      per_jurd_ruc_int: cliente.persona_juridica?.per_jurd_ruc_int ?? null,
+      per_jurd_razSocial_vac: cliente.persona_juridica?.per_jurd_razSocial_vac ?? null
     })
     setIsDialogOpen(true)
   }

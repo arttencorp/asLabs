@@ -72,28 +72,20 @@ export async function obtenerPersonas(): Promise<ClientePersona[]> {
   }
 }
 
-export async function crearPersona(personaData: {
-  // Datos generales
-  per_nom_contac_vac: string
-  per_email_vac: string
-  per_telef_int: string
-  per_direc_vac: string
-  per_cultivo_vac: string
-  per_cantidad_int: number | null
-  per_fec_prob_dt: string
-  per_hec_disp_int: number | null
-  per_hec_inst_int: number | null
-  per_observaciones_vac: string
-  tipo: 'natural' | 'juridica'
-  // Persona Natural
-  per_nat_dni_int?: number | null
-  per_nat_nomb_vac?: string
-  per_nat_apell_vac?: string
-  // Persona Jurídica
-  per_jurd_ruc_int?: number | null
-  per_jurd_razSocial_vac?: string
-}): Promise<ClientePersona> {
+function cleanData(obj: any) {
+  const cleaned = { ...obj }
+  for (const key in cleaned) {
+    if (cleaned[key] === '') {
+      cleaned[key] = null
+    }
+  }
+  return cleaned
+}
+
+export async function crearPersona(personaData: any): Promise<ClientePersona> {
   try {
+    cleanData(personaData);
+
     const { data: persona, error: personaError } = await supabase
       .from('Personas')
       .insert({
@@ -103,7 +95,7 @@ export async function crearPersona(personaData: {
         per_direc_vac: personaData.per_direc_vac,
         per_cultivo_vac: personaData.per_cultivo_vac,
         per_cantidad_int: personaData.per_cantidad_int,
-         per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
+        per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
         ? personaData.per_fec_prob_dt 
         : null,
         per_hec_disp_int: personaData.per_hec_disp_int,
@@ -344,11 +336,11 @@ export async function obtenerPedidos() {
 
 export async function crearPedido(pedidoData: {
   cotizacion_id: string
-  estado_id: string
-  codigo_rastreo?: string
-  observaciones?: string
-  numero_comprobante?: string
-  imagen_url?: string
+  estado_id: string | null
+  codigo_rastreo?: string | null
+  observaciones?: string | null
+  numero_comprobante?: string | null
+  imagen_url?: string | null
 }) {
   try {
     const codigoSeguimiento = generarCodigoSeguimiento()
@@ -478,18 +470,18 @@ export async function obtenerCotizaciones() {
 
 export async function crearCotizacion(cotizacionData: {
   cliente_id: string
-  fecha_emision: string
-  fecha_vencimiento: string
+  fecha_emision: string | null
+  fecha_vencimiento: string | null
   incluye_igv: boolean
   productos: Array<{
-    producto_id: string
-    cantidad: number
-    precio_historico: number
+    producto_id: string | null
+    cantidad: number | null
+    precio_historico: number | null
   }>
-  forma_pago_id: string
-  lugar_recojo: string
-  forma_entrega: string
-  terminos_condiciones: string
+  forma_pago_id: string | null
+  lugar_recojo: string | null
+  forma_entrega: string | null
+  terminos_condiciones: string | null
 }) {
   try {
     const numeroCotizacion = generarNumeroCotizacion()
