@@ -1,4 +1,4 @@
-export interface Cotizacion {
+export interface CotizacionImpresion {
   tipoDocumento?: string
   numeroCotizacion?: string
   razonSocial?: string
@@ -26,4 +26,12 @@ export interface Cotizacion {
   tipoProductoSeleccionado?: string
   preciosConIGV?: boolean
   fichasTecnicas?: Array<{ archivo?: string }>
+}
+
+export interface ConfiguracionImpresion {
+  mostrarCertificados: boolean
+  mostrarFichasTecnicas: boolean
+  incluirLogos: boolean
+  formatoPagina: 'A4' | 'Carta'
+  orientacion: 'portrait' | 'landscape'
 }

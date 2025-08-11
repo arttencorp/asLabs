@@ -1,16 +1,20 @@
 import { createClient } from "@supabase/supabase-js"
+import { generarCodigoSeguimiento, generarNumeroCotizacion } from '@/utils'
+import type { 
+  PersonaNatural, 
+  PersonaJuridica, 
+  Persona, 
+  EstadoPedido,
+  EstadoCotizacion,
+  FormaPago,
+  ProductoDatabase
+} from '@/types/database'
+import type { ClientePersona } from '@/utils'
 
-// Verificar que las variables de entorno estén configuradas
+// Configuración cliente Supabase
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("❌ Variables de entorno de Supabase no configuradas:")
-  console.error("NEXT_PUBLIC_SUPABASE_URL:", supabaseUrl ? "✅ Configurada" : "❌ Faltante")
-  console.error("NEXT_PUBLIC_SUPABASE_ANON_KEY:", supabaseAnonKey ? "✅ Configurada" : "❌ Faltante")
-}
-
-// Crear cliente de Supabase con configuración robusta
 export const supabase = createClient(
   supabaseUrl || "https://placeholder.supabase.co",
   supabaseAnonKey || "placeholder-key",
@@ -35,558 +39,562 @@ export const supabase = createClient(
   },
 )
 
-// Estados de pedido
-export const ESTADOS_PEDIDO = [
-  {
-    id: "recibido",
-    nombre: "Pedido Recibido",
-    descripcion: "Hemos recibido tu pedido y lo estamos procesando",
-    color: "bg-blue-100 text-blue-800 border-blue-200",
-  },
-  {
-    id: "pago_verificado",
-    nombre: "Pago Verificado",
-    descripcion: "Tu pago ha sido confirmado exitosamente",
-    color: "bg-green-100 text-green-800 border-green-200",
-  },
-  {
-    id: "preparando",
-    nombre: "Preparando Pedido",
-    descripcion: "Estamos preparando tus productos para el envío",
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  },
-  {
-    id: "empacando",
-    nombre: "Empacando Pedido",
-    descripcion: "Tus productos están siendo empacados cuidadosamente",
-    color: "bg-orange-100 text-orange-800 border-orange-200",
-  },
-  {
-    id: "enviado",
-    nombre: "Enviado",
-    descripcion: "Tu pedido está en camino a tu dirección",
-    color: "bg-purple-100 text-purple-800 border-purple-200",
-  },
-  {
-    id: "entregado",
-    nombre: "Entregado",
-    descripcion: "Tu pedido ha sido entregado exitosamente",
-    color: "bg-green-100 text-green-800 border-green-200",
-  },
-]
+// ============================================
+// FUNCIONES BASE PARA PERSONAS (Clientes)
+// ============================================
 
-// Tipos
-export interface Cliente {
-  id: string
-  nombres: string
-  apellidos: string
-  email: string
-  telefono: string
-  direccion: string
-  created_at: string
-  updated_at: string
-}
-
-export interface Pedido {
-  id: string
-  numero_pedido: string
-  codigo_seguimiento: string
-  cliente_id: string
-  productos: string
-  total: number
-  estado: string
-  codigo_rastreo?: string
-  fecha_pedido: string
-  fecha_actualizacion: string
-  notas?: string
-  cliente?: Cliente
-}
-
-export interface HistorialEstado {
-  id: string
-  pedido_id: string
-  estado_anterior?: string
-  estado_nuevo: string
-  comentario?: string
-  created_at: string
-}
-
-// Función para generar código de seguimiento
-export function generarCodigoSeguimiento(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  let result = ""
-  for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return result
-}
-
-// Función para generar número de pedido
-export function generarNumeroPedido(): string {
-  const timestamp = Date.now()
-  return `PED-${timestamp}`
-}
-
-// Función para verificar configuración y conexión
-export async function verificarConfiguracion(): Promise<{
-  configurado: boolean
-  conectado: boolean
-  error?: string
-}> {
+export async function obtenerPersonas(): Promise<ClientePersona[]> {
   try {
-    // Verificar variables de entorno
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return {
-        configurado: false,
-        conectado: false,
-        error:
-          "Variables de entorno de Supabase no configuradas. Verifica NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY",
-      }
-    }
+    const { data: personas, error } = await supabase
+      .from('Personas')
+      .select(`
+        *,
+        Persona_Natural(*),
+        Persona_Juridica(*)
+      `)
+      .order('per_created_at_dt', { ascending: false })
 
-    if (supabaseUrl.includes("placeholder") || supabaseAnonKey.includes("placeholder")) {
-      return {
-        configurado: false,
-        conectado: false,
-        error: "Variables de entorno contienen valores placeholder. Configura los valores reales de Supabase.",
-      }
-    }
+    if (error) throw error
 
-    // Verificar conexión con una consulta simple
-    const { data, error } = await supabase.from("clientes").select("count").limit(1)
-
-    if (error) {
-      console.error("Error de conexión con Supabase:", error)
-      return {
-        configurado: true,
-        conectado: false,
-        error: `Error de conexión: ${error.message}. Verifica que las tablas existan en Supabase.`,
-      }
-    }
-
-    return {
-      configurado: true,
-      conectado: true,
-    }
-  } catch (error: any) {
-    console.error("Error verificando configuración:", error)
-    return {
-      configurado: false,
-      conectado: false,
-      error: `Error de configuración: ${error.message}`,
-    }
+    return personas.map(persona => ({
+      ...persona,
+      tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+      persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
+        ? persona.Persona_Natural[0] 
+        : null,
+      persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
+        ? persona.Persona_Juridica[0] 
+        : null
+    }))
+  } catch (error) {
+    console.error('Error obteniendo personas:', error)
+    throw error
   }
 }
 
-// Función para verificar conexión (versión simplificada para compatibilidad)
-export async function verificarConexion(): Promise<boolean> {
-  const resultado = await verificarConfiguracion()
-  return resultado.conectado
+function cleanData(obj: any) {
+  const cleaned = { ...obj }
+  for (const key in cleaned) {
+    if (cleaned[key] === '') {
+      cleaned[key] = null
+    }
+  }
+  return cleaned
 }
 
-// Funciones para Clientes
-export async function obtenerClientes(): Promise<Cliente[]> {
+export async function crearPersona(personaData: any): Promise<ClientePersona> {
   try {
-    console.log("🔍 Obteniendo clientes...")
+    cleanData(personaData);
 
-    const { data, error } = await supabase.from("clientes").select("*").order("created_at", { ascending: false })
+    const { data: persona, error: personaError } = await supabase
+      .from('Personas')
+      .insert({
+        per_nom_contac_vac: personaData.per_nom_contac_vac,
+        per_email_vac: personaData.per_email_vac,
+        per_telef_int: personaData.per_telef_int,
+        per_direc_vac: personaData.per_direc_vac,
+        per_cultivo_vac: personaData.per_cultivo_vac,
+        per_cantidad_int: personaData.per_cantidad_int,
+        per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
+        ? personaData.per_fec_prob_dt 
+        : null,
+        per_hec_disp_int: personaData.per_hec_disp_int,
+        per_hec_inst_int: personaData.per_hec_inst_int,
+        per_observaciones_vac: personaData.per_observaciones_vac
+      })
+      .select()
+      .single()
 
-    if (error) {
-      console.error("❌ Error obteniendo clientes:", error)
-      throw new Error(`Error al obtener clientes: ${error.message}`)
+    if (personaError) throw personaError
+
+    if (personaData.tipo === 'natural') {
+      const { error: naturalError } = await supabase
+        .from('Persona_Natural')
+        .insert({
+          per_nat_dni_int: personaData.per_nat_dni_int,
+          per_nat_nomb_vac: personaData.per_nat_nomb_vac,
+          per_nat_apell_vac: personaData.per_nat_apell_vac,
+          per_id_int: persona.per_id_int
+        })
+
+      if (naturalError) throw naturalError
+    } else {
+      const { error: juridicaError } = await supabase
+        .from('Persona_Juridica')
+        .insert({
+          per_jurd_ruc_int: personaData.per_jurd_ruc_int,
+          per_jurd_razSocial_vac: personaData.per_jurd_razSocial_vac,
+          per_id_int: persona.per_id_int
+        })
+
+      if (juridicaError) throw juridicaError
     }
 
-    console.log("✅ Clientes obtenidos:", data?.length || 0)
+    const clientes = await obtenerPersonas()
+    return clientes.find(c => c.per_id_int === persona.per_id_int)!
+
+  } catch (error) {
+    console.error('Error creando persona:', error)
+    throw error
+  }
+}
+
+export async function actualizarPersona(id: string, personaData: any): Promise<ClientePersona> {
+  try {
+    const { error: personaError } = await supabase
+      .from('Personas')
+      .update({
+        per_nom_contac_vac: personaData.per_nom_contac_vac,
+        per_email_vac: personaData.per_email_vac,
+        per_telef_int: personaData.per_telef_int,
+        per_direc_vac: personaData.per_direc_vac,
+        per_cultivo_vac: personaData.per_cultivo_vac,
+        per_cantidad_int: personaData.per_cantidad_int,
+         per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
+        ? personaData.per_fec_prob_dt 
+        : null,
+        per_hec_disp_int: personaData.per_hec_disp_int,
+        per_hec_inst_int: personaData.per_hec_inst_int,
+        per_observaciones_vac: personaData.per_observaciones_vac,
+        per_updated_at_dt: new Date().toISOString()
+      })
+      .eq('per_id_int', id)
+
+    if (personaError) throw personaError
+
+    if (personaData.tipo === 'natural') {
+      const { error: naturalError } = await supabase
+        .from('Persona_Natural')
+        .update({
+          per_nat_dni_int: personaData.per_nat_dni_int,
+          per_nat_nomb_vac: personaData.per_nat_nomb_vac,
+          per_nat_apell_vac: personaData.per_nat_apell_vac
+        })
+        .eq('per_id_int', id)
+
+      if (naturalError) throw naturalError
+    } else {
+      const { error: juridicaError } = await supabase
+        .from('Persona_Juridica')
+        .update({
+          per_jurd_ruc_int: personaData.per_jurd_ruc_int,
+          per_jurd_razSocial_vac: personaData.per_jurd_razSocial_vac
+        })
+        .eq('per_id_int', id)
+
+      if (juridicaError) throw juridicaError
+    }
+
+    const clientes = await obtenerPersonas()
+    return clientes.find(c => c.per_id_int === id)!
+
+  } catch (error) {
+    console.error('Error actualizando persona:', error)
+    throw error
+  }
+}
+
+export async function eliminarPersona(id: string): Promise<void> {
+  try {
+    await supabase.from('Persona_Natural').delete().eq('per_id_int', id)
+    await supabase.from('Persona_Juridica').delete().eq('per_id_int', id)
+    
+    const { error } = await supabase
+      .from('Personas')
+      .delete()
+      .eq('per_id_int', id)
+
+    if (error) throw error
+
+  } catch (error) {
+    console.error('Error eliminando persona:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES BASE PARA CATÁLOGOS
+// ============================================
+
+export async function obtenerEstadosPedido(): Promise<EstadoPedido[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Estado_Pedido')
+      .select('*')
+      .order('est_ped_tipo_int', { ascending: true })
+
+    if (error) throw error
     return data || []
-  } catch (error: any) {
-    console.error("❌ Error en obtenerClientes:", error)
+  } catch (error) {
+    console.error('Error obteniendo estados de pedido:', error)
     throw error
   }
 }
 
-export async function crearCliente(
-  cliente: Omit<Cliente, "id" | "created_at" | "updated_at">,
-): Promise<Cliente | null> {
+export async function obtenerEstadosCotizacion(): Promise<EstadoCotizacion[]> {
   try {
-    console.log("➕ Creando cliente:", cliente)
-
-    // Validar datos requeridos
-    if (!cliente.nombres?.trim() || !cliente.apellidos?.trim() || !cliente.email?.trim()) {
-      throw new Error("Los campos nombres, apellidos y email son obligatorios")
-    }
-
-    // Validar formato de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(cliente.email.trim())) {
-      throw new Error("El formato del email no es válido")
-    }
-
-    const clienteData = {
-      nombres: cliente.nombres.trim(),
-      apellidos: cliente.apellidos.trim(),
-      email: cliente.email.trim().toLowerCase(),
-      telefono: cliente.telefono?.trim() || "",
-      direccion: cliente.direccion?.trim() || "",
-    }
-
-    const { data, error } = await supabase.from("clientes").insert([clienteData]).select().single()
-
-    if (error) {
-      console.error("❌ Error creando cliente:", error)
-      if (error.code === "23505") {
-        throw new Error("Ya existe un cliente con ese email")
-      }
-      throw new Error(`Error al crear cliente: ${error.message}`)
-    }
-
-    console.log("✅ Cliente creado exitosamente:", data)
-    return data
-  } catch (error: any) {
-    console.error("❌ Error en crearCliente:", error)
-    throw error
-  }
-}
-
-export async function actualizarCliente(id: string, cliente: Partial<Cliente>): Promise<Cliente | null> {
-  try {
-    console.log("✏️ Actualizando cliente:", id, cliente)
-
-    if (!id?.trim()) {
-      throw new Error("ID del cliente es requerido")
-    }
-
-    // Validar email si se proporciona
-    if (cliente.email && !cliente.email.trim()) {
-      throw new Error("El email no puede estar vacío")
-    }
-
-    if (cliente.email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(cliente.email.trim())) {
-        throw new Error("El formato del email no es válido")
-      }
-    }
-
-    const clienteData: any = {
-      updated_at: new Date().toISOString(),
-    }
-
-    if (cliente.nombres !== undefined) clienteData.nombres = cliente.nombres.trim()
-    if (cliente.apellidos !== undefined) clienteData.apellidos = cliente.apellidos.trim()
-    if (cliente.email !== undefined) clienteData.email = cliente.email.trim().toLowerCase()
-    if (cliente.telefono !== undefined) clienteData.telefono = cliente.telefono.trim()
-    if (cliente.direccion !== undefined) clienteData.direccion = cliente.direccion.trim()
-
-    const { data, error } = await supabase.from("clientes").update(clienteData).eq("id", id).select().single()
-
-    if (error) {
-      console.error("❌ Error actualizando cliente:", error)
-      if (error.code === "23505") {
-        throw new Error("Ya existe un cliente con ese email")
-      }
-      throw new Error(`Error al actualizar cliente: ${error.message}`)
-    }
-
-    console.log("✅ Cliente actualizado exitosamente:", data)
-    return data
-  } catch (error: any) {
-    console.error("❌ Error en actualizarCliente:", error)
-    throw error
-  }
-}
-
-export async function eliminarCliente(id: string): Promise<boolean> {
-  try {
-    console.log("🗑️ Eliminando cliente:", id)
-
-    if (!id?.trim()) {
-      throw new Error("ID del cliente es requerido")
-    }
-
-    // Verificar si el cliente tiene pedidos asociados
-    const { data: pedidos, error: pedidosError } = await supabase
-      .from("pedidos")
-      .select("id")
-      .eq("cliente_id", id)
-      .limit(1)
-
-    if (pedidosError) {
-      console.error("❌ Error verificando pedidos:", pedidosError)
-      throw new Error(`Error al verificar pedidos: ${pedidosError.message}`)
-    }
-
-    if (pedidos && pedidos.length > 0) {
-      throw new Error("No se puede eliminar el cliente porque tiene pedidos asociados")
-    }
-
-    const { error } = await supabase.from("clientes").delete().eq("id", id)
-
-    if (error) {
-      console.error("❌ Error eliminando cliente:", error)
-      throw new Error(`Error al eliminar cliente: ${error.message}`)
-    }
-
-    console.log("✅ Cliente eliminado exitosamente")
-    return true
-  } catch (error: any) {
-    console.error("❌ Error en eliminarCliente:", error)
-    throw error
-  }
-}
-
-// Funciones para Pedidos
-export async function obtenerPedidos(): Promise<Pedido[]> {
-  try {
-    console.log("🔍 Obteniendo pedidos...")
-
     const { data, error } = await supabase
-      .from("pedidos")
-      .select(`
-        *,
-        cliente:clientes(*)
-      `)
-      .order("fecha_pedido", { ascending: false })
+      .from('Estado_Cotizacion')
+      .select('*')
+      .order('est_cot_tipo_int', { ascending: true })
 
-    if (error) {
-      console.error("❌ Error obteniendo pedidos:", error)
-      throw new Error(`Error al obtener pedidos: ${error.message}`)
-    }
-
-    console.log("✅ Pedidos obtenidos:", data?.length || 0)
+    if (error) throw error
     return data || []
-  } catch (error: any) {
-    console.error("❌ Error en obtenerPedidos:", error)
+  } catch (error) {
+    console.error('Error obteniendo estados de cotización:', error)
     throw error
   }
 }
 
-export async function crearPedido(
-  pedido: Omit<Pedido, "id" | "numero_pedido" | "codigo_seguimiento" | "fecha_pedido" | "fecha_actualizacion">,
-): Promise<Pedido | null> {
+export async function obtenerFormasPago(): Promise<FormaPago[]> {
   try {
-    console.log("➕ Creando pedido:", pedido)
-
-    // Validar datos requeridos
-    if (!pedido.cliente_id?.trim() || !pedido.productos?.trim() || !pedido.total) {
-      throw new Error("Los campos cliente_id, productos y total son obligatorios")
-    }
-
-    if (pedido.total <= 0) {
-      throw new Error("El total debe ser mayor a 0")
-    }
-
-    // Verificar que el cliente existe
-    const { data: cliente, error: clienteError } = await supabase
-      .from("clientes")
-      .select("*")
-      .eq("id", pedido.cliente_id)
-      .single()
-
-    if (clienteError || !cliente) {
-      throw new Error("El cliente seleccionado no existe")
-    }
-
-    // Generar códigos únicos
-    let codigoSeguimiento = generarCodigoSeguimiento()
-    let numeroPedido = generarNumeroPedido()
-
-    // Verificar que los códigos sean únicos
-    const { data: existingPedido } = await supabase
-      .from("pedidos")
-      .select("id")
-      .or(`codigo_seguimiento.eq.${codigoSeguimiento},numero_pedido.eq.${numeroPedido}`)
-      .limit(1)
-
-    // Si existe, generar nuevos códigos
-    if (existingPedido && existingPedido.length > 0) {
-      codigoSeguimiento = generarCodigoSeguimiento()
-      numeroPedido = generarNumeroPedido()
-    }
-
-    const pedidoData = {
-      numero_pedido: numeroPedido,
-      codigo_seguimiento: codigoSeguimiento,
-      cliente_id: pedido.cliente_id,
-      productos: pedido.productos.trim(),
-      total: Number(pedido.total),
-      estado: pedido.estado || "recibido",
-      codigo_rastreo: pedido.codigo_rastreo?.trim() || null,
-      notas: pedido.notas?.trim() || null,
-      fecha_pedido: new Date().toISOString(),
-      fecha_actualizacion: new Date().toISOString(),
-    }
-
     const { data, error } = await supabase
-      .from("pedidos")
-      .insert([pedidoData])
+      .from('Forma_Pago')
+      .select('*')
+      .order('form_pa_tipo_int', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo formas de pago:', error)
+    throw error
+  }
+}
+
+export async function obtenerProductos(): Promise<ProductoDatabase[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos')
+      .select('*')
+      .order('pro_nomb_vac', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo productos:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES ESPECÍFICAS DE PEDIDOS
+// ============================================
+
+export async function obtenerPedidos() {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
       .select(`
         *,
-        cliente:clientes(*)
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
       `)
-      .single()
+      .order('ped_created_at_dt', { ascending: false })
 
-    if (error) {
-      console.error("❌ Error creando pedido:", error)
-      throw new Error(`Error al crear pedido: ${error.message}`)
-    }
+    if (error) throw error
 
-    console.log("✅ Pedido creado exitosamente:", data)
-    return data
-  } catch (error: any) {
-    console.error("❌ Error en crearPedido:", error)
-    throw error
-  }
-}
-
-export async function actualizarPedido(id: string, pedido: Partial<Pedido>): Promise<Pedido | null> {
-  try {
-    console.log("✏️ Actualizando pedido:", id, pedido)
-
-    if (!id?.trim()) {
-      throw new Error("ID del pedido es requerido")
-    }
-
-    const pedidoData: any = {
-      fecha_actualizacion: new Date().toISOString(),
-    }
-
-    if (pedido.cliente_id !== undefined) pedidoData.cliente_id = pedido.cliente_id
-    if (pedido.productos !== undefined) pedidoData.productos = pedido.productos.trim()
-    if (pedido.total !== undefined) {
-      if (pedido.total <= 0) {
-        throw new Error("El total debe ser mayor a 0")
+    // Transformar los datos de persona
+    const pedidosTransformados = data?.map(pedido => {
+      if (pedido.cotizacion && pedido.cotizacion.persona) {
+        const persona = pedido.cotizacion.persona
+        pedido.cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
+            ? persona.Persona_Natural[0] 
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
+            ? persona.Persona_Juridica[0] 
+            : null
+        }
       }
-      pedidoData.total = Number(pedido.total)
-    }
-    if (pedido.estado !== undefined) pedidoData.estado = pedido.estado
-    if (pedido.codigo_rastreo !== undefined) pedidoData.codigo_rastreo = pedido.codigo_rastreo?.trim() || null
-    if (pedido.notas !== undefined) pedidoData.notas = pedido.notas?.trim() || null
-
-    const { data, error } = await supabase
-      .from("pedidos")
-      .update(pedidoData)
-      .eq("id", id)
-      .select(`
-        *,
-        cliente:clientes(*)
-      `)
-      .single()
-
-    if (error) {
-      console.error("❌ Error actualizando pedido:", error)
-      throw new Error(`Error al actualizar pedido: ${error.message}`)
-    }
-
-    console.log("✅ Pedido actualizado exitosamente:", data)
-    return data
-  } catch (error: any) {
-    console.error("❌ Error en actualizarPedido:", error)
-    throw error
-  }
-}
-
-export async function eliminarPedido(id: string): Promise<boolean> {
-  try {
-    console.log("🗑️ Eliminando pedido:", id)
-
-    if (!id?.trim()) {
-      throw new Error("ID del pedido es requerido")
-    }
-
-    const { error } = await supabase.from("pedidos").delete().eq("id", id)
-
-    if (error) {
-      console.error("❌ Error eliminando pedido:", error)
-      throw new Error(`Error al eliminar pedido: ${error.message}`)
-    }
-
-    console.log("✅ Pedido eliminado exitosamente")
-    return true
-  } catch (error: any) {
-    console.error("❌ Error en eliminarPedido:", error)
-    throw error
-  }
-}
-
-export async function obtenerPedidoPorCodigo(codigo: string): Promise<Pedido | null> {
-  try {
-    console.log("🔍 Buscando pedido por código:", codigo)
-
-    if (!codigo?.trim()) {
-      throw new Error("Código de seguimiento es requerido")
-    }
-
-    const { data, error } = await supabase
-      .from("pedidos")
-      .select(`
-        *,
-        cliente:clientes(*)
-      `)
-      .eq("codigo_seguimiento", codigo.trim().toUpperCase())
-      .single()
-
-    if (error) {
-      if (error.code === "PGRST116") {
-        // No se encontró el pedido
-        console.log("ℹ️ No se encontró pedido con código:", codigo)
-        return null
-      }
-      console.error("❌ Error obteniendo pedido por código:", error)
-      throw new Error(`Error al buscar pedido: ${error.message}`)
-    }
-
-    console.log("✅ Pedido encontrado:", data)
-    return data
-  } catch (error: any) {
-    console.error("❌ Error en obtenerPedidoPorCodigo:", error)
-    throw error
-  }
-}
-
-// Función para crear datos de prueba
-export async function crearDatosPrueba(): Promise<void> {
-  try {
-    console.log("🔍 Verificando datos de prueba...")
-
-    // Verificar si ya existen datos
-    const { data: clientesExistentes, error: errorClientes } = await supabase.from("clientes").select("id").limit(1)
-
-    if (errorClientes) {
-      console.error("❌ Error verificando clientes existentes:", errorClientes)
-      return
-    }
-
-    if (clientesExistentes && clientesExistentes.length > 0) {
-      console.log("ℹ️ Los datos de prueba ya existen")
-      return
-    }
-
-    console.log("➕ Creando datos de prueba...")
-
-    // Crear cliente de prueba
-    const clientePrueba = await crearCliente({
-      nombres: "María Elena",
-      apellidos: "García López",
-      email: "maria.garcia@email.com",
-      telefono: "+51 987 654 321",
-      direccion: "Av. Universitaria 1801, San Martín de Porres, Lima",
+      return pedido
     })
 
-    if (clientePrueba) {
-      // Crear pedido de prueba con código específico para testing
-      await crearPedido({
-        cliente_id: clientePrueba.id,
-        productos: "Kit Microbiología Básica, Medios de Cultivo (5 unidades), Manual de Laboratorio",
-        total: 450.0,
-        estado: "preparando",
-        codigo_rastreo: "TRACK-001-2024",
-        notas: "Cliente solicita entrega en horario de oficina",
+    return pedidosTransformados || []
+  } catch (error) {
+    console.error('Error obteniendo pedidos:', error)
+    throw error
+  }
+}
+
+export async function crearPedido(pedidoData: {
+  cotizacion_id: string
+  estado_id: string | null
+  codigo_rastreo?: string | null
+  observaciones?: string | null
+  numero_comprobante?: string | null
+  imagen_url?: string | null
+}) {
+  try {
+    const codigoSeguimiento = generarCodigoSeguimiento()
+    const fechaActual = new Date().toISOString()
+
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .insert({
+        ped_cod_segui_vac: codigoSeguimiento,
+        ped_cod_rastreo_vac: pedidoData.codigo_rastreo,
+        ped_fec_pedido_dt: fechaActual,
+        ped_fec_actualizada_dt: fechaActual,
+        ped_imagen_url: pedidoData.imagen_url,
+        ped_observacion_vac: pedidoData.observaciones,
+        ped_num_comprob_vac: pedidoData.numero_comprobante,
+        est_ped_id_int: pedidoData.estado_id,
+        cot_id_int: pedidoData.cotizacion_id
+      })
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          )
+        )
+      `)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error creando pedido:', error)
+    throw error
+  }
+}
+
+export async function actualizarPedido(id: string, pedidoData: any) {
+  try {
+    const updateData: any = {
+      ped_fec_actualizada_dt: new Date().toISOString()
+    }
+
+    if (pedidoData.estado_id !== undefined) updateData.est_ped_id_int = pedidoData.estado_id
+    if (pedidoData.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoData.codigo_rastreo
+    if (pedidoData.observaciones !== undefined) updateData.ped_observacion_vac = pedidoData.observaciones
+    if (pedidoData.numero_comprobante !== undefined) updateData.ped_num_comprob_vac = pedidoData.numero_comprobante
+    if (pedidoData.imagen_url !== undefined) updateData.ped_imagen_url = pedidoData.imagen_url
+
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .update(updateData)
+      .eq('ped_id_int', id)
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          )
+        )
+      `)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error actualizando pedido:', error)
+    throw error
+  }
+}
+
+export async function eliminarPedido(id: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('Pedidos')
+      .delete()
+      .eq('ped_id_int', id)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error eliminando pedido:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES ESPECÍFICAS DE COTIZACIONES
+// ============================================
+
+export async function obtenerCotizaciones() {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones:', error)
+    throw error
+  }
+}
+
+export async function crearCotizacion(cotizacionData: {
+  cliente_id: string
+  fecha_emision: string | null
+  fecha_vencimiento: string | null
+  incluye_igv: boolean
+  productos: Array<{
+    producto_id: string | null
+    cantidad: number | null
+    precio_historico: number | null
+  }>
+  forma_pago_id: string | null
+  lugar_recojo: string | null
+  forma_entrega: string | null
+  terminos_condiciones: string | null
+}) {
+  try {
+    const numeroCotizacion = generarNumeroCotizacion()
+
+    // Crear cotización
+    const { data: cotizacion, error: cotizacionError } = await supabase
+      .from('Cotizaciones')
+      .insert({
+        cot_num_vac: numeroCotizacion,
+        cot_fec_emis_dt: cotizacionData.fecha_emision,
+        cot_fec_venc_dt: cotizacionData.fecha_vencimiento,
+        cot_igv_bol: cotizacionData.incluye_igv,
+        est_cot_id_int: '1', // Borrador por defecto
+        per_id_int: cotizacionData.cliente_id
+      })
+      .select()
+      .single()
+
+    if (cotizacionError) throw cotizacionError
+
+    // Crear detalles
+    const detalles = cotizacionData.productos.map(prod => ({
+      pro_id_int: prod.producto_id,
+      cot_id_int: cotizacion.cot_id_int,
+      det_cot_cant_int: prod.cantidad,
+      det_cot_prec_hist_int: prod.precio_historico
+    }))
+
+    const { error: detalleError } = await supabase
+      .from('Detalle_Cotizacion')
+      .insert(detalles)
+
+    if (detalleError) throw detalleError
+
+    // Crear información adicional
+    const { error: infoError } = await supabase
+      .from('Informacion_Adicional')
+      .insert({
+        inf_ad_lug_recojo_vac: cotizacionData.lugar_recojo,
+        inf_ad_form_entr_vac: cotizacionData.forma_entrega,
+        inf_ad_term_cond_vac: cotizacionData.terminos_condiciones,
+        form_pa_id_int: cotizacionData.forma_pago_id,
+        cot_id_int: cotizacion.cot_id_int
       })
 
-      console.log("✅ Datos de prueba creados exitosamente")
+    if (infoError) throw infoError
+
+    return cotizacion
+  } catch (error) {
+    console.error('Error creando cotización:', error)
+    throw error
+  }
+}
+
+// ============================================
+// SEGUIMIENTO DE PEDIDOS
+// ============================================
+
+export async function obtenerPedidoPorCodigo(codigoSeguimiento: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
+      `)
+      .eq('ped_cod_segui_vac', codigoSeguimiento)
+      .single()
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null
+      }
+      throw error
     }
-  } catch (error: any) {
-    console.error("❌ Error creando datos de prueba:", error)
-    // No lanzar error para no bloquear la aplicación
+
+    // Transformar los datos para que coincidan con nuestro tipo ClientePersona
+    if (data && data.cotizacion && data.cotizacion.persona) {
+      const persona = data.cotizacion.persona
+      
+      // Los datos vienen como arrays, necesitamos convertirlos
+      data.cotizacion.persona = {
+        ...persona,
+        tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+        persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
+          ? persona.Persona_Natural[0] 
+          : null,
+        persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
+          ? persona.Persona_Juridica[0] 
+          : null
+      }
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error obteniendo pedido por código:', error)
+    throw error
   }
 }

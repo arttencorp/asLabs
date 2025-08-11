@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import type { Cotizacion } from "../types"
+import { formatearFecha, obtenerTituloDocumento } from '../utils'
+import type { CotizacionImpresion } from "../types"
 
 export function useCotizacionImpresion() {
     const router = useRouter()
-    const [cotizacion, setCotizacion] = useState<Cotizacion | null>(null)
+    const [cotizacion, setCotizacion] = useState<CotizacionImpresion | null>(null)
     const [cargando, setCargando] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
@@ -80,13 +81,14 @@ export function useCotizacionImpresion() {
     }
 
     const volverACrear = () => {
-        router.push("/admin/pedidos")
+        router.push("/admin/cotizaciones")
     }
 
     const volverAlInicio = () => {
-        router.push("/admin/pedidos")
+        router.push("/admin")
     }
 
+    // Helpers usando las utilidades globales
     const tieneASWG =
         cotizacion?.items &&
         Array.isArray(cotizacion.items) &&
@@ -105,16 +107,37 @@ export function useCotizacionImpresion() {
     // Determinar el tipo de producto principal
     const esLaboratorio = tieneLAB || cotizacion?.tipoProductoSeleccionado === "laboratorio"
 
+    // Helpers mejorados usando utils globales
+    const tituloDocumento = cotizacion?.tipoDocumento ? 
+        obtenerTituloDocumento(cotizacion.tipoDocumento) : 
+        "Cotización"
+
+    const fechaEmisionFormateada = cotizacion?.fechaEmision ? 
+        formatearFecha(cotizacion.fechaEmision) : 
+        ""
+
+    const fechaVencimientoFormateada = cotizacion?.fechaVencimiento ? 
+        formatearFecha(cotizacion.fechaVencimiento) : 
+        ""
+
     return {
+        // Estados
         cotizacion,
         cargando,
         error,
+        
+        // Funciones
         imprimir,
         volverACrear,
         volverAlInicio,
+        
+        // Helpers
         tieneASWG,
         tieneASC5,
         tieneLAB,
-        esLaboratorio
+        esLaboratorio,
+        tituloDocumento,
+        fechaEmisionFormateada,
+        fechaVencimientoFormateada
     }
 }
