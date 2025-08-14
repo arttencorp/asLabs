@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { usePedidos } from "@/components/admin/pedidos/hooks/usePedidos"
 import { PedidosList } from "@/components/admin/pedidos/components/pedidosList"
 import { PedidoFormDialog } from "@/components/admin/pedidos/components/pedidosForm"
-import { formatCurrency } from "@/components/admin/pedidos/utils"
+import { formatCurrency } from "@/utils/index"
 import type { Pedido } from "@/components/admin/pedidos/types"
 
 export default function PedidosPage() {

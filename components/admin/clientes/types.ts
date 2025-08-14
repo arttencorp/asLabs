@@ -1,5 +1,5 @@
-import type { ClientePersona } from '@/types/database'
 import type { TipoCliente } from '@/constants'
+import type { ClientePersona } from '@/types/database'
 
 export interface ClienteForm {
   // Datos generales
@@ -26,6 +26,8 @@ export interface ClienteForm {
   per_jurd_ruc_int?: number | null
   per_jurd_razSocial_vac?: string | null
 }
+
+export type Cliente = ClientePersona
 
 export interface ClientesStats {
   totalClientes: number

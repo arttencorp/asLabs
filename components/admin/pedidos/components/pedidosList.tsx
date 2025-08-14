@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Search, Edit, Trash2, RefreshCw, Loader2 } from "lucide-react"
-import { formatCurrency, formatDate, getEstadoPedidoColor, getNombreCompleto } from '../utils'
+import { formatDate, getEstadoColor, getNombreCompleto } from '@/utils/index'
 import type { Pedido } from '../types'
 
 interface PedidosListProps {
@@ -105,8 +105,8 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: P
                       }
                     </TableCell>
                     <TableCell>
-                      {pedido.estado_pedido && (
-                        <Badge className={getEstadoPedidoColor(pedido.estado_pedido.est_ped_tipo_int)}>
+                      {pedido.estado_pedido?.est_ped_tipo_int && (
+                        <Badge className={getEstadoColor(pedido.estado_pedido.est_ped_tipo_int, 'pedido')}>
                           {pedido.estado_pedido.est_ped_desc_vac}
                         </Badge>
                       )}

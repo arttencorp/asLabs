@@ -63,9 +63,9 @@ export function generarCodigoSeguimiento(): string {
 }
 
 export function generarNumeroCotizacion(): string {
-  const año = new Date().getFullYear()
-  const numero = Math.floor(Math.random() * 9000) + 1000
-  return `${numero}-${año}`
+  const timestamp = Date.now()
+  const year = new Date().getFullYear()
+  return `COT-${year}-${timestamp.toString().slice(-6)}`
 }
 
 // Cliente helpers (reutilizable)

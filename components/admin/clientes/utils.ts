@@ -1,8 +1,4 @@
-import type { ClientePersona } from '@/types/database'
 import type { ClienteForm } from './types'
-
-// Re-export from central utils with aliases for backward compatibility
-export { getNombreCompleto as formatClienteName, getDocumentoCliente as formatClienteDocument } from '@/utils'
 
 export const validateClienteForm = (form: ClienteForm): string[] => {
   const errors: string[] = []
@@ -27,8 +23,4 @@ export const validateClienteForm = (form: ClienteForm): string[] => {
 
 export const formatHectareas = (hectareas: number): string => {
   return `${hectareas.toFixed(2)} ha`
-}
-
-export const formatFecha = (fecha: string): string => {
-  return new Date(fecha).toLocaleDateString('es-PE')
 }

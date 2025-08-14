@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, User, Building2 } from "lucide-react"
 import type { ClientePersona } from "@/types/database"
-import { formatHectareas, formatFecha } from "../utils"
-import { getNombreCompleto as formatClienteName, getDocumentoCliente as formatClienteDocument } from "@/utils"
+import { formatHectareas } from "../utils"
+import { getNombreCompleto as formatClienteName, getDocumentoCliente as formatClienteDocument } from "@/utils/index"
 
 interface ClientesTableProps {
   clientes: ClientePersona[]

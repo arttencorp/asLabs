@@ -2,16 +2,11 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { generarNumeroCotizacion } from '@/utils'
 import { 
-  productosPreexistentes, 
-  terminosCondicionesDefault, 
-  terminosCondicionesLaboratorio,
-  certificadosDefault 
+  productosPreexistentes, terminosCondicionesDefault, 
+  terminosCondicionesLaboratorio, certificadosDefault 
 } from '../constants'
-import { 
-  calcularFechaVencimiento, 
-  generarCertificadosTexto,
-  numeroATexto 
-} from '../utils'
+import { calcularFechaVencimiento, numeroATexto } from '@/utils/index'
+import {  generarCertificadosTexto } from '../utils'
 import type { Item, FichaTecnica, TipoDocumento, FormaPagoUI, TabName } from '../types'
 
 export function useCotizacion() {

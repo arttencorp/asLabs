@@ -13,7 +13,7 @@ import {
   eliminarPedido,
   obtenerPersonas
 } from '@/lib/supabase'
-import { calcularTotalCotizacion } from '@/utils'
+import { calcularTotalCotizacion } from '@/utils/index'
 import type { 
   Pedido, 
   Cotizacion, 

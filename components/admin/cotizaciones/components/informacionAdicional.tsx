@@ -1,4 +1,3 @@
-// app/cotizaciones/nueva/components/InformacionAdicional.tsx
 import { Printer } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

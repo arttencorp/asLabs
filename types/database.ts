@@ -1,4 +1,3 @@
-// Tipos de base de datos que se reutilizan en múltiples módulos
 export interface PersonaNatural {
   per_nat_id_int: string
   per_nat_dni_int: number | null
