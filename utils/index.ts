@@ -1,5 +1,5 @@
 import { ESTADO_COLORS } from '@/constants'
-import type { Persona, PersonaNatural, PersonaJuridica } from '@/types/database'
+import type { ClientePersona } from '@/types/database'
 
 // Formateo de fechas centralizado
 export function formatDate(dateString: string, options?: {
@@ -7,7 +7,7 @@ export function formatDate(dateString: string, options?: {
   short?: boolean
 }): string {
   const date = new Date(dateString)
-  
+
   if (options?.short) {
     return date.toLocaleDateString("es-PE", {
       year: "numeric",
@@ -15,13 +15,13 @@ export function formatDate(dateString: string, options?: {
       day: "2-digit",
     })
   }
-  
+
   const baseOptions = {
     year: "numeric" as const,
     month: "short" as const,
     day: "numeric" as const,
   }
-  
+
   if (options?.includeTime) {
     return date.toLocaleDateString("es-PE", {
       ...baseOptions,
@@ -29,7 +29,7 @@ export function formatDate(dateString: string, options?: {
       minute: "2-digit",
     })
   }
-  
+
   return date.toLocaleDateString("es-PE", baseOptions)
 }
 
@@ -69,11 +69,8 @@ export function generarNumeroCotizacion(): string {
 }
 
 // Cliente helpers (reutilizable)
-export interface ClientePersona extends Persona {
-  persona_natural?: PersonaNatural
-  persona_juridica?: PersonaJuridica
-  tipo: 'natural' | 'juridica'
-}
+// Use the type directly from database types
+export type { ClientePersona } from '@/types/database'
 
 export function getNombreCompleto(persona: ClientePersona): string {
   // Verificar si es persona natural y tiene datos
@@ -83,7 +80,7 @@ export function getNombreCompleto(persona: ClientePersona): string {
       return `${per_nat_nomb_vac} ${per_nat_apell_vac}`.trim()
     }
   }
-  
+
   // Verificar si es persona jurídica y tiene datos
   if (persona.tipo === 'juridica' && persona.persona_juridica) {
     const { per_jurd_razSocial_vac } = persona.persona_juridica
@@ -91,12 +88,12 @@ export function getNombreCompleto(persona: ClientePersona): string {
       return per_jurd_razSocial_vac.trim()
     }
   }
-  
+
   // Fallback al nombre de contacto si existe
   if (persona.per_nom_contac_vac && persona.per_nom_contac_vac.trim()) {
     return persona.per_nom_contac_vac.trim()
   }
-  
+
   // Último fallback
   return 'Cliente sin nombre'
 }
@@ -105,18 +102,18 @@ export function getDocumentoCliente(persona: ClientePersona): string {
   if (persona.tipo === 'natural' && persona.persona_natural?.per_nat_dni_int) {
     return `DNI: ${persona.persona_natural.per_nat_dni_int}`
   }
-  
+
   if (persona.tipo === 'juridica' && persona.persona_juridica?.per_jurd_ruc_int) {
     return `RUC: ${persona.persona_juridica.per_jurd_ruc_int}`
   }
-  
+
   return 'Sin documento'
 }
 
 // Estado helpers
 export function getEstadoColor(tipo: number, categoria: 'pedido' | 'cotizacion'): string {
-  return ESTADO_COLORS[categoria][tipo as keyof typeof ESTADO_COLORS[typeof categoria]] || 
-         "bg-gray-100 text-gray-800 border-gray-200"
+  return ESTADO_COLORS[categoria][tipo as keyof typeof ESTADO_COLORS[typeof categoria]] ||
+    "bg-gray-100 text-gray-800 border-gray-200"
 }
 
 // Cálculos de cotización (centralizados)
@@ -125,13 +122,13 @@ export function calcularTotalCotizacion(
   incluye_igv: boolean = false
 ): { subtotal: number; igv: number; total: number } {
   const subtotal = detalles.reduce(
-    (sum, detalle) => sum + (detalle.cantidad * detalle.precio), 
+    (sum, detalle) => sum + (detalle.cantidad * detalle.precio),
     0
   )
-  
+
   const igv = incluye_igv ? subtotal * 0.18 : 0
   const total = subtotal + igv
-  
+
   return { subtotal, igv, total }
 }
 
@@ -146,12 +143,12 @@ export function numeroATexto(numero: number): string {
     "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete",
     "dieciocho", "diecinueve"
   ]
-  
+
   const decenas = [
     "", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta",
     "ochenta", "noventa"
   ]
-  
+
   const centenas = [
     "", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos",
     "seiscientos", "setecientos", "ochocientos", "novecientos"

@@ -64,7 +64,7 @@ export default function PedidosPage() {
   const stats = {
     totalPedidos: pedidos.length,
     pedidosPendientes: pedidos.filter(p => 
-      p.estado_pedido && ![5, 6].includes(p.estado_pedido.est_ped_tipo_int)
+      p.estado_pedido?.est_ped_tipo_int ? ![5, 6].includes(p.estado_pedido.est_ped_tipo_int) : false
     ).length, // No entregados ni cancelados
     pedidosEntregados: pedidos.filter(p => 
       p.estado_pedido?.est_ped_tipo_int === 5

@@ -2,13 +2,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, User, Building2 } from "lucide-react"
-import { Cliente } from "../types"
-import { formatClienteName, formatClienteDocument, formatHectareas, formatFecha } from "../utils"
+import type { ClientePersona } from "@/types/database"
+import { formatHectareas, formatFecha } from "../utils"
+import { getNombreCompleto as formatClienteName, getDocumentoCliente as formatClienteDocument } from "@/utils"
 
 interface ClientesTableProps {
-  clientes: Cliente[]
+  clientes: ClientePersona[]
   loading: boolean
-  onEdit: (cliente: Cliente) => void
+  onEdit: (cliente: ClientePersona) => void
   onDelete: (id: string) => void
 }
 
@@ -126,7 +127,7 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
                   <div className="font-medium">{cliente.per_cultivo_vac}</div>
                   {cliente.per_cantidad_int && (
                     <div className="text-sm text-gray-500">
-                      Cantidad: {cliente.per_cantidad_int}
+                      {cliente.per_cantidad_int}
                     </div>
                   )}
                 </div>

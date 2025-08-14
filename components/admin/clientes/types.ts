@@ -1,8 +1,5 @@
-import type { ClientePersona } from '@/utils'
+import type { ClientePersona } from '@/types/database'
 import type { TipoCliente } from '@/constants'
-
-// Solo tipos específicos de clientes
-export interface Cliente extends ClientePersona {}
 
 export interface ClienteForm {
   // Datos generales

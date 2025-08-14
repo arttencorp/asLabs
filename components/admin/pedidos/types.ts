@@ -4,7 +4,7 @@ import type {
   FormaPago, 
   ProductoDatabase 
 } from '@/types/database'
-import type { ClientePersona } from '@/utils'
+import type { ClientePersona } from '@/types/database'
 
 // Interfaces complejas específicas de pedidos
 export interface DetalleCotizacion {

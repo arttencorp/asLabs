@@ -1,11 +1,6 @@
 import type { TipoCliente } from '@/constants'
 import { ClienteForm } from "./types"
 
-export const TIPO_CLIENTE = {
-  NATURAL: 'natural',
-  JURIDICA: 'juridica'
-} as const
-
 export const CLIENTE_FORM_INITIAL: ClienteForm = {
   per_nom_contac_vac: null,
   per_email_vac: null,
@@ -24,12 +19,4 @@ export const CLIENTE_FORM_INITIAL: ClienteForm = {
   per_jurd_ruc_int: null,
   per_jurd_razSocial_vac: null
 }
-
-export const CULTIVOS_OPCIONES = [
-  'Banano',
-  'Quinua',
-  'Kiwicha',
-  'Frijol',
-  'Arveja',
-  'Otro'
-]
+ 

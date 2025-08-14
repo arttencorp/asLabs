@@ -12,15 +12,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2, User, Building2 } from "lucide-react"
-import { ClienteForm, Cliente } from "../types"
-import { CULTIVOS_OPCIONES } from "../constants"
+import type { ClienteForm } from "../types"
+import type { ClientePersona } from "@/types/database"
+import { CULTIVOS_OPCIONES } from "@/constants"
 
 interface ClienteDialogProps {
   isOpen: boolean
   onClose: () => void
   clienteForm: ClienteForm
   setClienteForm: (form: ClienteForm) => void
-  editingCliente: Cliente | null
+  editingCliente: ClientePersona | null
   loading: boolean
   onSubmit: () => void
 }
@@ -154,7 +155,7 @@ export function ClienteDialog({
                   <Label htmlFor="contacto">Nombre de Contacto</Label>
                   <Input
                     id="contacto"
-                    value={clienteForm.per_nom_contac_vac}
+                    value={clienteForm.per_nom_contac_vac || ''}
                     onChange={(e) => updateForm('per_nom_contac_vac', e.target.value)}
                     placeholder="Persona de contacto"
                   />
@@ -164,7 +165,7 @@ export function ClienteDialog({
                   <Input
                     id="email"
                     type="email"
-                    value={clienteForm.per_email_vac}
+                    value={clienteForm.per_email_vac || ''}
                     onChange={(e) => updateForm('per_email_vac', e.target.value)}
                     placeholder="contacto@email.com"
                   />
@@ -173,7 +174,7 @@ export function ClienteDialog({
                   <Label htmlFor="telefono">Teléfono</Label>
                   <Input
                     id="telefono"
-                    value={clienteForm.per_telef_int}
+                    value={clienteForm.per_telef_int || ''}
                     onChange={(e) => updateForm('per_telef_int', e.target.value)}
                     placeholder="+51 987 654 321"
                   />
@@ -182,7 +183,7 @@ export function ClienteDialog({
                   <Label htmlFor="direccion">Dirección</Label>
                   <Input
                     id="direccion"
-                    value={clienteForm.per_direc_vac}
+                    value={clienteForm.per_direc_vac || ''}
                     onChange={(e) => updateForm('per_direc_vac', e.target.value)}
                     placeholder="Dirección completa"
                   />
@@ -196,21 +197,12 @@ export function ClienteDialog({
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="cultivo">Cultivo Principal</Label>
-                  <Select
-                    value={clienteForm.per_cultivo_vac}
-                    onValueChange={(value) => updateForm('per_cultivo_vac', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleccionar cultivo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CULTIVOS_OPCIONES.map((cultivo) => (
-                        <SelectItem key={cultivo} value={cultivo}>
-                          {cultivo}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    id="cultivo"
+                    value={clienteForm.per_cultivo_vac || ''}
+                    onChange={(e) => updateForm('per_cultivo_vac', e.target.value)}
+                    placeholder="Ingrese el cultivo principal"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="cantidad">Cantidad</Label>
@@ -227,8 +219,8 @@ export function ClienteDialog({
                   <Input
                     id="fechaProb"
                     type="date"
-                    value={clienteForm.per_fec_prob_dt}
-                    onChange={(e) => updateForm('per_fec_prob_dt', e.target.value)}
+                    value={clienteForm.per_fec_prob_dt ? new Date(clienteForm.per_fec_prob_dt).toISOString().split('T')[0] : ''}
+                    onChange={(e) => updateForm('per_fec_prob_dt', e.target.value || null)}
                   />
                 </div>
                 <div>
@@ -260,7 +252,7 @@ export function ClienteDialog({
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-4">Observaciones</h3>
               <Textarea
-                value={clienteForm.per_observaciones_vac}
+                value={clienteForm.per_observaciones_vac || ''}
                 onChange={(e) => updateForm('per_observaciones_vac', e.target.value)}
                 placeholder="Observaciones adicionales..."
                 rows={3}

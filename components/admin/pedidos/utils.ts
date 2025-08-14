@@ -78,17 +78,8 @@ export function validarDNI(dni: string): boolean {
   return /^\d{8}$/.test(dni)
 }
 
-export function getNombreCompleto(persona: ClientePersona): string {
-  if (persona.tipo === 'natural' && persona.persona_natural) {
-    return `${persona.persona_natural.per_nat_nomb_vac} ${persona.persona_natural.per_nat_apell_vac}`
-  }
-  
-  if (persona.tipo === 'juridica' && persona.persona_juridica) {
-    return persona.persona_juridica.per_jurd_razSocial_vac
-  }
-  
-  return persona.per_nom_contac_vac || 'Sin nombre'
-}
+// Re-export from central utils
+export { getNombreCompleto } from '@/utils'
 
 import { ESTADO_PEDIDO_COLORS, ESTADO_COTIZACION_COLORS } from './constants'
-import type { ClientePersona } from './types'
+import type { ClientePersona } from '@/types/database'
