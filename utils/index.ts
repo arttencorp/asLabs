@@ -110,6 +110,36 @@ export function getDocumentoCliente(persona: ClientePersona): string {
   return 'Sin documento'
 }
 
+export function getEmailCliente(persona: ClientePersona): string {
+  if (persona?.per_email_vac) {
+    return `${persona.per_email_vac}`
+  }
+
+  return 'Sin email'
+} 
+
+export function getTelfCliente(persona: ClientePersona): string {
+  if (persona?.per_telef_int) {
+    return `${persona.per_telef_int}`
+  }
+
+  return 'Sin teléfono'
+}
+
+export function getCultivoCliente(persona: ClientePersona): string {
+  if (persona?.per_cultivo_vac && persona.per_cultivo_vac.trim()) {
+    return persona.per_cultivo_vac.trim()
+  }
+  return 'Sin tipo de cultivo'
+}
+
+export function getCantidadCultivo(persona: ClientePersona): string {
+  if (persona?.per_cantidad_int) {
+    return persona.per_cantidad_int.toString()
+  }
+  return '-'
+}
+
 // Estado helpers
 export function getEstadoColor(tipo: number, categoria: 'pedido' | 'cotizacion'): string {
   return ESTADO_COLORS[categoria][tipo as keyof typeof ESTADO_COLORS[typeof categoria]] ||

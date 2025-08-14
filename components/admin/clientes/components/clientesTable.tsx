@@ -4,7 +4,13 @@ import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, User, Building2 } from "lucide-react"
 import type { ClientePersona } from "@/types/database"
 import { formatHectareas } from "../utils"
-import { getNombreCompleto as formatClienteName, getDocumentoCliente as formatClienteDocument } from "@/utils/index"
+import {
+  getNombreCompleto as formatClienteName,
+  getDocumentoCliente as formatClienteDocument,
+  getEmailCliente as formatClienteEmail,
+  getTelfCliente as formatClienteTelf,
+  getCultivoCliente as formatClienteCultivo
+} from "@/utils/index"
 
 interface ClientesTableProps {
   clientes: ClientePersona[]
@@ -120,20 +126,23 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
                   {formatClienteDocument(cliente)}
                 </span>
               </TableCell>
-              <TableCell>{cliente.per_email_vac}</TableCell>
-              <TableCell>{cliente.per_telef_int}</TableCell>
               <TableCell>
-                <div>
-                  <div className="font-medium">{cliente.per_cultivo_vac}</div>
-                  {cliente.per_cantidad_int && (
-                    <div className="text-sm text-gray-500">
-                      {cliente.per_cantidad_int}
-                    </div>
-                  )}
-                </div>
+                <span className="font-mono text-sm">
+                  {formatClienteEmail(cliente)}
+                </span>
               </TableCell>
               <TableCell>
-                {cliente.per_hec_disp_int ? formatHectareas(cliente.per_hec_disp_int) : '-'}
+                <span className="font-mono text-sm">
+                  {formatClienteTelf(cliente)}
+                </span>
+              </TableCell>
+              <TableCell>
+                <span className="font-mono text-sm">
+                  {formatClienteCultivo(cliente)}
+                </span>
+              </TableCell>
+              <TableCell>
+                {formatHectareas(cliente.per_hec_disp_int)}
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">

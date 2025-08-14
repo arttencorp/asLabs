@@ -1,4 +1,5 @@
 import type { ClienteForm } from './types'
+import type { ClientePersona } from '@/types/database'
 
 export const validateClienteForm = (form: ClienteForm): string[] => {
   const errors: string[] = []
@@ -21,6 +22,9 @@ export const validateClienteForm = (form: ClienteForm): string[] => {
   return errors
 }
 
-export const formatHectareas = (hectareas: number): string => {
-  return `${hectareas.toFixed(2)} ha`
+export const formatHectareas = (hectareas: number | null): string => {
+  if (hectareas) {
+    return `${hectareas.toFixed(2)} ha`
+  }
+  return '-'
 }
