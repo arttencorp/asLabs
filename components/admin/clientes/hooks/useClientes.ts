@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { obtenerPersonas, crearPersona, actualizarPersona, eliminarPersona } from '@/lib/supabase'
 import { CLIENTE_FORM_INITIAL } from '../constants'
 import { validateClienteForm } from '../utils'
-import { formatDate } from '@/utils'
-import type { Cliente, ClienteForm, ClientesStats } from '../types'
+import type { ClienteForm, ClientesStats } from '../types'
+import type { ClientePersona } from '@/types/database'
+import type { TipoCliente } from '@/constants'
 
 export function useClientes() {
-  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [clientes, setClientes] = useState<ClientePersona[]>([])
   const [loading, setLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -14,7 +15,7 @@ export function useClientes() {
 
   // Estados del formulario
   const [clienteForm, setClienteForm] = useState<ClienteForm>(CLIENTE_FORM_INITIAL)
-  const [editingCliente, setEditingCliente] = useState<Cliente | null>(null)
+  const [editingCliente, setEditingCliente] = useState<ClientePersona | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
@@ -126,7 +127,7 @@ export function useClientes() {
     }
   }
 
-  const openEditDialog = (cliente: Cliente) => {
+  const openEditDialog = (cliente: ClientePersona) => {
     setEditingCliente(cliente)
     setClienteForm({
       per_nom_contac_vac: cliente.per_nom_contac_vac,
@@ -139,7 +140,7 @@ export function useClientes() {
       per_hec_disp_int: cliente.per_hec_disp_int,
       per_hec_inst_int: cliente.per_hec_inst_int,
       per_observaciones_vac: cliente.per_observaciones_vac,
-      tipo: cliente.tipo,
+      tipo: cliente.tipo as TipoCliente,
       per_nat_dni_int: cliente.persona_natural?.per_nat_dni_int ?? null,
       per_nat_nomb_vac: cliente.persona_natural?.per_nat_nomb_vac ?? null,
       per_nat_apell_vac: cliente.persona_natural?.per_nat_apell_vac ?? null,

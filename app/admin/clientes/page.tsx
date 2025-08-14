@@ -14,8 +14,8 @@ import {
   ClientesStats,
   ClientesTable,
   ClienteDialog,
-  type Cliente
 } from "@/components/admin/clientes"
+import type { ClientePersona } from '@/types/database'
 
 export default function ClientesPage() {
   const {
@@ -47,7 +47,7 @@ export default function ClientesPage() {
   const [searchTerm, setSearchTerm] = useState("")
 
   // Filtrar clientes según término de búsqueda
-  const filteredClientes = clientes.filter((cliente: Cliente) => {
+  const filteredClientes = clientes.filter((cliente: ClientePersona) => {
     const searchLower = searchTerm.toLowerCase()
     const nombreCompleto = cliente.tipo === 'natural' && cliente.persona_natural
       ? `${cliente.persona_natural.per_nat_nomb_vac} ${cliente.persona_natural.per_nat_apell_vac}`
@@ -55,9 +55,9 @@ export default function ClientesPage() {
     
     return (
       nombreCompleto.toLowerCase().includes(searchLower) ||
-      cliente.per_nom_contac_vac.toLowerCase().includes(searchLower) ||
-      cliente.per_email_vac.toLowerCase().includes(searchLower) ||
-      cliente.per_cultivo_vac.toLowerCase().includes(searchLower) ||
+      (cliente.per_nom_contac_vac?.toLowerCase().includes(searchLower) || false) ||
+      (cliente.per_email_vac?.toLowerCase().includes(searchLower) || false) ||
+      (cliente.per_cultivo_vac?.toLowerCase().includes(searchLower) || false) ||
       (cliente.persona_natural?.per_nat_dni_int?.toString().includes(searchTerm)) ||
       (cliente.persona_juridica?.per_jurd_ruc_int?.toString().includes(searchTerm))
     )

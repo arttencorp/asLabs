@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { productosPreexistentes } from '../constants'
-import type { Item, ProductosServiciosProps } from '../types'
+import type { ProductosServiciosProps } from '../types'
 
 export function ProductosServicios({
   items,

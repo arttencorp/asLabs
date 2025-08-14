@@ -1,6 +1,3 @@
-import type { ProductoDatabase } from '@/types/database'
-import type { ClientePersona } from '@/utils'
-
 // Tipos específicos para el módulo de cotizaciones (interfaz de usuario)
 export interface Item {
   id: number

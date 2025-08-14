@@ -1,4 +1,4 @@
-import { formatearFecha } from "../utils"
+import { formatDate } from "@/utils/index"
 
 interface InformacionClienteProps {
     razonSocial?: string
@@ -28,10 +28,10 @@ export function InformacionCliente({
                 </div>
                 <div className="w-1/2 text-right">
                     <p>
-                        <span className="font-semibold">Fecha de emisión:</span> {String(formatearFecha(fechaEmision ?? ""))}
+                        <span className="font-semibold">Fecha de emisión:</span> {formatDate(String(fechaEmision ?? ""))}
                     </p>
                     <p>
-                        <span className="font-semibold">Fecha de vencimiento:</span> {formatearFecha(fechaVencimiento ?? "").toString()}
+                        <span className="font-semibold">Fecha de vencimiento:</span> {formatDate(String(fechaVencimiento ?? "")).toString()}
                     </p>
                 </div>
             </div>

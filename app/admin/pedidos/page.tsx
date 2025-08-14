@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { usePedidos } from "@/components/admin/pedidos/hooks/usePedidos"
 import { PedidosList } from "@/components/admin/pedidos/components/pedidosList"
 import { PedidoFormDialog } from "@/components/admin/pedidos/components/pedidosForm"
-import { formatCurrency } from "@/components/admin/pedidos/utils"
+import { formatCurrency } from "@/utils/index"
 import type { Pedido } from "@/components/admin/pedidos/types"
 
 export default function PedidosPage() {
@@ -64,7 +64,7 @@ export default function PedidosPage() {
   const stats = {
     totalPedidos: pedidos.length,
     pedidosPendientes: pedidos.filter(p => 
-      p.estado_pedido && ![5, 6].includes(p.estado_pedido.est_ped_tipo_int)
+      p.estado_pedido?.est_ped_tipo_int ? ![5, 6].includes(p.estado_pedido.est_ped_tipo_int) : false
     ).length, // No entregados ni cancelados
     pedidosEntregados: pedidos.filter(p => 
       p.estado_pedido?.est_ped_tipo_int === 5

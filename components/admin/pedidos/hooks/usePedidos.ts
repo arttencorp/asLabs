@@ -13,7 +13,7 @@ import {
   eliminarPedido,
   obtenerPersonas
 } from '@/lib/supabase'
-import { calcularTotalCotizacion } from '@/utils'
+import { calcularTotalCotizacion } from '@/utils/index'
 import type { 
   Pedido, 
   Cotizacion, 
@@ -26,7 +26,7 @@ import type {
   FormaPago,
   ProductoDatabase
 } from '@/types/database'
-import type { ClientePersona } from '@/utils'
+import type { ClientePersona } from '@/types/database'
 
 export function usePedidos() {
   const [pedidos, setPedidos] = useState<Pedido[]>([])
@@ -138,7 +138,7 @@ export function usePedidos() {
   const stats: PedidosStats = {
     totalPedidos: pedidos.length,
     pedidosPendientes: pedidos.filter(p => 
-      p.estado_pedido && ![5, 6].includes(p.estado_pedido.est_ped_tipo_int)
+      p.estado_pedido?.est_ped_tipo_int ? ![5, 6].includes(p.estado_pedido.est_ped_tipo_int) : false
     ).length,
     pedidosEntregados: pedidos.filter(p => 
       p.estado_pedido?.est_ped_tipo_int === 5

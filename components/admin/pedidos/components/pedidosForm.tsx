@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
-import type { PedidoForm, Cotizacion, EstadoPedido, Pedido } from '../types'
+import type { EstadoPedido } from '@/types/database'
+import type { PedidoForm, Cotizacion, Pedido } from '../types'
 
 interface PedidoFormProps {
   open: boolean

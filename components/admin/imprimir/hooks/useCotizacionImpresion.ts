@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { formatearFecha, obtenerTituloDocumento } from '../utils'
+import { obtenerTituloDocumento } from '../utils'
+import { formatDate } from '@/utils/index'
 import type { CotizacionImpresion } from "../types"
 
 export function useCotizacionImpresion() {
@@ -113,11 +114,11 @@ export function useCotizacionImpresion() {
         "Cotización"
 
     const fechaEmisionFormateada = cotizacion?.fechaEmision ? 
-        formatearFecha(cotizacion.fechaEmision) : 
+        formatDate(String(cotizacion.fechaEmision)) : 
         ""
 
     const fechaVencimientoFormateada = cotizacion?.fechaVencimiento ? 
-        formatearFecha(cotizacion.fechaVencimiento) : 
+        formatDate(String(cotizacion.fechaVencimiento)) : 
         ""
 
     return {

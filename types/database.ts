@@ -1,4 +1,3 @@
-// Tipos de base de datos que se reutilizan en múltiples módulos
 export interface PersonaNatural {
   per_nat_id_int: string
   per_nat_dni_int: number | null
@@ -28,7 +27,13 @@ export interface Persona {
   per_created_at_dt: string
   per_updated_at_dt: string
   per_observaciones_vac: string | null
+  tipo?: 'natural' | 'juridica'
+  persona_natural?: PersonaNatural | null
+  persona_juridica?: PersonaJuridica | null
 }
+
+// Alias para mejor semántica
+export type ClientePersona = Persona
 
 export interface EstadoPedido {
   est_ped_id_int: string

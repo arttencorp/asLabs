@@ -9,7 +9,7 @@ import type {
   FormaPago,
   ProductoDatabase
 } from '@/types/database'
-import type { ClientePersona } from '@/utils'
+import type { ClientePersona } from '@/types/database'
 
 // Configuración cliente Supabase
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
