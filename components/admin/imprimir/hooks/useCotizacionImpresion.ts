@@ -50,8 +50,7 @@ export function useCotizacionImpresion() {
 
                 setCotizacion(cotizacionData)
             }
-        } catch (error) {
-            console.error("Error al cargar la cotización:", error)
+        } catch (error) { 
             setError("Error al cargar los datos de la cotización. Por favor, intente nuevamente.")
         } finally {
             setCargando(false)
@@ -85,8 +84,12 @@ export function useCotizacionImpresion() {
         router.push("/admin/cotizaciones")
     }
 
-    const volverAlInicio = () => {
-        router.push("/admin")
+    const volverAlInicio = () => { 
+        window.close()
+
+        setTimeout(() => {
+            router.push("/admin/cotizaciones")
+        }, 100)
     }
 
     // Helpers usando las utilidades globales
@@ -109,16 +112,16 @@ export function useCotizacionImpresion() {
     const esLaboratorio = tieneLAB || cotizacion?.tipoProductoSeleccionado === "laboratorio"
 
     // Helpers mejorados usando utils globales
-    const tituloDocumento = cotizacion?.tipoDocumento ? 
-        obtenerTituloDocumento(cotizacion.tipoDocumento) : 
+    const tituloDocumento = cotizacion?.tipoDocumento ?
+        obtenerTituloDocumento(cotizacion.tipoDocumento) :
         "Cotización"
 
-    const fechaEmisionFormateada = cotizacion?.fechaEmision ? 
-        formatDate(String(cotizacion.fechaEmision)) : 
+    const fechaEmisionFormateada = cotizacion?.fechaEmision ?
+        formatDate(String(cotizacion.fechaEmision)) :
         ""
 
-    const fechaVencimientoFormateada = cotizacion?.fechaVencimiento ? 
-        formatDate(String(cotizacion.fechaVencimiento)) : 
+    const fechaVencimientoFormateada = cotizacion?.fechaVencimiento ?
+        formatDate(String(cotizacion.fechaVencimiento)) :
         ""
 
     return {
@@ -126,12 +129,12 @@ export function useCotizacionImpresion() {
         cotizacion,
         cargando,
         error,
-        
+
         // Funciones
         imprimir,
         volverACrear,
         volverAlInicio,
-        
+
         // Helpers
         tieneASWG,
         tieneASC5,

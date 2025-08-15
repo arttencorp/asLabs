@@ -59,7 +59,7 @@ export default function CotizacionesPage() {
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Cotizaciones</h1>
-                <p className="text-gray-600">Gestiona las cotizaciones de AS Laboratorios</p>
+                <p className="text-gray-600">Gestione las cotizaciones de AS Laboratorios</p>
             </div>
 
             {/* Selección de tipo de documento */}
@@ -104,7 +104,7 @@ export default function CotizacionesPage() {
 
             {/* Título y descripción */}
             <div>
-                <h2 className="text-2xl font-bold text-gray-900">Nuevo {obtenerTituloDocumento()}</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Nueva {obtenerTituloDocumento()}</h2>
                 <p className="text-muted-foreground">
                     Crea un {obtenerTituloDocumento().toLowerCase()} profesional en pocos pasos
                 </p>
