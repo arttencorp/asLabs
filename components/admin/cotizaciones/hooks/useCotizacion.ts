@@ -275,7 +275,7 @@ export function useCotizacion() {
       }
 
       localStorage.setItem("cotizacionActual", JSON.stringify(cotizacion))
-      window.open("/admin/imprimir", "_blank")
+      window.open("/imprimir", "_blank")
     } catch (error) {
       console.error("Error al generar vista previa:", error)
       alert("Ocurrió un error al generar la vista previa. Por favor, intente nuevamente.")

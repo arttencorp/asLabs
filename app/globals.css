@@ -200,7 +200,9 @@ img {
     margin: 10mm;
   }
 
-  html, body, * {
+  html,
+  body,
+  * {
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   }
 
@@ -219,7 +221,18 @@ img {
 
   .print-page,
   .print-page *,
-  div, p, span, h1, h2, h3, h4, h5, h6, td, th, table {
+  div,
+  p,
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  td,
+  th,
+  table {
     font-family: "Poppins", sans-serif !important;
   }
 
