@@ -2,7 +2,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Menu, X, ChevronDown } from "lucide-react"
+import { ExternalLink, Menu, X, ChevronDown, Microscope } from "lucide-react"
 
 interface NavItem {
   title: string
@@ -44,11 +44,11 @@ export default function Navbar() {
       description:
         "Explora nuestra variedad de plantines in vitro de alta calidad genética y fitosanitaria para diferentes cultivos.",
     },
-    research: {
+    /*research: {
       title: "Investigación",
       href: "/research",
       description: "Explora nuestros proyectos de investigación en clonación de plantas e ingeniería genética.",
-    },
+    },*/
     tienda: {
       title: "Tienda",
       description: "Productos especializados para educación y laboratorio",
@@ -117,9 +117,9 @@ export default function Navbar() {
       </div>
 
       {/* Main navigation */}
-      <nav className="bg-white border-b py-2 lg:py-4 relative z-20 font-serif">
+      <nav className="bg-white border-b py-1.5 lg:py-2 relative z-20 font-serif">
         <div className="container mx-auto flex items-center justify-between px-4">
-          <div className="flex items-center gap-4 lg:gap-8">
+          <div className="flex items-center gap-2 lg:gap-4">
             <Link href="/" className="flex items-center">
               <Image
                 src="/as-labs-logo.png"
@@ -132,7 +132,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex gap-6 text-sm font-serif">
+            <div className="hidden lg:flex gap-4 text-sm font-serif">
               {Object.entries(navItems).map(([key, item]) => (
                 <div
                   key={key}
@@ -142,9 +142,8 @@ export default function Navbar() {
                 >
                   {item.children ? (
                     <div
-                      className={`hover:text-[#2e7d32] py-2 transition-colors duration-200 flex items-center gap-1 cursor-pointer ${
-                        activeItem === key ? "text-[#2e7d32]" : ""
-                      }`}
+                      className={`hover:text-[#2e7d32] py-2 transition-colors duration-200 flex items-center gap-1 cursor-pointer ${activeItem === key ? "text-[#2e7d32]" : ""
+                        }`}
                     >
                       {item.title}
                       <ChevronDown className="h-4 w-4" />
@@ -154,26 +153,23 @@ export default function Navbar() {
                         </span>
                       )}
                       <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
-                          activeItem === key ? "w-full" : "w-0"
-                        }`}
+                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
+                          }`}
                       ></span>
                     </div>
                   ) : (
                     <Link
                       href={item.href || "#"}
-                      className={`hover:text-[#2e7d32] py-2 transition-colors duration-200 flex items-center gap-2 relative ${
-                        activeItem === key ? "text-[#2e7d32]" : ""
-                      }`}
+                      className={`hover:text-[#2e7d32] py-2 transition-colors duration-200 flex items-center gap-2 relative ${activeItem === key ? "text-[#2e7d32]" : ""
+                        }`}
                     >
                       {item.title}
                       {key === "seguimiento" && (
                         <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">Track</span>
                       )}
                       <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
-                          activeItem === key ? "w-full" : "w-0"
-                        }`}
+                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
+                          }`}
                       ></span>
                     </Link>
                   )}
@@ -243,7 +239,7 @@ export default function Navbar() {
 
           {/* Desktop Right Side */}
           <div className="hidden lg:flex items-center">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <a
                 href="https://wa.me/51961996645"
                 target="_blank"
@@ -260,11 +256,29 @@ export default function Navbar() {
                 </svg>
                 WhatsApp
               </a>
+              <a
+                href="https://forms.cloud.microsoft/r/wQWhqq0wR6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center bg-[#148b7d] hover:bg-[#62a9a0] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif"
+              >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <Microscope className="h-4 w-4" />
+                </svg>
+
+                Investiga con nosotros
+              </a>
             </div>
+
           </div>
 
           {/* Mobile Right Side */}
-          <div className="flex lg:hidden items-center gap-3">
+          <div className="flex lg:hidden items-center gap-2">
             <a
               href="https://wa.me/51961996645"
               target="_blank"
