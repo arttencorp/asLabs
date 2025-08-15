@@ -1,4 +1,4 @@
-import { Printer } from "lucide-react"
+import { Printer, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,7 +21,8 @@ export function InformacionAdicional({
   setCertificadosCalidad,
   tieneLaboratorio,
   onAnterior,
-  onVistaPrevia
+  onVistaPrevia,
+  onGuardar
 }: InformacionAdicionalProps) {
   return (
     <>
@@ -111,10 +112,16 @@ export function InformacionAdicional({
         <Button className="border-gray-800 text-gray-900 hover:bg-gray-100" variant="outline" onClick={onAnterior} type="button">
           Anterior: Productos y Servicios
         </Button>
-        <Button onClick={onVistaPrevia} className="gap-2" type="button">
-          <Printer className="h-4 w-4" />
-          Vista Previa
-        </Button>
+        <div className="flex gap-3">
+          <Button onClick={onGuardar} className="gap-2 bg-green-600 hover:bg-green-700" type="button">
+            <Save className="h-4 w-4" />
+            Guardar
+          </Button>
+          <Button onClick={onVistaPrevia} className="gap-2" type="button">
+            <Printer className="h-4 w-4" />
+            Vista Previa
+          </Button>
+        </div>
       </div>
     </>
   )

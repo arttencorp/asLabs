@@ -7,6 +7,7 @@ interface InformacionClienteProps {
     telefono?: string
     fechaEmision?: string | number | Date
     fechaVencimiento?: string | number | Date
+    tipoCliente?: 'natural' | 'juridica' // Nuevo prop para determinar el tipo
 }
 
 export function InformacionCliente({
@@ -15,16 +16,20 @@ export function InformacionCliente({
     direccion,
     telefono,
     fechaEmision,
-    fechaVencimiento
+    fechaVencimiento,
+    tipoCliente
 }: InformacionClienteProps) {
+    // Determinar la etiqueta del documento según el tipo de cliente
+    const etiquetaDocumento = tipoCliente === 'natural' ? 'DNI' : 'RUC'
+    
     return (
         <>
             <div className="flex justify-between text-xs">
                 <div className="w-1/2">
                     <h2 className="font-bold">Cliente: {razonSocial || ""}</h2>
-                    <p>RUC {dniRuc || ""}</p>
+                    <p>{dniRuc ? `${etiquetaDocumento} ${dniRuc}` : ""}</p>
                     <p>{direccion || ""}</p>
-                    <p>Telf. {telefono || ""}</p>
+                    <p>{telefono ? `Telf. ${telefono}` : ""}</p>
                 </div>
                 <div className="w-1/2 text-right">
                     <p>

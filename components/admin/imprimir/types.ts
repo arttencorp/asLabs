@@ -7,6 +7,7 @@ export interface CotizacionImpresion {
   telefono?: string
   fechaEmision?: string | number | Date
   fechaVencimiento?: string | number | Date
+  tipoCliente?: 'natural' | 'juridica' // Nuevo campo para determinar DNI o RUC
   items?: Array<{
     codigo?: string
     descripcion?: string

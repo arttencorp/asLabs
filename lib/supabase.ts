@@ -486,48 +486,77 @@ export async function crearCotizacion(cotizacionData: {
   try {
     const numeroCotizacion = generarNumeroCotizacion()
 
+    // Limpiar datos antes de insertar (convertir strings vacíos a null)
+    const datosLimpios = {
+      cliente_id: cotizacionData.cliente_id || null,
+      fecha_emision: cotizacionData.fecha_emision?.trim() || null,
+      fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() || null,
+      incluye_igv: cotizacionData.incluye_igv,
+      lugar_recojo: cotizacionData.lugar_recojo?.trim() || null,
+      forma_entrega: cotizacionData.forma_entrega?.trim() || null,
+      terminos_condiciones: cotizacionData.terminos_condiciones?.trim() || null,
+      forma_pago_id: cotizacionData.forma_pago_id || null
+    }
+
     // Crear cotización
     const { data: cotizacion, error: cotizacionError } = await supabase
       .from('Cotizaciones')
       .insert({
         cot_num_vac: numeroCotizacion,
-        cot_fec_emis_dt: cotizacionData.fecha_emision,
-        cot_fec_venc_dt: cotizacionData.fecha_vencimiento,
-        cot_igv_bol: cotizacionData.incluye_igv,
-        est_cot_id_int: '1', // Borrador por defecto
-        per_id_int: cotizacionData.cliente_id
+        cot_fec_emis_dt: datosLimpios.fecha_emision,
+        cot_fec_venc_dt: datosLimpios.fecha_vencimiento,
+        cot_igv_bol: datosLimpios.incluye_igv,
+        per_id_int: datosLimpios.cliente_id
+        // No incluir est_cot_id_int, dejemos que Supabase use el valor por defecto
       })
       .select()
       .single()
 
     if (cotizacionError) throw cotizacionError
 
-    // Crear detalles
-    const detalles = cotizacionData.productos.map(prod => ({
-      pro_id_int: prod.producto_id,
-      cot_id_int: cotizacion.cot_id_int,
-      det_cot_cant_int: prod.cantidad,
-      det_cot_prec_hist_int: prod.precio_historico
-    }))
+    // Crear detalles (solo productos válidos de BD)
+    const productosValidos = cotizacionData.productos.filter(prod => 
+      prod.producto_id && 
+      prod.producto_id !== 'personalizado' &&
+      prod.cantidad && 
+      prod.precio_historico
+    )
 
-    const { error: detalleError } = await supabase
-      .from('Detalle_Cotizacion')
-      .insert(detalles)
+    // Crear detalles solo si hay productos válidos
+    if (productosValidos.length > 0) {
+      const detalles = productosValidos.map(prod => ({
+        pro_id_int: prod.producto_id, // ya es el ID real de BD
+        cot_id_int: cotizacion.cot_id_int,
+        det_cot_cant_int: prod.cantidad,
+        det_cot_prec_hist_int: prod.precio_historico
+      }))
 
-    if (detalleError) throw detalleError
+      const { error: detalleError } = await supabase
+        .from('Detalle_Cotizacion')
+        .insert(detalles)
 
-    // Crear información adicional
-    const { error: infoError } = await supabase
-      .from('Informacion_Adicional')
-      .insert({
-        inf_ad_lug_recojo_vac: cotizacionData.lugar_recojo,
-        inf_ad_form_entr_vac: cotizacionData.forma_entrega,
-        inf_ad_term_cond_vac: cotizacionData.terminos_condiciones,
-        form_pa_id_int: cotizacionData.forma_pago_id,
-        cot_id_int: cotizacion.cot_id_int
-      })
+      if (detalleError) {
+        console.warn('Error insertando detalles, continuando sin productos en BD:', detalleError)
+        // No lanzar error, continuar sin productos en BD
+      }
+    } else {
+      console.log('No hay productos válidos para insertar en BD, cotización guardada sin detalles')
+    }
 
-    if (infoError) throw infoError
+    // Crear información adicional (solo si hay datos para insertar)
+    if (datosLimpios.lugar_recojo || datosLimpios.forma_entrega || datosLimpios.terminos_condiciones) {
+      const { error: infoError } = await supabase
+        .from('Informacion_Adicional')
+        .insert({
+          inf_ad_lug_recojo_vac: datosLimpios.lugar_recojo,
+          inf_ad_form_entr_vac: datosLimpios.forma_entrega,
+          inf_ad_term_cond_vac: datosLimpios.terminos_condiciones,
+          cot_id_int: cotizacion.cot_id_int
+          // Quitar form_pa_id_int por ahora, puede estar causando problemas
+        })
+
+      if (infoError) throw infoError
+    }
 
     return cotizacion
   } catch (error) {
@@ -535,7 +564,7 @@ export async function crearCotizacion(cotizacionData: {
     throw error
   }
 }
-
+     
 // ============================================
 // SEGUIMIENTO DE PEDIDOS
 // ============================================

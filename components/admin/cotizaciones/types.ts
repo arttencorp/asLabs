@@ -36,6 +36,7 @@ export interface CotizacionUIData {
   tipoDocumento: string
   fechaEmision: string
   fechaVencimiento: string
+  clienteSeleccionado: string
   razonSocial: string
   dniRuc: string
   direccion: string
@@ -63,6 +64,8 @@ export interface InformacionGeneralProps {
   setFechaEmision: (value: string) => void
   fechaVencimiento: string
   setFechaVencimiento: (value: string) => void 
+  clienteSeleccionado: string
+  setClienteSeleccionado: (value: string) => void
   razonSocial: string
   setRazonSocial: (value: string) => void
   dniRuc: string
@@ -88,12 +91,15 @@ export interface InformacionAdicionalProps {
   tieneLaboratorio: boolean
   onAnterior: () => void
   onVistaPrevia: () => void
+  onGuardar: () => void
 }
 
 export interface ProductosServiciosProps {
   items: Item[]
   preciosConIGV: boolean
   setPreciosConIGV: (value: boolean) => void
+  productos: import('@/types/database').ProductoDatabase[] // Productos de la BD
+  productosLoading: boolean
   seleccionarProducto: (id: number, productoId: string) => void
   actualizarItem: (id: number, campo: string, valor: string | number) => void
   agregarItem: () => void

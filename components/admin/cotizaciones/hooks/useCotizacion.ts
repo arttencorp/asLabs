@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { generarNumeroCotizacion } from '@/utils'
+import { generarNumeroCotizacion, limpiarDatosParaBD } from '@/utils'
+import { crearCotizacion } from '@/lib/supabase'
+import { useClientes } from '@/components/admin/clientes'
+import { useProductos } from './useProductos'
 import { 
   productosPreexistentes, terminosCondicionesDefault, 
   terminosCondicionesLaboratorio, certificadosDefault 
@@ -11,6 +14,8 @@ import type { Item, FichaTecnica, TipoDocumento, FormaPagoUI, TabName } from '..
 
 export function useCotizacion() {
   const router = useRouter()
+  const { clientes } = useClientes()
+  const { productos, loading: productosLoading, obtenerProductoPorId, formatearProductoParaSelector } = useProductos()
   
   // Estados principales
   const [activeTab, setActiveTab] = useState<TabName>('informacion')
@@ -23,6 +28,7 @@ export function useCotizacion() {
   const [fechaVencimiento, setFechaVencimiento] = useState(calcularFechaVencimiento(10))
   
   // Información del cliente
+  const [clienteSeleccionado, setClienteSeleccionado] = useState('')
   const [razonSocial, setRazonSocial] = useState('')
   const [dniRuc, setDniRuc] = useState('')
   const [direccion, setDireccion] = useState('')
@@ -131,29 +137,73 @@ export function useCotizacion() {
   // Seleccionar producto
   const seleccionarProducto = useCallback((id: number, productoId: string) => {
     if (!productoId) return
+    
+    console.log('🔍 Seleccionando producto:', { id, productoId })
 
     if (productoId === "personalizado") {
       setItems(items.map((item) => {
         if (item.id === id) {
-          return { ...item, codigo: "personalizado" }
+          return { 
+            ...item, 
+            codigo: "personalizado",
+            descripcion: "", // Limpiar descripción para personalizado
+            precioUnitario: 0, // Limpiar precio para personalizado
+            total: 0
+          }
         }
         return item
       }))
+      console.log('✅ Producto personalizado seleccionado')
       return
     }
 
+    // Buscar primero en productos de BD
+    const productoBD = obtenerProductoPorId(productoId)
+    console.log('🔍 Producto BD encontrado:', productoBD)
+    
+    if (productoBD) {
+      setItems(items.map((item) => {
+        if (item.id === id) {
+          const itemActualizado = {
+            ...item,
+            descripcion: productoBD.pro_nomb_vac || '',
+            precioUnitario: productoBD.pro_prec_unitario_int || 0,
+            total: item.cantidad * (productoBD.pro_prec_unitario_int || 0),
+            codigo: productoBD.pro_id_int,
+          }
+          console.log('✅ Item actualizado con producto BD:', itemActualizado)
+          return itemActualizado
+        }
+        return item
+      }))
+      
+      // Para productos de BD, usar términos por defecto
+      setTipoProductoSeleccionado("database")
+      setTerminosCondiciones(terminosCondicionesDefault)
+      
+      setTimeout(() => {
+        actualizarCertificadosCombinados()
+        actualizarFichasTecnicas()
+      }, 0)
+      return
+    }
+
+    // Fallback a productos preexistentes (constantes) si no se encuentra en BD
     const productoSeleccionado = productosPreexistentes.find((p) => p.id === productoId)
+    console.log('🔍 Producto conceptual encontrado:', productoSeleccionado)
 
     if (productoSeleccionado) {
       setItems(items.map((item) => {
         if (item.id === id) {
-          return {
+          const itemActualizado = {
             ...item,
             descripcion: productoSeleccionado.descripcion,
             precioUnitario: productoSeleccionado.precioUnitario,
             total: item.cantidad * productoSeleccionado.precioUnitario,
             codigo: productoSeleccionado.id,
           }
+          console.log('✅ Item actualizado con producto conceptual:', itemActualizado)
+          return itemActualizado
         }
         return item
       }))
@@ -172,8 +222,10 @@ export function useCotizacion() {
         actualizarCertificadosCombinados()
         actualizarFichasTecnicas()
       }, 0)
+    } else {
+      console.log('❌ Producto no encontrado:', productoId)
     }
-  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas])
+  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas, obtenerProductoPorId])
 
   // Actualizar item
   const actualizarItem = useCallback((id: number, campo: string, valor: string | number) => {
@@ -182,8 +234,19 @@ export function useCotizacion() {
         if (item.id === id) {
           const itemActualizado = { ...item, [campo]: valor }
 
+          // Si se cambió la cantidad o precio, recalcular total
           if (campo === "cantidad" || campo === "precioUnitario") {
             itemActualizado.total = itemActualizado.cantidad * itemActualizado.precioUnitario
+          }
+
+          // Si se cambió el código, buscar el producto en BD y actualizar información
+          if (campo === "codigo" && valor && valor !== 'personalizado') {
+            const productoBD = obtenerProductoPorId(valor as string)
+            if (productoBD) {
+              itemActualizado.descripcion = productoBD.pro_nomb_vac || ''
+              itemActualizado.precioUnitario = productoBD.pro_prec_unitario_int || 0
+              itemActualizado.total = itemActualizado.cantidad * itemActualizado.precioUnitario
+            }
           }
 
           return itemActualizado
@@ -200,7 +263,7 @@ export function useCotizacion() {
     } catch (error) {
       console.error("Error al actualizar item:", error)
     }
-  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas])
+  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas, obtenerProductoPorId])
 
   // Agregar item
   const agregarItem = useCallback(() => {
@@ -250,6 +313,10 @@ export function useCotizacion() {
           }))
         : []
 
+      // Encontrar el cliente seleccionado para determinar el tipo
+      const clienteCompleto = clientes.find(cliente => cliente.per_id_int === clienteSeleccionado)
+      const tipoCliente = clienteCompleto?.tipo || 'natural' // por defecto natural
+
       const cotizacion = {
         numeroCotizacion: numeroCotizacion || "",
         tipoDocumento: tipoDocumento || "cotizacion",
@@ -259,6 +326,7 @@ export function useCotizacion() {
         dniRuc: dniRuc || "",
         direccion: direccion || "",
         telefono: telefono || "",
+        tipoCliente: tipoCliente, // Agregar el tipo de cliente
         items: itemsValidados,
         subtotal: totales.subtotal || 0,
         impuesto: totales.impuesto || 0,
@@ -284,7 +352,55 @@ export function useCotizacion() {
     items, numeroCotizacion, tipoDocumento, fechaEmision, fechaVencimiento,
     razonSocial, dniRuc, direccion, telefono, terminosCondiciones,
     lugarRecojo, formaPago, formaEntrega, certificadosCalidad,
-    fichasTecnicas, tipoProductoSeleccionado, preciosConIGV, calcularTotales
+    fichasTecnicas, tipoProductoSeleccionado, preciosConIGV, calcularTotales,
+    clienteSeleccionado, clientes
+  ])
+
+  // Guardar cotización en BD
+  const guardarCotizacion = useCallback(async () => {
+    try {
+      if (!clienteSeleccionado) {
+        throw new Error('Debe seleccionar un cliente')
+      }
+
+      const totales = calcularTotales()
+      
+      // Preparar productos válidos para BD
+      const productosValidos = items
+        .filter(item => item.codigo && item.cantidad > 0 && item.precioUnitario > 0)
+        .map(item => ({
+          producto_id: item.codigo === 'personalizado' ? null : item.codigo,
+          cantidad: item.cantidad,
+          precio_historico: item.precioUnitario
+        }))
+
+      const cotizacionData = limpiarDatosParaBD({
+        cliente_id: clienteSeleccionado,
+        fecha_emision: fechaEmision,
+        fecha_vencimiento: fechaVencimiento,
+        incluye_igv: preciosConIGV,
+        productos: productosValidos,
+        forma_pago_id: null, // Por ahora null, después se puede agregar selector de forma de pago
+        lugar_recojo: lugarRecojo,
+        forma_entrega: formaEntrega,
+        terminos_condiciones: terminosCondiciones
+      })
+
+      const cotizacionCreada = await crearCotizacion(cotizacionData)
+      
+      // Mostrar mensaje de éxito y redirigir
+      alert(`Cotización ${cotizacionCreada.cot_num_vac} guardada exitosamente`)
+      router.push('/admin/pedidos') // o donde corresponda ver las cotizaciones
+      
+      return cotizacionCreada
+    } catch (error) {
+      console.error("Error guardando cotización:", error)
+      alert('Error al guardar la cotización: ' + (error as Error).message)
+      throw error
+    }
+  }, [
+    clienteSeleccionado, calcularTotales, items, fechaEmision, fechaVencimiento,
+    preciosConIGV, lugarRecojo, formaEntrega, terminosCondiciones, router
   ])
 
   // Navegación entre tabs
@@ -333,6 +449,8 @@ export function useCotizacion() {
     setFechaEmision,
     fechaVencimiento,
     setFechaVencimiento,
+    clienteSeleccionado,
+    setClienteSeleccionado,
     razonSocial,
     setRazonSocial,
     dniRuc,
@@ -355,12 +473,17 @@ export function useCotizacion() {
     fichasTecnicas,
     tipoProductoSeleccionado,
 
+    // Productos de BD
+    productos,
+    productosLoading,
+    
     // Funciones
     seleccionarProducto,
     actualizarItem,
     agregarItem,
     eliminarItem,
     vistaPrevia,
+    guardarCotizacion,
     avanzarPaso,
     retrocederPaso,
     calcularTotales,

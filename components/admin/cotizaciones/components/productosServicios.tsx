@@ -11,6 +11,8 @@ export function ProductosServicios({
   items,
   preciosConIGV,
   setPreciosConIGV,
+  productos,
+  productosLoading,
   seleccionarProducto,
   actualizarItem,
   agregarItem,
@@ -80,17 +82,25 @@ export function ProductosServicios({
                       <Select
                         value={item.codigo || ""}
                         onValueChange={(value) => seleccionarProducto(item.id, value)}
+                        disabled={productosLoading}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar producto" />
+                          <SelectValue placeholder={productosLoading ? "Cargando productos..." : "Seleccionar producto"} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="personalizado">Personalizado</SelectItem>
-                          {productosPreexistentes.map((producto) => (
-                            <SelectItem key={producto.id} value={producto.id}>
-                              {producto.id}
+                          {/* Productos de la base de datos */}
+                          {productos.map((producto) => (
+                            <SelectItem key={producto.pro_id_int} value={producto.pro_id_int}>
+                              {producto.pro_nomb_vac || 'Sin nombre'}
                             </SelectItem>
                           ))}
+                          {/* Productos conceptuales como fallback 
+                          {productosPreexistentes.map((producto) => (
+                            <SelectItem key={`conceptual-${producto.id}`} value={producto.id}>
+                              {producto.descripcion} - S/{producto.precioUnitario} (Conceptual)
+                            </SelectItem>
+                          ))}*/}
                         </SelectContent>
                       </Select>
                     </TableCell>
