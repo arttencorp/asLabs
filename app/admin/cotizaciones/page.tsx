@@ -23,6 +23,8 @@ export default function CotizacionesPage() {
         setFechaEmision,
         fechaVencimiento,
         setFechaVencimiento,
+        clienteSeleccionado,
+        setClienteSeleccionado,
         razonSocial,
         setRazonSocial,
         dniRuc,
@@ -42,11 +44,14 @@ export default function CotizacionesPage() {
         setFormaEntrega,
         certificadosCalidad,
         setCertificadosCalidad,
+        productos,
+        productosLoading,
         seleccionarProducto,
         actualizarItem,
         agregarItem,
         eliminarItem,
         vistaPrevia,
+        guardarCotizacion,
         avanzarPaso,
         retrocederPaso,
         calcularTotales,
@@ -142,6 +147,8 @@ export default function CotizacionesPage() {
                         setFechaEmision={setFechaEmision}
                         fechaVencimiento={fechaVencimiento}
                         setFechaVencimiento={setFechaVencimiento}
+                        clienteSeleccionado={clienteSeleccionado}
+                        setClienteSeleccionado={setClienteSeleccionado}
                         razonSocial={razonSocial}
                         setRazonSocial={setRazonSocial}
                         dniRuc={dniRuc}
@@ -160,6 +167,8 @@ export default function CotizacionesPage() {
                         items={items}
                         preciosConIGV={preciosConIGV}
                         setPreciosConIGV={setPreciosConIGV}
+                        productos={productos}
+                        productosLoading={productosLoading}
                         seleccionarProducto={seleccionarProducto}
                         actualizarItem={actualizarItem}
                         agregarItem={agregarItem}
@@ -186,6 +195,7 @@ export default function CotizacionesPage() {
                         tieneLaboratorio={tieneLaboratorio}
                         onAnterior={retrocederPaso}
                         onVistaPrevia={vistaPrevia}
+                        onGuardar={guardarCotizacion}
                     />
                 </TabsContent>
             </Tabs>

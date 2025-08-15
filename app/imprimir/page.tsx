@@ -86,6 +86,7 @@ export default function ImprimirCotizacion() {
             telefono={cotizacion.telefono}
             fechaEmision={cotizacion.fechaEmision}
             fechaVencimiento={cotizacion.fechaVencimiento}
+            tipoCliente={cotizacion.tipoCliente}
           />
 
           <TablaProductos
