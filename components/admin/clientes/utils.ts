@@ -23,7 +23,7 @@ export const validateClienteForm = (form: ClienteForm): string[] => {
 }
 
 export const formatHectareas = (hectareas: number | null): string => {
-  if (hectareas) {
+  if (hectareas !== null && hectareas !== undefined) {
     return `${hectareas.toFixed(2)} ha`
   }
   return '-'

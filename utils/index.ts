@@ -68,8 +68,7 @@ export function generarNumeroCotizacion(): string {
   return `COT-${year}-${timestamp.toString().slice(-6)}`
 }
 
-// Cliente helpers (reutilizable)
-// Use the type directly from database types
+//Re-export ClientePersona type from database types for convenience
 export type { ClientePersona } from '@/types/database'
 
 export function getNombreCompleto(persona: ClientePersona): string {
@@ -95,7 +94,7 @@ export function getNombreCompleto(persona: ClientePersona): string {
   }
 
   // Último fallback
-  return '-'
+  return ''
 }
 
 export function getDocumentoCliente(persona: ClientePersona): string {
@@ -107,7 +106,7 @@ export function getDocumentoCliente(persona: ClientePersona): string {
     return `RUC: ${persona.persona_juridica.per_jurd_ruc_int}`
   }
 
-  return '-'
+  return ''
 }
 
 export function getEmailCliente(persona: ClientePersona): string {
@@ -115,7 +114,7 @@ export function getEmailCliente(persona: ClientePersona): string {
     return `${persona.per_email_vac}`
   }
 
-  return '-'
+  return ''
 } 
 
 export function getTelfCliente(persona: ClientePersona): string {
@@ -123,7 +122,7 @@ export function getTelfCliente(persona: ClientePersona): string {
     return `${persona.per_telef_int}`
   }
 
-  return '-'
+  return ''
 }
 
 export function getCultivoCliente(persona: ClientePersona): string {
@@ -137,7 +136,7 @@ export function getCantidadCultivo(persona: ClientePersona): string {
   if (persona?.per_cantidad_int) {
     return persona.per_cantidad_int.toString()
   }
-  return '-'
+  return ''
 }
 
 // Funciones específicas para impresión de cotizaciones

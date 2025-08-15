@@ -7,7 +7,7 @@ interface InformacionClienteProps {
     telefono?: string
     fechaEmision?: string | number | Date
     fechaVencimiento?: string | number | Date
-    tipoCliente?: 'natural' | 'juridica' // Nuevo prop para determinar el tipo
+    tipoCliente?: 'natural' | 'juridica'
 }
 
 export function InformacionCliente({
@@ -27,9 +27,9 @@ export function InformacionCliente({
             <div className="flex justify-between text-xs">
                 <div className="w-1/2">
                     <h2 className="font-bold">Cliente: {razonSocial || ""}</h2>
-                    <p>{dniRuc ? `${etiquetaDocumento} ${dniRuc}` : ""}</p>
-                    <p>{direccion || ""}</p>
-                    <p>{telefono ? `Telf. ${telefono}` : ""}</p>
+                    {dniRuc && <p>{etiquetaDocumento}: {dniRuc}</p>}
+                    {direccion && <p>{direccion}</p>}
+                    {telefono && <p>Telf: {telefono}</p>}
                 </div>
                 <div className="w-1/2 text-right">
                     <p>
