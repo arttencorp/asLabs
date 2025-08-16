@@ -14,6 +14,7 @@ export interface Certificado {
   tipo: string
   informe: string
   detalle: string[]
+  link?: string // URL opcional para enlace del certificado
 }
 
 export interface FichaTecnica {
@@ -51,6 +52,7 @@ export interface CotizacionUIData {
   formaEntrega: string
   totalTexto: string
   certificadosCalidad: string
+  certificadosEstructurados?: Certificado[] // Certificados estructurados
   fichasTecnicas: FichaTecnica[]
   tipoProductoSeleccionado: string
   preciosConIGV: boolean
@@ -88,6 +90,7 @@ export interface InformacionAdicionalProps {
   setTerminosCondiciones: (value: string) => void
   certificadosCalidad: string
   setCertificadosCalidad: (value: string) => void
+  certificadosEstructurados: Certificado[] // Certificados estructurados
   tieneLaboratorio: boolean
   onAnterior: () => void
   onVistaPrevia: () => void

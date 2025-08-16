@@ -62,3 +62,28 @@ export interface ProductoDatabase {
   pro_created_at_dt: string
   pro_updated_at_dt: string
 }
+
+// Certificados de Calidad - Estructura real de BD
+export interface CertificadoCalidadDatabase {
+  cer_cal_id_int: string
+  cer_cal_cod_muestra_int: number | null
+  cer_cal_tipo_vac: string | null
+  cer_cal_infor_ensayo_vac: string | null
+  cer_cal_result_vac: string | null
+  cer_cal_resum_vac: string | null
+  cer_cal_imag_url: string | null
+  cer_cal_created_at_dt: string
+  cer_cal_updated_at_dt: string
+  pro_id_int: string // FK a Productos - relación directa
+}
+
+// Fichas Técnicas - Estructura real de BD
+export interface FichaTecnicaDatabase {
+  fit_tec_id_int: string
+  fit_tec_nom_planta_vac: string | null
+  fit_tec_created_at_dt: string
+  fit_tec_updated_at_dt: string
+  pro_id_int: string // FK a Productos - relación directa
+  fit_tec_imag_vac: string | null
+  fit_tec_cod_vac: string | null
+}

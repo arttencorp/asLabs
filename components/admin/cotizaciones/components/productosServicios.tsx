@@ -95,12 +95,6 @@ export function ProductosServicios({
                               {producto.pro_nomb_vac || 'Sin nombre'}
                             </SelectItem>
                           ))}
-                          {/* Productos conceptuales como fallback 
-                          {productosPreexistentes.map((producto) => (
-                            <SelectItem key={`conceptual-${producto.id}`} value={producto.id}>
-                              {producto.descripcion} - S/{producto.precioUnitario} (Conceptual)
-                            </SelectItem>
-                          ))}*/}
                         </SelectContent>
                       </Select>
                     </TableCell>

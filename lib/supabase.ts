@@ -7,7 +7,11 @@ import type {
   EstadoPedido,
   EstadoCotizacion,
   FormaPago,
-  ProductoDatabase
+  ProductoDatabase,
+  CertificadoCalidadDatabase,
+  FichaTecnicaDatabase,
+  ProductoCertificadoDatabase,
+  ProductoFichaTecnicaDatabase
 } from '@/types/database'
 import type { ClientePersona } from '@/types/database'
 
@@ -272,6 +276,106 @@ export async function obtenerProductos(): Promise<ProductoDatabase[]> {
     return data || []
   } catch (error) {
     console.error('Error obteniendo productos:', error)
+    throw error
+  }
+}
+
+// Obtener certificados de calidad para un producto específico
+export async function obtenerCertificadosPorProducto(productoId: string): Promise<CertificadoCalidadDatabase[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos_Certificados')
+      .select(`
+        certificado:Certificados_Calidad(*)
+      `)
+      .eq('pro_id_int', productoId)
+
+    if (error) throw error
+    
+    // Extraer solo los certificados de la respuesta
+    return (data?.map(item => item.certificado).filter(Boolean) || []) as unknown as CertificadoCalidadDatabase[]
+  } catch (error) {
+    console.error('Error obteniendo certificados del producto:', error)
+    throw error
+  }
+}
+
+// Obtener fichas técnicas para un producto específico
+export async function obtenerFichasTecnicasPorProducto(productoId: string): Promise<FichaTecnicaDatabase[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos_Fichas_Tecnicas')
+      .select(`
+        ficha_tecnica:Fichas_Tecnicas(*)
+      `)
+      .eq('pro_id_int', productoId)
+
+    if (error) throw error
+    
+    // Extraer solo las fichas técnicas de la respuesta
+    return (data?.map(item => item.ficha_tecnica).filter(Boolean) || []) as unknown as FichaTecnicaDatabase[]
+  } catch (error) {
+    console.error('Error obteniendo fichas técnicas del producto:', error)
+    throw error
+  }
+}
+
+// Obtener certificados de calidad para múltiples productos
+export async function obtenerCertificadosPorProductos(productosIds: string[]): Promise<{[key: string]: CertificadoCalidadDatabase[]}> {
+  try {
+    if (productosIds.length === 0) return {}
+
+    const { data, error } = await supabase
+      .from('Certificados_Calidad')
+      .select('*')
+      .in('pro_id_int', productosIds)
+
+    if (error) throw error
+
+    // Agrupar certificados por producto ID
+    const certificadosPorProducto: {[key: string]: CertificadoCalidadDatabase[]} = {}
+    data?.forEach((certificado: CertificadoCalidadDatabase) => {
+      if (certificado.pro_id_int) {
+        if (!certificadosPorProducto[certificado.pro_id_int]) {
+          certificadosPorProducto[certificado.pro_id_int] = []
+        }
+        certificadosPorProducto[certificado.pro_id_int].push(certificado)
+      }
+    })
+
+    return certificadosPorProducto
+  } catch (error) {
+    console.error('Error obteniendo certificados de productos:', error)
+    throw error
+  }
+}
+
+// Obtener fichas técnicas para múltiples productos
+export async function obtenerFichasTecnicasPorProductos(productosIds: string[]): Promise<{[key: string]: FichaTecnicaDatabase[]}> {
+  try {
+    if (productosIds.length === 0) return {}
+
+    const { data, error } = await supabase
+      .from('Ficha_Tecnica')
+      .select('*')
+      .in('pro_id_int', productosIds)
+
+    if (error) throw error
+
+    // Agrupar fichas técnicas por producto ID
+    const fichasPorProducto: {[key: string]: FichaTecnicaDatabase[]} = {}
+    data?.forEach((ficha: FichaTecnicaDatabase) => {
+      if (ficha.pro_id_int) {
+        if (!fichasPorProducto[ficha.pro_id_int]) {
+          fichasPorProducto[ficha.pro_id_int] = []
+        }
+        fichasPorProducto[ficha.pro_id_int].push(ficha)
+      }
+    })
+
+    return fichasPorProducto
+  } catch (error) {
+    console.error('Error obteniendo fichas técnicas de productos:', error)
     throw error
   }
 }
@@ -626,4 +730,42 @@ export async function obtenerPedidoPorCodigo(codigoSeguimiento: string) {
     console.error('Error obteniendo pedido por código:', error)
     throw error
   }
+}
+
+// ============================================
+// FUNCIONES HELPER PARA CERTIFICADOS Y FICHAS TÉCNICAS
+// ============================================
+
+// Transformar certificado de BD a formato UI
+export function transformarCertificadoBD(certificado: CertificadoCalidadDatabase): import('@/components/admin/cotizaciones/types').Certificado {
+  return {
+    titulo: `Certificado de Calidad - ${certificado.cer_cal_tipo_vac || 'Sin Tipo'}`,
+    codigo: certificado.cer_cal_cod_muestra_int ? certificado.cer_cal_cod_muestra_int.toString() : '',
+    tipo: certificado.cer_cal_tipo_vac || '',
+    informe: certificado.cer_cal_infor_ensayo_vac || '',
+    detalle: [
+      certificado.cer_cal_result_vac || '',
+      certificado.cer_cal_resum_vac || ''
+    ].filter(Boolean), // Solo incluir elementos no vacíos
+    link: certificado.cer_cal_imag_url || undefined
+  }
+}
+
+// Transformar ficha técnica de BD a formato UI
+export function transformarFichaTecnicaBD(fichaTecnica: FichaTecnicaDatabase): import('@/components/admin/cotizaciones/types').FichaTecnica {
+  return {
+    titulo: fichaTecnica.fit_tec_nom_planta_vac || 'Ficha Técnica',
+    descripcion: `Código: ${fichaTecnica.fit_tec_cod_vac || 'Sin código'}`,
+    archivo: fichaTecnica.fit_tec_imag_vac || ''
+  }
+}
+
+// Transformar múltiples certificados de BD a formato UI
+export function transformarCertificadosBD(certificados: CertificadoCalidadDatabase[]): import('@/components/admin/cotizaciones/types').Certificado[] {
+  return certificados.map(transformarCertificadoBD)
+}
+
+// Transformar múltiples fichas técnicas de BD a formato UI
+export function transformarFichasTecnicasBD(fichasTecnicas: FichaTecnicaDatabase[]): import('@/components/admin/cotizaciones/types').FichaTecnica[] {
+  return fichasTecnicas.map(transformarFichaTecnicaBD)
 }

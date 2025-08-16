@@ -39,6 +39,7 @@ export function useCotizacionImpresion() {
                 cotizacionData.totalTexto = cotizacionData.totalTexto || ""
                 cotizacionData.terminosCondiciones = cotizacionData.terminosCondiciones || ""
                 cotizacionData.certificadosCalidad = cotizacionData.certificadosCalidad || ""
+                cotizacionData.certificadosEstructurados = cotizacionData.certificadosEstructurados || []
                 cotizacionData.lugarRecojo = cotizacionData.lugarRecojo || ""
                 cotizacionData.formaPago = cotizacionData.formaPago || "completo"
                 cotizacionData.formaEntrega = cotizacionData.formaEntrega || ""

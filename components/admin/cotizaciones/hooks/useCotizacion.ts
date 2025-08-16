@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { generarNumeroCotizacion, limpiarDatosParaBD } from '@/utils'
 import { crearCotizacion } from '@/lib/supabase'
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
+import { useCertificadosFichas } from '@/hooks/useCertificadosFichas'
 import { 
   productosPreexistentes, terminosCondicionesDefault, 
   terminosCondicionesLaboratorio, certificadosDefault 
@@ -16,6 +17,14 @@ export function useCotizacion() {
   const router = useRouter()
   const { clientes } = useClientes()
   const { productos, loading: productosLoading, obtenerProductoPorId, formatearProductoParaSelector } = useProductos()
+  const { 
+    cargarCertificadosParaProductos, 
+    cargarFichasParaProductos,
+    obtenerCertificadosProducto,
+    obtenerFichasProducto,
+    certificadosLoading,
+    fichasLoading
+  } = useCertificadosFichas()
   
   // Estados principales
   const [activeTab, setActiveTab] = useState<TabName>('informacion')
@@ -39,12 +48,21 @@ export function useCotizacion() {
     { id: 1, descripcion: '', cantidad: 1, precioUnitario: 0, total: 0, codigo: '' }
   ])
   
+  // Ref para acceder a los items actuales sin dependencia de closure
+  const itemsRef = useRef(items)
+  
+  // Sincronizar ref con state
+  useEffect(() => {
+    itemsRef.current = items
+  }, [items])
+  
   // Información adicional
   const [terminosCondiciones, setTerminosCondiciones] = useState(terminosCondicionesDefault)
   const [lugarRecojo, setLugarRecojo] = useState('')
   const [formaPago, setFormaPago] = useState<FormaPagoUI>('completo')
   const [formaEntrega, setFormaEntrega] = useState('')
   const [certificadosCalidad, setCertificadosCalidad] = useState(certificadosDefault)
+  const [certificadosEstructurados, setCertificadosEstructurados] = useState<any[]>([]) // Certificados raw
   const [fichasTecnicas, setFichasTecnicas] = useState<FichaTecnica[]>([])
   const [tipoProductoSeleccionado, setTipoProductoSeleccionado] = useState('vegetal')
 
@@ -72,42 +90,70 @@ export function useCotizacion() {
   }, [items, preciosConIGV])
 
   // Actualizar certificados combinados
-  const actualizarCertificadosCombinados = useCallback(() => {
+  const actualizarCertificadosCombinados = useCallback(async () => {
+    console.log('🚀 INICIANDO actualizarCertificadosCombinados')
+    const currentItems = itemsRef.current
+    console.log('📋 Items actuales:', currentItems)
     try {
-      const codigosSeleccionados = items
+      const codigosSeleccionados = currentItems
         .filter((item) => item && item.codigo)
         .map((item) => item.codigo)
         .filter((codigo) => codigo && codigo !== "personalizado" && codigo !== "LAB")
 
+      console.log('🔍 Items con código:', currentItems.map(item => ({ id: item.id, codigo: item.codigo })))
+      console.log('🔍 Códigos seleccionados:', codigosSeleccionados)
+
       if (!codigosSeleccionados || codigosSeleccionados.length === 0) {
         setCertificadosCalidad(certificadosDefault)
+        setCertificadosEstructurados([])
         return
       }
 
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       let todosCertificados: any[] = []
       
-      codigosUnicos.forEach((codigo) => {
-        const producto = productosPreexistentes.find((p) => p && p.id === codigo)
-        if (producto && producto.certificados && Array.isArray(producto.certificados)) {
-          todosCertificados = [...todosCertificados, ...producto.certificados]
-        }
-      })
+      console.log('🔄 Todos los códigos son productos de BD (UUIDs):', codigosUnicos)
+      
+      // Cargar certificados de BD para todos los productos
+      if (codigosUnicos.length > 0) {
+        console.log('📞 Llamando a cargarCertificadosParaProductos con:', codigosUnicos)
+        await cargarCertificadosParaProductos(codigosUnicos)
+        
+        codigosUnicos.forEach((productoId) => {
+          console.log(`🔍 Buscando certificados para producto ${productoId}`)
+          const certificadosBD = obtenerCertificadosProducto(productoId)
+          console.log(`📋 Certificados encontrados para ${productoId}:`, certificadosBD)
+          if (certificadosBD && certificadosBD.length > 0) {
+            todosCertificados = [...todosCertificados, ...certificadosBD]
+            console.log(`✅ Agregados ${certificadosBD.length} certificados`)
+          } else {
+            console.log(`❌ No se encontraron certificados para ${productoId}`)
+          }
+        })
+      }
+      
+      console.log('🎯 Total certificados obtenidos:', todosCertificados)
 
       if (todosCertificados.length > 0) {
         const certificadosTexto = generarCertificadosTexto(todosCertificados)
         setCertificadosCalidad(certificadosTexto)
+        setCertificadosEstructurados(todosCertificados) // Guardar también los certificados estructurados
+      } else {
+        setCertificadosCalidad(certificadosDefault)
+        setCertificadosEstructurados([])
       }
     } catch (error) {
       console.error("Error al actualizar certificados:", error)
       setCertificadosCalidad(certificadosDefault)
+      setCertificadosEstructurados([])
     }
-  }, [items])
+  }, [cargarCertificadosParaProductos, obtenerCertificadosProducto])
 
   // Actualizar fichas técnicas
-  const actualizarFichasTecnicas = useCallback(() => {
+  const actualizarFichasTecnicas = useCallback(async () => {
     try {
-      const codigosSeleccionados = items
+      const currentItems = itemsRef.current
+      const codigosSeleccionados = currentItems
         .filter((item) => item && item.codigo)
         .map((item) => item.codigo)
         .filter((codigo) => codigo && codigo !== "personalizado" && codigo !== "LAB")
@@ -120,19 +166,44 @@ export function useCotizacion() {
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       const todasFichas: FichaTecnica[] = []
       
-      codigosUnicos.forEach((codigo) => {
-        const producto = productosPreexistentes.find((p) => p && p.id === codigo)
-        if (producto && producto.fichaTecnica) {
-          todasFichas.push(producto.fichaTecnica)
-        }
-      })
+      console.log('🔄 Todos los códigos son productos de BD para fichas (UUIDs):', codigosUnicos)
+      
+      // Cargar fichas técnicas de BD para todos los productos
+      if (codigosUnicos.length > 0) {
+        console.log('📞 Llamando a cargarFichasParaProductos con:', codigosUnicos)
+        await cargarFichasParaProductos(codigosUnicos)
+        
+        codigosUnicos.forEach((productoId) => {
+          console.log(`🔍 Buscando fichas para producto ${productoId}`)
+          const fichasBD = obtenerFichasProducto(productoId)
+          console.log(`📋 Fichas encontradas para ${productoId}:`, fichasBD)
+          if (fichasBD && fichasBD.length > 0) {
+            todasFichas.push(...fichasBD)
+            console.log(`✅ Agregadas ${fichasBD.length} fichas`)
+          } else {
+            console.log(`❌ No se encontraron fichas para ${productoId}`)
+          }
+        })
+      }
+      
+      console.log('🎯 Total fichas obtenidas:', todasFichas)
 
       setFichasTecnicas(todasFichas)
     } catch (error) {
       console.error("Error al actualizar fichas técnicas:", error)
       setFichasTecnicas([])
     }
-  }, [items])
+  }, [cargarFichasParaProductos, obtenerFichasProducto])
+
+  // Helper para actualizar certificados y fichas de forma asíncrona
+  const actualizarCertificadosYFichas = useCallback(async () => {
+    try {
+      await actualizarCertificadosCombinados()
+      await actualizarFichasTecnicas()
+    } catch (error) {
+      console.error('Error actualizando certificados y fichas:', error)
+    }
+  }, [actualizarCertificadosCombinados, actualizarFichasTecnicas])
 
   // Seleccionar producto
   const seleccionarProducto = useCallback((id: number, productoId: string) => {
@@ -146,86 +217,45 @@ export function useCotizacion() {
           return { 
             ...item, 
             codigo: "personalizado",
-            descripcion: "", // Limpiar descripción para personalizado
-            precioUnitario: 0, // Limpiar precio para personalizado
+            descripcion: "",
+            precioUnitario: 0,
             total: 0
           }
         }
         return item
       }))
-      console.log('✅ Producto personalizado seleccionado')
       return
     }
 
-    // Buscar primero en productos de BD
+    // Buscar producto en BD
     const productoBD = obtenerProductoPorId(productoId)
     console.log('🔍 Producto BD encontrado:', productoBD)
+    console.log('🔍 productoId buscado:', productoId)
     
     if (productoBD) {
       setItems(items.map((item) => {
         if (item.id === id) {
-          const itemActualizado = {
+          return {
             ...item,
             descripcion: productoBD.pro_nomb_vac || '',
             precioUnitario: productoBD.pro_prec_unitario_int || 0,
             total: item.cantidad * (productoBD.pro_prec_unitario_int || 0),
             codigo: productoBD.pro_id_int,
           }
-          console.log('✅ Item actualizado con producto BD:', itemActualizado)
-          return itemActualizado
         }
         return item
       }))
       
-      // Para productos de BD, usar términos por defecto
       setTipoProductoSeleccionado("database")
       setTerminosCondiciones(terminosCondicionesDefault)
       
+      // Actualizar certificados y fichas DESPUÉS del próximo render
       setTimeout(() => {
-        actualizarCertificadosCombinados()
-        actualizarFichasTecnicas()
-      }, 0)
-      return
+        console.log('🚀 EJECUTANDO actualizarCertificadosYFichas después de setTimeout')
+        actualizarCertificadosYFichas()
+      }, 10)
     }
-
-    // Fallback a productos preexistentes (constantes) si no se encuentra en BD
-    const productoSeleccionado = productosPreexistentes.find((p) => p.id === productoId)
-    console.log('🔍 Producto conceptual encontrado:', productoSeleccionado)
-
-    if (productoSeleccionado) {
-      setItems(items.map((item) => {
-        if (item.id === id) {
-          const itemActualizado = {
-            ...item,
-            descripcion: productoSeleccionado.descripcion,
-            precioUnitario: productoSeleccionado.precioUnitario,
-            total: item.cantidad * productoSeleccionado.precioUnitario,
-            codigo: productoSeleccionado.id,
-          }
-          console.log('✅ Item actualizado con producto conceptual:', itemActualizado)
-          return itemActualizado
-        }
-        return item
-      }))
-
-      if (productoSeleccionado.tipoProducto) {
-        setTipoProductoSeleccionado(productoSeleccionado.tipoProducto)
-
-        if (productoSeleccionado.tipoProducto === "laboratorio") {
-          setTerminosCondiciones(terminosCondicionesLaboratorio)
-        } else {
-          setTerminosCondiciones(terminosCondicionesDefault)
-        }
-      }
-
-      setTimeout(() => {
-        actualizarCertificadosCombinados()
-        actualizarFichasTecnicas()
-      }, 0)
-    } else {
-      console.log('❌ Producto no encontrado:', productoId)
-    }
-  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas, obtenerProductoPorId])
+  }, [items, actualizarCertificadosYFichas, obtenerProductoPorId])
 
   // Actualizar item
   const actualizarItem = useCallback((id: number, campo: string, valor: string | number) => {
@@ -255,15 +285,13 @@ export function useCotizacion() {
       }))
 
       if (campo === "codigo") {
-        setTimeout(() => {
-          actualizarCertificadosCombinados()
-          actualizarFichasTecnicas()
-        }, 0)
+        // Actualizar certificados y fichas de forma asíncrona
+        actualizarCertificadosYFichas()
       }
     } catch (error) {
       console.error("Error al actualizar item:", error)
     }
-  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas, obtenerProductoPorId])
+  }, [items, actualizarCertificadosYFichas, obtenerProductoPorId])
 
   // Agregar item
   const agregarItem = useCallback(() => {
@@ -287,15 +315,13 @@ export function useCotizacion() {
     try {
       if (items.length > 1) {
         setItems(items.filter((item) => item.id !== id))
-        setTimeout(() => {
-          actualizarCertificadosCombinados()
-          actualizarFichasTecnicas()
-        }, 0)
+        // Actualizar certificados y fichas de forma asíncrona
+        actualizarCertificadosYFichas()
       }
     } catch (error) {
       console.error("Error al eliminar item:", error)
     }
-  }, [items, actualizarCertificadosCombinados, actualizarFichasTecnicas])
+  }, [items, actualizarCertificadosYFichas])
 
   // Vista previa
   const vistaPrevia = useCallback(() => {
@@ -337,6 +363,7 @@ export function useCotizacion() {
         formaEntrega: formaEntrega || "",
         totalTexto: numeroATexto(totales.total) || "",
         certificadosCalidad: certificadosCalidad || "",
+        certificadosEstructurados: certificadosEstructurados || [], // Incluir certificados estructurados
         fichasTecnicas: Array.isArray(fichasTecnicas) ? fichasTecnicas : [],
         tipoProductoSeleccionado: tipoProductoSeleccionado || "vegetal",
         preciosConIGV: preciosConIGV,
@@ -470,12 +497,17 @@ export function useCotizacion() {
     setFormaEntrega,
     certificadosCalidad,
     setCertificadosCalidad,
+    certificadosEstructurados, // Exportar certificados estructurados
     fichasTecnicas,
     tipoProductoSeleccionado,
 
     // Productos de BD
     productos,
     productosLoading,
+    
+    // Estados de carga de certificados y fichas
+    certificadosLoading,
+    fichasLoading,
     
     // Funciones
     seleccionarProducto,
