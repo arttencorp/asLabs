@@ -44,6 +44,7 @@ export default function CotizacionesPage() {
         setFormaEntrega,
         certificadosCalidad,
         setCertificadosCalidad,
+        certificadosEstructurados,
         productos,
         productosLoading,
         seleccionarProducto,
@@ -192,6 +193,7 @@ export default function CotizacionesPage() {
                         setTerminosCondiciones={setTerminosCondiciones}
                         certificadosCalidad={certificadosCalidad}
                         setCertificadosCalidad={setCertificadosCalidad}
+                        certificadosEstructurados={certificadosEstructurados}
                         tieneLaboratorio={tieneLaboratorio}
                         onAnterior={retrocederPaso}
                         onVistaPrevia={vistaPrevia}

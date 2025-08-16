@@ -197,7 +197,18 @@ img {
 @media print {
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 0;
+  }
+  
+  /* Crear nuestros propios márgenes internos para evitar headers/footers */
+  body {
+    margin: 0 !important;
+    padding: 10mm !important;
+  }
+  
+  .print-page {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   html,
