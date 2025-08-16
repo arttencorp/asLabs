@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Plus, ExternalLink, User, Building2, Search, X, Calendar, MapPin, Phone, Mail } from "lucide-react"
+import { ChevronRight, Plus, ExternalLink, User, Building2, Search, X, Calendar, MapPin, Phone, Mail } from "lucide-react"
 import Link from "next/link"
 import { InformacionGeneralProps} from "../types"
 import { useClientes } from "@/components/admin/clientes"
@@ -350,8 +350,8 @@ export function InformacionGeneral({
           }`}
           size="lg"
         >
-          {clienteSeleccionado ? 'Continuar con Productos' : 'Selecciona un cliente primero'}
-          {clienteSeleccionado && <ExternalLink className="ml-2 h-4 w-4" />}
+          {clienteSeleccionado ? 'Continuar con Productos/Servicios' : 'Selecciona un cliente primero'}
+          {clienteSeleccionado && <ChevronRight className="ml-2 h-4 w-4" />}
         </Button>
       </div>
     </>

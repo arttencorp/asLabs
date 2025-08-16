@@ -1,4 +1,4 @@
-import { Printer, Save } from "lucide-react"
+import { ChevronRight, ChevronLeft, Eye, Printer, Save, EyeIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -81,7 +81,7 @@ export function InformacionAdicional({
             />
           </div>
 
-          {/* Mostrar certificados solo si NO hay productos de laboratorio */}
+          {/* Mostrar certificados solo si NO hay productos de laboratorio 
           {!tieneLaboratorio && (
             <div className="grid gap-2">
               <Label htmlFor="certificadosCalidad">Certificados de Calidad</Label>
@@ -93,7 +93,7 @@ export function InformacionAdicional({
                 rows={3}
               />
             </div>
-          )}
+          )}*/}
         </CardContent>
         <CardFooter>
           <div className="mt-4 space-y-2 w-full">
@@ -108,17 +108,31 @@ export function InformacionAdicional({
         </CardFooter>
       </Card>
 
-      <div className="mt-6 flex justify-between"> 
-        <Button className="border-gray-800 text-gray-900 hover:bg-gray-100" variant="outline" onClick={onAnterior} type="button">
-          Anterior: Productos y Servicios
-        </Button>
-        <div className="flex gap-3">
-          <Button onClick={onGuardar} className="gap-2 bg-green-600 hover:bg-green-700" type="button">
+      <div className="mt-8 flex justify-between">
+        <div className="text-sm text-gray-500">
+          Paso 3 de 3 - Información Adicional
+        </div>
+        <div className="flex justify-between gap-3">
+          <Button
+            className="border-gray-800 text-gray-900 hover:bg-gray-100"
+            variant="outline"
+            onClick={onAnterior}
+            type="button">
+            <ChevronLeft className="h-4 w-4" />
+            Volver a Productos/Servicios
+          </Button>
+          <Button
+            onClick={onGuardar}
+            className="gap-2 bg-[#1a1a2e] hover:bg-[#24243c]"
+            type="button">
             <Save className="h-4 w-4" />
             Guardar
           </Button>
-          <Button onClick={onVistaPrevia} className="gap-2" type="button">
-            <Printer className="h-4 w-4" />
+          <Button
+            onClick={onVistaPrevia}
+            className="gap-2 bg-green-600 hover:bg-green-700"
+            type="button">
+            <Eye className="h-4 w-4" />
             Vista Previa
           </Button>
         </div>

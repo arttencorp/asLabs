@@ -3,7 +3,6 @@
 import type React from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 import { useCotizacion } from "@/components/admin/cotizaciones/hooks/useCotizacion"
 import { InformacionGeneral } from "@/components/admin/cotizaciones/components/informacionGeneral"
 import { ProductosServicios } from "@/components/admin/cotizaciones/components/productosServicios"
@@ -77,7 +76,7 @@ export default function CotizacionesPage() {
                         onClick={() => setTipoDocumento("cotizacion")}
                         className={
                             tipoDocumento === "cotizacion"
-                                ? "bg-[#5D9848] hover:bg-[#4a7c3a]"
+                                ? "bg-green-600 hover:bg-[#4a7c3a]"
                                 : "border-gray-800 text-gray-900 hover:bg-gray-100"
                         }
                     >
@@ -88,7 +87,7 @@ export default function CotizacionesPage() {
                         onClick={() => setTipoDocumento("boleta")}
                         className={
                             tipoDocumento === "boleta"
-                                ? "bg-[#5D9848] hover:bg-[#4a7c3a]"
+                                ? "bg-green-600 hover:bg-[#4a7c3a]"
                                 : "border-gray-800 text-gray-900 hover:bg-gray-100"
                         }
                     >
@@ -99,7 +98,7 @@ export default function CotizacionesPage() {
                         onClick={() => setTipoDocumento("factura")}
                         className={
                             tipoDocumento === "factura"
-                                ? "bg-[#5D9848] hover:bg-[#4a7c3a]"
+                                ? "bg-green-600 hover:bg-[#4a7c3a]"
                                 : "border-gray-800 text-gray-900 hover:bg-gray-100"
                         }
                     >
@@ -121,19 +120,19 @@ export default function CotizacionesPage() {
                 <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger
                         value="informacion"
-                        className="data-[state=active]:bg-[#5D9848] data-[state=active]:text-white"
+                        className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
                     >
                         1. Información General
                     </TabsTrigger>
                     <TabsTrigger
                         value="productos"
-                        className="data-[state=active]:bg-[#5D9848] data-[state=active]:text-white"
+                        className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
                     >
                         2. Productos y Servicios
                     </TabsTrigger>
                     <TabsTrigger
                         value="adicional"
-                        className="data-[state=active]:bg-[#5D9848] data-[state=active]:text-white"
+                        className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
                     >
                         3. Información Adicional
                     </TabsTrigger>

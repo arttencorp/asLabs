@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react"
+import { ChevronRight, ChevronLeft, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,21 +35,19 @@ export function ProductosServicios({
               <div className="flex border rounded-md overflow-hidden">
                 <button
                   type="button"
-                  className={`px-3 py-1 text-sm ${
-                    !preciosConIGV ? "bg-[#5D9848] text-white" : "bg-gray-100 text-gray-700"
-                  }`}
+                  className={`px-3 py-1 text-sm ${!preciosConIGV ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"
+                    }`}
                   onClick={() => setPreciosConIGV(false)}
                 >
-                  SIN IGV
+                  Incluye IGV
                 </button>
                 <button
                   type="button"
-                  className={`px-3 py-1 text-sm ${
-                    preciosConIGV ? "bg-[#5D9848] text-white" : "bg-gray-100 text-gray-700"
-                  }`}
+                  className={`px-3 py-1 text-sm ${preciosConIGV ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"
+                    }`}
                   onClick={() => setPreciosConIGV(true)}
                 >
-                  CON IGV
+                  No incluye IGV
                 </button>
               </div>
             </div>
@@ -158,14 +156,28 @@ export function ProductosServicios({
           </div>
         </CardContent>
       </Card>
-      
-      <div className="mt-6 flex justify-between">
-        <Button className="border-gray-800 text-gray-900 hover:bg-gray-100" variant="outline" onClick={onAnterior} type="button">
-          Anterior: Información General
-        </Button>
-        <Button onClick={onSiguiente} type="button">
-          Siguiente: Información Adicional
-        </Button>
+
+      <div className="mt-8 flex justify-between items-center">
+        <div className="text-sm text-gray-500">
+          Paso 2 de 3 - Productos/Servicios
+        </div>
+        <div className="flex justify-end gap-4">
+          <Button
+            className="border-gray-800 text-gray-900 hover:bg-gray-100"
+            variant="outline"
+            onClick={onAnterior}
+            type="button">
+            <ChevronLeft className="ml-2 h-4 w-4" />
+            Volver a Información General
+          </Button>
+          <Button
+            className="bg-green-600 hover:bg-green-700 text-white"
+            onClick={onSiguiente}
+            type="button">
+            Continuar con Información Adicional
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </>
   )

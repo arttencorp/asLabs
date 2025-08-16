@@ -1,6 +1,7 @@
 // Tipos específicos para el módulo de cotizaciones (interfaz de usuario)
 export interface Item {
   id: number
+  nombre: string
   descripcion: string
   cantidad: number
   precioUnitario: number

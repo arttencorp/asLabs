@@ -33,6 +33,7 @@ export function useProductos() {
   // Función para formatear producto para el selector
   const formatearProductoParaSelector = (producto: ProductoDatabase) => ({
     id: producto.pro_id_int,
+    nombre: producto.pro_nomb_vac || 'Sin nombre',
     descripcion: producto.pro_nomb_vac || 'Sin nombre',
     precioUnitario: producto.pro_prec_unitario_int || 0,
     tipoProducto: 'database' // para distinguir de productos conceptuales

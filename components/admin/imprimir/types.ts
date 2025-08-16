@@ -10,6 +10,7 @@ export interface CotizacionImpresion {
   tipoCliente?: 'natural' | 'juridica' // Nuevo campo para determinar DNI o RUC
   items?: Array<{
     codigo?: string
+    nombre?: string
     descripcion?: string
     cantidad?: number
     precioUnitario?: number

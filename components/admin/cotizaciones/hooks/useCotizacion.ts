@@ -45,7 +45,7 @@ export function useCotizacion() {
   
   // Productos y servicios
   const [items, setItems] = useState<Item[]>([
-    { id: 1, descripcion: '', cantidad: 1, precioUnitario: 0, total: 0, codigo: '' }
+    { id: 1, nombre: '', descripcion: '', cantidad: 1, precioUnitario: 0, total: 0, codigo: '' }
   ])
   
   // Ref para acceder a los items actuales sin dependencia de closure
@@ -183,7 +183,7 @@ export function useCotizacion() {
       await actualizarCertificadosCombinados()
       await actualizarFichasTecnicas()
     } catch (error) {
-      console.error('Error actualizando certificados y fichas:', error)
+      console.error('Error actualizando certificados y fichas')
     }
   }, [actualizarCertificadosCombinados, actualizarFichasTecnicas])
 
@@ -216,7 +216,8 @@ export function useCotizacion() {
         if (item.id === id) {
           return {
             ...item,
-            descripcion: productoBD.pro_nomb_vac || '',
+            nombre: productoBD.pro_nomb_vac || '',
+            descripcion: productoBD.pro_desc_vac || '',
             precioUnitario: productoBD.pro_prec_unitario_int || 0,
             total: item.cantidad * (productoBD.pro_prec_unitario_int || 0),
             codigo: productoBD.pro_id_int,
@@ -251,7 +252,8 @@ export function useCotizacion() {
           if (campo === "codigo" && valor && valor !== 'personalizado') {
             const productoBD = obtenerProductoPorId(valor as string)
             if (productoBD) {
-              itemActualizado.descripcion = productoBD.pro_nomb_vac || ''
+              itemActualizado.nombre = productoBD.pro_nomb_vac || ''
+              itemActualizado.descripcion = productoBD.pro_desc_vac || ''
               itemActualizado.precioUnitario = productoBD.pro_prec_unitario_int || 0
               itemActualizado.total = itemActualizado.cantidad * itemActualizado.precioUnitario
             }
@@ -277,6 +279,7 @@ export function useCotizacion() {
       const nuevoId = Math.max(...items.map((item) => item.id), 0) + 1
       setItems([...items, { 
         id: nuevoId, 
+        nombre: "",
         descripcion: "", 
         cantidad: 1, 
         precioUnitario: 0, 
