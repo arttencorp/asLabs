@@ -1,154 +1,102 @@
-import { useState, useEffect, useCallback } from 'react'
+'use client'
+
+'use client'
+
+import { useState, useCallback } from 'react'
 import { 
   obtenerCertificadosPorProductos, 
   obtenerFichasTecnicasPorProductos,
   transformarCertificadosBD,
   transformarFichasTecnicasBD
 } from '@/lib/supabase'
+import type { 
+  CertificadoCalidadDatabase, 
+  FichaTecnicaDatabase 
+} from '@/types/database'
 import type { Certificado, FichaTecnica } from '../types'
 
+// Cache global compartido entre todas las instancias del hook
+let certificadosCacheGlobal: Record<string, Certificado[]> = {}
+let fichasCacheGlobal: Record<string, FichaTecnica[]> = {}
+
 export function useCertificadosFichas() {
+  // Estados de carga
   const [certificadosLoading, setCertificadosLoading] = useState(false)
   const [fichasLoading, setFichasLoading] = useState(false)
-  const [certificadosError, setCertificadosError] = useState<string | null>(null)
-  const [fichasError, setFichasError] = useState<string | null>(null)
   
-  // Cache para certificados y fichas por producto
-  const [certificadosCache, setCertificadosCache] = useState<{[key: string]: Certificado[]}>({})
-  const [fichasCache, setFichasCache] = useState<{[key: string]: FichaTecnica[]}>({})
-
-  // Cargar certificados para múltiples productos
+  // Cargar certificados para múltiples productos (usando IDs UUID)
   const cargarCertificadosParaProductos = useCallback(async (productosIds: string[]) => {
-    if (productosIds.length === 0) return
-
-    // Filtrar solo productos que no están en caché y son de BD
-    const productosParaCargar = productosIds.filter(id => 
-      id && 
-      id !== 'personalizado' && 
-      id !== 'LAB' &&
-      !id.startsWith('ASW') && // Productos conceptuales
-      !id.startsWith('ASC') && // Productos conceptuales  
-      !certificadosCache[id]
-    )
-
-    if (productosParaCargar.length === 0) return
-
+    if (!productosIds || productosIds.length === 0) return
+    
     try {
       setCertificadosLoading(true)
-      setCertificadosError(null)
       
-      const certificadosBD = await obtenerCertificadosPorProductos(productosParaCargar)
+      const certificadosPorProducto = await obtenerCertificadosPorProductos(productosIds)
       
-      // Transformar y actualizar cache
-      const nuevosCache: {[key: string]: Certificado[]} = {}
-      for (const [productoId, certificados] of Object.entries(certificadosBD)) {
-        nuevosCache[productoId] = transformarCertificadosBD(certificados)
-      }
-
-      setCertificadosCache(prev => ({ ...prev, ...nuevosCache }))
+      // Actualizar cache global
+      Object.entries(certificadosPorProducto).forEach(([productoId, certificadosBD]) => {
+        if (certificadosBD && certificadosBD.length > 0) {
+          certificadosCacheGlobal[productoId] = transformarCertificadosBD(certificadosBD)
+        }
+      })
+      
     } catch (error) {
-      console.error('Error cargando certificados:', error)
-      setCertificadosError('Error al cargar certificados de calidad')
+      // Error al cargar certificados
     } finally {
       setCertificadosLoading(false)
     }
-  }, [certificadosCache])
+  }, [])
 
-  // Cargar fichas técnicas para múltiples productos
+  // Cargar fichas técnicas para múltiples productos (usando IDs UUID)
   const cargarFichasParaProductos = useCallback(async (productosIds: string[]) => {
-    if (productosIds.length === 0) return
-
-    // Filtrar solo productos que no están en caché y son de BD
-    const productosParaCargar = productosIds.filter(id => 
-      id && 
-      id !== 'personalizado' && 
-      id !== 'LAB' &&
-      !id.startsWith('ASW') && // Productos conceptuales
-      !id.startsWith('ASC') && // Productos conceptuales
-      !fichasCache[id]
-    )
-
-    if (productosParaCargar.length === 0) return
-
+    if (!productosIds || productosIds.length === 0) return
+    
     try {
       setFichasLoading(true)
-      setFichasError(null)
       
-      const fichasBD = await obtenerFichasTecnicasPorProductos(productosParaCargar)
+      const fichasPorProducto = await obtenerFichasTecnicasPorProductos(productosIds)
       
-      // Transformar y actualizar cache
-      const nuevosCache: {[key: string]: FichaTecnica[]} = {}
-      for (const [productoId, fichas] of Object.entries(fichasBD)) {
-        nuevosCache[productoId] = transformarFichasTecnicasBD(fichas)
-      }
-
-      setFichasCache(prev => ({ ...prev, ...nuevosCache }))
+      // Actualizar cache global
+      Object.entries(fichasPorProducto).forEach(([productoId, fichasBD]) => {
+        if (fichasBD && fichasBD.length > 0) {
+          fichasCacheGlobal[productoId] = transformarFichasTecnicasBD(fichasBD)
+        }
+      })
+      
     } catch (error) {
-      console.error('Error cargando fichas técnicas:', error)
-      setFichasError('Error al cargar fichas técnicas')
+      // Error al cargar fichas técnicas
     } finally {
       setFichasLoading(false)
     }
-  }, [fichasCache])
+  }, [])
 
-  // Obtener certificados para un producto específico
+  // Obtener certificados de un producto específico del cache global
   const obtenerCertificadosProducto = useCallback((productoId: string): Certificado[] => {
-    if (!productoId) return []
-    
-    // Verificar si está en cache
-    if (certificadosCache[productoId]) {
-      return certificadosCache[productoId]
-    }
+    const resultado = certificadosCacheGlobal[productoId] || []
+    return resultado
+  }, [])
 
-    // Si es un producto conceptual, devolver array vacío (se manejará con la lógica existente)
-    if (productoId === 'personalizado' || productoId === 'LAB' || 
-        productoId.startsWith('ASW') || productoId.startsWith('ASC')) {
-      return []
-    }
-
-    return []
-  }, [certificadosCache])
-
-  // Obtener fichas técnicas para un producto específico
+  // Obtener fichas técnicas de un producto específico del cache global
   const obtenerFichasProducto = useCallback((productoId: string): FichaTecnica[] => {
-    if (!productoId) return []
-    
-    // Verificar si está en cache
-    if (fichasCache[productoId]) {
-      return fichasCache[productoId]
-    }
-
-    // Si es un producto conceptual, devolver array vacío (se manejará con la lógica existente)
-    if (productoId === 'personalizado' || productoId === 'LAB' || 
-        productoId.startsWith('ASW') || productoId.startsWith('ASC')) {
-      return []
-    }
-
-    return []
-  }, [fichasCache])
-
-  // Limpiar cache
-  const limpiarCache = useCallback(() => {
-    setCertificadosCache({})
-    setFichasCache({})
+    const resultado = fichasCacheGlobal[productoId] || []
+    return resultado
   }, [])
 
   return {
     // Estados de carga
     certificadosLoading,
     fichasLoading,
-    certificadosError,
-    fichasError,
     
-    // Funciones principales
+    // Funciones de carga
     cargarCertificadosParaProductos,
     cargarFichasParaProductos,
+    
+    // Funciones de acceso
     obtenerCertificadosProducto,
     obtenerFichasProducto,
-    limpiarCache,
     
-    // Cache (para debug)
-    certificadosCache,
-    fichasCache
+    // Cache global (para debugging)
+    certificadosCache: certificadosCacheGlobal,
+    fichasCache: fichasCacheGlobal
   }
 }

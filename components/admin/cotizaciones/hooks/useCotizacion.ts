@@ -4,7 +4,7 @@ import { generarNumeroCotizacion, limpiarDatosParaBD } from '@/utils'
 import { crearCotizacion } from '@/lib/supabase'
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
-import { useCertificadosFichas } from '@/hooks/useCertificadosFichas'
+import { useCertificadosFichas } from './useCertificadosFichas'
 import { 
   productosPreexistentes, terminosCondicionesDefault, 
   terminosCondicionesLaboratorio, certificadosDefault 
@@ -91,17 +91,13 @@ export function useCotizacion() {
 
   // Actualizar certificados combinados
   const actualizarCertificadosCombinados = useCallback(async () => {
-    console.log('🚀 INICIANDO actualizarCertificadosCombinados')
     const currentItems = itemsRef.current
-    console.log('📋 Items actuales:', currentItems)
     try {
       const codigosSeleccionados = currentItems
         .filter((item) => item && item.codigo)
         .map((item) => item.codigo)
         .filter((codigo) => codigo && codigo !== "personalizado" && codigo !== "LAB")
 
-      console.log('🔍 Items con código:', currentItems.map(item => ({ id: item.id, codigo: item.codigo })))
-      console.log('🔍 Códigos seleccionados:', codigosSeleccionados)
 
       if (!codigosSeleccionados || codigosSeleccionados.length === 0) {
         setCertificadosCalidad(certificadosDefault)
@@ -112,27 +108,20 @@ export function useCotizacion() {
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       let todosCertificados: any[] = []
       
-      console.log('🔄 Todos los códigos son productos de BD (UUIDs):', codigosUnicos)
       
       // Cargar certificados de BD para todos los productos
       if (codigosUnicos.length > 0) {
-        console.log('📞 Llamando a cargarCertificadosParaProductos con:', codigosUnicos)
         await cargarCertificadosParaProductos(codigosUnicos)
         
         codigosUnicos.forEach((productoId) => {
-          console.log(`🔍 Buscando certificados para producto ${productoId}`)
           const certificadosBD = obtenerCertificadosProducto(productoId)
-          console.log(`📋 Certificados encontrados para ${productoId}:`, certificadosBD)
           if (certificadosBD && certificadosBD.length > 0) {
             todosCertificados = [...todosCertificados, ...certificadosBD]
-            console.log(`✅ Agregados ${certificadosBD.length} certificados`)
           } else {
-            console.log(`❌ No se encontraron certificados para ${productoId}`)
           }
         })
       }
       
-      console.log('🎯 Total certificados obtenidos:', todosCertificados)
 
       if (todosCertificados.length > 0) {
         const certificadosTexto = generarCertificadosTexto(todosCertificados)
@@ -166,27 +155,20 @@ export function useCotizacion() {
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       const todasFichas: FichaTecnica[] = []
       
-      console.log('🔄 Todos los códigos son productos de BD para fichas (UUIDs):', codigosUnicos)
       
       // Cargar fichas técnicas de BD para todos los productos
       if (codigosUnicos.length > 0) {
-        console.log('📞 Llamando a cargarFichasParaProductos con:', codigosUnicos)
         await cargarFichasParaProductos(codigosUnicos)
         
         codigosUnicos.forEach((productoId) => {
-          console.log(`🔍 Buscando fichas para producto ${productoId}`)
           const fichasBD = obtenerFichasProducto(productoId)
-          console.log(`📋 Fichas encontradas para ${productoId}:`, fichasBD)
           if (fichasBD && fichasBD.length > 0) {
             todasFichas.push(...fichasBD)
-            console.log(`✅ Agregadas ${fichasBD.length} fichas`)
           } else {
-            console.log(`❌ No se encontraron fichas para ${productoId}`)
           }
         })
       }
       
-      console.log('🎯 Total fichas obtenidas:', todasFichas)
 
       setFichasTecnicas(todasFichas)
     } catch (error) {
@@ -209,7 +191,6 @@ export function useCotizacion() {
   const seleccionarProducto = useCallback((id: number, productoId: string) => {
     if (!productoId) return
     
-    console.log('🔍 Seleccionando producto:', { id, productoId })
 
     if (productoId === "personalizado") {
       setItems(items.map((item) => {
@@ -229,8 +210,6 @@ export function useCotizacion() {
 
     // Buscar producto en BD
     const productoBD = obtenerProductoPorId(productoId)
-    console.log('🔍 Producto BD encontrado:', productoBD)
-    console.log('🔍 productoId buscado:', productoId)
     
     if (productoBD) {
       setItems(items.map((item) => {
@@ -251,7 +230,6 @@ export function useCotizacion() {
       
       // Actualizar certificados y fichas DESPUÉS del próximo render
       setTimeout(() => {
-        console.log('🚀 EJECUTANDO actualizarCertificadosYFichas después de setTimeout')
         actualizarCertificadosYFichas()
       }, 10)
     }

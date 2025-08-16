@@ -644,7 +644,6 @@ export async function crearCotizacion(cotizacionData: {
         // No lanzar error, continuar sin productos en BD
       }
     } else {
-      console.log('No hay productos válidos para insertar en BD, cotización guardada sin detalles')
     }
 
     // Crear información adicional (solo si hay datos para insertar)

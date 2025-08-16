@@ -1,7 +1,7 @@
 "use client"
 
 import { useCotizacionImpresion } from "@/components/admin/imprimir/hooks/useCotizacionImpresion"
-import { useCertificadosFichas } from "@/hooks/useCertificadosFichas"
+import { useCertificadosFichas } from "@/components/admin/cotizaciones/hooks/useCertificadosFichas"
 import { ControlesImpresion } from "@/components/admin/imprimir/components/controlesImpresion"
 import { EncabezadoDocumento } from "@/components/admin/imprimir/components/encabezadoDocumento"
 import { InformacionCliente } from "@/components/admin/imprimir/components/informacionCliente"
@@ -43,7 +43,6 @@ export default function ImprimirCotizacion() {
         const needsFichas = !cotizacion.fichasTecnicas || cotizacion.fichasTecnicas.length === 0
         
         if (needsCertificados || needsFichas) {
-          console.log('🔄 Cargando certificados y fichas desde BD para productos:', productosIds)
           if (needsCertificados) {
             cargarCertificadosParaProductos(productosIds)
           }
