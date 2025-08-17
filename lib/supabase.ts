@@ -7,7 +7,9 @@ import type {
   EstadoPedido,
   EstadoCotizacion,
   FormaPago,
-  ProductoDatabase
+  ProductoDatabase,
+  CertificadoCalidadDatabase,
+  FichaTecnicaDatabase
 } from '@/types/database'
 import type { ClientePersona } from '@/types/database'
 
@@ -276,6 +278,106 @@ export async function obtenerProductos(): Promise<ProductoDatabase[]> {
   }
 }
 
+// Obtener certificados de calidad para un producto específico
+export async function obtenerCertificadosPorProducto(productoId: string): Promise<CertificadoCalidadDatabase[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos_Certificados')
+      .select(`
+        certificado:Certificados_Calidad(*)
+      `)
+      .eq('pro_id_int', productoId)
+
+    if (error) throw error
+    
+    // Extraer solo los certificados de la respuesta
+    return (data?.map(item => item.certificado).filter(Boolean) || []) as unknown as CertificadoCalidadDatabase[]
+  } catch (error) {
+    console.error('Error obteniendo certificados del producto:', error)
+    throw error
+  }
+}
+
+// Obtener fichas técnicas para un producto específico
+export async function obtenerFichasTecnicasPorProducto(productoId: string): Promise<FichaTecnicaDatabase[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos_Fichas_Tecnicas')
+      .select(`
+        ficha_tecnica:Fichas_Tecnicas(*)
+      `)
+      .eq('pro_id_int', productoId)
+
+    if (error) throw error
+    
+    // Extraer solo las fichas técnicas de la respuesta
+    return (data?.map(item => item.ficha_tecnica).filter(Boolean) || []) as unknown as FichaTecnicaDatabase[]
+  } catch (error) {
+    console.error('Error obteniendo fichas técnicas del producto:', error)
+    throw error
+  }
+}
+
+// Obtener certificados de calidad para múltiples productos
+export async function obtenerCertificadosPorProductos(productosIds: string[]): Promise<{[key: string]: CertificadoCalidadDatabase[]}> {
+  try {
+    if (productosIds.length === 0) return {}
+
+    const { data, error } = await supabase
+      .from('Certificados_Calidad')
+      .select('*')
+      .in('pro_id_int', productosIds)
+
+    if (error) throw error
+
+    // Agrupar certificados por producto ID
+    const certificadosPorProducto: {[key: string]: CertificadoCalidadDatabase[]} = {}
+    data?.forEach((certificado: CertificadoCalidadDatabase) => {
+      if (certificado.pro_id_int) {
+        if (!certificadosPorProducto[certificado.pro_id_int]) {
+          certificadosPorProducto[certificado.pro_id_int] = []
+        }
+        certificadosPorProducto[certificado.pro_id_int].push(certificado)
+      }
+    })
+
+    return certificadosPorProducto
+  } catch (error) {
+    console.error('Error obteniendo certificados de productos:', error)
+    throw error
+  }
+}
+
+// Obtener fichas técnicas para múltiples productos
+export async function obtenerFichasTecnicasPorProductos(productosIds: string[]): Promise<{[key: string]: FichaTecnicaDatabase[]}> {
+  try {
+    if (productosIds.length === 0) return {}
+
+    const { data, error } = await supabase
+      .from('Ficha_Tecnica')
+      .select('*')
+      .in('pro_id_int', productosIds)
+
+    if (error) throw error
+
+    // Agrupar fichas técnicas por producto ID
+    const fichasPorProducto: {[key: string]: FichaTecnicaDatabase[]} = {}
+    data?.forEach((ficha: FichaTecnicaDatabase) => {
+      if (ficha.pro_id_int) {
+        if (!fichasPorProducto[ficha.pro_id_int]) {
+          fichasPorProducto[ficha.pro_id_int] = []
+        }
+        fichasPorProducto[ficha.pro_id_int].push(ficha)
+      }
+    })
+
+    return fichasPorProducto
+  } catch (error) {
+    console.error('Error obteniendo fichas técnicas de productos:', error)
+    throw error
+  }
+}
+
 // ============================================
 // FUNCIONES ESPECÍFICAS DE PEDIDOS
 // ============================================
@@ -484,50 +586,78 @@ export async function crearCotizacion(cotizacionData: {
   terminos_condiciones: string | null
 }) {
   try {
-    const numeroCotizacion = generarNumeroCotizacion()
+    const numeroCotizacion = await generarNumeroCotizacion()
+
+    // Limpiar datos antes de insertar (convertir strings vacíos a null)
+    const datosLimpios = {
+      cliente_id: cotizacionData.cliente_id || null,
+      fecha_emision: cotizacionData.fecha_emision?.trim() || null,
+      fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() || null,
+      incluye_igv: cotizacionData.incluye_igv,
+      lugar_recojo: cotizacionData.lugar_recojo?.trim() || null,
+      forma_entrega: cotizacionData.forma_entrega?.trim() || null,
+      terminos_condiciones: cotizacionData.terminos_condiciones?.trim() || null,
+      forma_pago_id: cotizacionData.forma_pago_id || null
+    }
 
     // Crear cotización
     const { data: cotizacion, error: cotizacionError } = await supabase
       .from('Cotizaciones')
       .insert({
         cot_num_vac: numeroCotizacion,
-        cot_fec_emis_dt: cotizacionData.fecha_emision,
-        cot_fec_venc_dt: cotizacionData.fecha_vencimiento,
-        cot_igv_bol: cotizacionData.incluye_igv,
-        est_cot_id_int: '1', // Borrador por defecto
-        per_id_int: cotizacionData.cliente_id
+        cot_fec_emis_dt: datosLimpios.fecha_emision,
+        cot_fec_venc_dt: datosLimpios.fecha_vencimiento,
+        cot_igv_bol: datosLimpios.incluye_igv,
+        per_id_int: datosLimpios.cliente_id
+        // No incluir est_cot_id_int, dejemos que Supabase use el valor por defecto
       })
       .select()
       .single()
 
     if (cotizacionError) throw cotizacionError
 
-    // Crear detalles
-    const detalles = cotizacionData.productos.map(prod => ({
-      pro_id_int: prod.producto_id,
-      cot_id_int: cotizacion.cot_id_int,
-      det_cot_cant_int: prod.cantidad,
-      det_cot_prec_hist_int: prod.precio_historico
-    }))
+    // Crear detalles (solo productos válidos de BD)
+    const productosValidos = cotizacionData.productos.filter(prod => 
+      prod.producto_id && 
+      prod.producto_id !== 'personalizado' &&
+      prod.cantidad && 
+      prod.precio_historico
+    )
 
-    const { error: detalleError } = await supabase
-      .from('Detalle_Cotizacion')
-      .insert(detalles)
+    // Crear detalles solo si hay productos válidos
+    if (productosValidos.length > 0) {
+      const detalles = productosValidos.map(prod => ({
+        pro_id_int: prod.producto_id, // ya es el ID real de BD
+        cot_id_int: cotizacion.cot_id_int,
+        det_cot_cant_int: prod.cantidad,
+        det_cot_prec_hist_int: prod.precio_historico
+      }))
 
-    if (detalleError) throw detalleError
+      const { error: detalleError } = await supabase
+        .from('Detalle_Cotizacion')
+        .insert(detalles)
 
-    // Crear información adicional
-    const { error: infoError } = await supabase
-      .from('Informacion_Adicional')
-      .insert({
-        inf_ad_lug_recojo_vac: cotizacionData.lugar_recojo,
-        inf_ad_form_entr_vac: cotizacionData.forma_entrega,
-        inf_ad_term_cond_vac: cotizacionData.terminos_condiciones,
-        form_pa_id_int: cotizacionData.forma_pago_id,
-        cot_id_int: cotizacion.cot_id_int
-      })
+      if (detalleError) {
+        console.warn('Error insertando detalles, continuando sin productos en BD:', detalleError)
+        // No lanzar error, continuar sin productos en BD
+      }
+    } else {
+    }
 
-    if (infoError) throw infoError
+    // Crear información adicional (solo si hay datos para insertar)
+    if (datosLimpios.lugar_recojo || datosLimpios.forma_entrega || datosLimpios.terminos_condiciones || datosLimpios.forma_pago_id) {
+      const { error: infoError } = await supabase
+        .from('Informacion_Adicional')
+        .insert({
+          inf_ad_lug_recojo_vac: datosLimpios.lugar_recojo,
+          inf_ad_form_entr_vac: datosLimpios.forma_entrega,
+          inf_ad_term_cond_vac: datosLimpios.terminos_condiciones,
+          form_pa_id_int: datosLimpios.forma_pago_id,
+          cot_id_int: cotizacion.cot_id_int
+        })
+
+      if (infoError) throw infoError
+    }
 
     return cotizacion
   } catch (error) {
@@ -536,6 +666,153 @@ export async function crearCotizacion(cotizacionData: {
   }
 }
 
+export async function obtenerCotizacionPorId(id: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .eq('cot_id_int', id)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error obteniendo cotización por ID:', error)
+    throw error
+  }
+}
+
+export async function actualizarCotizacion(id: string, cotizacionData: {
+  cliente_id?: string
+  fecha_emision?: string | null
+  fecha_vencimiento?: string | null
+  incluye_igv?: boolean
+  productos?: Array<{
+    producto_id: string | null
+    cantidad: number | null
+    precio_historico: number | null
+  }>
+  forma_pago_id?: string | null
+  lugar_recojo?: string | null
+  forma_entrega?: string | null
+  terminos_condiciones?: string | null
+}) {
+  try {
+    // Actualizar cotización principal
+    const datosLimpios: any = {}
+    
+    if (cotizacionData.cliente_id !== undefined) datosLimpios.per_id_int = cotizacionData.cliente_id
+    if (cotizacionData.fecha_emision !== undefined) datosLimpios.cot_fec_emis_dt = cotizacionData.fecha_emision?.trim() || null
+    if (cotizacionData.fecha_vencimiento !== undefined) datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() || null
+    if (cotizacionData.incluye_igv !== undefined) datosLimpios.cot_igv_bol = cotizacionData.incluye_igv
+
+    if (Object.keys(datosLimpios).length > 0) {
+      const { error: cotizacionError } = await supabase
+        .from('Cotizaciones')
+        .update(datosLimpios)
+        .eq('cot_id_int', id)
+
+      if (cotizacionError) throw cotizacionError
+    }
+
+    // Actualizar productos si se proporcionan
+    if (cotizacionData.productos) {
+      // Eliminar detalles existentes
+      const { error: deleteError } = await supabase
+        .from('Detalle_Cotizacion')
+        .delete()
+        .eq('cot_id_int', id)
+
+      if (deleteError) throw deleteError
+
+      // Insertar nuevos detalles
+      const productosValidos = cotizacionData.productos.filter(prod => 
+        prod.producto_id && 
+        prod.producto_id !== 'personalizado' &&
+        prod.cantidad && 
+        prod.precio_historico
+      )
+
+      if (productosValidos.length > 0) {
+        const detalles = productosValidos.map(prod => ({
+          pro_id_int: prod.producto_id,
+          cot_id_int: id,
+          det_cot_cant_int: prod.cantidad,
+          det_cot_prec_hist_int: prod.precio_historico
+        }))
+
+        const { error: insertError } = await supabase
+          .from('Detalle_Cotizacion')
+          .insert(detalles)
+
+        if (insertError) throw insertError
+      }
+    }
+
+    // Actualizar información adicional si se proporciona
+    if (cotizacionData.lugar_recojo !== undefined || 
+        cotizacionData.forma_entrega !== undefined || 
+        cotizacionData.terminos_condiciones !== undefined || 
+        cotizacionData.forma_pago_id !== undefined) {
+      
+      const infoLimpia: any = {}
+      if (cotizacionData.lugar_recojo !== undefined) infoLimpia.inf_ad_lug_recojo_vac = cotizacionData.lugar_recojo?.trim() || null
+      if (cotizacionData.forma_entrega !== undefined) infoLimpia.inf_ad_form_entr_vac = cotizacionData.forma_entrega?.trim() || null
+      if (cotizacionData.terminos_condiciones !== undefined) infoLimpia.inf_ad_term_cond_vac = cotizacionData.terminos_condiciones?.trim() || null
+      if (cotizacionData.forma_pago_id !== undefined) infoLimpia.form_pa_id_int = cotizacionData.forma_pago_id || null
+
+      // Verificar si ya existe información adicional
+      const { data: infoExistente } = await supabase
+        .from('Informacion_Adicional')
+        .select('*')
+        .eq('cot_id_int', id)
+        .single()
+
+      if (infoExistente) {
+        // Actualizar existente
+        const { error: updateInfoError } = await supabase
+          .from('Informacion_Adicional')
+          .update(infoLimpia)
+          .eq('cot_id_int', id)
+
+        if (updateInfoError) throw updateInfoError
+      } else {
+        // Crear nueva
+        const { error: insertInfoError } = await supabase
+          .from('Informacion_Adicional')
+          .insert({
+            ...infoLimpia,
+            cot_id_int: id
+          })
+
+        if (insertInfoError) throw insertInfoError
+      }
+    }
+
+    // Obtener cotización actualizada
+    return await obtenerCotizacionPorId(id)
+  } catch (error) {
+    console.error('Error actualizando cotización:', error)
+    throw error
+  }
+}
+     
 // ============================================
 // SEGUIMIENTO DE PEDIDOS
 // ============================================
@@ -597,4 +874,42 @@ export async function obtenerPedidoPorCodigo(codigoSeguimiento: string) {
     console.error('Error obteniendo pedido por código:', error)
     throw error
   }
+}
+
+// ============================================
+// FUNCIONES HELPER PARA CERTIFICADOS Y FICHAS TÉCNICAS
+// ============================================
+
+// Transformar certificado de BD a formato UI
+export function transformarCertificadoBD(certificado: CertificadoCalidadDatabase): import('@/components/admin/cotizaciones/types').Certificado {
+  return {
+    titulo: `Certificado de Calidad - ${certificado.cer_cal_tipo_vac || 'Sin Tipo'}`,
+    codigo: certificado.cer_cal_cod_muestra_int ? certificado.cer_cal_cod_muestra_int.toString() : '',
+    tipo: certificado.cer_cal_tipo_vac || '',
+    informe: certificado.cer_cal_infor_ensayo_vac || '',
+    detalle: [
+      certificado.cer_cal_result_vac || '',
+      certificado.cer_cal_resum_vac || ''
+    ].filter(Boolean), // Solo incluir elementos no vacíos
+    link: certificado.cer_cal_imag_url || undefined
+  }
+}
+
+// Transformar ficha técnica de BD a formato UI
+export function transformarFichaTecnicaBD(fichaTecnica: FichaTecnicaDatabase): import('@/components/admin/cotizaciones/types').FichaTecnica {
+  return {
+    titulo: fichaTecnica.fit_tec_nom_planta_vac || 'Ficha Técnica',
+    descripcion: `Código: ${fichaTecnica.fit_tec_cod_vac || 'Sin código'}`,
+    archivo: fichaTecnica.fit_tec_imag_vac || ''
+  }
+}
+
+// Transformar múltiples certificados de BD a formato UI
+export function transformarCertificadosBD(certificados: CertificadoCalidadDatabase[]): import('@/components/admin/cotizaciones/types').Certificado[] {
+  return certificados.map(transformarCertificadoBD)
+}
+
+// Transformar múltiples fichas técnicas de BD a formato UI
+export function transformarFichasTecnicasBD(fichasTecnicas: FichaTecnicaDatabase[]): import('@/components/admin/cotizaciones/types').FichaTecnica[] {
+  return fichasTecnicas.map(transformarFichaTecnicaBD)
 }

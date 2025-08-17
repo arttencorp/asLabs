@@ -7,8 +7,10 @@ export interface CotizacionImpresion {
   telefono?: string
   fechaEmision?: string | number | Date
   fechaVencimiento?: string | number | Date
+  tipoCliente?: 'natural' | 'juridica' // Nuevo campo para determinar DNI o RUC
   items?: Array<{
     codigo?: string
+    nombre?: string
     descripcion?: string
     cantidad?: number
     precioUnitario?: number
@@ -20,12 +22,24 @@ export interface CotizacionImpresion {
   totalTexto?: string
   terminosCondiciones?: string
   certificadosCalidad?: string
+  certificadosEstructurados?: Array<{
+    titulo: string;
+    codigo: string;
+    tipo: string;
+    informe: string;
+    detalle: string[];
+    link?: string;
+  }>
   lugarRecojo?: string
   formaPago?: string
   formaEntrega?: string
   tipoProductoSeleccionado?: string
   preciosConIGV?: boolean
-  fichasTecnicas?: Array<{ archivo?: string }>
+  fichasTecnicas?: Array<{ 
+    titulo?: string
+    descripcion?: string
+    archivo?: string 
+  }>
 }
 
 export interface ConfiguracionImpresion {

@@ -62,14 +62,59 @@ export function generarCodigoSeguimiento(): string {
   return result
 }
 
-export function generarNumeroCotizacion(): string {
-  const timestamp = Date.now()
-  const year = new Date().getFullYear()
-  return `COT-${year}-${timestamp.toString().slice(-6)}`
+export async function generarNumeroCotizacion(): Promise<string> {
+  try {
+    const { createClient } = await import("@supabase/supabase-js")
+    
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+
+    const year = new Date().getFullYear()
+
+    // Buscar el último número de cotización del año actual
+    const { data, error } = await supabase
+      .from("Cotizaciones")
+      .select("cot_num_vac")
+      .ilike("cot_num_vac", `%-${year}`)
+      .order("cot_num_vac", { ascending: false })
+      .limit(1)
+
+    if (error) {
+      console.error("Error al obtener último número de cotización:", error)
+      // Fallback: usar timestamp si hay error
+      const timestamp = Date.now()
+      return `${timestamp.toString().slice(-6)}-${year}`
+    }
+
+    let siguienteNumero = 1
+
+    if (data && data.length > 0) {
+      // Extraer el número de la cotización (parte antes del guión)
+      const ultimaCotizacion = data[0].cot_num_vac
+      const match = ultimaCotizacion.match(/^(\d+)-\d{4}$/)
+      
+      if (match) {
+        const ultimoNumero = parseInt(match[1], 10)
+        siguienteNumero = ultimoNumero + 1
+      }
+    }
+
+    // Formatear con ceros a la izquierda (4 dígitos)
+    const numeroFormateado = siguienteNumero.toString().padStart(4, "0")
+    
+    return `${numeroFormateado}-${year}`
+  } catch (error) {
+    console.error("Error en generarNumeroCotizacion:", error)
+    // Fallback: usar timestamp si hay error
+    const timestamp = Date.now()
+    const year = new Date().getFullYear()
+    return `${timestamp.toString().slice(-6)}-${year}`
+  }
 }
 
-// Cliente helpers (reutilizable)
-// Use the type directly from database types
+//Re-export ClientePersona type from database types for convenience
 export type { ClientePersona } from '@/types/database'
 
 export function getNombreCompleto(persona: ClientePersona): string {
@@ -95,7 +140,7 @@ export function getNombreCompleto(persona: ClientePersona): string {
   }
 
   // Último fallback
-  return 'Cliente sin nombre'
+  return ''
 }
 
 export function getDocumentoCliente(persona: ClientePersona): string {
@@ -107,7 +152,7 @@ export function getDocumentoCliente(persona: ClientePersona): string {
     return `RUC: ${persona.persona_juridica.per_jurd_ruc_int}`
   }
 
-  return 'Sin documento'
+  return ''
 }
 
 export function getEmailCliente(persona: ClientePersona): string {
@@ -115,7 +160,7 @@ export function getEmailCliente(persona: ClientePersona): string {
     return `${persona.per_email_vac}`
   }
 
-  return 'Sin email'
+  return ''
 } 
 
 export function getTelfCliente(persona: ClientePersona): string {
@@ -123,7 +168,7 @@ export function getTelfCliente(persona: ClientePersona): string {
     return `${persona.per_telef_int}`
   }
 
-  return 'Sin teléfono'
+  return ''
 }
 
 export function getCultivoCliente(persona: ClientePersona): string {
@@ -137,7 +182,65 @@ export function getCantidadCultivo(persona: ClientePersona): string {
   if (persona?.per_cantidad_int) {
     return persona.per_cantidad_int.toString()
   }
-  return '-'
+  return ''
+}
+
+// Funciones específicas para impresión de cotizaciones
+export function getDocumentoClienteParaImpresion(persona: ClientePersona): {
+  etiqueta: string;
+  valor: string;
+} {
+  if (persona.tipo === 'natural' && persona.persona_natural?.per_nat_dni_int) {
+    return {
+      etiqueta: 'DNI',
+      valor: persona.persona_natural.per_nat_dni_int.toString()
+    }
+  }
+
+  if (persona.tipo === 'juridica' && persona.persona_juridica?.per_jurd_ruc_int) {
+    return {
+      etiqueta: 'RUC',
+      valor: persona.persona_juridica.per_jurd_ruc_int.toString()
+    }
+  }
+
+  return {
+    etiqueta: '',
+    valor: ''
+  }
+}
+
+// Función para limpiar datos antes de enviar a BD (convierte strings vacíos a null)
+export function limpiarDatosParaBD(obj: any): any {
+  if (obj === null || obj === undefined) return null
+  if (typeof obj === 'string') return obj.trim() === '' ? null : obj.trim()
+  if (typeof obj === 'boolean') return obj // Manejar booleanos explícitamente
+  // No convertir números a null - deja que Supabase maneje los IDs
+  if (typeof obj === 'number') return obj
+  if (Array.isArray(obj)) return obj.length === 0 ? null : obj
+  if (typeof obj === 'object') {
+    const cleaned: any = {}
+    for (const [key, value] of Object.entries(obj)) {
+      cleaned[key] = limpiarDatosParaBD(value)
+    }
+    return cleaned
+  }
+  return obj
+}
+
+// Función para formatear datos de cotización para impresión
+export function formatearDatosCotizacionParaImpresion(cotizacion: any, cliente?: ClientePersona) {
+  const documento = cliente ? getDocumentoClienteParaImpresion(cliente) : { etiqueta: '', valor: '' }
+  
+  return {
+    razonSocial: cotizacion.razonSocial || '',
+    documentoEtiqueta: documento.etiqueta,
+    documentoValor: documento.valor,
+    direccion: cotizacion.direccion || '',
+    telefono: cotizacion.telefono || '',
+    fechaEmision: cotizacion.fechaEmision || '',
+    fechaVencimiento: cotizacion.fechaVencimiento || ''
+  }
 }
 
 // Estado helpers

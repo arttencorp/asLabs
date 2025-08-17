@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { usePedidos } from "@/components/admin/pedidos/hooks/usePedidos"
 import { PedidosList } from "@/components/admin/pedidos/components/pedidosList"
 import { PedidoFormDialog } from "@/components/admin/pedidos/components/pedidosForm"
+import { CotizacionViewDialog } from "@/components/admin/pedidos/components/cotizacionViewDialog"
 import { formatCurrency } from "@/utils/index"
 import type { Pedido } from "@/components/admin/pedidos/types"
 
@@ -28,6 +29,15 @@ export default function PedidosPage() {
 
   const [showForm, setShowForm] = useState(false)
   const [editingPedido, setEditingPedido] = useState<Pedido | null>(null)
+  const [showCotizacion, setShowCotizacion] = useState(false)
+  const [selectedCotizacion, setSelectedCotizacion] = useState<any>(null) 
+
+  const handleViewCotizacion = (pedido: Pedido) => {
+    if (pedido.cotizacion) {
+      setSelectedCotizacion(pedido.cotizacion)
+      setShowCotizacion(true)
+    }
+  }
 
   const handleCreatePedido = async (pedidoForm: any) => {
     try {
@@ -40,7 +50,7 @@ export default function PedidosPage() {
 
   const handleUpdatePedido = async (pedidoForm: any) => {
     if (!editingPedido) return
-    
+
     try {
       await updatePedido(editingPedido.ped_id_int, pedidoForm)
       setEditingPedido(null)
@@ -63,13 +73,13 @@ export default function PedidosPage() {
   // Calcular estadísticas
   const stats = {
     totalPedidos: pedidos.length,
-    pedidosPendientes: pedidos.filter(p => 
+    pedidosPendientes: pedidos.filter(p =>
       p.estado_pedido?.est_ped_tipo_int ? ![5, 6].includes(p.estado_pedido.est_ped_tipo_int) : false
     ).length, // No entregados ni cancelados
-    pedidosEntregados: pedidos.filter(p => 
+    pedidosEntregados: pedidos.filter(p =>
       p.estado_pedido?.est_ped_tipo_int === 5
     ).length, // Entregados
-    pedidosCancelados: pedidos.filter(p => 
+    pedidosCancelados: pedidos.filter(p =>
       p.estado_pedido?.est_ped_tipo_int === 6
     ).length, // Cancelados
     ingresoTotal: pedidos
@@ -180,6 +190,7 @@ export default function PedidosPage() {
         onEdit={handleEdit}
         onDelete={deletePedido}
         onRefresh={loadData}
+        onViewCotizacion={handleViewCotizacion}
       />
 
       {/* Formulario Modal */}
@@ -193,12 +204,22 @@ export default function PedidosPage() {
         loading={loading}
       />
 
+      {/* Modal para ver cotización */}
+      <CotizacionViewDialog
+        open={showCotizacion}
+        onClose={() => {
+          setShowCotizacion(false)
+          setSelectedCotizacion(null)
+        }}
+        cotizacion={selectedCotizacion} 
+      />
+
       {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg flex items-center gap-3">
-            <Loader2 className="h-6 w-6 animate-spin" />
-            <span>Procesando...</span>
+            <Loader2 className="h-6 w-6 animate-spin text-gray-900" />
+            <span className="text-gray-900 font-medium">Procesando...</span>
           </div>
         </div>
       )}

@@ -1,10 +1,10 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import type React from "react"
 
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createBrowserClient } from "@supabase/ssr"
 import { Mail, Lock, AlertCircle } from "lucide-react"
 
 export default function AdminLogin() {
@@ -20,7 +20,12 @@ export default function AdminLogin() {
     typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY === "undefined"
 
   // Only create the client if environment variables are available
-  const supabase = !isMissingEnvVars ? createClientComponentClient() : null 
+  const supabase = !isMissingEnvVars 
+    ? createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+    : null
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()

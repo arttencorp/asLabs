@@ -1,6 +1,7 @@
 // Tipos específicos para el módulo de cotizaciones (interfaz de usuario)
 export interface Item {
   id: number
+  nombre: string
   descripcion: string
   cantidad: number
   precioUnitario: number
@@ -14,6 +15,7 @@ export interface Certificado {
   tipo: string
   informe: string
   detalle: string[]
+  link?: string // URL opcional para enlace del certificado
 }
 
 export interface FichaTecnica {
@@ -36,6 +38,7 @@ export interface CotizacionUIData {
   tipoDocumento: string
   fechaEmision: string
   fechaVencimiento: string
+  clienteSeleccionado: string
   razonSocial: string
   dniRuc: string
   direccion: string
@@ -50,6 +53,7 @@ export interface CotizacionUIData {
   formaEntrega: string
   totalTexto: string
   certificadosCalidad: string
+  certificadosEstructurados?: Certificado[] // Certificados estructurados
   fichasTecnicas: FichaTecnica[]
   tipoProductoSeleccionado: string
   preciosConIGV: boolean
@@ -63,6 +67,8 @@ export interface InformacionGeneralProps {
   setFechaEmision: (value: string) => void
   fechaVencimiento: string
   setFechaVencimiento: (value: string) => void 
+  clienteSeleccionado: string
+  setClienteSeleccionado: (value: string) => void
   razonSocial: string
   setRazonSocial: (value: string) => void
   dniRuc: string
@@ -85,15 +91,26 @@ export interface InformacionAdicionalProps {
   setTerminosCondiciones: (value: string) => void
   certificadosCalidad: string
   setCertificadosCalidad: (value: string) => void
+  certificadosEstructurados: Certificado[] // Certificados estructurados
   tieneLaboratorio: boolean
+  // Nuevas props para formas de pago de BD
+  formasPago: import('@/types/database').FormaPago[]
+  formaPagoSeleccionada: string
+  setFormaPagoSeleccionada: (value: string) => void
+  formasPagoLoading: boolean
+  // Modo de edición
+  isEditMode?: boolean
   onAnterior: () => void
   onVistaPrevia: () => void
+  onGuardar: () => void
 }
 
 export interface ProductosServiciosProps {
   items: Item[]
   preciosConIGV: boolean
   setPreciosConIGV: (value: boolean) => void
+  productos: import('@/types/database').ProductoDatabase[] // Productos de la BD
+  productosLoading: boolean
   seleccionarProducto: (id: number, productoId: string) => void
   actualizarItem: (id: number, campo: string, valor: string | number) => void
   agregarItem: () => void

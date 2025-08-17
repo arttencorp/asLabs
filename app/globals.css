@@ -197,10 +197,23 @@ img {
 @media print {
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 0;
+  }
+  
+  /* Crear nuestros propios márgenes internos para evitar headers/footers */
+  body {
+    margin: 0 !important;
+    padding: 10mm !important;
+  }
+  
+  .print-page {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  html, body, * {
+  html,
+  body,
+  * {
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   }
 
@@ -219,7 +232,18 @@ img {
 
   .print-page,
   .print-page *,
-  div, p, span, h1, h2, h3, h4, h5, h6, td, th, table {
+  div,
+  p,
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  td,
+  th,
+  table {
     font-family: "Poppins", sans-serif !important;
   }
 
@@ -253,16 +277,22 @@ img {
 
   .ficha-tecnica-print {
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 270mm; /* Altura aproximada de página A4 menos márgenes */
     margin: 0;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    page-break-inside: avoid;
   }
 
   .ficha-tecnica-print img {
-    width: 100%;
+    max-width: 190mm; /* Ancho de A4 menos márgenes */
+    max-height: 250mm; /* Alto de A4 menos márgenes */
+    width: auto;
     height: auto;
     object-fit: contain;
-    max-height: 100vh;
   }
 
   /* Asegurar que los colores se impriman correctamente */

@@ -1,6 +1,7 @@
 "use client"
 
 import { useCotizacionImpresion } from "@/components/admin/imprimir/hooks/useCotizacionImpresion"
+import { useCertificadosFichas } from "@/components/admin/cotizaciones/hooks/useCertificadosFichas"
 import { ControlesImpresion } from "@/components/admin/imprimir/components/controlesImpresion"
 import { EncabezadoDocumento } from "@/components/admin/imprimir/components/encabezadoDocumento"
 import { InformacionCliente } from "@/components/admin/imprimir/components/informacionCliente"
@@ -11,8 +12,10 @@ import { CertificadosCalidad } from "@/components/admin/imprimir/components/cert
 import { MetodosPago } from "@/components/admin/imprimir/components/metodosPago"
 import { FichaTecnicaASC5 } from "@/components/admin/imprimir/components/fichaTecnicaASC5"
 import { FichaTecnicaASWG } from "@/components/admin/imprimir/components/fichaTecnicaASWG"
+import { FichasTecnicas } from "@/components/admin/imprimir/components/fichasTecnicas"
 import { CertificadosSENASA } from "@/components/admin/imprimir/components/certificadosSENASA"
 import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 
 export default function ImprimirCotizacion() {
   const {
@@ -26,6 +29,30 @@ export default function ImprimirCotizacion() {
     tieneASC5,
     esLaboratorio
   } = useCotizacionImpresion()
+
+  const { cargarCertificadosParaProductos, cargarFichasParaProductos } = useCertificadosFichas()
+
+  // Cargar certificados y fichas de BD si no están en localStorage
+  useEffect(() => {
+    if (cotizacion && cotizacion.items && cotizacion.items.length > 0) {
+      const productosIds = cotizacion.items.map(item => item.codigo).filter(Boolean) as string[]
+      
+      if (productosIds.length > 0) {
+        // Solo cargar si no hay datos ya cargados
+        const needsCertificados = !cotizacion.certificadosEstructurados || cotizacion.certificadosEstructurados.length === 0
+        const needsFichas = !cotizacion.fichasTecnicas || cotizacion.fichasTecnicas.length === 0
+        
+        if (needsCertificados || needsFichas) {
+          if (needsCertificados) {
+            cargarCertificadosParaProductos(productosIds)
+          }
+          if (needsFichas) {
+            cargarFichasParaProductos(productosIds)
+          }
+        }
+      }
+    }
+  }, [cotizacion, cargarCertificadosParaProductos, cargarFichasParaProductos])
 
   if (cargando) {
     return (
@@ -86,6 +113,7 @@ export default function ImprimirCotizacion() {
             telefono={cotizacion.telefono}
             fechaEmision={cotizacion.fechaEmision}
             fechaVencimiento={cotizacion.fechaVencimiento}
+            tipoCliente={cotizacion.tipoCliente}
           />
 
           <TablaProductos
@@ -111,9 +139,27 @@ export default function ImprimirCotizacion() {
             esLaboratorio={esLaboratorio}
           />
 
+          {/* Fichas técnicas como texto simple (comentado para usar imágenes) */}
+          {/* 
+          {!esLaboratorio && cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0 && (
+            <div>
+              <h3 className="text-sm font-bold mb-1.5 text-[#5D9848]">Fichas Técnicas</h3>
+              <div className="space-y-2">
+                {cotizacion.fichasTecnicas.map((ficha, index) => (
+                  <div key={index}>
+                    <h4 className="text-xs font-semibold">{ficha.titulo}</h4>
+                    <p className="text-xs text-gray-600">{ficha.descripcion}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          */}
+
           {!esLaboratorio && cotizacion.certificadosCalidad && (
             <CertificadosCalidad
               certificadosCalidad={cotizacion.certificadosCalidad}
+              certificados={cotizacion.certificadosEstructurados}
               tieneASWG={tieneASWG}
               tieneASC5={tieneASC5}
             />
@@ -122,17 +168,48 @@ export default function ImprimirCotizacion() {
           <MetodosPago esLaboratorio={esLaboratorio} />
         </div>
       </div>
-      {/* Fichas técnicas */}
+      
+      {/* Fichas técnicas - Páginas separadas con imágenes de BD */}
       {!esLaboratorio && (
         <>
-          {tieneASC5 && !tieneASWG && <FichaTecnicaASC5 />}
-          {tieneASWG && !tieneASC5 && <FichaTecnicaASWG />}
-          {tieneASWG && tieneASC5 && (
+          {/* Si hay fichas técnicas de BD, mostrar con imágenes */}
+          {cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0 ? (
+            <FichasTecnicas fichasTecnicas={cotizacion.fichasTecnicas} />
+          ) : (
             <>
-              <FichaTecnicaASC5 />
-              <FichaTecnicaASWG />
+              {/* Fallback a fichas hardcodeadas */}
+              {tieneASC5 && !tieneASWG && <FichaTecnicaASC5 />}
+              {tieneASWG && !tieneASC5 && <FichaTecnicaASWG />}
+              {tieneASWG && tieneASC5 && (
+                <>
+                  <FichaTecnicaASC5 />
+                  <FichaTecnicaASWG />
+                </>
+              )}
             </>
           )}
+        </>
+      )}
+      
+      {/* Imágenes de certificados al final - cada una en su página */}
+      {!esLaboratorio && cotizacion.certificadosEstructurados && 
+        cotizacion.certificadosEstructurados.some(cert => cert.link) && (
+        <>
+          {cotizacion.certificadosEstructurados
+            .filter(cert => cert.link) // Solo los que tienen imagen
+            .map((cert, index) => (
+              <div key={index} className="mt-6 page-break-before">
+                <div className="mx-auto max-w-[210mm] bg-white print:p-0">
+                  <div className="ficha-tecnica-print">
+                    <img 
+                      src={cert.link} 
+                      alt={`Certificado ${cert.titulo || index + 1}`}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))
+          }
         </>
       )}
 

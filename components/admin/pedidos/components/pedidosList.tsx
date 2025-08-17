@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Search, Edit, Trash2, RefreshCw, Loader2 } from "lucide-react"
+import { Search, Edit, Eye, Trash2, RefreshCw, Loader2 } from "lucide-react"
 import { formatDate, getEstadoColor, getNombreCompleto } from '@/utils/index'
 import type { Pedido } from '../types'
 
@@ -16,15 +16,16 @@ interface PedidosListProps {
   onEdit: (pedido: Pedido) => void
   onDelete: (id: string) => void
   onRefresh: () => void
+  onViewCotizacion: (pedido: Pedido) => void 
 }
 
-export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: PedidosListProps) {
+export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onViewCotizacion }: PedidosListProps) {
   const [searchTerm, setSearchTerm] = useState("")
 
   const filteredPedidos = pedidos.filter(pedido => {
     const searchLower = searchTerm.toLowerCase()
     const nombreCliente = pedido.cotizacion?.persona ? getNombreCompleto(pedido.cotizacion.persona) : ''
-    
+
     return (
       pedido.ped_cod_segui_vac.toLowerCase().includes(searchLower) ||
       pedido.ped_cod_rastreo_vac?.toLowerCase().includes(searchLower) ||
@@ -33,6 +34,7 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: P
     )
   })
 
+  // Manejo de eliminación con confirmación (patrón useBaseCrud)
   const handleDelete = (pedido: Pedido) => {
     if (confirm(`¿Estás seguro de eliminar el pedido ${pedido.ped_cod_segui_vac}?`)) {
       onDelete(pedido.ped_id_int)
@@ -96,11 +98,11 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: P
                       {pedido.ped_cod_segui_vac}
                     </TableCell>
                     <TableCell className="font-mono">
-                      {pedido.cotizacion?.cot_num_vac || 'N/A'}
+                      {pedido.cotizacion?.cot_num_vac || 'Sin número'}
                     </TableCell>
                     <TableCell>
-                      {pedido.cotizacion?.persona ? 
-                        getNombreCompleto(pedido.cotizacion.persona) : 
+                      {pedido.cotizacion?.persona ?
+                        getNombreCompleto(pedido.cotizacion.persona) :
                         'Sin cliente'
                       }
                     </TableCell>
@@ -117,10 +119,11 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: P
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => onEdit(pedido)}
+                          title="Editar pedido"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -129,8 +132,18 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh }: P
                           size="sm"
                           onClick={() => handleDelete(pedido)}
                           disabled={loading}
+                          title="Eliminar pedido"
                         >
                           <Trash2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => onViewCotizacion(pedido)}
+                          disabled={loading}
+                          title="Ver cotización"
+                        >
+                          <Eye className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>

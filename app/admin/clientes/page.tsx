@@ -52,7 +52,7 @@ export default function ClientesPage() {
     const nombreCompleto = cliente.tipo === 'natural' && cliente.persona_natural
       ? `${cliente.persona_natural.per_nat_nomb_vac} ${cliente.persona_natural.per_nat_apell_vac}`
       : cliente.persona_juridica?.per_jurd_razSocial_vac || ''
-    
+
     return (
       nombreCompleto.toLowerCase().includes(searchLower) ||
       (cliente.per_nom_contac_vac?.toLowerCase().includes(searchLower) || false) ||
@@ -166,8 +166,8 @@ export default function ClientesPage() {
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg flex items-center gap-3">
-            <Loader2 className="h-6 w-6 animate-spin" />
-            <span>Procesando...</span>
+            <Loader2 className="h-6 w-6 animate-spin text-gray-900" />
+            <span className="text-gray-900 font-medium">Procesando...</span>
           </div>
         </div>
       )}
