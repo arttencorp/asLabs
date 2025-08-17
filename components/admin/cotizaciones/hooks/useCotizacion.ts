@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { generarNumeroCotizacion, limpiarDatosParaBD } from '@/utils'
-import { crearCotizacion, obtenerFormasPago } from '@/lib/supabase'
+import { crearCotizacion, actualizarCotizacion, obtenerCotizacionPorId, obtenerFormasPago } from '@/lib/supabase'
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
 import { useCertificadosFichas } from './useCertificadosFichas'
@@ -31,6 +31,10 @@ export function useCotizacion() {
   const [activeTab, setActiveTab] = useState<TabName>('informacion')
   const [tipoDocumento, setTipoDocumento] = useState<TipoDocumento>('cotizacion')
   const [preciosConIGV, setPreciosConIGV] = useState(false)
+  
+  // Estados para modo de edición
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [editingCotizacionId, setEditingCotizacionId] = useState<string | null>(null)
   
   // Información de la cotización
   const [numeroCotizacion, setNumeroCotizacion] = useState('')
@@ -109,23 +113,23 @@ export function useCotizacion() {
 
   // Calcular totales usando utility global
   const calcularTotales = useCallback(() => {
+    const subtotal = items.reduce((sum, item) => sum + (item.total || 0), 0)
+    
     if (preciosConIGV) {
-      const totalConIGV = items.reduce((sum, item) => sum + (item.total || 0), 0)
-      const subtotalSinIGV = totalConIGV / 1.18
-      const igv = totalConIGV - subtotalSinIGV
-      return {
-        subtotal: subtotalSinIGV,
-        impuesto: igv,
-        total: totalConIGV,
-      }
-    } else {
-      const subtotal = items.reduce((sum, item) => sum + (item.total || 0), 0)
+      // CON IGV: agregar el 18% al precio base
       const impuesto = subtotal * 0.18
       const total = subtotal + impuesto
       return {
         subtotal,
         impuesto,
         total,
+      }
+    } else {
+      // SIN IGV: el precio es tal como está, sin agregar nada
+      return {
+        subtotal,
+        impuesto: 0,
+        total: subtotal,
       }
     }
   }, [items, preciosConIGV])
@@ -485,6 +489,175 @@ export function useCotizacion() {
     }
   }, [])
 
+  // Función para cargar cotización existente para edición
+  const cargarCotizacionParaEdicion = useCallback(async (cotizacionId: string) => {
+    try {
+      const cotizacion = await obtenerCotizacionPorId(cotizacionId)
+      
+      if (!cotizacion) {
+        throw new Error('Cotización no encontrada')
+      }
+
+      // Establecer modo de edición
+      setIsEditMode(true)
+      setEditingCotizacionId(cotizacionId)
+
+      // Cargar información básica
+      setNumeroCotizacion(cotizacion.cot_num_vac)
+      setFechaEmision(cotizacion.cot_fec_emis_dt)
+      setFechaVencimiento(cotizacion.cot_fec_venc_dt)
+      setPreciosConIGV(cotizacion.cot_igv_bol)
+      
+      // Cargar información del cliente
+      setClienteSeleccionado(cotizacion.per_id_int)
+      if (cotizacion.persona) {
+        const persona = cotizacion.persona
+        if (persona.Persona_Natural && persona.Persona_Natural.length > 0) {
+          setRazonSocial(`${persona.Persona_Natural[0].per_nat_nomb_vac || ''} ${persona.Persona_Natural[0].per_nat_apell_vac || ''}`.trim())
+          setDniRuc(persona.per_num_docum_vac || '')
+        } else if (persona.Persona_Juridica && persona.Persona_Juridica.length > 0) {
+          setRazonSocial(persona.Persona_Juridica[0].per_jurd_razSocial_vac || '')
+          setDniRuc(persona.per_num_docum_vac || '')
+        }
+        setDireccion(persona.per_direcc_vac || '')
+        setTelefono(persona.per_num_telf_vac || '')
+      }
+
+      // Cargar productos
+      if (cotizacion.detalle_cotizacion && cotizacion.detalle_cotizacion.length > 0) {
+        const itemsCargados = cotizacion.detalle_cotizacion.map((detalle: any, index: number) => ({
+          id: index + 1,
+          nombre: detalle.producto?.pro_nomb_vac || '',
+          descripcion: detalle.producto?.pro_desc_vac || '',
+          cantidad: detalle.det_cot_cant_int,
+          precioUnitario: detalle.det_cot_prec_hist_int,
+          total: detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int,
+          codigo: detalle.producto?.pro_id_int?.toString() || ''
+        }))
+        setItems(itemsCargados)
+      }
+
+      // Cargar información adicional
+      if (cotizacion.informacion_adicional && cotizacion.informacion_adicional.length > 0) {
+        const info = cotizacion.informacion_adicional[0]
+        setLugarRecojo(info.inf_ad_lug_recojo_vac || '')
+        setFormaEntrega(info.inf_ad_form_entr_vac || '')
+        setTerminosCondiciones(info.inf_ad_term_cond_vac || terminosCondicionesDefault)
+        if (info.form_pa_id_int) {
+          setFormaPagoSeleccionada(info.form_pa_id_int)
+        }
+      }
+
+      // Ir al tab de información general
+      setActiveTab('informacion')
+      
+      return cotizacion
+    } catch (error) {
+      console.error('Error cargando cotización para edición:', error)
+      throw error
+    }
+  }, [terminosCondicionesDefault])
+
+  // Función para limpiar el modo de edición y resetear formulario
+  const limpiarModoEdicion = useCallback(async () => {
+    setIsEditMode(false)
+    setEditingCotizacionId(null)
+    
+    // Resetear todos los campos del formulario
+    setActiveTab('informacion')
+    setTipoDocumento('cotizacion')
+    setPreciosConIGV(false)
+    
+    // Generar nuevo número de cotización
+    try {
+      const numero = await generarNumeroCotizacion()
+      setNumeroCotizacion(numero)
+    } catch (error) {
+      console.error('Error regenerando número:', error)
+      const timestamp = Date.now()
+      const year = new Date().getFullYear()
+      setNumeroCotizacion(`${timestamp.toString().slice(-6)}-${year}`)
+    }
+    
+    setFechaEmision(new Date().toISOString().split('T')[0])
+    setFechaVencimiento(calcularFechaVencimiento(10))
+    
+    // Limpiar información del cliente
+    setClienteSeleccionado('')
+    setRazonSocial('')
+    setDniRuc('')
+    setDireccion('')
+    setTelefono('')
+    
+    // Resetear productos a estado inicial
+    setItems([
+      { id: 1, nombre: '', descripcion: '', cantidad: 1, precioUnitario: 0, total: 0, codigo: '' }
+    ])
+    
+    // Limpiar información adicional
+    setTerminosCondiciones(terminosCondicionesDefault)
+    setLugarRecojo('')
+    setFormaPago('completo')
+    setFormaEntrega('')
+    setCertificadosCalidad(certificadosDefault)
+    setFormaPagoSeleccionada('')
+  }, [terminosCondicionesDefault, certificadosDefault])
+
+  // Función para guardar/actualizar cotización
+  const guardarOActualizarCotizacion = useCallback(async () => {
+    try {
+      if (!clienteSeleccionado) {
+        throw new Error('Debe seleccionar un cliente')
+      }
+      
+      // Preparar productos válidos para BD
+      const productosValidos = items
+        .filter(item => item.codigo && item.cantidad > 0 && item.precioUnitario > 0)
+        .map(item => ({
+          producto_id: item.codigo === 'personalizado' ? null : item.codigo,
+          cantidad: item.cantidad,
+          precio_historico: item.precioUnitario
+        }))
+
+      const cotizacionData = limpiarDatosParaBD({
+        cliente_id: clienteSeleccionado,
+        fecha_emision: fechaEmision,
+        fecha_vencimiento: fechaVencimiento,
+        incluye_igv: preciosConIGV,
+        productos: productosValidos,
+        forma_pago_id: formaPagoSeleccionada || null,
+        lugar_recojo: lugarRecojo,
+        forma_entrega: formaEntrega,
+        terminos_condiciones: terminosCondiciones
+      })
+
+      let cotizacionCreada
+      
+      if (isEditMode && editingCotizacionId) {
+        // Actualizar cotización existente
+        cotizacionCreada = await actualizarCotizacion(editingCotizacionId, cotizacionData)
+        alert(`Cotización ${numeroCotizacion} actualizada exitosamente`)
+      } else {
+        // Crear nueva cotización
+        cotizacionCreada = await crearCotizacion(cotizacionData)
+        alert(`Cotización ${cotizacionCreada.cot_num_vac} guardada exitosamente`)
+      }
+      
+      // Limpiar modo de edición y redirigir
+      limpiarModoEdicion()
+      router.push('/admin/cotizaciones')
+      
+      return cotizacionCreada
+    } catch (error) { 
+      alert(`Error al ${isEditMode ? 'actualizar' : 'guardar'} la cotización: ` + (error as Error).message)
+      throw error
+    }
+  }, [
+    clienteSeleccionado, calcularTotales, items, fechaEmision, fechaVencimiento,
+    preciosConIGV, lugarRecojo, formaEntrega, terminosCondiciones, formaPagoSeleccionada, 
+    isEditMode, editingCotizacionId, numeroCotizacion, limpiarModoEdicion, router
+  ])
+
   // Helpers
   const tieneLaboratorio = items.some((item) => item.codigo === "LAB")
   const obtenerTituloDocumento = () => {
@@ -558,10 +731,17 @@ export function useCotizacion() {
     eliminarItem,
     vistaPrevia,
     guardarCotizacion,
+    guardarOActualizarCotizacion,
+    cargarCotizacionParaEdicion,
+    limpiarModoEdicion,
     regenerarNumeroCotizacion,
     avanzarPaso,
     retrocederPaso,
     calcularTotales,
+
+    // Estados de edición
+    isEditMode,
+    editingCotizacionId,
 
     // Helpers
     tieneLaboratorio,

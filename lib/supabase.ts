@@ -665,6 +665,153 @@ export async function crearCotizacion(cotizacionData: {
     throw error
   }
 }
+
+export async function obtenerCotizacionPorId(id: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .eq('cot_id_int', id)
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error obteniendo cotización por ID:', error)
+    throw error
+  }
+}
+
+export async function actualizarCotizacion(id: string, cotizacionData: {
+  cliente_id?: string
+  fecha_emision?: string | null
+  fecha_vencimiento?: string | null
+  incluye_igv?: boolean
+  productos?: Array<{
+    producto_id: string | null
+    cantidad: number | null
+    precio_historico: number | null
+  }>
+  forma_pago_id?: string | null
+  lugar_recojo?: string | null
+  forma_entrega?: string | null
+  terminos_condiciones?: string | null
+}) {
+  try {
+    // Actualizar cotización principal
+    const datosLimpios: any = {}
+    
+    if (cotizacionData.cliente_id !== undefined) datosLimpios.per_id_int = cotizacionData.cliente_id
+    if (cotizacionData.fecha_emision !== undefined) datosLimpios.cot_fec_emis_dt = cotizacionData.fecha_emision?.trim() || null
+    if (cotizacionData.fecha_vencimiento !== undefined) datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() || null
+    if (cotizacionData.incluye_igv !== undefined) datosLimpios.cot_igv_bol = cotizacionData.incluye_igv
+
+    if (Object.keys(datosLimpios).length > 0) {
+      const { error: cotizacionError } = await supabase
+        .from('Cotizaciones')
+        .update(datosLimpios)
+        .eq('cot_id_int', id)
+
+      if (cotizacionError) throw cotizacionError
+    }
+
+    // Actualizar productos si se proporcionan
+    if (cotizacionData.productos) {
+      // Eliminar detalles existentes
+      const { error: deleteError } = await supabase
+        .from('Detalle_Cotizacion')
+        .delete()
+        .eq('cot_id_int', id)
+
+      if (deleteError) throw deleteError
+
+      // Insertar nuevos detalles
+      const productosValidos = cotizacionData.productos.filter(prod => 
+        prod.producto_id && 
+        prod.producto_id !== 'personalizado' &&
+        prod.cantidad && 
+        prod.precio_historico
+      )
+
+      if (productosValidos.length > 0) {
+        const detalles = productosValidos.map(prod => ({
+          pro_id_int: prod.producto_id,
+          cot_id_int: id,
+          det_cot_cant_int: prod.cantidad,
+          det_cot_prec_hist_int: prod.precio_historico
+        }))
+
+        const { error: insertError } = await supabase
+          .from('Detalle_Cotizacion')
+          .insert(detalles)
+
+        if (insertError) throw insertError
+      }
+    }
+
+    // Actualizar información adicional si se proporciona
+    if (cotizacionData.lugar_recojo !== undefined || 
+        cotizacionData.forma_entrega !== undefined || 
+        cotizacionData.terminos_condiciones !== undefined || 
+        cotizacionData.forma_pago_id !== undefined) {
+      
+      const infoLimpia: any = {}
+      if (cotizacionData.lugar_recojo !== undefined) infoLimpia.inf_ad_lug_recojo_vac = cotizacionData.lugar_recojo?.trim() || null
+      if (cotizacionData.forma_entrega !== undefined) infoLimpia.inf_ad_form_entr_vac = cotizacionData.forma_entrega?.trim() || null
+      if (cotizacionData.terminos_condiciones !== undefined) infoLimpia.inf_ad_term_cond_vac = cotizacionData.terminos_condiciones?.trim() || null
+      if (cotizacionData.forma_pago_id !== undefined) infoLimpia.form_pa_id_int = cotizacionData.forma_pago_id || null
+
+      // Verificar si ya existe información adicional
+      const { data: infoExistente } = await supabase
+        .from('Informacion_Adicional')
+        .select('*')
+        .eq('cot_id_int', id)
+        .single()
+
+      if (infoExistente) {
+        // Actualizar existente
+        const { error: updateInfoError } = await supabase
+          .from('Informacion_Adicional')
+          .update(infoLimpia)
+          .eq('cot_id_int', id)
+
+        if (updateInfoError) throw updateInfoError
+      } else {
+        // Crear nueva
+        const { error: insertInfoError } = await supabase
+          .from('Informacion_Adicional')
+          .insert({
+            ...infoLimpia,
+            cot_id_int: id
+          })
+
+        if (insertInfoError) throw insertInfoError
+      }
+    }
+
+    // Obtener cotización actualizada
+    return await obtenerCotizacionPorId(id)
+  } catch (error) {
+    console.error('Error actualizando cotización:', error)
+    throw error
+  }
+}
      
 // ============================================
 // SEGUIMIENTO DE PEDIDOS

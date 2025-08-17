@@ -22,6 +22,11 @@ export function ProductosServicios({
   onSiguiente
 }: ProductosServiciosProps) {
   const { subtotal, impuesto, total } = calcularTotales()
+  
+  // Validación: verificar que hay al menos un producto seleccionado
+  const tieneProductosSeleccionados = items.some(item => 
+    item.codigo && item.codigo.trim() !== '' && item.codigo !== 'personalizado' && item.codigo !== 'seleccionar'
+  )
 
   return (
     <>
@@ -74,6 +79,8 @@ export function ProductosServicios({
                         value={item.descripcion || ""}
                         onChange={(e) => actualizarItem(item.id, "descripcion", e.target.value)}
                         placeholder="Descripción del producto o servicio"
+                        disabled={true} // Siempre deshabilitado, se llena automáticamente al seleccionar producto
+                        className="bg-gray-50"
                       />
                     </TableCell>
                     <TableCell>
@@ -83,10 +90,11 @@ export function ProductosServicios({
                         disabled={productosLoading}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={productosLoading ? "Cargando productos..." : "Seleccionar producto"} />
+                          <SelectValue placeholder={productosLoading ? "Cargando productos..." : "Seleccionar"} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="personalizado">Personalizado</SelectItem>
+                          {/* Opción vacía por defecto */}
+                          <SelectItem value="seleccionar">Seleccionar</SelectItem>
                           {/* Productos de la base de datos */}
                           {productos.map((producto) => (
                             <SelectItem key={producto.pro_id_int} value={producto.pro_id_int}>
@@ -100,20 +108,26 @@ export function ProductosServicios({
                       <Input
                         type="number"
                         min="1"
-                        value={item.cantidad || 1}
+                        value={item.cantidad || ""}
                         onChange={(e) =>
                           actualizarItem(item.id, "cantidad", Number.parseInt(e.target.value) || 0)
                         }
+                        disabled={!item.codigo || item.codigo.trim() === "" || item.codigo === "seleccionar"}
+                        placeholder=""
+                        className={!item.codigo || item.codigo.trim() === "" || item.codigo === "seleccionar" ? "bg-gray-50" : ""}
                       />
                     </TableCell>
                     <TableCell>
                       <Input
                         type="number"
                         step="0.01"
-                        value={item.precioUnitario || 0}
+                        value={item.precioUnitario || ""}
                         onChange={(e) =>
                           actualizarItem(item.id, "precioUnitario", Number.parseFloat(e.target.value) || 0)
                         }
+                        disabled={!item.codigo || item.codigo.trim() === "" || item.codigo === "seleccionar"}
+                        placeholder=""
+                        className={!item.codigo || item.codigo.trim() === "" || item.codigo === "seleccionar" ? "bg-gray-50" : ""}
                       />
                     </TableCell>
                     <TableCell className="font-medium">S/ {(item.total || 0).toFixed(2)}</TableCell>
@@ -170,12 +184,18 @@ export function ProductosServicios({
             <ChevronLeft className="ml-2 h-4 w-4" />
             Volver a Información General
           </Button>
-          <Button
-            className="bg-green-600 hover:bg-green-700 text-white"
+          <Button 
             onClick={onSiguiente}
-            type="button">
-            Continuar con Información Adicional
-            <ChevronRight className="ml-2 h-4 w-4" />
+            disabled={!tieneProductosSeleccionados}
+            className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg ${
+              tieneProductosSeleccionados 
+                ? 'bg-green-600 hover:bg-green-700 text-white' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+            size="lg"
+          >
+            {tieneProductosSeleccionados ? 'Continuar con Información Adicional' : 'Selecciona productos primero'}
+            {tieneProductosSeleccionados && <ChevronRight className="ml-2 h-4 w-4" />}
           </Button>
         </div>
       </div>

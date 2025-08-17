@@ -214,6 +214,7 @@ export function getDocumentoClienteParaImpresion(persona: ClientePersona): {
 export function limpiarDatosParaBD(obj: any): any {
   if (obj === null || obj === undefined) return null
   if (typeof obj === 'string') return obj.trim() === '' ? null : obj.trim()
+  if (typeof obj === 'boolean') return obj // Manejar booleanos explícitamente
   // No convertir números a null - deja que Supabase maneje los IDs
   if (typeof obj === 'number') return obj
   if (Array.isArray(obj)) return obj.length === 0 ? null : obj

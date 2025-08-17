@@ -98,6 +98,8 @@ export interface InformacionAdicionalProps {
   formaPagoSeleccionada: string
   setFormaPagoSeleccionada: (value: string) => void
   formasPagoLoading: boolean
+  // Modo de edición
+  isEditMode?: boolean
   onAnterior: () => void
   onVistaPrevia: () => void
   onGuardar: () => void

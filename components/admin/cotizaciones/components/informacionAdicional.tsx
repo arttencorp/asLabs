@@ -25,6 +25,8 @@ export function InformacionAdicional({
   formaPagoSeleccionada,
   setFormaPagoSeleccionada,
   formasPagoLoading,
+  // Modo de edición
+  isEditMode = false,
   onAnterior,
   onVistaPrevia,
   onGuardar
@@ -138,7 +140,7 @@ export function InformacionAdicional({
             className="gap-2 bg-[#1a1a2e] hover:bg-[#24243c]"
             type="button">
             <Save className="h-4 w-4" />
-            Guardar
+            {isEditMode ? 'Actualizar' : 'Guardar'}
           </Button>
           <Button
             onClick={onVistaPrevia}
