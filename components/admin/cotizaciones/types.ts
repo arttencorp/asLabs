@@ -93,6 +93,11 @@ export interface InformacionAdicionalProps {
   setCertificadosCalidad: (value: string) => void
   certificadosEstructurados: Certificado[] // Certificados estructurados
   tieneLaboratorio: boolean
+  // Nuevas props para formas de pago de BD
+  formasPago: import('@/types/database').FormaPago[]
+  formaPagoSeleccionada: string
+  setFormaPagoSeleccionada: (value: string) => void
+  formasPagoLoading: boolean
   onAnterior: () => void
   onVistaPrevia: () => void
   onGuardar: () => void

@@ -35,17 +35,17 @@ export function ProductosServicios({
               <div className="flex border rounded-md overflow-hidden">
                 <button
                   type="button"
-                  className={`px-3 py-1 text-sm ${!preciosConIGV ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"
+                  className={`px-3 py-1 text-sm ${preciosConIGV ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"
                     }`}
-                  onClick={() => setPreciosConIGV(false)}
+                  onClick={() => setPreciosConIGV(true)}
                 >
                   Incluye IGV
                 </button>
                 <button
                   type="button"
-                  className={`px-3 py-1 text-sm ${preciosConIGV ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"
+                  className={`px-3 py-1 text-sm ${!preciosConIGV ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"
                     }`}
-                  onClick={() => setPreciosConIGV(true)}
+                  onClick={() => setPreciosConIGV(false)}
                 >
                   No incluye IGV
                 </button>

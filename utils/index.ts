@@ -65,7 +65,7 @@ export function generarCodigoSeguimiento(): string {
 export function generarNumeroCotizacion(): string {
   const timestamp = Date.now()
   const year = new Date().getFullYear()
-  return `COT-${year}-${timestamp.toString().slice(-6)}`
+  return `${timestamp.toString().slice(-6)}-${year}`
 }
 
 //Re-export ClientePersona type from database types for convenience

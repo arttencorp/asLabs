@@ -46,6 +46,11 @@ export default function CotizacionesPage() {
         certificadosEstructurados,
         productos,
         productosLoading,
+        // Nuevas variables para formas de pago de BD
+        formasPago,
+        formaPagoSeleccionada,
+        setFormaPagoSeleccionada,
+        formasPagoLoading,
         seleccionarProducto,
         actualizarItem,
         agregarItem,
@@ -194,6 +199,11 @@ export default function CotizacionesPage() {
                         setCertificadosCalidad={setCertificadosCalidad}
                         certificadosEstructurados={certificadosEstructurados}
                         tieneLaboratorio={tieneLaboratorio}
+                        // Nuevas props para formas de pago de BD
+                        formasPago={formasPago}
+                        formaPagoSeleccionada={formaPagoSeleccionada}
+                        setFormaPagoSeleccionada={setFormaPagoSeleccionada}
+                        formasPagoLoading={formasPagoLoading}
                         onAnterior={retrocederPaso}
                         onVistaPrevia={vistaPrevia}
                         onGuardar={guardarCotizacion}

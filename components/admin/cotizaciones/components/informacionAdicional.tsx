@@ -20,6 +20,11 @@ export function InformacionAdicional({
   certificadosCalidad,
   setCertificadosCalidad,
   tieneLaboratorio,
+  // Nuevas props para formas de pago de BD
+  formasPago,
+  formaPagoSeleccionada,
+  setFormaPagoSeleccionada,
+  formasPagoLoading,
   onAnterior,
   onVistaPrevia,
   onGuardar
@@ -58,14 +63,21 @@ export function InformacionAdicional({
           )}
 
           <div className="grid gap-2">
-            <Label htmlFor="formaPago">Forma de Pago</Label>
-            <Select value={formaPago} onValueChange={setFormaPago}>
-              <SelectTrigger id="formaPago">
-                <SelectValue placeholder="Seleccione la forma de pago" />
+            <Label htmlFor="formaPagoBD">Método de Pago</Label>
+            <Select 
+              value={formaPagoSeleccionada} 
+              onValueChange={setFormaPagoSeleccionada}
+              disabled={formasPagoLoading}
+            >
+              <SelectTrigger id="formaPagoBD">
+                <SelectValue placeholder={formasPagoLoading ? "Cargando..." : "Seleccione el método de pago"} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="completo">Pago 100%</SelectItem>
-                <SelectItem value="parcial">Pago 50-50</SelectItem>
+                {formasPago.map((formaPagoBD) => (
+                  <SelectItem key={formaPagoBD.form_pa_id_int} value={formaPagoBD.form_pa_id_int}>
+                    {formaPagoBD.form_pa_desc_vac || `Forma de pago ${formaPagoBD.form_pa_tipo_int}`}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

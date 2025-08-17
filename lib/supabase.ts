@@ -9,9 +9,7 @@ import type {
   FormaPago,
   ProductoDatabase,
   CertificadoCalidadDatabase,
-  FichaTecnicaDatabase,
-  ProductoCertificadoDatabase,
-  ProductoFichaTecnicaDatabase
+  FichaTecnicaDatabase
 } from '@/types/database'
 import type { ClientePersona } from '@/types/database'
 
@@ -647,15 +645,15 @@ export async function crearCotizacion(cotizacionData: {
     }
 
     // Crear información adicional (solo si hay datos para insertar)
-    if (datosLimpios.lugar_recojo || datosLimpios.forma_entrega || datosLimpios.terminos_condiciones) {
+    if (datosLimpios.lugar_recojo || datosLimpios.forma_entrega || datosLimpios.terminos_condiciones || datosLimpios.forma_pago_id) {
       const { error: infoError } = await supabase
         .from('Informacion_Adicional')
         .insert({
           inf_ad_lug_recojo_vac: datosLimpios.lugar_recojo,
           inf_ad_form_entr_vac: datosLimpios.forma_entrega,
           inf_ad_term_cond_vac: datosLimpios.terminos_condiciones,
+          form_pa_id_int: datosLimpios.forma_pago_id,
           cot_id_int: cotizacion.cot_id_int
-          // Quitar form_pa_id_int por ahora, puede estar causando problemas
         })
 
       if (infoError) throw infoError

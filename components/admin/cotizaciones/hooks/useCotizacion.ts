@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { generarNumeroCotizacion, limpiarDatosParaBD } from '@/utils'
-import { crearCotizacion } from '@/lib/supabase'
+import { crearCotizacion, obtenerFormasPago } from '@/lib/supabase'
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
 import { useCertificadosFichas } from './useCertificadosFichas'
@@ -12,6 +12,7 @@ import {
 import { calcularFechaVencimiento, numeroATexto } from '@/utils/index'
 import {  generarCertificadosTexto } from '../utils'
 import type { Item, FichaTecnica, TipoDocumento, FormaPagoUI, TabName } from '../types'
+import type { FormaPago } from '@/types/database'
 
 export function useCotizacion() {
   const router = useRouter()
@@ -55,6 +56,23 @@ export function useCotizacion() {
   useEffect(() => {
     itemsRef.current = items
   }, [items])
+
+  // Cargar formas de pago de BD al montar el componente
+  useEffect(() => {
+    const cargarFormasPago = async () => {
+      setFormasPagoLoading(true)
+      try {
+        const formasPagoBD = await obtenerFormasPago()
+        setFormasPago(formasPagoBD)
+      } catch (error) {
+        console.error('Error cargando formas de pago:', error)
+      } finally {
+        setFormasPagoLoading(false)
+      }
+    }
+
+    cargarFormasPago()
+  }, [])
   
   // Información adicional
   const [terminosCondiciones, setTerminosCondiciones] = useState(terminosCondicionesDefault)
@@ -65,6 +83,11 @@ export function useCotizacion() {
   const [certificadosEstructurados, setCertificadosEstructurados] = useState<any[]>([]) // Certificados raw
   const [fichasTecnicas, setFichasTecnicas] = useState<FichaTecnica[]>([])
   const [tipoProductoSeleccionado, setTipoProductoSeleccionado] = useState('vegetal')
+
+  // Estados para formas de pago de BD
+  const [formasPago, setFormasPago] = useState<FormaPago[]>([])
+  const [formaPagoSeleccionada, setFormaPagoSeleccionada] = useState<string>('') // ID de la forma de pago seleccionada
+  const [formasPagoLoading, setFormasPagoLoading] = useState(false)
 
   // Calcular totales usando utility global
   const calcularTotales = useCallback(() => {
@@ -370,8 +393,6 @@ export function useCotizacion() {
       if (!clienteSeleccionado) {
         throw new Error('Debe seleccionar un cliente')
       }
-
-      const totales = calcularTotales()
       
       // Preparar productos válidos para BD
       const productosValidos = items
@@ -388,7 +409,7 @@ export function useCotizacion() {
         fecha_vencimiento: fechaVencimiento,
         incluye_igv: preciosConIGV,
         productos: productosValidos,
-        forma_pago_id: null, // Por ahora null, después se puede agregar selector de forma de pago
+        forma_pago_id: formaPagoSeleccionada || null, // Usar el ID de la forma de pago seleccionada
         lugar_recojo: lugarRecojo,
         forma_entrega: formaEntrega,
         terminos_condiciones: terminosCondiciones
@@ -398,17 +419,16 @@ export function useCotizacion() {
       
       // Mostrar mensaje de éxito y redirigir
       alert(`Cotización ${cotizacionCreada.cot_num_vac} guardada exitosamente`)
-      router.push('/admin/pedidos') // o donde corresponda ver las cotizaciones
+      router.push('/admin/cotizaciones') // o donde corresponda ver las cotizaciones
       
       return cotizacionCreada
-    } catch (error) {
-      console.error("Error guardando cotización:", error)
+    } catch (error) { 
       alert('Error al guardar la cotización: ' + (error as Error).message)
       throw error
     }
   }, [
     clienteSeleccionado, calcularTotales, items, fechaEmision, fechaVencimiento,
-    preciosConIGV, lugarRecojo, formaEntrega, terminosCondiciones, router
+    preciosConIGV, lugarRecojo, formaEntrega, terminosCondiciones, formaPagoSeleccionada, router
   ])
 
   // Navegación entre tabs
@@ -489,6 +509,12 @@ export function useCotizacion() {
     // Estados de carga de certificados y fichas
     certificadosLoading,
     fichasLoading,
+    
+    // Formas de pago de BD
+    formasPago,
+    formaPagoSeleccionada,
+    setFormaPagoSeleccionada,
+    formasPagoLoading,
     
     // Funciones
     seleccionarProducto,
