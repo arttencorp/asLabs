@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { obtenerPersonas, crearPersona, actualizarPersona, eliminarPersona } from '@/lib/supabase'
+import { useBaseCrud } from '@/hooks/useBaseCrud'
 import { CLIENTE_FORM_INITIAL } from '../constants'
 import { validateClienteForm } from '../utils'
 import type { ClienteForm, ClientesStats } from '../types'
@@ -7,127 +8,52 @@ import type { ClientePersona } from '@/types/database'
 import type { TipoCliente } from '@/constants'
 
 export function useClientes() {
-  const [clientes, setClientes] = useState<ClientePersona[]>([])
-  const [loading, setLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
 
-  // Estados del formulario
-  const [clienteForm, setClienteForm] = useState<ClienteForm>(CLIENTE_FORM_INITIAL)
-  const [editingCliente, setEditingCliente] = useState<ClientePersona | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  // Usar useBaseCrud para la funcionalidad CRUD básica
+  const baseCrud = useBaseCrud<ClientePersona, ClienteForm>({
+    fetchFn: obtenerPersonas,
+    createFn: crearPersona,
+    updateFn: async (id: string, data: Partial<ClienteForm>) => {
+      return await actualizarPersona(id, data as ClienteForm)
+    },
+    deleteFn: eliminarPersona,
+    initialForm: CLIENTE_FORM_INITIAL,
+    validateFn: validateClienteForm,
+    getIdFn: (cliente) => cliente.per_id_int
+  })
+
+  // Estados y funciones desde useBaseCrud
+  const {
+    items: clientes,
+    loading,
+    error,
+    success,
+    form: clienteForm,
+    editingItem: editingCliente,
+    isDialogOpen,
+    setForm: setClienteForm,
+    setError,
+    setIsDialogOpen,
+    setEditingItem: setEditingCliente,
+    loadData,
+    handleCreate: handleCreateCliente,
+    handleUpdate: handleUpdateCliente,
+    handleDelete: handleDeleteCliente,
+    showSuccess
+  } = baseCrud
 
   useEffect(() => {
     setMounted(true)
-    loadData()
   }, [])
 
-  const loadData = async () => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const clientesData = await obtenerPersonas()
-      setClientes(clientesData)
-      if (mounted) {
-        showSuccess(`Datos cargados: ${clientesData.length} clientes`)
-      }
-    } catch (error: any) {
-      setError(error.message || 'Error al cargar los datos')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const showSuccess = (message: string) => {
-    setSuccess(message)
-    setTimeout(() => setSuccess(null), 5000)
-  }
-
-  const resetForm = () => {
+  // Funciones específicas de clientes
+  const resetForm = useCallback(() => {
     setClienteForm(CLIENTE_FORM_INITIAL)
     setEditingCliente(null)
-  }
+  }, [setClienteForm, setEditingCliente])
 
-  const handleCreateCliente = async () => {
-    const errors = validateClienteForm(clienteForm)
-    if (errors.length > 0) {
-      setError(errors.join(', '))
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const nuevoCliente = await crearPersona(clienteForm)
-      if (nuevoCliente) {
-        setClientes([nuevoCliente, ...clientes])
-        showSuccess(`Cliente creado exitosamente`)
-        resetForm()
-        setIsDialogOpen(false)
-      }
-    } catch (error: any) {
-      console.error('Error creando cliente:', error)
-      setError(error.message || 'Error al crear el cliente')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleUpdateCliente = async () => {
-    if (!editingCliente) return
-
-    const errors = validateClienteForm(clienteForm)
-    if (errors.length > 0) {
-      setError(errors.join(', '))
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const clienteActualizado = await actualizarPersona(editingCliente.per_id_int, clienteForm)
-      if (clienteActualizado) {
-        setClientes(clientes.map((c) =>
-          c.per_id_int === editingCliente.per_id_int ? clienteActualizado : c
-        ))
-        showSuccess(`Cliente actualizado exitosamente`)
-        resetForm()
-        setIsDialogOpen(false)
-      }
-    } catch (error: any) {
-      console.error('Error actualizando cliente:', error)
-      setError(error.message || 'Error al actualizar el cliente')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleDeleteCliente = async (id: string) => {
-    const cliente = clientes.find((c) => c.per_id_int === id)
-    if (!cliente) return
-
-    if (!confirm(`¿Estás seguro de eliminar este cliente?`)) return
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      await eliminarPersona(id)
-      setClientes(clientes.filter((c) => c.per_id_int !== id))
-      showSuccess(`Cliente eliminado exitosamente`)
-    } catch (error: any) {
-      console.error('Error eliminando cliente:', error)
-      setError(error.message || 'Error al eliminar el cliente')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const openEditDialog = (cliente: ClientePersona) => {
+  const openEditDialog = useCallback((cliente: ClientePersona) => {
     setEditingCliente(cliente)
     setClienteForm({
       per_nom_contac_vac: cliente.per_nom_contac_vac,
@@ -148,12 +74,12 @@ export function useClientes() {
       per_jurd_razSocial_vac: cliente.persona_juridica?.per_jurd_razSocial_vac ?? null
     })
     setIsDialogOpen(true)
-  }
+  }, [setEditingCliente, setClienteForm, setIsDialogOpen])
 
-  const openCreateDialog = () => {
+  const openCreateDialog = useCallback(() => {
     resetForm()
     setIsDialogOpen(true)
-  }
+  }, [resetForm, setIsDialogOpen])
 
   // Calcular estadísticas mejoradas
   const stats: ClientesStats = {
@@ -179,7 +105,7 @@ export function useClientes() {
     isDialogOpen,
     stats,
 
-    // Acciones
+    // Acciones (usando funciones de useBaseCrud)
     setClienteForm,
     setError,
     setIsDialogOpen,

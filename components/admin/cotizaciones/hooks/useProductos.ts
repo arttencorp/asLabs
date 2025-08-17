@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { obtenerProductos } from '@/lib/supabase'
 import type { ProductoDatabase } from '@/types/database'
 
@@ -6,24 +6,32 @@ export function useProductos() {
   const [productos, setProductos] = useState<ProductoDatabase[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
-  useEffect(() => {
-    cargarProductos()
+  // Función de éxito reutilizable (patrón useBaseCrud)
+  const showSuccess = useCallback((message: string) => {
+    setSuccess(message)
+    setTimeout(() => setSuccess(null), 5000)
   }, [])
 
-  const cargarProductos = async () => {
+  const cargarProductos = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
       const productosData = await obtenerProductos()
       setProductos(productosData)
+      showSuccess(`Cargados ${productosData.length} productos`)
     } catch (err) {
       console.error('Error cargando productos:', err)
       setError('Error al cargar productos')
     } finally {
       setLoading(false)
     }
-  }
+  }, [showSuccess])
+
+  useEffect(() => {
+    cargarProductos()
+  }, [cargarProductos])
 
   // Función para buscar producto por ID
   const obtenerProductoPorId = (id: string) => {
@@ -43,8 +51,11 @@ export function useProductos() {
     productos,
     loading,
     error,
+    success,
     cargarProductos,
     obtenerProductoPorId,
-    formatearProductoParaSelector
+    formatearProductoParaSelector,
+    showSuccess,
+    setError: (error: string | null) => setError(error)
   }
 }

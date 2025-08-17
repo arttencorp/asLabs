@@ -34,6 +34,7 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
     )
   })
 
+  // Manejo de eliminación con confirmación (patrón useBaseCrud)
   const handleDelete = (pedido: Pedido) => {
     if (confirm(`¿Estás seguro de eliminar el pedido ${pedido.ped_cod_segui_vac}?`)) {
       onDelete(pedido.ped_id_int)

@@ -13,6 +13,7 @@ import {
   eliminarPedido,
   obtenerPersonas
 } from '@/lib/supabase'
+import { useBaseCrud } from '@/hooks/useBaseCrud'
 import { calcularTotalCotizacion } from '@/utils/index'
 import type { 
   Pedido, 
@@ -28,30 +29,65 @@ import type {
 } from '@/types/database'
 import type { ClientePersona } from '@/types/database'
 
+// Formulario inicial para pedidos
+const PEDIDO_FORM_INITIAL: PedidoForm = {
+  cotizacion_id: '',
+  estado_id: '',
+  codigo_rastreo: '',
+  observaciones: '',
+  numero_comprobante: '',
+  imagen_url: ''
+}
+
 export function usePedidos() {
-  const [pedidos, setPedidos] = useState<Pedido[]>([])
+  // Estados para entidades relacionadas
   const [cotizaciones, setCotizaciones] = useState<Cotizacion[]>([])
   const [estadosPedido, setEstadosPedido] = useState<EstadoPedido[]>([])
   const [estadosCotizacion, setEstadosCotizacion] = useState<EstadoCotizacion[]>([])
   const [formasPago, setFormasPago] = useState<FormaPago[]>([])
   const [productos, setProductos] = useState<ProductoDatabase[]>([])
   const [clientes, setClientes] = useState<ClientePersona[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
 
-  const showSuccess = useCallback((message: string) => {
-    setSuccess(message)
-    setTimeout(() => setSuccess(null), 5000)
-  }, [])
+  // Usar useBaseCrud para la gestión de pedidos
+  const baseCrud = useBaseCrud<Pedido, PedidoForm>({
+    fetchFn: obtenerPedidos,
+    createFn: crearPedido,
+    updateFn: actualizarPedido,
+    deleteFn: eliminarPedido,
+    initialForm: PEDIDO_FORM_INITIAL,
+    getIdFn: (pedido) => pedido.ped_id_int
+  })
 
+  // Extraer funciones y estados de useBaseCrud
+  const {
+    items: pedidos,
+    loading: pedidosLoading,
+    error,
+    success,
+    form: pedidoForm,
+    editingItem: editingPedido,
+    isDialogOpen,
+    setForm: setPedidoForm,
+    setError,
+    setIsDialogOpen,
+    setEditingItem: setEditingPedido,
+    loadData: loadPedidos,
+    handleCreate: createPedido,
+    handleUpdate: updatePedido,
+    handleDelete: deletePedido,
+    showSuccess
+  } = baseCrud
+
+  // Estado de carga adicional para datos relacionados
+  const [relatedDataLoading, setRelatedDataLoading] = useState(false)
+
+  // Carga combinada de todos los datos
   const loadData = useCallback(async () => {
-    setLoading(true)
+    setRelatedDataLoading(true)
     setError(null)
 
     try {
       const [
-        pedidosData, 
         cotizacionesData, 
         estadosPedidoData,
         estadosCotizacionData,
@@ -59,7 +95,6 @@ export function usePedidos() {
         productosData,
         clientesData
       ] = await Promise.all([
-        obtenerPedidos(),
         obtenerCotizaciones(),
         obtenerEstadosPedido(),
         obtenerEstadosCotizacion(),
@@ -68,7 +103,6 @@ export function usePedidos() {
         obtenerPersonas()
       ])
 
-      setPedidos(pedidosData)
       setCotizaciones(cotizacionesData)
       setEstadosPedido(estadosPedidoData)
       setEstadosCotizacion(estadosCotizacionData)
@@ -76,63 +110,16 @@ export function usePedidos() {
       setProductos(productosData)
       setClientes(clientesData)
       
-      showSuccess(`Datos cargados: ${pedidosData.length} pedidos, ${cotizacionesData.length} cotizaciones`)
+      // Cargar pedidos usando useBaseCrud
+      await loadPedidos()
+      
+      showSuccess(`Datos cargados: ${cotizacionesData.length} cotizaciones`)
     } catch (error: any) {
       setError(error.message || "Error al cargar los datos")
     } finally {
-      setLoading(false)
+      setRelatedDataLoading(false)
     }
-  }, [showSuccess])
-
-  const createPedido = useCallback(async (pedidoForm: PedidoForm) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const nuevoPedido = await crearPedido(pedidoForm)
-      setPedidos(prev => [nuevoPedido, ...prev])
-      showSuccess(`Pedido ${nuevoPedido.ped_cod_segui_vac} creado exitosamente`)
-      return nuevoPedido
-    } catch (error: any) {
-      setError(error.message || "Error al crear el pedido")
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [showSuccess])
-
-  const updatePedido = useCallback(async (id: string, pedidoForm: Partial<PedidoForm>) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const pedidoActualizado = await actualizarPedido(id, pedidoForm)
-      setPedidos(prev => prev.map(p => p.ped_id_int === id ? pedidoActualizado : p))
-      showSuccess(`Pedido actualizado exitosamente`)
-      return pedidoActualizado
-    } catch (error: any) {
-      setError(error.message || "Error al actualizar el pedido")
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [showSuccess])
-
-  const deletePedido = useCallback(async (id: string) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      await eliminarPedido(id)
-      setPedidos(prev => prev.filter(p => p.ped_id_int !== id))
-      showSuccess("Pedido eliminado exitosamente")
-    } catch (error: any) {
-      setError(error.message || "Error al eliminar el pedido")
-      throw error
-    } finally {
-      setLoading(false)
-    }
-  }, [showSuccess])
+  }, [loadPedidos, showSuccess, setError])
 
   // Calcular estadísticas mejoradas
   const stats: PedidosStats = {
@@ -176,16 +163,24 @@ export function usePedidos() {
     clientes,
     stats,
     
-    // States
-    loading,
+    // States (combinando estados de useBaseCrud y adicionales)
+    loading: pedidosLoading || relatedDataLoading,
     error,
     success,
+    pedidoForm,
+    editingPedido,
+    isDialogOpen,
     
-    // Actions
+    // Actions (usando funciones de useBaseCrud)
     loadData,
     createPedido,
     updatePedido,
     deletePedido,
+    
+    // Form management
+    setPedidoForm,
+    setEditingPedido,
+    setIsDialogOpen,
     
     // Utilities
     showSuccess,
