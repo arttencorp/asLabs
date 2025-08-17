@@ -586,7 +586,7 @@ export async function crearCotizacion(cotizacionData: {
   terminos_condiciones: string | null
 }) {
   try {
-    const numeroCotizacion = generarNumeroCotizacion()
+    const numeroCotizacion = await generarNumeroCotizacion()
 
     // Limpiar datos antes de insertar (convertir strings vacíos a null)
     const datosLimpios = {

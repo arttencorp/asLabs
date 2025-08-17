@@ -62,10 +62,56 @@ export function generarCodigoSeguimiento(): string {
   return result
 }
 
-export function generarNumeroCotizacion(): string {
-  const timestamp = Date.now()
-  const year = new Date().getFullYear()
-  return `${timestamp.toString().slice(-6)}-${year}`
+export async function generarNumeroCotizacion(): Promise<string> {
+  try {
+    const { createClient } = await import("@supabase/supabase-js")
+    
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+
+    const year = new Date().getFullYear()
+
+    // Buscar el último número de cotización del año actual
+    const { data, error } = await supabase
+      .from("Cotizaciones")
+      .select("cot_num_vac")
+      .ilike("cot_num_vac", `%-${year}`)
+      .order("cot_num_vac", { ascending: false })
+      .limit(1)
+
+    if (error) {
+      console.error("Error al obtener último número de cotización:", error)
+      // Fallback: usar timestamp si hay error
+      const timestamp = Date.now()
+      return `${timestamp.toString().slice(-6)}-${year}`
+    }
+
+    let siguienteNumero = 1
+
+    if (data && data.length > 0) {
+      // Extraer el número de la cotización (parte antes del guión)
+      const ultimaCotizacion = data[0].cot_num_vac
+      const match = ultimaCotizacion.match(/^(\d+)-\d{4}$/)
+      
+      if (match) {
+        const ultimoNumero = parseInt(match[1], 10)
+        siguienteNumero = ultimoNumero + 1
+      }
+    }
+
+    // Formatear con ceros a la izquierda (4 dígitos)
+    const numeroFormateado = siguienteNumero.toString().padStart(4, "0")
+    
+    return `${numeroFormateado}-${year}`
+  } catch (error) {
+    console.error("Error en generarNumeroCotizacion:", error)
+    // Fallback: usar timestamp si hay error
+    const timestamp = Date.now()
+    const year = new Date().getFullYear()
+    return `${timestamp.toString().slice(-6)}-${year}`
+  }
 }
 
 //Re-export ClientePersona type from database types for convenience

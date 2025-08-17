@@ -33,7 +33,7 @@ export function useCotizacion() {
   const [preciosConIGV, setPreciosConIGV] = useState(false)
   
   // Información de la cotización
-  const [numeroCotizacion, setNumeroCotizacion] = useState(generarNumeroCotizacion())
+  const [numeroCotizacion, setNumeroCotizacion] = useState('')
   const [fechaEmision, setFechaEmision] = useState(new Date().toISOString().split('T')[0])
   const [fechaVencimiento, setFechaVencimiento] = useState(calcularFechaVencimiento(10))
   
@@ -72,6 +72,24 @@ export function useCotizacion() {
     }
 
     cargarFormasPago()
+  }, [])
+
+  // Generar número de cotización al montar el componente
+  useEffect(() => {
+    const generarNumero = async () => {
+      try {
+        const numero = await generarNumeroCotizacion()
+        setNumeroCotizacion(numero)
+      } catch (error) {
+        console.error('Error generando número de cotización:', error)
+        // Fallback: usar timestamp
+        const timestamp = Date.now()
+        const year = new Date().getFullYear()
+        setNumeroCotizacion(`${timestamp.toString().slice(-6)}-${year}`)
+      }
+    }
+
+    generarNumero()
   }, [])
   
   // Información adicional
@@ -450,6 +468,23 @@ export function useCotizacion() {
     }
   }, [activeTab])
 
+  // Regenerar número de cotización (útil después de guardar)
+  const regenerarNumeroCotizacion = useCallback(async () => {
+    try {
+      const numero = await generarNumeroCotizacion()
+      setNumeroCotizacion(numero)
+      return numero
+    } catch (error) {
+      console.error('Error regenerando número de cotización:', error)
+      // Fallback: usar timestamp
+      const timestamp = Date.now()
+      const year = new Date().getFullYear()
+      const numeroFallback = `${timestamp.toString().slice(-6)}-${year}`
+      setNumeroCotizacion(numeroFallback)
+      return numeroFallback
+    }
+  }, [])
+
   // Helpers
   const tieneLaboratorio = items.some((item) => item.codigo === "LAB")
   const obtenerTituloDocumento = () => {
@@ -523,6 +558,7 @@ export function useCotizacion() {
     eliminarItem,
     vistaPrevia,
     guardarCotizacion,
+    regenerarNumeroCotizacion,
     avanzarPaso,
     retrocederPaso,
     calcularTotales,
