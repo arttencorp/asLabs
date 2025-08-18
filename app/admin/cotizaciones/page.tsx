@@ -10,6 +10,7 @@ import {
   Edit, 
   ArrowLeft
 } from "lucide-react"
+import { formatDate } from "@/utils"
 import { useCotizacion } from "@/components/admin/cotizaciones/hooks/useCotizacion"
 import { InformacionGeneral } from "@/components/admin/cotizaciones/components/informacionGeneral"
 import { ProductosServicios } from "@/components/admin/cotizaciones/components/productosServicios"
@@ -210,7 +211,7 @@ export default function CotizacionesPage() {
                             {nombreCliente}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {new Date(cotizacion.cot_fec_emis_dt).toLocaleDateString('es-ES')}
+                            {formatDate(cotizacion.cot_fec_emis_dt, { short: true })}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             S/ {total.toFixed(2)}

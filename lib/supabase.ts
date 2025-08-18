@@ -705,8 +705,16 @@ export async function crearCotizacion(cotizacionData: {
     // Limpiar datos antes de insertar (convertir strings vacíos a null)
     const datosLimpios = {
       cliente_id: cotizacionData.cliente_id || null,
-      fecha_emision: cotizacionData.fecha_emision?.trim() || null,
-      fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() || null,
+      fecha_emision: cotizacionData.fecha_emision?.trim() ? 
+        new Date().toISOString() : // Fecha actual (se guardará en UTC pero es la hora real)
+        null,
+      fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() ? 
+        (() => {
+          // Crear fecha en zona horaria de Lima
+          const fechaLima = new Date(cotizacionData.fecha_vencimiento + 'T23:59:59-05:00')
+          return fechaLima.toISOString()
+        })() : 
+        null,
       incluye_igv: cotizacionData.incluye_igv,
       lugar_recojo: cotizacionData.lugar_recojo?.trim() || null,
       forma_entrega: cotizacionData.forma_entrega?.trim() || null,
@@ -832,8 +840,20 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
     const datosLimpios: any = {}
     
     if (cotizacionData.cliente_id !== undefined) datosLimpios.per_id_int = cotizacionData.cliente_id
-    if (cotizacionData.fecha_emision !== undefined) datosLimpios.cot_fec_emis_dt = cotizacionData.fecha_emision?.trim() || null
-    if (cotizacionData.fecha_vencimiento !== undefined) datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() || null
+    if (cotizacionData.fecha_emision !== undefined) {
+      datosLimpios.cot_fec_emis_dt = cotizacionData.fecha_emision?.trim() ? 
+        new Date().toISOString() : // Fecha actual (se guardará en UTC pero es la hora real)
+        null
+    }
+    if (cotizacionData.fecha_vencimiento !== undefined) {
+      datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() ? 
+        (() => {
+          // Crear fecha en zona horaria de Lima
+          const fechaLima = new Date(cotizacionData.fecha_vencimiento + 'T23:59:59-05:00')
+          return fechaLima.toISOString()
+        })() : 
+        null
+    }
     if (cotizacionData.incluye_igv !== undefined) datosLimpios.cot_igv_bol = cotizacionData.incluye_igv
 
     if (Object.keys(datosLimpios).length > 0) {

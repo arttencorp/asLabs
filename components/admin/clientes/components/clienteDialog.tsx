@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2, User, Building2 } from "lucide-react"
+import { dateToInputValue } from "@/utils"
 import type { ClienteForm } from "../types"
 import type { ClientePersona } from "@/types/database"
 
@@ -217,7 +218,7 @@ export function ClienteDialog({
                   <Input
                     id="fechaProb"
                     type="date"
-                    value={clienteForm.per_fec_prob_dt ? new Date(clienteForm.per_fec_prob_dt).toISOString().split('T')[0] : ''}
+                    value={dateToInputValue(clienteForm.per_fec_prob_dt)}
                     onChange={(e) => updateForm('per_fec_prob_dt', e.target.value || null)}
                   />
                 </div>
