@@ -278,6 +278,88 @@ export async function obtenerProductos(): Promise<ProductoDatabase[]> {
   }
 }
 
+export async function crearProducto(productoData: {
+  pro_nomb_vac: string
+  pro_desc_vac: string | null
+  pro_prec_unitario_int: number
+}): Promise<ProductoDatabase> {
+  try {
+    // Limpiar datos antes de insertar (convertir strings vacíos a null)
+    const datosLimpios = {
+      pro_nomb_vac: productoData.pro_nomb_vac?.trim() || null,
+      pro_desc_vac: productoData.pro_desc_vac?.trim() || null,
+      pro_prec_unitario_int: productoData.pro_prec_unitario_int || null,
+      pro_stock_int: 0 // Stock inicial en 0
+    }
+
+    // Validar que el nombre no esté vacío
+    if (!datosLimpios.pro_nomb_vac) {
+      throw new Error('El nombre del producto es obligatorio')
+    }
+
+    const { data, error } = await supabase
+      .from('Productos')
+      .insert(datosLimpios)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error creando producto:', error)
+    throw error
+  }
+}
+
+export async function actualizarProducto(id: string, productoData: {
+  pro_nomb_vac?: string
+  pro_desc_vac?: string | null
+  pro_prec_unitario_int?: number
+  pro_stock_int?: number
+}): Promise<ProductoDatabase> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!id || id.trim() === '') {
+      throw new Error('El ID del producto es obligatorio')
+    }
+
+    const updateData: any = {
+      pro_updated_at_dt: new Date().toISOString()
+    }
+
+    // Solo agregar campos que se están actualizando
+    if (productoData.pro_nomb_vac !== undefined) {
+      const nombreLimpio = productoData.pro_nomb_vac?.trim()
+      if (!nombreLimpio) {
+        throw new Error('El nombre del producto es obligatorio')
+      }
+      updateData.pro_nomb_vac = nombreLimpio
+    }
+    if (productoData.pro_desc_vac !== undefined) {
+      updateData.pro_desc_vac = productoData.pro_desc_vac?.trim() || null
+    }
+    if (productoData.pro_prec_unitario_int !== undefined) {
+      updateData.pro_prec_unitario_int = productoData.pro_prec_unitario_int || null
+    }
+    if (productoData.pro_stock_int !== undefined) {
+      updateData.pro_stock_int = productoData.pro_stock_int || null
+    }
+
+    const { data, error } = await supabase
+      .from('Productos')
+      .update(updateData)
+      .eq('pro_id_int', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error actualizando producto:', error)
+    throw error
+  }
+}
+
 // Obtener certificados de calidad para un producto específico
 export async function obtenerCertificadosPorProducto(productoId: string): Promise<CertificadoCalidadDatabase[]> {
   try {
