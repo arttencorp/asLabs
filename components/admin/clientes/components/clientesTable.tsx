@@ -153,7 +153,7 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
                     disabled={loading}
                   >
                     <Edit className="h-4 w-4" />
-                  </Button>
+                  </Button> {/* 
                   <Button
                     variant="outline"
                     size="sm"
@@ -161,7 +161,7 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
                     disabled={loading}
                   >
                     <Trash2 className="h-4 w-4" />
-                  </Button>
+                  </Button>*/}
                 </div>
               </TableCell>
             </TableRow>

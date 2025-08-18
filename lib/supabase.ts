@@ -453,13 +453,13 @@ export async function crearPedido(pedidoData: {
     const codigoSeguimiento = await generarCodigoSeguimiento()
     const fechaActual = new Date().toISOString()
 
-    // Si no se especifica estado, usar el primer estado (Recibido)
+    // Si no se especifica estado, usar el primer estado por orden (PEDIDO_RECIBIDO)
     let estadoId = pedidoData.estado_id
     if (!estadoId || estadoId.trim() === '') {
       const { data: estados } = await supabase
         .from('Estado_Pedido')
         .select('est_ped_id_int')
-        .order('est_ped_id_int', { ascending: true })
+        .order('est_ped_tipo_int', { ascending: true })
         .limit(1)
         .single()
       
@@ -520,6 +520,7 @@ export async function actualizarPedido(id: string, pedidoData: any) {
       ped_fec_actualizada_dt: new Date().toISOString()
     }
 
+    if (pedidoData.cotizacion_id !== undefined) updateData.cot_id_int = pedidoData.cotizacion_id
     if (pedidoData.estado_id !== undefined) updateData.est_ped_id_int = pedidoData.estado_id
     if (pedidoData.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoData.codigo_rastreo
     if (pedidoData.observaciones !== undefined) updateData.ped_observacion_vac = pedidoData.observaciones

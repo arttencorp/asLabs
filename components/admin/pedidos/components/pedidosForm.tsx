@@ -67,12 +67,12 @@ export function PedidoFormDialog({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
+    // Cotización siempre es obligatoria (crear y editar)
     if (!formData.cotizacion_id || formData.cotizacion_id.trim() === '') {
       newErrors.cotizacion_id = 'Debe seleccionar una cotización'
     }
 
-    // Para crear pedido, solo validar cotización
-    // Para editar pedido, también validar estado
+    // Estado solo es obligatorio al editar
     if (pedido && (!formData.estado_id || formData.estado_id.trim() === '')) {
       newErrors.estado_id = 'El estado es obligatorio'
     }
@@ -159,7 +159,7 @@ export function PedidoFormDialog({
                     <h3 className="text-sm font-medium text-blue-800">¿Qué sucederá?</h3>
                     <div className="mt-2 text-sm text-blue-700">
                       <ul className="list-disc list-inside space-y-1">
-                        <li>Se creará automáticamente con estado "Recibido"</li>
+                        <li>Se creará automáticamente con estado "PEDIDO_RECIBIDO"</li>
                         <li>Se generará código de seguimiento único (ASL-XXXXXXXX)</li>
                         <li>El cliente podrá rastrear el pedido</li>
                       </ul>
@@ -172,11 +172,10 @@ export function PedidoFormDialog({
             // EDITAR PEDIDO: Mostrar todos los campos necesarios
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="cotizacion">Cotización</Label>
+                <Label htmlFor="cotizacion">Cotización *</Label>
                 <Select
                   value={formData.cotizacion_id}
                   onValueChange={(value) => handleChange('cotizacion_id', value)}
-                  disabled={true}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar cotización" />
@@ -184,16 +183,24 @@ export function PedidoFormDialog({
                   <SelectContent>
                     {cotizaciones.map((cotizacion) => (
                       <SelectItem key={cotizacion.cot_id_int} value={cotizacion.cot_id_int}>
-                        {cotizacion.cot_num_vac} - {cotizacion.persona ? 
-                          (cotizacion.persona.tipo === 'natural' && cotizacion.persona.persona_natural ?
-                            `${cotizacion.persona.persona_natural.per_nat_nomb_vac} ${cotizacion.persona.persona_natural.per_nat_apell_vac}` :
-                            cotizacion.persona.persona_juridica?.per_jurd_razSocial_vac
-                          ) : 'Sin cliente'
-                        }
+                        <div className="flex flex-col">
+                          <span className="font-medium">{cotizacion.cot_num_vac}</span>
+                          <span className="text-sm text-gray-500">
+                            {cotizacion.persona ? 
+                              (cotizacion.persona.tipo === 'natural' && cotizacion.persona.persona_natural ?
+                                `${cotizacion.persona.persona_natural.per_nat_nomb_vac} ${cotizacion.persona.persona_natural.per_nat_apell_vac}` :
+                                cotizacion.persona.persona_juridica?.per_jurd_razSocial_vac
+                              ) : 'Sin cliente'
+                            }
+                          </span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.cotizacion_id && (
+                  <p className="text-sm text-red-500 mt-1">{errors.cotizacion_id}</p>
+                )}
               </div>
 
               <div>

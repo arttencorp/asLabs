@@ -126,7 +126,7 @@ export default function PedidosPage() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <Card>
           <CardContent className="p-6">
@@ -187,7 +187,7 @@ export default function PedidosPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </div>*/}
 
       {/* Lista de Pedidos */}
       <PedidosList

@@ -1,10 +1,12 @@
 export const ESTADOS_PEDIDO_TIPOS = {
-  RECIBIDO: 1,
-  CONFIRMADO: 2,
-  PREPARANDO: 3,
-  ENVIADO: 4,
-  ENTREGADO: 5,
-  CANCELADO: 6
+  PEDIDO_RECIBIDO: 1,
+  PAGO_VERIFICADO: 2,
+  PREPARANDO_PEDIDO: 3,
+  EMPACANDO_PEDIDO: 4,
+  ENVIADO: 5,
+  RECIBIDO: 6,
+  CANCELADO: 7,
+  REEMBOLSO: 8
 } as const
 
 export const ESTADOS_COTIZACION_TIPOS = {
@@ -31,12 +33,14 @@ export const CULTIVOS_OPCIONES = [
 // Colores para estados
 export const ESTADO_COLORS = {
   pedido: {
-    1: "bg-blue-100 text-blue-800 border-blue-200",
-    2: "bg-green-100 text-green-800 border-green-200",
-    3: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    4: "bg-purple-100 text-purple-800 border-purple-200",
-    5: "bg-green-100 text-green-800 border-green-200",
-    6: "bg-red-100 text-red-800 border-red-200"
+    1: "bg-blue-100 text-blue-800 border-blue-200",      // PEDIDO_RECIBIDO
+    2: "bg-green-100 text-green-800 border-green-200",   // PAGO_VERIFICADO
+    3: "bg-yellow-100 text-yellow-800 border-yellow-200", // PREPARANDO_PEDIDO
+    4: "bg-orange-100 text-orange-800 border-orange-200", // EMPACANDO_PEDIDO
+    5: "bg-purple-100 text-purple-800 border-purple-200", // ENVIADO
+    6: "bg-green-100 text-green-800 border-green-200",   // RECIBIDO
+    7: "bg-red-100 text-red-800 border-red-200",         // CANCELADO
+    8: "bg-gray-100 text-gray-800 border-gray-200"       // REEMBOLSO
   },
   cotizacion: {
     1: "bg-gray-100 text-gray-800 border-gray-200",
