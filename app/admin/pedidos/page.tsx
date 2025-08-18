@@ -10,6 +10,7 @@ import { PedidosList } from "@/components/admin/pedidos/components/pedidosList"
 import { PedidoFormDialog } from "@/components/admin/pedidos/components/pedidosForm"
 import { CotizacionViewDialog } from "@/components/admin/pedidos/components/cotizacionViewDialog"
 import { formatCurrency } from "@/utils/index"
+import { crearPedido, actualizarPedido } from "@/lib/supabase"
 import type { Pedido } from "@/components/admin/pedidos/types"
 
 export default function PedidosPage() {
@@ -20,11 +21,10 @@ export default function PedidosPage() {
     loading,
     error,
     success,
-    createPedido,
-    updatePedido,
     deletePedido,
     loadData,
-    setError
+    setError,
+    showSuccess
   } = usePedidos()
 
   const [showForm, setShowForm] = useState(false)
@@ -41,8 +41,12 @@ export default function PedidosPage() {
 
   const handleCreatePedido = async (pedidoForm: any) => {
     try {
-      await createPedido(pedidoForm)
+      // Solo quitar estado_id, dejar que crearPedido maneje las validaciones
+      const { estado_id, ...pedidoData } = pedidoForm
+      await crearPedido(pedidoData)
       setShowForm(false)
+      await loadData() // Recargar datos
+      showSuccess('Pedido creado exitosamente')
     } catch (error: any) {
       setError(error.message || "Error al crear el pedido")
     }
@@ -52,9 +56,11 @@ export default function PedidosPage() {
     if (!editingPedido) return
 
     try {
-      await updatePedido(editingPedido.ped_id_int, pedidoForm)
+      await actualizarPedido(editingPedido.ped_id_int, pedidoForm)
       setEditingPedido(null)
       setShowForm(false)
+      await loadData() // Recargar datos
+      showSuccess('Pedido actualizado exitosamente')
     } catch (error: any) {
       setError(error.message || "Error al actualizar el pedido")
     }
@@ -116,7 +122,7 @@ export default function PedidosPage() {
         </div>
         <Button onClick={() => setShowForm(true)} disabled={loading}>
           <Plus className="h-4 w-4 mr-2" />
-          Nuevo Pedido
+          Iniciar Pedido
         </Button>
       </div>
 
