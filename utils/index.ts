@@ -53,13 +53,47 @@ export function validarDNI(dni: string): boolean {
 }
 
 // Generadores únicos (sin duplicaciones)
-export function generarCodigoSeguimiento(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-  let result = "ASL-"
-  for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
+export async function generarCodigoSeguimiento(): Promise<string> {
+  try {
+    const { createClient } = await import("@supabase/supabase-js")
+    
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    const maxIntentos = 10
+
+    for (let intento = 1; intento <= maxIntentos; intento++) {
+      let result = "ASL-"
+      for (let i = 0; i < 8; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length))
+      }
+
+      const { data: existeData, error: existeError } = await supabase
+        .from("Pedidos")
+        .select("ped_cod_segui_vac")
+        .eq("ped_cod_segui_vac", result)
+        .limit(1)
+
+      if (existeError) {
+        continue // Reintentar
+      }
+
+      // Si no existe, retornar el código único
+      if (!existeData || existeData.length === 0) {
+        return result
+      }
+    }
+
+    const timestamp = Date.now().toString().slice(-4) // Últimos 4 dígitos del timestamp
+    return `ASL-${timestamp}${chars.charAt(Math.floor(Math.random() * chars.length))}${chars.charAt(Math.floor(Math.random() * chars.length))}${chars.charAt(Math.floor(Math.random() * chars.length))}${chars.charAt(Math.floor(Math.random() * chars.length))}`
+
+  } catch (error) {
+    const timestamp = Date.now().toString().slice(-8)
+    return `ASL-${timestamp}`
   }
-  return result
 }
 
 export async function generarNumeroCotizacion(): Promise<string> {
@@ -72,39 +106,68 @@ export async function generarNumeroCotizacion(): Promise<string> {
     )
 
     const year = new Date().getFullYear()
+    const maxIntentos = 10 // Prevenir loops infinitos
 
-    // Buscar el último número de cotización del año actual
-    const { data, error } = await supabase
-      .from("Cotizaciones")
-      .select("cot_num_vac")
-      .ilike("cot_num_vac", `%-${year}`)
-      .order("cot_num_vac", { ascending: false })
-      .limit(1)
+    for (let intento = 1; intento <= maxIntentos; intento++) {
+      // Buscar el último número de cotización del año actual
+      const { data, error } = await supabase
+        .from("Cotizaciones")
+        .select("cot_num_vac")
+        .ilike("cot_num_vac", `%-${year}`)
+        .order("cot_num_vac", { ascending: false })
+        .limit(1)
 
-    if (error) {
-      console.error("Error al obtener último número de cotización:", error)
-      // Fallback: usar timestamp si hay error
-      const timestamp = Date.now()
-      return `${timestamp.toString().slice(-6)}-${year}`
-    }
-
-    let siguienteNumero = 1
-
-    if (data && data.length > 0) {
-      // Extraer el número de la cotización (parte antes del guión)
-      const ultimaCotizacion = data[0].cot_num_vac
-      const match = ultimaCotizacion.match(/^(\d+)-\d{4}$/)
-      
-      if (match) {
-        const ultimoNumero = parseInt(match[1], 10)
-        siguienteNumero = ultimoNumero + 1
+      if (error) {
+        console.error("Error al obtener último número de cotización:", error)
+        // Fallback: usar timestamp si hay error
+        const timestamp = Date.now()
+        return `${timestamp.toString().slice(-6)}-${year}`
       }
+
+      let siguienteNumero = 1
+
+      if (data && data.length > 0) {
+        // Extraer el número de la cotización (parte antes del guión)
+        const ultimaCotizacion = data[0].cot_num_vac
+        const match = ultimaCotizacion.match(/^(\d+)-\d{4}$/)
+        
+        if (match) {
+          const ultimoNumero = parseInt(match[1], 10)
+          siguienteNumero = ultimoNumero + 1
+        }
+      }
+
+      // Formatear con ceros a la izquierda (4 dígitos)
+      const numeroFormateado = siguienteNumero.toString().padStart(4, "0")
+      const codigoGenerado = `${numeroFormateado}-${year}`
+
+      // Comprobar si el código ya existe
+      const { data: existeData, error: existeError } = await supabase
+        .from("Cotizaciones")
+        .select("cot_num_vac")
+        .eq("cot_num_vac", codigoGenerado)
+        .limit(1)
+
+      if (existeError) {
+        console.error("Error al verificar unicidad:", existeError)
+        continue // Reintentar
+      }
+
+      // Si no existe, retornar el código único
+      if (!existeData || existeData.length === 0) {
+        return codigoGenerado
+      }
+
+      // Si existe, reintentar (esto maneja race conditions)
+      console.warn(`Código duplicado detectado: ${codigoGenerado}. Reintentando...`)
     }
 
-    // Formatear con ceros a la izquierda (4 dígitos)
-    const numeroFormateado = siguienteNumero.toString().padStart(4, "0")
-    
-    return `${numeroFormateado}-${year}`
+    // Si después de todos los intentos no se pudo generar un código único,
+    // usar timestamp como fallback
+    console.error("No se pudo generar código único después de", maxIntentos, "intentos")
+    const timestamp = Date.now()
+    return `${timestamp.toString().slice(-6)}-${year}`
+
   } catch (error) {
     console.error("Error en generarNumeroCotizacion:", error)
     // Fallback: usar timestamp si hay error

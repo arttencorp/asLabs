@@ -438,29 +438,60 @@ export async function obtenerPedidos() {
 
 export async function crearPedido(pedidoData: {
   cotizacion_id: string
-  estado_id: string | null
+  estado_id?: string | null
   codigo_rastreo?: string | null
   observaciones?: string | null
   numero_comprobante?: string | null
   imagen_url?: string | null
 }) {
   try {
-    const codigoSeguimiento = generarCodigoSeguimiento()
+    // Validar que la cotización no esté vacía
+    if (!pedidoData.cotizacion_id || pedidoData.cotizacion_id.trim() === '') {
+      throw new Error('La cotización es obligatoria')
+    }
+
+    const codigoSeguimiento = await generarCodigoSeguimiento()
     const fechaActual = new Date().toISOString()
+
+    // Si no se especifica estado, usar el primer estado por orden (PEDIDO_RECIBIDO)
+    let estadoId = pedidoData.estado_id
+    if (!estadoId || estadoId.trim() === '') {
+      const { data: estados } = await supabase
+        .from('Estado_Pedido')
+        .select('est_ped_id_int')
+        .order('est_ped_tipo_int', { ascending: true })
+        .limit(1)
+        .single()
+      
+      estadoId = estados?.est_ped_id_int
+    }
+
+    // Solo enviar campos que no están vacíos
+    const insertData: any = {
+      ped_cod_segui_vac: codigoSeguimiento,
+      ped_fec_pedido_dt: fechaActual,
+      ped_fec_actualizada_dt: fechaActual,
+      est_ped_id_int: estadoId,
+      cot_id_int: pedidoData.cotizacion_id.trim()
+    }
+
+    // Solo agregar campos opcionales si tienen valor
+    if (pedidoData.codigo_rastreo?.trim()) {
+      insertData.ped_cod_rastreo_vac = pedidoData.codigo_rastreo
+    }
+    if (pedidoData.observaciones?.trim()) {
+      insertData.ped_observacion_vac = pedidoData.observaciones
+    }
+    if (pedidoData.numero_comprobante?.trim()) {
+      insertData.ped_num_comprob_vac = pedidoData.numero_comprobante
+    }
+    if (pedidoData.imagen_url?.trim()) {
+      insertData.ped_imagen_url = pedidoData.imagen_url
+    }
 
     const { data, error } = await supabase
       .from('Pedidos')
-      .insert({
-        ped_cod_segui_vac: codigoSeguimiento,
-        ped_cod_rastreo_vac: pedidoData.codigo_rastreo,
-        ped_fec_pedido_dt: fechaActual,
-        ped_fec_actualizada_dt: fechaActual,
-        ped_imagen_url: pedidoData.imagen_url,
-        ped_observacion_vac: pedidoData.observaciones,
-        ped_num_comprob_vac: pedidoData.numero_comprobante,
-        est_ped_id_int: pedidoData.estado_id,
-        cot_id_int: pedidoData.cotizacion_id
-      })
+      .insert(insertData)
       .select(`
         *,
         estado_pedido:Estado_Pedido(*),
@@ -489,6 +520,7 @@ export async function actualizarPedido(id: string, pedidoData: any) {
       ped_fec_actualizada_dt: new Date().toISOString()
     }
 
+    if (pedidoData.cotizacion_id !== undefined) updateData.cot_id_int = pedidoData.cotizacion_id
     if (pedidoData.estado_id !== undefined) updateData.est_ped_id_int = pedidoData.estado_id
     if (pedidoData.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoData.codigo_rastreo
     if (pedidoData.observaciones !== undefined) updateData.ped_observacion_vac = pedidoData.observaciones

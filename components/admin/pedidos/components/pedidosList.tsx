@@ -126,7 +126,7 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                           title="Editar pedido"
                         >
                           <Edit className="h-4 w-4" />
-                        </Button>
+                        </Button>{/* 
                         <Button
                           variant="outline"
                           size="sm"
@@ -135,7 +135,7 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                           title="Eliminar pedido"
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </Button>*/}
                         <Button
                           variant="outline"
                           size="sm"
@@ -144,6 +144,7 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                           title="Ver cotización"
                         >
                           <Eye className="h-4 w-4" />
+                          Ver cotización
                         </Button>
                       </div>
                     </TableCell>

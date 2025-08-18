@@ -94,8 +94,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Pedidos", href: "/admin/pedidos", icon: <Package className="h-5 w-5" /> },
     { name: "Cotizaciones", href: "/admin/cotizaciones", icon: <FileText className="h-5 w-5" /> },
     { name: "Clientes", href: "/admin/clientes", icon: <Users className="h-5 w-5" /> },
-    { name: "Productos", href: "/admin/productos", icon: <Package2 className="h-5 w-5" /> }, 
-    { name: "Analytics", href: "/admin/analytics", icon: <ChartColumn className="h-5 w-5" /> }, 
+    { name: "Productos", href: "/admin/productos", icon: <Package2 className="h-5 w-5" /> },  
   ]
 
   return (

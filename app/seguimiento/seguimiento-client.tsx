@@ -58,9 +58,32 @@ export default function SeguimientoClient() {
     return ESTADOS_SEGUIMIENTO.findIndex((e) => e.id === estadoTipo)
   }
 
+  // Función para obtener estados que debe ver el cliente según el estado actual del pedido
+  const getEstadosVisibles = (estadoActual: number) => {
+    // Estados del flujo normal (siempre visibles)
+    const estadosNormales = ESTADOS_SEGUIMIENTO.filter(estado => 
+      [1, 2, 3, 4, 5, 6].includes(estado.id) // PEDIDO_RECIBIDO, PAGO_VERIFICADO, PREPARANDO, EMPACANDO, ENVIADO, RECIBIDO
+    )
+
+    // Si el pedido está cancelado, mostrar solo hasta donde llegó + CANCELADO
+    if (estadoActual === 7) { // CANCELADO
+      const estadoCancelado = ESTADOS_SEGUIMIENTO.find(e => e.id === 7)
+      return estadoCancelado ? [...estadosNormales, estadoCancelado] : estadosNormales
+    }
+
+    // Si el pedido está en reembolso, mostrar flujo completo + REEMBOLSO
+    if (estadoActual === 8) { // REEMBOLSO
+      const estadoReembolso = ESTADOS_SEGUIMIENTO.find(e => e.id === 8)
+      return estadoReembolso ? [...estadosNormales, estadoReembolso] : estadosNormales
+    }
+
+    // Para cualquier otro estado, solo mostrar flujo normal
+    return estadosNormales
+  }
+
   const getTotalPedido = (pedido: Pedido): number => {
     if (!pedido.cotizacion?.detalle_cotizacion) return 0
-    
+
     const { total } = calcularTotalCotizacion(
       pedido.cotizacion.detalle_cotizacion.map(d => ({
         cantidad: d.det_cot_cant_int,
@@ -68,13 +91,13 @@ export default function SeguimientoClient() {
       })),
       pedido.cotizacion.cot_igv_bol
     )
-    
+
     return total
   }
 
   const getProductosTexto = (pedido: Pedido): string => {
     if (!pedido.cotizacion?.detalle_cotizacion) return 'Sin productos'
-    
+
     return pedido.cotizacion.detalle_cotizacion
       .map(d => `${d.producto?.pro_nomb_vac || 'Producto'} (${d.det_cot_cant_int})`)
       .join(', ')
@@ -141,7 +164,7 @@ export default function SeguimientoClient() {
           </Alert>
         )}
 
-                {/* No Results */}
+        {/* No Results */}
         {searched && !pedido && !error && !loading && (
           <Card className="max-w-2xl mx-auto">
             <CardContent className="text-center py-12">
@@ -208,9 +231,10 @@ export default function SeguimientoClient() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {ESTADOS_SEGUIMIENTO.map((estado, index) => {
+                  {getEstadosVisibles(pedido.estado_pedido?.est_ped_tipo_int || 1).map((estado, index) => {
                     const currentEstadoTipo = pedido.estado_pedido?.est_ped_tipo_int || 1
-                    const isCompleted = getEstadoIndex(currentEstadoTipo) >= index
+                    const estadosVisibles = getEstadosVisibles(currentEstadoTipo)
+                    const isCompleted = estadosVisibles.findIndex(e => e.id === currentEstadoTipo) >= index
                     const isCurrent = currentEstadoTipo === estado.id
 
                     return (
@@ -271,9 +295,9 @@ export default function SeguimientoClient() {
                         </div>
                       </div>
                     )) || (
-                      <p className="text-gray-500 text-center py-4">No hay productos disponibles</p>
-                    )}
-                    
+                        <p className="text-gray-500 text-center py-4">No hay productos disponibles</p>
+                      )}
+
                     <div className="pt-2 border-t">
                       <div className="flex justify-between items-center">
                         <span className="font-medium">Total:</span>
@@ -380,7 +404,7 @@ export default function SeguimientoClient() {
                       </div>
                     </div>
                   )}
-
+                  {/*
                   {pedido.ped_num_comprob_vac && (
                     <div className="flex items-center gap-4 p-3 bg-indigo-50 rounded-lg">
                       <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
@@ -389,7 +413,7 @@ export default function SeguimientoClient() {
                         <p className="text-sm text-gray-500 font-mono">{pedido.ped_num_comprob_vac}</p>
                       </div>
                     </div>
-                  )}
+                  )} */}
 
                   {/* Información adicional de la cotización */}
                   {pedido.cotizacion?.informacion_adicional && (
