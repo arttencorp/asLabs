@@ -130,6 +130,7 @@ export function useBaseCrud<T, FormT>({
     isDialogOpen,
     
     // Setters
+    setItems,
     setForm,
     setError,
     setIsDialogOpen,
