@@ -8,7 +8,8 @@ import {
   Plus, 
   Eye, 
   Edit, 
-  ArrowLeft
+  ArrowLeft,
+  Download
 } from "lucide-react"
 import { formatDate } from "@/utils"
 import { useCotizacion } from "@/components/admin/cotizaciones/hooks/useCotizacion"
@@ -97,6 +98,161 @@ export default function CotizacionesPage() {
     } catch (error) {
       console.error('Error cargando cotización para edición:', error)
       alert('Error al cargar la cotización para edición')
+    }
+  }
+
+  // Función para descargar/reimprimir cotización
+  const handleDescargarCotizacion = async (cotizacion: CotizacionItem) => {
+    try {
+      // Importar funciones necesarias desde supabase
+      const { 
+        obtenerCotizacionPorId,
+        obtenerCertificadosPorProductos,
+        obtenerFichasTecnicasPorProductos,
+        transformarFichasTecnicasBD 
+      } = await import('@/lib/supabase')
+      
+      // Importar utilidades necesarias
+      const { calcularTotalCotizacion, numeroATexto } = await import('@/utils/index')
+      
+      // Obtener los datos completos de la cotización con todas las relaciones
+      const cotizacionCompleta = await obtenerCotizacionPorId(cotizacion.cot_id_int)
+      
+      if (!cotizacionCompleta) {
+        alert('No se pudo cargar la cotización completa')
+        return
+      }
+
+      // Extraer información del cliente
+      const persona = cotizacionCompleta.persona
+      let razonSocial = ''
+      let dniRuc = ''
+      let tipoCliente = 'natural'
+
+      if (persona?.Persona_Natural?.[0]) {
+        const natural = persona.Persona_Natural[0]
+        razonSocial = `${natural.per_nat_nomb_vac || ''} ${natural.per_nat_apell_vac || ''}`.trim()
+        dniRuc = natural.per_nat_dni_int ? natural.per_nat_dni_int.toString() : ''
+        tipoCliente = 'natural'
+      } else if (persona?.Persona_Juridica?.[0]) {
+        const juridica = persona.Persona_Juridica[0]
+        razonSocial = juridica.per_jurd_razSocial_vac || ''
+        dniRuc = juridica.per_jurd_ruc_int ? juridica.per_jurd_ruc_int.toString() : ''
+        tipoCliente = 'juridica'
+      } else if (persona?.per_nom_contac_vac) {
+        razonSocial = persona.per_nom_contac_vac
+        dniRuc = '' // No hay documento disponible para contactos genéricos
+        tipoCliente = 'natural' // Default para contactos genéricos
+      }
+
+      // Procesar items con productos de BD
+      const items = cotizacionCompleta.detalle_cotizacion?.map((detalle: any, index: number) => ({
+        id: index + 1,
+        descripcion: detalle.producto?.pro_nomb_vac || '',
+        nombre: detalle.producto?.pro_nomb_vac || '',
+        cantidad: detalle.det_cot_cant_int || 0,
+        precioUnitario: detalle.det_cot_prec_hist_int || 0,
+        total: (detalle.det_cot_cant_int || 0) * (detalle.det_cot_prec_hist_int || 0),
+        codigo: detalle.producto?.pro_id_int || ''
+      })) || []
+
+      // Calcular totales usando la misma lógica que el hook
+      const { total: totalCalculado } = calcularTotalCotizacion(
+        cotizacionCompleta.detalle_cotizacion?.map((d: any) => ({
+          cantidad: d.det_cot_cant_int,
+          precio: d.det_cot_prec_hist_int
+        })) || [],
+        cotizacionCompleta.cot_igv_bol
+      )
+
+      const subtotal = items.reduce((sum: number, item: any) => sum + (item.total || 0), 0)
+      const impuesto = cotizacionCompleta.cot_igv_bol ? subtotal * 0.18 : 0
+      const total = cotizacionCompleta.cot_igv_bol ? subtotal + impuesto : subtotal
+
+      // Obtener IDs de productos para cargar certificados y fichas técnicas
+      const productosIds = items
+        .map((item: any) => item.codigo)
+        .filter((codigo: string) => codigo && codigo !== 'personalizado') as string[]
+
+      let certificadosEstructurados: any[] = []
+      let fichasTecnicas: any[] = []
+      let certificadosCalidad = ""
+
+      // Cargar certificados y fichas técnicas si hay productos de BD
+      if (productosIds.length > 0) {
+        try {
+          const [certificadosMap, fichasMap] = await Promise.all([
+            obtenerCertificadosPorProductos(productosIds),
+            obtenerFichasTecnicasPorProductos(productosIds)
+          ])
+
+          // Consolidar certificados de todos los productos
+          Object.values(certificadosMap).forEach((certs: any) => {
+            certificadosEstructurados = [...certificadosEstructurados, ...certs]
+          })
+
+          // Consolidar fichas técnicas de todos los productos
+          Object.values(fichasMap).forEach((fichas: any) => {
+            const fichasTransformadas = transformarFichasTecnicasBD(fichas)
+            fichasTecnicas = [...fichasTecnicas, ...fichasTransformadas]
+          })
+
+          // Generar texto de certificados (usar lógica similar al hook)
+          if (certificadosEstructurados.length > 0) {
+            certificadosCalidad = certificadosEstructurados
+              .map((cert: any) => `${cert.cert_cal_nomb_vac || 'Certificado'}: ${cert.cert_cal_desc_vac || 'Descripción no disponible'}`)
+              .join('\n\n')
+          }
+
+          // Transformar certificados de BD al formato esperado por el componente
+          certificadosEstructurados = certificadosEstructurados.map((cert: any) => ({
+            titulo: cert.cer_cal_tipo_vac || 'Certificado de Calidad',
+            codigo: cert.cer_cal_cod_muestra_int?.toString() || 'N/A',
+            tipo: cert.cer_cal_tipo_vac || 'Análisis',
+            informe: cert.cer_cal_infor_ensayo_vac || 'N/A',
+            detalle: cert.cer_cal_result_vac ? [cert.cer_cal_result_vac] : ['Resultado no disponible'],
+            link: cert.cer_cal_imag_url || undefined
+          }))
+
+        } catch (error) {
+          console.error('Error cargando certificados y fichas:', error)
+        }
+      }
+
+      // Estructurar datos exactamente como en vistaPrevia
+      const cotizacionParaImpresion = {
+        numeroCotizacion: cotizacionCompleta.cot_num_vac || "",
+        tipoDocumento: "cotizacion",
+        fechaEmision: cotizacionCompleta.cot_fec_emis_dt || "",
+        fechaVencimiento: cotizacionCompleta.cot_fec_venc_dt || "",
+        razonSocial,
+        dniRuc,
+        direccion: persona?.per_direc_vac || "",
+        telefono: persona?.per_telef_int || "",
+        tipoCliente,
+        items,
+        subtotal,
+        impuesto,
+        total,
+        terminosCondiciones: cotizacionCompleta.informacion_adicional?.inf_ad_term_cond_vac || "",
+        lugarRecojo: cotizacionCompleta.informacion_adicional?.inf_ad_lug_recojo_vac || "",
+        formaPago: cotizacionCompleta.informacion_adicional?.forma_pago?.form_pa_desc_vac || "completo",
+        formaEntrega: cotizacionCompleta.informacion_adicional?.inf_ad_form_entr_vac || "",
+        totalTexto: numeroATexto(total) || "",
+        certificadosCalidad: certificadosCalidad || "",
+        certificadosEstructurados, // Como en vistaPrevia
+        fichasTecnicas,
+        tipoProductoSeleccionado: "vegetal", // Default
+        preciosConIGV: cotizacionCompleta.cot_igv_bol
+      }
+
+      // Guardar en localStorage y abrir impresión
+      localStorage.setItem("cotizacionActual", JSON.stringify(cotizacionParaImpresion))
+      window.open("/imprimir", "_blank")
+      
+    } catch (error) {
+      console.error('Error descargando cotización:', error)
+      alert('Error al preparar la cotización para descarga: ' + (error as Error).message)
     }
   }
 
@@ -236,6 +392,14 @@ export default function CotizacionesPage() {
                               >
                                 <Edit className="h-4 w-4 mr-1" />
                                 Editar
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDescargarCotizacion(cotizacion)}
+                              >
+                                <Download className="h-4 w-4 mr-1" />
+                                Descargar
                               </Button>
                             </div>
                           </td>
