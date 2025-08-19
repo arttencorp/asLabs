@@ -80,16 +80,16 @@ export default function PedidosPage() {
   const stats = {
     totalPedidos: pedidos.length,
     pedidosPendientes: pedidos.filter(p =>
-      p.estado_pedido?.est_ped_tipo_int ? ![5, 6].includes(p.estado_pedido.est_ped_tipo_int) : false
-    ).length, // No entregados ni cancelados
+      p.estado_pedido?.est_ped_tipo_int ? ![6, 7, 8, 9].includes(p.estado_pedido.est_ped_tipo_int) : false
+    ).length, // No entregados, cancelados, reembolsados o pago contraentrega
     pedidosEntregados: pedidos.filter(p =>
-      p.estado_pedido?.est_ped_tipo_int === 5
-    ).length, // Entregados
+      p.estado_pedido?.est_ped_tipo_int === 6 // RECIBIDO
+    ).length,
     pedidosCancelados: pedidos.filter(p =>
-      p.estado_pedido?.est_ped_tipo_int === 6
-    ).length, // Cancelados
+      [7, 8].includes(p.estado_pedido?.est_ped_tipo_int || 0) // CANCELADO o REEMBOLSO
+    ).length,
     ingresoTotal: pedidos
-      .filter(p => p.estado_pedido?.est_ped_tipo_int === 5) // Solo entregados
+      .filter(p => p.estado_pedido?.est_ped_tipo_int === 6) // Solo RECIBIDO (entregados)
       .reduce((sum, p) => {
         const total = p.cotizacion?.detalle_cotizacion?.reduce(
           (detSum, detalle) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),

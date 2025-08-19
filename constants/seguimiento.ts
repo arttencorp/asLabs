@@ -32,6 +32,12 @@ export const ESTADOS_SEGUIMIENTO = [
     color: "bg-purple-100 text-purple-800 border-purple-200",
   },
   {
+    id: ESTADOS_PEDIDO_TIPOS.PAGO_CONTRAENTREGA,
+    nombre: "Pago Contraentrega",
+    descripcion: "Pendiente de pago contra entrega",
+    color: "bg-indigo-100 text-indigo-800 border-indigo-200",
+  },
+  {
     id: ESTADOS_PEDIDO_TIPOS.RECIBIDO,
     nombre: "Recibido",
     descripcion: "Tu pedido ha sido entregado exitosamente",
