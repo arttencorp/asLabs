@@ -77,6 +77,21 @@ export default function SeguimientoClient() {
       return estadoReembolso ? [...estadosNormales, estadoReembolso] : estadosNormales
     }
 
+    // Si el pedido está en pago contraentrega, mostrar flujo hasta enviado + PAGO_CONTRAENTREGA + RECIBIDO
+    if (estadoActual === 9) { // PAGO_CONTRAENTREGA
+      const estadosHastaEnviado = ESTADOS_SEGUIMIENTO.filter(estado => 
+        [1, 2, 3, 4, 5].includes(estado.id) // Hasta ENVIADO
+      )
+      const estadoPagoContraentrega = ESTADOS_SEGUIMIENTO.find(e => e.id === 9)
+      const estadoRecibido = ESTADOS_SEGUIMIENTO.find(e => e.id === 6) // RECIBIDO como paso final
+      
+      const estadosVisibles = [...estadosHastaEnviado]
+      if (estadoPagoContraentrega) estadosVisibles.push(estadoPagoContraentrega)
+      if (estadoRecibido) estadosVisibles.push(estadoRecibido)
+      
+      return estadosVisibles
+    }
+
     // Para cualquier otro estado, solo mostrar flujo normal
     return estadosNormales
   }

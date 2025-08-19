@@ -125,16 +125,16 @@ export function usePedidos() {
   const stats: PedidosStats = {
     totalPedidos: pedidos.length,
     pedidosPendientes: pedidos.filter(p => 
-      p.estado_pedido?.est_ped_tipo_int ? ![5, 6].includes(p.estado_pedido.est_ped_tipo_int) : false
-    ).length,
+      p.estado_pedido?.est_ped_tipo_int ? ![6, 7, 8, 9].includes(p.estado_pedido.est_ped_tipo_int) : false
+    ).length, // No RECIBIDO, CANCELADO, REEMBOLSO, PAGO_CONTRAENTREGA
     pedidosEntregados: pedidos.filter(p => 
-      p.estado_pedido?.est_ped_tipo_int === 5
+      p.estado_pedido?.est_ped_tipo_int === 6 // RECIBIDO
     ).length,
     pedidosCancelados: pedidos.filter(p => 
-      p.estado_pedido?.est_ped_tipo_int === 6
+      [7, 8].includes(p.estado_pedido?.est_ped_tipo_int || 0) // CANCELADO o REEMBOLSO
     ).length,
     ingresoTotal: pedidos
-      .filter(p => p.estado_pedido?.est_ped_tipo_int === 5)
+      .filter(p => p.estado_pedido?.est_ped_tipo_int === 6) // Solo RECIBIDO
       .reduce((sum, p) => {
         if (!p.cotizacion?.detalle_cotizacion) return sum
         const { total } = calcularTotalCotizacion(

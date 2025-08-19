@@ -6,7 +6,8 @@ export const ESTADOS_PEDIDO_TIPOS = {
   ENVIADO: 5,
   RECIBIDO: 6,
   CANCELADO: 7,
-  REEMBOLSO: 8
+  REEMBOLSO: 8,
+  PAGO_CONTRAENTREGA: 9
 } as const
 
 export const ESTADOS_COTIZACION_TIPOS = {
@@ -40,7 +41,8 @@ export const ESTADO_COLORS = {
     5: "bg-purple-100 text-purple-800 border-purple-200", // ENVIADO
     6: "bg-green-100 text-green-800 border-green-200",   // RECIBIDO
     7: "bg-red-100 text-red-800 border-red-200",         // CANCELADO
-    8: "bg-gray-100 text-gray-800 border-gray-200"       // REEMBOLSO
+    8: "bg-gray-100 text-gray-800 border-gray-200",      // REEMBOLSO
+    9: "bg-indigo-100 text-indigo-800 border-indigo-200" // PAGO_CONTRAENTREGA
   },
   cotizacion: {
     1: "bg-gray-100 text-gray-800 border-gray-200",

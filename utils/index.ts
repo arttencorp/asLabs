@@ -6,20 +6,23 @@ export function formatDate(dateString: string, options?: {
   includeTime?: boolean
   short?: boolean
 }): string {
-  const date = new Date(dateString)
+  // Crear la fecha de forma que evite problemas de zona horaria
+  const date = new Date(dateString + (dateString.includes('T') ? '' : 'T00:00:00'))
 
   if (options?.short) {
     return date.toLocaleDateString("es-PE", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
+      timeZone: 'America/Lima' // Zona horaria de Lima, Perú
     })
   }
 
-  const baseOptions = {
+  const baseOptions: Intl.DateTimeFormatOptions = {
     year: "numeric" as const,
     month: "short" as const,
     day: "numeric" as const,
+    timeZone: 'America/Lima' // Zona horaria de Lima, Perú
   }
 
   if (options?.includeTime) {
@@ -31,6 +34,30 @@ export function formatDate(dateString: string, options?: {
   }
 
   return date.toLocaleDateString("es-PE", baseOptions)
+}
+
+// Función para convertir fecha ISO a formato de input date (YYYY-MM-DD)
+export function dateToInputValue(dateString: string | null): string {
+  if (!dateString) return ''
+  
+  // Si la fecha ya viene como YYYY-MM-DD, devolverla tal como está
+  if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return dateString
+  }
+  
+  // Si es fecha ISO completa, usar zona horaria de Lima para extraer la fecha
+  const date = new Date(dateString)
+  const limaDate = new Date(date.toLocaleString('en-CA', { timeZone: 'America/Lima' }))
+  return limaDate.toISOString().split('T')[0]
+}
+
+// Función para convertir fecha de input a ISO completa considerando zona horaria de Lima
+export function inputValueToISO(dateString: string): string {
+  if (!dateString) return ''
+  
+  // Crear fecha en zona horaria de Lima (UTC-5)
+  const limaDate = new Date(dateString + 'T00:00:00-05:00')
+  return limaDate.toISOString()
 }
 
 // Formateo de moneda

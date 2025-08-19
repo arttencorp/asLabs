@@ -1,9 +1,9 @@
 import { createClient } from "@supabase/supabase-js"
 import { generarCodigoSeguimiento, generarNumeroCotizacion } from '@/utils'
-import type { 
-  PersonaNatural, 
-  PersonaJuridica, 
-  Persona, 
+import type {
+  PersonaNatural,
+  PersonaJuridica,
+  Persona,
   EstadoPedido,
   EstadoCotizacion,
   FormaPago,
@@ -61,11 +61,11 @@ export async function obtenerPersonas(): Promise<ClientePersona[]> {
     return personas.map(persona => ({
       ...persona,
       tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
-      persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
-        ? persona.Persona_Natural[0] 
+      persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+        ? persona.Persona_Natural[0]
         : null,
-      persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
-        ? persona.Persona_Juridica[0] 
+      persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+        ? persona.Persona_Juridica[0]
         : null
     }))
   } catch (error) {
@@ -97,9 +97,9 @@ export async function crearPersona(personaData: any): Promise<ClientePersona> {
         per_direc_vac: personaData.per_direc_vac,
         per_cultivo_vac: personaData.per_cultivo_vac,
         per_cantidad_int: personaData.per_cantidad_int,
-        per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
-        ? personaData.per_fec_prob_dt 
-        : null,
+        per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim()
+          ? personaData.per_fec_prob_dt
+          : null,
         per_hec_disp_int: personaData.per_hec_disp_int,
         per_hec_inst_int: personaData.per_hec_inst_int,
         per_observaciones_vac: personaData.per_observaciones_vac
@@ -152,9 +152,9 @@ export async function actualizarPersona(id: string, personaData: any): Promise<C
         per_direc_vac: personaData.per_direc_vac,
         per_cultivo_vac: personaData.per_cultivo_vac,
         per_cantidad_int: personaData.per_cantidad_int,
-         per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim() 
-        ? personaData.per_fec_prob_dt 
-        : null,
+        per_fec_prob_dt: personaData.per_fec_prob_dt && personaData.per_fec_prob_dt.trim()
+          ? personaData.per_fec_prob_dt
+          : null,
         per_hec_disp_int: personaData.per_hec_disp_int,
         per_hec_inst_int: personaData.per_hec_inst_int,
         per_observaciones_vac: personaData.per_observaciones_vac,
@@ -200,7 +200,7 @@ export async function eliminarPersona(id: string): Promise<void> {
   try {
     await supabase.from('Persona_Natural').delete().eq('per_id_int', id)
     await supabase.from('Persona_Juridica').delete().eq('per_id_int', id)
-    
+
     const { error } = await supabase
       .from('Personas')
       .delete()
@@ -371,7 +371,7 @@ export async function obtenerCertificadosPorProducto(productoId: string): Promis
       .eq('pro_id_int', productoId)
 
     if (error) throw error
-    
+
     // Extraer solo los certificados de la respuesta
     return (data?.map(item => item.certificado).filter(Boolean) || []) as unknown as CertificadoCalidadDatabase[]
   } catch (error) {
@@ -391,7 +391,7 @@ export async function obtenerFichasTecnicasPorProducto(productoId: string): Prom
       .eq('pro_id_int', productoId)
 
     if (error) throw error
-    
+
     // Extraer solo las fichas técnicas de la respuesta
     return (data?.map(item => item.ficha_tecnica).filter(Boolean) || []) as unknown as FichaTecnicaDatabase[]
   } catch (error) {
@@ -401,7 +401,7 @@ export async function obtenerFichasTecnicasPorProducto(productoId: string): Prom
 }
 
 // Obtener certificados de calidad para múltiples productos
-export async function obtenerCertificadosPorProductos(productosIds: string[]): Promise<{[key: string]: CertificadoCalidadDatabase[]}> {
+export async function obtenerCertificadosPorProductos(productosIds: string[]): Promise<{ [key: string]: CertificadoCalidadDatabase[] }> {
   try {
     if (productosIds.length === 0) return {}
 
@@ -413,7 +413,7 @@ export async function obtenerCertificadosPorProductos(productosIds: string[]): P
     if (error) throw error
 
     // Agrupar certificados por producto ID
-    const certificadosPorProducto: {[key: string]: CertificadoCalidadDatabase[]} = {}
+    const certificadosPorProducto: { [key: string]: CertificadoCalidadDatabase[] } = {}
     data?.forEach((certificado: CertificadoCalidadDatabase) => {
       if (certificado.pro_id_int) {
         if (!certificadosPorProducto[certificado.pro_id_int]) {
@@ -431,7 +431,7 @@ export async function obtenerCertificadosPorProductos(productosIds: string[]): P
 }
 
 // Obtener fichas técnicas para múltiples productos
-export async function obtenerFichasTecnicasPorProductos(productosIds: string[]): Promise<{[key: string]: FichaTecnicaDatabase[]}> {
+export async function obtenerFichasTecnicasPorProductos(productosIds: string[]): Promise<{ [key: string]: FichaTecnicaDatabase[] }> {
   try {
     if (productosIds.length === 0) return {}
 
@@ -443,7 +443,7 @@ export async function obtenerFichasTecnicasPorProductos(productosIds: string[]):
     if (error) throw error
 
     // Agrupar fichas técnicas por producto ID
-    const fichasPorProducto: {[key: string]: FichaTecnicaDatabase[]} = {}
+    const fichasPorProducto: { [key: string]: FichaTecnicaDatabase[] } = {}
     data?.forEach((ficha: FichaTecnicaDatabase) => {
       if (ficha.pro_id_int) {
         if (!fichasPorProducto[ficha.pro_id_int]) {
@@ -500,11 +500,11 @@ export async function obtenerPedidos() {
         pedido.cotizacion.persona = {
           ...persona,
           tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
-          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
-            ? persona.Persona_Natural[0] 
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
             : null,
-          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
-            ? persona.Persona_Juridica[0] 
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
             : null
         }
       }
@@ -544,7 +544,7 @@ export async function crearPedido(pedidoData: {
         .order('est_ped_tipo_int', { ascending: true })
         .limit(1)
         .single()
-      
+
       estadoId = estados?.est_ped_id_int
     }
 
@@ -705,8 +705,10 @@ export async function crearCotizacion(cotizacionData: {
     // Limpiar datos antes de insertar (convertir strings vacíos a null)
     const datosLimpios = {
       cliente_id: cotizacionData.cliente_id || null,
-      fecha_emision: cotizacionData.fecha_emision?.trim() || null,
-      fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() || null,
+      fecha_emision: new Date().toISOString(), 
+      fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() ?
+        new Date(`${cotizacionData.fecha_vencimiento}T23:59:59-05:00`).toISOString() :
+        null,
       incluye_igv: cotizacionData.incluye_igv,
       lugar_recojo: cotizacionData.lugar_recojo?.trim() || null,
       forma_entrega: cotizacionData.forma_entrega?.trim() || null,
@@ -722,8 +724,7 @@ export async function crearCotizacion(cotizacionData: {
         cot_fec_emis_dt: datosLimpios.fecha_emision,
         cot_fec_venc_dt: datosLimpios.fecha_vencimiento,
         cot_igv_bol: datosLimpios.incluye_igv,
-        per_id_int: datosLimpios.cliente_id
-        // No incluir est_cot_id_int, dejemos que Supabase use el valor por defecto
+        per_id_int: datosLimpios.cliente_id 
       })
       .select()
       .single()
@@ -731,10 +732,10 @@ export async function crearCotizacion(cotizacionData: {
     if (cotizacionError) throw cotizacionError
 
     // Crear detalles (solo productos válidos de BD)
-    const productosValidos = cotizacionData.productos.filter(prod => 
-      prod.producto_id && 
+    const productosValidos = cotizacionData.productos.filter(prod =>
+      prod.producto_id &&
       prod.producto_id !== 'personalizado' &&
-      prod.cantidad && 
+      prod.cantidad &&
       prod.precio_historico
     )
 
@@ -752,8 +753,6 @@ export async function crearCotizacion(cotizacionData: {
         .insert(detalles)
 
       if (detalleError) {
-        console.warn('Error insertando detalles, continuando sin productos en BD:', detalleError)
-        // No lanzar error, continuar sin productos en BD
       }
     } else {
     }
@@ -775,7 +774,6 @@ export async function crearCotizacion(cotizacionData: {
 
     return cotizacion
   } catch (error) {
-    console.error('Error creando cotización:', error)
     throw error
   }
 }
@@ -830,10 +828,20 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
   try {
     // Actualizar cotización principal
     const datosLimpios: any = {}
-    
+
     if (cotizacionData.cliente_id !== undefined) datosLimpios.per_id_int = cotizacionData.cliente_id
-    if (cotizacionData.fecha_emision !== undefined) datosLimpios.cot_fec_emis_dt = cotizacionData.fecha_emision?.trim() || null
-    if (cotizacionData.fecha_vencimiento !== undefined) datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() || null
+    if (cotizacionData.fecha_emision !== undefined) {
+      datosLimpios.cot_fec_emis_dt = new Date().toISOString()
+    }
+    if (cotizacionData.fecha_vencimiento !== undefined) {
+      datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() ?
+        (() => {
+          // Crear fecha en zona horaria de Lima
+          const fechaLima = new Date(cotizacionData.fecha_vencimiento + 'T23:59:59-05:00')
+          return fechaLima.toISOString()
+        })() :
+        null
+    }
     if (cotizacionData.incluye_igv !== undefined) datosLimpios.cot_igv_bol = cotizacionData.incluye_igv
 
     if (Object.keys(datosLimpios).length > 0) {
@@ -856,10 +864,10 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
       if (deleteError) throw deleteError
 
       // Insertar nuevos detalles
-      const productosValidos = cotizacionData.productos.filter(prod => 
-        prod.producto_id && 
+      const productosValidos = cotizacionData.productos.filter(prod =>
+        prod.producto_id &&
         prod.producto_id !== 'personalizado' &&
-        prod.cantidad && 
+        prod.cantidad &&
         prod.precio_historico
       )
 
@@ -880,11 +888,11 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
     }
 
     // Actualizar información adicional si se proporciona
-    if (cotizacionData.lugar_recojo !== undefined || 
-        cotizacionData.forma_entrega !== undefined || 
-        cotizacionData.terminos_condiciones !== undefined || 
-        cotizacionData.forma_pago_id !== undefined) {
-      
+    if (cotizacionData.lugar_recojo !== undefined ||
+      cotizacionData.forma_entrega !== undefined ||
+      cotizacionData.terminos_condiciones !== undefined ||
+      cotizacionData.forma_pago_id !== undefined) {
+
       const infoLimpia: any = {}
       if (cotizacionData.lugar_recojo !== undefined) infoLimpia.inf_ad_lug_recojo_vac = cotizacionData.lugar_recojo?.trim() || null
       if (cotizacionData.forma_entrega !== undefined) infoLimpia.inf_ad_form_entr_vac = cotizacionData.forma_entrega?.trim() || null
@@ -926,7 +934,7 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
     throw error
   }
 }
-     
+
 // ============================================
 // SEGUIMIENTO DE PEDIDOS
 // ============================================
@@ -969,16 +977,16 @@ export async function obtenerPedidoPorCodigo(codigoSeguimiento: string) {
     // Transformar los datos para que coincidan con nuestro tipo ClientePersona
     if (data && data.cotizacion && data.cotizacion.persona) {
       const persona = data.cotizacion.persona
-      
+
       // Los datos vienen como arrays, necesitamos convertirlos
       data.cotizacion.persona = {
         ...persona,
         tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
-        persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0 
-          ? persona.Persona_Natural[0] 
+        persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+          ? persona.Persona_Natural[0]
           : null,
-        persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0 
-          ? persona.Persona_Juridica[0] 
+        persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+          ? persona.Persona_Juridica[0]
           : null
       }
     }
