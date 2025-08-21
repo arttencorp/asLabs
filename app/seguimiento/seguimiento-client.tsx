@@ -161,7 +161,7 @@ export default function SeguimientoClient() {
                   disabled={loading}
                 />
                 <Button type="submit" disabled={loading || !codigo.trim()}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 text-white" />}
                 </Button>
               </div>
               <p className="text-sm text-gray-500 text-center">
