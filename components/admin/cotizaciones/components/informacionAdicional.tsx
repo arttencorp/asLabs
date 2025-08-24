@@ -24,6 +24,7 @@ export function InformacionAdicional({
   formasPago,
   formaPagoSeleccionada,
   setFormaPagoSeleccionada,
+  cambiarFormaPagoSeleccionada,
   formasPagoLoading,
   // Modo de edición
   isEditMode = false,
@@ -68,7 +69,7 @@ export function InformacionAdicional({
             <Label htmlFor="formaPagoBD">Método de Pago</Label>
             <Select 
               value={formaPagoSeleccionada} 
-              onValueChange={setFormaPagoSeleccionada}
+              onValueChange={cambiarFormaPagoSeleccionada}
               disabled={formasPagoLoading}
             >
               <SelectTrigger id="formaPagoBD">

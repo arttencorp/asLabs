@@ -97,6 +97,7 @@ export interface InformacionAdicionalProps {
   formasPago: import('@/types/database').FormaPago[]
   formaPagoSeleccionada: string
   setFormaPagoSeleccionada: (value: string) => void
+  cambiarFormaPagoSeleccionada: (value: string) => void
   formasPagoLoading: boolean
   // Modo de edición
   isEditMode?: boolean

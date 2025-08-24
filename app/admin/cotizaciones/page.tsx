@@ -234,10 +234,16 @@ export default function CotizacionesPage() {
         subtotal,
         impuesto,
         total,
-        terminosCondiciones: cotizacionCompleta.informacion_adicional?.inf_ad_term_cond_vac || "",
-        lugarRecojo: cotizacionCompleta.informacion_adicional?.inf_ad_lug_recojo_vac || "",
-        formaPago: cotizacionCompleta.informacion_adicional?.forma_pago?.form_pa_desc_vac || "completo",
-        formaEntrega: cotizacionCompleta.informacion_adicional?.inf_ad_form_entr_vac || "",
+        terminosCondiciones: cotizacionCompleta.informacion_adicional?.[0]?.inf_ad_term_cond_vac || "",
+        lugarRecojo: cotizacionCompleta.informacion_adicional?.[0]?.inf_ad_lug_recojo_vac || "",
+        formaPago: (() => {
+          const infoAdicional = cotizacionCompleta.informacion_adicional?.[0]
+          const formaPagoBD = infoAdicional?.forma_pago
+          if (!formaPagoBD) return "completo"
+          // Mapear usando form_pa_tipo_int: 1 = completo, 2 = parcial
+          return formaPagoBD.form_pa_tipo_int === 2 ? "parcial" : "completo"
+        })(),
+        formaEntrega: cotizacionCompleta.informacion_adicional?.[0]?.inf_ad_form_entr_vac || "",
         totalTexto: numeroATexto(total) || "",
         certificadosCalidad: certificadosCalidad || "",
         certificadosEstructurados, // Como en vistaPrevia
@@ -497,6 +503,7 @@ function CrearCotizacionContent({
     formasPago,
     formaPagoSeleccionada,
     setFormaPagoSeleccionada,
+    cambiarFormaPagoSeleccionada,
     formasPagoLoading,
     seleccionarProducto,
     actualizarItem,
@@ -652,6 +659,7 @@ function CrearCotizacionContent({
             formasPago={formasPago}
             formaPagoSeleccionada={formaPagoSeleccionada}
             setFormaPagoSeleccionada={setFormaPagoSeleccionada}
+            cambiarFormaPagoSeleccionada={cambiarFormaPagoSeleccionada}
             formasPagoLoading={formasPagoLoading}
             isEditMode={isEditMode}
             onAnterior={retrocederPaso}

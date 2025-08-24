@@ -830,17 +830,31 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
     const datosLimpios: any = {}
 
     if (cotizacionData.cliente_id !== undefined) datosLimpios.per_id_int = cotizacionData.cliente_id
-    if (cotizacionData.fecha_emision !== undefined) {
-      datosLimpios.cot_fec_emis_dt = new Date().toISOString()
+    
+    // Solo actualizar fecha de emisión si se proporciona una fecha válida y diferente
+    if (cotizacionData.fecha_emision !== undefined && cotizacionData.fecha_emision?.trim()) {
+      try {
+        const fechaLima = new Date(`${cotizacionData.fecha_emision}T00:00:00-05:00`)
+        if (isNaN(fechaLima.getTime())) {
+          throw new Error('Fecha de emisión inválida')
+        }
+        datosLimpios.cot_fec_emis_dt = fechaLima.toISOString()
+      } catch (error) {
+        throw new Error(`Error procesando fecha de emisión: ${cotizacionData.fecha_emision}`)
+      }
     }
-    if (cotizacionData.fecha_vencimiento !== undefined) {
-      datosLimpios.cot_fec_venc_dt = cotizacionData.fecha_vencimiento?.trim() ?
-        (() => {
-          // Crear fecha en zona horaria de Lima
-          const fechaLima = new Date(cotizacionData.fecha_vencimiento + 'T23:59:59-05:00')
-          return fechaLima.toISOString()
-        })() :
-        null
+    
+    // Solo actualizar fecha de vencimiento si se proporciona una fecha válida y diferente
+    if (cotizacionData.fecha_vencimiento !== undefined && cotizacionData.fecha_vencimiento?.trim()) {
+      try {
+        const fechaLima = new Date(`${cotizacionData.fecha_vencimiento}T23:59:59-05:00`)
+        if (isNaN(fechaLima.getTime())) {
+          throw new Error('Fecha de vencimiento inválida')
+        }
+        datosLimpios.cot_fec_venc_dt = fechaLima.toISOString()
+      } catch (error) {
+        throw new Error(`Error procesando fecha de vencimiento: ${cotizacionData.fecha_vencimiento}`)
+      }
     }
     if (cotizacionData.incluye_igv !== undefined) datosLimpios.cot_igv_bol = cotizacionData.incluye_igv
 

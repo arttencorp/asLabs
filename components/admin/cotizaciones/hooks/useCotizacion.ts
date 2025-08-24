@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { generarNumeroCotizacion, limpiarDatosParaBD } from '@/utils'
+import { generarNumeroCotizacion, limpiarDatosParaBD, dateToInputValue } from '@/utils'
 import { crearCotizacion, actualizarCotizacion, obtenerCotizacionPorId, obtenerFormasPago } from '@/lib/supabase'
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
@@ -111,6 +111,19 @@ export function useCotizacion() {
   const [formaPagoSeleccionada, setFormaPagoSeleccionada] = useState<string>('') // ID de la forma de pago seleccionada
   const [formasPagoLoading, setFormasPagoLoading] = useState(false)
 
+  // Helper para mapear forma de pago de BD a UI
+  // Helper para cambiar forma de pago seleccionada y sincronizar con el tipo UI
+  const cambiarFormaPagoSeleccionada = useCallback((nuevaFormaPagoId: string) => {
+    setFormaPagoSeleccionada(nuevaFormaPagoId)
+    
+    // Obtener el tipo desde formasPago y mapear correctamente
+    const formaPagoBD = formasPago.find(fp => fp.form_pa_id_int === nuevaFormaPagoId)
+    console.log('CAMBIO FORMA PAGO:', { nuevaFormaPagoId, formaPagoBD }) // LOG TEMPORAL
+    const formaPagoUI = formaPagoBD?.form_pa_tipo_int === 1 ? 'completo' : 'parcial'
+    console.log('MAPEO FORMA PAGO UI:', formaPagoUI) // LOG TEMPORAL
+    setFormaPago(formaPagoUI)
+  }, [formasPago])
+
   // Calcular totales usando utility global
   const calcularTotales = useCallback(() => {
     const subtotal = items.reduce((sum, item) => sum + (item.total || 0), 0)
@@ -133,6 +146,15 @@ export function useCotizacion() {
       }
     }
   }, [items, preciosConIGV])
+
+  // Efecto para mantener términos por defecto (NO generar dinámicos)
+  // Los términos dinámicos se muestran por separado en CondicionesEntrega
+  useEffect(() => {
+    // Solo en modo NO edición, mantener términos por defecto
+    if (!isEditMode && terminosCondiciones !== terminosCondicionesDefault) {
+      setTerminosCondiciones(terminosCondicionesDefault)
+    }
+  }, [terminosCondicionesDefault, isEditMode])
 
   // Actualizar certificados combinados
   const actualizarCertificadosCombinados = useCallback(async () => {
@@ -354,6 +376,8 @@ export function useCotizacion() {
     try {
       const totales = calcularTotales()
       
+      console.log('VISTA PREVIA - FORMA PAGO:', formaPago) // LOG TEMPORAL
+      
       const itemsValidados = Array.isArray(items)
         ? items.map((item) => ({
             id: item?.id || 0,
@@ -504,8 +528,8 @@ export function useCotizacion() {
 
       // Cargar información básica
       setNumeroCotizacion(cotizacion.cot_num_vac)
-      setFechaEmision(cotizacion.cot_fec_emis_dt)
-      setFechaVencimiento(cotizacion.cot_fec_venc_dt)
+      setFechaEmision(dateToInputValue(cotizacion.cot_fec_emis_dt))
+      setFechaVencimiento(dateToInputValue(cotizacion.cot_fec_venc_dt))
       setPreciosConIGV(cotizacion.cot_igv_bol)
       
       // Cargar información del cliente
@@ -542,10 +566,20 @@ export function useCotizacion() {
         const info = cotizacion.informacion_adicional[0]
         setLugarRecojo(info.inf_ad_lug_recojo_vac || '')
         setFormaEntrega(info.inf_ad_form_entr_vac || '')
-        setTerminosCondiciones(info.inf_ad_term_cond_vac || terminosCondicionesDefault)
+        
+        // Cargar forma de pago
         if (info.form_pa_id_int) {
           setFormaPagoSeleccionada(info.form_pa_id_int)
+          
+          // Obtener el form_pa_tipo_int desde forma_pago para mapear correctamente
+          const tipoFormaPago = info.forma_pago?.form_pa_tipo_int
+          // Mapear forma de pago: tipo 1 = completo (PAGO_100), tipo 2 = parcial (PAGO_50_50)
+          const formaPagoUI = tipoFormaPago === 1 ? 'completo' : 'parcial'
+          setFormaPago(formaPagoUI)
         }
+        
+        // Cargar términos y condiciones
+        setTerminosCondiciones(info.inf_ad_term_cond_vac || terminosCondicionesDefault)
       }
 
       // Ir al tab de información general
@@ -619,17 +653,26 @@ export function useCotizacion() {
           precio_historico: item.precioUnitario
         }))
 
-      const cotizacionData = limpiarDatosParaBD({
+      // Preparar datos base para la cotización
+      const baseCotizacionData: any = {
         cliente_id: clienteSeleccionado,
-        fecha_emision: fechaEmision,
-        fecha_vencimiento: fechaVencimiento,
         incluye_igv: preciosConIGV,
         productos: productosValidos,
         forma_pago_id: formaPagoSeleccionada || null,
         lugar_recojo: lugarRecojo,
         forma_entrega: formaEntrega,
         terminos_condiciones: terminosCondiciones
-      })
+      }
+
+      // Solo incluir fechas si tienen valores válidos (para evitar sobrescribir fechas existentes con null)
+      if (fechaEmision && fechaEmision.trim()) {
+        baseCotizacionData.fecha_emision = fechaEmision
+      }
+      if (fechaVencimiento && fechaVencimiento.trim()) {
+        baseCotizacionData.fecha_vencimiento = fechaVencimiento
+      }
+
+      const cotizacionData = limpiarDatosParaBD(baseCotizacionData)
 
       let cotizacionCreada
       
@@ -722,6 +765,7 @@ export function useCotizacion() {
     formasPago,
     formaPagoSeleccionada,
     setFormaPagoSeleccionada,
+    cambiarFormaPagoSeleccionada,
     formasPagoLoading,
     
     // Funciones

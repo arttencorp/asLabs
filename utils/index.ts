@@ -40,15 +40,25 @@ export function formatDate(dateString: string, options?: {
 export function dateToInputValue(dateString: string | null): string {
   if (!dateString) return ''
   
-  // Si la fecha ya viene como YYYY-MM-DD, devolverla tal como está
-  if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    return dateString
+  try {
+    // Si la fecha ya viene como YYYY-MM-DD, devolverla tal como está
+    if (typeof dateString === 'string' && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateString
+    }
+    
+    // Si es fecha ISO completa, extraer solo la parte de fecha usando un método más simple
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) {
+      console.warn('Fecha inválida recibida:', dateString)
+      return ''
+    }
+    
+    // Método simple: usar toISOString y extraer solo la fecha
+    return date.toISOString().split('T')[0]
+  } catch (error) {
+    console.error('Error en dateToInputValue:', error, 'Input:', dateString)
+    return ''
   }
-  
-  // Si es fecha ISO completa, usar zona horaria de Lima para extraer la fecha
-  const date = new Date(dateString)
-  const limaDate = new Date(date.toLocaleString('en-CA', { timeZone: 'America/Lima' }))
-  return limaDate.toISOString().split('T')[0]
 }
 
 // Función para convertir fecha de input a ISO completa considerando zona horaria de Lima

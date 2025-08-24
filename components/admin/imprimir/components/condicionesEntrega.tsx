@@ -25,12 +25,17 @@ export function CondicionesEntrega({
                 Entrega inmediata previa confirmación del depósito, equivalente a S/{(total || 0).toFixed(2)}{" "}
                 ({totalTexto || ""} soles)
               </>
+            ) : formaPago === "parcial" ? (
+              <>
+                50% al confirmar el pedido equivalente a S/
+                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles), el 50% restante equivalente a S/
+                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles) previa entrega del producto
+              </>
             ) : (
               <>
-                Depósito del 50% a la confirmación del pedido equivalente a S/
-                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles) y
-                su entrega previa constatación del depósito del 50% restante, equivalente a S/
-                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles)
+                50% al confirmar el pedido equivalente a S/
+                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles), el 50% restante equivalente a S/
+                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles) previa entrega del producto
               </>
             )}
           </p>
