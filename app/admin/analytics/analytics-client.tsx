@@ -53,6 +53,14 @@ export default function AnalyticsClient() {
   })
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+
+  // Función de éxito reutilizable (patrón useBaseCrud)
+  const showSuccess = (message: string) => {
+    setSuccess(message)
+    setTimeout(() => setSuccess(null), 5000)
+  }
 
   useEffect(() => {
     fetchAnalyticsData()
@@ -60,6 +68,7 @@ export default function AnalyticsClient() {
 
   const fetchAnalyticsData = async () => {
     setLoading(true)
+    setError(null)
     try {
       // Fetch KPI data
       const { data: orders } = await supabase
@@ -130,8 +139,10 @@ export default function AnalyticsClient() {
         .limit(5)
 
       setRecentOrders(recent || [])
+      showSuccess("Datos analíticos cargados exitosamente")
     } catch (error) {
       console.error("Error fetching analytics data:", error)
+      setError("Error al cargar los datos analíticos")
     } finally {
       setLoading(false)
     }
