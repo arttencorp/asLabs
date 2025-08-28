@@ -31,7 +31,7 @@ export default function OfferCarousel() {
       title: "Biotecnología Vegetal",
       content:
         "Producimos plantas in vitro de alta calidad genética y fitosanitaria mediante técnicas de micropropagación. Ofrecemos plantines de banano, plátano, piña, arándanos y especies ornamentales, garantizando material vegetal libre de enfermedades y con características genéticas superiores.",
-      image: "/biotecnologia-vegetal.png",
+      image: "/new/BiotecnologiaVegetal.webp",
       link: "EXPLORA NUESTROS PLANTINES",
     },
     {
@@ -98,9 +98,8 @@ export default function OfferCarousel() {
                     setActiveItem(item.id)
                     setIsPaused(true)
                   }}
-                  className={`text-left py-3 pl-4 pr-6 rounded-md transition-all duration-300 relative w-full ${
-                    activeItem === item.id ? "text-[#2e7d32] font-medium" : "text-[#01283c] hover:text-[#2e7d32]"
-                  }`}
+                  className={`text-left py-3 pl-4 pr-6 rounded-md transition-all duration-300 relative w-full ${activeItem === item.id ? "text-[#2e7d32] font-medium" : "text-[#01283c] hover:text-[#2e7d32]"
+                    }`}
                 >
                   {activeItem === item.id && (
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#d1343e] rounded-l-md"></div>
@@ -136,6 +135,7 @@ export default function OfferCarousel() {
           <div className="w-full lg:w-1/3 mb-8 lg:mb-0">
             <div className="rounded-lg overflow-hidden">
               <Image
+                key={offerItems[activeItem].id}
                 src={offerItems[activeItem].image || "/placeholder.svg"}
                 alt={offerItems[activeItem].title}
                 width={500}
