@@ -273,7 +273,7 @@ export default function ClientPage() {
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="relative h-48 sm:h-64 md:h-80">
                 <Image
-                  src="/u13Ap.png"
+                  src="/new/AlternativasSosteniblesParaeLFuturo.webp"
                   alt="Scientists in lab"
                   fill
                   style={{ objectFit: "cover" }}
@@ -282,12 +282,12 @@ export default function ClientPage() {
               </div>
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-2xl font-bold text-[#01283c] mb-4 font-serif">
-                  Join us and change the world of medicine
+                  Alternativas Sostenibles para el Futuro
                 </h3>
                 <Link href="#" className="inline-flex items-center text-[#e65100] font-medium">
-                  LIFE AT MODERNA
+                  Conócenos{/* 
                   <div className="ml-2 flex items-center justify-center w-6 h-6 rounded-full border border-[#e65100]">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="./public/new/AlternativasSosteniblesParaeLFuturo.webp">
                       <path
                         d="M5 12h14M12 5l7 7-7 7"
                         stroke="currentColor"
@@ -296,7 +296,7 @@ export default function ClientPage() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                  </div>
+                  </div>*/}
                 </Link>
               </div>
             </div>

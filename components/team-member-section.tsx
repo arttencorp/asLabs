@@ -41,7 +41,7 @@ export default function TeamMemberSection() {
             <div className="w-full lg:w-1/2 relative">
               <div className="h-full bg-[#e7f3f8] relative">
                 <Image
-                  src="/lab-header-bg.jpg"
+                  src="/new/SobreASLaboratorios.webp"
                   alt="Laboratorio de biotecnología de AS Labs"
                   width={600}
                   height={500}
