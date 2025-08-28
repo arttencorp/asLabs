@@ -88,7 +88,7 @@ export default function ClientPage() {
         {/* Image Background - Replace video section */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <Image
-            src="/lab-header-bg.jpg"
+            src="/new/HEADER.webp"
             alt="Modern laboratory with scientists working"
             fill
             style={{ objectFit: "cover" }}
