@@ -39,7 +39,7 @@ export default function OfferCarousel() {
       title: "Asesoría Técnica",
       content:
         "Brindamos consultoría especializada en biotecnología vegetal, manejo integrado de plagas y enfermedades, y sistemas de producción sostenible. Nuestro equipo de profesionales altamente capacitados ofrece soluciones personalizadas para optimizar la producción agrícola de nuestros clientes.",
-      image: "/asesoria-tecnica.png",
+      image: "/scientists-meeting.png",
       link: "SOLICITA UNA CONSULTA",
     },
     {
@@ -47,7 +47,7 @@ export default function OfferCarousel() {
       title: "Insumos de Laboratorio",
       content:
         "Suministramos materiales, equipos y reactivos para laboratorios de investigación y enseñanza universitaria. Desde medios de cultivo hasta instrumentos especializados, ofrecemos productos de alta calidad para estudiantes, docentes e investigadores en el campo de la biotecnología.",
-      image: "/insumos-laboratorio.png",
+      image: "/pitch-hero.png",
       link: "VER CATÁLOGO DE INSUMOS",
     },
   ]
