@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect, useCallback } from 'react'
-import { 
-  obtenerPedidos, 
-  obtenerCotizaciones, 
+import {
+  obtenerPedidos,
+  obtenerCotizaciones,
+  obtenerCotizacionesDisponibles,
+  verificarCotizacionTienePedido,
   obtenerEstadosPedido,
   obtenerEstadosCotizacion,
   obtenerFormasPago,
@@ -42,6 +44,7 @@ const PEDIDO_FORM_INITIAL: PedidoForm = {
 export function usePedidos() {
   // Estados para entidades relacionadas
   const [cotizaciones, setCotizaciones] = useState<Cotizacion[]>([])
+  const [cotizacionesDisponibles, setCotizacionesDisponibles] = useState<Cotizacion[]>([])
   const [estadosPedido, setEstadosPedido] = useState<EstadoPedido[]>([])
   const [estadosCotizacion, setEstadosCotizacion] = useState<EstadoCotizacion[]>([])
   const [formasPago, setFormasPago] = useState<FormaPago[]>([])
@@ -88,7 +91,8 @@ export function usePedidos() {
 
     try {
       const [
-        cotizacionesData, 
+        cotizacionesData,
+        cotizacionesDisponiblesData,
         estadosPedidoData,
         estadosCotizacionData,
         formasPagoData,
@@ -96,6 +100,7 @@ export function usePedidos() {
         clientesData
       ] = await Promise.all([
         obtenerCotizaciones(),
+        obtenerCotizacionesDisponibles(),
         obtenerEstadosPedido(),
         obtenerEstadosCotizacion(),
         obtenerFormasPago(),
@@ -104,6 +109,7 @@ export function usePedidos() {
       ])
 
       setCotizaciones(cotizacionesData)
+      setCotizacionesDisponibles(cotizacionesDisponiblesData)
       setEstadosPedido(estadosPedidoData)
       setEstadosCotizacion(estadosCotizacionData)
       setFormasPago(formasPagoData)
@@ -113,7 +119,7 @@ export function usePedidos() {
       // Cargar pedidos usando useBaseCrud
       await loadPedidos()
       
-      showSuccess(`Datos cargados: ${cotizacionesData.length} cotizaciones`)
+      showSuccess(`Datos cargados: ${cotizacionesData.length} cotizaciones (${cotizacionesDisponiblesData.length} disponibles)`)
     } catch (error: any) {
       setError(error.message || "Error al cargar los datos")
     } finally {
@@ -148,6 +154,31 @@ export function usePedidos() {
       }, 0)
   }
 
+  // Función para obtener cotizaciones apropiadas según el contexto
+  const getCotizacionesParaFormulario = (editingPedido: Pedido | null): Cotizacion[] => {
+    if (editingPedido) {
+      // Al editar: mostrar la cotización actual + las disponibles
+      const cotizacionActual = editingPedido.cotizacion
+      if (cotizacionActual) {
+        // Verificar si la cotización actual ya está en las disponibles
+        const yaEstaEnDisponibles = cotizacionesDisponibles.some(
+          c => c.cot_id_int === cotizacionActual.cot_id_int
+        )
+        
+        if (yaEstaEnDisponibles) {
+          return cotizacionesDisponibles
+        } else {
+          // Agregar la cotización actual a las disponibles
+          return [cotizacionActual, ...cotizacionesDisponibles]
+        }
+      }
+      return cotizacionesDisponibles
+    } else {
+      // Al crear: solo mostrar cotizaciones disponibles
+      return cotizacionesDisponibles
+    }
+  }
+
   useEffect(() => {
     loadData()
   }, [loadData])
@@ -156,6 +187,7 @@ export function usePedidos() {
     // Data
     pedidos,
     cotizaciones,
+    cotizacionesDisponibles,
     estadosPedido,
     estadosCotizacion,
     formasPago,
@@ -183,6 +215,7 @@ export function usePedidos() {
     setIsDialogOpen,
     
     // Utilities
+    getCotizacionesParaFormulario,
     showSuccess,
     setError
   }
