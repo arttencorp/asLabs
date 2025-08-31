@@ -1,7 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Edit, Trash2, User, Building2 } from "lucide-react"
+import { Edit, Trash2, User, Building2, Eye } from "lucide-react"
+import { useRouter } from "next/navigation"
 import type { ClientePersona } from "@/types/database"
 import { formatHectareas } from "../utils"
 import {
@@ -20,6 +21,11 @@ interface ClientesTableProps {
 }
 
 export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesTableProps) {
+  const router = useRouter()
+
+  const handleViewDetalle = (cliente: ClientePersona) => {
+    router.push(`/admin/clientes/${cliente.per_id_int}`)
+  }
   if (loading && clientes.length === 0) {
     return (
       <div className="rounded-md border">
@@ -146,6 +152,15 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleViewDetalle(cliente)}
+                    className="flex items-center gap-1"
+                  >
+                    <Eye className="h-4 w-4" />
+                    Ver
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
