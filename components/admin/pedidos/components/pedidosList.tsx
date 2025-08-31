@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Search, Edit, Eye, Trash2, RefreshCw, Loader2 } from "lucide-react"
+import { Search, Edit, Eye, Trash2, RefreshCw, Loader2, Image } from "lucide-react"
 import { formatDate, getEstadoColor, getNombreCompleto } from '@/utils/index'
 import type { Pedido } from '../types'
 
@@ -81,13 +81,14 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                 <TableHead>Estado</TableHead>
                 <TableHead>Fecha Pedido</TableHead>
                 <TableHead>Código Rastreo</TableHead>
+                <TableHead>Imagen</TableHead>
                 <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredPedidos.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                  <TableCell colSpan={8} className="text-center py-8 text-gray-500">
                     {loading ? "Cargando pedidos..." : "No hay pedidos registrados"}
                   </TableCell>
                 </TableRow>
@@ -116,6 +117,29 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                     <TableCell>{formatDate(pedido.ped_fec_pedido_dt)}</TableCell>
                     <TableCell className="font-mono text-sm">
                       {pedido.ped_cod_rastreo_vac || 'Sin código'}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-center">
+                        {pedido.ped_imagen_url ? (
+                          <div className="flex items-center gap-1">
+                            <Image className="h-4 w-4 text-green-600" />
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => window.open(pedido.ped_imagen_url!, '_blank')}
+                              className="h-6 px-1 text-xs text-green-600 hover:text-green-700"
+                              title="Ver imagen"
+                            >
+                              Ver
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1 text-gray-400">
+                            <Image className="h-4 w-4" />
+                            <span className="text-xs">Sin imagen</span>
+                          </div>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">

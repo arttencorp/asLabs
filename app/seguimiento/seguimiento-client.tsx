@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search, Package, MapPin, Calendar, User, Phone, Mail, Loader2, AlertCircle, CheckCircle } from "lucide-react"
+import { Search, Package, MapPin, Calendar, User, Phone, Mail, Loader2, Eye, AlertCircle, CheckCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { obtenerPedidoPorCodigo } from "@/lib/supabase"
 import { formatCurrency, formatDate, getNombreCompleto, getDocumentoCliente, calcularTotalCotizacion } from "@/utils"
@@ -224,8 +224,8 @@ export default function SeguimientoClient() {
                   </div>
                   <div className="text-right">
                     {pedido.estado_pedido && (
-                      <Badge className={`${getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int).color} text-sm px-3 py-1`}>
-                        {getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int).nombre}
+                      <Badge className={`${getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int || 1).color} text-sm px-3 py-1`}>
+                        {getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int || 1).nombre}
                       </Badge>
                     )}
                     <p className="text-sm text-gray-500 mt-1">Total: {formatCurrency(getTotalPedido(pedido))}</p>
@@ -240,7 +240,7 @@ export default function SeguimientoClient() {
                 <CardTitle>Estado del Pedido</CardTitle>
                 {pedido.estado_pedido && (
                   <CardDescription>
-                    {getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int).descripcion}
+                    {getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int || 1).descripcion}
                   </CardDescription>
                 )}
               </CardHeader>
@@ -377,87 +377,133 @@ export default function SeguimientoClient() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <p className="font-medium">Pedido creado</p>
-                      <p className="text-sm text-gray-500">
-                        {formatDate(pedido.ped_fec_pedido_dt, { includeTime: true })}
-                      </p>
-                    </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Imagen del Pedido - Lado Izquierdo */}
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+                      <Package className="h-4 w-4" />
+                      Imagen del Pedido
+                    </h4>
+                    {pedido.ped_imagen_url ? (
+                      <div className="space-y-3">
+                        <div className="border border-gray-200 rounded-lg overflow-hidden">
+                          <img
+                            src={pedido.ped_imagen_url}
+                            alt="Imagen del pedido"
+                            className="w-full h-48 object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                              target.nextElementSibling?.classList.remove('hidden')
+                            }}
+                          />
+                          <div className="hidden bg-gray-100 h-48 flex items-center justify-center">
+                            <div className="text-center text-gray-500">
+                              <Package className="h-8 w-8 mx-auto mb-2" />
+                              <p className="text-sm">Error al cargar imagen</p>
+                            </div>
+                          </div>
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open(pedido.ped_imagen_url, '_blank')}
+                          className="w-full flex items-center gap-2"
+                        >
+                          <Eye className="h-4 w-4" />
+                          Ver completo
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="border border-gray-200 rounded-lg bg-gray-50 h-48 flex items-center justify-center">
+                        <div className="text-center text-gray-500">
+                          <Package className="h-8 w-8 mx-auto mb-2" />
+                          <p className="text-sm">No hay imagen disponible</p>
+                          <p className="text-xs">Se agregará cuando el pedido esté en preparación</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {pedido.ped_fec_actualizada_dt !== pedido.ped_fec_pedido_dt && (
-                    <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Última actualización</p>
-                        <p className="text-sm text-gray-500">
-                          {formatDate(pedido.ped_fec_actualizada_dt, { includeTime: true })}
-                        </p>
+                  {/* Historial - Lado Derecho */}
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      Cronología
+                    </h4>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <div className="flex-1">
+                          <p className="font-medium">Pedido creado</p>
+                          <p className="text-sm text-gray-500">
+                            {formatDate(pedido.ped_fec_pedido_dt, { includeTime: true })}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  )}
 
-                  {pedido.ped_cod_rastreo_vac && (
-                    <div className="flex items-center gap-4 p-3 bg-purple-50 rounded-lg">
-                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Código de rastreo asignado</p>
-                        <p className="text-sm text-gray-500 font-mono">{pedido.ped_cod_rastreo_vac}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {pedido.ped_observacion_vac && (
-                    <div className="flex items-start gap-4 p-3 bg-yellow-50 rounded-lg">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Observaciones</p>
-                        <p className="text-sm text-gray-600">{pedido.ped_observacion_vac}</p>
-                      </div>
-                    </div>
-                  )}
-                  {/*
-                  {pedido.ped_num_comprob_vac && (
-                    <div className="flex items-center gap-4 p-3 bg-indigo-50 rounded-lg">
-                      <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Comprobante generado</p>
-                        <p className="text-sm text-gray-500 font-mono">{pedido.ped_num_comprob_vac}</p>
-                      </div>
-                    </div>
-                  )} */}
-
-                  {/* Información adicional de la cotización */}
-                  {pedido.cotizacion?.informacion_adicional && (
-                    <>
-                      {pedido.cotizacion.informacion_adicional.inf_ad_lug_recojo_vac && (
-                        <div className="flex items-start gap-4 p-3 bg-orange-50 rounded-lg">
-                          <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                      {pedido.ped_fec_actualizada_dt !== pedido.ped_fec_pedido_dt && (
+                        <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                           <div className="flex-1">
-                            <p className="font-medium">Lugar de recojo</p>
-                            <p className="text-sm text-gray-600">
-                              {pedido.cotizacion.informacion_adicional.inf_ad_lug_recojo_vac}
+                            <p className="font-medium">Última actualización</p>
+                            <p className="text-sm text-gray-500">
+                              {formatDate(pedido.ped_fec_actualizada_dt, { includeTime: true })}
                             </p>
                           </div>
                         </div>
                       )}
 
-                      {pedido.cotizacion.informacion_adicional.inf_ad_form_entr_vac && (
-                        <div className="flex items-start gap-4 p-3 bg-teal-50 rounded-lg">
-                          <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                      {pedido.ped_cod_rastreo_vac && (
+                        <div className="flex items-center gap-4 p-3 bg-purple-50 rounded-lg">
+                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                           <div className="flex-1">
-                            <p className="font-medium">Forma de entrega</p>
-                            <p className="text-sm text-gray-600">
-                              {pedido.cotizacion.informacion_adicional.inf_ad_form_entr_vac}
-                            </p>
+                            <p className="font-medium">Código de rastreo asignado</p>
+                            <p className="text-sm text-gray-500 font-mono">{pedido.ped_cod_rastreo_vac}</p>
                           </div>
                         </div>
                       )}
-                    </>
-                  )}
+
+                      {pedido.ped_observacion_vac && (
+                        <div className="flex items-start gap-4 p-3 bg-yellow-50 rounded-lg">
+                          <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
+                          <div className="flex-1">
+                            <p className="font-medium">Observaciones</p>
+                            <p className="text-sm text-gray-600">{pedido.ped_observacion_vac}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Información adicional de la cotización */}
+                      {pedido.cotizacion?.informacion_adicional && (
+                        <>
+                          {pedido.cotizacion.informacion_adicional.inf_ad_lug_recojo_vac && (
+                            <div className="flex items-start gap-4 p-3 bg-orange-50 rounded-lg">
+                              <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                              <div className="flex-1">
+                                <p className="font-medium">Lugar de recojo</p>
+                                <p className="text-sm text-gray-600">
+                                  {pedido.cotizacion.informacion_adicional.inf_ad_lug_recojo_vac}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {pedido.cotizacion.informacion_adicional.inf_ad_form_entr_vac && (
+                            <div className="flex items-start gap-4 p-3 bg-teal-50 rounded-lg">
+                              <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                              <div className="flex-1">
+                                <p className="font-medium">Forma de entrega</p>
+                                <p className="text-sm text-gray-600">
+                                  {pedido.cotizacion.informacion_adicional.inf_ad_form_entr_vac}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
