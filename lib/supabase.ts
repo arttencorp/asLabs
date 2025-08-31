@@ -518,6 +518,92 @@ export async function obtenerPedidos() {
   }
 }
 
+// Función para verificar si una cotización ya tiene un pedido asociado
+export async function verificarCotizacionTienePedido(cotizacionId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select('ped_id_int')
+      .eq('cot_id_int', cotizacionId)
+      .limit(1)
+
+    if (error) throw error
+    return data && data.length > 0
+  } catch (error) {
+    console.error('Error verificando cotización con pedido:', error)
+    throw error
+  }
+}
+
+// Función para obtener cotizaciones disponibles (sin pedido asociado)
+export async function obtenerCotizacionesDisponibles() {
+  try {
+    // Primero obtener todas las cotizaciones
+    const { data: todasCotizaciones, error: cotizacionesError } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (cotizacionesError) throw cotizacionesError
+
+    // Obtener todas las cotizaciones que ya tienen pedido
+    const { data: cotizacionesConPedido, error: pedidosError } = await supabase
+      .from('Pedidos')
+      .select('cot_id_int')
+
+    if (pedidosError) throw pedidosError
+
+    // Crear un Set con los IDs de cotizaciones que ya tienen pedido
+    const cotizacionesUsadas = new Set(
+      cotizacionesConPedido?.map(p => p.cot_id_int) || []
+    )
+
+    // Filtrar cotizaciones que NO tienen pedido asociado
+    const cotizacionesDisponibles = todasCotizaciones?.filter(
+      cotizacion => !cotizacionesUsadas.has(cotizacion.cot_id_int)
+    ) || []
+
+    // Transformar los datos de persona igual que en obtenerCotizaciones
+    const cotizacionesTransformadas = cotizacionesDisponibles.map(cotizacion => {
+      if (cotizacion.persona) {
+        const persona = cotizacion.persona
+        cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
+            : null
+        }
+      }
+      return cotizacion
+    })
+
+    return cotizacionesTransformadas
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones disponibles:', error)
+    throw error
+  }
+}
+
 export async function crearPedido(pedidoData: {
   cotizacion_id: string
   estado_id?: string | null
@@ -530,6 +616,12 @@ export async function crearPedido(pedidoData: {
     // Validar que la cotización no esté vacía
     if (!pedidoData.cotizacion_id || pedidoData.cotizacion_id.trim() === '') {
       throw new Error('La cotización es obligatoria')
+    }
+
+    // Verificar si ya existe un pedido para esta cotización
+    const yaExistePedido = await verificarCotizacionTienePedido(pedidoData.cotizacion_id.trim())
+    if (yaExistePedido) {
+      throw new Error('Esta cotización ya tiene un pedido asociado. No se puede crear otro pedido para la misma cotización.')
     }
 
     const codigoSeguimiento = await generarCodigoSeguimiento()
@@ -598,6 +690,26 @@ export async function crearPedido(pedidoData: {
 
 export async function actualizarPedido(id: string, pedidoData: any) {
   try {
+    // Si se está cambiando la cotización, verificar que la nueva cotización no tenga pedido
+    if (pedidoData.cotizacion_id !== undefined) {
+      // Obtener el pedido actual para verificar si está cambiando la cotización
+      const { data: pedidoActual, error: pedidoError } = await supabase
+        .from('Pedidos')
+        .select('cot_id_int')
+        .eq('ped_id_int', id)
+        .single()
+
+      if (pedidoError) throw pedidoError
+
+      // Si está cambiando a una cotización diferente
+      if (pedidoActual.cot_id_int !== pedidoData.cotizacion_id) {
+        const yaExistePedido = await verificarCotizacionTienePedido(pedidoData.cotizacion_id)
+        if (yaExistePedido) {
+          throw new Error('La cotización seleccionada ya tiene un pedido asociado. No se puede asignar a otro pedido.')
+        }
+      }
+    }
+
     const updateData: any = {
       ped_fec_actualizada_dt: new Date().toISOString()
     }
