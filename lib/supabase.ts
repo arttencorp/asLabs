@@ -461,6 +461,172 @@ export async function obtenerFichasTecnicasPorProductos(productosIds: string[]):
 }
 
 // ============================================
+// FUNCIONES ESPECÍFICAS DE CLIENTES
+// ============================================
+
+// Obtener una persona específica por ID
+export async function obtenerPersonaPorId(id: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Personas')
+      .select(`
+        *,
+        Persona_Natural(*),
+        Persona_Juridica(*)
+      `)
+      .eq('per_id_int', id)
+      .single()
+
+    if (error) throw error
+
+    if (data) {
+      // Transformar los datos de persona
+      const persona = {
+        ...data,
+        tipo: data.Persona_Natural && data.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+        persona_natural: data.Persona_Natural && data.Persona_Natural.length > 0
+          ? data.Persona_Natural[0]
+          : null,
+        persona_juridica: data.Persona_Juridica && data.Persona_Juridica.length > 0
+          ? data.Persona_Juridica[0]
+          : null
+      }
+
+      return persona
+    }
+
+    return null
+  } catch (error) {
+    console.error('Error obteniendo persona por ID:', error)
+    throw error
+  }
+}
+
+// Obtener cotizaciones de un cliente específico
+export async function obtenerCotizacionesPorCliente(clienteId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .eq('per_id_int', clienteId)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (error) throw error
+
+    // Transformar los datos de persona igual que en obtenerCotizaciones
+    const cotizacionesTransformadas = data?.map(cotizacion => {
+      if (cotizacion.persona) {
+        const persona = cotizacion.persona
+        cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
+            : null
+        }
+      }
+      return cotizacion
+    })
+
+    return cotizacionesTransformadas || []
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones por cliente:', error)
+    throw error
+  }
+}
+
+// Obtener pedidos de un cliente específico
+export async function obtenerPedidosPorCliente(clienteId: string) {
+  try {
+    // Primero obtener las cotizaciones del cliente
+    const { data: cotizacionesCliente, error: cotizacionesError } = await supabase
+      .from('Cotizaciones')
+      .select('cot_id_int')
+      .eq('per_id_int', clienteId)
+
+    if (cotizacionesError) throw cotizacionesError
+
+    if (!cotizacionesCliente || cotizacionesCliente.length === 0) {
+      return []
+    }
+
+    // Obtener los IDs de las cotizaciones
+    const cotizacionIds = cotizacionesCliente.map(c => c.cot_id_int)
+
+    // Obtener pedidos que pertenecen a esas cotizaciones
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
+      `)
+      .in('cot_id_int', cotizacionIds)
+      .order('ped_created_at_dt', { ascending: false })
+
+    if (error) throw error
+
+    // Transformar los datos de persona igual que en obtenerPedidos
+    const pedidosTransformados = data?.map(pedido => {
+      if (pedido.cotizacion && pedido.cotizacion.persona) {
+        const persona = pedido.cotizacion.persona
+        pedido.cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
+            : null
+        }
+      }
+      return pedido
+    })
+
+    return pedidosTransformados || []
+  } catch (error) {
+    console.error('Error obteniendo pedidos por cliente:', error)
+    throw error
+  }
+}
+
+// ============================================
 // FUNCIONES ESPECÍFICAS DE PEDIDOS
 // ============================================
 
