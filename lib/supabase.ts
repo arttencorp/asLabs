@@ -928,6 +928,86 @@ export async function eliminarPedido(id: string): Promise<void> {
 }
 
 // ============================================
+// FUNCIONES DE STORAGE PARA IMÁGENES
+// ============================================
+
+export async function subirImagenPedido(file: File, pedidoId?: string): Promise<string> {
+  try {
+    // Validar archivo antes de subir
+    if (!file) {
+      throw new Error('No se proporcionó archivo')
+    }
+    
+    if (!file.type.startsWith('image/')) {
+      throw new Error('El archivo debe ser una imagen')
+    }
+
+    // Generar nombre único para el archivo
+    const timestamp = Date.now()
+    const extension = file.name.split('.').pop()?.toLowerCase()
+    const fileName = pedidoId 
+      ? `pedido_${pedidoId}_${timestamp}.${extension}`
+      : `pedido_temp_${timestamp}.${extension}`
+
+    // Subir a bucket 'admin' en carpeta 'pedidos' como especificaste
+    const { data, error } = await supabase.storage
+      .from('admin')
+      .upload(`pedidos/${fileName}`, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (error) {
+      throw new Error(`Error del servidor: ${error.message}`)
+    }
+
+    if (!data) {
+      throw new Error('No se recibió respuesta del servidor')
+    }
+
+    // Obtener URL pública
+    const { data: urlData } = supabase.storage
+      .from('admin')
+      .getPublicUrl(`pedidos/${fileName}`)
+
+    if (!urlData.publicUrl) {
+      throw new Error('No se pudo generar la URL pública')
+    }
+
+    return urlData.publicUrl
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
+  try {
+    if (!imageUrl) {
+      throw new Error('No se proporcionó URL de imagen')
+    }
+    
+    // Extraer el path del archivo de la URL
+    const urlParts = imageUrl.split('/')
+    const fileName = urlParts[urlParts.length - 1]
+    
+    if (!fileName) {
+      throw new Error('No se pudo extraer el nombre del archivo de la URL')
+    }
+
+    // Eliminar del bucket 'admin' carpeta 'pedidos'
+    const { error } = await supabase.storage
+      .from('admin')
+      .remove([`pedidos/${fileName}`])
+
+    if (error) {
+      throw new Error(`Error del servidor: ${error.message}`)
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
+// ============================================
 // FUNCIONES ESPECÍFICAS DE COTIZACIONES
 // ============================================
 
