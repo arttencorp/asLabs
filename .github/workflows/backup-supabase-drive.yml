@@ -1,57 +1,83 @@
-name: Backup Diario a Google Drive
+name: Backup Diario de Base de Datos
 on:
   schedule:
     - cron: '30 5 * * *'
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   backup-database:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Configurar fecha
-        id: date
+      - name: Instalar herramientas necesarias (jq, psql)
+        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client
+
+      - name: Configurar variables de fecha y proyecto
+        id: config
         run: |
           echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
           echo "date_simple=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-      
-      - name: Instalar PostgreSQL Client
+          # Extrae el ID del proyecto de la URL de la base de datos
+          PROJECT_ID=$(echo "${{ secrets.SUPABASE_DATABASE_URL }}" | grep -o 'db\.[a-z0-9]*' | cut -d'.' -f2)
+          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
+          echo "PROJECT_ID: $PROJECT_ID"
+
+      - name: Autorizar IP del Runner en el firewall de Supabase
+        id: authorize_ip
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ steps.config.outputs.project_id }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client
-      
-      - name: Crear backup de Supabase
+          # 1. Obtenemos la IP pública actual del runner
+          RUNNER_IP=$(curl -s ifconfig.me)
+          echo "La IP del Runner es: $RUNNER_IP"
+          echo "runner_ip=$RUNNER_IP" >> $GITHUB_OUTPUT
+
+          # 2. Obtenemos las reglas de red actuales para no borrarlas
+          CURRENT_RULES_JSON=$(curl -s -X GET \
+            "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
+          
+          # Guardamos las reglas originales para restaurarlas después
+          echo "Original rules: $CURRENT_RULES_JSON"
+          echo "original_rules=$CURRENT_RULES_JSON" >> $GITHUB_OUTPUT
+
+          # 3. Creamos la nueva lista de IPs, añadiendo la nuestra
+          # Usamos jq para añadir la IP a la lista existente de forma segura
+          NEW_RULES_JSON=$(echo '$CURRENT_RULES_JSON' | jq --arg ip "$RUNNER_IP/32" '.dbAllowedCidrs += [$ip]')
+
+          # 4. Aplicamos las nuevas reglas
+          echo "Aplicando nuevas reglas de red..."
+          curl -s -X POST \
+            "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-raw "$NEW_RULES_JSON"
+          
+          # Damos un par de segundos para que la regla se propague
+          sleep 10
+
+      - name: Crear backup de la Base de Datos
         id: backup
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           echo "Iniciando backup..."
+          FILENAME="supabase-backup-${{ steps.config.outputs.date }}.sql"
+          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > $FILENAME
           
-          # Corrección: Extraer el host de la URL de la base de datos de forma segura
-          TEMP="${DATABASE_URL#*@}"
-          DB_HOST="${TEMP%%:*}"
+          # Comprimir el backup
+          tar -czf "$FILENAME.tar.gz" $FILENAME
           
-          echo "Host de la BD extraído: $DB_HOST"
-          if [ -z "$DB_HOST" ]; then
-            echo "ERROR: No se pudo extraer el DB_HOST de la DATABASE_URL."
-            exit 1
-          fi
-          
-          echo "54.163.223.160 $DB_HOST" | sudo tee -a /etc/hosts
-          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
-          tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
-          SIZE=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
+          SIZE=$(ls -lh "$FILENAME.tar.gz" | awk '{print $5}')
           echo "size_compressed=$SIZE" >> $GITHUB_OUTPUT
           echo "Backup creado: $SIZE"
       
-      - name: Subir backup a GitHub
+      - name: Subir backup como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: backup-${{ steps.date.outputs.date }}
-          path: supabase-backup-*.tar.gz
+          name: backup-${{ steps.config.outputs.date }}
+          path: "*.tar.gz"
           retention-days: 30
       
       - name: Enviar notificación de éxito
@@ -63,14 +89,32 @@ jobs:
           secure: true
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Backup Exitoso - ${{ steps.date.outputs.date_simple }}
+          subject: Backup Exitoso - ${{ steps.config.outputs.date_simple }}
           to: ${{ secrets.EMAIL_USERNAME }}
           from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
           body: |
-            El backup se completó exitosamente.
-            Tamaño: ${{ steps.backup.outputs.size_compressed }}
-            Puedes descargarlo desde GitHub Actions.
-      
-      - name: Limpiar
+            El backup de la base de datos se completó exitosamente.
+            Tamaño del archivo comprimido: ${{ steps.backup.outputs.size_compressed }}
+            Puedes descargarlo desde la sección de Artefactos en GitHub Actions.
+            
+      - name: Limpiar y restaurar firewall (SIEMPRE SE EJECUTA)
         if: always()
-        run: rm -f backup.sql *.tar.gz
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ steps.config.outputs.project_id }}
+          ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
+        run: |
+          echo "Limpiando archivos locales..."
+          rm -f *.sql *.tar.gz
+          
+          echo "Restaurando reglas originales del firewall..."
+          if [[ -n "$ORIGINAL_RULES" ]]; then
+            curl -s -X POST \
+              "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
+              -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data-raw '$ORIGINAL_RULES'
+            echo "Firewall restaurado a su estado original."
+          else
+            echo "No se encontraron reglas originales para restaurar, omitiendo."
+          fi
