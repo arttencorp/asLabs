@@ -30,8 +30,7 @@ jobs:
         run: |
           echo "Iniciando backup..."
           
-          # Hack para forzar IPv4
-          # ESTA ES LA LÍNEA CRÍTICA CORREGIDA: se usan '$' y '$' para capturar el host.
+          # <-- ESTA ES LA LÍNEA CORRECTA. FÍJATE EN LAS BARRAS INVERTIDAS Y PARÉNTESIS: $ y $
           DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
           
           echo "Host de la BD extraído: $DB_HOST"
