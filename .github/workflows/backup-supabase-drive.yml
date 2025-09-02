@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Instalar herramientas necesarias (jq, psql)
-        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client
+      - name: Instalar herramientas necesarias (jq, psql, dnsutils)
+        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client dnsutils
 
       - name: Configurar variables de fecha
         id: config
@@ -64,8 +64,9 @@ jobs:
         run: |
           DB_HOST=$(echo "$DATABASE_URL" | awk -F@ '{print $2}' | awk -F: '{print $1}')
           
-          # --- LA ÚNICA LÍNEA QUE CAMBIÓ: LA CORRECCIÓN FINAL ---
-          DB_IP=$(getent ahosts "$DB_HOST" | awk '/STREAM/ { print $1 }' | grep -v ':' | head -n 1)
+          # --- CORRECCIÓN FINAL Y DEFINITIVA ---
+          # Usamos 'dig' para pedir EXCLUSIVAMENTE la dirección IPv4 (A record)
+          DB_IP=$(dig +short A "$DB_HOST" | head -n 1)
           
           if [ -z "$DB_IP" ]; then
             echo "::error::No se pudo resolver la dirección IPv4 para el host de la base de datos: $DB_HOST"
@@ -120,13 +121,4 @@ jobs:
           rm -f *.sql *.tar.gz
           
           echo "Restaurando reglas originales del firewall..."
-          if [[ -n "$ORIGINAL_RULES" && "$ORIGINAL_RULES" != *"Cannot GET"* ]]; then
-            curl -s -X POST \
-              "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
-              -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
-              -H "Content-Type: application/json" \
-              -d "$ORIGINAL_RULES"
-            echo "Firewall restaurado a su estado original."
-          else
-            echo "No se encontraron reglas originales válidas para restaurar, omitiendo."
-          fi
+          if [[<span class="ml-2" /><span class="inline-block w-3 h-3 rounded-full bg-neutral-a12 align-middle mb-[0.1rem]" />
