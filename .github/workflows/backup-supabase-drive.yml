@@ -30,14 +30,15 @@ jobs:
         run: |
           echo "Iniciando backup..."
           
-          sudo apt-get install -y netcat-openbsd
-           
-          DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
-          nc -zv -4 $DB_HOST 5432 || echo "Advertencia: No se pudo verificar conexión"
-           
-          pg_dump -4 "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql || \
+          # Opción más simple: usar pg_dump directo
           pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
-           
+          
+          # Si falla por IPv6, intenta con una conexión TCP forzada
+          if [ $? -ne 0 ]; then
+            echo "Reintentando con conexión TCP..."
+            pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean --host=db.ntuvrqipgvhnuynjfzbx.supabase.co > backup.sql
+          fi
+          
           SIZE_ORIGINAL=$(ls -lh backup.sql | awk '{print $5}')
           echo "size_original=$SIZE_ORIGINAL" >> $GITHUB_OUTPUT
           tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
