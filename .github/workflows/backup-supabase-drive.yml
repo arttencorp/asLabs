@@ -153,117 +153,117 @@ jobs:
           # Verificar que las credenciales sean válidas JSON
           if ! python3 -m json.tool /tmp/credentials.json > /dev/null 2>&1; then
             echo "Error: Las credenciales de Google Drive no son JSON válido"
-            echo "google_drive_status=❌ Error de configuración" >> $GITHUB_OUTPUT
+            echo "google_drive_status=Error de configuración" >> $GITHUB_OUTPUT
             exit 0
           fi
           
           # Verificar que GOOGLE_DRIVE_FOLDER_ID esté configurado
           if [[ -z "${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}" ]]; then
             echo "Error: GOOGLE_DRIVE_FOLDER_ID no está configurado"
-            echo "google_drive_status=❌ Error de configuración" >> $GITHUB_OUTPUT
+            echo "google_drive_status=Error de configuración" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           echo "Creando script de subida a Google Drive..."
           cat > upload_to_drive.py << 'EOF'
-import os
-import json
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
-from googleapiclient.errors import HttpError
-from datetime import datetime
+          import os
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          from googleapiclient.errors import HttpError
+          from datetime import datetime
 
-def upload_to_drive():
-    try:
-        credentials = service_account.Credentials.from_service_account_file(
-            '/tmp/credentials.json',
-            scopes=['https://www.googleapis.com/auth/drive']
-        )
-        
-        service = build('drive', 'v3', credentials=credentials)
-        
-        import glob
-        backup_files = glob.glob('*.tar.gz')
-        if not backup_files:
-            print("No se encontró archivo de backup")
-            return False
-            
-        backup_file = backup_files[0]
-        print(f"Subiendo archivo: {backup_file}")
-        
-        file_size = os.path.getsize(backup_file)
-        print(f"Tamaño del archivo: {file_size} bytes")
-        
-        folder_id = os.environ.get('GOOGLE_DRIVE_FOLDER_ID')
-        if not folder_id:
-            print("Error: GOOGLE_DRIVE_FOLDER_ID no está configurado")
-            return False
-        
-        try:
-            folder_info = service.files().get(fileId=folder_id).execute()
-            print(f"Carpeta de destino: {folder_info.get('name', 'Sin nombre')}")
-        except HttpError as e:
-            if e.resp.status == 404:
-                print(f"Error: La carpeta con ID {folder_id} no existe o no es accesible")
-                return False
-            raise
-        
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        file_name = f"supabase_backup_{timestamp}.tar.gz"
-        
-        file_metadata = {
-            'name': file_name,
-            'parents': [folder_id]
-        }
-        
-        if file_size < 5 * 1024 * 1024:
-            media = MediaFileUpload(backup_file)
-            file = service.files().create(
-                body=file_metadata,
-                media_body=media,
-                fields='id,name,size,createdTime'
-            ).execute()
-        else:
-            media = MediaFileUpload(backup_file, resumable=True)
-            file = service.files().create(
-                body=file_metadata,
-                media_body=media,
-                fields='id,name,size,createdTime'
-            ).execute()
-        
-        print(f"Backup subido exitosamente a Google Drive")
-        print(f"ID: {file.get('id')}")
-        print(f"Nombre: {file.get('name')}")
-        print(f"Tamaño: {file.get('size')} bytes")
-        print(f"Creado: {file.get('createdTime')}")
-        return True
-        
-    except HttpError as e:
-        if e.resp.status == 403 and 'storageQuotaExceeded' in str(e):
-            print("Error: Sin cuota de almacenamiento. Verifica que:")
-            print("1. La cuenta de servicio tenga acceso a una unidad compartida")
-            print("2. O que esté usando delegación OAuth")
-            print("3. O que la carpeta de destino esté en una unidad compartida")
-        else:
-            print(f"Error HTTP: {e}")
-        return False
-    except Exception as e:
-        print(f"Error inesperado: {str(e)}")
-        return False
+          def upload_to_drive():
+              try:
+                  credentials = service_account.Credentials.from_service_account_file(
+                      '/tmp/credentials.json',
+                      scopes=['https://www.googleapis.com/auth/drive']
+                  )
+                  
+                  service = build('drive', 'v3', credentials=credentials)
+                  
+                  import glob
+                  backup_files = glob.glob('*.tar.gz')
+                  if not backup_files:
+                      print("No se encontró archivo de backup")
+                      return False
+                      
+                  backup_file = backup_files[0]
+                  print(f"Subiendo archivo: {backup_file}")
+                  
+                  file_size = os.path.getsize(backup_file)
+                  print(f"Tamaño del archivo: {file_size} bytes")
+                  
+                  folder_id = os.environ.get('GOOGLE_DRIVE_FOLDER_ID')
+                  if not folder_id:
+                      print("Error: GOOGLE_DRIVE_FOLDER_ID no está configurado")
+                      return False
+                  
+                  try:
+                      folder_info = service.files().get(fileId=folder_id).execute()
+                      print(f"Carpeta de destino: {folder_info.get('name', 'Sin nombre')}")
+                  except HttpError as e:
+                      if e.resp.status == 404:
+                          print(f"Error: La carpeta con ID {folder_id} no existe o no es accesible")
+                          return False
+                      raise
+                  
+                  timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                  file_name = f"supabase_backup_{timestamp}.tar.gz"
+                  
+                  file_metadata = {
+                      'name': file_name,
+                      'parents': [folder_id]
+                  }
+                  
+                  if file_size < 5 * 1024 * 1024:
+                      media = MediaFileUpload(backup_file)
+                      file = service.files().create(
+                          body=file_metadata,
+                          media_body=media,
+                          fields='id,name,size,createdTime'
+                      ).execute()
+                  else:
+                      media = MediaFileUpload(backup_file, resumable=True)
+                      file = service.files().create(
+                          body=file_metadata,
+                          media_body=media,
+                          fields='id,name,size,createdTime'
+                      ).execute()
+                  
+                  print(f"Backup subido exitosamente a Google Drive")
+                  print(f"ID: {file.get('id')}")
+                  print(f"Nombre: {file.get('name')}")
+                  print(f"Tamaño: {file.get('size')} bytes")
+                  print(f"Creado: {file.get('createdTime')}")
+                  return True
+                  
+              except HttpError as e:
+                  if e.resp.status == 403 and 'storageQuotaExceeded' in str(e):
+                      print("Error: Sin cuota de almacenamiento. Verifica que:")
+                      print("1. La cuenta de servicio tenga acceso a una unidad compartida")
+                      print("2. O que esté usando delegación OAuth")
+                      print("3. O que la carpeta de destino esté en una unidad compartida")
+                  else:
+                      print(f"Error HTTP: {e}")
+                  return False
+              except Exception as e:
+                  print(f"Error inesperado: {str(e)}")
+                  return False
 
-if __name__ == '__main__':
-    if upload_to_drive():
-        print("Proceso completado exitosamente")
-    else:
-        print("Proceso falló - continuando sin Google Drive")
-EOF
+          if __name__ == '__main__':
+              if upload_to_drive():
+                  print("Proceso completado exitosamente")
+              else:
+                  print("Proceso falló - continuando sin Google Drive")
+          EOF
 
           echo "Ejecutando subida a Google Drive..."
           if python3 upload_to_drive.py; then
-            echo "google_drive_status=✅ Exitoso" >> $GITHUB_OUTPUT
+            echo "google_drive_status=Exitoso" >> $GITHUB_OUTPUT
           else
-            echo "google_drive_status=⚠️ Falló (backup disponible en GitHub Actions)" >> $GITHUB_OUTPUT
+            echo "google_drive_status=Falló (backup disponible en GitHub Actions)" >> $GITHUB_OUTPUT
           fi
       
       - name: Subir backup como artefacto
@@ -289,8 +289,8 @@ EOF
             El backup de la base de datos se completó exitosamente.
             Tamaño del archivo comprimido: ${{ steps.backup.outputs.size_compressed }}
             
-            📦 GitHub Actions: Descárgalo desde la sección de Artefactos
-            ☁️ Google Drive: ${{ steps.drive_upload.outputs.google_drive_status }}
+            GitHub Actions: Descárgalo desde la sección de Artefactos
+            Google Drive: ${{ steps.drive_upload.outputs.google_drive_status }}
             
             Fecha del backup: ${{ steps.config.outputs.date }}
             
