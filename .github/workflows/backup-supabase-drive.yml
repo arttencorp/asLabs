@@ -6,7 +6,8 @@ on:
 
 jobs:
   backup-database:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    timeout-minutes: 30
     
     steps:
       - name: Checkout
@@ -18,51 +19,114 @@ jobs:
           echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
           echo "date_simple=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       
-      - name: Instalar Supabase CLI
+      - name: Instalar PostgreSQL Client
         run: |
-          wget -qO- https://github.com/supabase/cli/releases/download/v1.123.4/supabase_linux_amd64.tar.gz | tar xvz
-          sudo mv supabase /usr/local/bin
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-12
       
-      - name: Crear backup con Supabase CLI
-        id: backup
+      - name: Test conexión a Supabase
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
+          echo "Probando conexión..."
+          export PGCONNECT_TIMEOUT=10
+          psql "$DATABASE_URL" -c "SELECT version();" || echo "Advertencia: No se pudo verificar la conexión"
+      
+      - name: Crear backup de Supabase
+        id: backup
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+          PGCONNECT_TIMEOUT: 120
+        run: |
           echo "Iniciando backup..."
           
-          supabase db dump --db-url "${DATABASE_URL}" -f backup.sql
+          pg_dump "$DATABASE_URL" \
+            --verbose \
+            --no-owner \
+            --no-privileges \
+            --no-acl \
+            --clean \
+            --if-exists \
+            --quote-all-identifiers \
+            --no-comments \
+            --no-publications \
+            --no-security-labels \
+            --no-subscriptions \
+            --no-tablespaces \
+            --no-unlogged-table-data \
+            --data-only=false \
+            -f backup.sql
           
-          if [ ! -f backup.sql ] || [ ! -s backup.sql ]; then
-            echo "ERROR: No se pudo crear el backup"
+          if [ ! -f backup.sql ]; then
+            echo "ERROR: El archivo backup.sql no se creó"
+            exit 1
+          fi
+          
+          if [ ! -s backup.sql ]; then
+            echo "ERROR: El archivo backup.sql está vacío"
             exit 1
           fi
           
           SIZE_ORIGINAL=$(ls -lh backup.sql | awk '{print $5}')
           echo "size_original=$SIZE_ORIGINAL" >> $GITHUB_OUTPUT
+          
+          echo "Comprimiendo backup..."
           tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
-
+          
           SIZE_COMPRESSED=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
           echo "size_compressed=$SIZE_COMPRESSED" >> $GITHUB_OUTPUT
           
-          echo "Backup creado: $SIZE_COMPRESSED (original: $SIZE_ORIGINAL)"
+          echo "Backup creado exitosamente:"
+          echo "- Original: $SIZE_ORIGINAL"
+          echo "- Comprimido: $SIZE_COMPRESSED"
       
       - name: Instalar rclone
         run: |
-          curl https://rclone.org/install.sh | sudo bash
+          echo "Instalando rclone..."
+          curl -s https://rclone.org/install.sh | sudo bash
+          rclone version
       
       - name: Configurar rclone para Google Drive
         run: |
+          echo "Configurando rclone..."
           mkdir -p ~/.config/rclone
           echo '${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}' > sa.json
+          
+          # Verificar que el archivo JSON es válido
+          if ! jq empty sa.json 2>/dev/null; then
+            echo "ERROR: Las credenciales de Google Drive no son JSON válido"
+            exit 1
+          fi
+          
           rclone config create gdrive drive \
             scope=drive \
-            service_account_file=sa.json
+            service_account_file=$(pwd)/sa.json \
+            --quiet
+          
+          echo "Configuración completada"
       
       - name: Subir backup a Google Drive
         run: |
-          rclone copy supabase-backup-${{ steps.date.outputs.date }}.tar.gz gdrive:${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}/
+          echo "Subiendo a Google Drive..."
+          
+          # Verificar que el archivo existe
+          if [ ! -f supabase-backup-${{ steps.date.outputs.date }}.tar.gz ]; then
+            echo "ERROR: No se encontró el archivo de backup"
+            exit 1
+          fi
+          
+          # Subir archivo
+          rclone copy \
+            supabase-backup-${{ steps.date.outputs.date }}.tar.gz \
+            gdrive:${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}/ \
+            --progress \
+            --stats 10s
+          
+          # Verificar que se subió
+          rclone ls gdrive:${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}/ | grep "supabase-backup-${{ steps.date.outputs.date }}.tar.gz"
+          
           echo "Backup subido exitosamente a Google Drive"
-          rm sa.json
+          rm -f sa.json
       
       - name: Enviar notificación de éxito
         if: success()
@@ -92,7 +156,12 @@ jobs:
       
       - name: Limpiar archivos temporales
         if: always()
-        run: rm -f backup.sql *.tar.gz sa.json
+        run: |
+          echo "Limpiando archivos temporales..."
+          rm -f backup.sql
+          rm -f *.tar.gz
+          rm -f sa.json
+          echo "Limpieza completada"
       
       - name: Enviar notificación de error
         if: failure()
@@ -117,8 +186,4 @@ jobs:
             Por favor revisa los logs inmediatamente:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
             
-            Este error requiere atención inmediata para asegurar la integridad de los backups.
-      
-      - name: Notificar éxito final
-        if: success()
-        run: echo "Backup completado y notificación enviada"
+            Este error requiere atención inmediata.
