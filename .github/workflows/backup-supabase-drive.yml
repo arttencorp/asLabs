@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Instalar herramientas necesarias (jq, psql, dnsutils)
-        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client dnsutils
+      - name: Instalar herramientas necesarias (jq, psql)
+        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client
 
       - name: Configurar variables de fecha
         id: config
@@ -26,8 +26,7 @@ jobs:
         run: |
           RUNNER_IP=$(curl -s ifconfig.me)
           echo "La IP del Runner es: $RUNNER_IP"
-          echo "runner_ip=$RUNNER_IP" >> $GITHUB_OUTPUT
-
+          
           CURRENT_RULES_JSON=$(curl -s -f -X GET \
             "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" \
             -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
@@ -37,7 +36,6 @@ jobs:
             exit 1
           fi
           
-          echo "Original rules: $CURRENT_RULES_JSON"
           echo "original_rules=$CURRENT_RULES_JSON" >> $GITHUB_OUTPUT
 
           NEW_RULES_JSON=$(echo "$CURRENT_RULES_JSON" | jq --arg ip "$RUNNER_IP/32" '.dbAllowedCidrs += [$ip]')
@@ -48,36 +46,25 @@ jobs:
             -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             --data-raw "$NEW_RULES_JSON"
-
+          
           if [ $? -ne 0 ]; then
             echo "::error::Falló al aplicar las nuevas reglas de red."
             exit 1
           fi
-          
-          echo "Esperando 15 segundos para que la regla de red se aplique..."
+
+          echo "Esperando 15 segundos para que la regla se aplique..."
           sleep 15
 
       - name: Crear backup de la Base de Datos
         id: backup
         env:
+          # Usamos la URL directa (sin pooler)
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
-          DB_HOST=$(echo "$DATABASE_URL" | awk -F@ '{print $2}' | awk -F: '{print $1}')
-          
-          # --- CORRECCIÓN FINAL Y DEFINITIVA ---
-          # Usamos 'dig' para pedir EXCLUSIVAMENTE la dirección IPv4 (A record)
-          DB_IP=$(dig +short A "$DB_HOST" | head -n 1)
-          
-          if [ -z "$DB_IP" ]; then
-            echo "::error::No se pudo resolver la dirección IPv4 para el host de la base de datos: $DB_HOST"
-            exit 1
-          fi
-
-          echo "$DB_IP $DB_HOST" | sudo tee -a /etc/hosts
-          echo "Regla de /etc/hosts añadida para forzar IPv4: $DB_IP -> $DB_HOST"
-
           echo "Iniciando backup..."
           FILENAME="supabase-backup-${{ steps.config.outputs.date }}.sql"
+          
+          # La conexión directa debería resolver el problema de IPv6
           pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > $FILENAME
           
           tar -czf "$FILENAME.tar.gz" $FILENAME
@@ -121,4 +108,13 @@ jobs:
           rm -f *.sql *.tar.gz
           
           echo "Restaurando reglas originales del firewall..."
-          if [[<span class="ml-2" /><span class="inline-block w-3 h-3 rounded-full bg-neutral-a12 align-middle mb-[0.1rem]" />
+          if [[ -n "$ORIGINAL_RULES" && "$ORIGINAL_RULES" != *"Cannot GET"* ]]; then
+            curl -s -X POST \
+              "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
+              -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "$ORIGINAL_RULES"
+            echo "Firewall restaurado a su estado original."
+          else
+            echo "No se encontraron reglas originales válidas para restaurar, omitiendo."
+          fi
