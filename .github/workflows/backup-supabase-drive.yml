@@ -23,7 +23,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
       
-            - name: Crear backup de Supabase
+      - name: Crear backup de Supabase
         id: backup
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
@@ -31,16 +31,15 @@ jobs:
           echo "Iniciando backup..."
           
           # Hack para forzar IPv4 (Corregido)
-          # The original sed command was missing a capture group. The $ $ creates it.
+          # El comando sed ahora usa $ y $ para crear un grupo de captura y extraer el host.
           DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
-          echo "Extracted DB Host: $DB_HOST" # Added for debugging
+          echo "Host de la BD extraído: $DB_HOST"
           
-          # This line is for your specific IPv4 hack.
-          # Ensure the IP address and the need for this hack are still valid.
+          # Asegúrate de que la IP y la necesidad de este hack sigan siendo válidas.
           if [ -n "$DB_HOST" ]; then
             echo "54.163.223.160 $DB_HOST" | sudo tee -a /etc/hosts
           else
-            echo "DB_HOST could not be extracted. Skipping hosts file modification."
+            echo "No se pudo extraer el DB_HOST. Omitiendo la modificación del archivo hosts."
             exit 1
           fi
 
@@ -74,7 +73,7 @@ jobs:
           from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
           body: |
             El backup se completó exitosamente.
-            Tamaño: ${{ steps.backup.size_compressed }}
+            Tamaño: ${{ steps.backup.outputs.size_compressed }}
             Puedes descargarlo desde GitHub Actions.
       
       - name: Limpiar
