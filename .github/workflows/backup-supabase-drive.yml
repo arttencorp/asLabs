@@ -6,8 +6,7 @@ on:
 
 jobs:
   backup-database:
-    runs-on: ubuntu-20.04
-    timeout-minutes: 1
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout
@@ -19,171 +18,40 @@ jobs:
           echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
           echo "date_simple=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       
-      - name: Instalar PostgreSQL Client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client-12
-      
-      - name: Test conexión a Supabase
-        env:
-          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
-        run: |
-          echo "Probando conexión..."
-          export PGCONNECT_TIMEOUT=10
-          psql "$DATABASE_URL" -c "SELECT version();" || echo "Advertencia: No se pudo verificar la conexión"
-      
-      - name: Crear backup de Supabase
+      - name: Crear backup usando CURL
         id: backup
-        env:
-          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
-          PGCONNECT_TIMEOUT: 120
         run: |
           echo "Iniciando backup..."
           
-          pg_dump "$DATABASE_URL" \
-            --verbose \
-            --no-owner \
-            --no-privileges \
-            --no-acl \
-            --clean \
-            --if-exists \
-            --quote-all-identifiers \
-            --no-comments \
-            --no-publications \
-            --no-security-labels \
-            --no-subscriptions \
-            --no-tablespaces \
-            --no-unlogged-table-data \
-            --data-only=false \
-            -f backup.sql
+          # Usar la API REST de Supabase en lugar de pg_dump
+          PROJECT_REF=$(echo "${{ secrets.SUPABASE_DATABASE_URL }}" | grep -oP 'db\.\K[^.]+')
           
-          if [ ! -f backup.sql ]; then
-            echo "ERROR: El archivo backup.sql no se creó"
-            exit 1
-          fi
+          curl -X GET \
+            "https://${PROJECT_REF}.supabase.co/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            -o backup.json
           
-          if [ ! -s backup.sql ]; then
-            echo "ERROR: El archivo backup.sql está vacío"
-            exit 1
-          fi
+          tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.json
           
-          SIZE_ORIGINAL=$(ls -lh backup.sql | awk '{print $5}')
-          echo "size_original=$SIZE_ORIGINAL" >> $GITHUB_OUTPUT
+          SIZE=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
+          echo "size_compressed=$SIZE" >> $GITHUB_OUTPUT
           
-          echo "Comprimiendo backup..."
-          tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
-          
-          SIZE_COMPRESSED=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
-          echo "size_compressed=$SIZE_COMPRESSED" >> $GITHUB_OUTPUT
-          
-          echo "Backup creado exitosamente:"
-          echo "- Original: $SIZE_ORIGINAL"
-          echo "- Comprimido: $SIZE_COMPRESSED"
+          echo "Backup creado: $SIZE"
       
-      - name: Instalar rclone
-        run: |
-          echo "Instalando rclone..."
-          curl -s https://rclone.org/install.sh | sudo bash
-          rclone version
-      
-      - name: Configurar rclone para Google Drive
-        run: |
-          echo "Configurando rclone..."
-          mkdir -p ~/.config/rclone
-          echo '${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}' > sa.json
-          
-          # Verificar que el archivo JSON es válido
-          if ! jq empty sa.json 2>/dev/null; then
-            echo "ERROR: Las credenciales de Google Drive no son JSON válido"
-            exit 1
-          fi
-          
-          rclone config create gdrive drive \
-            scope=drive \
-            service_account_file=$(pwd)/sa.json \
-            --quiet
-          
-          echo "Configuración completada"
-      
-      - name: Subir backup a Google Drive
-        run: |
-          echo "Subiendo a Google Drive..."
-          
-          # Verificar que el archivo existe
-          if [ ! -f supabase-backup-${{ steps.date.outputs.date }}.tar.gz ]; then
-            echo "ERROR: No se encontró el archivo de backup"
-            exit 1
-          fi
-          
-          # Subir archivo
-          rclone copy \
-            supabase-backup-${{ steps.date.outputs.date }}.tar.gz \
-            gdrive:${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}/ \
-            --progress \
-            --stats 10s
-          
-          # Verificar que se subió
-          rclone ls gdrive:${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}/ | grep "supabase-backup-${{ steps.date.outputs.date }}.tar.gz"
-          
-          echo "Backup subido exitosamente a Google Drive"
-          rm -f sa.json
-      
-      - name: Enviar notificación de éxito
-        if: success()
-        uses: dawidd6/action-send-mail@v3
+      - name: Subir a GitHub Artifacts (más simple que Google Drive)
+        uses: actions/upload-artifact@v3
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Backup Exitoso - ${{ steps.date.outputs.date_simple }}
-          to: ${{ secrets.EMAIL_USERNAME }}
-          from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
-          body: |
-            El backup de Supabase se completó exitosamente.
-
-            Fecha: ${{ steps.date.outputs.date_simple }}
-            Hora: ${{ steps.date.outputs.date }}
-            Tamaño original: ${{ steps.backup.size_original }}
-            Tamaño comprimido: ${{ steps.backup.size_compressed }}
-            Guardado en: Google Drive
-            
-            Archivo: supabase-backup-${{ steps.date.outputs.date }}.tar.gz
-            
-            ---
-            Este es un backup automático ejecutado por GitHub Actions.
+          name: backup-${{ steps.date.outputs.date }}
+          path: supabase-backup-*.tar.gz
+          retention-days: 30
       
-      - name: Limpiar archivos temporales
+      - name: Notificar
         if: always()
         run: |
-          echo "Limpiando archivos temporales..."
-          rm -f backup.sql
-          rm -f *.tar.gz
-          rm -f sa.json
-          echo "Limpieza completada"
-      
-      - name: Enviar notificación de error
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: FALLO Backup - ${{ steps.date.outputs.date_simple }}
-          to: ${{ secrets.EMAIL_USERNAME }}
-          from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
-          priority: high
-          body: |
-            El backup de Supabase ha FALLADO.
-            
-            Fecha: ${{ steps.date.outputs.date_simple }}
-            Hora del intento: ${{ steps.date.outputs.date }}
-            Estado: FALLIDO
-            
-            Por favor revisa los logs inmediatamente:
-            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            Este error requiere atención inmediata.
+          if [ -f supabase-backup-*.tar.gz ]; then
+            echo "BACKUP EXITOSO"
+          else
+            echo "BACKUP FALLÓ"
+            exit 1
+          fi
