@@ -30,18 +30,19 @@ jobs:
         run: |
           echo "Iniciando backup..."
           
-          # Hack para forzar IPv4 (Corregido)
-          # El comando sed ahora usa $ y $ para crear un grupo de captura y extraer el host.
+          # Hack para forzar IPv4
+          # ESTA ES LA LÍNEA CRÍTICA CORREGIDA: se usan '$' y '$' para capturar el host.
           DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
+          
           echo "Host de la BD extraído: $DB_HOST"
           
-          # Asegúrate de que la IP y la necesidad de este hack sigan siendo válidas.
-          if [ -n "$DB_HOST" ]; then
-            echo "54.163.223.160 $DB_HOST" | sudo tee -a /etc/hosts
-          else
-            echo "No se pudo extraer el DB_HOST. Omitiendo la modificación del archivo hosts."
+          if [ -z "$DB_HOST" ]; then
+            echo "ERROR: No se pudo extraer el DB_HOST de la DATABASE_URL."
             exit 1
           fi
+
+          # Se aplica el hack si el host fue extraído correctamente
+          echo "54.163.223.160 $DB_HOST" | sudo tee -a /etc/hosts
 
           pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
           
