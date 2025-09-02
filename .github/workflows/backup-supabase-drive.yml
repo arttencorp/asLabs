@@ -44,18 +44,23 @@ jobs:
           
           echo "Backup creado: $SIZE_COMPRESSED (original: $SIZE_ORIGINAL)"
       
-      - name: Autenticar con Google
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+      - name: Instalar rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
       
-      - name: Subir a Google Drive
-        uses: adityak74/google-drive-upload-action@main
-        with:
-          credentials: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
-          filename: supabase-backup-${{ steps.date.outputs.date }}.tar.gz
-          folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
-          name: supabase-backup-${{ steps.date.outputs.date }}.tar.gz
+      - name: Configurar rclone para Google Drive
+        run: |
+          mkdir -p ~/.config/rclone
+          echo '${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}' > sa.json
+          rclone config create gdrive drive \
+            scope=drive \
+            service_account_file=sa.json
+      
+      - name: Subir backup a Google Drive
+        run: |
+          rclone copy supabase-backup-${{ steps.date.outputs.date }}.tar.gz gdrive:${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}/
+          echo "Backup subido exitosamente a Google Drive"
+          rm sa.json
       
       - name: Enviar notificación de éxito
         if: success()
@@ -70,7 +75,7 @@ jobs:
           to: ${{ secrets.EMAIL_USERNAME }}
           from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
           body: |
-            ¡El backup de Supabase se completó exitosamente!
+            El backup de Supabase se completó exitosamente.
 
             Fecha: ${{ steps.date.outputs.date_simple }}
             Hora: ${{ steps.date.outputs.date }}
@@ -85,7 +90,7 @@ jobs:
       
       - name: Limpiar archivos temporales
         if: always()
-        run: rm -f backup.sql *.tar.gz
+        run: rm -f backup.sql *.tar.gz sa.json
       
       - name: Enviar notificación de error
         if: failure()
@@ -101,7 +106,7 @@ jobs:
           from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
           priority: high
           body: |
-            ¡El backup de Supabase ha FALLADO!
+            El backup de Supabase ha FALLADO.
             
             Fecha: ${{ steps.date.outputs.date_simple }}
             Hora del intento: ${{ steps.date.outputs.date }}
@@ -114,4 +119,4 @@ jobs:
       
       - name: Notificar éxito final
         if: success()
-        run: echo "Backup completado y notificación enviada!"
+        run: echo "Backup completado y notificación enviada"
