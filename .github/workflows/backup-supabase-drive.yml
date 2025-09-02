@@ -29,12 +29,17 @@ jobs:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           echo "Iniciando backup..."
-          DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
+          
+          # Corrección: Extraer el host de la URL de la base de datos de forma segura
+          TEMP="${DATABASE_URL#*@}"
+          DB_HOST="${TEMP%%:*}"
+          
           echo "Host de la BD extraído: $DB_HOST"
           if [ -z "$DB_HOST" ]; then
             echo "ERROR: No se pudo extraer el DB_HOST de la DATABASE_URL."
             exit 1
           fi
+          
           echo "54.163.223.160 $DB_HOST" | sudo tee -a /etc/hosts
           pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
           tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
