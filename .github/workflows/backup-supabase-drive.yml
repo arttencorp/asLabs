@@ -176,48 +176,65 @@ jobs:
 
           def upload_to_drive():
               try:
+                  print("Cargando credenciales...")
                   credentials = service_account.Credentials.from_service_account_file(
                       '/tmp/credentials.json',
                       scopes=['https://www.googleapis.com/auth/drive']
                   )
                   
+                  print("Construyendo cliente de Google Drive...")
                   service = build('drive', 'v3', credentials=credentials)
                   
                   import glob
                   backup_files = glob.glob('*.tar.gz')
                   if not backup_files:
-                      print("No se encontró archivo de backup")
+                      print("ERROR: No se encontró archivo de backup")
                       return False
                       
                   backup_file = backup_files[0]
-                  print(f"Subiendo archivo: {backup_file}")
+                  print(f"Archivo encontrado: {backup_file}")
                   
                   file_size = os.path.getsize(backup_file)
-                  print(f"Tamaño del archivo: {file_size} bytes")
+                  print(f"Tamaño del archivo: {file_size} bytes ({file_size/1024:.1f} KB)")
                   
                   folder_id = os.environ.get('GOOGLE_DRIVE_FOLDER_ID')
                   if not folder_id:
-                      print("Error: GOOGLE_DRIVE_FOLDER_ID no está configurado")
+                      print("ERROR: GOOGLE_DRIVE_FOLDER_ID no está configurado")
                       return False
                   
+                  print(f"Verificando carpeta de destino: {folder_id}")
                   try:
                       folder_info = service.files().get(fileId=folder_id).execute()
-                      print(f"Carpeta de destino: {folder_info.get('name', 'Sin nombre')}")
+                      print(f"EXITO: Carpeta encontrada: {folder_info.get('name', 'Sin nombre')}")
                   except HttpError as e:
+                      print(f"ERROR al acceder a la carpeta: {e}")
                       if e.resp.status == 404:
-                          print(f"Error: La carpeta con ID {folder_id} no existe o no es accesible")
+                          print(f"La carpeta con ID {folder_id} no existe o no es accesible")
                           return False
                       raise
                   
+                  # Verificar permisos de escritura
+                  print("Verificando permisos de escritura en la carpeta...")
+                  try:
+                      permissions = service.permissions().list(fileId=folder_id).execute()
+                      print(f"Permisos encontrados: {len(permissions.get('permissions', []))} permisos")
+                      for perm in permissions.get('permissions', []):
+                          print(f"   - Tipo: {perm.get('type')}, Rol: {perm.get('role')}")
+                  except HttpError as e:
+                      print(f"ADVERTENCIA: No se pudieron verificar permisos: {e}")
+                  
                   timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                   file_name = f"supabase_backup_{timestamp}.tar.gz"
+                  print(f"Nombre del archivo: {file_name}")
                   
                   file_metadata = {
                       'name': file_name,
                       'parents': [folder_id]
                   }
                   
+                  print("Iniciando subida...")
                   if file_size < 5 * 1024 * 1024:
+                      print("Usando subida simple (archivo < 5MB)")
                       media = MediaFileUpload(backup_file)
                       file = service.files().create(
                           body=file_metadata,
@@ -225,6 +242,7 @@ jobs:
                           fields='id,name,size,createdTime'
                       ).execute()
                   else:
+                      print("Usando subida resumible (archivo > 5MB)")
                       media = MediaFileUpload(backup_file, resumable=True)
                       file = service.files().create(
                           body=file_metadata,
@@ -232,7 +250,7 @@ jobs:
                           fields='id,name,size,createdTime'
                       ).execute()
                   
-                  print(f"Backup subido exitosamente a Google Drive")
+                  print(f"EXITO: Backup subido exitosamente a Google Drive")
                   print(f"ID: {file.get('id')}")
                   print(f"Nombre: {file.get('name')}")
                   print(f"Tamaño: {file.get('size')} bytes")
@@ -240,16 +258,31 @@ jobs:
                   return True
                   
               except HttpError as e:
-                  if e.resp.status == 403 and 'storageQuotaExceeded' in str(e):
-                      print("Error: Sin cuota de almacenamiento. Verifica que:")
-                      print("1. La cuenta de servicio tenga acceso a una unidad compartida")
-                      print("2. O que esté usando delegación OAuth")
-                      print("3. O que la carpeta de destino esté en una unidad compartida")
+                  error_details = e.content.decode() if hasattr(e, 'content') else str(e)
+                  print(f"ERROR HTTP {e.resp.status}: {error_details}")
+                  
+                  if e.resp.status == 403:
+                      if 'storageQuotaExceeded' in str(e):
+                          print("ERROR: Sin cuota de almacenamiento. Verifica que:")
+                          print("   1. La cuenta de servicio tenga acceso a una unidad compartida")
+                          print("   2. O que esté usando delegación OAuth")
+                          print("   3. O que la carpeta de destino esté en una unidad compartida")
+                      elif 'insufficientPermissions' in str(e):
+                          print("ERROR: Permisos insuficientes. La cuenta de servicio necesita:")
+                          print("   1. Permisos de 'Editor' en la carpeta de destino")
+                          print("   2. O ser propietaria de la carpeta")
+                      else:
+                          print(f"ERROR de permisos: {error_details}")
+                  elif e.resp.status == 404:
+                      print(f"ERROR: La carpeta con ID no existe o no es accesible")
                   else:
-                      print(f"Error HTTP: {e}")
+                      print(f"ERROR de API: {error_details}")
                   return False
               except Exception as e:
-                  print(f"Error inesperado: {str(e)}")
+                  print(f"ERROR inesperado: {str(e)}")
+                  print(f"Tipo de error: {type(e).__name__}")
+                  import traceback
+                  print(f"Stack trace: {traceback.format_exc()}")
                   return False
 
           if __name__ == '__main__':
