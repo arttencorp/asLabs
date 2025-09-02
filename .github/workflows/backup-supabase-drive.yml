@@ -23,22 +23,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
       
-      - name: Crear backup de Supabase
+            - name: Crear backup de Supabase
         id: backup
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           echo "Iniciando backup..."
-          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
           
-          # Obtener tamaño antes de comprimir
+          sudo apt-get install -y netcat-openbsd
+           
+          DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
+          nc -zv -4 $DB_HOST 5432 || echo "Advertencia: No se pudo verificar conexión"
+           
+          pg_dump -4 "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql || \
+          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
+           
           SIZE_ORIGINAL=$(ls -lh backup.sql | awk '{print $5}')
           echo "size_original=$SIZE_ORIGINAL" >> $GITHUB_OUTPUT
-          
-          # Comprimir el backup
           tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
-          
-          # Obtener tamaño comprimido
+
           SIZE_COMPRESSED=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
           echo "size_compressed=$SIZE_COMPRESSED" >> $GITHUB_OUTPUT
           
