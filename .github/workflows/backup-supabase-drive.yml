@@ -12,30 +12,18 @@ jobs:
       - name: Instalar herramientas necesarias (jq, psql)
         run: sudo apt-get update && sudo apt-get install -y jq postgresql-client
 
-      - name: Configurar variables de fecha y proyecto
+      - name: Configurar variables de fecha
         id: config
-        env:
-          # CORRECCIÓN 1: Pasamos la URL como variable de entorno
-          SUPABASE_URL_ENV: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
           echo "date_simple=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-          
-          # Extrae el ID del proyecto desde la variable de entorno
-          PROJECT_ID=$(echo "$SUPABASE_URL_ENV" | grep -o 'db\.[a-z0-9]*' | cut -d'.' -f2)
-          if [ -z "$PROJECT_ID" ]; then
-            echo "::error::No se pudo extraer el PROJECT_ID de la URL de la base de datos."
-            exit 1
-          fi
-          
-          echo "project_id=$PROJECT_ID" >> $GITHUB_OUTPUT
-          echo "PROJECT_ID extraído: $PROJECT_ID"
 
       - name: Autorizar IP del Runner en el firewall de Supabase
         id: authorize_ip
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          PROJECT_ID: ${{ steps.config.outputs.project_id }}
+          # CORRECCIÓN: Usamos el nuevo secreto directamente
+          PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
         run: |
           RUNNER_IP=$(curl -s ifconfig.me)
           echo "La IP del Runner es: $RUNNER_IP"
@@ -46,25 +34,29 @@ jobs:
             -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
           
           if [ $? -ne 0 ]; then
-            echo "::error::Falló la obtención de las reglas de red. ¿El token de acceso es correcto?"
+            echo "::error::Falló la obtención de las reglas de red. ¿El PROJECT_ID y el ACCESS_TOKEN son correctos?"
             exit 1
           fi
           
           echo "Original rules: $CURRENT_RULES_JSON"
           echo "original_rules=$CURRENT_RULES_JSON" >> $GITHUB_OUTPUT
 
-          # CORRECCIÓN 2: Quitamos las comillas simples de '$CURRENT_RULES_JSON'
           NEW_RULES_JSON=$(echo "$CURRENT_RULES_JSON" | jq --arg ip "$RUNNER_IP/32" '.dbAllowedCidrs += [$ip]')
 
-          echo "Aplicando nuevas reglas de red..."
-          curl -s -X POST \
+          echo "Aplicando nuevas reglas de red para permitir la IP: $RUNNER_IP..."
+          curl -s -f -X POST \
             "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
             -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             --data-raw "$NEW_RULES_JSON"
+
+          if [ $? -ne 0 ]; then
+            echo "::error::Falló al aplicar las nuevas reglas de red."
+            exit 1
+          fi
           
-          echo "Esperando 10 segundos para que la regla de red se aplique..."
-          sleep 10
+          echo "Esperando 15 segundos para que la regla de red se aplique..."
+          sleep 15
 
       - name: Crear backup de la Base de Datos
         id: backup
@@ -109,7 +101,7 @@ jobs:
         if: always()
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          PROJECT_ID: ${{ steps.config.outputs.project_id }}
+          PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
           ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
         run: |
           echo "Limpiando archivos locales..."
