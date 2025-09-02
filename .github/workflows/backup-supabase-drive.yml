@@ -25,10 +25,12 @@ jobs:
       
       - name: Crear backup con Supabase CLI
         id: backup
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           echo "Iniciando backup..."
           
-          supabase db dump --db-url "${{ secrets.SUPABASE_DATABASE_URL }}" -f backup.sql
+          supabase db dump --db-url "${DATABASE_URL}" -f backup.sql
           
           if [ ! -f backup.sql ] || [ ! -s backup.sql ]; then
             echo "ERROR: No se pudo crear el backup"
