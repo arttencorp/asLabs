@@ -23,7 +23,10 @@ jobs:
           
           # Actualizar e instalar PostgreSQL 17 client
           sudo apt-get update
-          sudo apt-get install -y postgresql-client-17
+          sudo apt-get install -y postgresql-client-17 python3-pip
+          
+          # Instalar Google Drive API
+          pip3 install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
           
           # Verificar instalación
           echo "Versión de pg_dump instalada:"
@@ -137,6 +140,75 @@ jobs:
           echo "size_compressed=$SIZE" >> $GITHUB_OUTPUT
           echo "Backup creado exitosamente: $SIZE"
       
+      - name: Subir backup a Google Drive
+        env:
+          GOOGLE_DRIVE_CREDENTIALS: ${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+        run: |
+          echo "Configurando credenciales de Google Drive..."
+          echo '${{ secrets.GOOGLE_DRIVE_CREDENTIALS }}' > /tmp/credentials.json
+          
+          echo "Creando script de subida a Google Drive..."
+          cat > upload_to_drive.py << 'EOF'
+          import os
+          import json
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          from datetime import datetime
+          
+          def upload_to_drive():
+              # Cargar credenciales
+              credentials = service_account.Credentials.from_service_account_file(
+                  '/tmp/credentials.json',
+                  scopes=['https://www.googleapis.com/auth/drive.file']
+              )
+              
+              # Crear servicio de Drive
+              service = build('drive', 'v3', credentials=credentials)
+              
+              # Buscar el archivo backup
+              import glob
+              backup_files = glob.glob('*.tar.gz')
+              if not backup_files:
+                  print("No se encontró archivo de backup")
+                  return False
+                  
+              backup_file = backup_files[0]
+              print(f"Subiendo archivo: {backup_file}")
+              
+              # Configurar metadata del archivo
+              file_metadata = {
+                  'name': backup_file,
+                  'parents': [os.environ.get('GOOGLE_DRIVE_FOLDER_ID')]
+              }
+              
+              # Subir archivo
+              media = MediaFileUpload(backup_file, resumable=True)
+              file = service.files().create(
+                  body=file_metadata,
+                  media_body=media,
+                  fields='id'
+              ).execute()
+              
+              print(f"Archivo subido exitosamente. ID: {file.get('id')}")
+              return True
+          
+          if __name__ == '__main__':
+              try:
+                  if upload_to_drive():
+                      print("✅ Backup subido a Google Drive exitosamente")
+                  else:
+                      print("❌ Error al subir backup a Google Drive")
+                      exit(1)
+              except Exception as e:
+                  print(f"❌ Error: {str(e)}")
+                  exit(1)
+          EOF
+          
+          echo "Ejecutando subida a Google Drive..."
+          python3 upload_to_drive.py
+      
       - name: Subir backup como artefacto
         uses: actions/upload-artifact@v4
         with:
@@ -159,7 +231,11 @@ jobs:
           body: |
             El backup de la base de datos se completó exitosamente.
             Tamaño del archivo comprimido: ${{ steps.backup.outputs.size_compressed }}
-            Puedes descargarlo desde la sección de Artefactos en GitHub Actions.
+            
+            📦 GitHub Actions: Descárgalo desde la sección de Artefactos
+            ☁️ Google Drive: Subido automáticamente a la carpeta configurada
+            
+            Fecha del backup: ${{ steps.config.outputs.date }}
             
       - name: Limpiar y restaurar firewall (SIEMPRE SE EJECUTA)
         if: always()
@@ -169,7 +245,7 @@ jobs:
           ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
         run: |
           echo "Limpiando archivos locales..."
-          rm -f *.sql *.tar.gz
+          rm -f *.sql *.tar.gz upload_to_drive.py /tmp/credentials.json
           
           echo "Restaurando reglas originales del firewall..."
           if [[ -n "$ORIGINAL_RULES" && "$ORIGINAL_RULES" != *"Cannot GET"* ]]; then
