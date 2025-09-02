@@ -18,10 +18,10 @@ jobs:
           echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
           echo "date_simple=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       
-      - name: Instalar PostgreSQL Client
+      - name: Instalar PostgreSQL Client y herramientas
         run: |
           sudo apt-get update
-          sudo apt-get install -y postgresql-client
+          sudo apt-get install -y postgresql-client dnsutils
       
       - name: Crear backup de Supabase
         id: backup
@@ -30,13 +30,28 @@ jobs:
         run: |
           echo "Iniciando backup..."
           
-          # Opción más simple: usar pg_dump directo
-          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
+          # Extraer host de la URL
+          DB_HOST=$(echo "$DATABASE_URL" | grep -oP '(?<=@)[^:]+(?=:)')
+          echo "Host detectado: $DB_HOST"
           
-          # Si falla por IPv6, intenta con una conexión TCP forzada
-          if [ $? -ne 0 ]; then
-            echo "Reintentando con conexión TCP..."
-            pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean --host=db.ntuvrqipgvhnuynjfzbx.supabase.co > backup.sql
+          # Obtener solo IPv4
+          DB_IP=$(dig +short $DB_HOST A | grep -E '^[0-9.]+$' | head -1)
+          echo "IPv4 detectada: $DB_IP"
+          
+          # Si tenemos IP, reemplazar en la URL
+          if [ ! -z "$DB_IP" ]; then
+            DATABASE_URL_IPV4=$(echo "$DATABASE_URL" | sed "s/@$DB_HOST:/@$DB_IP:/")
+            echo "Usando conexión IPv4..."
+            pg_dump "$DATABASE_URL_IPV4" --no-owner --no-privileges --clean > backup.sql
+          else
+            echo "Usando URL original..."
+            pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
+          fi
+          
+          # Verificar si el backup se creó
+          if [ ! -f backup.sql ] || [ ! -s backup.sql ]; then
+            echo "ERROR: No se pudo crear el backup"
+            exit 1
           fi
           
           SIZE_ORIGINAL=$(ls -lh backup.sql | awk '{print $5}')
@@ -46,7 +61,7 @@ jobs:
           SIZE_COMPRESSED=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
           echo "size_compressed=$SIZE_COMPRESSED" >> $GITHUB_OUTPUT
           
-          echo "Backup creado: $SIZE_COMPRESSED (original: $SIZE_ORIGINAL)"
+          echo "Backup creado exitosamente: $SIZE_COMPRESSED (original: $SIZE_ORIGINAL)"
       
       - name: Instalar rclone
         run: |
@@ -84,13 +99,10 @@ jobs:
             Fecha: ${{ steps.date.outputs.date_simple }}
             Hora: ${{ steps.date.outputs.date }}
             Tamaño original: ${{ steps.backup.size_original }}
-            Tamaño comprimido: ${{ steps.backup.size_compressed }}
+            Tamaño comprimido: ${{ steps.backup.compressed }}
             Guardado en: Google Drive
             
             Archivo: supabase-backup-${{ steps.date.outputs.date }}.tar.gz
-            
-            ---
-            Este es un backup automático ejecutado por GitHub Actions.
       
       - name: Limpiar archivos temporales
         if: always()
@@ -118,9 +130,3 @@ jobs:
             
             Por favor revisa los logs inmediatamente:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            Este error requiere atención inmediata para asegurar la integridad de los backups.
-      
-      - name: Notificar éxito final
-        if: success()
-        run: echo "Backup completado y notificación enviada"
