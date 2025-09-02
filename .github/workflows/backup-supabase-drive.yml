@@ -18,40 +18,55 @@ jobs:
           echo "date=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
           echo "date_simple=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       
-      - name: Crear backup usando CURL
+      - name: Instalar PostgreSQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      
+      - name: Crear backup de Supabase
         id: backup
+        env:
+          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
           echo "Iniciando backup..."
           
-          # Usar la API REST de Supabase en lugar de pg_dump
-          PROJECT_REF=$(echo "${{ secrets.SUPABASE_DATABASE_URL }}" | grep -oP 'db\.\K[^.]+')
+          # Hack para forzar IPv4
+          DB_HOST=$(echo "$DATABASE_URL" | sed -n 's/.*@$[^:]*$:.*/\1/p')
+          echo "54.163.223.160 $DB_HOST" | sudo tee -a /etc/hosts
           
-          curl -X GET \
-            "https://${PROJECT_REF}.supabase.co/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
-            -o backup.json
+          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > backup.sql
           
-          tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.json
+          tar -czf supabase-backup-${{ steps.date.outputs.date }}.tar.gz backup.sql
           
           SIZE=$(ls -lh supabase-backup-*.tar.gz | awk '{print $5}')
           echo "size_compressed=$SIZE" >> $GITHUB_OUTPUT
           
           echo "Backup creado: $SIZE"
       
-      - name: Subir a GitHub Artifacts (más simple que Google Drive)
-        uses: actions/upload-artifact@v3
+      - name: Subir backup a GitHub
+        uses: actions/upload-artifact@v4
         with:
           name: backup-${{ steps.date.outputs.date }}
           path: supabase-backup-*.tar.gz
           retention-days: 30
       
-      - name: Notificar
+      - name: Enviar notificación de éxito
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Backup Exitoso - ${{ steps.date.outputs.date_simple }}
+          to: ${{ secrets.EMAIL_USERNAME }}
+          from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
+          body: |
+            El backup se completó exitosamente.
+            Tamaño: ${{ steps.backup.size_compressed }}
+            Puedes descargarlo desde GitHub Actions.
+      
+      - name: Limpiar
         if: always()
-        run: |
-          if [ -f supabase-backup-*.tar.gz ]; then
-            echo "BACKUP EXITOSO"
-          else
-            echo "BACKUP FALLÓ"
-            exit 1
-          fi
+        run: rm -f backup.sql *.tar.gz
