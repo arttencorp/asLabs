@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Instalar herramientas necesarias (jq, psql, dnsutils)
-        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client dnsutils
+      - name: Instalar herramientas necesarias (jq, psql)
+        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client
 
       - name: Configurar variables de fecha
         id: config
@@ -62,15 +62,21 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
-          # --- INICIO DE LA CORRECCIÓN MÁGICA ---
-          # Extraer el host de la URL (ej: aws-0-us-east-1.pooler.supabase.com)
+          # --- INICIO DE LA CORRECCIÓN DEFINITIVA ---
           DB_HOST=$(echo "$DATABASE_URL" | awk -F@ '{print $2}' | awk -F: '{print $1}')
-          # Obtener la dirección IPv4 de ese host
-          DB_IP=$(dig +short A "$DB_HOST")
-          # Añadir una regla al sistema para que SIEMPRE use esa IPv4 para ese host
+          
+          # Usamos 'getent' que es más robusto para obtener la IP del sistema
+          DB_IP=$(getent ahosts "$DB_HOST" | grep -v '::' | awk '{print $1}' | head -n 1)
+          
+          # AÑADIMOS UN SEGURO DE VIDA
+          if [ -z "$DB_IP" ]; then
+            echo "::error::No se pudo resolver la dirección IPv4 para el host de la base de datos: $DB_HOST"
+            exit 1
+          fi
+
           echo "$DB_IP $DB_HOST" | sudo tee -a /etc/hosts
           echo "Regla de /etc/hosts añadida para forzar IPv4: $DB_IP -> $DB_HOST"
-          # --- FIN DE LA CORRECCIÓN MÁGICA ---
+          # --- FIN DE LA CORRECCIÓN DEFINITIVA ---
 
           echo "Iniciando backup..."
           FILENAME="supabase-backup-${{ steps.config.outputs.date }}.sql"
