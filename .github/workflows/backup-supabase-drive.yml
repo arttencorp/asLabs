@@ -62,13 +62,11 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
-          # --- INICIO DE LA CORRECCIÓN DEFINITIVA ---
           DB_HOST=$(echo "$DATABASE_URL" | awk -F@ '{print $2}' | awk -F: '{print $1}')
           
-          # Usamos 'getent' que es más robusto para obtener la IP del sistema
-          DB_IP=$(getent ahosts "$DB_HOST" | grep -v '::' | awk '{print $1}' | head -n 1)
+          # --- LA ÚNICA LÍNEA QUE CAMBIÓ: LA CORRECCIÓN FINAL ---
+          DB_IP=$(getent ahosts "$DB_HOST" | awk '/STREAM/ { print $1 }' | grep -v ':' | head -n 1)
           
-          # AÑADIMOS UN SEGURO DE VIDA
           if [ -z "$DB_IP" ]; then
             echo "::error::No se pudo resolver la dirección IPv4 para el host de la base de datos: $DB_HOST"
             exit 1
@@ -76,7 +74,6 @@ jobs:
 
           echo "$DB_IP $DB_HOST" | sudo tee -a /etc/hosts
           echo "Regla de /etc/hosts añadida para forzar IPv4: $DB_IP -> $DB_HOST"
-          # --- FIN DE LA CORRECCIÓN DEFINITIVA ---
 
           echo "Iniciando backup..."
           FILENAME="supabase-backup-${{ steps.config.outputs.date }}.sql"
