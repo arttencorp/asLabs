@@ -9,8 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Instalar herramientas necesarias (jq, psql)
-        run: sudo apt-get update && sudo apt-get install -y jq postgresql-client
+      - name: Instalar herramientas necesarias (jq, PostgreSQL 17 client)
+        run: |
+          # Instalar jq
+          sudo apt-get update && sudo apt-get install -y jq
+          
+          # Agregar repositorio oficial de PostgreSQL para obtener la versión 17
+          sudo apt-get install -y wget ca-certificates
+          
+          # Método moderno para agregar la clave GPG
+          wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+          echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          
+          # Actualizar e instalar PostgreSQL 17 client
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
+          
+          # Verificar instalación
+          echo "Versión de pg_dump instalada:"
+          /usr/lib/postgresql/17/bin/pg_dump --version || pg_dump --version
 
       - name: Configurar variables de fecha
         id: config
@@ -61,17 +78,64 @@ jobs:
           # Usamos la URL directa (sin pooler)
           DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
         run: |
+          echo "Verificando versión de pg_dump..."
+          # Intentar usar la versión específica de PostgreSQL 17 primero
+          PG_DUMP_CMD="/usr/lib/postgresql/17/bin/pg_dump"
+          if [ ! -f "$PG_DUMP_CMD" ]; then
+            echo "PostgreSQL 17 no encontrado, usando versión por defecto..."
+            PG_DUMP_CMD="pg_dump"
+          fi
+          
+          $PG_DUMP_CMD --version
+          
           echo "Iniciando backup..."
           FILENAME="supabase-backup-${{ steps.config.outputs.date }}.sql"
           
-          # La conexión directa debería resolver el problema de IPv6
-          pg_dump "$DATABASE_URL" --no-owner --no-privileges --clean > $FILENAME
+          # Usar pg_dump con mejor compatibilidad de versiones
+          $PG_DUMP_CMD "$DATABASE_URL" \
+            --no-owner \
+            --no-privileges \
+            --clean \
+            --if-exists \
+            --verbose \
+            > $FILENAME
           
+          # Si falla por incompatibilidad de versiones, intentar con Docker
+          if [ $? -ne 0 ]; then
+            echo "::warning::pg_dump falló, intentando con Docker PostgreSQL 17..."
+            docker run --rm \
+              -e PGPASSWORD="$(echo "$DATABASE_URL" | sed -n 's/.*:\([^@]*\)@.*/\1/p')" \
+              postgres:17 \
+              pg_dump \
+              --host="$(echo "$DATABASE_URL" | sed -n 's/.*@\([^:]*\):.*/\1/p')" \
+              --port="$(echo "$DATABASE_URL" | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')" \
+              --username="$(echo "$DATABASE_URL" | sed -n 's/.*\/\/\([^:]*\):.*/\1/p')" \
+              --dbname="$(echo "$DATABASE_URL" | sed -n 's/.*\/\([^?]*\).*/\1/p')" \
+              --no-owner \
+              --no-privileges \
+              --clean \
+              --if-exists \
+              --verbose \
+              > $FILENAME
+              
+            if [ $? -ne 0 ]; then
+              echo "::error::Falló la creación del backup con Docker también"
+              exit 1
+            fi
+          fi
+          
+          # Verificar que el archivo no esté vacío
+          if [ ! -s "$FILENAME" ]; then
+            echo "::error::El archivo de backup está vacío"
+            exit 1
+          fi
+          
+          echo "Comprimiendo backup..."
           tar -czf "$FILENAME.tar.gz" $FILENAME
           
           SIZE=$(ls -lh "$FILENAME.tar.gz" | awk '{print $5}')
           echo "size_compressed=$SIZE" >> $GITHUB_OUTPUT
-          echo "Backup creado: $SIZE"
+          echo "Backup creado exitosamente: $SIZE"
       
       - name: Subir backup como artefacto
         uses: actions/upload-artifact@v4
