@@ -368,6 +368,7 @@ export default function PlantinesClient() {
   const [showCalculator, setShowCalculator] = useState(false)
   const [showTechnicalSheet, setShowTechnicalSheet] = useState(false)
   const [selectedTechnicalData, setSelectedTechnicalData] = useState<Plantin | null>(null)
+  const [hectareas, setHectareas] = useState(5)
 
   const filteredPlantines =
     selectedCategory === "Todos" ? plantines : plantines.filter((plantin) => plantin.category === selectedCategory)
@@ -608,137 +609,349 @@ export default function PlantinesClient() {
         </div>
       )}
 
-      {/* Hero Section Profesional */}
-      <section className="relative bg-white py-20 overflow-hidden">
+      {/* Hero Section Profesional - Layout Texto + Calculadora */}
+      <section className="relative bg-white py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-white opacity-60"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <FlaskConical className="w-4 h-4" />
-              Biotecnología Vegetal de Vanguardia
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+            
+            {/* Panel Izquierdo - TEXTO */}
+            <div className="text-left">
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <FlaskConical className="w-4 h-4" />
+                Biotecnología Vegetal de Vanguardia
+              </div>
+
+              <h1 className="text-3xl lg:text-5xl font-bold mb-6 text-gray-900 leading-tight">
+                Plantines de <span className="text-emerald-600">Elite Genética</span>
+                <br />para Agricultura Profesional
+              </h1>
+
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                Desarrollados con tecnología in vitro de vanguardia para maximizar tu productividad agrícola. 
+                Libres de plagas, alta resistencia y rendimientos superiores garantizados.
+              </p>
+
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
+                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+                    <TrendingUp className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-1 text-sm">Mayor Productividad</h3>
+                  <p className="text-xs text-gray-600">Hasta 115% más rendimiento</p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
+                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+                    <Shield className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-1 text-sm">100% Libres de Plagas</h3>
+                  <p className="text-xs text-gray-600">Tecnología in vitro</p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
+                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+                    <DollarSign className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-1 text-sm">ROI Garantizado</h3>
+                  <p className="text-xs text-gray-600">Inversión rentable</p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <button
+                  onClick={() => handleWhatsAppContact("información completa sobre plantines premium")}
+                  className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Asesoría Gratuita
+                </button>
+              </div>
             </div>
 
-            <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-900 leading-tight">
-              Plantines de <span className="text-emerald-600">Elite Genética</span>
-              <br />para Agricultura Profesional
-            </h1>
-
-            <p className="text-lg text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto">
-              Desarrollados con tecnología in vitro de vanguardia para maximizar tu productividad agrícola. 
-              Libres de plagas, alta resistencia y rendimientos superiores garantizados.
-            </p>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-10">
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <TrendingUp className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Mayor Productividad</h3>
-                <p className="text-sm text-gray-600">Hasta 60% más rendimiento</p>
+            {/* Panel Derecho - CALCULADORA */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-6">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  <Calculator className="w-6 h-6" />
+                  Calculadora de Rentabilidad
+                </h3>
+                <p className="text-emerald-100 text-sm">Descubre cuánto más puedes ganar</p>
               </div>
-              
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Shield className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">100% Libres de Plagas</h3>
-                <p className="text-sm text-gray-600">Tecnología in vitro</p>
-              </div>
-              
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <DollarSign className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">ROI Garantizado</h3>
-                <p className="text-sm text-gray-600">Inversión rentable</p>
-              </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => handleWhatsAppContact("información completa sobre plantines premium")}
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                Asesoría Gratuita
-              </button>
+              <div className="p-6 space-y-6">
+                {/* Input de Hectáreas */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    ¿Cuántas hectáreas planeas cultivar?
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      max="1000"
+                      value={hectareas}
+                      onChange={(e) => setHectareas(Math.max(1, parseInt(e.target.value) || 1))}
+                      className="w-full px-4 py-3 text-xl font-bold text-center border-2 border-emerald-300 rounded-lg focus:border-emerald-500 focus:ring-emerald-500 focus:outline-none transition-colors"
+                      placeholder="5"
+                    />
+                    <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                      hectáreas
+                    </span>
+                  </div>
+                  
+                  {/* Botones rápidos */}
+                  <div className="flex gap-2 mt-3">
+                    {[1, 5, 10, 20, 50].map((value) => (
+                      <button
+                        key={value}
+                        onClick={() => setHectareas(value)}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          hectareas === value
+                            ? "bg-emerald-600 text-white"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
+                      >
+                        {value} ha
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-              <button
-                onClick={() => setShowCalculator(!showCalculator)}
-                className="inline-flex items-center gap-2 bg-white text-emerald-600 border border-emerald-600 px-6 py-3 rounded-lg font-medium hover:bg-emerald-50 transition-colors"
-              >
-                <Calculator className="w-5 h-5" />
-                Calcular Rentabilidad
-              </button>
+                {/* Comparación de Rendimientos */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900">Comparación de Ingresos Anuales</h4>
+                  
+                  {/* Plantines Tradicionales */}
+                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-red-800">Plantines Tradicionales</span>
+                      <span className="text-xs text-red-600">14 ton/ha</span>
+                    </div>
+                    <div className="text-xl font-bold text-red-700">
+                      S/. {(hectareas * 14 * 2500).toLocaleString()}
+                    </div>
+                  </div>
+
+                  {/* Plantines In Vitro */}
+                  <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-emerald-800">Plantines In Vitro AS Labs</span>
+                      <span className="text-xs text-emerald-600">30 ton/ha</span>
+                    </div>
+                    <div className="text-xl font-bold text-emerald-700">
+                      S/. {(hectareas * 30 * 2500).toLocaleString()}
+                    </div>
+                  </div>
+
+                  {/* Ganancia Adicional */}
+                  <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-300 text-center">
+                    <div className="text-sm text-blue-800 mb-1">Ganancia Adicional</div>
+                    <div className="text-2xl font-bold text-blue-700">
+                      +S/. {((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}
+                    </div>
+                    <div className="text-sm text-blue-600 mt-1">
+                      {Math.round(((30 - 14) / 14) * 100)}% más rentabilidad
+                    </div>
+                  </div>
+                </div>
+
+                {/* Call to Action */}
+                <button
+                  onClick={() => handleWhatsAppContact(`¡Hola! He calculado que con ${hectareas} hectáreas puedo ganar S/. ${((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()} adicionales con sus plantines in vitro. Quiero más información.`)}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Solicitar Cotización para {hectareas} hectáreas
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Calculadora de Rentabilidad */}
+      {/* Calculadora de Rentabilidad Interactiva */}
       {showCalculator && (
         <section className="py-16 bg-gray-50 border-t border-gray-200">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Calculadora de Rentabilidad</h2>
-                <p className="text-gray-600">Descubre el potencial de ganancias con nuestros plantines</p>
+            <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="text-center p-6 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white">
+                <h2 className="text-2xl font-bold mb-2">Calculadora de Rentabilidad</h2>
+                <p className="text-emerald-100">Descubre cuánto más puedes ganar con nuestros plantines in vitro</p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-emerald-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-emerald-800 mb-4 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5" />
-                    Proyección de Ingresos
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>Hectáreas cultivadas:</span>
-                      <span className="font-semibold">5 ha</span>
+              <div className="grid lg:grid-cols-2 gap-0">
+                {/* Panel Izquierdo - Información y Control */}
+                <div className="p-8 bg-gray-50">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <Calculator className="w-5 h-5 text-emerald-600" />
+                        Configura tu Cultivo
+                      </h3>
+                      
+                      {/* Input de Hectáreas */}
+                      <div className="bg-white rounded-lg p-6 border border-gray-200">
+                        <label className="block text-sm font-medium text-gray-700 mb-3">
+                          ¿Cuántas hectáreas planeas cultivar?
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            min="1"
+                            max="1000"
+                            value={hectareas}
+                            onChange={(e) => setHectareas(Math.max(1, parseInt(e.target.value) || 1))}
+                            className="w-full px-4 py-3 text-xl font-bold text-center border-2 border-emerald-300 rounded-lg focus:border-emerald-500 focus:ring-emerald-500 focus:outline-none transition-colors"
+                            placeholder="5"
+                          />
+                          <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                            hectáreas
+                          </span>
+                        </div>
+                        
+                        {/* Botones rápidos */}
+                        <div className="flex gap-2 mt-4">
+                          {[1, 5, 10, 20, 50].map((value) => (
+                            <button
+                              key={value}
+                              onClick={() => setHectareas(value)}
+                              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                hectareas === value
+                                  ? "bg-emerald-600 text-white"
+                                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                              }`}
+                            >
+                              {value} ha
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Rendimiento promedio:</span>
-                      <span className="font-semibold text-emerald-600">45 ton/ha</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Precio por tonelada:</span>
-                      <span className="font-semibold">S/. 2,500</span>
-                    </div>
-                    <hr className="border-emerald-200" />
-                    <div className="flex justify-between text-lg font-bold text-emerald-700 bg-emerald-100 p-3 rounded">
-                      <span>Ingreso total anual:</span>
-                      <span>S/. 562,500</span>
+
+                    {/* Información de Rendimientos */}
+                    <div className="bg-white rounded-lg p-6 border border-gray-200">
+                      <h4 className="text-lg font-semibold text-gray-900 mb-4">Rendimientos Promedio</h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Plantines Tradicionales:</span>
+                          <span className="font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full">14 ton/ha</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Plantines In Vitro AS Labs:</span>
+                          <span className="font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">30 ton/ha</span>
+                        </div>
+                        <div className="border-t border-gray-200 pt-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-900 font-medium">Diferencia:</span>
+                            <span className="font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                              +{30 - 14} ton/ha (+{Math.round(((30 - 14) / 14) * 100)}%)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center gap-2">
-                    <Target className="w-5 h-5" />
-                    Comparación vs. Plantines Tradicionales
+                {/* Panel Derecho - Calculadora con Resultados */}
+                <div className="p-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-emerald-600" />
+                    Proyección de Ingresos
                   </h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>Plantines tradicionales:</span>
-                      <span>S/. 350,000</span>
+
+                  <div className="space-y-6">
+                    {/* Plantines Tradicionales */}
+                    <div className="bg-red-50 p-6 rounded-lg border border-red-200">
+                      <h4 className="text-lg font-semibold text-red-800 mb-4">Plantines Tradicionales</h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                          <span>Hectáreas cultivadas:</span>
+                          <span className="font-semibold">{hectareas} ha</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Rendimiento:</span>
+                          <span className="font-semibold">14 ton/ha</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Producción total:</span>
+                          <span className="font-semibold">{hectareas * 14} toneladas</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Precio por tonelada:</span>
+                          <span className="font-semibold">S/. 2,500</span>
+                        </div>
+                        <hr className="border-red-200" />
+                        <div className="flex justify-between text-lg font-bold text-red-700 bg-red-100 p-3 rounded">
+                          <span>Ingreso anual:</span>
+                          <span>S/. {(hectareas * 14 * 2500).toLocaleString()}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Plantines AS Labs:</span>
-                      <span className="font-semibold text-emerald-600">S/. 562,500</span>
+
+                    {/* Plantines In Vitro */}
+                    <div className="bg-emerald-50 p-6 rounded-lg border border-emerald-200">
+                      <h4 className="text-lg font-semibold text-emerald-800 mb-4">Plantines In Vitro AS Labs</h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                          <span>Hectáreas cultivadas:</span>
+                          <span className="font-semibold">{hectareas} ha</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Rendimiento:</span>
+                          <span className="font-semibold text-emerald-600">30 ton/ha</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Producción total:</span>
+                          <span className="font-semibold">{hectareas * 30} toneladas</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Precio por tonelada:</span>
+                          <span className="font-semibold">S/. 2,500</span>
+                        </div>
+                        <hr className="border-emerald-200" />
+                        <div className="flex justify-between text-lg font-bold text-emerald-700 bg-emerald-100 p-3 rounded">
+                          <span>Ingreso anual:</span>
+                          <span>S/. {(hectareas * 30 * 2500).toLocaleString()}</span>
+                        </div>
+                      </div>
                     </div>
-                    <hr className="border-blue-200" />
-                    <div className="flex justify-between text-lg font-bold text-blue-700 bg-blue-100 p-3 rounded">
-                      <span>Ganancia adicional:</span>
-                      <span className="text-emerald-600">+S/. 212,500</span>
-                    </div>
-                    <div className="text-center mt-4">
-                      <span className="bg-emerald-500 text-white px-4 py-2 rounded-lg font-semibold">
-                        60% más rentabilidad
-                      </span>
+
+                    {/* Diferencia Final */}
+                    <div className="bg-blue-50 p-6 rounded-lg border-2 border-blue-300">
+                      <h4 className="text-lg font-semibold text-blue-800 mb-4 flex items-center gap-2">
+                        <Target className="w-5 h-5" />
+                        Ganancia Adicional con AS Labs
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-lg font-bold text-blue-700">
+                          <span>Ingresos adicionales:</span>
+                          <span className="text-emerald-600">
+                            +S/. {((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="text-center mt-4">
+                          <span className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold text-xl">
+                            {Math.round(((30 - 14) / 14) * 100)}% más rentabilidad
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Call to Action */}
+              <div className="bg-gray-100 p-6 text-center border-t border-gray-200">
+                <button
+                  onClick={() => handleWhatsAppContact(`¡Hola! He calculado que con ${hectareas} hectáreas puedo ganar S/. ${((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()} adicionales con sus plantines in vitro. Quiero más información.`)}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition-colors flex items-center gap-3 mx-auto"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Solicitar Cotización para {hectareas} hectáreas
+                </button>
               </div>
             </div>
           </div>
@@ -990,7 +1203,7 @@ export default function PlantinesClient() {
             {/* Título principal */}
             <div className="mb-8">
               <span className="inline-block bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                🚀 Transforma tu Agricultura Hoy
+                Transforma tu Agricultura Hoy
               </span>
               <h2 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                 ¿Listo para <span className="text-emerald-400 relative">
