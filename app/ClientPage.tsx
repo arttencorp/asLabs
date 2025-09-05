@@ -201,29 +201,32 @@ export default function ClientPage() {
               </div>
             ))}
           </div>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 gap-4">
-            <div className="flex gap-2">
-              <button className="border rounded-full p-1">
-                <ChevronLeft className="h-4 w-4" />
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-8 gap-6">
+            <div className="flex gap-3">
+              <button className="border border-gray-300 hover:border-[#2e7d32] rounded-full p-3 transition-colors duration-200 shadow-sm hover:shadow-md">
+              <ChevronLeft className="h-5 w-5 text-gray-600 hover:text-[#2e7d32]" />
               </button>
-              <button className="border rounded-full p-1">
-                <ChevronRight className="h-4 w-4" />
+              <button className="border border-gray-300 hover:border-[#2e7d32] rounded-full p-3 transition-colors duration-200 shadow-sm hover:shadow-md">
+              <ChevronRight className="h-5 w-5 text-gray-600 hover:text-[#2e7d32]" />
               </button>
             </div>
-            <Link href="#" className="text-xs sm:text-sm flex items-center text-[#2e7d32]">
+            <Link 
+              href="/plantines" 
+              className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center transition-all duration-200 shadow-sm hover:shadow-md group"
+            >
               VER TODOS LOS PRODUCTOS
-              <svg className="h-4 w-4 ml-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                <path
-                  d="M12 8L16 12L12 16M8 12H16"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+              <svg className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+              <path
+                d="M12 8L16 12L12 16M8 12H16"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
               </svg>
             </Link>
-          </div>
+            </div>
         </div>
       </section>
 
