@@ -610,51 +610,51 @@ export default function PlantinesClient() {
       )}
 
       {/* Hero Section Profesional - Layout Texto + Calculadora */}
-      <section className="relative bg-white py-16 overflow-hidden">
+      <section className="relative bg-white py-2 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-white opacity-60"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
             
             {/* Panel Izquierdo - TEXTO */}
             <div className="text-left">
-              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 <FlaskConical className="w-4 h-4" />
                 Biotecnología Vegetal de Vanguardia
               </div>
 
-              <h1 className="text-3xl lg:text-5xl font-bold mb-6 text-gray-900 leading-tight">
+              <h1 className="text-3xl lg:text-5xl font-bold mb-4 text-gray-900 leading-tight">
                 Plantines de <span className="text-emerald-600">Elite Genética</span>
                 <br />para Agricultura Profesional
               </h1>
 
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 Desarrollados con tecnología in vitro de vanguardia para maximizar tu productividad agrícola. 
                 Libres de plagas, alta resistencia y rendimientos superiores garantizados.
               </p>
 
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
-                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
-                    <TrendingUp className="w-5 h-5 text-emerald-600" />
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 text-center">
+                  <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                    <TrendingUp className="w-4 h-4 text-emerald-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1 text-sm">Mayor Productividad</h3>
-                  <p className="text-xs text-gray-600">Hasta 115% más rendimiento</p>
+                  <h3 className="font-semibold text-gray-900 mb-1 text-xs">Mayor Productividad</h3>
+                  <p className="text-xs text-gray-600">Hasta {Math.round(((20 - 14) / 14) * 100)}% más rendimiento</p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
-                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
-                    <Shield className="w-5 h-5 text-emerald-600" />
+                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 text-center">
+                  <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                    <Shield className="w-4 h-4 text-emerald-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1 text-sm">100% Libres de Plagas</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1 text-xs">100% Libres de Plagas</h3>
                   <p className="text-xs text-gray-600">Tecnología in vitro</p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
-                  <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
-                    <DollarSign className="w-5 h-5 text-emerald-600" />
+                <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 text-center">
+                  <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                    <DollarSign className="w-4 h-4 text-emerald-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1 text-sm">ROI Garantizado</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1 text-xs">ROI Garantizado</h3>
                   <p className="text-xs text-gray-600">Inversión rentable</p>
                 </div>
               </div>
@@ -672,15 +672,15 @@ export default function PlantinesClient() {
 
             {/* Panel Derecho - CALCULADORA */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-6">
-                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                  <Calculator className="w-6 h-6" />
+              <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-4">
+                <h3 className="text-lg font-bold mb-1 flex items-center gap-2">
+                  <Calculator className="w-5 h-5" />
                   Calculadora de Rentabilidad
                 </h3>
-                <p className="text-emerald-100 text-sm">Descubre cuánto más puedes ganar</p>
+                <p className="text-emerald-100 text-xs">Descubre cuánto más puedes ganar</p>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="p-4 space-y-4">
                 {/* Input de Hectáreas */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -720,51 +720,74 @@ export default function PlantinesClient() {
                 </div>
 
                 {/* Comparación de Rendimientos */}
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900">Comparación de Ingresos Anuales</h4>
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 text-sm">Comparación de Ingresos Anuales</h4>
                   
                   {/* Plantines Tradicionales */}
-                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-red-800">Plantines Tradicionales</span>
+                  <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs font-medium text-red-800">Plantines Tradicionales</span>
                       <span className="text-xs text-red-600">14 ton/ha</span>
                     </div>
-                    <div className="text-xl font-bold text-red-700">
+                    <div className="text-lg font-bold text-red-700">
                       S/. {(hectareas * 14 * 2500).toLocaleString()}
                     </div>
                   </div>
 
                   {/* Plantines In Vitro */}
-                  <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-200">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-emerald-800">Plantines In Vitro AS Labs</span>
-                      <span className="text-xs text-emerald-600">30 ton/ha</span>
+                  <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs font-medium text-emerald-800">Plantines In Vitro AS Labs</span>
+                      <span className="text-xs text-emerald-600">20 ton/ha</span>
                     </div>
-                    <div className="text-xl font-bold text-emerald-700">
-                      S/. {(hectareas * 30 * 2500).toLocaleString()}
+                    <div className="text-lg font-bold text-emerald-700">
+                      S/. {(hectareas * 20 * 2500).toLocaleString()}
                     </div>
                   </div>
 
                   {/* Ganancia Adicional */}
-                  <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-300 text-center">
-                    <div className="text-sm text-blue-800 mb-1">Ganancia Adicional</div>
-                    <div className="text-2xl font-bold text-blue-700">
-                      +S/. {((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}
+                  <div className="bg-blue-50 p-3 rounded-lg border-2 border-blue-300 text-center">
+                    <div className="text-xs text-blue-800 mb-1">Ganancia Adicional</div>
+                    <div className="text-xl font-bold text-blue-700">
+                      +S/. {((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}
                     </div>
-                    <div className="text-sm text-blue-600 mt-1">
-                      {Math.round(((30 - 14) / 14) * 100)}% más rentabilidad
+                    <div className="text-xs text-blue-600 mt-1">
+                      {Math.round(((20 - 14) / 14) * 100)}% más rentabilidad
                     </div>
                   </div>
                 </div>
 
                 {/* Call to Action */}
                 <button
-                  onClick={() => handleWhatsAppContact(`¡Hola! He calculado que con ${hectareas} hectáreas puedo ganar S/. ${((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()} adicionales con sus plantines in vitro. Quiero más información.`)}
+                  onClick={() => handleWhatsAppContact(`¡Hola! He calculado que con ${hectareas} hectáreas puedo ganar S/. ${((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()} adicionales con sus plantines in vitro. Quiero más información.`)}
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
                 >
                   <MessageCircle className="w-5 h-5" />
                   Solicitar Cotización para {hectareas} hectáreas
                 </button>
+
+                {/* Disclaimer de estudios */}
+                <div className="text-xs text-gray-500 text-center">
+                  <p className="mb-2">Precio calculado estimado según los siguientes estudios:</p>
+                  <div className="space-y-1">
+                    <a 
+                      href="https://www.fao.org/fileadmin/templates/ex_act/pdf/EXACT_VC/Case_study_Banana_organico_installacion_Peru.pdf" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block text-emerald-600 hover:text-emerald-700 underline"
+                    >
+                      FAO - Caso de estudio: Banano orgánico en Perú
+                    </a>
+                    <a 
+                      href="https://www.musalit.org/viewPostPrint.php?file=IN130316_pp.pdf&id=14818" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block text-emerald-600 hover:text-emerald-700 underline"
+                    >
+                      Musalit.org - Estudio de rendimiento de banano
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -840,13 +863,13 @@ export default function PlantinesClient() {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Plantines In Vitro AS Labs:</span>
-                          <span className="font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">30 ton/ha</span>
+                          <span className="font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">20 ton/ha</span>
                         </div>
                         <div className="border-t border-gray-200 pt-3">
                           <div className="flex justify-between items-center">
                             <span className="text-gray-900 font-medium">Diferencia:</span>
                             <span className="font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                              +{30 - 14} ton/ha (+{Math.round(((30 - 14) / 14) * 100)}%)
+                              +{20 - 14} ton/ha (+{Math.round(((20 - 14) / 14) * 100)}%)
                             </span>
                           </div>
                         </div>
@@ -901,11 +924,11 @@ export default function PlantinesClient() {
                         </div>
                         <div className="flex justify-between">
                           <span>Rendimiento:</span>
-                          <span className="font-semibold text-emerald-600">30 ton/ha</span>
+                          <span className="font-semibold text-emerald-600">20 ton/ha</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Producción total:</span>
-                          <span className="font-semibold">{hectareas * 30} toneladas</span>
+                          <span className="font-semibold">{hectareas * 20} toneladas</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Precio por tonelada:</span>
@@ -914,7 +937,7 @@ export default function PlantinesClient() {
                         <hr className="border-emerald-200" />
                         <div className="flex justify-between text-lg font-bold text-emerald-700 bg-emerald-100 p-3 rounded">
                           <span>Ingreso anual:</span>
-                          <span>S/. {(hectareas * 30 * 2500).toLocaleString()}</span>
+                          <span>S/. {(hectareas * 20 * 2500).toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
@@ -929,12 +952,12 @@ export default function PlantinesClient() {
                         <div className="flex justify-between text-lg font-bold text-blue-700">
                           <span>Ingresos adicionales:</span>
                           <span className="text-emerald-600">
-                            +S/. {((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}
+                            +S/. {((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}
                           </span>
                         </div>
                         <div className="text-center mt-4">
                           <span className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold text-xl">
-                            {Math.round(((30 - 14) / 14) * 100)}% más rentabilidad
+                            {Math.round(((20 - 14) / 14) * 100)}% más rentabilidad
                           </span>
                         </div>
                       </div>
@@ -946,7 +969,7 @@ export default function PlantinesClient() {
               {/* Call to Action */}
               <div className="bg-gray-100 p-6 text-center border-t border-gray-200">
                 <button
-                  onClick={() => handleWhatsAppContact(`¡Hola! He calculado que con ${hectareas} hectáreas puedo ganar S/. ${((hectareas * 30 * 2500) - (hectareas * 14 * 2500)).toLocaleString()} adicionales con sus plantines in vitro. Quiero más información.`)}
+                  onClick={() => handleWhatsAppContact(`¡Hola! He calculado que con ${hectareas} hectáreas puedo ganar S/. ${((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()} adicionales con sus plantines in vitro. Quiero más información.`)}
                   className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition-colors flex items-center gap-3 mx-auto"
                 >
                   <MessageCircle className="w-5 h-5" />
@@ -958,35 +981,8 @@ export default function PlantinesClient() {
         </section>
       )}
 
-      {/* Filtros de Categorías */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Explora Nuestro Catálogo</h2>
-            <p className="text-gray-600">Selecciona la categoría que más te interese</p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                  selectedCategory === category
-                    ? "bg-emerald-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {category}
-                {selectedCategory === category && <CheckCircle className="inline-block w-4 h-4 ml-2" />}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Catálogo de Plantines con mejor UX/UI */}
-      <section className="py-20 bg-gray-50">
+      {/* Catálogo de Plantines con mejor UX/UI y Menú Lateral */}
+      <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           {/* Header de la sección */}
           <div className="text-center mb-12">
@@ -997,201 +993,247 @@ export default function PlantinesClient() {
             </p>
           </div>
 
-          {/* Grid responsivo moderno */}
-          <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-8 max-w-7xl mx-auto">
-            {filteredPlantines.map((plantin, index) => (
-              <div
-                key={plantin.id}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-emerald-200 transform hover:-translate-y-1"
-              >
-                {/* Imagen destacada */}
-                <div className="aspect-video relative bg-gradient-to-br from-emerald-50 to-emerald-100 overflow-hidden">
-                  <Image
-                    src={plantin.image || "/biotecnologia-vegetal.png"}
-                    alt={plantin.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  
-                  {/* Badge de estado sobre la imagen */}
-                  <div className="absolute top-4 right-4">
-                    {plantin.isResearch && (
-                      <span className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-full shadow-lg">
-                        En Investigación
-                      </span>
-                    )}
-                    {plantin.profitability && !plantin.isResearch && (
-                      <span className={`text-xs font-medium px-3 py-1 rounded-full shadow-lg ${getProfitabilityColor(plantin.profitability)}`}>
-                        {plantin.profitability}
-                      </span>
-                    )}
-                  </div>
+          <div className="flex gap-8 max-w-7xl mx-auto">
+            {/* Menú Lateral - Filtros de Categorías */}
+            <div className="w-64 flex-shrink-0">
+              <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Explora Nuestro Catálogo</h3>
+                <div className="space-y-3">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-between ${
+                        selectedCategory === category
+                          ? "bg-emerald-600 text-white shadow-lg"
+                          : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200"
+                      }`}
+                    >
+                      <span>{category}</span>
+                      {selectedCategory === category && (
+                        <CheckCircle className="w-4 h-4" />
+                      )}
+                    </button>
+                  ))}
                 </div>
+                
+                {/* Información adicional en el sidebar */}
+                <div className="mt-8 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+                  <h4 className="font-semibold text-emerald-800 mb-2">¿Necesitas ayuda?</h4>
+                  <p className="text-sm text-emerald-700 mb-3">
+                    Nuestros especialistas están listos para asesorarte
+                  </p>
+                  <button
+                    onClick={() => handleWhatsAppContact("asesoría especializada para elegir los mejores plantines")}
+                    className="w-full bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Consulta Gratis
+                  </button>
+                </div>
+              </div>
+            </div>
 
-                {/* Header con título y descripción */}
-                <div className="p-6">
-                  <div className="flex items-start gap-3 mb-4">
-                    {/* Icono */}
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      plantin.isResearch
-                        ? "bg-blue-500 text-white"
-                        : plantin.id === "pitahaya"
-                        ? "bg-purple-500 text-white"
-                        : "bg-emerald-500 text-white"
-                    } shadow-md`}>
-                      <plantin.icon className="w-6 h-6" />
+            {/* Contenido Principal - Grid de Plantines */}
+            <div className="flex-1">
+              {/* Grid responsivo moderno */}
+              <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-8">
+                {filteredPlantines.map((plantin, index) => (
+                  <div
+                    key={plantin.id}
+                    className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-emerald-200 transform hover:-translate-y-1"
+                  >
+                    {/* Imagen destacada */}
+                    <div className="aspect-video relative bg-gradient-to-br from-emerald-50 to-emerald-100 overflow-hidden">
+                      <Image
+                        src={plantin.image || "/biotecnologia-vegetal.png"}
+                        alt={plantin.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      
+                      {/* Badge de estado sobre la imagen */}
+                      <div className="absolute top-4 right-4">
+                        {plantin.isResearch && (
+                          <span className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-full shadow-lg">
+                            En Investigación
+                          </span>
+                        )}
+                        {plantin.profitability && !plantin.isResearch && (
+                          <span className={`text-xs font-medium px-3 py-1 rounded-full shadow-lg ${getProfitabilityColor(plantin.profitability)}`}>
+                            {plantin.profitability}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Header con título y descripción */}
+                    <div className="p-6">
+                      <div className="flex items-start gap-3 mb-4">
+                        {/* Icono */}
+                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                          plantin.isResearch
+                            ? "bg-blue-500 text-white"
+                            : plantin.id === "pitahaya"
+                            ? "bg-purple-500 text-white"
+                            : "bg-emerald-500 text-white"
+                        } shadow-md`}>
+                          <plantin.icon className="w-6 h-6" />
+                        </div>
+                        
+                        {/* Título y categoría */}
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-gray-900 mb-1 leading-tight">
+                            {plantin.name}
+                          </h3>
+                          <p className="text-sm text-gray-500 font-medium">
+                            {plantin.category}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Descripción */}
+                      <p className="text-gray-600 text-sm leading-snug mb-4">
+                        {plantin.description}
+                      </p>
+
+                      {/* Métricas en 2x2 para mejor distribución */}
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
+                        <div className="text-center">
+                          <div className="text-xs text-gray-500 mb-1 font-medium">Precio</div>
+                          <div className="font-bold text-emerald-600 text-sm">{plantin.price}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
+                          <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-gray-500 mb-1 font-medium">Cosecha</div>
+                          <div className="font-bold text-purple-600 text-sm">{plantin.harvestTime}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xs text-gray-500 mb-1 font-medium">Resistencias</div>
+                          <div className="font-bold text-orange-600 text-sm">{plantin.resistance?.length || 0}+</div>
+                        </div>
+                      </div>
                     </div>
                     
-                    {/* Título y categoría */}
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-1 leading-tight">
-                        {plantin.name}
-                      </h3>
-                      <p className="text-sm text-gray-500 font-medium">
-                        {plantin.category}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Descripción */}
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    {plantin.description}
-                  </p>
-
-                  {/* Métricas en 2x2 para mejor distribución */}
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
-                    <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1 font-medium">Precio</div>
-                      <div className="font-bold text-emerald-600 text-sm">{plantin.price}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
-                      <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1 font-medium">Cosecha</div>
-                      <div className="font-bold text-purple-600 text-sm">{plantin.harvestTime}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-1 font-medium">Resistencias</div>
-                      <div className="font-bold text-orange-600 text-sm">{plantin.resistance?.length || 0}+</div>
-                    </div>
-                  </div>
-                </div>
-                {/* Características principales compactas */}
-                <div className="px-6 pb-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-                    Características Principales
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {plantin.features.slice(0, 4).map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-2">
-                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                          plantin.isResearch 
-                            ? "bg-blue-400" 
-                            : plantin.id === "pitahaya"
-                            ? "bg-purple-400"
-                            : "bg-emerald-400"
-                        }`}></div>
-                        <span className="text-gray-700 text-xs font-medium">{feature}</span>
+                    {/* Características principales compactas */}
+                    <div className="px-6 pb-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
+                        Características Principales
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {plantin.features.slice(0, 4).map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-center gap-2">
+                            <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                              plantin.isResearch 
+                                ? "bg-blue-400" 
+                                : plantin.id === "pitahaya"
+                                ? "bg-purple-400"
+                                : "bg-emerald-400"
+                            }`}></div>
+                            <span className="text-gray-700 text-xs font-medium">{feature}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Resistencias destacadas (si existen) */}
-                {plantin.resistance && (
-                  <div className="px-6 pb-4">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2 uppercase tracking-wide">
-                      <Shield className="w-3 h-3 text-emerald-500" />
-                      Resistencias
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {plantin.resistance.slice(0, 3).map((resistance, idx) => (
-                        <span
-                          key={idx}
-                          className={`text-xs font-medium px-2 py-1 rounded-full border ${
-                            plantin.id === "pitahaya"
-                              ? "bg-purple-100 text-purple-700 border-purple-200"
-                              : plantin.isResearch
-                              ? "bg-blue-100 text-blue-700 border-blue-200"
-                              : "bg-emerald-100 text-emerald-700 border-emerald-200"
-                          }`}
-                        >
-                          {resistance}
-                        </span>
-                      ))}
-                      {plantin.resistance.length > 3 && (
-                        <span className="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">
-                          +{plantin.resistance.length - 3}
-                        </span>
-                      )}
                     </div>
-                  </div>
-                )}
 
-                {/* Botones lado a lado - DISEÑO PROFESIONAL */}
-                <div className="px-6 pb-6">
-                  <div className="flex gap-3">
-                    {/* Botón principal */}
-                    {plantin.available ? (
-                      <button
-                        onClick={() => handleWhatsAppContact(plantin.name)}
-                        className={`flex-1 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-sm ${
-                          plantin.id === "pitahaya"
-                            ? "bg-purple-600 hover:bg-purple-700 text-white"
-                            : "bg-emerald-600 hover:bg-emerald-700 text-white"
-                        }`}
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                        Cotizar
-                      </button>
-                    ) : plantin.isResearch ? (
-                      <a
-                        href="/research/banano-baby"
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors text-center block shadow-sm"
-                      >
-                        Ver Investigación
-                      </a>
-                    ) : (
-                      <button
-                        disabled
-                        className="flex-1 bg-gray-300 text-gray-500 px-4 py-3 rounded-lg font-medium cursor-not-allowed"
-                      >
-                        No Disponible
-                      </button>
+                    {/* Resistencias destacadas (si existen) */}
+                    {plantin.resistance && (
+                      <div className="px-6 pb-4">
+                        <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2 uppercase tracking-wide">
+                          <Shield className="w-3 h-3 text-emerald-500" />
+                          Resistencias
+                        </h4>
+                        <div className="flex flex-wrap gap-1">
+                          {plantin.resistance.slice(0, 3).map((resistance, idx) => (
+                            <span
+                              key={idx}
+                              className={`text-xs font-medium px-2 py-1 rounded-full border ${
+                                plantin.id === "pitahaya"
+                                  ? "bg-purple-100 text-purple-700 border-purple-200"
+                                  : plantin.isResearch
+                                  ? "bg-blue-100 text-blue-700 border-blue-200"
+                                  : "bg-emerald-100 text-emerald-700 border-emerald-200"
+                              }`}
+                            >
+                              {resistance}
+                            </span>
+                          ))}
+                          {plantin.resistance.length > 3 && (
+                            <span className="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">
+                              +{plantin.resistance.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     )}
 
-                    {/* Botón secundario */}
-                    <button
-                      onClick={() => handleTechnicalSheet(plantin)}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
-                    >
-                      <FileText className="w-4 h-4" />
-                      Ficha Técnica
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                    {/* Botones lado a lado - DISEÑO PROFESIONAL */}
+                    <div className="px-6 pb-6">
+                      <div className="flex gap-2">
+                        {/* Botón principal */}
+                        {plantin.available ? (
+                          <button
+                            onClick={() => handleWhatsAppContact(plantin.name)}
+                            className={`flex-1 px-2 py-1.5 rounded-md font-medium transition-colors flex items-center justify-center gap-1 shadow-sm text-xs ${
+                              plantin.id === "pitahaya"
+                                ? "bg-purple-600 hover:bg-purple-700 text-white"
+                                : "bg-emerald-600 hover:bg-emerald-700 text-white"
+                            }`}
+                          >
+                            <MessageCircle className="w-3 h-3" />
+                            Cotizar
+                          </button>
+                        ) : plantin.isResearch ? (
+                          <a
+                            href="/research/banano-baby"
+                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 rounded-md font-medium transition-colors text-center block shadow-sm text-xs"
+                          >
+                            Ver Investigación
+                          </a>
+                        ) : (
+                          <button
+                            disabled
+                            className="flex-1 bg-gray-300 text-gray-500 px-2 py-1.5 rounded-md font-medium cursor-not-allowed text-xs"
+                          >
+                            No Disponible
+                          </button>
+                        )}
 
-          {/* Mensaje si no hay resultados */}
-          {filteredPlantines.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
-                <Leaf className="w-16 h-16 mx-auto" />
+                        {/* Botón secundario */}
+                        <button
+                          onClick={() => handleTechnicalSheet(plantin)}
+                          className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1.5 rounded-md font-medium transition-colors flex items-center justify-center gap-1 text-xs"
+                        >
+                          <FileText className="w-3 h-3" />
+                          Ficha Técnica
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No se encontraron plantines</h3>
-              <p className="text-gray-500">Intenta seleccionar otra categoría</p>
+
+              {/* Mensaje si no hay resultados */}
+              {filteredPlantines.length === 0 && (
+                <div className="text-center py-12">
+                  <div className="text-gray-400 mb-4">
+                    <Leaf className="w-16 h-16 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">No se encontraron plantines</h3>
+                  <p className="text-gray-500">Intenta seleccionar otra categoría</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
       {/* Call to Action Final con mejor paleta de colores */}
-      <section className="py-24 bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 text-white relative overflow-hidden">
+      <section className="py-8 bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 text-white relative overflow-hidden">
         {/* Elementos decorativos sutiles */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-64 h-64 bg-emerald-500 rounded-full blur-3xl"></div>
