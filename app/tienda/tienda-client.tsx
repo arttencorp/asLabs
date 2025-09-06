@@ -28,6 +28,7 @@ import {
   Filter,
 } from "lucide-react"
 import Navbar from "@/components/navbar"
+import { useCategorias } from "@/components/admin/tienda/hooks/useCategorias"
 
 /* ---------- Datos ------------- */
 const allProducts = [
@@ -152,6 +153,7 @@ const allProducts = [
   },
 ]
 
+// Categorías estáticas temporales (serán reemplazadas por categoriasDB cuando esté completa la funcionalidad)
 const categories = [
   { id: "todos", name: "Todos los productos", icon: ShoppingCart, count: allProducts.length },
   { id: "medios", name: "Medios de Cultivo", icon: PetriDish, count: 4 },
@@ -167,6 +169,7 @@ const categories = [
 ]
 
 export default function TiendaClient() {
+  const { categorias: categoriasDB, loading: categoriasLoading } = useCategorias()
   const [openDialog, setOpenDialog] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState("todos")
   const [searchTerm, setSearchTerm] = useState("")

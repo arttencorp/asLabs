@@ -2,10 +2,15 @@ import { ESTADO_COLORS } from '@/constants'
 import type { ClientePersona } from '@/types/database'
 
 // Formateo de fechas centralizado
-export function formatDate(dateString: string, options?: {
+export function formatDate(dateString: string | null | undefined, options?: {
   includeTime?: boolean
   short?: boolean
 }): string {
+  // Manejar valores null o undefined
+  if (!dateString) {
+    return 'Sin fecha'
+  }
+  
   // Crear la fecha de forma que evite problemas de zona horaria
   const date = new Date(dateString + (dateString.includes('T') ? '' : 'T00:00:00'))
 

@@ -87,3 +87,24 @@ export interface FichaTecnicaDatabase {
   fit_tec_imag_vac: string | null
   fit_tec_cod_vac: string | null
 }
+
+// Categorías de Tienda
+export interface CategoriaDatabase {
+  cat_id_int: string
+  cat_nom_vac: string | null
+  cat_desc_vac: string | null
+  cat_activo_bool?: boolean | null
+  cat_created_at_dt: string
+  cat_updated_at_dt: string
+}
+
+// Productos de Tienda  
+export interface ProductoTiendaDatabase {
+  prod_tiend_id_int: string
+  prod_tiend_nom_vac: string | null
+  prod_tiend_desc_vac: string | null
+  prod_tiend_prec_vac: string | null
+  prod_tiend_created_at_dt: string
+  prod_tiend_updated_at_dt: string
+  cat_id_int: string // FK a Categoria
+}
