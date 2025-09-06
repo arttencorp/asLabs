@@ -65,7 +65,6 @@ export function CategoriasTable({
               <TableRow key={categoria.cat_id_int}>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
-                    <Package className="h-4 w-4 text-green-600" />
                     {categoria.cat_nom_vac || 'Sin nombre'}
                   </div>
                 </TableCell>
