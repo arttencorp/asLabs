@@ -52,7 +52,7 @@ export default function PlantinesClient() {
             </p>
           </div>
 
-          <div className="flex gap-6 lg:gap-8 max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 max-w-7xl mx-auto">
             {/* Sidebar de categorías */}
             <CategorySidebar 
               selectedCategory={selectedCategory}
@@ -60,8 +60,8 @@ export default function PlantinesClient() {
             />
 
             {/* Grid de plantines */}
-            <div className="flex-1">
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            <div className="flex-1 w-full min-w-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 {filteredPlantines.map((plantin) => (
                   <PlantinCard
                     key={plantin.id}

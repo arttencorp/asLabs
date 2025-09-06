@@ -22,7 +22,7 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center max-w-7xl mx-auto">
           
           {/* Panel Izquierdo - TEXTO */}
-          <div className="text-center lg:text-left order-2 lg:order-1">
+          <div className="text-center lg:text-left order-1 lg:order-1">
             <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-2 rounded-full text-xs sm:text-sm font-medium mb-4">
               <FlaskConical className="w-3 h-3 sm:w-4 sm:h-4" />
               Biotecnología Vegetal de Vanguardia
@@ -77,8 +77,8 @@ export default function HeroSection() {
           </div>
 
           {/* Panel Derecho - CALCULADORA */}
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden order-1 lg:order-2">
-            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-4 sm:p-6">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden order-2 lg:order-2">
+            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-3 sm:p-4">
               <h3 className="text-lg sm:text-xl font-bold mb-1 flex items-center gap-2">
                 <Calculator className="w-5 h-5" />
                 Calculadora de Rentabilidad
