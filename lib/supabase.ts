@@ -1770,3 +1770,91 @@ export async function mostrarProductoTienda(id: string): Promise<ProductoTiendaD
     throw error
   }
 }
+
+export async function ocultarProductosPorCategoria(categoriaId: string): Promise<void> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!categoriaId || categoriaId.trim() === '') {
+      throw new Error('El ID de la categoría es obligatorio')
+    }
+
+    const { error } = await supabase
+      .from('Productos_Tienda')
+      .update({ prod_tiend_activo_bool: false })
+      .eq('cat_id_int', categoriaId)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error ocultando productos por categoría:', error)
+    throw error
+  }
+}
+
+export async function mostrarProductosPorCategoria(categoriaId: string): Promise<void> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!categoriaId || categoriaId.trim() === '') {
+      throw new Error('El ID de la categoría es obligatorio')
+    }
+
+    const { error } = await supabase
+      .from('Productos_Tienda')
+      .update({ prod_tiend_activo_bool: true })
+      .eq('cat_id_int', categoriaId)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error mostrando productos por categoría:', error)
+    throw error
+  }
+}
+
+export async function contarProductosPorCategoria(categoriaId: string): Promise<number> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!categoriaId || categoriaId.trim() === '') {
+      throw new Error('El ID de la categoría es obligatorio')
+    }
+
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .select('prod_tiend_id_int')
+      .eq('cat_id_int', categoriaId)
+
+    if (error) throw error
+    
+    // Contar manualmente para depurar
+    const totalProductos = data?.length || 0
+    console.log(`Categoría ${categoriaId}: ${totalProductos} productos totales`)
+    
+    return totalProductos
+  } catch (error) {
+    console.error('Error contando productos por categoría:', error)
+    throw error
+  }
+}
+
+export async function contarProductosOcultosPorCategoria(categoriaId: string): Promise<number> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!categoriaId || categoriaId.trim() === '') {
+      throw new Error('El ID de la categoría es obligatorio')
+    }
+
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .select('prod_tiend_id_int')
+      .eq('cat_id_int', categoriaId)
+      .eq('prod_tiend_activo_bool', false) // Solo productos ocultos
+
+    if (error) throw error
+    
+    const productosOcultos = data?.length || 0
+    console.log(`Categoría ${categoriaId}: ${productosOcultos} productos ocultos`)
+    
+    return productosOcultos
+  } catch (error) {
+    console.error('Error contando productos ocultos por categoría:', error)
+    throw error
+  }
+}

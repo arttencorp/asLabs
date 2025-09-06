@@ -12,10 +12,16 @@ import {
   actualizarCategoria, 
   eliminarCategoria,
   ocultarCategoria,
-  mostrarCategoria
+  mostrarCategoria,
+  ocultarProductosPorCategoria,
+  mostrarProductosPorCategoria,
+  contarProductosPorCategoria,
+  contarProductosOcultosPorCategoria
 } from '@/lib/supabase'
 import { CategoriaFormDialog } from './CategoriaFormDialog'
 import { CategoriasTable } from './CategoriasTable'
+import { OcultarCategoriaDialog } from './OcultarCategoriaDialog'
+import { MostrarCategoriaDialog } from './MostrarCategoriaDialog'
 import type { CategoriaDatabase } from '@/types/database'
 import type { CategoriaForm } from '../types'
 
@@ -70,6 +76,16 @@ export default function CategoriasManagement() {
     getIdFn: (item) => item.cat_id_int
   })
 
+  // Estados para el modal de ocultar categoría
+  const [ocultarDialogOpen, setOcultarDialogOpen] = useState(false)
+  const [categoriaAOcultar, setCategoriaAOcultar] = useState<CategoriaDatabase | null>(null)
+  const [productosCount, setProductosCount] = useState(0)
+  
+  // Estados para el modal de mostrar categoría
+  const [mostrarDialogOpen, setMostrarDialogOpen] = useState(false)
+  const [categoriaAMostrar, setCategoriaAMostrar] = useState<CategoriaDatabase | null>(null)
+  const [productosOcultosCount, setProductosOcultosCount] = useState(0)
+
   const handleOpenDialog = (categoria?: CategoriaDatabase) => {
     if (categoria) {
       // Modo edición
@@ -122,23 +138,94 @@ export default function CategoriasManagement() {
   }
 
   const handleToggleVisibility = async (id: string, currentState: boolean) => {
+    const categoria = categorias.find(cat => cat.cat_id_int === id)
+    if (!categoria) return
+
+    if (currentState) {
+      // Está visible, queremos ocultarlo - mostrar modal de confirmación
+      try {
+        // Contar productos activos de esta categoría
+        const count = await contarProductosPorCategoria(id)
+        setCategoriaAOcultar(categoria)
+        setProductosCount(count)
+        setOcultarDialogOpen(true)
+      } catch (error: any) {
+        setError(error.message || 'Error al verificar productos de la categoría')
+      }
+    } else {
+      // Está oculto, queremos mostrarlo - mostrar modal para productos ocultos
+      try {
+        // Contar productos ocultos de esta categoría
+        const count = await contarProductosOcultosPorCategoria(id)
+        setCategoriaAMostrar(categoria)
+        setProductosOcultosCount(count)
+        setMostrarDialogOpen(true)
+      } catch (error: any) {
+        setError(error.message || 'Error al verificar productos ocultos de la categoría')
+      }
+    }
+  }
+
+  const handleConfirmOcultarCategoria = async (ocultarProductos: boolean) => {
+    if (!categoriaAOcultar) return
+    
     setError(null)
     
     try {
-      if (currentState) {
-        // Está visible, lo vamos a ocultar
-        await ocultarCategoria(id)
-      } else {
-        // Está oculto, lo vamos a mostrar
-        await mostrarCategoria(id)
+      // Ocultar la categoría
+      await ocultarCategoria(categoriaAOcultar.cat_id_int)
+      
+      // Si se eligió ocultar productos también
+      if (ocultarProductos) {
+        await ocultarProductosPorCategoria(categoriaAOcultar.cat_id_int)
       }
       
-      // Recargar datos
+      // Recargar datos y cerrar modal
       await loadData()
+      setOcultarDialogOpen(false)
+      setCategoriaAOcultar(null)
+      setProductosCount(0)
       
     } catch (error: any) {
-      setError(error.message || 'Error al cambiar visibilidad de categoría')
+      setError(error.message || 'Error al ocultar categoría')
     }
+  }
+
+  const handleCloseOcultarDialog = () => {
+    setOcultarDialogOpen(false)
+    setCategoriaAOcultar(null)
+    setProductosCount(0)
+  }
+
+  const handleConfirmMostrarCategoria = async (activarProductos: boolean) => {
+    if (!categoriaAMostrar) return
+    
+    setError(null)
+    
+    try {
+      // Mostrar la categoría
+      await mostrarCategoria(categoriaAMostrar.cat_id_int)
+      
+      // Si se eligió activar productos también
+      if (activarProductos) {
+        await mostrarProductosPorCategoria(categoriaAMostrar.cat_id_int)
+      }
+      
+      // Recargar datos y cerrar modal
+      await loadData()
+      setMostrarDialogOpen(false)
+      setCategoriaAMostrar(null)
+      setProductosOcultosCount(0)
+      
+    } catch (error: any) {
+      setError(error.message || 'Error al mostrar categoría')
+    }
+  }
+
+  const handleCloseMostrarDialog = () => {
+    setMostrarDialogOpen(false)
+    setCategoriaAMostrar(null)
+    setProductosOcultosCount(0)
   }
 
   return (
@@ -231,6 +318,26 @@ export default function CategoriasManagement() {
         onSubmit={handleSubmit}
         loading={loading}
         error={error}
+      />
+
+      {/* Dialog de confirmación para ocultar categoría */}
+      <OcultarCategoriaDialog
+        isOpen={ocultarDialogOpen}
+        onClose={handleCloseOcultarDialog}
+        categoriaNombre={categoriaAOcultar?.cat_nom_vac || ''}
+        productosCount={productosCount}
+        onConfirm={handleConfirmOcultarCategoria}
+        loading={loading}
+      />
+
+      {/* Dialog de confirmación para mostrar categoría */}
+      <MostrarCategoriaDialog
+        isOpen={mostrarDialogOpen}
+        onClose={handleCloseMostrarDialog}
+        categoriaNombre={categoriaAMostrar?.cat_nom_vac || ''}
+        productosOcultosCount={productosOcultosCount}
+        onConfirm={handleConfirmMostrarCategoria}
+        loading={loading}
       />
     </div>
   )
