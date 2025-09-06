@@ -94,7 +94,7 @@ export default function CallToActionSection() {
             <div className="text-white/60 hidden lg:block">o</div>
 
             <a
-              href="tel:+51999999999"
+              href="tel:+51961996645"
               className="group bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-slate-900 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-base sm:text-lg lg:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center gap-3 sm:gap-4 w-full sm:w-auto"
             >
               <Phone className="w-5 h-5 sm:w-6 sm:h-6 group-hover:animate-pulse" />
