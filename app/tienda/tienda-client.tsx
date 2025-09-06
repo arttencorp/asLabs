@@ -26,163 +26,84 @@ import {
   Beaker,
   Search,
   Filter,
+  Package,
 } from "lucide-react"
 import Navbar from "@/components/navbar"
-
-/* ---------- Datos ------------- */
-const allProducts = [
-  // Medios de Cultivo
-  { id: "agar-tsa", name: "Agar TSA", price: "S/. 5.00", category: "medios", categoryName: "Medios de Cultivo" },
-  { id: "agar-tsi", name: "Agar TSI", price: "S/. 5.00", category: "medios", categoryName: "Medios de Cultivo" },
-  {
-    id: "agar-macconkey",
-    name: "Agar MacConkey",
-    price: "S/. 5.00",
-    category: "medios",
-    categoryName: "Medios de Cultivo",
-  },
-  { id: "agar-puro", name: "Agar Puro", price: "S/. 3.00", category: "medios", categoryName: "Medios de Cultivo" },
-
-  // Caldos
-  { id: "caldo-caso", name: "Caldo CASO", price: "S/. 5.00", category: "caldos", categoryName: "Caldos" },
-
-  // Tubos de Ensayo
-  { id: "tubo-13x100", name: "Tubo 13×100 mm", price: "S/. 2.00", category: "tubos", categoryName: "Tubos de Ensayo" },
-  { id: "tubo-16x150", name: "Tubo 16×150 mm", price: "S/. 3.00", category: "tubos", categoryName: "Tubos de Ensayo" },
-
-  // Placas Petri
-  { id: "placa-90", name: "Placa Petri 90 mm", price: "S/. 3.00", category: "placas", categoryName: "Placas Petri" },
-  { id: "placa-150", name: "Placa Petri 150 mm", price: "S/. 5.00", category: "placas", categoryName: "Placas Petri" },
-
-  // Tubos de Recolección
-  {
-    id: "tubo-rojo",
-    name: "Tubo tapa roja",
-    price: "S/. 4.00",
-    category: "recoleccion",
-    categoryName: "Tubos de Recolección",
-    desc: "Sin aditivo",
-  },
-  {
-    id: "tubo-lila",
-    name: "Tubo tapa lila (EDTA)",
-    price: "S/. 5.00",
-    category: "recoleccion",
-    categoryName: "Tubos de Recolección",
-    desc: "EDTA",
-  },
-
-  // Asas Bacteriológicas
-  {
-    id: "asa-delgada",
-    name: "Asa mango delgado",
-    price: "S/. 18.00",
-    category: "asas",
-    categoryName: "Asas Bacteriológicas",
-  },
-  {
-    id: "asa-gruesa",
-    name: "Asa mango grueso",
-    price: "S/. 13.00",
-    category: "asas",
-    categoryName: "Asas Bacteriológicas",
-  },
-
-  // Porta Objetos
-  {
-    id: "porta-premium",
-    name: "Porta Objetos Premium",
-    price: "S/. 8.00",
-    category: "porta",
-    categoryName: "Porta Objetos",
-  },
-
-  // Colorantes
-  {
-    id: "kit-gram",
-    name: "Kit tinción de Gram",
-    price: "S/. 25.00",
-    category: "colorantes",
-    categoryName: "Colorantes",
-  },
-  { id: "kit-wright", name: "Kit Wright", price: "S/. 20.00", category: "colorantes", categoryName: "Colorantes" },
-
-  // Servicios
-  {
-    id: "serv-esteril",
-    name: "Esterilización (2 L)",
-    price: "S/. 10.00",
-    category: "servicios",
-    categoryName: "Servicios",
-    desc: "Autoclave profesional",
-  },
-  {
-    id: "serv-siembra",
-    name: "Siembra en placa",
-    price: "S/. 10.00",
-    category: "servicios",
-    categoryName: "Servicios",
-    desc: "Preparación y sembrado",
-  },
-  {
-    id: "serv-centrifuga",
-    name: "Centrifugado de tubos",
-    price: "S/. 10.00",
-    category: "servicios",
-    categoryName: "Servicios",
-    desc: "Hasta 10 tubos",
-  },
-
-  // Frascos
-  {
-    id: "frasco-5ml",
-    name: "Frasco 5ml vidrio",
-    price: "S/. 1.00",
-    category: "frascos",
-    categoryName: "Frascos de Vidrio",
-    desc: "No estéril, tapa de jebe",
-  },
-  {
-    id: "frasco-10ml",
-    name: "Frasco 10ml vidrio",
-    price: "S/. 1.70",
-    category: "frascos",
-    categoryName: "Frascos de Vidrio",
-    desc: "No estéril, tapa de jebe",
-  },
-]
-
-const categories = [
-  { id: "todos", name: "Todos los productos", icon: ShoppingCart, count: allProducts.length },
-  { id: "medios", name: "Medios de Cultivo", icon: PetriDish, count: 4 },
-  { id: "caldos", name: "Caldos", icon: Flask, count: 1 },
-  { id: "tubos", name: "Tubos de Ensayo", icon: Test, count: 2 },
-  { id: "placas", name: "Placas Petri", icon: PetriDish, count: 2 },
-  { id: "recoleccion", name: "Tubos de Recolección", icon: Vial, count: 2 },
-  { id: "asas", name: "Asas Bacteriológicas", icon: Pipette, count: 2 },
-  { id: "porta", name: "Porta Objetos", icon: Microscope, count: 1 },
-  { id: "colorantes", name: "Colorantes", icon: Droplets, count: 2 },
-  { id: "servicios", name: "Servicios", icon: Beaker, count: 3 },
-  { id: "frascos", name: "Frascos de Vidrio", icon: Vial, count: 2 },
-]
+import { obtenerCategorias, obtenerProductosTienda } from "@/lib/supabase"
+import type { CategoriaDatabase, ProductoTiendaDatabase } from "@/types/database"
 
 export default function TiendaClient() {
+  const [categorias, setCategorias] = useState<CategoriaDatabase[]>([])
+  const [productos, setProductos] = useState<ProductoTiendaDatabase[]>([])
+  const [loading, setLoading] = useState(true)
   const [openDialog, setOpenDialog] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState("todos")
   const [searchTerm, setSearchTerm] = useState("")
   const [loaded, setLoaded] = useState(false)
 
+  /* Cargar datos de la BD */
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [categoriasData, productosData] = await Promise.all([
+          obtenerCategorias(),
+          obtenerProductosTienda()
+        ])
+        
+        // Solo categorías y productos activos
+        setCategorias(categoriasData.filter(cat => cat.cat_activo_bool !== false))
+        setProductos(productosData.filter(prod => prod.prod_tiend_activo_bool !== false))
+      } catch (error) {
+        console.error('Error cargando datos:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    loadData()
+  }, [])
+
   /* efecto de entrada */
   useEffect(() => setLoaded(true), [])
 
+  // Crear categorías dinámicas basadas en los datos de la BD
+  const categories = [
+    { id: "todos", name: "Todos los productos", icon: ShoppingCart, count: productos.length },
+    ...categorias.map(categoria => ({
+      id: categoria.cat_id_int,
+      name: categoria.cat_nom_vac || 'Sin nombre',
+      icon: Package, // Ícono genérico para todas las categorías
+      count: productos.filter(prod => prod.cat_id_int === categoria.cat_id_int).length
+    }))
+  ]
+
   /* filtrado de productos */
-  const filteredProducts = allProducts.filter((product) => {
-    const matchesCategory = selectedCategory === "todos" || product.category === selectedCategory
+  const filteredProducts = productos.filter((product) => {
+    const matchesCategory = selectedCategory === "todos" || product.cat_id_int === selectedCategory
     const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+      (product.prod_tiend_nom_vac || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (getCategoriaName(product.cat_id_int) || '').toLowerCase().includes(searchTerm.toLowerCase())
     return matchesCategory && matchesSearch
   })
+
+  // Helper para obtener nombre de categoría
+  const getCategoriaName = (categoriaId: string) => {
+    const categoria = categorias.find(cat => cat.cat_id_int === categoriaId)
+    return categoria?.cat_nom_vac || 'Sin categoría'
+  }
+
+  // Helper para formatear precio
+  const formatPrice = (price: string | null) => {
+    if (!price) return 'Consultar precio'
+    
+    const numPrice = parseFloat(price)
+    if (isNaN(numPrice)) return price
+    
+    return new Intl.NumberFormat('es-PE', {
+      style: 'currency',
+      currency: 'PEN'
+    }).format(numPrice)
+  }
 
   /* helpers */
   const openProductDialog = (id: string) => setOpenDialog(id)
@@ -193,28 +114,30 @@ export default function TiendaClient() {
   }
 
   /* ---------- Render Card ------------- */
-  const ProductCard = ({ product }: { product: (typeof allProducts)[0] }) => (
+  const ProductCard = ({ product }: { product: ProductoTiendaDatabase }) => (
     <Card
-      key={product.id}
+      key={product.prod_tiend_id_int}
       className={`overflow-hidden border-t-4 border-t-[#2e7d32]/80 transition-all duration-500 hover:shadow-lg ${
         loaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       }`}
     >
       <CardHeader className="p-5 bg-gradient-to-b from-gray-50 to-white">
-        <CardTitle className="text-lg font-semibold text-gray-800">{product.name}</CardTitle>
+        <CardTitle className="text-lg font-semibold text-gray-800">
+          {product.prod_tiend_nom_vac || 'Sin nombre'}
+        </CardTitle>
         <CardDescription className="text-gray-500">
-          {product.desc || `${product.categoryName} - Producto de laboratorio`}
+          {product.prod_tiend_desc_vac || `${getCategoriaName(product.cat_id_int)} - Producto de laboratorio`}
         </CardDescription>
       </CardHeader>
       <CardFooter className="p-5 pt-0 flex justify-between items-center">
-        <p className="text-xl font-bold text-[#2e7d32]">{product.price}</p>
+        <p className="text-xl font-bold text-[#2e7d32]">{formatPrice(product.prod_tiend_prec_vac)}</p>
         {/* diálogo */}
-        <Dialog open={openDialog === product.id} onOpenChange={(o) => !o && closeDialog()}>
+        <Dialog open={openDialog === product.prod_tiend_id_int} onOpenChange={(o) => !o && closeDialog()}>
           <DialogTrigger asChild>
             <Button
               variant="outline"
               className="border-[#2e7d32] text-[#2e7d32] hover:bg-[#2e7d32] hover:text-white"
-              onClick={() => openProductDialog(product.id)}
+              onClick={() => openProductDialog(product.prod_tiend_id_int)}
             >
               Ver detalles
             </Button>
@@ -222,24 +145,24 @@ export default function TiendaClient() {
 
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-2xl">{product.name}</DialogTitle>
-              <DialogDescription>{product.categoryName}</DialogDescription>
+              <DialogTitle className="text-2xl">{product.prod_tiend_nom_vac || 'Sin nombre'}</DialogTitle>
+              <DialogDescription>{getCategoriaName(product.cat_id_int)}</DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4">
               <p className="text-sm text-gray-600">
-                {product.desc ? (
+                {product.prod_tiend_desc_vac ? (
                   <>
-                    Descripción: <strong>{product.desc}</strong>
+                    Descripción: <strong>{product.prod_tiend_desc_vac}</strong>
                   </>
                 ) : (
                   <>
-                    Descripción breve de <strong>{product.name}</strong>. Ideal para prácticas académicas.
+                    Descripción breve de <strong>{product.prod_tiend_nom_vac}</strong>. Ideal para prácticas académicas.
                   </>
                 )}
               </p>
               <div className="flex justify-between bg-gray-50 p-3 rounded-lg">
-                <span className="font-bold text-2xl text-[#2e7d32]">{product.price}</span>
+                <span className="font-bold text-2xl text-[#2e7d32]">{formatPrice(product.prod_tiend_prec_vac)}</span>
                 <span className="text-sm text-gray-500">Precio unitario</span>
               </div>
             </div>
@@ -250,7 +173,7 @@ export default function TiendaClient() {
               </DialogClose>
               <Button
                 className="bg-[#25D366] hover:bg-[#128C7E]"
-                onClick={() => sendWhatsApp(product.name, product.price)}
+                onClick={() => sendWhatsApp(product.prod_tiend_nom_vac || 'Producto', formatPrice(product.prod_tiend_prec_vac))}
               >
                 WhatsApp
               </Button>
@@ -373,50 +296,61 @@ export default function TiendaClient() {
 
           {/* ÁREA DE PRODUCTOS */}
           <div className="lg:w-3/4">
-            {/* Header de resultados */}
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {selectedCategory === "todos"
-                    ? "Todos los productos"
-                    : categories.find((c) => c.id === selectedCategory)?.name}
-                </h2>
-                <p className="text-gray-600">
-                  {filteredProducts.length} producto{filteredProducts.length !== 1 ? "s" : ""} encontrado
-                  {filteredProducts.length !== 1 ? "s" : ""}
-                  {searchTerm && ` para "${searchTerm}"`}
-                </p>
-              </div>
-            </div>
-
-            {/* Grid de productos */}
-            {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2e7d32] mx-auto mb-4"></div>
+                  <p className="text-gray-600">Cargando productos...</p>
+                </div>
               </div>
             ) : (
-              <div className="text-center py-12">
-                <div className="text-gray-400 mb-4">
-                  <Search className="h-16 w-16 mx-auto" />
+              <>
+                {/* Header de resultados */}
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      {selectedCategory === "todos"
+                        ? "Todos los productos"
+                        : categories.find((c) => c.id === selectedCategory)?.name}
+                    </h2>
+                    <p className="text-gray-600">
+                      {filteredProducts.length} producto{filteredProducts.length !== 1 ? "s" : ""} encontrado
+                      {filteredProducts.length !== 1 ? "s" : ""}
+                      {searchTerm && ` para "${searchTerm}"`}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">No se encontraron productos</h3>
-                <p className="text-gray-500 mb-4">
-                  {searchTerm
-                    ? `No hay productos que coincidan con "${searchTerm}"`
-                    : "No hay productos en esta categoría"}
-                </p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchTerm("")
-                    setSelectedCategory("todos")
-                  }}
-                >
-                  Ver todos los productos
-                </Button>
-              </div>
+
+                {/* Grid de productos */}
+                {filteredProducts.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {filteredProducts.map((product) => (
+                      <ProductCard key={product.prod_tiend_id_int} product={product} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="text-gray-400 mb-4">
+                      <Search className="h-16 w-16 mx-auto" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-600 mb-2">No se encontraron productos</h3>
+                    <p className="text-gray-500 mb-4">
+                      {searchTerm
+                        ? `No hay productos que coincidan con "${searchTerm}"`
+                        : "No hay productos en esta categoría"}
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setSearchTerm("")
+                        setSelectedCategory("todos")
+                      }}
+                    >
+                      Ver todos los productos
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

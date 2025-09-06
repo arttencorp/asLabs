@@ -50,6 +50,7 @@ export interface Pedido {
   ped_observacion_vac?: string
   ped_num_comprob_vac?: string
   ped_created_at_dt: string
+  ped_updated_at_dt: string
   est_ped_id_int: string
   cot_id_int: string
   estado_pedido?: EstadoPedido
