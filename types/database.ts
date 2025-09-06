@@ -104,6 +104,7 @@ export interface ProductoTiendaDatabase {
   prod_tiend_nom_vac: string | null
   prod_tiend_desc_vac: string | null
   prod_tiend_prec_vac: string | null
+  prod_tiend_activo_bool?: boolean | null
   prod_tiend_created_at_dt: string
   prod_tiend_updated_at_dt: string
   cat_id_int: string // FK a Categoria

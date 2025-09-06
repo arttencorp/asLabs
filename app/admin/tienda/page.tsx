@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Store, Tags, Package } from "lucide-react"
 import CategoriasManagement from '@/components/admin/tienda/components/CategoriasManagement'
+import { ProductosTiendaManagement } from '@/components/admin/tienda/components/ProductosTiendaManagement'
 
 export default function TiendaAdminPage() {
   const [activeTab, setActiveTab] = useState('categorias')
@@ -29,9 +30,9 @@ export default function TiendaAdminPage() {
             <Tags className="h-4 w-4" />
             Categorías
           </TabsTrigger>
-          <TabsTrigger value="productos" className="flex items-center gap-2" disabled>
+          <TabsTrigger value="productos" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
-            Productos (Próximamente)
+            Productos
           </TabsTrigger>
         </TabsList>
 
@@ -40,29 +41,9 @@ export default function TiendaAdminPage() {
           <CategoriasManagement />
         </TabsContent>
 
-        {/* Tab de Productos (placeholder) */}
+        {/* Tab de Productos */}
         <TabsContent value="productos">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                Productos de Tienda
-              </CardTitle>
-              <CardDescription>
-                Gestión de productos específicos de la tienda online
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12 text-gray-500">
-                <Package className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-semibold mb-2">Próximamente</h3>
-                <p>La gestión de productos de tienda estará disponible próximamente.</p>
-                <p className="text-sm mt-1">
-                  Primero completa la configuración de categorías.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <ProductosTiendaManagement />
         </TabsContent>
       </Tabs>
     </div>

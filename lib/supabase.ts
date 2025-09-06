@@ -1599,3 +1599,174 @@ export async function obtenerCategoriaPorId(id: string): Promise<CategoriaDataba
     throw error
   }
 }
+
+// ============================================
+// PRODUCTOS DE TIENDA CRUD
+// ============================================
+
+export async function obtenerProductosTienda(): Promise<ProductoTiendaDatabase[]> {
+  try {
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .select('*')
+      .order('prod_tiend_nom_vac', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error obteniendo productos de tienda:', error)
+    throw error
+  }
+}
+
+export async function crearProductoTienda(productoData: {
+  prod_tiend_nom_vac: string
+  prod_tiend_desc_vac: string | null
+  prod_tiend_prec_vac: string | null
+  cat_id_int: string
+}): Promise<ProductoTiendaDatabase> {
+  try {
+    // Limpiar datos antes de insertar
+    const datosLimpios = {
+      prod_tiend_nom_vac: productoData.prod_tiend_nom_vac?.trim() || null,
+      prod_tiend_desc_vac: productoData.prod_tiend_desc_vac?.trim() || null,
+      prod_tiend_prec_vac: productoData.prod_tiend_prec_vac?.trim() || null,
+      cat_id_int: productoData.cat_id_int
+    }
+
+    // Validar que el nombre no esté vacío
+    if (!datosLimpios.prod_tiend_nom_vac) {
+      throw new Error('El nombre del producto es obligatorio')
+    }
+
+    // Validar que la categoría no esté vacía
+    if (!datosLimpios.cat_id_int) {
+      throw new Error('La categoría es obligatoria')
+    }
+
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .insert(datosLimpios)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error creando producto de tienda:', error)
+    throw error
+  }
+}
+
+export async function actualizarProductoTienda(id: string, productoData: {
+  prod_tiend_nom_vac?: string
+  prod_tiend_desc_vac?: string | null
+  prod_tiend_prec_vac?: string | null
+  cat_id_int?: string
+}): Promise<ProductoTiendaDatabase> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!id || id.trim() === '') {
+      throw new Error('El ID del producto es obligatorio')
+    }
+
+    const updateData: any = {}
+
+    // Solo agregar campos que se están actualizando
+    if (productoData.prod_tiend_nom_vac !== undefined) {
+      const nombreLimpio = productoData.prod_tiend_nom_vac?.trim()
+      if (!nombreLimpio) {
+        throw new Error('El nombre del producto es obligatorio')
+      }
+      updateData.prod_tiend_nom_vac = nombreLimpio
+    }
+    if (productoData.prod_tiend_desc_vac !== undefined) {
+      updateData.prod_tiend_desc_vac = productoData.prod_tiend_desc_vac?.trim() || null
+    }
+    if (productoData.prod_tiend_prec_vac !== undefined) {
+      updateData.prod_tiend_prec_vac = productoData.prod_tiend_prec_vac?.trim() || null
+    }
+    if (productoData.cat_id_int !== undefined) {
+      if (!productoData.cat_id_int) {
+        throw new Error('La categoría es obligatoria')
+      }
+      updateData.cat_id_int = productoData.cat_id_int
+    }
+
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .update(updateData)
+      .eq('prod_tiend_id_int', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error actualizando producto de tienda:', error)
+    throw error
+  }
+}
+
+export async function eliminarProductoTienda(id: string): Promise<void> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!id || id.trim() === '') {
+      throw new Error('El ID del producto es obligatorio')
+    }
+
+    const { error } = await supabase
+      .from('Productos_Tienda')
+      .delete()
+      .eq('prod_tiend_id_int', id)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error eliminando producto de tienda:', error)
+    throw error
+  }
+}
+
+export async function ocultarProductoTienda(id: string): Promise<ProductoTiendaDatabase> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!id || id.trim() === '') {
+      throw new Error('El ID del producto es obligatorio')
+    }
+
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .update({ prod_tiend_activo_bool: false })
+      .eq('prod_tiend_id_int', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error ocultando producto de tienda:', error)
+    throw error
+  }
+}
+
+export async function mostrarProductoTienda(id: string): Promise<ProductoTiendaDatabase> {
+  try {
+    // Validar que el ID no esté vacío
+    if (!id || id.trim() === '') {
+      throw new Error('El ID del producto es obligatorio')
+    }
+
+    const { data, error } = await supabase
+      .from('Productos_Tienda')
+      .update({ prod_tiend_activo_bool: true })
+      .eq('prod_tiend_id_int', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error mostrando producto de tienda:', error)
+    throw error
+  }
+}
