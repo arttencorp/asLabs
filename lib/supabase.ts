@@ -461,6 +461,172 @@ export async function obtenerFichasTecnicasPorProductos(productosIds: string[]):
 }
 
 // ============================================
+// FUNCIONES ESPECÍFICAS DE CLIENTES
+// ============================================
+
+// Obtener una persona específica por ID
+export async function obtenerPersonaPorId(id: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Personas')
+      .select(`
+        *,
+        Persona_Natural(*),
+        Persona_Juridica(*)
+      `)
+      .eq('per_id_int', id)
+      .single()
+
+    if (error) throw error
+
+    if (data) {
+      // Transformar los datos de persona
+      const persona = {
+        ...data,
+        tipo: data.Persona_Natural && data.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+        persona_natural: data.Persona_Natural && data.Persona_Natural.length > 0
+          ? data.Persona_Natural[0]
+          : null,
+        persona_juridica: data.Persona_Juridica && data.Persona_Juridica.length > 0
+          ? data.Persona_Juridica[0]
+          : null
+      }
+
+      return persona
+    }
+
+    return null
+  } catch (error) {
+    console.error('Error obteniendo persona por ID:', error)
+    throw error
+  }
+}
+
+// Obtener cotizaciones de un cliente específico
+export async function obtenerCotizacionesPorCliente(clienteId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .eq('per_id_int', clienteId)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (error) throw error
+
+    // Transformar los datos de persona igual que en obtenerCotizaciones
+    const cotizacionesTransformadas = data?.map(cotizacion => {
+      if (cotizacion.persona) {
+        const persona = cotizacion.persona
+        cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
+            : null
+        }
+      }
+      return cotizacion
+    })
+
+    return cotizacionesTransformadas || []
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones por cliente:', error)
+    throw error
+  }
+}
+
+// Obtener pedidos de un cliente específico
+export async function obtenerPedidosPorCliente(clienteId: string) {
+  try {
+    // Primero obtener las cotizaciones del cliente
+    const { data: cotizacionesCliente, error: cotizacionesError } = await supabase
+      .from('Cotizaciones')
+      .select('cot_id_int')
+      .eq('per_id_int', clienteId)
+
+    if (cotizacionesError) throw cotizacionesError
+
+    if (!cotizacionesCliente || cotizacionesCliente.length === 0) {
+      return []
+    }
+
+    // Obtener los IDs de las cotizaciones
+    const cotizacionIds = cotizacionesCliente.map(c => c.cot_id_int)
+
+    // Obtener pedidos que pertenecen a esas cotizaciones
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select(`
+        *,
+        estado_pedido:Estado_Pedido(*),
+        cotizacion:Cotizaciones(
+          *,
+          estado_cotizacion:Estado_Cotizacion(*),
+          persona:Personas(
+            *,
+            Persona_Natural(*),
+            Persona_Juridica(*)
+          ),
+          detalle_cotizacion:Detalle_Cotizacion(
+            *,
+            producto:Productos(*)
+          ),
+          informacion_adicional:Informacion_Adicional(
+            *,
+            forma_pago:Forma_Pago(*)
+          )
+        )
+      `)
+      .in('cot_id_int', cotizacionIds)
+      .order('ped_created_at_dt', { ascending: false })
+
+    if (error) throw error
+
+    // Transformar los datos de persona igual que en obtenerPedidos
+    const pedidosTransformados = data?.map(pedido => {
+      if (pedido.cotizacion && pedido.cotizacion.persona) {
+        const persona = pedido.cotizacion.persona
+        pedido.cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
+            : null
+        }
+      }
+      return pedido
+    })
+
+    return pedidosTransformados || []
+  } catch (error) {
+    console.error('Error obteniendo pedidos por cliente:', error)
+    throw error
+  }
+}
+
+// ============================================
 // FUNCIONES ESPECÍFICAS DE PEDIDOS
 // ============================================
 
@@ -518,6 +684,92 @@ export async function obtenerPedidos() {
   }
 }
 
+// Función para verificar si una cotización ya tiene un pedido asociado
+export async function verificarCotizacionTienePedido(cotizacionId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase
+      .from('Pedidos')
+      .select('ped_id_int')
+      .eq('cot_id_int', cotizacionId)
+      .limit(1)
+
+    if (error) throw error
+    return data && data.length > 0
+  } catch (error) {
+    console.error('Error verificando cotización con pedido:', error)
+    throw error
+  }
+}
+
+// Función para obtener cotizaciones disponibles (sin pedido asociado)
+export async function obtenerCotizacionesDisponibles() {
+  try {
+    // Primero obtener todas las cotizaciones
+    const { data: todasCotizaciones, error: cotizacionesError } = await supabase
+      .from('Cotizaciones')
+      .select(`
+        *,
+        estado_cotizacion:Estado_Cotizacion(*),
+        persona:Personas(
+          *,
+          Persona_Natural(*),
+          Persona_Juridica(*)
+        ),
+        detalle_cotizacion:Detalle_Cotizacion(
+          *,
+          producto:Productos(*)
+        ),
+        informacion_adicional:Informacion_Adicional(
+          *,
+          forma_pago:Forma_Pago(*)
+        )
+      `)
+      .order('cot_fec_emis_dt', { ascending: false })
+
+    if (cotizacionesError) throw cotizacionesError
+
+    // Obtener todas las cotizaciones que ya tienen pedido
+    const { data: cotizacionesConPedido, error: pedidosError } = await supabase
+      .from('Pedidos')
+      .select('cot_id_int')
+
+    if (pedidosError) throw pedidosError
+
+    // Crear un Set con los IDs de cotizaciones que ya tienen pedido
+    const cotizacionesUsadas = new Set(
+      cotizacionesConPedido?.map(p => p.cot_id_int) || []
+    )
+
+    // Filtrar cotizaciones que NO tienen pedido asociado
+    const cotizacionesDisponibles = todasCotizaciones?.filter(
+      cotizacion => !cotizacionesUsadas.has(cotizacion.cot_id_int)
+    ) || []
+
+    // Transformar los datos de persona igual que en obtenerCotizaciones
+    const cotizacionesTransformadas = cotizacionesDisponibles.map(cotizacion => {
+      if (cotizacion.persona) {
+        const persona = cotizacion.persona
+        cotizacion.persona = {
+          ...persona,
+          tipo: persona.Persona_Natural && persona.Persona_Natural.length > 0 ? 'natural' : 'juridica',
+          persona_natural: persona.Persona_Natural && persona.Persona_Natural.length > 0
+            ? persona.Persona_Natural[0]
+            : null,
+          persona_juridica: persona.Persona_Juridica && persona.Persona_Juridica.length > 0
+            ? persona.Persona_Juridica[0]
+            : null
+        }
+      }
+      return cotizacion
+    })
+
+    return cotizacionesTransformadas
+  } catch (error) {
+    console.error('Error obteniendo cotizaciones disponibles:', error)
+    throw error
+  }
+}
+
 export async function crearPedido(pedidoData: {
   cotizacion_id: string
   estado_id?: string | null
@@ -530,6 +782,12 @@ export async function crearPedido(pedidoData: {
     // Validar que la cotización no esté vacía
     if (!pedidoData.cotizacion_id || pedidoData.cotizacion_id.trim() === '') {
       throw new Error('La cotización es obligatoria')
+    }
+
+    // Verificar si ya existe un pedido para esta cotización
+    const yaExistePedido = await verificarCotizacionTienePedido(pedidoData.cotizacion_id.trim())
+    if (yaExistePedido) {
+      throw new Error('Esta cotización ya tiene un pedido asociado. No se puede crear otro pedido para la misma cotización.')
     }
 
     const codigoSeguimiento = await generarCodigoSeguimiento()
@@ -598,6 +856,26 @@ export async function crearPedido(pedidoData: {
 
 export async function actualizarPedido(id: string, pedidoData: any) {
   try {
+    // Si se está cambiando la cotización, verificar que la nueva cotización no tenga pedido
+    if (pedidoData.cotizacion_id !== undefined) {
+      // Obtener el pedido actual para verificar si está cambiando la cotización
+      const { data: pedidoActual, error: pedidoError } = await supabase
+        .from('Pedidos')
+        .select('cot_id_int')
+        .eq('ped_id_int', id)
+        .single()
+
+      if (pedidoError) throw pedidoError
+
+      // Si está cambiando a una cotización diferente
+      if (pedidoActual.cot_id_int !== pedidoData.cotizacion_id) {
+        const yaExistePedido = await verificarCotizacionTienePedido(pedidoData.cotizacion_id)
+        if (yaExistePedido) {
+          throw new Error('La cotización seleccionada ya tiene un pedido asociado. No se puede asignar a otro pedido.')
+        }
+      }
+    }
+
     const updateData: any = {
       ped_fec_actualizada_dt: new Date().toISOString()
     }
@@ -645,6 +923,86 @@ export async function eliminarPedido(id: string): Promise<void> {
     if (error) throw error
   } catch (error) {
     console.error('Error eliminando pedido:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES DE STORAGE PARA IMÁGENES
+// ============================================
+
+export async function subirImagenPedido(file: File, pedidoId?: string): Promise<string> {
+  try {
+    // Validar archivo antes de subir
+    if (!file) {
+      throw new Error('No se proporcionó archivo')
+    }
+    
+    if (!file.type.startsWith('image/')) {
+      throw new Error('El archivo debe ser una imagen')
+    }
+
+    // Generar nombre único para el archivo
+    const timestamp = Date.now()
+    const extension = file.name.split('.').pop()?.toLowerCase()
+    const fileName = pedidoId 
+      ? `pedido_${pedidoId}_${timestamp}.${extension}`
+      : `pedido_temp_${timestamp}.${extension}`
+
+    // Subir a bucket 'admin' en carpeta 'pedidos' como especificaste
+    const { data, error } = await supabase.storage
+      .from('admin')
+      .upload(`pedidos/${fileName}`, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (error) {
+      throw new Error(`Error del servidor: ${error.message}`)
+    }
+
+    if (!data) {
+      throw new Error('No se recibió respuesta del servidor')
+    }
+
+    // Obtener URL pública
+    const { data: urlData } = supabase.storage
+      .from('admin')
+      .getPublicUrl(`pedidos/${fileName}`)
+
+    if (!urlData.publicUrl) {
+      throw new Error('No se pudo generar la URL pública')
+    }
+
+    return urlData.publicUrl
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
+  try {
+    if (!imageUrl) {
+      throw new Error('No se proporcionó URL de imagen')
+    }
+    
+    // Extraer el path del archivo de la URL
+    const urlParts = imageUrl.split('/')
+    const fileName = urlParts[urlParts.length - 1]
+    
+    if (!fileName) {
+      throw new Error('No se pudo extraer el nombre del archivo de la URL')
+    }
+
+    // Eliminar del bucket 'admin' carpeta 'pedidos'
+    const { error } = await supabase.storage
+      .from('admin')
+      .remove([`pedidos/${fileName}`])
+
+    if (error) {
+      throw new Error(`Error del servidor: ${error.message}`)
+    }
+  } catch (error) {
     throw error
   }
 }

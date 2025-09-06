@@ -17,6 +17,7 @@ export default function PedidosPage() {
   const {
     pedidos,
     cotizaciones,
+    cotizacionesDisponibles,
     estadosPedido,
     loading,
     error,
@@ -24,7 +25,8 @@ export default function PedidosPage() {
     deletePedido,
     loadData,
     setError,
-    showSuccess
+    showSuccess,
+    getCotizacionesParaFormulario
   } = usePedidos()
 
   const [showForm, setShowForm] = useState(false)
@@ -205,7 +207,7 @@ export default function PedidosPage() {
         onClose={handleCloseForm}
         onSubmit={editingPedido ? handleUpdatePedido : handleCreatePedido}
         pedido={editingPedido}
-        cotizaciones={cotizaciones}
+        cotizaciones={getCotizacionesParaFormulario(editingPedido)}
         estadosPedido={estadosPedido}
         loading={loading}
       />
