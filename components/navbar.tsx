@@ -177,7 +177,7 @@ export default function Navbar() {
 
                   {activeItem === key && (
                     <div
-                      className="absolute left-0 mt-2 w-[600px] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn"
+                      className="absolute left-0 top-full w-[600px] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn"
                       style={{
                         animation: "fadeIn 0.3s ease-in-out",
                         transformOrigin: "top center",
