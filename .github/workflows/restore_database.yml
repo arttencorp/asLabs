@@ -27,6 +27,7 @@ jobs:
           name: latest-backup 
           branch: main
           workflow_conclusion: success
+          github_token: ${{ secrets.ACTIONS_PAT }}
 
       - name: Descomprimir el backup
         run: |
