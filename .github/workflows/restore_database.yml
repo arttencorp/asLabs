@@ -1,11 +1,7 @@
-name: Restaurar Base de Datos desde URL
+name: Restaurar Último Backup
 
 on:
   workflow_dispatch:
-    inputs:
-      backup_url:
-        description: 'URL de descarga directa del .sql'
-        required: true
 
 jobs:
   restore-database:
@@ -14,106 +10,66 @@ jobs:
     steps:
       - name: Instalar herramientas necesarias (jq, PostgreSQL 17 client)
         run: |
-          # Instalar jq
           sudo apt-get update && sudo apt-get install -y jq
-          
-          # Agregar repositorio oficial de PostgreSQL para obtener la versión 17
           sudo apt-get install -y wget ca-certificates
           wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
           echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-          
-          # Actualizar e instalar PostgreSQL 17 client
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
-          
-          # Verificar instalación
-          echo "Versión de psql instalada:"
-          /usr/lib/postgresql/17/bin/psql --version || psql --version
 
-      - name: Autorizar IP del Runner en el firewall de Supabase
+      - name: Descargar el último backup desde el workflow de backup
+        uses: dawidd6/action-download-artifact@v6
+        with: 
+          workflow: backup-database.yml 
+          name: latest-backup 
+          branch: main
+          workflow_conclusion: success
+
+      - name: Descomprimir el backup
+        run: |
+          # Encuentra el archivo .tar.gz y descomprímelo
+          tar -xzf latest-backup/*.tar.gz
+          # Renombra el .sql a un nombre fijo para que sea fácil de usar
+          mv *.sql backup.sql
+          echo "Backup descomprimido exitosamente."
+
+      - name: Autorizar IP del Runner en el firewall de Supabase (PRUEBA)
         id: authorize_ip
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN  }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
         run: |
+          # ... (este bloque es idéntico y funciona bien)
           RUNNER_IP=$(curl -s ifconfig.me)
           echo "La IP del Runner es: $RUNNER_IP"
-          
-          CURRENT_RULES_JSON=$(curl -s -f -X GET \
-            "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" \
-            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
-          
-          if [ $? -ne 0 ]; then
-            echo "::error::Falló la obtención de las reglas de red. ¿El PROJECT_ID y el ACCESS_TOKEN son correctos?"
-            exit 1
-          fi
-          
+          CURRENT_RULES_JSON=$(curl -s -f -X GET "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
           echo "original_rules=$CURRENT_RULES_JSON" >> $GITHUB_OUTPUT
-
           NEW_RULES_JSON=$(echo "$CURRENT_RULES_JSON" | jq --arg ip "$RUNNER_IP/32" '.dbAllowedCidrs += [$ip]')
-
           echo "Aplicando nuevas reglas de red para permitir la IP: $RUNNER_IP..."
-          curl -s -f -X POST \
-            "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
-            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
-            -H "Content-Type: application/json" \
-            --data-raw "$NEW_RULES_JSON"
-          
-          if [ $? -ne 0 ]; then
-            echo "::error::Falló al aplicar las nuevas reglas de red."
-            exit 1
-          fi
-
+          curl -s -f -X POST "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" --data-raw "$NEW_RULES_JSON"
           echo "Esperando 20 segundos para que la regla se aplique..."
           sleep 20
-
-      - name: Descargar y verificar archivo de backup
-        run: |
-          echo "Descargando backup desde la URL proporcionada..."
-          curl -L --fail -o backup.sql "${{ github.event.inputs.backup_url }}"
-          
-          if [ ! -s "backup.sql" ] || grep -q "<!DOCTYPE html>" backup.sql; then
-            echo "::error:: El archivo descargado está vacío o es una página HTML."
-            echo "Asegúrate de usar un enlace de descarga directa."
-            exit 1
-          fi
-          echo "Backup descargado y verificado exitosamente. Tamaño: $(ls -lh backup.sql | awk '{print $5}')"
 
       - name: Restaurar la Base de Datos (EN ENTORNO DE PRUEBA)
         env:
           DATABASE_URL: ${{ secrets.STAGING_SUPABASE_DATABASE_URL }}
         run: |
-          # Intentar usar la versión específica de PostgreSQL 17 primero
           PSQL_CMD="/usr/lib/postgresql/17/bin/psql"
-          if [ ! -f "$PSQL_CMD" ]; then
-            echo "PostgreSQL 17 no encontrado, usando versión por defecto..."
-            PSQL_CMD="psql"
-          fi
+          if [ ! -f "$PSQL_CMD" ]; then PSQL_CMD="psql"; fi
           
           echo "Iniciando restauración con: $($PSQL_CMD --version)"
-          $PSQL_CMD "$DATABASE_URL" \
-            -v ON_ERROR_STOP=1 \
-            -f backup.sql
+          $PSQL_CMD "$DATABASE_URL" -v ON_ERROR_STOP=1 -f backup.sql
           echo "¡Restauración completada exitosamente!"
             
-      - name: Limpiar y restaurar firewall
+      - name: Limpiar y restaurar firewall (PRUEBA)
         if: always()
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN  }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
           ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
         run: |
-          echo "Limpiando archivos locales..."
-          rm -f backup.sql
-          
           echo "Restaurando reglas originales del firewall..."
           if [[ -n "$ORIGINAL_RULES" && "$ORIGINAL_RULES" != *"Cannot GET"* ]]; then
-            curl -s -X POST \
-              "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" \
-              -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
-              -H "Content-Type: application/json" \
-              -d "$ORIGINAL_RULES"
+            curl -s -X POST "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d "$ORIGINAL_RULES"
             echo "Firewall restaurado a su estado original."
-          else
-            echo "No se encontraron reglas originales válidas para restaurar, omitiendo."
           fi
