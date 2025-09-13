@@ -22,18 +22,14 @@ jobs:
 
       - name: Descargar el último backup desde el workflow de backup
         uses: dawidd6/action-download-artifact@v6
-        with: 
+        with:
           workflow: Backup Diario de Base de Datos
-          name: latest-backup 
-          branch: main
+          name: latest-backup
           workflow_conclusion: success
-          github_token: ${{ secrets.ACTIONS_PAT }}
 
       - name: Descomprimir el backup
         run: |
-          # Encuentra el archivo .tar.gz y descomprímelo
           tar -xzf latest-backup/*.tar.gz
-          # Renombra el .sql a un nombre fijo para que sea fácil de usar
           mv *.sql backup.sql
           echo "Backup descomprimido exitosamente."
 
@@ -43,7 +39,6 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
         run: |
-          # ... (este bloque es idéntico y funciona bien)
           RUNNER_IP=$(curl -s ifconfig.me)
           echo "La IP del Runner es: $RUNNER_IP"
           CURRENT_RULES_JSON=$(curl -s -f -X GET "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
