@@ -1,90 +1,58 @@
-name: Restaurar Último Backup
+name: Restaurar Backup desde URL (Manual)
 
 on:
   workflow_dispatch:
-
-permissions:
-  actions: read
-  contents: read
+    inputs:
+      backup_url_raw:
+        description: 'URL RAW del Gist con el backup LIMPIO'
+        required: true
 
 jobs:
-  restore-database:
+  restore-from-gist:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v4
-
-      - name: Instalar herramientas necesarias (jq, PostgreSQL 17 client)
+      - name: Instalar herramientas
         run: |
-          sudo apt-get update && sudo apt-get install -y jq
-          sudo apt-get install -y wget ca-certificates
-          wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
-          echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client-17
+          sudo apt-get update && sudo apt-get install -y jq postgresql-client-17
 
-      - name: Encontrar el ID de la última ejecución exitosa del backup
-        id: find_run
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          LATEST_RUN_ID=$(gh run list --workflow "Backup Diario de Base de Datos" --status success --limit 1 --json databaseId -q '.[0].databaseId')
-          if [ -z "$LATEST_RUN_ID" ]; then
-            echo "::error::No se encontró ninguna ejecución exitosa del workflow de backup."
-            exit 1
-          fi
-          echo "run_id=$LATEST_RUN_ID" >> $GITHUB_OUTPUT
-          echo "ID de la ejecución encontrada: $LATEST_RUN_ID"
-
-      - name: Descargar el artefacto del backup
-        uses: actions/download-artifact@v4
-        with:
-          run-id: ${{ steps.find_run.outputs.run_id }}
-          name: latest-backup
-
-      - name: Descomprimir el backup
-        run: |
-          tar -xzf *.tar.gz
-          mv *.sql backup.sql
-          echo "Backup descomprimido exitosamente."
-
-      - name: Autorizar IP del Runner en el firewall de Supabase (PRUEBA)
+      - name: Autorizar IP del Runner en el firewall de Supabase
         id: authorize_ip
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
         run: |
           RUNNER_IP=$(curl -s ifconfig.me)
-          echo "La IP del Runner es: $RUNNER_IP"
           CURRENT_RULES_JSON=$(curl -s -f -X GET "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
           echo "original_rules=$CURRENT_RULES_JSON" >> $GITHUB_OUTPUT
           NEW_RULES_JSON=$(echo "$CURRENT_RULES_JSON" | jq --arg ip "$RUNNER_IP/32" '.dbAllowedCidrs += [$ip]')
-          echo "Aplicando nuevas reglas de red para permitir la IP: $RUNNER_IP..."
           curl -s -f -X POST "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" --data-raw "$NEW_RULES_JSON"
-          echo "Esperando 20 segundos para que la regla se aplique..."
           sleep 20
+
+      - name: Descargar y verificar archivo de backup
+        run: |
+          curl -L --fail -o backup.sql "${{ github.event.inputs.backup_url_raw }}"
+          if [ ! -s "backup.sql" ] || grep -qi "<!DOCTYPE html>" backup.sql; then
+            echo "::error:: El archivo descargado está vacío o es una página HTML."
+            exit 1
+          fi
+          echo "Backup descargado y verificado."
 
       - name: Restaurar la Base de Datos (EN ENTORNO DE PRUEBA)
         env:
           DATABASE_URL: ${{ secrets.STAGING_SUPABASE_DATABASE_URL }}
         run: |
-          PSQL_CMD="/usr/lib/postgresql/17/bin/psql"
-          if [ ! -f "$PSQL_CMD" ]; then PSQL_CMD="psql"; fi
-          
-          echo "Iniciando restauración con: $($PSQL_CMD --version)"
-          $PSQL_CMD "$DATABASE_URL" -v ON_ERROR_STOP=1 -f backup.sql
-          echo "¡Restauración completada exitosamente!"
+          # Este es el comando que tú encontraste. La única verdad.
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f backup.sql
+          echo "¡RESTAURACIÓN COMPLETADA!"
             
-      - name: Limpiar y restaurar firewall (PRUEPA)
+      - name: Limpiar y restaurar firewall (PRUEBA)
         if: always()
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
           ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
         run: |
-          echo "Restaurando reglas originales del firewall..."
-          if [[ -n "$ORIGINAL_RULES" && "$ORIGINAL_RULES" != *"Cannot GET"* ]]; then
+          if [[ -n "$ORIGINAL_RULES" ]]; then
             curl -s -X POST "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d "$ORIGINAL_RULES"
-            echo "Firewall restaurado a su estado original."
           fi
