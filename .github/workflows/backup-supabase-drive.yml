@@ -96,6 +96,13 @@ jobs:
           
           # Usar pg_dump con mejor compatibilidad de versiones
           $PG_DUMP_CMD "$DATABASE_URL" \
+            --exclude-schema='storage' \
+            --exclude-schema='graphql' \
+            --exclude-schema='graphql_public' \
+            --exclude-schema='net' \
+            --exclude-schema='realtime' \
+            --exclude-schema='supabase_functions' \
+            --exclude-schema='supabase_migrations' \
             --no-owner \
             --no-privileges \
             --clean \
