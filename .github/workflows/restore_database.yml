@@ -5,6 +5,7 @@ on:
 
 permissions:
   actions: read
+  contents: read
 
 jobs:
   restore-database:
@@ -20,16 +21,28 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client-17
 
-      - name: Descargar el último backup desde el workflow de backup
-        uses: dawidd6/action-download-artifact@v6
+      - name: Encontrar el ID de la última ejecución exitosa del backup
+        id: find_run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST_RUN_ID=$(gh run list --workflow "Backup Diario de Base de Datos" --status success --limit 1 --json databaseId -q '.[0].databaseId')
+          if [ -z "$LATEST_RUN_ID" ]; then
+            echo "::error::No se encontró ninguna ejecución exitosa del workflow de backup."
+            exit 1
+          fi
+          echo "run_id=$LATEST_RUN_ID" >> $GITHUB_OUTPUT
+          echo "ID de la ejecución encontrada: $LATEST_RUN_ID"
+
+      - name: Descargar el artefacto del backup
+        uses: actions/download-artifact@v4
         with:
-          workflow: Backup Diario de Base de Datos
+          run_id: ${{ steps.find_run.outputs.run_id }}
           name: latest-backup
-          workflow_conclusion: success
 
       - name: Descomprimir el backup
         run: |
-          tar -xzf latest-backup/*.tar.gz
+          tar -xzf *.tar.gz
           mv *.sql backup.sql
           echo "Backup descomprimido exitosamente."
 
@@ -60,7 +73,7 @@ jobs:
           $PSQL_CMD "$DATABASE_URL" -v ON_ERROR_STOP=1 -f backup.sql
           echo "¡Restauración completada exitosamente!"
             
-      - name: Limpiar y restaurar firewall (PRUEBA)
+      - name: Limpiar y restaurar firewall (PRUEPA)
         if: always()
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
