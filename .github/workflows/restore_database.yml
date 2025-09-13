@@ -3,6 +3,9 @@ name: Restaurar Último Backup
 on:
   workflow_dispatch:
 
+permissions:
+  actions: read
+
 jobs:
   restore-database:
     runs-on: ubuntu-latest
