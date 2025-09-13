@@ -23,7 +23,7 @@ jobs:
       - name: Descargar el último backup desde el workflow de backup
         uses: dawidd6/action-download-artifact@v6
         with: 
-          workflow: backup-database.yml 
+          workflow: Backup Diario de Base de Datos
           name: latest-backup 
           branch: main
           workflow_conclusion: success
