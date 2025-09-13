@@ -1,0 +1,49 @@
+name: Restaurar Base de Datos desde URL
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_url:
+        description: 'URL de descarga del archivo .sql (ej. de Wormhole)'
+        required: true
+
+jobs:
+  restore-from-url:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Instalar cliente de PostgreSQL
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Descargar archivo de backup desde URL
+        run: |
+          echo "Descargando backup desde la URL proporcionada..."
+          # Usamos curl con -L para seguir redirecciones (importante para servicios como Wormhole)
+          # y -o para especificar el nombre del archivo de salida.
+          # --fail hace que el comando falle si la descarga no es exitosa (código HTTP != 2xx).
+          curl -L --fail -o backup.sql "${{ github.event.inputs.backup_url }}"
+          echo "Descarga completada."
+
+      - name: Verificar que el backup se descargó y no está vacío
+        run: |
+          if [ ! -s "backup.sql" ]; then
+            echo "::error::El archivo de backup está vacío o no se pudo descargar."
+            echo "Verifica que la URL sea correcta y que el archivo no haya expirado."
+            exit 1
+          fi
+          echo "El archivo de backup parece válido. Tamaño: $(ls -lh backup.sql | awk '{print $5}')"
+          # Muestra las primeras 5 líneas para confirmar que es un archivo SQL
+          echo "Primeras líneas del archivo:"
+          head -n 5 backup.sql
+
+      - name: Restaurar la base de datos
+        env: 
+          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+        run: |
+          echo "Iniciando restauración en Supabase..."
+          # Usamos psql para ejecutar el archivo .sql.
+          # -v ON_ERROR_STOP=1 hace que el script se detenga al primer error.
+          psql "$DATABASE_URL" \
+            -v ON_ERROR_STOP=1 \
+            -f backup.sql
+          echo "¡Restauración completada exitosamente!"
