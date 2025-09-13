@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       backup_url:
-        description: 'URL de descarga directa del .sql (de transfer.sh)'
+        description: 'URL de descarga directa del .sql'
         required: true
 
 jobs:
@@ -33,8 +33,8 @@ jobs:
       - name: Autorizar IP del Runner en el firewall de Supabase
         id: authorize_ip
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
         run: |
           RUNNER_IP=$(curl -s ifconfig.me)
           echo "La IP del Runner es: $RUNNER_IP"
@@ -74,14 +74,14 @@ jobs:
           
           if [ ! -s "backup.sql" ] || grep -q "<!DOCTYPE html>" backup.sql; then
             echo "::error:: El archivo descargado está vacío o es una página HTML."
-            echo "Asegúrate de usar un enlace de descarga directa (como el de transfer.sh)."
+            echo "Asegúrate de usar un enlace de descarga directa."
             exit 1
           fi
           echo "Backup descargado y verificado exitosamente. Tamaño: $(ls -lh backup.sql | awk '{print $5}')"
 
-      - name: Restaurar la Base de Datos
+      - name: Restaurar la Base de Datos (EN ENTORNO DE PRUEBA)
         env:
-          DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.STAGING_SUPABASE_DATABASE_URL }}
         run: |
           # Intentar usar la versión específica de PostgreSQL 17 primero
           PSQL_CMD="/usr/lib/postgresql/17/bin/psql"
@@ -96,11 +96,11 @@ jobs:
             -f backup.sql
           echo "¡Restauración completada exitosamente!"
             
-      - name: Limpiar y restaurar firewall (SIEMPRE SE EJECUTA)
+      - name: Limpiar y restaurar firewall
         if: always()
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
           ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
         run: |
           echo "Limpiando archivos locales..."
