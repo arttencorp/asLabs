@@ -33,7 +33,7 @@ jobs:
       - name: Autorizar IP del Runner en el firewall de Supabase
         id: authorize_ip
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN  }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
         run: |
           RUNNER_IP=$(curl -s ifconfig.me)
@@ -99,7 +99,7 @@ jobs:
       - name: Limpiar y restaurar firewall
         if: always()
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.STAGING_SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN  }}
           PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
           ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
         run: |
