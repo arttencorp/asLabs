@@ -610,12 +610,39 @@ export async function actualizarFichaTecnica(id: string, fichaTecnicaData: {
 // Eliminar una ficha técnica
 export async function eliminarFichaTecnica(id: string): Promise<void> {
   try {
+    // Primero obtener la ficha técnica para verificar si tiene imagen
+    const { data: fichaTecnica, error: fichaError } = await supabase
+      .from('Ficha_Tecnica')
+      .select('fit_tec_imag_vac')
+      .eq('fit_tec_id_int', id)
+      .single()
+
+    if (fichaError) throw fichaError
+
+    // Si la ficha técnica tiene imagen, eliminarla primero del storage
+    if (fichaTecnica?.fit_tec_imag_vac) {
+      try {
+        const result = await eliminarImagenFichaTecnica(fichaTecnica.fit_tec_imag_vac)
+        if (result.success) {
+          console.log('✅ Imagen de ficha técnica eliminada del storage')
+        } else {
+          console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
+        }
+      } catch (imageError) {
+        console.warn('⚠️ Error al eliminar imagen del storage, continuando con eliminación de la ficha:', imageError)
+        // No lanzar error aquí para permitir que se elimine el registro aunque falle la imagen
+      }
+    }
+
+    // Eliminar el registro de la base de datos
     const { error } = await supabase
       .from('Ficha_Tecnica')
       .delete()
       .eq('fit_tec_id_int', id)
 
     if (error) throw error
+    
+    console.log('✅ Ficha técnica eliminada correctamente')
   } catch (error) {
     console.error('Error eliminando ficha técnica:', error)
     throw error
@@ -1220,12 +1247,35 @@ export async function actualizarPedido(id: string, pedidoData: any) {
 
 export async function eliminarPedido(id: string): Promise<void> {
   try {
+    // Primero obtener el pedido para verificar si tiene imagen
+    const { data: pedido, error: pedidoError } = await supabase
+      .from('Pedidos')
+      .select('ped_imagen_url')
+      .eq('ped_id_int', id)
+      .single()
+
+    if (pedidoError) throw pedidoError
+
+    // Si el pedido tiene imagen, eliminarla primero del storage
+    if (pedido?.ped_imagen_url) {
+      try {
+        await eliminarImagenPedido(pedido.ped_imagen_url)
+        console.log('✅ Imagen del pedido eliminada del storage')
+      } catch (imageError) {
+        console.warn('⚠️ Error al eliminar imagen del storage, continuando con eliminación del pedido:', imageError)
+        // No lanzar error aquí para permitir que se elimine el registro aunque falle la imagen
+      }
+    }
+
+    // Eliminar el registro de la base de datos
     const { error } = await supabase
       .from('Pedidos')
       .delete()
       .eq('ped_id_int', id)
 
     if (error) throw error
+    
+    console.log('✅ Pedido eliminado correctamente')
   } catch (error) {
     console.error('Error eliminando pedido:', error)
     throw error
@@ -1238,6 +1288,19 @@ export async function eliminarPedido(id: string): Promise<void> {
 
 export async function subirImagenPedido(file: File, pedidoId?: string): Promise<string> {
   try {
+    // Usar cliente autenticado para operaciones de storage
+    const supabaseAuth = createAuthenticatedClient()
+    
+    // Verificar autenticación antes de proceder
+    const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
+    
+    if (sessionError || !session) {
+      console.error('Error de sesión:', sessionError || 'No hay sesión activa')
+      throw new Error('No hay una sesión autenticada activa')
+    }
+
+    console.log('✅ Sesión encontrada para subir imagen de pedido, usuario:', session.user.email)
+
     // Validar archivo antes de subir
     if (!file) {
       throw new Error('No se proporcionó archivo')
@@ -1254,8 +1317,10 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       ? `pedido_${pedidoId}_${timestamp}.${extension}`
       : `pedido_temp_${timestamp}.${extension}`
 
-    // Subir a bucket 'admin' en carpeta 'pedidos' como especificaste
-    const { data, error } = await supabase.storage
+    console.log('📤 Subiendo imagen de pedido:', `pedidos/${fileName}`)
+
+    // Subir a bucket 'admin' en carpeta 'pedidos'
+    const { data, error } = await supabaseAuth.storage
       .from('admin')
       .upload(`pedidos/${fileName}`, file, {
         cacheControl: '3600',
@@ -1263,6 +1328,7 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       })
 
     if (error) {
+      console.error('❌ Error subiendo imagen de pedido:', error)
       throw new Error(`Error del servidor: ${error.message}`)
     }
 
@@ -1270,8 +1336,10 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       throw new Error('No se recibió respuesta del servidor')
     }
 
+    console.log('✅ Imagen de pedido subida exitosamente:', data?.path)
+
     // Obtener URL pública
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseAuth.storage
       .from('admin')
       .getPublicUrl(`pedidos/${fileName}`)
 
@@ -1279,14 +1347,30 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       throw new Error('No se pudo generar la URL pública')
     }
 
+    console.log('🌐 URL pública de pedido generada:', urlData.publicUrl)
+
     return urlData.publicUrl
   } catch (error) {
+    console.error('💥 Error en subida de imagen de pedido:', error)
     throw error
   }
 }
 
 export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
   try {
+    // Usar cliente autenticado para operaciones de storage
+    const supabaseAuth = createAuthenticatedClient()
+    
+    // Verificar autenticación antes de proceder
+    const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
+    
+    if (sessionError || !session) {
+      console.error('Error de sesión:', sessionError || 'No hay sesión activa')
+      throw new Error('No hay una sesión autenticada activa')
+    }
+
+    console.log('✅ Sesión encontrada para eliminar imagen de pedido, usuario:', session.user.email)
+
     if (!imageUrl) {
       throw new Error('No se proporcionó URL de imagen')
     }
@@ -1299,15 +1383,21 @@ export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
       throw new Error('No se pudo extraer el nombre del archivo de la URL')
     }
 
+    console.log('🗑️ Eliminando imagen del storage:', `pedidos/${fileName}`)
+
     // Eliminar del bucket 'admin' carpeta 'pedidos'
-    const { error } = await supabase.storage
+    const { error } = await supabaseAuth.storage
       .from('admin')
       .remove([`pedidos/${fileName}`])
 
     if (error) {
+      console.error('❌ Error eliminando imagen del storage:', error)
       throw new Error(`Error del servidor: ${error.message}`)
     }
+
+    console.log('✅ Imagen eliminada exitosamente del storage')
   } catch (error) {
+    console.error('💥 Error en eliminación de imagen de pedido:', error)
     throw error
   }
 }

@@ -109,15 +109,7 @@ export function useFichasTecnicas() {
     setLoading(true)
     setError(null)
     try {
-      // Buscar la ficha técnica para obtener la URL de la imagen
-      const fichaTecnica = items.find(item => item.fit_tec_id_int === id)
-      
-      // Si tiene imagen, eliminarla del storage
-      if (fichaTecnica?.fit_tec_imag_vac) {
-        await eliminarImagenFichaTecnica(fichaTecnica.fit_tec_imag_vac)
-      }
-
-      // Eliminar la ficha técnica de la base de datos
+      // La función eliminarFichaTecnica ya maneja la eliminación de la imagen
       await eliminarFichaTecnica(id)
       setItems(prevItems => prevItems.filter(item => item.fit_tec_id_int !== id))
       showSuccess('Ficha técnica eliminada exitosamente')
@@ -126,7 +118,7 @@ export function useFichasTecnicas() {
     } finally {
       setLoading(false)
     }
-  }, [items, showSuccess])
+  }, [showSuccess])
 
   const handleUploadImage = useCallback(async (file: File, fileName: string) => {
     setUploadLoading(true)

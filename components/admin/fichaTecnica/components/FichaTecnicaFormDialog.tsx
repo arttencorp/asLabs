@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Upload, X, Image as ImageIcon } from "lucide-react"
+import { eliminarImagenFichaTecnica, actualizarFichaTecnica } from '@/lib/supabase'
 import type { FichaTecnicaFormDialogProps, FichaTecnicaForm } from '../types'
 import { PLACEHOLDERS, ERROR_MESSAGES } from '../constants'
 import { validarArchivoImagen, formatearTamanoArchivo } from '../utils'
@@ -101,12 +102,40 @@ export function FichaTecnicaFormDialog({
     reader.readAsDataURL(file)
   }
 
-  const handleRemoveImage = () => {
-    setSelectedFile(null)
-    setPreviewUrl(null)
-    setFormData(prev => ({ ...prev, fit_tec_imag_vac: null }))
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+  const handleRemoveImage = async () => {
+    try {
+      // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
+      if (editingFichaTecnica?.fit_tec_imag_vac) {
+        console.log('🗑️ Eliminando imagen del storage:', editingFichaTecnica.fit_tec_imag_vac)
+        const result = await eliminarImagenFichaTecnica(editingFichaTecnica.fit_tec_imag_vac)
+        
+        if (result.success) {
+          console.log('✅ Imagen eliminada del storage')
+          
+          // Actualizar inmediatamente la BD para quitar la referencia
+          await actualizarFichaTecnica(editingFichaTecnica.fit_tec_id_int, { fit_tec_imag_vac: null })
+          console.log('✅ Referencia de imagen eliminada de la BD')
+        } else {
+          console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
+        }
+      }
+      
+      // Limpiar estado local
+      setSelectedFile(null)
+      setPreviewUrl(null)
+      setFormData(prev => ({ ...prev, fit_tec_imag_vac: null }))
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    } catch (error) {
+      console.error('💥 Error eliminando imagen:', error)
+      // Aún así limpiar el estado local
+      setSelectedFile(null)
+      setPreviewUrl(null)
+      setFormData(prev => ({ ...prev, fit_tec_imag_vac: null }))
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     }
   }
 
