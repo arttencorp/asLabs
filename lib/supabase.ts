@@ -11,6 +11,10 @@ import type {
   ProductoDatabase,
   CertificadoCalidadDatabase,
   FichaTecnicaDatabase,
+  FichaTecnicaCompletaDatabase,
+  DetalleFichaTecnicaDatabase,
+  TaxonomiaDatabase,
+  ZonaColectaGermDatabase,
   CategoriaDatabase,
   ProductoTiendaDatabase
 } from '@/types/database'
@@ -623,13 +627,11 @@ export async function eliminarFichaTecnica(id: string): Promise<void> {
     if (fichaTecnica?.fit_tec_imag_vac) {
       try {
         const result = await eliminarImagenFichaTecnica(fichaTecnica.fit_tec_imag_vac)
-        if (result.success) {
-          console.log('✅ Imagen de ficha técnica eliminada del storage')
-        } else {
-          console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
+        if (!result.success) {
+          console.error('Error al eliminar imagen del storage:', result.error)
         }
       } catch (imageError) {
-        console.warn('⚠️ Error al eliminar imagen del storage, continuando con eliminación de la ficha:', imageError)
+        console.error('Error al eliminar imagen del storage, continuando con eliminación de la ficha:', imageError)
         // No lanzar error aquí para permitir que se elimine el registro aunque falle la imagen
       }
     }
@@ -642,7 +644,6 @@ export async function eliminarFichaTecnica(id: string): Promise<void> {
 
     if (error) throw error
     
-    console.log('✅ Ficha técnica eliminada correctamente')
   } catch (error) {
     console.error('Error eliminando ficha técnica:', error)
     throw error
@@ -689,6 +690,221 @@ export async function obtenerFichaTecnicaPorProducto(productoId: string): Promis
   }
 }
 
+// ============================================
+// FUNCIONES PARA FICHAS TÉCNICAS COMPLETAS (CON RELACIONES)
+// ============================================
+
+// Obtener ficha técnica completa con todas sus relaciones
+export async function obtenerFichaTecnicaCompleta(id: string): Promise<FichaTecnicaCompletaDatabase | null> {
+  try {
+    const { data: ficha, error: fichaError } = await supabase
+      .from('Ficha_Tecnica')
+      .select(`
+        *,
+        producto:Productos(*)
+      `)
+      .eq('fit_tec_id_int', id)
+      .single()
+
+    if (fichaError) throw fichaError
+    if (!ficha) return null
+
+    // Obtener detalle
+    const { data: detalle } = await supabase
+      .from('Detalle_Ficha_Tecnica')
+      .select('*')
+      .eq('fit_tec_id_int', id)
+      .single()
+
+    // Obtener taxonomía
+    const { data: taxonomia } = await supabase
+      .from('Taxonomias')
+      .select('*')
+      .eq('fit_tec_id_int', id)
+      .single()
+
+    // Obtener zona de colecta
+    const { data: zonaColecta } = await supabase
+      .from('Zona_Colecta_Germ')
+      .select('*')
+      .eq('fit_tec_id_int', id)
+      .single()
+
+    return {
+      ...ficha,
+      detalle: detalle || null,
+      taxonomia: taxonomia || null,
+      zona_colecta: zonaColecta || null
+    } as FichaTecnicaCompletaDatabase
+  } catch (error) {
+    console.error('Error obteniendo ficha técnica completa:', error)
+    throw error
+  }
+}
+
+// Obtener fichas técnicas completas por códigos de producto
+export async function obtenerFichasTecnicasCompletasPorCodigos(codigos: string[]): Promise<FichaTecnicaCompletaDatabase[]> {
+  try {
+    if (!codigos || codigos.length === 0) return []
+
+    // Los "códigos" pueden ser UUIDs de productos o códigos de texto
+    // Primero intentar como UUIDs de productos
+    const { data: fichasPorUuid, error: error1 } = await supabase
+      .from('Ficha_Tecnica')
+      .select(`
+        *,
+        producto:Productos(*)
+      `)
+      .in('pro_id_int', codigos)
+
+    // Luego buscar por códigos de texto (tanto de ficha como de producto)
+    const { data: fichasPorCodigo, error: error2 } = await supabase
+      .from('Ficha_Tecnica')
+      .select(`
+        *,
+        producto:Productos(*)
+      `)
+      .in('fit_tec_cod_vac', codigos)
+
+    // Buscar productos por código de texto y luego sus fichas
+    const { data: productos, error: error3 } = await supabase
+      .from('Productos')
+      .select('pro_id_int')
+      .in('pro_cod_vac', codigos)
+
+    let fichasPorProducto = []
+    if (productos && productos.length > 0) {
+      const productosIds = productos.map(p => p.pro_id_int)
+      const { data, error: error4 } = await supabase
+        .from('Ficha_Tecnica')
+        .select(`
+          *,
+          producto:Productos(*)
+        `)
+        .in('pro_id_int', productosIds)
+      
+      if (!error4) fichasPorProducto = data || []
+    }
+
+    // Combinar todos los resultados y eliminar duplicados
+    const todasFichas = [
+      ...(fichasPorUuid || []), 
+      ...(fichasPorCodigo || []), 
+      ...fichasPorProducto
+    ]
+    const fichasUnicas = todasFichas.filter((ficha, index, self) => 
+      self.findIndex(f => f.fit_tec_id_int === ficha.fit_tec_id_int) === index
+    )
+
+    if (fichasUnicas.length === 0) return []
+
+    // Para cada ficha, obtener sus relaciones
+    const fichasCompletas: FichaTecnicaCompletaDatabase[] = []
+
+    for (const ficha of fichasUnicas) {
+      // Obtener detalle
+      const { data: detalle } = await supabase
+        .from('Detalle_Ficha_Tecnica')
+        .select('*')
+        .eq('fit_tec_id_int', ficha.fit_tec_id_int)
+        .single()
+
+      // Obtener taxonomía
+      const { data: taxonomia } = await supabase
+        .from('Taxonomias')
+        .select('*')
+        .eq('fit_tec_id_int', ficha.fit_tec_id_int)
+        .single()
+
+      // Obtener zona de colecta
+      const { data: zonaColecta } = await supabase
+        .from('Zona_Colecta_Germ')
+        .select('*')
+        .eq('fit_tec_id_int', ficha.fit_tec_id_int)
+        .single()
+
+      fichasCompletas.push({
+        ...ficha,
+        detalle: detalle || null,
+        taxonomia: taxonomia || null,
+        zona_colecta: zonaColecta || null
+      } as FichaTecnicaCompletaDatabase)
+    }
+
+    return fichasCompletas
+  } catch (error) {
+    console.error('Error obteniendo fichas técnicas completas por códigos:', error)
+    throw error
+  }
+}
+
+// Obtener todas las fichas técnicas completas
+export async function obtenerFichasTecnicasCompletas(): Promise<FichaTecnicaCompletaDatabase[]> {
+  try {
+    // Obtener todas las fichas técnicas básicas
+    const { data: fichasTecnicas, error: fichasError } = await supabase
+      .from('Ficha_Tecnica')
+      .select('*')
+      .order('fit_tec_created_at_dt', { ascending: false })
+
+    if (fichasError) throw fichasError
+    if (!fichasTecnicas || fichasTecnicas.length === 0) return []
+
+    // Obtener todos los IDs
+    const ids = fichasTecnicas.map(ficha => ficha.fit_tec_id_int)
+
+    // Obtener datos relacionados en paralelo
+    const [detallesResult, taxonomiasResult, zonasColectaResult] = await Promise.all([
+      supabase
+        .from('Detalle_Ficha_Tecnica')
+        .select('*')
+        .in('fit_tec_id_int', ids),
+      supabase
+        .from('Taxonomias')
+        .select('*')
+        .in('fit_tec_id_int', ids),
+      supabase
+        .from('Zona_Colecta_Germ')
+        .select('*')
+        .in('fit_tec_id_int', ids)
+    ])
+
+    // Crear mapas para acceso rápido
+    const detallesMap = new Map()
+    const taxonomiasMap = new Map()
+    const zonasColectaMap = new Map()
+
+    detallesResult.data?.forEach(detalle => {
+      detallesMap.set(detalle.fit_tec_id_int, detalle)
+    })
+
+    taxonomiasResult.data?.forEach(taxonomia => {
+      taxonomiasMap.set(taxonomia.fit_tec_id_int, taxonomia)
+    })
+
+    zonasColectaResult.data?.forEach(zona => {
+      zonasColectaMap.set(zona.fit_tec_id_int, zona)
+    })
+
+    // Construir objetos completos
+    const fichasCompletas: FichaTecnicaCompletaDatabase[] = fichasTecnicas.map(ficha => ({
+      ...ficha,
+      detalle: detallesMap.get(ficha.fit_tec_id_int) || null,
+      taxonomia: taxonomiasMap.get(ficha.fit_tec_id_int) || null,
+      zona_colecta: zonasColectaMap.get(ficha.fit_tec_id_int) || null
+    }))
+
+    return fichasCompletas
+  } catch (error) {
+    console.error('Error obteniendo fichas técnicas completas:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES DE STORAGE PARA IMÁGENES
+// ============================================
+
 // Subir imagen de ficha técnica al storage
 export async function subirImagenFichaTecnica(file: File, fileName: string): Promise<{ url: string | null; error: string | null }> {
   try {
@@ -702,8 +918,6 @@ export async function subirImagenFichaTecnica(file: File, fileName: string): Pro
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       return { url: null, error: 'No hay una sesión autenticada activa' }
     }
-
-    console.log('✅ Sesión encontrada, usuario:', session.user.email)
 
     // Validar tipo de archivo
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -722,8 +936,6 @@ export async function subirImagenFichaTecnica(file: File, fileName: string): Pro
     const cleanFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_')
     const finalFileName = `${timestamp}_${cleanFileName}`
 
-    console.log('📤 Subiendo archivo:', finalFileName)
-
     // Subir archivo al bucket 'admin' en la carpeta 'fichaTecnica'
     const { data, error } = await supabaseAuth.storage
       .from('admin')
@@ -733,22 +945,16 @@ export async function subirImagenFichaTecnica(file: File, fileName: string): Pro
       })
 
     if (error) {
-      console.error('❌ Error subiendo imagen:', error)
       return { url: null, error: `Error al subir la imagen: ${error.message}` }
     }
-
-    console.log('✅ Archivo subido exitosamente:', data?.path)
 
     // Obtener URL pública
     const { data: { publicUrl } } = supabaseAuth.storage
       .from('admin')
       .getPublicUrl(`fichaTecnica/${finalFileName}`)
 
-    console.log('🌐 URL pública generada:', publicUrl)
-
     return { url: publicUrl, error: null }
   } catch (error) {
-    console.error('💥 Error en subida de imagen:', error)
     return { url: null, error: 'Error inesperado al subir la imagen' }
   }
 }
@@ -1260,9 +1466,8 @@ export async function eliminarPedido(id: string): Promise<void> {
     if (pedido?.ped_imagen_url) {
       try {
         await eliminarImagenPedido(pedido.ped_imagen_url)
-        console.log('✅ Imagen del pedido eliminada del storage')
       } catch (imageError) {
-        console.warn('⚠️ Error al eliminar imagen del storage, continuando con eliminación del pedido:', imageError)
+        console.error('Error al eliminar imagen del storage, continuando con eliminación del pedido:', imageError)
         // No lanzar error aquí para permitir que se elimine el registro aunque falle la imagen
       }
     }
@@ -1275,7 +1480,6 @@ export async function eliminarPedido(id: string): Promise<void> {
 
     if (error) throw error
     
-    console.log('✅ Pedido eliminado correctamente')
   } catch (error) {
     console.error('Error eliminando pedido:', error)
     throw error
@@ -1299,8 +1503,6 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       throw new Error('No hay una sesión autenticada activa')
     }
 
-    console.log('✅ Sesión encontrada para subir imagen de pedido, usuario:', session.user.email)
-
     // Validar archivo antes de subir
     if (!file) {
       throw new Error('No se proporcionó archivo')
@@ -1317,8 +1519,6 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       ? `pedido_${pedidoId}_${timestamp}.${extension}`
       : `pedido_temp_${timestamp}.${extension}`
 
-    console.log('📤 Subiendo imagen de pedido:', `pedidos/${fileName}`)
-
     // Subir a bucket 'admin' en carpeta 'pedidos'
     const { data, error } = await supabaseAuth.storage
       .from('admin')
@@ -1328,15 +1528,13 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       })
 
     if (error) {
-      console.error('❌ Error subiendo imagen de pedido:', error)
+      console.error('Error subiendo imagen de pedido:', error)
       throw new Error(`Error del servidor: ${error.message}`)
     }
 
     if (!data) {
       throw new Error('No se recibió respuesta del servidor')
     }
-
-    console.log('✅ Imagen de pedido subida exitosamente:', data?.path)
 
     // Obtener URL pública
     const { data: urlData } = supabaseAuth.storage
@@ -1347,11 +1545,9 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
       throw new Error('No se pudo generar la URL pública')
     }
 
-    console.log('🌐 URL pública de pedido generada:', urlData.publicUrl)
-
     return urlData.publicUrl
   } catch (error) {
-    console.error('💥 Error en subida de imagen de pedido:', error)
+    console.error('Error en subida de imagen de pedido:', error)
     throw error
   }
 }
@@ -1369,8 +1565,6 @@ export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
       throw new Error('No hay una sesión autenticada activa')
     }
 
-    console.log('✅ Sesión encontrada para eliminar imagen de pedido, usuario:', session.user.email)
-
     if (!imageUrl) {
       throw new Error('No se proporcionó URL de imagen')
     }
@@ -1383,21 +1577,18 @@ export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
       throw new Error('No se pudo extraer el nombre del archivo de la URL')
     }
 
-    console.log('🗑️ Eliminando imagen del storage:', `pedidos/${fileName}`)
-
     // Eliminar del bucket 'admin' carpeta 'pedidos'
     const { error } = await supabaseAuth.storage
       .from('admin')
       .remove([`pedidos/${fileName}`])
 
     if (error) {
-      console.error('❌ Error eliminando imagen del storage:', error)
+      console.error('Error eliminando imagen del storage:', error)
       throw new Error(`Error del servidor: ${error.message}`)
     }
 
-    console.log('✅ Imagen eliminada exitosamente del storage')
   } catch (error) {
-    console.error('💥 Error en eliminación de imagen de pedido:', error)
+    console.error('Error en eliminación de imagen de pedido:', error)
     throw error
   }
 }
@@ -2218,7 +2409,6 @@ export async function contarProductosPorCategoria(categoriaId: string): Promise<
     
     // Contar manualmente para depurar
     const totalProductos = data?.length || 0
-    console.log(`Categoría ${categoriaId}: ${totalProductos} productos totales`)
     
     return totalProductos
   } catch (error) {
@@ -2243,11 +2433,213 @@ export async function contarProductosOcultosPorCategoria(categoriaId: string): P
     if (error) throw error
     
     const productosOcultos = data?.length || 0
-    console.log(`Categoría ${categoriaId}: ${productosOcultos} productos ocultos`)
     
     return productosOcultos
   } catch (error) {
     console.error('Error contando productos ocultos por categoría:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES CRUD PARA TABLAS RELACIONADAS DE FICHAS TÉCNICAS
+// ============================================
+
+// Crear o actualizar detalle de ficha técnica
+export async function crearOActualizarDetalleFichaTecnica(
+  fichaTecnicaId: string,
+  detalleData: {
+    dft_desc_vac?: string | null
+    dft_parcela_vac?: string | null
+    dft_zona_colecta_vac?: string | null
+    dft_present_vac?: string | null
+  }
+): Promise<DetalleFichaTecnicaDatabase> {
+  try {
+    // Verificar si ya existe un detalle
+    const { data: existingDetalle } = await supabase
+      .from('Detalle_Ficha_Tecnica')
+      .select('*')
+      .eq('fit_tec_id_int', fichaTecnicaId)
+      .single()
+
+    if (existingDetalle) {
+      // Actualizar existente
+      const { data, error } = await supabase
+        .from('Detalle_Ficha_Tecnica')
+        .update(detalleData)
+        .eq('fit_tec_id_int', fichaTecnicaId)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } else {
+      // Crear nuevo
+      const { data, error } = await supabase
+        .from('Detalle_Ficha_Tecnica')
+        .insert({
+          ...detalleData,
+          fit_tec_id_int: fichaTecnicaId
+        })
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    }
+  } catch (error) {
+    console.error('Error creando/actualizando detalle de ficha técnica:', error)
+    throw error
+  }
+}
+
+// Crear o actualizar taxonomía
+export async function crearOActualizarTaxonomia(
+  fichaTecnicaId: string,
+  taxonomiaData: {
+    ta_familia_vac?: string | null
+    ta_genero_vac?: string | null
+    ta_nombre_cientifico_vac?: string | null
+    ta_grupo_vac?: string | null
+    ta_nombre_comun_vac?: string | null
+  }
+): Promise<TaxonomiaDatabase> {
+  try {
+    // Verificar si ya existe una taxonomía
+    const { data: existingTaxonomia } = await supabase
+      .from('Taxonomias')
+      .select('*')
+      .eq('fit_tec_id_int', fichaTecnicaId)
+      .single()
+
+    if (existingTaxonomia) {
+      // Actualizar existente
+      const { data, error } = await supabase
+        .from('Taxonomias')
+        .update(taxonomiaData)
+        .eq('fit_tec_id_int', fichaTecnicaId)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } else {
+      // Crear nueva
+      const { data, error } = await supabase
+        .from('Taxonomias')
+        .insert({
+          ...taxonomiaData,
+          fit_tec_id_int: fichaTecnicaId
+        })
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    }
+  } catch (error) {
+    console.error('Error creando/actualizando taxonomía:', error)
+    throw error
+  }
+}
+
+// Crear o actualizar zona de colecta
+export async function crearOActualizarZonaColecta(
+  fichaTecnicaId: string,
+  zonaColectaData: {
+    zcg_pais_vac?: string | null
+    zcg_region_vac?: string | null
+    zcg_provincia_vac?: string | null
+    zcg_distrito_vac?: string | null
+    zcg_zona_vac?: string | null
+    zcg_fecha_vac?: string | null
+  }
+): Promise<ZonaColectaGermDatabase> {
+  try {
+    // Verificar si ya existe una zona de colecta
+    const { data: existingZona } = await supabase
+      .from('Zona_Colecta_Germ')
+      .select('*')
+      .eq('fit_tec_id_int', fichaTecnicaId)
+      .single()
+
+    if (existingZona) {
+      // Actualizar existente
+      const { data, error } = await supabase
+        .from('Zona_Colecta_Germ')
+        .update(zonaColectaData)
+        .eq('fit_tec_id_int', fichaTecnicaId)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } else {
+      // Crear nueva
+      const { data, error } = await supabase
+        .from('Zona_Colecta_Germ')
+        .insert({
+          ...zonaColectaData,
+          fit_tec_id_int: fichaTecnicaId
+        })
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    }
+  } catch (error) {
+    console.error('Error creando/actualizando zona de colecta:', error)
+    throw error
+  }
+}
+
+// Función para crear/actualizar ficha técnica completa
+export async function crearOActualizarFichaTecnicaCompleta(
+  fichaTecnicaId: string,
+  datosCompletos: {
+    detalle?: {
+      dft_desc_vac?: string | null
+      dft_parcela_vac?: string | null
+      dft_zona_colecta_vac?: string | null
+      dft_present_vac?: string | null
+    }
+    taxonomia?: {
+      ta_familia_vac?: string | null
+      ta_genero_vac?: string | null
+      ta_nombre_cientifico_vac?: string | null
+      ta_grupo_vac?: string | null
+      ta_nombre_comun_vac?: string | null
+    }
+    zona_colecta?: {
+      zcg_pais_vac?: string | null
+      zcg_region_vac?: string | null
+      zcg_provincia_vac?: string | null
+      zcg_distrito_vac?: string | null
+      zcg_zona_vac?: string | null
+      zcg_fecha_vac?: string | null
+    }
+  }
+): Promise<void> {
+  try {
+    const promesas = []
+
+    if (datosCompletos.detalle) {
+      promesas.push(crearOActualizarDetalleFichaTecnica(fichaTecnicaId, datosCompletos.detalle))
+    }
+
+    if (datosCompletos.taxonomia) {
+      promesas.push(crearOActualizarTaxonomia(fichaTecnicaId, datosCompletos.taxonomia))
+    }
+
+    if (datosCompletos.zona_colecta) {
+      promesas.push(crearOActualizarZonaColecta(fichaTecnicaId, datosCompletos.zona_colecta))
+    }
+
+    await Promise.all(promesas)
+  } catch (error) {
+    console.error('Error creando/actualizando ficha técnica completa:', error)
     throw error
   }
 }

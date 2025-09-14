@@ -1,7 +1,7 @@
 "use client"
 
-import { FichasTecnicasManagement } from "@/components/admin/fichaTecnica/components/FichasTecnicasManagement"
+import { FichasTecnicasAdminMain } from "@/components/admin/fichaTecnica/components/FichasTecnicasAdminMain"
 
 export default function FichaTecnicaPage() {
-  return <FichasTecnicasManagement />
+  return <FichasTecnicasAdminMain />
 }

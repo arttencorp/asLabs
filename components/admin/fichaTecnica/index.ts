@@ -3,11 +3,13 @@ export {
   FichaTecnicaFormDialog, 
   FichasTecnicasTable, 
   FichasTecnicasStats, 
-  FichasTecnicasManagement 
+  FichasTecnicasManagement,
+  FichaTecnicaDinamica,
 } from './components'
 
 // Hooks
 export { useFichasTecnicas } from './hooks'
+export { useFichasTecnicasCompletas } from './hooks/useFichasTecnicasCompletas'
 
 // Tipos (exportamos solo los necesarios para evitar conflictos)
 export type { 

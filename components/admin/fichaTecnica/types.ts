@@ -1,4 +1,10 @@
-import type { FichaTecnicaDatabase, ProductoDatabase } from '@/types/database'
+import type { 
+  FichaTecnicaDatabase, 
+  ProductoDatabase, 
+  DetalleFichaTecnicaDatabase,
+  TaxonomiaDatabase,
+  ZonaColectaGermDatabase
+} from '@/types/database'
 
 // Tipo para formulario de ficha técnica (simplificado para crear/actualizar)
 export interface FichaTecnicaForm {
@@ -6,6 +12,40 @@ export interface FichaTecnicaForm {
   fit_tec_cod_vac: string | null
   pro_id_int: string
   fit_tec_imag_vac?: string | null
+}
+
+// Tipo para formulario de detalle de ficha técnica
+export interface DetalleFichaTecnicaForm {
+  dft_desc_vac?: string | null
+  dft_parcela_vac?: string | null
+  dft_zona_colecta_vac?: string | null
+  dft_present_vac?: string | null
+}
+
+// Tipo para formulario de taxonomía
+export interface TaxonomiaForm {
+  ta_familia_vac?: string | null
+  ta_genero_vac?: string | null
+  ta_nombre_cientifico_vac?: string | null
+  ta_grupo_vac?: string | null
+  ta_nombre_comun_vac?: string | null
+}
+
+// Tipo para formulario de zona de colecta
+export interface ZonaColectaForm {
+  zcg_pais_vac?: string | null
+  zcg_region_vac?: string | null
+  zcg_provincia_vac?: string | null
+  zcg_distrito_vac?: string | null
+  zcg_zona_vac?: string | null
+  zcg_fecha_vac?: string | null
+}
+
+// Tipo para formulario completo de ficha técnica
+export interface FichaTecnicaCompletaForm extends FichaTecnicaForm {
+  detalle?: DetalleFichaTecnicaForm
+  taxonomia?: TaxonomiaForm
+  zona_colecta?: ZonaColectaForm
 }
 
 // Tipo para actualización parcial de ficha técnica
