@@ -286,12 +286,21 @@ export function FichaTecnicaCompletaFormDialog({
     onSubmit(dataToSubmit)
   }
 
+  // Función para verificar si un valor es "no vacío" de forma robusta
+  const isNonEmptyValue = (value: any): boolean => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string') return value.trim() !== '';
+    if (typeof value === 'number') return !isNaN(value);
+    if (typeof value === 'boolean') return value === true;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'object') return Object.keys(value).length > 0;
+    return false;
+  }
+
   // Función para verificar si una sección tiene datos
   const hasDataInSection = (section: 'detalle' | 'taxonomia' | 'zona_colecta'): boolean => {
     const sectionData = formData[section]
-    return Object.values(sectionData).some(value => 
-      value && typeof value === 'string' && value.trim() !== ''
-    )
+    return Object.values(sectionData).some(isNonEmptyValue)
   }
 
   return (
