@@ -51,7 +51,7 @@ export function CertificadosCalidad({
                                 </tbody>
                             </table>
                             <div className="mt-1">
-                                {cert.detalle.map((detalle, detIndex) => (
+                                {cert.detalle?.map((detalle, detIndex) => (
                                     <p key={detIndex} className="mt-1 text-[9pt]">
                                         {detalle}
                                     </p>
