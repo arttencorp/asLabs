@@ -782,9 +782,13 @@ export async function obtenerFichasTecnicasCompletasPorCodigos(codigos: string[]
       ...(fichasPorCodigo || []),
       ...fichasPorProducto
     ]
-    const fichasUnicas = todasFichas.filter((ficha, index, self) =>
-      self.findIndex(f => f.fit_tec_id_int === ficha.fit_tec_id_int) === index
-    )
+    
+    const seen = new Set<string>();
+    const fichasUnicas = todasFichas.filter(ficha => {
+      if (seen.has(ficha.fit_tec_id_int)) return false;
+      seen.add(ficha.fit_tec_id_int);
+      return true;
+    });
 
     if (fichasUnicas.length === 0) return []
 
