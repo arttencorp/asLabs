@@ -6,7 +6,7 @@ import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { createBrowserClient } from "@supabase/ssr"
-import { ChartColumn, Store, FileText, Package, Package2, Users, LogOut, Menu, X } from "lucide-react"
+import { ChartColumn, Store, FileText, FileBadge, FileSpreadsheet, Package, Package2, Users, LogOut, Menu, X } from "lucide-react"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -96,6 +96,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Clientes", href: "/admin/clientes", icon: <Users className="h-5 w-5" /> },
     { name: "Productos", href: "/admin/productos", icon: <Package2 className="h-5 w-5" /> },
     { name: "Tienda", href: "/admin/tienda", icon: <Store className="h-5 w-5" /> },
+    { name: "Fichas Técnicas", href: "/admin/fichaTecnica", icon: <FileSpreadsheet className="h-5 w-5" /> },
+    { name: "Certificados de Calidad", href: "/admin/certificadoCalidad", icon: <FileBadge className="h-5 w-5" /> }, 
   ]
 
   return (

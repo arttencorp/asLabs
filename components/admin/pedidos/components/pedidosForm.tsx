@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Loader2, Upload, X, Eye } from "lucide-react"
 import { obtenerPedidoPorCodigo } from "@/lib/supabase"
-import { subirImagenPedido, eliminarImagenPedido } from "@/lib/supabase"
+import { subirImagenPedido, eliminarImagenPedido, actualizarPedido } from "@/lib/supabase"
 import type { EstadoPedido } from '@/types/database'
 import type { PedidoForm, Cotizacion, Pedido } from '../types'
 
@@ -164,10 +164,11 @@ export function PedidoFormDialog({
     
     try {
       // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
-      if (pedido?.ped_imagen_url && previewUrl === pedido.ped_imagen_url) {
+      if (pedido?.ped_imagen_url) {
         await eliminarImagenPedido(pedido.ped_imagen_url)
-        // También actualizar el formData para que se guarde el cambio
-        setFormData(prev => ({ ...prev, imagen_url: '' }))
+        
+        // Actualizar inmediatamente la BD para quitar la referencia
+        await actualizarPedido(pedido.ped_id_int, { imagen_url: '' })
       }
       
       setImagenFile(null)

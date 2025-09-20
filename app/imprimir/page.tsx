@@ -2,6 +2,7 @@
 
 import { useCotizacionImpresion } from "@/components/admin/imprimir/hooks/useCotizacionImpresion"
 import { useCertificadosFichas } from "@/components/admin/cotizaciones/hooks/useCertificadosFichas"
+import { useFichasTecnicasCompletas } from "@/components/admin/fichaTecnica"
 import { ControlesImpresion } from "@/components/admin/imprimir/components/controlesImpresion"
 import { EncabezadoDocumento } from "@/components/admin/imprimir/components/encabezadoDocumento"
 import { InformacionCliente } from "@/components/admin/imprimir/components/informacionCliente"
@@ -10,12 +11,11 @@ import { CondicionesEntrega } from "@/components/admin/imprimir/components/condi
 import { TerminosCondiciones } from "@/components/admin/imprimir/components/terminosCondiciones"
 import { CertificadosCalidad } from "@/components/admin/imprimir/components/certificadosCalidad"
 import { MetodosPago } from "@/components/admin/imprimir/components/metodosPago"
-import { FichaTecnicaASC5 } from "@/components/admin/imprimir/components/fichaTecnicaASC5"
-import { FichaTecnicaASWG } from "@/components/admin/imprimir/components/fichaTecnicaASWG"
-import { FichasTecnicas } from "@/components/admin/imprimir/components/fichasTecnicas"
-import { CertificadosSENASA } from "@/components/admin/imprimir/components/certificadosSENASA"
+import { FichasTecnicas } from "@/components/admin/imprimir/components/fichasTecnicas" 
+import { FichaTecnicaTexto } from "@/components/admin/imprimir/components/fichaTecnicaTexto"
 import { Button } from "@/components/ui/button"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { FichaTecnicaCompletaDatabase } from "@/types/database"
 
 export default function ImprimirCotizacion() {
   const {
@@ -25,12 +25,14 @@ export default function ImprimirCotizacion() {
     imprimir,
     volverACrear,
     volverAlInicio,
-    tieneASWG,
-    tieneASC5,
     esLaboratorio
   } = useCotizacionImpresion()
 
   const { cargarCertificadosParaProductos, cargarFichasParaProductos } = useCertificadosFichas()
+  const { cargarFichasCompletasPorCodigos } = useFichasTecnicasCompletas()
+  
+  // Estado para fichas técnicas dinámicas de BD
+  const [fichasDinamicas, setFichasDinamicas] = useState<FichaTecnicaCompletaDatabase[]>([])
 
   // Cargar certificados y fichas de BD si no están en localStorage
   useEffect(() => {
@@ -53,6 +55,32 @@ export default function ImprimirCotizacion() {
       }
     }
   }, [cotizacion, cargarCertificadosParaProductos, cargarFichasParaProductos])
+
+  // Cargar fichas técnicas dinámicas (completas) desde BD
+  useEffect(() => {
+    const cargarFichasDinamicas = async () => {
+      if (cotizacion && cotizacion.items && cotizacion.items.length > 0) {
+        const codigosProductos = cotizacion.items
+          .map(item => item.codigo)
+          .filter(codigo => codigo && codigo.trim() !== '') as string[]
+        
+        if (codigosProductos.length > 0) {
+          try {
+            const fichasCompletas = await cargarFichasCompletasPorCodigos(codigosProductos)
+            setFichasDinamicas(fichasCompletas)
+          } catch (error) {
+            setFichasDinamicas([])
+          }
+        } else {
+          setFichasDinamicas([])
+        }
+      } else {
+        setFichasDinamicas([])
+      }
+    }
+    
+    cargarFichasDinamicas()
+  }, [cotizacion?.items, cargarFichasCompletasPorCodigos])
 
   if (cargando) {
     return (
@@ -139,29 +167,10 @@ export default function ImprimirCotizacion() {
             esLaboratorio={esLaboratorio}
           />
 
-          {/* Fichas técnicas como texto simple (comentado para usar imágenes) */}
-          {/* 
-          {!esLaboratorio && cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0 && (
-            <div>
-              <h3 className="text-sm font-bold mb-1.5 text-[#5D9848]">Fichas Técnicas</h3>
-              <div className="space-y-2">
-                {cotizacion.fichasTecnicas.map((ficha, index) => (
-                  <div key={index}>
-                    <h4 className="text-xs font-semibold">{ficha.titulo}</h4>
-                    <p className="text-xs text-gray-600">{ficha.descripcion}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          */}
-
-          {!esLaboratorio && cotizacion.certificadosCalidad && (
+          {cotizacion.certificadosCalidad && (
             <CertificadosCalidad
               certificadosCalidad={cotizacion.certificadosCalidad}
               certificados={cotizacion.certificadosEstructurados}
-              tieneASWG={tieneASWG}
-              tieneASC5={tieneASC5}
             />
           )}
 
@@ -169,30 +178,27 @@ export default function ImprimirCotizacion() {
         </div>
       </div>
       
-      {/* Fichas técnicas - Páginas separadas con imágenes de BD */}
-      {!esLaboratorio && (
-        <>
-          {/* Si hay fichas técnicas de BD, mostrar con imágenes */}
-          {cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0 ? (
-            <FichasTecnicas fichasTecnicas={cotizacion.fichasTecnicas} />
-          ) : (
-            <>
-              {/* Fallback a fichas hardcodeadas */}
-              {tieneASC5 && !tieneASWG && <FichaTecnicaASC5 />}
-              {tieneASWG && !tieneASC5 && <FichaTecnicaASWG />}
-              {tieneASWG && tieneASC5 && (
-                <>
-                  <FichaTecnicaASC5 />
-                  <FichaTecnicaASWG />
-                </>
-              )}
-            </>
-          )}
-        </>
-      )}
+      {/* Fichas técnicas - Páginas separadas */}
+      <>
+        {/* 1. Prioridad: Fichas dinámicas (todas - con y sin imagen) */}
+        {fichasDinamicas && fichasDinamicas.length > 0 && (
+          <>
+            {fichasDinamicas.map((ficha, index) => (
+              <div key={index} className="page-break-before">
+                <FichaTecnicaTexto ficha={ficha} />
+              </div>
+            ))}
+          </>
+        )}
+        
+        {/* 2. Fallback: Fichas con imágenes de BD (formato básico) - solo si no hay dinámicas */}
+        {(!fichasDinamicas || fichasDinamicas.length === 0) && cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0 && (
+          <FichasTecnicas fichasTecnicas={cotizacion.fichasTecnicas} />
+        )}
+      </>
       
       {/* Imágenes de certificados al final - cada una en su página */}
-      {!esLaboratorio && cotizacion.certificadosEstructurados && 
+      {cotizacion.certificadosEstructurados && 
         cotizacion.certificadosEstructurados.some(cert => cert.link) && (
         <>
           {cotizacion.certificadosEstructurados
@@ -213,8 +219,13 @@ export default function ImprimirCotizacion() {
         </>
       )}
 
-      {/* Certificados SENASA */}
-      {!esLaboratorio && <CertificadosSENASA tieneASC5={tieneASC5} tieneASWG={tieneASWG} />}
+      {/* Certificados SENASA - Solo mostrar si hay datos de BD */}
+      {cotizacion.certificadosEstructurados && 
+        cotizacion.certificadosEstructurados.some(cert => cert.link) && (
+        <div>
+          {/* Los certificados con imágenes ya se muestran arriba */}
+        </div>
+      )}
     </>
   )
 }

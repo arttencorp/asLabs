@@ -1,0 +1,1 @@
+export { useFichasTecnicas } from './useFichasTecnicas'

@@ -12,310 +12,60 @@ interface Certificado {
 interface CertificadosCalidadProps {
     certificadosCalidad?: string
     certificados?: Certificado[] // Nueva prop para certificados estructurados
-    tieneASWG: boolean
-    tieneASC5: boolean
+    tieneASWG?: boolean // Temporal para compatibilidad
+    tieneASC5?: boolean // Temporal para compatibilidad
 }
 
 export function CertificadosCalidad({
     certificadosCalidad,
     certificados,
-    tieneASWG,
-    tieneASC5
+    tieneASWG = false,
+    tieneASC5 = false
 }: CertificadosCalidadProps) {
     return (
         <div className="mt-4">
             <h3 className="text-sm font-bold mb-1.5 text-[#5D9848]">Certificados de Calidad</h3>
-            {(() => {
-                // Si tenemos certificados de BD, mostrar con el formato original
-                if (certificados && certificados.length > 0) {
-                    return (
-                        <div className="space-y-3 text-[10pt]">
-                            {certificados.map((cert, index) => (
-                                <div key={index} className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                    <h4 className="font-bold text-center mb-1.5 text-xs">
-                                        {cert.titulo}
-                                    </h4>
-                                    <table className="w-full border-collapse text-[9pt]">
-                                        <tbody>
-                                            <tr className="border border-gray-300 bg-gray-100">
-                                                <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                <td className="p-1 border border-gray-300">{cert.codigo}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                <td className="p-1 border border-gray-300">{cert.tipo}</td>
-                                            </tr>
-                                            <tr className="border border-gray-300 bg-gray-100">
-                                                <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                <td className="p-1 border border-gray-300">{cert.informe}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    {cert.detalle.map((detalle, detIndex) => (
-                                        <p key={detIndex} className="mt-1 text-[9pt]">
-                                            {detalle}
-                                        </p>
-                                    ))}
-                                </div>
-                            ))}
+            
+            {/* Mostrar certificados de BD si existen */}
+            {certificados && certificados.length > 0 ? (
+                <div className="space-y-3 text-[10pt]">
+                    {certificados.map((cert, index) => (
+                        <div key={index} className="border border-dashed border-amber-300 bg-amber-100 p-2">
+                            <h4 className="font-bold text-center mb-1.5 text-xs">
+                                {cert.titulo}
+                            </h4>
+                            <table className="w-full border-collapse text-[9pt]">
+                                <tbody>
+                                    <tr className="border border-gray-300 bg-gray-100">
+                                        <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
+                                        <td className="p-1 border border-gray-300">{cert.codigo}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-1 font-semibold border border-gray-300">TIPO</td>
+                                        <td className="p-1 border border-gray-300">{cert.tipo}</td>
+                                    </tr>
+                                    <tr className="border border-gray-300 bg-gray-100">
+                                        <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
+                                        <td className="p-1 border border-gray-300">{cert.informe}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div className="mt-1">
+                                {cert.detalle?.map((detalle, detIndex) => (
+                                    <p key={detIndex} className="mt-1 text-[9pt]">
+                                        {detalle}
+                                    </p>
+                                ))}
+                            </div>
                         </div>
-                    )
-                }
-                
-                // Fallback a certificados hardcodeados si no hay datos de BD
-                else if (tieneASWG || tieneASC5) {
-                    return (
-                        <div className="space-y-3 text-[10pt]">
-                            {tieneASWG && (
-                                <>
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de Bacterias Fitopatógenas
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2023114632010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 114644-2023-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/BM-22: FUSARIUM OXYSPORUM F. SP CUBENSE RAZA 4 TROPICAL (FOC R4T) CON PCR
-                                            CONVENCIONAL - REGIÓN IGS
-                                        </p>
-                                        <p className="text-[9pt]">
-                                            MET-UCDSV/BM-102: FUSARIUM OXYSPORUM F.SP. CUBENSE RAZA 4 TROPICAL (FOC R4T) CON PCR
-                                            CONVENCIONAL PRIMERS LI
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de Ralstonia solanacearum
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2023114630010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 114535-2023-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/BM-102: FUSARIUM OXYSPORUM F.SP. CUBENSE RAZA 4 TROPICAL (FOC R4T) CON PCR
-                                            CONVENCIONAL PRIMERS LI
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de banana Streak virus.
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2020109320010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 100341-2021-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/VIR-002: DAS ELISA PARA DETECCIÓN DE VIRUS FITOPATÓGENO EN MATERIAL VEGETAL
-                                        </p>
-                                    </div>
-                                </>
-                            )}
-
-                            {tieneASC5 && (
-                                <>
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de Fusarium oxysporum f.sp. cubense Raza 4 Tropical
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2023114627010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 114531-2023-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/BM-22: FUSARIUM OXYSPORUM F. SP CUBENSE RAZA 4 TROPICAL (FOC R4T) CON PCR
-                                            CONVENCIONAL - REGIÓN IGS
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de Fusarium oxysporum f.sp. cubense Raza 4 Tropical
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2023114627010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 114531-2023-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/BM-102: FUSARIUM OXYSPORUM F.SP. CUBENSE RAZA 4 TROPICAL (FOC R4T) CON PCR
-                                            CONVENCIONAL PRIMERS LI
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de Bacterias Fitopatógenas
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2023114632010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 114644-2023-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/BAC-005: DIAGNÓSTICO DE BACTERIAS FITOPATÓGENAS EN MATERIAL VEGETAL
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de Ralstonia solanacearum
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2023114632010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 114644-2023-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/BAC-004: BACTERIAS FITOPATÓGENAS POR SEROLOGÍA EN MATERIAL VEGETAL
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de banana Streak virus.
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2020109321010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 100342-2021-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/VIR-002: DAS ELISA PARA DETECCIÓN DE VIRUS FITOPATÓGENO EN MATERIAL VEGETAL
-                                        </p>
-                                    </div>
-
-                                    <div className="border border-dashed border-amber-300 bg-amber-100 p-2">
-                                        <h4 className="font-bold text-center mb-1.5 text-xs">
-                                            Negativo a la presencia de banana Streak virus.
-                                        </h4>
-                                        <table className="w-full border-collapse text-[9pt]">
-                                            <tbody>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold w-1/3">CÓDIGO DE MUESTRA</td>
-                                                    <td className="p-1 border border-gray-300">2020109319010001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-1 font-semibold border border-gray-300">TIPO</td>
-                                                    <td className="p-1 border border-gray-300">PLANTA COMPLETA</td>
-                                                </tr>
-                                                <tr className="border border-gray-300 bg-gray-100">
-                                                    <td className="p-1 font-semibold">INFORME DE ENSAYO</td>
-                                                    <td className="p-1 border border-gray-300">Nº 100340-2021-AG-SENASA-OCDP-UCDSV</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-1 text-[9pt]">
-                                            MET-UCDSV/VIR-002: DAS ELISA PARA DETECCIÓN DE VIRUS FITOPATÓGENO EN MATERIAL VEGETAL
-                                        </p>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    )
-                } else {
-                    return (
-                        <div className="whitespace-pre-line text-xs bg-[#f0f7ed] p-3 rounded-md">
-                            {certificadosCalidad || ""}
-                        </div>
-                    )
-                }
-            })()}
+                    ))}
+                </div>
+            ) : (
+                /* Mostrar texto simple de certificados si no hay datos estructurados */
+                certificadosCalidad && (
+                    <p className="text-xs text-gray-600">{certificadosCalidad}</p>
+                )
+            )}
         </div>
     )
 }

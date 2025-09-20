@@ -118,9 +118,7 @@ export function useCotizacion() {
     
     // Obtener el tipo desde formasPago y mapear correctamente
     const formaPagoBD = formasPago.find(fp => fp.form_pa_id_int === nuevaFormaPagoId)
-    console.log('CAMBIO FORMA PAGO:', { nuevaFormaPagoId, formaPagoBD }) // LOG TEMPORAL
     const formaPagoUI = formaPagoBD?.form_pa_tipo_int === 1 ? 'completo' : 'parcial'
-    console.log('MAPEO FORMA PAGO UI:', formaPagoUI) // LOG TEMPORAL
     setFormaPago(formaPagoUI)
   }, [formasPago])
 
@@ -375,8 +373,6 @@ export function useCotizacion() {
   const vistaPrevia = useCallback(() => {
     try {
       const totales = calcularTotales()
-      
-      console.log('VISTA PREVIA - FORMA PAGO:', formaPago) // LOG TEMPORAL
       
       const itemsValidados = Array.isArray(items)
         ? items.map((item) => ({

@@ -51,8 +51,7 @@ export function ProductosTable({
             <TableRow>
               <TableHead>Nombre</TableHead>
               <TableHead>Descripción</TableHead>
-              <TableHead>Precio</TableHead>
-              <TableHead>Estado</TableHead>
+              <TableHead>Precio</TableHead> 
               <TableHead className="w-[100px]">Acciones</TableHead>
             </TableRow>
           </TableHeader>
@@ -72,12 +71,7 @@ export function ProductosTable({
                   </TableCell>
                   <TableCell className="font-mono">
                     {formatearPrecio(producto.pro_prec_unitario_int)}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={estado.variant}>
-                      {estado.texto}
-                    </Badge>
-                  </TableCell>
+                  </TableCell> 
                   <TableCell>
                     <div className="flex gap-2">
                       <Button

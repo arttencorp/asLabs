@@ -133,14 +133,14 @@ export default function OfferCarousel() {
 
           {/* Center - Image */}
           <div className="w-full lg:w-1/3 mb-8 lg:mb-0">
-            <div className="rounded-lg overflow-hidden">
+            <div className="rounded-lg overflow-hidden h-[250px] sm:h-[300px] lg:h-[350px]">
               <Image
                 key={offerItems[activeItem].id}
                 src={offerItems[activeItem].image || "/placeholder.svg"}
                 alt={offerItems[activeItem].title}
                 width={500}
                 height={500}
-                className="w-full h-auto object-cover rounded-lg"
+                className="w-full h-full object-cover rounded-lg"
               />
             </div>
           </div>
