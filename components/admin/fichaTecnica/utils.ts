@@ -51,7 +51,20 @@ export function obtenerExtensionArchivo(fileName: string): string {
 
 // Limpiar nombre de archivo para uso en storage
 export function limpiarNombreArchivo(fileName: string): string {
-  return fileName.replace(/[^a-zA-Z0-9.-]/g, '_')
+  // Remove any path components
+  const baseName = fileName.split(/[/\\]/).pop() || '';
+  // Split into name and extension
+  const lastDot = baseName.lastIndexOf('.');
+  let name = lastDot > 0 ? baseName.slice(0, lastDot) : baseName;
+  let ext = lastDot > 0 ? baseName.slice(lastDot + 1) : '';
+  // Sanitize name: only alphanumeric and underscores, no leading dots
+  name = name.replace(/[^a-zA-Z0-9]/g, '_').replace(/^_+/, '');
+  // Sanitize extension: only alphanumeric, max 8 chars
+  ext = ext.replace(/[^a-zA-Z0-9]/g, '').slice(0, 8);
+  // If no name, use 'file'
+  if (!name) name = 'file';
+  // Recombine
+  return ext ? `${name}.${ext}` : name;
 }
 
 // Extraer nombre de archivo de URL de storage
