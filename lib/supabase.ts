@@ -550,7 +550,7 @@ export async function actualizarFichaTecnica(id: string, fichaTecnicaData: {
   try {
     // Limpiar datos y crear objeto de actualización
     const updateData: any = {}
-    
+
     if (fichaTecnicaData.fit_tec_nom_planta_vac !== undefined) {
       updateData.fit_tec_nom_planta_vac = fichaTecnicaData.fit_tec_nom_planta_vac?.trim() || null
     }
@@ -633,7 +633,7 @@ export async function eliminarFichaTecnica(id: string): Promise<void> {
       .eq('fit_tec_id_int', id)
 
     if (error) throw error
-    
+
   } catch (error) {
     console.error('Error eliminando ficha técnica:', error)
     throw error
@@ -772,17 +772,17 @@ export async function obtenerFichasTecnicasCompletasPorCodigos(codigos: string[]
           producto:Productos(*)
         `)
         .in('pro_id_int', productosIds)
-      
+
       if (!error4) fichasPorProducto = data || []
     }
 
     // Combinar todos los resultados y eliminar duplicados
     const todasFichas = [
-      ...(fichasPorUuid || []), 
-      ...(fichasPorCodigo || []), 
+      ...(fichasPorUuid || []),
+      ...(fichasPorCodigo || []),
       ...fichasPorProducto
     ]
-    const fichasUnicas = todasFichas.filter((ficha, index, self) => 
+    const fichasUnicas = todasFichas.filter((ficha, index, self) =>
       self.findIndex(f => f.fit_tec_id_int === ficha.fit_tec_id_int) === index
     )
 
@@ -900,10 +900,10 @@ export async function subirImagenFichaTecnica(file: File, fileName: string): Pro
   try {
     // Usar cliente autenticado para operaciones de storage
     const supabaseAuth = createAuthenticatedClient()
-    
+
     // Verificar autenticación antes de proceder
     const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
-    
+
     if (sessionError || !session) {
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       return { url: null, error: 'No hay una sesión autenticada activa' }
@@ -913,13 +913,7 @@ export async function subirImagenFichaTecnica(file: File, fileName: string): Pro
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
     if (!allowedTypes.includes(file.type)) {
       return { url: null, error: 'Tipo de archivo no permitido. Solo se permiten imágenes JPG, PNG y WebP.' }
-    }
-
-    // Validar tamaño de archivo (máximo 5MB)
-    const maxSize = 5 * 1024 * 1024 // 5MB
-    if (file.size > maxSize) {
-      return { url: null, error: 'El archivo es demasiado grande. Tamaño máximo: 5MB.' }
-    }
+    } 
 
     // Crear nombre único para el archivo
     const timestamp = Date.now()
@@ -954,34 +948,40 @@ export async function eliminarImagenFichaTecnica(imageUrl: string): Promise<{ su
   try {
     // Usar cliente autenticado para operaciones de storage
     const supabaseAuth = createAuthenticatedClient()
-    
+
     // Verificar autenticación antes de proceder
     const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
-    
+
     if (sessionError || !session) {
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       return { success: false, error: 'No hay una sesión autenticada activa' }
     }
 
-    // Extraer el path del archivo desde la URL
-    const urlParts = imageUrl.split('/fichaTecnica/')
-    if (urlParts.length !== 2) {
+    // Extraer el path del archivo desde la URL de forma segura
+    try {
+      const url = new URL(imageUrl)
+      const pathMatch = url.pathname.match(/\/fichaTecnica\/(.+)/)
+
+      if (!pathMatch || !pathMatch[1]) {
+        return { success: false, error: 'URL de imagen inválida' }
+      }
+
+      const fileName = pathMatch[1]
+      const filePath = `fichaTecnica/${fileName}`
+
+      const { error } = await supabaseAuth.storage
+        .from('admin')
+        .remove([filePath])
+
+      if (error) {
+        console.error('Error eliminando imagen:', error)
+        return { success: false, error: 'Error al eliminar la imagen' }
+      }
+
+      return { success: true, error: null }
+    } catch (urlError) {
       return { success: false, error: 'URL de imagen inválida' }
     }
-
-    const fileName = urlParts[1]
-    const filePath = `fichaTecnica/${fileName}`
-
-    const { error } = await supabaseAuth.storage
-      .from('admin')
-      .remove([filePath])
-
-    if (error) {
-      console.error('Error eliminando imagen:', error)
-      return { success: false, error: 'Error al eliminar la imagen' }
-    }
-
-    return { success: true, error: null }
   } catch (error) {
     console.error('Error en eliminación de imagen:', error)
     return { success: false, error: 'Error inesperado al eliminar la imagen' }
@@ -1469,7 +1469,7 @@ export async function eliminarPedido(id: string): Promise<void> {
       .eq('ped_id_int', id)
 
     if (error) throw error
-    
+
   } catch (error) {
     console.error('Error eliminando pedido:', error)
     throw error
@@ -1484,10 +1484,10 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
   try {
     // Usar cliente autenticado para operaciones de storage
     const supabaseAuth = createAuthenticatedClient()
-    
+
     // Verificar autenticación antes de proceder
     const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
-    
+
     if (sessionError || !session) {
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       throw new Error('No hay una sesión autenticada activa')
@@ -1497,15 +1497,20 @@ export async function subirImagenPedido(file: File, pedidoId?: string): Promise<
     if (!file) {
       throw new Error('No se proporcionó archivo')
     }
-    
+
     if (!file.type.startsWith('image/')) {
       throw new Error('El archivo debe ser una imagen')
     }
 
+    // Validar que el archivo tenga extensión
+    if (!file.name.includes('.')) {
+      throw new Error('El archivo debe tener una extensión válida')
+    }
+
     // Generar nombre único para el archivo
     const timestamp = Date.now()
-    const extension = file.name.split('.').pop()?.toLowerCase()
-    const fileName = pedidoId 
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+    const fileName = pedidoId
       ? `pedido_${pedidoId}_${timestamp}.${extension}`
       : `pedido_temp_${timestamp}.${extension}`
 
@@ -1546,10 +1551,10 @@ export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
   try {
     // Usar cliente autenticado para operaciones de storage
     const supabaseAuth = createAuthenticatedClient()
-    
+
     // Verificar autenticación antes de proceder
     const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
-    
+
     if (sessionError || !session) {
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       throw new Error('No hay una sesión autenticada activa')
@@ -1558,11 +1563,12 @@ export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
     if (!imageUrl) {
       throw new Error('No se proporcionó URL de imagen')
     }
-    
-    // Extraer el path del archivo de la URL
-    const urlParts = imageUrl.split('/')
-    const fileName = urlParts[urlParts.length - 1]
-    
+
+    // Extraer el path del archivo de la URL de forma segura
+    const url = new URL(imageUrl)
+    const pathParts = url.pathname.split('/')
+    const fileName = pathParts[pathParts.length - 1]
+
     if (!fileName) {
       throw new Error('No se pudo extraer el nombre del archivo de la URL')
     }
@@ -1639,7 +1645,7 @@ export async function crearCotizacion(cotizacionData: {
     // Limpiar datos antes de insertar (convertir strings vacíos a null)
     const datosLimpios = {
       cliente_id: cotizacionData.cliente_id || null,
-      fecha_emision: new Date().toISOString(), 
+      fecha_emision: new Date().toISOString(),
       fecha_vencimiento: cotizacionData.fecha_vencimiento?.trim() ?
         new Date(`${cotizacionData.fecha_vencimiento}T23:59:59-05:00`).toISOString() :
         null,
@@ -1658,7 +1664,7 @@ export async function crearCotizacion(cotizacionData: {
         cot_fec_emis_dt: datosLimpios.fecha_emision,
         cot_fec_venc_dt: datosLimpios.fecha_vencimiento,
         cot_igv_bol: datosLimpios.incluye_igv,
-        per_id_int: datosLimpios.cliente_id 
+        per_id_int: datosLimpios.cliente_id
       })
       .select()
       .single()
@@ -1764,7 +1770,7 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
     const datosLimpios: any = {}
 
     if (cotizacionData.cliente_id !== undefined) datosLimpios.per_id_int = cotizacionData.cliente_id
-    
+
     // Solo actualizar fecha de emisión si se proporciona una fecha válida y diferente
     if (cotizacionData.fecha_emision !== undefined && cotizacionData.fecha_emision?.trim()) {
       try {
@@ -1777,7 +1783,7 @@ export async function actualizarCotizacion(id: string, cotizacionData: {
         throw new Error(`Error procesando fecha de emisión: ${cotizacionData.fecha_emision}`)
       }
     }
-    
+
     // Solo actualizar fecha de vencimiento si se proporciona una fecha válida y diferente
     if (cotizacionData.fecha_vencimiento !== undefined && cotizacionData.fecha_vencimiento?.trim()) {
       try {
@@ -2396,10 +2402,10 @@ export async function contarProductosPorCategoria(categoriaId: string): Promise<
       .eq('cat_id_int', categoriaId)
 
     if (error) throw error
-    
+
     // Contar manualmente para depurar
     const totalProductos = data?.length || 0
-    
+
     return totalProductos
   } catch (error) {
     console.error('Error contando productos por categoría:', error)
@@ -2421,9 +2427,9 @@ export async function contarProductosOcultosPorCategoria(categoriaId: string): P
       .eq('prod_tiend_activo_bool', false) // Solo productos ocultos
 
     if (error) throw error
-    
+
     const productosOcultos = data?.length || 0
-    
+
     return productosOcultos
   } catch (error) {
     console.error('Error contando productos ocultos por categoría:', error)
@@ -2739,7 +2745,7 @@ export async function eliminarCertificadoCalidad(id: string): Promise<void> {
       .eq('cer_cal_id_int', id)
 
     if (error) throw error
-    
+
   } catch (error) {
     console.error('Error eliminando certificado de calidad:', error)
     throw error
@@ -2800,17 +2806,22 @@ export async function subirImagenCertificado(archivo: File, nombreArchivo: strin
   try {
     // Usar cliente autenticado para operaciones de storage
     const supabaseAuth = createAuthenticatedClient()
-    
+
     // Verificar autenticación antes de proceder
     const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
-    
+
     if (sessionError || !session) {
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       return { success: false, error: 'No hay una sesión autenticada activa' }
     }
 
+    // Validar que el archivo tenga extensión
+    const extension = nombreArchivo.includes('.') ? nombreArchivo.split('.').pop() : ''
+    if (!extension) {
+      return { success: false, error: 'El archivo debe tener una extensión válida' }
+    }
+
     const timestamp = Date.now()
-    const extension = nombreArchivo.split('.').pop()
     const nombreFinal = `certificado_${timestamp}.${extension}`
     const rutaArchivo = `certificados/${nombreFinal}`
 
@@ -2839,10 +2850,10 @@ export async function eliminarImagenCertificado(url: string): Promise<{ success:
   try {
     // Usar cliente autenticado para operaciones de storage
     const supabaseAuth = createAuthenticatedClient()
-    
+
     // Verificar autenticación antes de proceder
     const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
-    
+
     if (sessionError || !session) {
       console.error('Error de sesión:', sessionError || 'No hay sesión activa')
       return { success: false, error: 'No hay una sesión autenticada activa' }
