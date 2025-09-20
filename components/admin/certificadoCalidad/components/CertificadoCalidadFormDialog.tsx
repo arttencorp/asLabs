@@ -18,8 +18,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2, Upload, X, FileText } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Loader2, Upload, X } from "lucide-react"
+import { eliminarImagenCertificado, actualizarCertificadoCalidad } from '@/lib/supabase'
 import type { CertificadoCalidadFormDialogProps, CertificadoCalidadForm } from '../types/index'
 
 export function CertificadoCalidadFormDialog({
@@ -27,6 +27,7 @@ export function CertificadoCalidadFormDialog({
   onOpenChange,
   certificado,
   onSubmit,
+  onUpdateEditingItem,
   loading,
   productos
 }: CertificadoCalidadFormDialogProps) {
@@ -40,7 +41,7 @@ export function CertificadoCalidadFormDialog({
     imagen: null
   })
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [dragActive, setDragActive] = useState(false)
+  const [isRemovingImage, setIsRemovingImage] = useState(false)
 
   const isEditing = !!certificado
 
@@ -97,27 +98,12 @@ export function CertificadoCalidadFormDialog({
     }
   }
 
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true)
-    } else if (e.type === "dragleave") {
-      setDragActive(false)
-    }
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0]
-      if (file.type.startsWith('image/')) {
-        handleImageChange(file)
-      }
-    }
+  const clearImage = () => {
+    setFormData(prev => ({
+      ...prev,
+      imagen: null
+    }))
+    setImagePreview(null)
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -125,13 +111,50 @@ export function CertificadoCalidadFormDialog({
     onSubmit(formData)
   }
 
-  const removeImage = () => {
-    handleImageChange(null)
+  const removeImage = async () => {
+    if (isRemovingImage) return // Prevenir múltiples clicks
+    
+    setIsRemovingImage(true)
+    try {
+      // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
+      if (certificado?.cer_cal_imag_url) {
+        console.log('🗑️ Eliminando imagen del storage:', certificado.cer_cal_imag_url)
+        const result = await eliminarImagenCertificado(certificado.cer_cal_imag_url)
+        
+        if (result.success) {
+          console.log('✅ Imagen eliminada del storage')
+          
+          // Actualizar inmediatamente la BD para quitar la referencia
+          await actualizarCertificadoCalidad(certificado.cer_cal_id_int, { cer_cal_imag_url: null })
+          console.log('✅ Referencia de imagen eliminada de la BD')
+          
+          // Actualizar el item en edición para que el formulario refleje el cambio
+          if (onUpdateEditingItem) {
+            onUpdateEditingItem({ cer_cal_imag_url: null })
+            console.log('✅ Item en edición actualizado')
+          }
+        } else {
+          console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
+        }
+      }
+      
+      // Limpiar estado local (igual que fichas técnicas)
+      clearImage()
+      setFormData(prev => ({ ...prev, imagen: null }))
+      console.log('✅ Estado local limpiado')
+    } catch (error) {
+      console.error('💥 Error eliminando imagen:', error)
+      // Aún así limpiar el estado local
+      clearImage()
+      setFormData(prev => ({ ...prev, imagen: null }))
+    } finally {
+      setIsRemovingImage(false)
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? 'Editar Certificado de Calidad' : 'Nuevo Certificado de Calidad'}
@@ -141,13 +164,12 @@ export function CertificadoCalidadFormDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Tipo */}
           <div className="space-y-2">
-            <Label htmlFor="tipo">Tipo de Certificado *</Label>
+            <Label htmlFor="tipo">Tipo de Certificado</Label>
             <Input
               id="tipo"
               value={formData.tipo}
               onChange={(e) => handleInputChange('tipo', e.target.value)}
               placeholder="Ej: Análisis microbiológico, Control de calidad..."
-              required
             />
           </div>
 
@@ -223,56 +245,60 @@ export function CertificadoCalidadFormDialog({
           {/* Image Upload */}
           <div className="space-y-2">
             <Label>Imagen del Certificado</Label>
-            <div
-              className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors ${
-                dragActive ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-gray-400'
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-              onClick={() => document.getElementById('file-upload')?.click()}
-            >
-              {imagePreview ? (
-                <div className="relative inline-block">
-                  <Avatar className="h-20 w-20 mx-auto">
-                    <AvatarImage src={imagePreview} alt="Preview" />
-                    <AvatarFallback>
-                      <FileText className="h-8 w-8" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeImage()
-                    }}
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="py-4">
-                  <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-600">
-                    Arrastra una imagen aquí o haz clic para seleccionar
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    PNG, JPG, GIF hasta 10MB
-                  </p>
-                </div>
-              )}
-            </div>
-            <input
-              id="file-upload"
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageChange(e.target.files?.[0] || null)}
-              className="hidden"
-            />
+            
+            {/* Preview de imagen */}
+            {imagePreview && (
+              <div className="relative w-full max-w-md mx-auto border-2 border-dashed border-gray-300 rounded-lg">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-2 right-2"
+                  disabled={isRemovingImage}
+                  onClick={async (e) => {
+                    e.stopPropagation()
+                    await removeImage()
+                  }}
+                >
+                  {isRemovingImage ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <X className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            )}
+
+            {/* Input de archivo */}
+            {!imagePreview && (
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e.target.files?.[0] || null)}
+                  className="hidden"
+                  id="imagen-certificado"
+                />
+                <label htmlFor="imagen-certificado" className="cursor-pointer">
+                  <div className="flex flex-col items-center space-y-2">
+                    <Upload className="h-8 w-8 text-gray-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Haz clic para seleccionar una imagen
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        JPG, PNG o WebP (máx. 5MB)
+                      </p>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            )}
           </div>
 
           {/* Submit Buttons */}
@@ -285,7 +311,7 @@ export function CertificadoCalidadFormDialog({
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading || !formData.tipo.trim()}>
+            <Button type="submit" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isEditing ? 'Actualizar' : 'Crear'}
             </Button>

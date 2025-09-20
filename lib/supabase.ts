@@ -2808,18 +2808,23 @@ export async function obtenerCertificadosCalidadPorProducto(productoId: string):
 
 export async function subirImagenCertificado(archivo: File, nombreArchivo: string): Promise<{ success: boolean; url?: string; error?: string }> {
   try {
-    const { data: session } = await supabase.auth.getSession()
+    // Usar cliente autenticado para operaciones de storage
+    const supabaseAuth = createAuthenticatedClient()
     
-    if (!session?.session) {
-      return { success: false, error: 'No hay sesión de usuario autenticado' }
+    // Verificar autenticación antes de proceder
+    const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
+    
+    if (sessionError || !session) {
+      console.error('Error de sesión:', sessionError || 'No hay sesión activa')
+      return { success: false, error: 'No hay una sesión autenticada activa' }
     }
 
     const timestamp = Date.now()
     const extension = nombreArchivo.split('.').pop()
     const nombreFinal = `certificado_${timestamp}.${extension}`
-    const rutaArchivo = `certificadoCalidad/${nombreFinal}`
+    const rutaArchivo = `certificados/${nombreFinal}`
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabaseAuth.storage
       .from('admin')
       .upload(rutaArchivo, archivo)
 
@@ -2829,7 +2834,7 @@ export async function subirImagenCertificado(archivo: File, nombreArchivo: strin
     }
 
     // Obtener URL pública
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseAuth.storage
       .from('admin')
       .getPublicUrl(rutaArchivo)
 
@@ -2842,24 +2847,30 @@ export async function subirImagenCertificado(archivo: File, nombreArchivo: strin
 
 export async function eliminarImagenCertificado(url: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const { data: session } = await supabase.auth.getSession()
+    // Usar cliente autenticado para operaciones de storage
+    const supabaseAuth = createAuthenticatedClient()
     
-    if (!session?.session) {
-      return { success: false, error: 'No hay sesión de usuario autenticado' }
+    // Verificar autenticación antes de proceder
+    const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
+    
+    if (sessionError || !session) {
+      console.error('Error de sesión:', sessionError || 'No hay sesión activa')
+      return { success: false, error: 'No hay una sesión autenticada activa' }
     }
 
-    // Extraer la ruta del archivo de la URL
-    const urlParts = url.split('/storage/v1/object/public/admin/')
-    if (urlParts.length < 2) {
+    // Extraer el path del archivo desde la URL (mismo patrón que fichas técnicas)
+    const urlParts = url.split('/certificados/')
+    if (urlParts.length !== 2) {
       console.warn('URL de imagen no válida:', url)
-      return { success: false, error: 'URL de imagen no válida' }
+      return { success: false, error: 'URL de imagen inválida' }
     }
 
-    const rutaArchivo = urlParts[1]
+    const fileName = urlParts[1]
+    const filePath = `certificados/${fileName}`
 
-    const { error } = await supabase.storage
+    const { error } = await supabaseAuth.storage
       .from('admin')
-      .remove([rutaArchivo])
+      .remove([filePath])
 
     if (error) {
       console.error('Error eliminando imagen de certificado del storage:', error)

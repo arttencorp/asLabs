@@ -37,6 +37,7 @@ export function CertificadosCalidadManagement() {
     loadData,
     handleSubmit,
     handleDelete,
+    updateEditingItem,
     openCreateDialog,
     openEditDialog,
     closeDialog,
@@ -138,6 +139,7 @@ export function CertificadosCalidadManagement() {
         }}
         certificado={editingItem}
         onSubmit={handleSubmit}
+        onUpdateEditingItem={updateEditingItem}
         loading={loading || uploadLoading}
         productos={productos}
       />

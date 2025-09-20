@@ -7,6 +7,7 @@ import {
   actualizarCertificadoCalidad,
   eliminarCertificadoCalidad,
   subirImagenCertificado,
+  eliminarImagenCertificado,
   obtenerProductos
 } from '@/lib/supabase'
 import type { 
@@ -80,6 +81,34 @@ export function useCertificadosCalidad() {
     }
   }, [showSuccess])
 
+  const handleDeleteImage = useCallback(async (imageUrl: string) => {
+    try {
+      const result = await eliminarImagenCertificado(imageUrl)
+      if (result.error) {
+        setError(result.error)
+        return false
+      }
+      return true
+    } catch (error: any) {
+      setError(error.message || 'Error al eliminar imagen')
+      return false
+    }
+  }, [])
+
+  // Función para actualizar el item en edición (útil cuando se modifica desde el formulario)
+  const updateEditingItem = useCallback((updates: Partial<CertificadoCalidadDatabase>) => {
+    if (editingItem) {
+      const updatedItem = { ...editingItem, ...updates }
+      setEditingItem(updatedItem)
+      // También actualizar en la lista si está presente
+      setItems(prevItems => 
+        prevItems.map(item => 
+          item.cer_cal_id_int === editingItem.cer_cal_id_int ? updatedItem : item
+        )
+      )
+    }
+  }, [editingItem])
+
   const handleCreateWithForm = useCallback(async (formData: CertificadoCalidadForm) => {
     setLoading(true)
     setError(null)
@@ -89,20 +118,21 @@ export function useCertificadosCalidad() {
       // Subir imagen si se seleccionó una
       if (formData.imagen) {
         const nombreArchivo = `certificado-${Date.now()}-${formData.imagen.name}`
-        imagenUrl = await handleUploadImage(formData.imagen, nombreArchivo)
-        if (!imagenUrl) {
+        const resultadoUpload = await handleUploadImage(formData.imagen, nombreArchivo)
+        if (!resultadoUpload) {
           throw new Error('Error al subir la imagen')
         }
+        imagenUrl = resultadoUpload
       }
 
       const dataToCreate = {
         cer_cal_cod_muestra_int: formData.codMuestra ? parseInt(formData.codMuestra) : null,
-        cer_cal_tipo_vac: formData.tipo,
+        cer_cal_tipo_vac: formData.tipo || null,
         cer_cal_infor_ensayo_vac: formData.informacionEnsayo || null,
         cer_cal_result_vac: formData.resultados || null,
         cer_cal_resum_vac: formData.observaciones || null,
         cer_cal_imag_url: imagenUrl,
-        pro_id_int: (formData.proId && formData.proId !== 'sin-producto') ? formData.proId : '1'
+        pro_id_int: (formData.proId && formData.proId !== 'sin-producto') ? formData.proId : (productos[0]?.pro_id_int || '1')
       }
       const nuevoCertificado = await crearCertificadoCalidad(dataToCreate)
       setItems(prevItems => [nuevoCertificado, ...prevItems])
@@ -134,12 +164,12 @@ export function useCertificadosCalidad() {
 
       const dataToUpdate = {
         cer_cal_cod_muestra_int: formData.codMuestra ? parseInt(formData.codMuestra) : null,
-        cer_cal_tipo_vac: formData.tipo,
+        cer_cal_tipo_vac: formData.tipo || null,
         cer_cal_infor_ensayo_vac: formData.informacionEnsayo || null,
         cer_cal_result_vac: formData.resultados || null,
         cer_cal_resum_vac: formData.observaciones || null,
         cer_cal_imag_url: imagenUrl,
-        pro_id_int: (formData.proId && formData.proId !== 'sin-producto') ? formData.proId : (editingItem.pro_id_int || '1')
+        pro_id_int: (formData.proId && formData.proId !== 'sin-producto') ? formData.proId : (editingItem.pro_id_int || productos[0]?.pro_id_int || '1')
       }
       const certificadoActualizado = await actualizarCertificadoCalidad(editingItem.cer_cal_id_int, dataToUpdate)
       setItems(prevItems => 
@@ -194,7 +224,9 @@ export function useCertificadosCalidad() {
     setIsDialogOpen(false)
     setEditingItem(null)
     setError(null)
-  }, [])
+    // Recargar datos para asegurar sincronización (igual que fichas técnicas)
+    loadData()
+  }, [loadData])
 
   // Función unificada para manejar submit del formulario
   const handleSubmit = useCallback(async (formData: CertificadoCalidadForm) => {
@@ -246,6 +278,8 @@ export function useCertificadosCalidad() {
     handleUpdateWithForm,
     handleDelete,
     handleUploadImage,
+    handleDeleteImage,
+    updateEditingItem,
     openCreateDialog,
     openEditDialog,
     closeDialog,

@@ -28,6 +28,7 @@ export interface CertificadoCalidadFormDialogProps {
   onOpenChange: (open: boolean) => void
   certificado?: CertificadoCalidadDatabase | null
   onSubmit: (data: CertificadoCalidadForm) => Promise<void>
+  onUpdateEditingItem?: (updates: Partial<CertificadoCalidadDatabase>) => void
   loading: boolean
   productos: ProductoDatabase[]
 }
