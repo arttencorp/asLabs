@@ -13,6 +13,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -101,6 +111,7 @@ export function FichaTecnicaCompletaFormDialog({
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [fileError, setFileError] = useState<string | null>(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [activeTab, setActiveTab] = useState<string>("basic")
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -215,19 +226,24 @@ export function FichaTecnicaCompletaFormDialog({
     reader.readAsDataURL(file)
   }
 
-  const handleRemoveImage = async () => {
+  // Función que muestra el diálogo de confirmación
+  const showDeleteConfirmation = () => {
+    setShowDeleteDialog(true)
+  }
+
+  // Función que ejecuta la eliminación de imagen
+  const executeImageRemoval = async () => {
+    setShowDeleteDialog(false) // Cerrar el diálogo
+    
     try {
       // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
       if (editingFichaTecnica?.fit_tec_imag_vac) {
-        console.log('🗑️ Eliminando imagen del storage:', editingFichaTecnica.fit_tec_imag_vac)
         const result = await eliminarImagenFichaTecnica(editingFichaTecnica.fit_tec_imag_vac)
         
         if (result.success) {
-          console.log('✅ Imagen eliminada del storage')
           
           // Actualizar inmediatamente la BD para quitar la referencia
           await actualizarFichaTecnica(editingFichaTecnica.fit_tec_id_int, { fit_tec_imag_vac: null })
-          console.log('✅ Referencia de imagen eliminada de la BD')
         } else {
           console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
         }
@@ -279,7 +295,8 @@ export function FichaTecnicaCompletaFormDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
@@ -386,7 +403,7 @@ export function FichaTecnicaCompletaFormDialog({
                       variant="destructive"
                       size="sm"
                       className="absolute top-2 right-2"
-                      onClick={handleRemoveImage}
+                      onClick={showDeleteConfirmation}
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -618,5 +635,28 @@ export function FichaTecnicaCompletaFormDialog({
         </form>
       </DialogContent>
     </Dialog>
+
+    {/* Diálogo de confirmación para eliminar imagen */}
+    <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>¿Eliminar imagen?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Esta acción eliminará permanentemente la imagen de la ficha técnica completa.
+            Esta acción es <strong>irreversible</strong>.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={executeImageRemoval}
+            className="bg-red-600 hover:bg-red-700"
+          >
+            Sí, eliminar
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   )
 }

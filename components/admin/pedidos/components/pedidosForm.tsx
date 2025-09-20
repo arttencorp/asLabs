@@ -165,13 +165,10 @@ export function PedidoFormDialog({
     try {
       // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
       if (pedido?.ped_imagen_url) {
-        console.log('🗑️ Eliminando imagen del storage:', pedido.ped_imagen_url)
         await eliminarImagenPedido(pedido.ped_imagen_url)
-        console.log('✅ Imagen eliminada del storage')
         
         // Actualizar inmediatamente la BD para quitar la referencia
         await actualizarPedido(pedido.ped_id_int, { imagen_url: '' })
-        console.log('✅ Referencia de imagen eliminada de la BD')
       }
       
       setImagenFile(null)

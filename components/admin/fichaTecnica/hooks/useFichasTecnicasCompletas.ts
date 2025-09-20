@@ -32,8 +32,91 @@ interface FormDataCompleta {
   selectedFile?: File | null
 }
 
-// Cache global para fichas técnicas completas
-const fichasCompletasCache: { [key: string]: FichaTecnicaCompletaDatabase[] } = {}
+// Cache mejorado para fichas técnicas completas
+interface CacheEntry {
+  data: FichaTecnicaCompletaDatabase[]
+  timestamp: number
+  accessCount: number
+}
+
+class FichasCompletasCache {
+  private cache: { [key: string]: CacheEntry } = {}
+  private readonly maxEntries = 50 // Límite de entradas
+  private readonly ttl = 5 * 60 * 1000 // 5 minutos en millisegundos
+
+  get(key: string): FichaTecnicaCompletaDatabase[] | null {
+    const entry = this.cache[key]
+    if (!entry) return null
+
+    // Verificar si la entrada ha expirado
+    if (Date.now() - entry.timestamp > this.ttl) {
+      delete this.cache[key]
+      return null
+    }
+
+    // Incrementar contador de acceso
+    entry.accessCount++
+    return entry.data
+  }
+
+  set(key: string, data: FichaTecnicaCompletaDatabase[]): void {
+    // Si el cache está lleno, eliminar la entrada menos usada y más antigua
+    if (Object.keys(this.cache).length >= this.maxEntries) {
+      this.evictLeastUsed()
+    }
+
+    this.cache[key] = {
+      data,
+      timestamp: Date.now(),
+      accessCount: 0
+    }
+  }
+
+  clear(): void {
+    this.cache = {}
+  }
+
+  private evictLeastUsed(): void {
+    let leastUsedKey = ''
+    let leastUsedScore = Infinity
+
+    for (const [key, entry] of Object.entries(this.cache)) {
+      // Score basado en frecuencia de uso y antigüedad
+      const score = entry.accessCount / (Date.now() - entry.timestamp)
+      if (score < leastUsedScore) {
+        leastUsedScore = score
+        leastUsedKey = key
+      }
+    }
+
+    if (leastUsedKey) {
+      delete this.cache[leastUsedKey]
+    }
+  }
+
+  // Limpiar entradas expiradas automáticamente
+  private cleanExpired(): void {
+    const now = Date.now()
+    for (const [key, entry] of Object.entries(this.cache)) {
+      if (now - entry.timestamp > this.ttl) {
+        delete this.cache[key]
+      }
+    }
+  }
+
+  // Iniciar limpieza automática cada 2 minutos
+  startAutoCleanup(): void {
+    setInterval(() => this.cleanExpired(), 2 * 60 * 1000)
+  }
+}
+
+// Instancia global del cache mejorado
+const fichasCompletasCache = new FichasCompletasCache()
+
+// Iniciar limpieza automática
+if (typeof window !== 'undefined') {
+  fichasCompletasCache.startAutoCleanup()
+}
 
 export function useFichasTecnicasCompletas() {
   const [items, setItems] = useState<FichaTecnicaCompletaDatabase[]>([])
@@ -87,14 +170,15 @@ export function useFichasTecnicasCompletas() {
 
       // Verificar cache primero
       const cacheKey = codigos.sort().join(',')
-      if (fichasCompletasCache[cacheKey]) {
-        return fichasCompletasCache[cacheKey]
+      const cachedData = fichasCompletasCache.get(cacheKey)
+      if (cachedData) {
+        return cachedData
       }
       
       const fichasCompletas = await obtenerFichasTecnicasCompletasPorCodigos(codigos)
       
       // Guardar en cache
-      fichasCompletasCache[cacheKey] = fichasCompletas
+      fichasCompletasCache.set(cacheKey, fichasCompletas)
       
       return fichasCompletas
     } catch (err) {
@@ -309,9 +393,7 @@ export function useFichasTecnicasCompletas() {
 
   // Limpiar cache
   const limpiarCache = useCallback(() => {
-    Object.keys(fichasCompletasCache).forEach(key => {
-      delete fichasCompletasCache[key]
-    })
+    fichasCompletasCache.clear()
   }, [])
 
   useEffect(() => {

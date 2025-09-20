@@ -29,6 +29,7 @@ export interface CertificadoCalidadFormDialogProps {
   certificado?: CertificadoCalidadDatabase | null
   onSubmit: (data: CertificadoCalidadForm) => Promise<void>
   onUpdateEditingItem?: (updates: Partial<CertificadoCalidadDatabase>) => void
+  onRemoveImage?: (certificado: CertificadoCalidadDatabase) => Promise<void>
   loading: boolean
   productos: ProductoDatabase[]
 }

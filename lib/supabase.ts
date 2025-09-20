@@ -515,16 +515,6 @@ export async function crearFichaTecnica(fichaTecnicaData: {
       fit_tec_imag_vac: fichaTecnicaData.fit_tec_imag_vac?.trim() || null
     }
 
-    // Validar que el nombre no esté vacío
-    if (!datosLimpios.fit_tec_nom_planta_vac) {
-      throw new Error('El nombre de la planta es requerido')
-    }
-
-    // Validar que el producto ID no esté vacío
-    if (!datosLimpios.pro_id_int) {
-      throw new Error('El producto es requerido')
-    }
-
     // Verificar que no exista ya una ficha técnica para este producto
     const { data: existingFicha } = await supabase
       .from('Ficha_Tecnica')

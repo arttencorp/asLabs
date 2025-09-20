@@ -8,6 +8,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -42,6 +52,7 @@ export function CertificadoCalidadFormDialog({
   })
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [isRemovingImage, setIsRemovingImage] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const isEditing = !!certificado
 
@@ -111,27 +122,31 @@ export function CertificadoCalidadFormDialog({
     onSubmit(formData)
   }
 
-  const removeImage = async () => {
+  // Función que muestra el diálogo de confirmación
+  const showDeleteConfirmation = () => {
+    setShowDeleteDialog(true)
+  }
+
+  // Función que ejecuta la eliminación de imagen
+  const executeImageRemoval = async () => {
     if (isRemovingImage) return // Prevenir múltiples clicks
     
     setIsRemovingImage(true)
+    setShowDeleteDialog(false) // Cerrar el diálogo
+    
     try {
       // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
       if (certificado?.cer_cal_imag_url) {
-        console.log('🗑️ Eliminando imagen del storage:', certificado.cer_cal_imag_url)
         const result = await eliminarImagenCertificado(certificado.cer_cal_imag_url)
         
         if (result.success) {
-          console.log('✅ Imagen eliminada del storage')
           
           // Actualizar inmediatamente la BD para quitar la referencia
           await actualizarCertificadoCalidad(certificado.cer_cal_id_int, { cer_cal_imag_url: null })
-          console.log('✅ Referencia de imagen eliminada de la BD')
           
           // Actualizar el item en edición para que el formulario refleje el cambio
           if (onUpdateEditingItem) {
             onUpdateEditingItem({ cer_cal_imag_url: null })
-            console.log('✅ Item en edición actualizado')
           }
         } else {
           console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
@@ -141,7 +156,6 @@ export function CertificadoCalidadFormDialog({
       // Limpiar estado local (igual que fichas técnicas)
       clearImage()
       setFormData(prev => ({ ...prev, imagen: null }))
-      console.log('✅ Estado local limpiado')
     } catch (error) {
       console.error('💥 Error eliminando imagen:', error)
       // Aún así limpiar el estado local
@@ -153,7 +167,8 @@ export function CertificadoCalidadFormDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
@@ -260,9 +275,9 @@ export function CertificadoCalidadFormDialog({
                   size="sm"
                   className="absolute top-2 right-2"
                   disabled={isRemovingImage}
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     e.stopPropagation()
-                    await removeImage()
+                    showDeleteConfirmation()
                   }}
                 >
                   {isRemovingImage ? (
@@ -319,5 +334,36 @@ export function CertificadoCalidadFormDialog({
         </form>
       </DialogContent>
     </Dialog>
+
+    {/* Diálogo de confirmación para eliminar imagen */}
+    <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>¿Eliminar imagen?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Esta acción eliminará permanentemente la imagen del certificado de calidad.
+            Esta acción es <strong>irreversible</strong>.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={executeImageRemoval}
+            className="bg-red-600 hover:bg-red-700"
+            disabled={isRemovingImage}
+          >
+            {isRemovingImage ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Eliminando...
+              </>
+            ) : (
+              'Sí, eliminar'
+            )}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   )
 }
