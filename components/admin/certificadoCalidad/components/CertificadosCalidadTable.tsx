@@ -75,12 +75,14 @@ export function CertificadosCalidadTable({
     return (
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <Search className="h-4 w-4" />
-          <Input
-            placeholder="Buscar certificados..."
-            disabled
-            className="max-w-sm"
-          />
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Buscar certificados..."
+              disabled
+              className="pl-10"
+            />
+          </div>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -131,13 +133,15 @@ export function CertificadosCalidadTable({
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
-        <Search className="h-4 w-4" />
-        <Input
-          placeholder="Buscar por tipo, ensayo, código o producto..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-        />
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            placeholder="Buscar por tipo, ensayo, código o producto..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
       </div>
 
       <div className="rounded-md border">
@@ -201,7 +205,7 @@ export function CertificadosCalidadTable({
                       {getProductoNombre(certificado.pro_id_int)}
                     </div>
                   </TableCell>
-                  <TableCell> 
+                  <TableCell>
                     <Badge
                       variant={certificado.cer_cal_imag_url ? "default" : "secondary"}
                       className="text-white"

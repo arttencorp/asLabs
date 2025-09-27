@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Edit, Trash2, Package, Loader2, Tags, Eye, EyeOff, Search } from "lucide-react"
+import { Edit, Trash2, Package, Loader2, Tags, Eye, EyeOff, Search, RefreshCw, Plus } from "lucide-react"
 import { formatDate } from '@/utils/index'
 import type { CategoriasTableProps } from '../types'
 
@@ -24,7 +24,9 @@ export function CategoriasTable({
   loading,
   onEdit,
   onDelete,
-  onToggleVisibility
+  onToggleVisibility,
+  onRefresh,
+  onCreate
 }: CategoriasTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   
@@ -49,10 +51,25 @@ export function CategoriasTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Tags className="h-5 w-5" />
-          Categorías de Tienda ({pagination.totalItems})
-        </CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="flex items-center gap-2">
+            Categorías de Tienda
+          </CardTitle>
+          <div className="flex gap-2">
+            {onRefresh && (
+              <Button variant="outline" onClick={onRefresh} disabled={loading}>
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Actualizar
+              </Button>
+            )}
+            {onCreate && (
+              <Button onClick={onCreate} disabled={loading} className="text-white">
+                <Plus className="h-4 w-4 mr-2" />
+                Nueva Categoría
+              </Button>
+            )}
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         {/* Búsqueda */}
@@ -157,7 +174,7 @@ export function CategoriasTable({
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onToggleVisibility(categoria.cat_id_int, categoria.cat_activo_bool !== false)}
+                              onClick={() => onToggleVisibility(categoria)}
                               title={categoria.cat_activo_bool !== false ? "Ocultar categoría" : "Mostrar categoría"}
                               className={categoria.cat_activo_bool !== false ? "text-orange-600 hover:text-orange-700" : "text-green-600 hover:text-green-700"}
                             >
@@ -170,7 +187,7 @@ export function CategoriasTable({
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onDelete(categoria.cat_id_int)}
+                              onClick={() => onDelete(categoria)}
                               className="text-red-600 hover:text-red-700"
                               title="Eliminar categoría"
                             >

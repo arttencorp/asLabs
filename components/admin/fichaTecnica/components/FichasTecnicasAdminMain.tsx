@@ -17,7 +17,7 @@ export function FichasTecnicasAdminMain() {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestión de Fichas Técnicas</h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-gray-600">
           Administra las fichas técnicas de productos con diferentes niveles de detalle.
         </p>
       </div>

@@ -14,10 +14,9 @@ export default function TiendaAdminPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <Store className="h-8 w-8 text-green-600" />
+        <div className="flex items-center gap-2"> 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Gestión de Tienda</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestión de Tienda</h1>
             <p className="text-gray-600">Administra categorías y productos de la tienda online</p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Eye, Edit, Download, Search } from "lucide-react"
+import { Eye, Edit, Download, Search, RefreshCw, Plus } from "lucide-react"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDate } from "@/utils"
@@ -47,6 +47,8 @@ interface CotizacionesTableProps {
   onVerCotizacion: (cotizacion: CotizacionItem) => void
   onEditarCotizacion: (cotizacion: CotizacionItem) => void
   onDescargarCotizacion: (cotizacion: CotizacionItem) => void
+  onRefresh?: () => void
+  onCreate?: () => void
 }
 
 export function CotizacionesTable({ 
@@ -54,7 +56,9 @@ export function CotizacionesTable({
   loading, 
   onVerCotizacion, 
   onEditarCotizacion, 
-  onDescargarCotizacion 
+  onDescargarCotizacion,
+  onRefresh,
+  onCreate
 }: CotizacionesTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   

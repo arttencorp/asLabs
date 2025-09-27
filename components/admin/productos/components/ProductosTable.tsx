@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Edit, Package, Loader2, Search } from "lucide-react"
+import { Edit, Package, Loader2, Search, RefreshCw, Plus } from "lucide-react"
 import { formatearPrecio, obtenerEstadoProducto } from '../utils'
 import type { ProductosTableProps } from '../types'
 
@@ -21,7 +21,9 @@ export function ProductosTable({
   productos,
   loading,
   onEdit,
-  onDelete
+  onDelete,
+  onRefresh,
+  onCreate
 }: ProductosTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   
@@ -46,10 +48,25 @@ export function ProductosTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Package className="h-5 w-5" />
-          Catálogo de Productos ({pagination.totalItems})
-        </CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="flex items-center gap-2">
+            Catálogo de Productos
+          </CardTitle>
+          <div className="flex gap-2">
+            {onRefresh && (
+              <Button variant="outline" onClick={onRefresh} disabled={loading}>
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Actualizar
+              </Button>
+            )}
+            {onCreate && (
+              <Button onClick={onCreate} disabled={loading} className="text-white">
+                <Plus className="h-4 w-4 mr-2" />
+                Nuevo Producto
+              </Button>
+            )}
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         {/* Búsqueda */}

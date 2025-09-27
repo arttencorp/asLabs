@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Search, Edit, Eye, Trash2, RefreshCw, Loader2, Image } from "lucide-react"
+import { Search, Edit, Eye, Trash2, RefreshCw, Loader2, Image, Plus } from "lucide-react"
 import { formatDate, getEstadoColor, getNombreCompleto } from '@/utils/index'
 import type { Pedido } from '../types'
 
@@ -18,10 +18,11 @@ interface PedidosListProps {
   onEdit: (pedido: Pedido) => void
   onDelete: (id: string) => void
   onRefresh: () => void
-  onViewCotizacion: (pedido: Pedido) => void 
+  onViewCotizacion: (pedido: Pedido) => void
+  onCreate: () => void
 }
 
-export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onViewCotizacion }: PedidosListProps) {
+export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onViewCotizacion, onCreate }: PedidosListProps) {
   const [searchTerm, setSearchTerm] = useState("")
 
   // Filtrar pedidos basado en el término de búsqueda
@@ -58,14 +59,20 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle>Lista de Pedidos</CardTitle>
-          <Button variant="outline" onClick={onRefresh} disabled={loading}>
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : (
-              <RefreshCw className="h-4 w-4 mr-2" />
-            )}
-            {loading ? "Cargando..." : "Actualizar"}
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={onRefresh} disabled={loading}>
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <RefreshCw className="h-4 w-4 mr-2" />
+              )}
+              {loading ? "Cargando..." : "Actualizar"}
+            </Button>
+            <Button className="text-white" onClick={onCreate} disabled={loading}>
+              <Plus className="h-4 w-4 mr-2" />
+              Iniciar Pedido
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>

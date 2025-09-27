@@ -5,7 +5,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
-  Plus, 
   Eye, 
   Edit, 
   ArrowLeft,
@@ -318,6 +317,8 @@ export default function CotizacionesPage() {
             onVerCotizacion={handleVerCotizacion}
             onEditarCotizacion={handleEditarCotizacion}
             onDescargarCotizacion={handleDescargarCotizacion}
+            onRefresh={recargarCotizaciones}
+            onCreate={() => setMainTab('crear')}
           />
         </TabsContent>
 

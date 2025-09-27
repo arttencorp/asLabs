@@ -3,12 +3,13 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Plus, Package, Loader2 } from "lucide-react"
+import { Package, Loader2, Plus, RefreshCw } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { usePedidos } from "@/components/admin/pedidos/hooks/usePedidos"
 import { PedidosList } from "@/components/admin/pedidos/components/pedidosList"
 import { PedidoFormDialog } from "@/components/admin/pedidos/components/pedidosForm"
 import { CotizacionViewDialog } from "@/components/admin/pedidos/components/cotizacionViewDialog"
+import { PedidosStats } from "@/components/admin/pedidos/components/PedidosStats"
 import { formatCurrency } from "@/utils/index"
 import { crearPedido, actualizarPedido } from "@/lib/supabase"
 import type { Pedido } from "@/components/admin/pedidos/types"
@@ -78,29 +79,6 @@ export default function PedidosPage() {
     setEditingPedido(null)
   }
 
-  // Calcular estadísticas
-  const stats = {
-    totalPedidos: pedidos.length,
-    pedidosPendientes: pedidos.filter(p =>
-      p.estado_pedido?.est_ped_tipo_int ? ![6, 7, 8, 9].includes(p.estado_pedido.est_ped_tipo_int) : false
-    ).length, // No entregados, cancelados, reembolsados o pago contraentrega
-    pedidosEntregados: pedidos.filter(p =>
-      p.estado_pedido?.est_ped_tipo_int === 6 // RECIBIDO
-    ).length,
-    pedidosCancelados: pedidos.filter(p =>
-      [7, 8].includes(p.estado_pedido?.est_ped_tipo_int || 0) // CANCELADO o REEMBOLSO
-    ).length,
-    ingresoTotal: pedidos
-      .filter(p => p.estado_pedido?.est_ped_tipo_int === 6) // Solo RECIBIDO (entregados)
-      .reduce((sum, p) => {
-        const total = p.cotizacion?.detalle_cotizacion?.reduce(
-          (detSum, detalle) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
-          0
-        ) || 0
-        return sum + (p.cotizacion?.cot_igv_bol ? total * 1.18 : total)
-      }, 0)
-  }
-
   return (
     <div className="space-y-6">
       {/* Mensajes de estado */}
@@ -117,16 +95,13 @@ export default function PedidosPage() {
       )}
 
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestión de Pedidos</h1>
-          <p className="text-gray-600">Administra todos los pedidos de AS Laboratorios</p>
-        </div>
-        <Button onClick={() => setShowForm(true)} disabled={loading}>
-          <Plus className="h-4 w-4 mr-2" />
-          Iniciar Pedido
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestión de Pedidos</h1>
+        <p className="text-gray-600">Administra todos los pedidos de AS Laboratorios</p>
       </div>
+
+      {/* Estadísticas */}
+      <PedidosStats pedidos={pedidos} loading={loading} />
 
       {/* Lista de Pedidos */}
       <PedidosList
@@ -136,6 +111,7 @@ export default function PedidosPage() {
         onDelete={deletePedido}
         onRefresh={loadData}
         onViewCotizacion={handleViewCotizacion}
+        onCreate={() => setShowForm(true)}
       />
 
       {/* Formulario Modal */}

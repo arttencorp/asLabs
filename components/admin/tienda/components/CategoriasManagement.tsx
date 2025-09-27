@@ -133,19 +133,18 @@ export default function CategoriasManagement() {
     }
   }
 
-  const handleDeleteCategoria = async (id: string) => {
-    await handleDelete(id)
+  const handleDeleteCategoria = async (categoria: CategoriaDatabase) => {
+    await handleDelete(categoria.cat_id_int)
   }
 
-  const handleToggleVisibility = async (id: string, currentState: boolean) => {
-    const categoria = categorias.find(cat => cat.cat_id_int === id)
-    if (!categoria) return
+  const handleToggleVisibility = async (categoria: CategoriaDatabase) => {
+    const currentState = categoria.cat_activo_bool !== false
 
     if (currentState) {
       // Está visible, queremos ocultarlo - mostrar modal de confirmación
       try {
         // Contar productos activos de esta categoría
-        const count = await contarProductosPorCategoria(id)
+        const count = await contarProductosPorCategoria(categoria.cat_id_int)
         setCategoriaAOcultar(categoria)
         setProductosCount(count)
         setOcultarDialogOpen(true)
@@ -156,7 +155,7 @@ export default function CategoriasManagement() {
       // Está oculto, queremos mostrarlo - mostrar modal para productos ocultos
       try {
         // Contar productos ocultos de esta categoría
-        const count = await contarProductosOcultosPorCategoria(id)
+        const count = await contarProductosOcultosPorCategoria(categoria.cat_id_int)
         setCategoriaAMostrar(categoria)
         setProductosOcultosCount(count)
         setMostrarDialogOpen(true)
@@ -231,17 +230,11 @@ export default function CategoriasManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Categorías</h1>
-          <p className="text-gray-600 mt-1">
-            Administra las categorías de productos de la tienda online
-          </p>
-        </div>
-        <Button onClick={() => handleOpenDialog()} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Nueva Categoría
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Gestión de Categorías</h1>
+        <p className="text-gray-600 mt-1">
+          Administra las categorías de productos de la tienda online
+        </p>
       </div>
 
       {/* Alertas */}
@@ -308,6 +301,8 @@ export default function CategoriasManagement() {
         onEdit={handleOpenDialog}
         onDelete={handleDeleteCategoria}
         onToggleVisibility={handleToggleVisibility}
+        onRefresh={loadData}
+        onCreate={() => setIsDialogOpen(true)}
       />
 
       {/* Dialog de formulario */}

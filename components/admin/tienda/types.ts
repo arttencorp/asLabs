@@ -27,8 +27,10 @@ export interface CategoriasTableProps {
   categorias: CategoriaDatabase[]
   loading: boolean
   onEdit: (categoria: CategoriaDatabase) => void
-  onDelete: (id: string) => void
-  onToggleVisibility: (id: string, currentState: boolean) => void
+  onDelete: (categoria: CategoriaDatabase) => void
+  onToggleVisibility: (categoria: CategoriaDatabase) => void
+  onRefresh?: () => void
+  onCreate?: () => void
 }
 
 // Estadísticas de categorías
@@ -73,8 +75,10 @@ export interface ProductosTiendaTableProps {
   categorias: CategoriaDatabase[]
   loading: boolean
   onEdit: (producto: ProductoTiendaDatabase) => void
-  onDelete: (id: string) => void
-  onToggleVisibility: (id: string, currentState: boolean) => void
+  onDelete: (producto: ProductoTiendaDatabase) => void
+  onToggleVisibility: (producto: ProductoTiendaDatabase) => void
+  onRefresh?: () => void
+  onCreate?: () => void
 }
 
 // Estadísticas de productos

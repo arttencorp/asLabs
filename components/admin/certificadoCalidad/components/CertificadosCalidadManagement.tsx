@@ -65,28 +65,11 @@ export function CertificadosCalidadManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Certificados de Calidad</h1>
-          <p className="text-muted-foreground">
-            Gestiona los certificados de calidad de los productos
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            onClick={loadData}
-            disabled={loading}
-            className='text-gray-900'
-          >
-            <RefreshCw className={`h-4 w-4 mr-2 text-gray-900 ${loading ? 'animate-spin' : ''}`} />
-            Actualizar
-          </Button>
-          <Button onClick={openCreateDialog} disabled={loading}>
-            <Plus className="h-4 w-4 mr-2 text-white-900" />
-            Nuevo Certificado
-          </Button>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Certificados de Calidad</h1>
+        <p className="text-muted-foreground">
+          Gestiona los certificados de calidad de los productos
+        </p>
       </div>
 
       {/* Alerts */}
@@ -112,14 +95,25 @@ export function CertificadosCalidadManagement() {
 
       {/* Contenido Principal */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
             Lista de Certificados
           </CardTitle>
-          <CardDescription>
-            Gestiona todos los certificados de calidad del sistema
-          </CardDescription>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={loadData}
+              disabled={loading}
+              size="sm"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Actualizar
+            </Button>
+            <Button onClick={openCreateDialog} disabled={loading} size="sm" className="text-white">
+              <Plus className="h-4 w-4 mr-2" />
+              Nuevo certificado
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <CertificadosCalidadTable

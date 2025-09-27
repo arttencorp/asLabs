@@ -120,8 +120,8 @@ export default function ClientesPage() {
                 )}
                 {loading ? "Cargando..." : "Actualizar"}
               </Button>
-              <Button onClick={openCreateDialog}>
-                <Plus className="h-4 w-4 mr-2" />
+              <Button className="text-white" onClick={openCreateDialog}>
+                <Plus className="h-4 w-4 mr-2 " />
                 Nuevo Cliente
               </Button>
             </div>

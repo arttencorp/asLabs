@@ -9,14 +9,14 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Plus, Edit, Trash2, Image, FileText, Leaf, MapPin, Clock, Search } from "lucide-react"
+import { Plus, Edit, Trash2, Image, FileText, Leaf, MapPin, Clock, Search, RefreshCw } from "lucide-react"
 import { useFichasTecnicasCompletas } from '../hooks/useFichasTecnicasCompletas'
 import { FichaTecnicaCompletaFormDialog } from './FichaTecnicaCompletaFormDialog'
 import type { FichaTecnicaCompletaDatabase } from '@/types/database'
 
 export function FichasTecnicasAdminCompleta() {
   const [searchTerm, setSearchTerm] = useState('')
-  
+
   const {
     items,
     productos,
@@ -33,7 +33,8 @@ export function FichasTecnicasAdminCompleta() {
     handleCreateCompleta,
     handleUpdateCompleta,
     handleDelete,
-    setError
+    setError,
+    loadData
   } = useFichasTecnicasCompletas()
 
   const getProductName = (productId: string) => {
@@ -51,7 +52,7 @@ export function FichasTecnicasAdminCompleta() {
       const familia = ficha.taxonomia?.ta_familia_vac?.toLowerCase() || ''
       const genero = ficha.taxonomia?.ta_genero_vac?.toLowerCase() || ''
       const nombreCientifico = ficha.taxonomia?.ta_nombre_cientifico_vac?.toLowerCase() || ''
-      
+
       return nombrePlanta.includes(searchLower) ||
         codigo.includes(searchLower) ||
         producto.includes(searchLower) ||
@@ -90,15 +91,12 @@ export function FichasTecnicasAdminCompleta() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Fichas Técnicas Completas</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl font-bold text-gray-900">Fichas Técnicas Completas</h1>
+          <p className="text-gray-600">
             Gestiona fichas técnicas con información detallada de taxonomía, colecta y características.
           </p>
         </div>
-        <Button onClick={openCreateDialog} disabled={loading}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nueva Ficha Completa
-        </Button>
+
       </div>
 
       {/* Alertas */}
@@ -179,11 +177,18 @@ export function FichasTecnicasAdminCompleta() {
 
       {/* Lista de Fichas Técnicas */}
       <Card>
-        <CardHeader>
-          <CardTitle>Fichas Técnicas ({pagination.totalItems})</CardTitle>
-          <CardDescription>
-            Lista completa de fichas técnicas con toda su información relacionada.
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Fichas Técnicas</CardTitle>
+          <div className="flex gap-2">
+            <Button onClick={loadData} variant="outline" size="sm">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Actualizar
+            </Button>
+            <Button onClick={openCreateDialog} disabled={loading} className="text-white">
+              <Plus className="mr-2 h-4 w-4" />
+              Nueva Ficha Completa
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {/* Búsqueda */}
@@ -271,11 +276,11 @@ interface FichaTecnicaCompletaCardProps {
   onDelete: () => void
 }
 
-function FichaTecnicaCompletaCard({ 
-  ficha, 
-  productName, 
-  onEdit, 
-  onDelete 
+function FichaTecnicaCompletaCard({
+  ficha,
+  productName,
+  onEdit,
+  onDelete
 }: FichaTecnicaCompletaCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -291,7 +296,7 @@ function FichaTecnicaCompletaCard({
                 <Badge variant="outline">{ficha.fit_tec_cod_vac}</Badge>
               )}
             </div>
-            
+
             <p className="text-sm text-muted-foreground">
               <strong>Producto:</strong> {productName}
             </p>
@@ -334,7 +339,7 @@ function FichaTecnicaCompletaCard({
                     {ficha.detalle && <TabsTrigger value="detalle">Detalle</TabsTrigger>}
                     {ficha.zona_colecta && <TabsTrigger value="zona">Zona</TabsTrigger>}
                   </TabsList>
-                  
+
                   <TabsContent value="info" className="mt-4">
                     <div className="text-sm space-y-1 text-gray-700">
                       <p><strong className="text-gray-800">Creada:</strong> {new Date(ficha.fit_tec_created_at_dt).toLocaleDateString('es-ES')}</p>
@@ -387,7 +392,7 @@ function FichaTecnicaCompletaCard({
                 className="w-20 h-20 object-cover rounded-lg border"
               />
             )}
-            
+
             <div className="flex gap-2">
               <Button
                 variant="outline"

@@ -20,7 +20,9 @@ import {
   Image as ImageIcon,
   ImageOff,
   Search,
-  ExternalLink
+  ExternalLink,
+  RefreshCw,
+  Plus
 } from "lucide-react"
 import { formatDate } from '@/utils/index'
 import type { FichasTecnicasTableProps } from '../types'
@@ -31,7 +33,9 @@ export function FichasTecnicasTable({
   loading,
   onEdit,
   onDelete,
-  productos
+  productos,
+  onRefresh,
+  onCreate
 }: FichasTecnicasTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
 

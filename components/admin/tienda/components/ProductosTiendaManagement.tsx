@@ -112,13 +112,13 @@ export function ProductosTiendaManagement() {
     }
   }
 
-  const handleDeleteProducto = async (id: string) => {
+  const handleDeleteProducto = async (producto: ProductoTiendaDatabase) => {
     if (!confirm('¿Estás seguro de eliminar este producto?')) return
 
     setError(null)
     
     try {
-      await eliminarProductoTienda(id)
+      await eliminarProductoTienda(producto.prod_tiend_id_int)
       await loadData()
       showSuccess('Producto eliminado exitosamente')
     } catch (error: any) {
@@ -126,17 +126,17 @@ export function ProductosTiendaManagement() {
     }
   }
 
-  const handleToggleVisibility = async (id: string, currentState: boolean) => {
+  const handleToggleVisibility = async (producto: ProductoTiendaDatabase) => {
     setError(null)
     
     try {
-      if (currentState) {
+      if (producto.prod_tiend_activo_bool !== false) {
         // Está visible, lo vamos a ocultar
-        await ocultarProductoTienda(id)
+        await ocultarProductoTienda(producto.prod_tiend_id_int)
         showSuccess('Producto ocultado exitosamente')
       } else {
         // Está oculto, lo vamos a mostrar
-        await mostrarProductoTienda(id)
+        await mostrarProductoTienda(producto.prod_tiend_id_int)
         showSuccess('Producto mostrado exitosamente')
       }
       
@@ -162,17 +162,11 @@ export function ProductosTiendaManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Productos</h1>
-          <p className="text-gray-600 mt-1">
-            Administra los productos de tu tienda online
-          </p>
-        </div>
-        <Button onClick={() => handleOpenDialog()} disabled={loading}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nuevo Producto
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Gestión de Productos</h1>
+        <p className="text-gray-600 mt-1">
+          Administra los productos de tu tienda online
+        </p>
       </div>
 
       {/* Mensajes de estado */}
@@ -240,6 +234,8 @@ export function ProductosTiendaManagement() {
         onEdit={handleOpenDialog}
         onDelete={handleDeleteProducto}
         onToggleVisibility={handleToggleVisibility}
+        onRefresh={loadData}
+        onCreate={() => handleOpenDialog()}
       />
 
       {/* Dialog de formulario */}

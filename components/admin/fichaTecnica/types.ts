@@ -75,6 +75,8 @@ export interface FichasTecnicasTableProps {
   onEdit: (fichaTecnica: FichaTecnicaDatabase) => void
   onDelete: (id: string) => void
   productos: ProductoDatabase[]
+  onRefresh?: () => void
+  onCreate?: () => void
 }
 
 // Estadísticas de fichas técnicas

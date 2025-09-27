@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Edit, Trash2, Package, Loader2, ShoppingCart, Eye, EyeOff, Search } from "lucide-react"
+import { Edit, Trash2, Package, Loader2, ShoppingCart, Eye, EyeOff, Search, RefreshCw, Plus } from "lucide-react"
 import { formatDate } from '@/utils/index'
 import type { ProductosTiendaTableProps } from '../types'
 
@@ -25,7 +25,9 @@ export function ProductosTiendaTable({
   loading,
   onEdit,
   onDelete,
-  onToggleVisibility
+  onToggleVisibility,
+  onRefresh,
+  onCreate
 }: ProductosTiendaTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   
@@ -72,10 +74,26 @@ export function ProductosTiendaTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShoppingCart className="h-5 w-5" />
-          Productos de Tienda ({pagination.totalItems})
-        </CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="flex items-center gap-2">
+            <ShoppingCart className="h-5 w-5" />
+            Productos de Tienda ({pagination.totalItems})
+          </CardTitle>
+          <div className="flex gap-2">
+            {onRefresh && (
+              <Button variant="outline" onClick={onRefresh} disabled={loading}>
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Actualizar
+              </Button>
+            )}
+            {onCreate && (
+              <Button className="text-white" onClick={onCreate} disabled={loading}>
+                <Plus className="h-4 w-4 mr-2" />
+                Nuevo Producto
+              </Button>
+            )}
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         {/* Búsqueda */}
@@ -191,7 +209,7 @@ export function ProductosTiendaTable({
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onToggleVisibility(producto.prod_tiend_id_int, producto.prod_tiend_activo_bool !== false)}
+                              onClick={() => onToggleVisibility(producto)}
                               title={producto.prod_tiend_activo_bool !== false ? "Ocultar producto" : "Mostrar producto"}
                               className={producto.prod_tiend_activo_bool !== false ? "text-orange-600 hover:text-orange-700" : "text-green-600 hover:text-green-700"}
                             >
@@ -204,7 +222,7 @@ export function ProductosTiendaTable({
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onDelete(producto.prod_tiend_id_int)}
+                              onClick={() => onDelete(producto)}
                               className="text-red-600 hover:text-red-700"
                               title="Eliminar producto"
                             >
