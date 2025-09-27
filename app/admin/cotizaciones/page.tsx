@@ -17,6 +17,7 @@ import { InformacionGeneral } from "@/components/admin/cotizaciones/components/i
 import { ProductosServicios } from "@/components/admin/cotizaciones/components/productosServicios"
 import { InformacionAdicional } from "@/components/admin/cotizaciones/components/informacionAdicional"
 import { CotizacionViewDialog } from "@/components/admin/cotizaciones/components/cotizacionViewDialog"
+import { CotizacionesTable } from "@/components/admin/cotizaciones/components/cotizacionesList"
 import { useBaseCrud } from "@/hooks/useBaseCrud"
 import { obtenerCotizaciones } from "@/lib/supabase"
 
@@ -299,135 +300,25 @@ export default function CotizacionesPage() {
 
         {/* Tab Lista */}
         <TabsContent value="lista">
-          <div className="bg-white rounded-lg shadow">
-            {/* Mensajes de estado */}
-            {error && (
-              <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-t-lg">
-                Error: {error}
-              </div>
-            )}
-            {success && (
-              <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-t-lg">
-                {success}
-              </div>
-            )}
+          {/* Mensajes de estado */}
+          {error && (
+            <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg mb-4">
+              Error: {error}
+            </div>
+          )}
+          {success && (
+            <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg mb-4">
+              {success}
+            </div>
+          )}
 
-            {cotizacionesLoading ? (
-              <div className="p-6 text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Cargando cotizaciones...</p>
-              </div>
-            ) : cotizaciones && cotizaciones.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Número
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Cliente
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Fecha Emisión
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Total
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        IGV
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Acciones
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {cotizaciones.map((cotizacion: CotizacionItem) => {
-                      // Calcular nombre completo del cliente
-                      const nombreCliente = (() => {
-                        if (cotizacion.persona?.Persona_Juridica?.[0]?.per_jurd_razSocial_vac) {
-                          return cotizacion.persona.Persona_Juridica[0].per_jurd_razSocial_vac
-                        }
-                        if (cotizacion.persona?.Persona_Natural?.[0]) {
-                          const natural = cotizacion.persona.Persona_Natural[0]
-                          return `${natural.per_nat_nomb_vac || ''} ${natural.per_nat_apell_vac || ''}`.trim()
-                        }
-                        if (cotizacion.persona?.per_nom_contac_vac) {
-                          return cotizacion.persona.per_nom_contac_vac
-                        }
-                        return 'Cliente no especificado'
-                      })()
-
-                      // Calcular total desde detalle_cotizacion (cantidad × precio histórico)
-                      const total = cotizacion.detalle_cotizacion?.reduce((sum, detalle) => {
-                        return sum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int)
-                      }, 0) || 0
-
-                      return (
-                        <tr key={cotizacion.cot_id_int} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {cotizacion.cot_num_vac}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {nombreCliente}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {formatDate(cotizacion.cot_fec_emis_dt, { short: true })}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            S/ {total.toFixed(2)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {cotizacion.cot_igv_bol ? 'Con IGV' : 'Sin IGV'}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div className="flex items-center space-x-2">
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleVerCotizacion(cotizacion)}
-                              >
-                                <Eye className="h-4 w-4 mr-1" />
-                                Ver
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleEditarCotizacion(cotizacion)}
-                              >
-                                <Edit className="h-4 w-4 mr-1" />
-                                Editar
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleDescargarCotizacion(cotizacion)}
-                              >
-                                <Download className="h-4 w-4 mr-1" />
-                                Descargar
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="p-6 text-center">
-                <p className="text-gray-600 mb-4">No hay cotizaciones registradas</p>
-                <Button
-                  onClick={handleNuevaCotizacion}
-                  className="bg-green-600 hover:bg-[#4a7c3a] text-white flex items-center gap-2 mx-auto"
-                >
-                  <Plus className="h-4 w-4" />
-                  Crear primera cotización
-                </Button>
-              </div>
-            )}
-          </div>
+          <CotizacionesTable
+            cotizaciones={cotizaciones}
+            loading={cotizacionesLoading}
+            onVerCotizacion={handleVerCotizacion}
+            onEditarCotizacion={handleEditarCotizacion}
+            onDescargarCotizacion={handleDescargarCotizacion}
+          />
         </TabsContent>
 
         {/* Tab Crear */}

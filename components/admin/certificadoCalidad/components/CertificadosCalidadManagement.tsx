@@ -67,7 +67,7 @@ export function CertificadosCalidadManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Certificados de Calidad</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Certificados de Calidad</h1>
           <p className="text-muted-foreground">
             Gestiona los certificados de calidad de los productos
           </p>
@@ -77,12 +77,13 @@ export function CertificadosCalidadManagement() {
             variant="outline"
             onClick={loadData}
             disabled={loading}
+            className='text-gray-900'
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 text-gray-900 ${loading ? 'animate-spin' : ''}`} />
             Actualizar
           </Button>
           <Button onClick={openCreateDialog} disabled={loading}>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4 mr-2 text-white-900" />
             Nuevo Certificado
           </Button>
         </div>

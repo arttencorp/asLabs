@@ -128,69 +128,6 @@ export default function PedidosPage() {
         </Button>
       </div>
 
-      {/* Stats Cards 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Package className="h-8 w-8 text-blue-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Pedidos</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalPedidos}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Package className="h-8 w-8 text-yellow-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pendientes</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pedidosPendientes}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Package className="h-8 w-8 text-green-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Entregados</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pedidosEntregados}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Package className="h-8 w-8 text-red-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Cancelados</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pedidosCancelados}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Package className="h-8 w-8 text-purple-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Ingresos</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.ingresoTotal)}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>*/}
-
       {/* Lista de Pedidos */}
       <PedidosList
         pedidos={pedidos}

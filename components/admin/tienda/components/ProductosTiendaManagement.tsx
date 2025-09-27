@@ -51,8 +51,7 @@ export function ProductosTiendaManagement() {
         obtenerCategorias()
       ])
       setProductos(productosData)
-      setCategorias(categoriasData)
-      showSuccess(`Cargados ${productosData.length} productos`)
+      setCategorias(categoriasData) 
     } catch (error: any) {
       setError(error.message || 'Error al cargar datos')
     } finally {

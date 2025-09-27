@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DataPagination } from "@/components/ui/data-pagination"
+import { usePagination } from "@/hooks/usePagination"
 import { Search, Edit, Eye, Trash2, RefreshCw, Loader2, Image } from "lucide-react"
 import { formatDate, getEstadoColor, getNombreCompleto } from '@/utils/index'
 import type { Pedido } from '../types'
@@ -22,16 +24,26 @@ interface PedidosListProps {
 export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onViewCotizacion }: PedidosListProps) {
   const [searchTerm, setSearchTerm] = useState("")
 
-  const filteredPedidos = pedidos.filter(pedido => {
-    const searchLower = searchTerm.toLowerCase()
-    const nombreCliente = pedido.cotizacion?.persona ? getNombreCompleto(pedido.cotizacion.persona) : ''
+  // Filtrar pedidos basado en el término de búsqueda
+  const filteredPedidos = useMemo(() => {
+    return pedidos.filter(pedido => {
+      const searchLower = searchTerm.toLowerCase()
+      const nombreCliente = pedido.cotizacion?.persona ? getNombreCompleto(pedido.cotizacion.persona) : ''
 
-    return (
-      pedido.ped_cod_segui_vac.toLowerCase().includes(searchLower) ||
-      pedido.ped_cod_rastreo_vac?.toLowerCase().includes(searchLower) ||
-      nombreCliente.toLowerCase().includes(searchLower) ||
-      pedido.cotizacion?.cot_num_vac.toLowerCase().includes(searchLower)
-    )
+      return (
+        pedido.ped_cod_segui_vac.toLowerCase().includes(searchLower) ||
+        pedido.ped_cod_rastreo_vac?.toLowerCase().includes(searchLower) ||
+        nombreCliente.toLowerCase().includes(searchLower) ||
+        pedido.cotizacion?.cot_num_vac.toLowerCase().includes(searchLower)
+      )
+    })
+  }, [pedidos, searchTerm])
+
+  // Configurar paginación
+  const pagination = usePagination<Pedido>({
+    data: filteredPedidos,
+    defaultPageSize: 10,
+    defaultPage: 1
   })
 
   // Manejo de eliminación con confirmación (patrón useBaseCrud)
@@ -86,14 +98,14 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredPedidos.length === 0 ? (
+              {pagination.totalItems === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-8 text-gray-500">
                     {loading ? "Cargando pedidos..." : "No hay pedidos registrados"}
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredPedidos.map((pedido) => (
+                pagination.paginatedData.map((pedido) => (
                   <TableRow key={pedido.ped_id_int}>
                     <TableCell className="font-mono font-bold text-blue-600">
                       {pedido.ped_cod_segui_vac}
@@ -178,6 +190,21 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
             </TableBody>
           </Table>
         </div>
+
+        {/* Paginación */}
+        {pagination.totalItems > 0 && (
+          <DataPagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            pageSize={pagination.pageSize}
+            totalItems={pagination.totalItems}
+            onPageChange={pagination.setCurrentPage}
+            onPageSizeChange={pagination.setPageSize}
+            showPageSizeSelector={true}
+            pageSizeOptions={[5, 10, 20, 50]}
+            className="mt-4"
+          />
+        )}
       </CardContent>
     </Card>
   )

@@ -40,8 +40,7 @@ export function useCertificadosCalidad() {
     setError(null)
     try {
       const data = await obtenerCertificadosCalidad()
-      setItems(data)
-      showSuccess(`Cargados ${data.length} certificados de calidad`)
+      setItems(data) 
     } catch (err: any) {
       setError(err.message || 'Error al cargar certificados de calidad')
     } finally {

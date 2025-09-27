@@ -1,6 +1,8 @@
+import { useState, useMemo } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { 
   Table, 
   TableBody, 
@@ -9,7 +11,9 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table"
-import { Edit, Package, Loader2 } from "lucide-react"
+import { DataPagination } from "@/components/ui/data-pagination"
+import { usePagination } from "@/hooks/usePagination"
+import { Edit, Package, Loader2, Search } from "lucide-react"
 import { formatearPrecio, obtenerEstadoProducto } from '../utils'
 import type { ProductosTableProps } from '../types'
 
@@ -19,93 +23,123 @@ export function ProductosTable({
   onEdit,
   onDelete
 }: ProductosTableProps) {
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5" />
-            Catálogo de Productos
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
+  const [searchTerm, setSearchTerm] = useState("")
+  
+  // Filtrar productos basado en el término de búsqueda
+  const filteredProductos = useMemo(() => {
+    return productos.filter(producto => {
+      const searchLower = searchTerm.toLowerCase()
+      return (
+        (producto.pro_nomb_vac?.toLowerCase().includes(searchLower) || false) ||
+        (producto.pro_desc_vac?.toLowerCase().includes(searchLower) || false) ||
+        producto.pro_id_int.toString().includes(searchTerm)
+      )
+    })
+  }, [productos, searchTerm])
 
+  // Configurar paginación
+  const pagination = usePagination({
+    data: filteredProductos,
+    defaultPageSize: 10,
+    defaultPage: 1
+  })
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Package className="h-5 w-5" />
-          Catálogo de Productos ({productos.length})
+          Catálogo de Productos ({pagination.totalItems})
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nombre</TableHead>
-              <TableHead>Descripción</TableHead>
-              <TableHead>Precio</TableHead> 
-              <TableHead className="w-[100px]">Acciones</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {productos.map((producto) => {
-              const estado = obtenerEstadoProducto(producto.pro_prec_unitario_int)
-              
-              return (
-                <TableRow key={producto.pro_id_int}>
-                  <TableCell className="font-medium">
-                    {producto.pro_nomb_vac || 'Sin nombre'}
-                  </TableCell>
-                  <TableCell className="max-w-xs">
-                    <div className="truncate">
-                      {producto.pro_desc_vac || 'Sin descripción'}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-mono">
-                    {formatearPrecio(producto.pro_prec_unitario_int)}
-                  </TableCell> 
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEdit(producto)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      {/* 
-                      Botón de eliminar comentado según requerimientos del usuario
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onDelete(producto.pro_id_int)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                      */}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-            {productos.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                  No hay productos registrados. Crea el primer producto usando el botón "Nuevo Producto".
-                </TableCell>
-              </TableRow>
+        {/* Búsqueda */}
+        <div className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Buscar por nombre, descripción o ID..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Descripción</TableHead>
+                    <TableHead>Precio</TableHead> 
+                    <TableHead className="w-[100px]">Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pagination.totalItems === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                        {searchTerm ? 'No se encontraron productos que coincidan con la búsqueda' : 'No hay productos registrados. Crea el primer producto usando el botón "Nuevo Producto".'}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    pagination.paginatedData.map((producto) => {
+                      const estado = obtenerEstadoProducto(producto.pro_prec_unitario_int)
+                      
+                      return (
+                        <TableRow key={producto.pro_id_int}>
+                          <TableCell className="font-medium">
+                            {producto.pro_nomb_vac || 'Sin nombre'}
+                          </TableCell>
+                          <TableCell className="max-w-xs">
+                            <div className="truncate">
+                              {producto.pro_desc_vac || 'Sin descripción'}
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-mono">
+                            {formatearPrecio(producto.pro_prec_unitario_int)}
+                          </TableCell> 
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => onEdit(producto)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Paginación */}
+            {pagination.totalItems > 0 && (
+              <DataPagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                pageSize={pagination.pageSize}
+                totalItems={pagination.totalItems}
+                onPageChange={pagination.setCurrentPage}
+                onPageSizeChange={pagination.setPageSize}
+                showPageSizeSelector={true}
+                pageSizeOptions={[5, 10, 20, 50]}
+                className="mt-4"
+              />
             )}
-          </TableBody>
-        </Table>
+          </>
+        )}
       </CardContent>
     </Card>
   )

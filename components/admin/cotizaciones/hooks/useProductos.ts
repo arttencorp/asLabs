@@ -19,8 +19,7 @@ export function useProductos() {
       setLoading(true)
       setError(null)
       const productosData = await obtenerProductos()
-      setProductos(productosData)
-      showSuccess(`Cargados ${productosData.length} productos`)
+      setProductos(productosData) 
     } catch (err) {
       console.error('Error cargando productos:', err)
       setError('Error al cargar productos')

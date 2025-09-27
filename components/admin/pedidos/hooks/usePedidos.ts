@@ -118,8 +118,7 @@ export function usePedidos() {
       
       // Cargar pedidos usando useBaseCrud
       await loadPedidos()
-      
-      showSuccess(`Datos cargados: ${cotizacionesData.length} cotizaciones (${cotizacionesDisponiblesData.length} disponibles)`)
+       
     } catch (error: any) {
       setError(error.message || "Error al cargar los datos")
     } finally {

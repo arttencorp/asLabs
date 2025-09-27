@@ -139,8 +139,7 @@ export function useFichasTecnicasCompletas() {
     setError(null)
     try {
       const data = await obtenerFichasTecnicasCompletas()
-      setItems(data)
-      showSuccess(`Cargadas ${data.length} fichas técnicas completas`)
+      setItems(data) 
     } catch (err: any) {
       setError(err.message || 'Error al cargar fichas técnicas')
     } finally {
