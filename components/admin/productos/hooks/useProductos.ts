@@ -22,8 +22,7 @@ export function useProductos() {
     setError(null)
     try {
       const data = await obtenerProductos()
-      setItems(data)
-      showSuccess(`Cargados ${data.length} productos`)
+      setItems(data) 
     } catch (error: any) {
       setError(error.message || 'Error al cargar productos')
     } finally {

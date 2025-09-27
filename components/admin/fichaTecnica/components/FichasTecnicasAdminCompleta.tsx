@@ -1,17 +1,22 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Edit, Trash2, Image, FileText, Leaf, MapPin, Clock } from "lucide-react"
+import { DataPagination } from "@/components/ui/data-pagination"
+import { usePagination } from "@/hooks/usePagination"
+import { Plus, Edit, Trash2, Image, FileText, Leaf, MapPin, Clock, Search, RefreshCw } from "lucide-react"
 import { useFichasTecnicasCompletas } from '../hooks/useFichasTecnicasCompletas'
 import { FichaTecnicaCompletaFormDialog } from './FichaTecnicaCompletaFormDialog'
 import type { FichaTecnicaCompletaDatabase } from '@/types/database'
 
 export function FichasTecnicasAdminCompleta() {
+  const [searchTerm, setSearchTerm] = useState('')
+
   const {
     items,
     productos,
@@ -28,8 +33,42 @@ export function FichasTecnicasAdminCompleta() {
     handleCreateCompleta,
     handleUpdateCompleta,
     handleDelete,
-    setError
+    setError,
+    loadData
   } = useFichasTecnicasCompletas()
+
+  const getProductName = (productId: string) => {
+    const producto = productos.find(p => p.pro_id_int === productId)
+    return producto?.pro_nomb_vac || 'Producto desconocido'
+  }
+
+  // Filtrar fichas técnicas según término de búsqueda
+  const filteredItems = useMemo(() => {
+    return items.filter(ficha => {
+      const searchLower = searchTerm.toLowerCase()
+      const nombrePlanta = ficha.fit_tec_nom_planta_vac?.toLowerCase() || ''
+      const codigo = ficha.fit_tec_cod_vac?.toLowerCase() || ''
+      const producto = getProductName(ficha.pro_id_int).toLowerCase()
+      const familia = ficha.taxonomia?.ta_familia_vac?.toLowerCase() || ''
+      const genero = ficha.taxonomia?.ta_genero_vac?.toLowerCase() || ''
+      const nombreCientifico = ficha.taxonomia?.ta_nombre_cientifico_vac?.toLowerCase() || ''
+
+      return nombrePlanta.includes(searchLower) ||
+        codigo.includes(searchLower) ||
+        producto.includes(searchLower) ||
+        familia.includes(searchLower) ||
+        genero.includes(searchLower) ||
+        nombreCientifico.includes(searchLower) ||
+        ficha.fit_tec_id_int.toString().includes(searchTerm)
+    })
+  }, [items, searchTerm, productos])
+
+  // Configurar paginación
+  const pagination = usePagination({
+    data: filteredItems,
+    defaultPageSize: 10,
+    defaultPage: 1
+  })
 
   const handleSubmit = async (formData: any) => {
     if (editingItem) {
@@ -47,25 +86,17 @@ export function FichasTecnicasAdminCompleta() {
     })
   }
 
-  const getProductName = (productId: string) => {
-    const producto = productos.find(p => p.pro_id_int === productId)
-    return producto?.pro_nomb_vac || 'Producto desconocido'
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Fichas Técnicas Completas</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl font-bold text-gray-900">Fichas Técnicas Completas</h1>
+          <p className="text-gray-600">
             Gestiona fichas técnicas con información detallada de taxonomía, colecta y características.
           </p>
         </div>
-        <Button onClick={openCreateDialog} disabled={loading}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nueva Ficha Completa
-        </Button>
+
       </div>
 
       {/* Alertas */}
@@ -146,37 +177,78 @@ export function FichasTecnicasAdminCompleta() {
 
       {/* Lista de Fichas Técnicas */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Fichas Técnicas</CardTitle>
-          <CardDescription>
-            Lista completa de fichas técnicas con toda su información relacionada.
-          </CardDescription>
+          <div className="flex gap-2">
+            <Button onClick={loadData} variant="outline" size="sm">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Actualizar
+            </Button>
+            <Button onClick={openCreateDialog} disabled={loading} className="text-white">
+              <Plus className="mr-2 h-4 w-4" />
+              Nueva Ficha Completa
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
+          {/* Búsqueda */}
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Buscar por nombre, código, producto, familia, género..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+
           {loading ? (
             <div className="text-center py-8">
               <div className="text-muted-foreground">Cargando fichas técnicas...</div>
             </div>
-          ) : items.length === 0 ? (
+          ) : pagination.totalItems === 0 ? (
             <div className="text-center py-8">
-              <div className="text-muted-foreground">No hay fichas técnicas creadas</div>
-              <Button onClick={openCreateDialog} className="mt-4">
-                <Plus className="mr-2 h-4 w-4" />
-                Crear Primera Ficha
-              </Button>
+              <div className="text-muted-foreground">
+                {searchTerm ? 'No se encontraron fichas que coincidan con la búsqueda' : 'No hay fichas técnicas creadas'}
+              </div>
+              {!searchTerm && (
+                <Button onClick={openCreateDialog} className="mt-4">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Crear Primera Ficha
+                </Button>
+              )}
             </div>
           ) : (
-            <div className="space-y-4">
-              {items.map((ficha) => (
-                <FichaTecnicaCompletaCard
-                  key={ficha.fit_tec_id_int}
-                  ficha={ficha}
-                  productName={getProductName(ficha.pro_id_int)}
-                  onEdit={() => openEditDialog(ficha)}
-                  onDelete={() => handleDelete(ficha.fit_tec_id_int)}
+            <>
+              <div className="space-y-4">
+                {pagination.paginatedData.map((ficha) => (
+                  <FichaTecnicaCompletaCard
+                    key={ficha.fit_tec_id_int}
+                    ficha={ficha}
+                    productName={getProductName(ficha.pro_id_int)}
+                    onEdit={() => openEditDialog(ficha)}
+                    onDelete={() => handleDelete(ficha.fit_tec_id_int)}
+                  />
+                ))}
+              </div>
+
+              {/* Paginación */}
+              {pagination.totalItems > 0 && (
+                <DataPagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  pageSize={pagination.pageSize}
+                  totalItems={pagination.totalItems}
+                  onPageChange={pagination.setCurrentPage}
+                  onPageSizeChange={pagination.setPageSize}
+                  showPageSizeSelector={true}
+                  pageSizeOptions={[5, 10, 20, 50]}
+                  className="mt-6"
                 />
-              ))}
-            </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
@@ -204,11 +276,11 @@ interface FichaTecnicaCompletaCardProps {
   onDelete: () => void
 }
 
-function FichaTecnicaCompletaCard({ 
-  ficha, 
-  productName, 
-  onEdit, 
-  onDelete 
+function FichaTecnicaCompletaCard({
+  ficha,
+  productName,
+  onEdit,
+  onDelete
 }: FichaTecnicaCompletaCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -224,7 +296,7 @@ function FichaTecnicaCompletaCard({
                 <Badge variant="outline">{ficha.fit_tec_cod_vac}</Badge>
               )}
             </div>
-            
+
             <p className="text-sm text-muted-foreground">
               <strong>Producto:</strong> {productName}
             </p>
@@ -267,7 +339,7 @@ function FichaTecnicaCompletaCard({
                     {ficha.detalle && <TabsTrigger value="detalle">Detalle</TabsTrigger>}
                     {ficha.zona_colecta && <TabsTrigger value="zona">Zona</TabsTrigger>}
                   </TabsList>
-                  
+
                   <TabsContent value="info" className="mt-4">
                     <div className="text-sm space-y-1 text-gray-700">
                       <p><strong className="text-gray-800">Creada:</strong> {new Date(ficha.fit_tec_created_at_dt).toLocaleDateString('es-ES')}</p>
@@ -320,7 +392,7 @@ function FichaTecnicaCompletaCard({
                 className="w-20 h-20 object-cover rounded-lg border"
               />
             )}
-            
+
             <div className="flex gap-2">
               <Button
                 variant="outline"

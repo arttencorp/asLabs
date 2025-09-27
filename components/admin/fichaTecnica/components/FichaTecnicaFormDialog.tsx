@@ -132,7 +132,7 @@ export function FichaTecnicaFormDialog({
           // Actualizar inmediatamente la BD para quitar la referencia
           await actualizarFichaTecnica(editingFichaTecnica.fit_tec_id_int, { fit_tec_imag_vac: null })
         } else {
-          console.warn('⚠️ Error al eliminar imagen del storage:', result.error)
+          console.warn('Error al eliminar imagen del storage:', result.error)
         }
       }
       
@@ -144,7 +144,7 @@ export function FichaTecnicaFormDialog({
         fileInputRef.current.value = ''
       }
     } catch (error) {
-      console.error('💥 Error eliminando imagen:', error)
+      console.error('Error eliminando imagen:', error)
       // Aún así limpiar el estado local
       setSelectedFile(null)
       setPreviewUrl(null)

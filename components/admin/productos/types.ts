@@ -31,4 +31,6 @@ export interface ProductosTableProps {
   loading: boolean
   onEdit: (producto: ProductoDatabase) => void
   onDelete: (id: string) => void
+  onRefresh?: () => void
+  onCreate?: () => void
 }

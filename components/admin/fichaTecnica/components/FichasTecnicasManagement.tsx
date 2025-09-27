@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Plus, CheckCircle, AlertCircle, FileText } from "lucide-react"
+import { Plus, CheckCircle, AlertCircle, FileText, RefreshCw } from "lucide-react"
 import { FichaTecnicaFormDialog } from './FichaTecnicaFormDialog'
 import { FichasTecnicasTable } from './FichasTecnicasTable'
 import { FichasTecnicasStats } from './FichasTecnicasStats'
@@ -26,6 +26,7 @@ export function FichasTecnicasManagement() {
     stats,
     
     // Acciones
+    loadData,
     handleCreateWithForm,
     handleUpdateWithForm,
     handleDelete,
@@ -76,15 +77,11 @@ export function FichasTecnicasManagement() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Fichas Técnicas</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-xl font-bold text-gray-900">Gestión de Fichas Técnicas</h1>
+          <p className="text-gray-600">
             Administra las fichas técnicas de los productos con sus respectivas imágenes
           </p>
-        </div>
-        <Button onClick={openCreateDialog} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Nueva Ficha Técnica
-        </Button>
+        </div> 
       </div>
 
       {/* Alertas */}
@@ -108,13 +105,21 @@ export function FichasTecnicasManagement() {
       {/* Tabla principal */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            Fichas Técnicas
-          </CardTitle>
-          <CardDescription>
-            Lista de todas las fichas técnicas registradas en el sistema
-          </CardDescription>
+          <div className="flex justify-between items-center">
+            <CardTitle className="flex items-center gap-2">
+              Fichas Técnicas
+            </CardTitle>
+            <div className="flex gap-2">
+              <Button variant="outline" disabled={loading} onClick={loadData}>
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Actualizar
+              </Button>
+              <Button onClick={openCreateDialog} disabled={loading} className="text-white">
+                <Plus className="h-4 w-4 mr-2" />
+                Nueva Ficha Técnica
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <FichasTecnicasTable

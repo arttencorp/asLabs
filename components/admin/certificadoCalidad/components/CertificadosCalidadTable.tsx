@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Table,
   TableBody,
@@ -11,17 +11,19 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { 
-  MoreHorizontal, 
-  Pencil, 
-  Trash2, 
+import { DataPagination } from "@/components/ui/data-pagination"
+import { usePagination } from "@/hooks/usePagination"
+import {
+  MoreHorizontal,
+  Pencil,
+  Trash2,
   Search,
   Image as ImageIcon,
   FileText,
@@ -31,25 +33,36 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { CertificadosCalidadTableProps } from '../types/index'
 import { formatDate } from '@/utils/index'
 
-export function CertificadosCalidadTable({ 
-  certificados, 
-  loading, 
-  onEdit, 
+export function CertificadosCalidadTable({
+  certificados,
+  loading,
+  onEdit,
   onDelete,
-  productos 
+  productos
 }: CertificadosCalidadTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const filteredCertificados = certificados.filter(certificado => {
-    const searchLower = searchTerm.toLowerCase()
-    const producto = productos.find(p => p.pro_id_int === certificado.pro_id_int)
-    
-    return (
-      certificado.cer_cal_tipo_vac?.toLowerCase().includes(searchLower) ||
-      certificado.cer_cal_infor_ensayo_vac?.toLowerCase().includes(searchLower) ||
-      certificado.cer_cal_cod_muestra_int?.toString().includes(searchLower) ||
-      producto?.pro_nomb_vac?.toLowerCase().includes(searchLower)
-    )
+  // Filtrar certificados según término de búsqueda
+  const filteredCertificados = useMemo(() => {
+    return certificados.filter(certificado => {
+      const searchLower = searchTerm.toLowerCase()
+      const producto = productos.find(p => p.pro_id_int === certificado.pro_id_int)
+
+      return (
+        certificado.cer_cal_tipo_vac?.toLowerCase().includes(searchLower) ||
+        certificado.cer_cal_infor_ensayo_vac?.toLowerCase().includes(searchLower) ||
+        certificado.cer_cal_cod_muestra_int?.toString().includes(searchLower) ||
+        producto?.pro_nomb_vac?.toLowerCase().includes(searchLower) ||
+        certificado.cer_cal_id_int.toString().includes(searchTerm)
+      )
+    })
+  }, [certificados, searchTerm, productos])
+
+  // Configurar paginación
+  const pagination = usePagination({
+    data: filteredCertificados,
+    defaultPageSize: 10,
+    defaultPage: 1
   })
 
   const getProductoNombre = (productoId: string | null) => {
@@ -62,12 +75,14 @@ export function CertificadosCalidadTable({
     return (
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <Search className="h-4 w-4" />
-          <Input
-            placeholder="Buscar certificados..."
-            disabled
-            className="max-w-sm"
-          />
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Buscar certificados..."
+              disabled
+              className="pl-10"
+            />
+          </div>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -118,13 +133,15 @@ export function CertificadosCalidadTable({
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
-        <Search className="h-4 w-4" />
-        <Input
-          placeholder="Buscar por tipo, ensayo, código o producto..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-        />
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            placeholder="Buscar por tipo, ensayo, código o producto..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
       </div>
 
       <div className="rounded-md border">
@@ -141,14 +158,14 @@ export function CertificadosCalidadTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredCertificados.length === 0 ? (
+            {pagination.totalItems === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="h-24 text-center">
                   {searchTerm ? 'No se encontraron certificados que coincidan con la búsqueda.' : 'No hay certificados registrados.'}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredCertificados.map((certificado) => (
+              pagination.paginatedData.map((certificado) => (
                 <TableRow key={certificado.cer_cal_id_int}>
                   <TableCell>
                     {certificado.cer_cal_imag_url ? (
@@ -189,7 +206,10 @@ export function CertificadosCalidadTable({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={certificado.cer_cal_imag_url ? "default" : "secondary"}>
+                    <Badge
+                      variant={certificado.cer_cal_imag_url ? "default" : "secondary"}
+                      className="text-white"
+                    >
                       {certificado.cer_cal_imag_url ? "Con imagen" : "Solo texto"}
                     </Badge>
                   </TableCell>
@@ -209,9 +229,9 @@ export function CertificadosCalidadTable({
                       <DropdownMenuContent align="end">
                         {certificado.cer_cal_imag_url && (
                           <DropdownMenuItem asChild>
-                            <a 
-                              href={certificado.cer_cal_imag_url} 
-                              target="_blank" 
+                            <a
+                              href={certificado.cer_cal_imag_url}
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center"
                             >
@@ -224,7 +244,7 @@ export function CertificadosCalidadTable({
                           <Pencil className="mr-2 h-4 w-4" />
                           Editar
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           onClick={() => onDelete(certificado.cer_cal_id_int)}
                           className="text-red-600"
                         >
@@ -240,6 +260,20 @@ export function CertificadosCalidadTable({
           </TableBody>
         </Table>
       </div>
+
+      {/* Paginación */}
+      {pagination.totalItems > 0 && (
+        <DataPagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          pageSize={pagination.pageSize}
+          totalItems={pagination.totalItems}
+          onPageChange={pagination.setCurrentPage}
+          onPageSizeChange={pagination.setPageSize}
+          showPageSizeSelector={true}
+          pageSizeOptions={[5, 10, 20, 50]}
+        />
+      )}
     </div>
   )
 }

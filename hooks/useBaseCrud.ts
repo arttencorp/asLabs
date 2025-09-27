@@ -37,8 +37,7 @@ export function useBaseCrud<T, FormT>({
     setError(null)
     try {
       const data = await fetchFn()
-      setItems(data)
-      showSuccess(`Cargados ${data.length} elementos`)
+      setItems(data) 
     } catch (error: any) {
       setError(error.message || 'Error al cargar datos')
     } finally {

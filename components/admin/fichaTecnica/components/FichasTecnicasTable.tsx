@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -12,13 +12,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Edit, 
-  Trash2, 
-  Image as ImageIcon, 
+import { DataPagination } from "@/components/ui/data-pagination"
+import { usePagination } from "@/hooks/usePagination"
+import {
+  Edit,
+  Trash2,
+  Image as ImageIcon,
   ImageOff,
   Search,
-  ExternalLink
+  ExternalLink,
+  RefreshCw,
+  Plus
 } from "lucide-react"
 import { formatDate } from '@/utils/index'
 import type { FichasTecnicasTableProps } from '../types'
@@ -29,26 +33,38 @@ export function FichasTecnicasTable({
   loading,
   onEdit,
   onDelete,
-  productos
+  productos,
+  onRefresh,
+  onCreate
 }: FichasTecnicasTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
-
-  // Filtrar fichas técnicas según el término de búsqueda
-  const filteredFichas = fichasTecnicas.filter(ficha => {
-    const searchLower = searchTerm.toLowerCase()
-    const nombrePlanta = ficha.fit_tec_nom_planta_vac?.toLowerCase() || ''
-    const codigo = ficha.fit_tec_cod_vac?.toLowerCase() || ''
-    const producto = productos.find(p => p.pro_id_int === ficha.pro_id_int)?.pro_nomb_vac?.toLowerCase() || ''
-    
-    return nombrePlanta.includes(searchLower) || 
-           codigo.includes(searchLower) || 
-           producto.includes(searchLower)
-  })
 
   const getProductoNombre = (productoId: string) => {
     const producto = productos.find(p => p.pro_id_int === productoId)
     return producto?.pro_nomb_vac || 'Producto no encontrado'
   }
+
+  // Filtrar fichas técnicas según el término de búsqueda
+  const filteredFichas = useMemo(() => {
+    return fichasTecnicas.filter(ficha => {
+      const searchLower = searchTerm.toLowerCase()
+      const nombrePlanta = ficha.fit_tec_nom_planta_vac?.toLowerCase() || ''
+      const codigo = ficha.fit_tec_cod_vac?.toLowerCase() || ''
+      const producto = getProductoNombre(ficha.pro_id_int).toLowerCase()
+
+      return nombrePlanta.includes(searchLower) ||
+        codigo.includes(searchLower) ||
+        producto.includes(searchLower) ||
+        ficha.fit_tec_id_int.toString().includes(searchTerm)
+    })
+  }, [fichasTecnicas, searchTerm, productos])
+
+  // Configurar paginación
+  const pagination = usePagination({
+    data: filteredFichas,
+    defaultPageSize: 10,
+    defaultPage: 1
+  })
 
   if (loading) {
     return (
@@ -95,14 +111,20 @@ export function FichasTecnicasTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredFichas.length === 0 ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center text-gray-500">
+                  Cargando fichas técnicas...
+                </TableCell>
+              </TableRow>
+            ) : pagination.totalItems === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center text-gray-500">
                   {searchTerm ? 'No se encontraron fichas técnicas que coincidan con la búsqueda' : 'No hay fichas técnicas registradas'}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredFichas.map((ficha) => (
+              pagination.paginatedData.map((ficha) => (
                 <TableRow key={ficha.fit_tec_id_int}>
                   <TableCell className="font-medium">
                     {ficha.fit_tec_nom_planta_vac || 'Sin nombre'}
@@ -118,18 +140,17 @@ export function FichasTecnicasTable({
                     {getProductoNombre(ficha.pro_id_int)}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 text-white">
                       {ficha.fit_tec_imag_vac ? (
                         <>
                           <Badge variant="default" className="flex items-center space-x-1">
-                            <ImageIcon className="h-3 w-3" />
-                            <span>Con imagen</span>
+                            <span className="text-white">Con imagen</span>
                           </Badge>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => window.open(ficha.fit_tec_imag_vac!, '_blank')}
-                            className="h-6 w-6 p-0"
+                            className="h-6 w-6 p-0 text-gray-900"
                           >
                             <ExternalLink className="h-3 w-3" />
                           </Button>
@@ -175,11 +196,18 @@ export function FichasTecnicasTable({
         </Table>
       </div>
 
-      {/* Información de resultados */}
-      {searchTerm && (
-        <div className="text-sm text-gray-600">
-          Mostrando {filteredFichas.length} de {fichasTecnicas.length} fichas técnicas
-        </div>
+      {/* Paginación */}
+      {pagination.totalItems > 0 && (
+        <DataPagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          pageSize={pagination.pageSize}
+          totalItems={pagination.totalItems}
+          onPageChange={pagination.setCurrentPage}
+          onPageSizeChange={pagination.setPageSize}
+          showPageSizeSelector={true}
+          pageSizeOptions={[5, 10, 20, 50]}
+        />
       )}
     </div>
   )
