@@ -83,7 +83,12 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
             <div className="font-bold text-purple-600 text-sm">{plantin.harvestTime}</div>
           </div>
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1 font-medium">Resistencias</div>
+            <div className="text-xs text-gray-500 mb-1 font-medium">
+              {plantin.id === "banano-fusarium"
+                ? "Resistencias"
+                : "Tolerancia"
+              }
+            </div>
             <div className="font-bold text-orange-600 text-sm">{plantin.resistance?.length || 0}+</div>
           </div>
         </div>

@@ -1,0 +1,5 @@
+export { default as CategoriasManagement } from './components/CategoriasManagement'
+export { CategoriaFormDialog } from './components/CategoriaFormDialog'
+export { CategoriasTable } from './components/CategoriasTable'
+export { useCategorias } from './hooks/useCategorias'
+export * from './types'

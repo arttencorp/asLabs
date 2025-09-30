@@ -1,0 +1,8 @@
+export { FichaTecnicaFormDialog } from './FichaTecnicaFormDialog'
+export { FichasTecnicasTable } from './FichasTecnicasTable'
+export { FichasTecnicasStats } from './FichasTecnicasStats'
+export { FichasTecnicasManagement } from './FichasTecnicasManagement'
+export { FichaTecnicaDinamica } from './FichaTecnicaDinamica' 
+export { FichaTecnicaCompletaFormDialog } from './FichaTecnicaCompletaFormDialog'
+export { FichasTecnicasAdminCompleta } from './FichasTecnicasAdminCompleta'
+export { FichasTecnicasAdminMain } from './FichasTecnicasAdminMain'

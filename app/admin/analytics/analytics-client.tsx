@@ -138,8 +138,7 @@ export default function AnalyticsClient() {
         .order("fecha_pedido", { ascending: false })
         .limit(5)
 
-      setRecentOrders(recent || [])
-      showSuccess("Datos analíticos cargados exitosamente")
+      setRecentOrders(recent || []) 
     } catch (error) {
       console.error("Error fetching analytics data:", error)
       setError("Error al cargar los datos analíticos")

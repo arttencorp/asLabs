@@ -51,19 +51,9 @@ export default function ProductosPage() {
   return (
     <div className="container mx-auto p-4 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Gestión de Productos</h1>
-          <p className="text-gray-600">Administra el catálogo de productos de laboratorio</p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openCreateDialog}>
-              <Plus className="h-4 w-4 mr-2" />
-              Nuevo Producto
-            </Button>
-          </DialogTrigger>
-        </Dialog>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestión de Productos</h1>
+        <p className="text-gray-600">Administra el catálogo de productos de laboratorio</p>
       </div>
 
       {/* Messages */}
@@ -88,17 +78,21 @@ export default function ProductosPage() {
         loading={loading}
         onEdit={openEditDialog}
         onDelete={() => {}} // Eliminar deshabilitado según requerimientos
+        onCreate={openCreateDialog}
+        onRefresh={() => {}} // Añadir función de refresh si es necesaria
       />
 
       {/* Form Dialog */}
-      <ProductoFormDialog
-        isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
-        editingProducto={editingItem}
-        onSubmit={handleSubmit}
-        loading={loading}
-        error={error}
-      />
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <ProductoFormDialog
+          isOpen={isDialogOpen}
+          onClose={handleCloseDialog}
+          editingProducto={editingItem}
+          onSubmit={handleSubmit}
+          loading={loading}
+          error={error}
+        />
+      </Dialog>
     </div>
   )
 }

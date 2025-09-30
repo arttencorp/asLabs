@@ -87,3 +87,108 @@ export interface FichaTecnicaDatabase {
   fit_tec_imag_vac: string | null
   fit_tec_cod_vac: string | null
 }
+
+// Detalle de Ficha Técnica
+export interface DetalleFichaTecnicaDatabase {
+  dft_id_int: string
+  dft_desc_vac: string | null
+  dft_parcela_vac: string | null
+  dft_zona_colecta_vac: string | null
+  dft_present_vac: string | null
+  fit_tec_id_int: string // FK a Ficha_Tecnica
+}
+
+// Taxonomías
+export interface TaxonomiaDatabase {
+  ta_id_int: string
+  ta_familia_vac: string | null
+  ta_genero_vac: string | null
+  ta_nombre_cientifico_vac: string | null
+  ta_grupo_vac: string | null
+  ta_nombre_comun_vac: string | null
+  fit_tec_id_int: string // FK a Ficha_Tecnica
+}
+
+// Zona de Colecta de Germoplasma
+export interface ZonaColectaGermDatabase {
+  zcg_id_int: string
+  zcg_pais_vac: string | null
+  zcg_region_vac: string | null
+  zcg_provincia_vac: string | null
+  zcg_distrito_vac: string | null
+  zcg_zona_vac: string | null
+  zcg_fecha_vac: string | null
+  fit_tec_id_int: string // FK a Ficha_Tecnica
+}
+
+// Ficha Técnica Completa (con relaciones)
+export interface FichaTecnicaCompletaDatabase extends FichaTecnicaDatabase {
+  detalle?: DetalleFichaTecnicaDatabase | null
+  taxonomia?: TaxonomiaDatabase | null
+  zona_colecta?: ZonaColectaGermDatabase | null
+}
+
+// Categorías de Tienda
+export interface CategoriaDatabase {
+  cat_id_int: string
+  cat_nom_vac: string | null
+  cat_desc_vac: string | null
+  cat_activo_bool?: boolean | null
+  cat_created_at_dt: string
+  cat_updated_at_dt: string
+}
+
+// Productos de Tienda  
+export interface ProductoTiendaDatabase {
+  prod_tiend_id_int: string
+  prod_tiend_nom_vac: string | null
+  prod_tiend_desc_vac: string | null
+  prod_tiend_prec_vac: string | null
+  prod_tiend_activo_bool?: boolean | null
+  prod_tiend_created_at_dt: string
+  prod_tiend_updated_at_dt: string
+  cat_id_int: string // FK a Categoria
+}
+
+// ============================================
+// TIPOS PARA FORMULARIOS
+// ============================================
+
+// Formularios para crear/actualizar entidades
+export interface FichaTecnicaForm {
+  fit_tec_nom_planta_vac: string
+  fit_tec_cod_vac?: string | null
+  pro_id_int: string
+  fit_tec_imag_vac?: string | null
+}
+
+export interface DetalleFichaTecnicaForm {
+  dft_desc_vac?: string | null
+  dft_parcela_vac?: string | null
+  dft_zona_colecta_vac?: string | null
+  dft_present_vac?: string | null
+}
+
+export interface TaxonomiaForm {
+  ta_familia_vac?: string | null
+  ta_genero_vac?: string | null
+  ta_nombre_cientifico_vac?: string | null
+  ta_grupo_vac?: string | null
+  ta_nombre_comun_vac?: string | null
+}
+
+export interface ZonaColectaForm {
+  zcg_pais_vac?: string | null
+  zcg_region_vac?: string | null
+  zcg_provincia_vac?: string | null
+  zcg_distrito_vac?: string | null
+  zcg_zona_vac?: string | null
+  zcg_fecha_vac?: string | null
+}
+
+export interface FichaTecnicaCompletaForm {
+  ficha: FichaTecnicaForm
+  detalle?: DetalleFichaTecnicaForm
+  taxonomia?: TaxonomiaForm
+  zona_colecta?: ZonaColectaForm
+}
