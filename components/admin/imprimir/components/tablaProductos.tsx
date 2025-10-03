@@ -76,14 +76,14 @@ export function TablaProductos({
                         <td colSpan={2}></td>
                         <td className="p-1.5 text-right font-bold">Total</td>
                         <td className="p-1.5 text-right font-bold">S/{(total || 0).toFixed(2)}</td>
-                    </tr>
+                    </tr>{/* 
                     <tr>
                         <td colSpan={4} className="text-xs text-right italic pt-1">
                             {preciosConIGV
                                 ? "* Los precios unitarios incluyen IGV"
                                 : "* Los precios unitarios no incluyen IGV"}
                         </td>
-                    </tr>
+                    </tr>*/}
                 </tfoot>
             </table>
             <div className="my-3 h-[1px] w-full bg-gray-300"></div>
