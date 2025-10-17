@@ -96,6 +96,13 @@ jobs:
           
           # Usar pg_dump con mejor compatibilidad de versiones
           $PG_DUMP_CMD "$DATABASE_URL" \
+            --exclude-schema='storage' \
+            --exclude-schema='graphql' \
+            --exclude-schema='graphql_public' \
+            --exclude-schema='net' \
+            --exclude-schema='realtime' \
+            --exclude-schema='supabase_functions' \
+            --exclude-schema='supabase_migrations' \
             --no-owner \
             --no-privileges \
             --clean \
@@ -322,7 +329,7 @@ jobs:
       - name: Subir backup como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: backup-${{ steps.config.outputs.date }}
+          name: latest-backup
           path: "*.tar.gz"
           retention-days: 30
       

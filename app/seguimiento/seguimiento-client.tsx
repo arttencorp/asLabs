@@ -464,7 +464,7 @@ export default function SeguimientoClient() {
                         </div>
                       )}
 
-                      {pedido.ped_observacion_vac && (
+                      {/*pedido.ped_observacion_vac && (
                         <div className="flex items-start gap-4 p-3 bg-yellow-50 rounded-lg">
                           <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
                           <div className="flex-1">
@@ -472,7 +472,7 @@ export default function SeguimientoClient() {
                             <p className="text-sm text-gray-600">{pedido.ped_observacion_vac}</p>
                           </div>
                         </div>
-                      )}
+                      )*/}
 
                       {/* Información adicional de la cotización */}
                       {pedido.cotizacion?.informacion_adicional && (

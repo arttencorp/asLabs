@@ -1,0 +1,58 @@
+name: Restaurar Backup desde URL (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_url_raw:
+        description: 'URL RAW del Gist con el backup LIMPIO'
+        required: true
+
+jobs:
+  restore-from-gist:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Instalar herramientas
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq postgresql-client-17
+
+      - name: Autorizar IP del Runner en el firewall de Supabase
+        id: authorize_ip
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
+        run: |
+          RUNNER_IP=$(curl -s ifconfig.me)
+          CURRENT_RULES_JSON=$(curl -s -f -X GET "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN")
+          echo "original_rules=$CURRENT_RULES_JSON" >> $GITHUB_OUTPUT
+          NEW_RULES_JSON=$(echo "$CURRENT_RULES_JSON" | jq --arg ip "$RUNNER_IP/32" '.dbAllowedCidrs += [$ip]')
+          curl -s -f -X POST "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" --data-raw "$NEW_RULES_JSON"
+          sleep 20
+
+      - name: Descargar y verificar archivo de backup
+        run: |
+          curl -L --fail -o backup.sql "${{ github.event.inputs.backup_url_raw }}"
+          if [ ! -s "backup.sql" ] || grep -qi "<!DOCTYPE html>" backup.sql; then
+            echo "::error:: El archivo descargado está vacío o es una página HTML."
+            exit 1
+          fi
+          echo "Backup descargado y verificado."
+
+      - name: Restaurar la Base de Datos (EN ENTORNO DE PRUEBA)
+        env:
+          DATABASE_URL: ${{ secrets.STAGING_SUPABASE_DATABASE_URL }}
+        run: |
+          # Este es el comando que tú encontraste. La única verdad.
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f backup.sql
+          echo "¡RESTAURACIÓN COMPLETADA!"
+            
+      - name: Limpiar y restaurar firewall (PRUEBA)
+        if: always()
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PROJECT_ID: ${{ secrets.STAGING_SUPABASE_PROJECT_ID }}
+          ORIGINAL_RULES: ${{ steps.authorize_ip.outputs.original_rules }}
+        run: |
+          if [[ -n "$ORIGINAL_RULES" ]]; then
+            curl -s -X POST "https://api.supabase.com/v1/projects/$PROJECT_ID/network-restrictions/apply" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d "$ORIGINAL_RULES"
+          fi

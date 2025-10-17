@@ -220,20 +220,23 @@ export function useCotizacion() {
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       const todasFichas: FichaTecnica[] = []
       
-      
       // Cargar fichas técnicas de BD para todos los productos
       if (codigosUnicos.length > 0) {
         await cargarFichasParaProductos(codigosUnicos)
         
         codigosUnicos.forEach((productoId) => {
           const fichasBD = obtenerFichasProducto(productoId)
+          // Solo agregar fichas si realmente existen y tienen contenido válido
           if (fichasBD && fichasBD.length > 0) {
-            todasFichas.push(...fichasBD)
-          } else {
+            const fichasValidas = fichasBD.filter(ficha => 
+              ficha && (ficha.titulo || ficha.descripcion || ficha.archivo)
+            )
+            if (fichasValidas.length > 0) {
+              todasFichas.push(...fichasValidas)
+            }
           }
         })
       }
-      
 
       setFichasTecnicas(todasFichas)
     } catch (error) {

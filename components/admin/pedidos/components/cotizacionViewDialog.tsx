@@ -335,6 +335,32 @@ export function CotizacionViewDialog({ open, onClose, cotizacion }: CotizacionVi
             </Card>
           )}
 
+          {/* Observaciones del Pedido */}
+          {cotizacion.pedido?.ped_observacion_vac && (
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <FileText className="h-5 w-5 text-orange-600" />
+                  <h3 className="text-lg font-semibold">Observaciones del Pedido</h3>
+                </div>
+
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText className="h-4 w-4 text-orange-600" />
+                    <span className="text-sm font-medium text-orange-800">
+                      Pedido: {cotizacion.pedido.ped_cod_segui_vac}
+                    </span>
+                  </div>
+                  <div className="bg-white border border-orange-200 rounded p-3">
+                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {cotizacion.pedido.ped_observacion_vac}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Metadatos */}
           <Card className="bg-gray-50">
             <CardContent className="p-4">

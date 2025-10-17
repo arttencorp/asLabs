@@ -154,13 +154,12 @@ export default function ClientPage() {
                     <button
                       key={i}
                       onClick={() => goToSlide(i)}
-                      className={`h-1 w-8 sm:w-16 ${
-                        i === currentSlide
+                      className={`h-1 w-8 sm:w-16 ${i === currentSlide
                           ? "bg-white"
                           : i === currentSlide + 1
                             ? "bg-white bg-opacity-50"
                             : "bg-white bg-opacity-30"
-                      }`}
+                        }`}
                       aria-label={`Slide ${i + 1}`}
                     />
                   ))}
@@ -185,10 +184,10 @@ export default function ClientPage() {
           <h2 className="text-lg sm:text-xl font-medium mb-6 font-serif">Productos</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
-              { title: "Plantines de Banano", variety: "Variedad Cavendish Williams" },
-              { title: "Plantines de Banano", variety: "Variedad Cavendish Valery" },
-              { title: "Plantines de Banano", variety: "Variedad Baby Banana" },
-              { title: "Plantines de Plátano", variety: "Variedad Dominico Hartón" },
+              { title: "Banano Invitro ASWG", variety: "Banano Cavendish Williams" },
+              { title: "Banano Invitro ASC5", variety: "Banano Cavendish Valery" },
+              { title: "Banano Invitro ASBBG", variety: "Banano Baby" },
+              { title: "Plátano invitro ASDG", variety: "Plátano Dominico Harton" },
             ].map((product, i) => (
               <div key={i} className="border rounded-lg overflow-hidden">
                 <div className="p-4 border-l-4 border-[#2e7d32] h-full flex flex-col">
@@ -201,18 +200,18 @@ export default function ClientPage() {
               </div>
             ))}
           </div>
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-8 gap-6">
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-8 gap-6">
+            {/* <div className="flex gap-3">
               <button className="border border-gray-300 hover:border-[#2e7d32] rounded-full p-3 transition-colors duration-200 shadow-sm hover:shadow-md">
               <ChevronLeft className="h-5 w-5 text-gray-600 hover:text-[#2e7d32]" />
               </button>
               <button className="border border-gray-300 hover:border-[#2e7d32] rounded-full p-3 transition-colors duration-200 shadow-sm hover:shadow-md">
               <ChevronRight className="h-5 w-5 text-gray-600 hover:text-[#2e7d32]" />
               </button>
-            </div>
-            <Link 
-              href="/plantines" 
-              className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center transition-all duration-200 shadow-sm hover:shadow-md group"
+            </div>*/}
+            <Link
+              href="/plantines"
+              className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center transition-all duration-200 shadow-sm hover:shadow-md group ml-auto"
             >
               VER TODOS LOS PRODUCTOS
               <svg className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
