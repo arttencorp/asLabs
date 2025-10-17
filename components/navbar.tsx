@@ -51,19 +51,8 @@ export default function Navbar() {
     },*/
     tienda: {
       title: "Tienda",
+      href: "/tienda",
       description: "Productos especializados para educación y laboratorio",
-      children: [
-        {
-          title: "Próximamente para Docentes",
-          href: "#",
-          description: "Materiales y recursos especializados para la enseñanza de biotecnología",
-        },
-        {
-          title: "Para Estudiantes",
-          href: "/solucion-estudiantes",
-          description: "Kits educativos y materiales de laboratorio para estudiantes universitarios",
-        },
-      ],
     },
     seguimiento: {
       title: "Seguimiento",
@@ -175,7 +164,7 @@ export default function Navbar() {
                     </Link>
                   )}
 
-                  {activeItem === key && (
+                  {activeItem === key && key !== "tienda" && (
                     <div
                       className="absolute left-0 top-full w-[600px] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn"
                       style={{

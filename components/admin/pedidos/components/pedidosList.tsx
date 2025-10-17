@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Search, Edit, Eye, Trash2, RefreshCw, Loader2, Image, Plus } from "lucide-react"
+import { Search, Edit, Eye, Trash2, RefreshCw, Loader2, Image, Plus, FileText } from "lucide-react"
 import { formatDate, getEstadoColor, getNombreCompleto } from '@/utils/index'
 import type { Pedido } from '../types'
 
@@ -24,6 +24,8 @@ interface PedidosListProps {
 
 export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onViewCotizacion, onCreate }: PedidosListProps) {
   const [searchTerm, setSearchTerm] = useState("")
+  const [showObservaciones, setShowObservaciones] = useState(false)
+  const [selectedObservaciones, setSelectedObservaciones] = useState<{observaciones: string, codigo: string} | null>(null)
 
   // Filtrar pedidos basado en el término de búsqueda
   const filteredPedidos = useMemo(() => {
@@ -51,6 +53,17 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
   const handleDelete = (pedido: Pedido) => {
     if (confirm(`¿Estás seguro de eliminar el pedido ${pedido.ped_cod_segui_vac}?`)) {
       onDelete(pedido.ped_id_int)
+    }
+  }
+
+  // Manejo de observaciones
+  const handleViewObservaciones = (pedido: Pedido) => {
+    if (pedido.ped_observacion_vac) {
+      setSelectedObservaciones({
+        observaciones: pedido.ped_observacion_vac,
+        codigo: pedido.ped_cod_segui_vac
+      })
+      setShowObservaciones(true)
     }
   }
 
@@ -187,8 +200,19 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                           title="Ver cotización"
                         >
                           <Eye className="h-4 w-4" />
-                          Ver cotización
                         </Button>
+                        {pedido.ped_observacion_vac && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewObservaciones(pedido)}
+                            disabled={loading}
+                            title="Ver observaciones"
+                            className="text-orange-600 hover:text-orange-700 border-orange-200 hover:border-orange-300"
+                          >
+                            <FileText className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -213,6 +237,59 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
           />
         )}
       </CardContent>
+
+      {/* Diálogo de Observaciones */}
+      {showObservaciones && selectedObservaciones && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <FileText className="h-5 w-5 text-orange-600" />
+                Observaciones del Pedido
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowObservaciones(false)
+                  setSelectedObservaciones(null)
+                }}
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-sm font-medium text-blue-800">
+                  Pedido: {selectedObservaciones.codigo}
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h4 className="font-medium text-gray-900 mb-2">Observaciones:</h4>
+                <div className="bg-white border border-gray-200 rounded p-3 min-h-[100px]">
+                  <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                    {selectedObservaciones.observaciones}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex justify-end">
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setShowObservaciones(false)
+                    setSelectedObservaciones(null)
+                  }}
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Card>
   )
 }
