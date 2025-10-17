@@ -120,7 +120,11 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
         <div className="px-4 sm:px-6 pb-3 sm:pb-4">
           <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2 uppercase tracking-wide">
             <Shield className="w-3 h-3 text-emerald-500" />
-            Resistencias
+            {plantin.id === "banano-fusarium"
+                ? "RESISTENCIAS"
+                : "TOLERANCIA"
+              }
+            
           </h4>
           <div className="flex flex-wrap gap-1">
             {plantin.resistance.slice(0, 3).map((resistance, idx) => (
