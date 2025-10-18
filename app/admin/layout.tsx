@@ -98,6 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Tienda", href: "/admin/tienda", icon: <Store className="h-5 w-5" /> },
     { name: "Fichas Técnicas", href: "/admin/fichaTecnica", icon: <FileSpreadsheet className="h-5 w-5" /> },
     { name: "Certificados de Calidad", href: "/admin/certificadoCalidad", icon: <FileBadge className="h-5 w-5" /> }, 
+    { name: "Análisis", href: "/admin/analytics", icon: <ChartColumn className="h-5 w-5" /> },
   ]
 
   return (

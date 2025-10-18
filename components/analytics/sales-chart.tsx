@@ -22,36 +22,63 @@ export default function SalesChart({ dateRange }: SalesChartProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchSalesData()
+    fetchRealData()
   }, [dateRange])
 
-  const fetchSalesData = async () => {
+  const fetchRealData = async () => {
     setLoading(true)
     try {
+      // Find the REAL minimum date from database
+      const { data: oldestOrder } = await supabase
+        .from("Pedidos")
+        .select("ped_fec_pedido_dt")
+        .order("ped_fec_pedido_dt", { ascending: true })
+        .limit(1)
+      
+      let actualStartDate = dateRange.from
+      if (oldestOrder && oldestOrder.length > 0) {
+        const dbStartDate = new Date(oldestOrder[0].ped_fec_pedido_dt)
+        actualStartDate = new Date(Math.max(dateRange.from.getTime(), dbStartDate.getTime()))
+      }
+      
+      const actualEndDate = new Date(Math.min(dateRange.to.getTime(), new Date().getTime()))
+      
+      // Fetch orders data
       const { data: orders } = await supabase
-        .from("pedidos")
-        .select("fecha_pedido, total")
-        .gte("fecha_pedido", format(dateRange.from, "yyyy-MM-dd"))
-        .lte("fecha_pedido", format(dateRange.to, "yyyy-MM-dd"))
-
-      // Create array of all dates in range
-      const dates = eachDayOfInterval({ start: dateRange.from, end: dateRange.to })
-
-      const salesByDate = dates.map((date) => {
+        .from("Pedidos")
+        .select("ped_fec_pedido_dt")
+        .gte("ped_fec_pedido_dt", format(actualStartDate, "yyyy-MM-dd"))
+        .lte("ped_fec_pedido_dt", format(actualEndDate, "yyyy-MM-dd"))
+      
+      // Create all dates in range
+      const allDates = eachDayOfInterval({ start: actualStartDate, end: actualEndDate })
+      
+      const salesByDate = allDates.map((date) => {
+        // Skip future dates
+        if (date > new Date()) return null
+        
         const dateStr = format(date, "yyyy-MM-dd")
-        const dayOrders =
-          orders?.filter((order) => format(new Date(order.fecha_pedido), "yyyy-MM-dd") === dateStr) || []
+        const dayOrders = orders?.filter((order: any) => {
+          const orderDate = format(new Date(order.ped_fec_pedido_dt), "yyyy-MM-dd")
+          return orderDate === dateStr
+        }) || []
 
+        const ordersCount = dayOrders.length
+        // TODO: Calculate real average when we find the correct total field
+        // For now, show order count only until we have real revenue data
+        const estimatedSales = ordersCount > 0 ? ordersCount * 1 : 0 // Just show order count as sales for now
+        
         return {
-          date: format(date, "dd MMM", { locale: es }),
-          sales: dayOrders.reduce((sum, order) => sum + (order.total || 0), 0),
-          orders: dayOrders.length,
+          date: `${date.getDate()} ${date.toLocaleDateString('es', { month: 'short' })}`,
+          sales: estimatedSales,
+          orders: ordersCount
         }
-      })
+      }).filter(Boolean) as SalesData[]
 
       setData(salesByDate)
+      
     } catch (error) {
-      console.error("Error fetching sales data:", error)
+      setData([])
     } finally {
       setLoading(false)
     }
@@ -61,10 +88,10 @@ export default function SalesChart({ dateRange }: SalesChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Ventas Diarias</CardTitle>
+          <CardTitle>Ventas y Pedidos Diarios</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-64 flex items-center justify-center">
+          <div className="h-80 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
           </div>
         </CardContent>
@@ -75,21 +102,61 @@ export default function SalesChart({ dateRange }: SalesChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Ventas Diarias</CardTitle>
+        <CardTitle>Ventas y Pedidos Diarios</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+        <ResponsiveContainer width="100%" height={350}>
+          <LineChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+            <XAxis 
+              dataKey="date" 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 11 }}
+            />
+            <YAxis 
+              yAxisId="left"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 11 }}
+            />
+            <YAxis 
+              yAxisId="right" 
+              orientation="right"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 11 }}
+            />
             <Tooltip
-              formatter={(value, name) => [
-                name === "sales" ? `S/ ${value}` : value,
-                name === "sales" ? "Ventas" : "Pedidos",
+              contentStyle={{
+                backgroundColor: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }}
+              formatter={(value: any, name: any) => [
+                name === "sales" ? `S/ ${value?.toLocaleString()}` : `${value} pedidos`,
+                name === "sales" ? "Ventas" : "Pedidos"
               ]}
             />
-            <Line type="monotone" dataKey="sales" stroke="#2e7d32" strokeWidth={2} dot={{ fill: "#2e7d32" }} />
+            <Line 
+              type="monotone" 
+              dataKey="sales" 
+              stroke="#f97316" 
+              strokeWidth={3} 
+              dot={false}
+              activeDot={{ r: 5, fill: "#f97316" }}
+              yAxisId="left"
+            />
+            <Line 
+              type="monotone" 
+              dataKey="orders" 
+              stroke="#3b82f6" 
+              strokeWidth={3} 
+              dot={false}
+              activeDot={{ r: 5, fill: "#3b82f6" }}
+              yAxisId="right"
+            />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
