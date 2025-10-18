@@ -33,21 +33,27 @@ export function PedidosStats({ pedidos, loading }: PedidosStatsProps) {
   // Calcular estadísticas
   const totalPedidos = pedidos.length
 
-  const pedidosPendientes = pedidos.filter(p =>
-    p.estado_pedido?.est_ped_tipo_int ? ![6, 7, 8, 9].includes(p.estado_pedido.est_ped_tipo_int) : false
-  ).length
+  const pedidosPendientes = pedidos.filter(p => {
+    const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+    return estadoDesc && !["PEDIDO_RECIBIDO", "PAGO_VERIFICADO", "CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc)
+  }).length
 
-  const pedidosEntregados = pedidos.filter(p =>
-    p.estado_pedido?.est_ped_tipo_int === 6 // RECIBIDO
-  ).length
+  const pedidosEntregados = pedidos.filter(p => {
+    const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+    return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
+  }).length
 
-  const pedidosCancelados = pedidos.filter(p =>
-    [7, 8].includes(p.estado_pedido?.est_ped_tipo_int || 0) // CANCELADO o REEMBOLSO
-  ).length
+  const pedidosCancelados = pedidos.filter(p => {
+    const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+    return ["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
+  }).length
 
   // Calcular ingresos de pedidos entregados
   const ingresosEntregados = pedidos
-    .filter(p => p.estado_pedido?.est_ped_tipo_int === 6) // Solo RECIBIDO (entregados)
+    .filter(p => {
+      const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+      return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
+    }) // RECIBIDO o PAGO_VERIFICADO (entregados)
     .reduce((sum, p) => {
       const total = p.cotizacion?.detalle_cotizacion?.reduce(
         (detSum, detalle) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
@@ -56,19 +62,9 @@ export function PedidosStats({ pedidos, loading }: PedidosStatsProps) {
       return sum + (p.cotizacion?.cot_igv_bol ? total * 1.18 : total)
     }, 0)
 
-  // Calcular pérdidas por pedidos cancelados
-  const perdidasCancelados = pedidos
-    .filter(p => [7, 8].includes(p.estado_pedido?.est_ped_tipo_int || 0)) // CANCELADO o REEMBOLSO
-    .reduce((sum, p) => {
-      const total = p.cotizacion?.detalle_cotizacion?.reduce(
-        (detSum, detalle) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
-        0
-      ) || 0
-      return sum + (p.cotizacion?.cot_igv_bol ? total * 1.18 : total)
-    }, 0)
-
-  // Ganancia neta (ingresos - pérdidas)
-  const gananciaNeta = ingresosEntregados - perdidasCancelados
+  // Los pedidos cancelados no generan pérdidas reales, solo no generan ingresos
+  // Mostramos los ingresos totales de pedidos completados
+  const ingresosNetos = ingresosEntregados
 
   const stats = [
     {
@@ -100,11 +96,11 @@ export function PedidosStats({ pedidos, loading }: PedidosStatsProps) {
       color: "text-red-600"
     },
     {
-      title: "Ganancia Neta",
-      value: formatCurrency(gananciaNeta),
-      description: gananciaNeta >= 0 ? "Ingresos - Pérdidas" : "Pérdidas superan ingresos",
-      icon: gananciaNeta >= 0 ? TrendingUp : TrendingDown,
-      color: gananciaNeta >= 0 ? "text-green-600" : "text-red-600"
+      title: "Ingresos Totales",
+      value: formatCurrency(ingresosNetos),
+      description: "Suma total de pedidos completados",
+      icon: TrendingUp,
+      color: "text-green-600"
     }
   ]
 
