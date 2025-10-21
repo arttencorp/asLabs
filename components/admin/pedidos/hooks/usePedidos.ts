@@ -129,17 +129,23 @@ export function usePedidos() {
   // Calcular estadísticas mejoradas
   const stats: PedidosStats = {
     totalPedidos: pedidos.length,
-    pedidosPendientes: pedidos.filter(p => 
-      p.estado_pedido?.est_ped_tipo_int ? ![6, 7, 8, 9].includes(p.estado_pedido.est_ped_tipo_int) : false
-    ).length, // No RECIBIDO, CANCELADO, REEMBOLSO, PAGO_CONTRAENTREGA
-    pedidosEntregados: pedidos.filter(p => 
-      p.estado_pedido?.est_ped_tipo_int === 6 // RECIBIDO
-    ).length,
-    pedidosCancelados: pedidos.filter(p => 
-      [7, 8].includes(p.estado_pedido?.est_ped_tipo_int || 0) // CANCELADO o REEMBOLSO
-    ).length,
+    pedidosPendientes: pedidos.filter(p => {
+      const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+      return estadoDesc && !["PEDIDO_RECIBIDO", "PAGO_VERIFICADO", "CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc)
+    }).length,
+    pedidosEntregados: pedidos.filter(p => {
+      const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+      return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
+    }).length,
+    pedidosCancelados: pedidos.filter(p => {
+      const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+      return ["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
+    }).length,
     ingresoTotal: pedidos
-      .filter(p => p.estado_pedido?.est_ped_tipo_int === 6) // Solo RECIBIDO
+      .filter(p => {
+        const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+        return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
+      }) // Solo pedidos completados - no restar cancelaciones
       .reduce((sum, p) => {
         if (!p.cotizacion?.detalle_cotizacion) return sum
         const { total } = calcularTotalCotizacion(
