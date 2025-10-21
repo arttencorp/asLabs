@@ -108,7 +108,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 lg:gap-4 h-full">
             <Link href="/" className="flex items-center">
               <Image
-                src="/as24An.jpg"
+                src="/frameLogo.png"
                 alt="AS Labs Logo"
                 width={150}
                 height={60}

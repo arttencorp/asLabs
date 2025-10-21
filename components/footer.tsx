@@ -10,7 +10,7 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Image
-              src="/as24AnWF.png"
+              src="/frameLogoFooter.png"
               alt="AS Laboratorios"
               width={150}
               height={60}
