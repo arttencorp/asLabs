@@ -625,7 +625,8 @@ export function FichaTecnicaCompletaFormDialog({
                 <Label htmlFor="fecha">Fecha de Colecta</Label>
                 <Input
                   id="fecha"
-                  type="date"
+                  type="text"
+                  placeholder="Ej: Marzo 2024"
                   value={formData.zona_colecta.zcg_fecha_vac || ''}
                   onChange={(e) => handleInputChange('zona_colecta', 'zcg_fecha_vac', e.target.value)}
                 />
