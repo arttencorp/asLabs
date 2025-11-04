@@ -374,7 +374,7 @@ function FichaTecnicaCompletaCard({
                         {ficha.zona_colecta.zcg_pais_vac && <p><strong className="text-orange-800">País:</strong> {ficha.zona_colecta.zcg_pais_vac}</p>}
                         {ficha.zona_colecta.zcg_region_vac && <p><strong className="text-orange-800">Región:</strong> {ficha.zona_colecta.zcg_region_vac}</p>}
                         {ficha.zona_colecta.zcg_provincia_vac && <p><strong className="text-orange-800">Provincia:</strong> {ficha.zona_colecta.zcg_provincia_vac}</p>}
-                        {ficha.zona_colecta.zcg_fecha_vac && <p><strong className="text-orange-800">Fecha:</strong> {new Date(ficha.zona_colecta.zcg_fecha_vac).toLocaleDateString('es-ES')}</p>}
+                        {ficha.zona_colecta.zcg_fecha_vac && <p><strong className="text-orange-800">Fecha:</strong> {ficha.zona_colecta.zcg_fecha_vac}</p>}
                       </div>
                     </TabsContent>
                   )}
