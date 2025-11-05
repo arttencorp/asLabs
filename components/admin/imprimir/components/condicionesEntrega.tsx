@@ -17,25 +17,30 @@ export function CondicionesEntrega({
   formaEntrega,
   esLaboratorio
 }: CondicionesEntregaProps) {
+  // Cálculo seguro para pagos parciales
+  const totalMonto = total || 0
+  const primerPago = Math.round((totalMonto / 2) * 100) / 100 // Redondear a 2 decimales
+  const segundoPago = Math.round((totalMonto - primerPago) * 100) / 100 // Lo que falta para completar
+
   return (
     <div className={`mt-3 text-xs ${esLaboratorio ? "bg-gray-50 p-3 rounded-md" : ""}`}>
           <p className="font-semibold">
             {formaPago === "completo" ? (
               <>
-                Entrega inmediata previa confirmación del depósito, equivalente a S/{(total || 0).toFixed(2)}{" "}
+                Entrega a coordinar previa confirmación del depósito, equivalente a S/{totalMonto.toFixed(2)}{" "}
                 ({totalTexto || ""} soles)
               </>
             ) : formaPago === "parcial" ? (
               <>
                 50% al confirmar el pedido equivalente a S/
-                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles), el 50% restante equivalente a S/
-                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles) previa entrega del producto
+                {primerPago.toFixed(2)} ({numeroATexto(primerPago) || ""} soles), el 50% restante equivalente a S/
+                {segundoPago.toFixed(2)} ({numeroATexto(segundoPago) || ""} soles) previa entrega del producto
               </>
             ) : (
               <>
                 50% al confirmar el pedido equivalente a S/
-                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles), el 50% restante equivalente a S/
-                {((total || 0) / 2).toFixed(2)} ({numeroATexto((total || 0) / 2) || ""} soles) previa entrega del producto
+                {primerPago.toFixed(2)} ({numeroATexto(primerPago) || ""} soles), el 50% restante equivalente a S/
+                {segundoPago.toFixed(2)} ({numeroATexto(segundoPago) || ""} soles) previa entrega del producto
               </>
             )}
           </p>
