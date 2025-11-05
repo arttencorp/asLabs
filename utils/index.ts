@@ -392,39 +392,69 @@ export function numeroATexto(numero: number): string {
     "seiscientos", "setecientos", "ochocientos", "novecientos"
   ]
 
+  function convertirGrupo(num: number): string {
+    let resultado = ""
+    
+    if (num >= 100) {
+      if (num === 100) {
+        resultado += "cien "
+      } else {
+        resultado += centenas[Math.floor(num / 100)] + " "
+      }
+      num = num % 100
+    }
+
+    if (num >= 20) {
+      resultado += decenas[Math.floor(num / 10)]
+      if (num % 10 !== 0) {
+        resultado += " y " + unidades[num % 10]
+      }
+    } else {
+      resultado += unidades[num]
+    }
+
+    return resultado.trim()
+  }
+
   if (numero === 0) return "cero"
 
   const entero = Math.floor(numero)
   const decimal = Math.round((numero - entero) * 100)
 
   let resultado = ""
+  let numeroRestante = entero
 
-  if (entero >= 1000) {
-    const miles = Math.floor(entero / 1000)
-    resultado += miles === 1 ? "mil " : numeroATexto(miles) + " mil "
-    numero = entero % 1000
-  } else {
-    numero = entero
-  }
-
-  if (numero >= 100) {
-    resultado += centenas[Math.floor(numero / 100)] + " "
-    numero = numero % 100
-  }
-
-  if (numero >= 20) {
-    resultado += decenas[Math.floor(numero / 10)]
-    if (numero % 10 !== 0) {
-      resultado += " y " + unidades[numero % 10]
+  // Millones (1,000,000 - 9,999,999)
+  if (numeroRestante >= 1000000) {
+    const millones = Math.floor(numeroRestante / 1000000)
+    if (millones === 1) {
+      resultado += "un millón "
+    } else {
+      resultado += convertirGrupo(millones) + " millones "
     }
-  } else {
-    resultado += unidades[numero]
+    numeroRestante = numeroRestante % 1000000
+  }
+
+  // Miles (1,000 - 999,999)
+  if (numeroRestante >= 1000) {
+    const miles = Math.floor(numeroRestante / 1000)
+    if (miles === 1) {
+      resultado += "mil "
+    } else {
+      resultado += convertirGrupo(miles) + " mil "
+    }
+    numeroRestante = numeroRestante % 1000
+  }
+
+  // Unidades, decenas y centenas (0-999)
+  if (numeroRestante > 0) {
+    resultado += convertirGrupo(numeroRestante)
   }
 
   resultado = resultado.trim()
 
   if (decimal > 0) {
-    resultado += ` y ${decimal}/100`
+    resultado += ` y ${decimal.toString().padStart(2, '0')}/100`
   } else {
     resultado += " y 00/100"
   }
