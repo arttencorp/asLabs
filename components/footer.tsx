@@ -194,7 +194,10 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-gray-400 mb-4 md:mb-0">
-              © 2025 AS Laboratorios. Todos los derechos reservados.
+              © 2025 AS Laboratorios. Todos los derechos reservados. 
+            </div>
+            <div className="text-sm text-gray-400 mb-4 md:mb-0">
+              Parte de la información en este sitio web esta generada por inteligencia artificial, por lo que puede no ser completamente precisa. Para mayor información contactarse con nosotros.
             </div>
             <div className="flex space-x-6 text-sm">
               <Link href="/legal" className="text-gray-400 hover:text-white transition-colors">

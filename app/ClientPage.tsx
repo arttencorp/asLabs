@@ -115,6 +115,18 @@ export default function ClientPage() {
               </Link>
             </div>
           </div>
+          
+          {/* Senasa Logo - Top Right Corner */}
+          <div className="absolute top-4 right-8 sm:top-6 sm:right-12 lg:top-8 lg:right-16">
+            <div className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48">
+              <Image
+                src="/senasaLogo.png"
+                alt="Senasa Logo"
+                fill
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Carousel Controls */}
@@ -177,9 +189,41 @@ export default function ClientPage() {
           </div>
         </div>
       </section>
-
+      {/* Trust on Us Section*/}
+      <section className="py-8 sm:py-8">
+        <div className="container mx-auto px-4">
+          <h2 className="text-lg sm:text-xl font-medium mb-8 font-serif text-center">Confían en Nosotros</h2>
+          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 lg:gap-16">
+            <a href="https://agroindustriallaredo.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
+              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+                <Image src="/trustUs/soldelaredo.jpg" alt="Sol de Laredo" fill style={{ objectFit: "contain" }} />
+              </div>
+            </a>
+            <a href="https://agroindustriallaredo.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
+              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+                <Image src="/trustUs/manuelita.jpg" alt="Manuelita" fill style={{ objectFit: "contain" }} />
+              </div>
+            </a>
+            <a href="https://www.skyeast.co.uk/en/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
+              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+                <Image src="/trustUs/skyeast.jpg" alt="Skyeast" fill style={{ objectFit: "contain" }} />
+              </div>
+            </a>
+            <a href="https://www.coazucar.com/esp/agrolmos_nosotros.html" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
+              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+                <Image src="/trustUs/agrolmos.jpg" alt="Agrolmos" fill style={{ objectFit: "contain" }} />
+              </div>
+            </a>
+            <a href="https://www.arttencorp.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
+              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+                <Image src="/trustUs/arttencorp.jpg" alt="ArttenCorp" fill style={{ objectFit: "contain" }} />
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
       {/* Products Section */}
-      <section className="py-8 sm:py-12">
+      <section className="py-8 sm:py-2">
         <div className="container mx-auto px-4">
           <h2 className="text-lg sm:text-xl font-medium mb-6 font-serif">Productos</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
