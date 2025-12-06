@@ -87,11 +87,17 @@ export default function ClienteDetallePage() {
   }, [clienteId])
 
   const calcularTotalCotizacion = (detalles: Array<{ det_cot_cant_int: number, det_cot_prec_hist_int: number }>, incluyeIgv: boolean) => {
-    const subtotal = detalles.reduce((sum, detalle) => 
+    const precioBase = detalles.reduce((sum, detalle) => 
       sum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int), 0
     )
-    const igv = incluyeIgv ? subtotal * 0.18 : 0
-    return subtotal + igv
+    
+    if (incluyeIgv) {
+      // CON IGV: El precio base NO incluye IGV, se agrega 18%
+      return precioBase + (precioBase * 0.18)
+    } else {
+      // SIN IGV: El precio base YA incluye IGV, el total es el precio base
+      return precioBase
+    }
   }
 
   if (loading) {

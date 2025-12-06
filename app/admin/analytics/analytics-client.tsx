@@ -154,11 +154,22 @@ export default function AnalyticsClient() {
         })
         .reduce((sum, p: any) => {
           const cotizacion = Array.isArray(p.cotizacion) ? p.cotizacion[0] : p.cotizacion
-          const total = cotizacion?.detalle_cotizacion?.reduce(
+          const precioBase = cotizacion?.detalle_cotizacion?.reduce(
             (detSum: number, detalle: any) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
             0
           ) || 0
-          return sum + (cotizacion?.cot_igv_bol ? total * 1.18 : total)
+          
+          // Calcular total correcto según si incluye IGV o no
+          let total: number
+          if (cotizacion?.cot_igv_bol) {
+            // CON IGV: precio base + 18%
+            total = precioBase + (precioBase * 0.18)
+          } else {
+            // SIN IGV: precio base ya incluye IGV
+            total = precioBase
+          }
+          
+          return sum + total
         }, 0) || 0
 
       // Los pedidos cancelados NO se restan porque no hubo transacción real

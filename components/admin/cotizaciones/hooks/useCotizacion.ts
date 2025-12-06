@@ -124,23 +124,29 @@ export function useCotizacion() {
 
   // Calcular totales usando utility global
   const calcularTotales = useCallback(() => {
-    const subtotal = items.reduce((sum, item) => sum + (item.total || 0), 0)
+    const precioBase = items.reduce((sum, item) => sum + (item.total || 0), 0)
     
     if (preciosConIGV) {
-      // CON IGV: agregar el 18% al precio base
-      const impuesto = subtotal * 0.18
-      const total = subtotal + impuesto
+      // CON IGV: El precio base NO incluye IGV, se agrega 18%
+      // Ejemplo: base=100 → subtotal=100, impuesto=18, total=118
+      const subtotal = precioBase
+      const impuesto = precioBase * 0.18
+      const total = precioBase + impuesto
       return {
         subtotal,
         impuesto,
         total,
       }
     } else {
-      // SIN IGV: el precio es tal como está, sin agregar nada
+      // SIN IGV: El precio base YA incluye IGV, se desglosa
+      // Ejemplo: base=100 → subtotal=82, impuesto=18, total=100
+      const total = precioBase
+      const subtotal = precioBase / 1.18
+      const impuesto = precioBase - subtotal
       return {
-        subtotal,
-        impuesto: 0,
-        total: subtotal,
+        subtotal: Math.round(subtotal * 100) / 100,
+        impuesto: Math.round(impuesto * 100) / 100,
+        total: Math.round(total * 100) / 100,
       }
     }
   }, [items, preciosConIGV])

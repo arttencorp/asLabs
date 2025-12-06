@@ -26,13 +26,14 @@ interface CotizacionViewDialogProps {
 export function CotizacionViewDialog({ open, onClose, cotizacion }: CotizacionViewDialogProps) {
   if (!cotizacion) return null
 
-  // Calcular totales
-  const subtotal = cotizacion.detalle_cotizacion?.reduce(
-    (sum: number, detalle: any) => sum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
-    0
-  ) || 0
-  const igv = cotizacion.cot_igv_bol ? subtotal * 0.18 : 0
-  const total = subtotal + igv
+  // Calcular totales usando la función centralizada
+  const detalles = cotizacion.detalle_cotizacion?.map((detalle: any) => ({
+    cantidad: detalle.det_cot_cant_int,
+    precio: detalle.det_cot_prec_hist_int
+  })) || []
+  
+  const { calcularTotalCotizacion } = require('@/utils/index')
+  const { subtotal, igv, total } = calcularTotalCotizacion(detalles, cotizacion.cot_igv_bol)
 
   // Determinar si es persona natural o jurídica
   const persona = cotizacion.persona

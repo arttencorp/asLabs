@@ -55,11 +55,22 @@ export function PedidosStats({ pedidos, loading }: PedidosStatsProps) {
       return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
     }) // RECIBIDO o PAGO_VERIFICADO (entregados)
     .reduce((sum, p) => {
-      const total = p.cotizacion?.detalle_cotizacion?.reduce(
+      const precioBase = p.cotizacion?.detalle_cotizacion?.reduce(
         (detSum, detalle) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
         0
       ) || 0
-      return sum + (p.cotizacion?.cot_igv_bol ? total * 1.18 : total)
+      
+      // Calcular total correcto según si incluye IGV o no
+      let total: number
+      if (p.cotizacion?.cot_igv_bol) {
+        // CON IGV: precio base + 18%
+        total = precioBase + (precioBase * 0.18)
+      } else {
+        // SIN IGV: precio base ya incluye IGV
+        total = precioBase
+      }
+      
+      return sum + total
     }, 0)
 
   // Los pedidos cancelados no generan pérdidas reales, solo no generan ingresos
