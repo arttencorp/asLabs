@@ -359,15 +359,34 @@ export function calcularTotalCotizacion(
   detalles: Array<{ cantidad: number; precio: number }>,
   incluye_igv: boolean = false
 ): { subtotal: number; igv: number; total: number } {
-  const subtotal = detalles.reduce(
+  const precioBase = detalles.reduce(
     (sum, detalle) => sum + (detalle.cantidad * detalle.precio),
     0
   )
 
-  const igv = incluye_igv ? subtotal * 0.18 : 0
-  const total = subtotal + igv
+  let subtotal: number
+  let igv: number
+  let total: number
 
-  return { subtotal, igv, total }
+  if (incluye_igv) {
+    // Con IGV: El precio base NO incluye IGV, se agrega 18%
+    // Ejemplo: base=100 → subtotal=100, igv=18, total=118
+    subtotal = precioBase
+    igv = precioBase * 0.18
+    total = precioBase + igv
+  } else {
+    // Sin IGV: El precio base YA incluye IGV, se desglosa
+    // Ejemplo: base=100 → subtotal=82, igv=18, total=100
+    total = precioBase
+    subtotal = precioBase / 1.18
+    igv = precioBase - subtotal
+  }
+
+  return { 
+    subtotal: Math.round(subtotal * 100) / 100, 
+    igv: Math.round(igv * 100) / 100, 
+    total: Math.round(total * 100) / 100 
+  }
 }
 
 // Formateo de números como texto (para cotizaciones)
