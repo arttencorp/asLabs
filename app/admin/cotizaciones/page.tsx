@@ -156,18 +156,14 @@ export default function CotizacionesPage() {
         codigo: detalle.producto?.pro_id_int || ''
       })) || []
 
-      // Calcular totales usando la misma lógica que el hook
-      const { total: totalCalculado } = calcularTotalCotizacion(
+      // Calcular totales usando la función centralizada
+      const { subtotal, igv: impuesto, total } = calcularTotalCotizacion(
         cotizacionCompleta.detalle_cotizacion?.map((d: any) => ({
           cantidad: d.det_cot_cant_int,
           precio: d.det_cot_prec_hist_int
         })) || [],
         cotizacionCompleta.cot_igv_bol
       )
-
-      const subtotal = items.reduce((sum: number, item: any) => sum + (item.total || 0), 0)
-      const impuesto = cotizacionCompleta.cot_igv_bol ? subtotal * 0.18 : 0
-      const total = cotizacionCompleta.cot_igv_bol ? subtotal + impuesto : subtotal
 
       // Obtener IDs de productos para cargar certificados y fichas técnicas
       const productosIds = items
