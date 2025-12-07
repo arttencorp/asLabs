@@ -1,15 +1,20 @@
 "use client"
 import { useState } from "react"
+import type React from "react"
+
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Menu, X, ChevronDown, Microscope } from "lucide-react"
+import { ExternalLink, Menu, X, ChevronDown, FlaskConical, Leaf, Droplets, Microscope, Bug } from "lucide-react"
 
 interface NavItem {
   title: string
   href?: string
   description: string
   children?: NavItem[]
+  icon?: React.ReactNode
 }
+
+export { Navbar }
 
 export default function Navbar() {
   const [activeItem, setActiveItem] = useState<string | null>(null)
@@ -38,21 +43,59 @@ export default function Navbar() {
         },
       ],
     },
+    servicios: {
+      title: "Servicios",
+      href: "/servicios",
+      description: "Análisis de laboratorio especializados",
+      children: [
+        {
+          title: "Fitopatología",
+          href: "/servicios/fitopatologia",
+          description: "Patógenos y análisis de suelos",
+          icon: <Bug className="h-4 w-4" />,
+        },
+        {
+          title: "Medio Ambiente",
+          href: "/servicios/medio-ambiente",
+          description: "Análisis microbiológicos",
+          icon: <Droplets className="h-4 w-4" />,
+        },
+        {
+          title: "Microbiológicos",
+          href: "/servicios/microbiologicos",
+          description: "Alimentos, agua y superficies",
+          icon: <Microscope className="h-4 w-4" />,
+        },
+        {
+          title: "Biotecnología Vegetal",
+          href: "/servicios/biotecnologia-vegetal",
+          description: "Cultivo de tejidos in vitro",
+          icon: <Leaf className="h-4 w-4" />,
+        },
+        {
+          title: "Bacteriología",
+          href: "/servicios/bacteriologia-general",
+          description: "Suspensiones y fermentación",
+          icon: <FlaskConical className="h-4 w-4" />,
+        },
+      ],
+    },
     plantines: {
       title: "Nuestros Plantines",
       href: "/plantines",
       description:
         "Explora nuestra variedad de plantines in vitro de alta calidad genética y fitosanitaria para diferentes cultivos.",
     },
-    /*research: {
+    research: {
       title: "Investigación",
       href: "/research",
       description: "Explora nuestros proyectos de investigación en clonación de plantas e ingeniería genética.",
-    },*/
-    tienda: {
-      title: "Tienda",
-      href: "/tienda",
-      description: "Productos especializados para educación y laboratorio",
+    },
+    "control-biologico": {
+      title: "Control Biológico",
+      href: "/control-biologico",
+      description:
+        "Soluciones naturales para el control de plagas. Asesoría a agricultores y venta de controladores biológicos como Billaea claripalpis y Trichogramma sp.",
     },
     seguimiento: {
       title: "Seguimiento",
@@ -74,7 +117,11 @@ export default function Navbar() {
           </Link>
           <Link href="/pitch-deck" className="hover:underline">
             Pitch Deck
-          </Link>{/* 
+          </Link>
+          <Link href="/control-biologico" className="hover:underline font-medium">
+            Control Biológico
+          </Link>
+          {/* 
           <Link href="#" className="hover:underline">
             Blog
           </Link>*/}
@@ -118,7 +165,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-4 text-sm font-serif">
+            <div className="hidden lg:flex items-center gap-6 text-sm font-serif">
               {Object.entries(navItems).map(([key, item]) => (
                 <div
                   key={key}
@@ -132,12 +179,23 @@ export default function Navbar() {
                         }`}
                     >
                       <span className="flex items-center gap-1">
-                        {item.title}
+                        {item.href ? (
+                          <Link href={item.href} className="hover:text-[#2e7d32]">
+                            {item.title}
+                          </Link>
+                        ) : (
+                          item.title
+                        )}
                         <ChevronDown className="h-4 w-4" />
                       </span>
                       {key === "biotecnologia" && (
                         <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1 flex items-center">
                           Ciencia
+                        </span>
+                      )}
+                      {key === "servicios" && (
+                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1 flex items-center">
+                          Lab
                         </span>
                       )}
                       <span
@@ -157,6 +215,9 @@ export default function Navbar() {
                       {key === "seguimiento" && (
                         <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center">Track</span>
                       )}
+                      {key === "control-biologico" && (
+                        <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center">Bio</span>
+                      )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
                           }`}
@@ -164,40 +225,41 @@ export default function Navbar() {
                     </Link>
                   )}
 
-                  {activeItem === key && key !== "tienda" && (
+                  {activeItem === key && item.children && (
                     <div
-                      className="absolute left-0 top-full w-[600px] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn"
+                      className={`absolute left-0 top-full mt-1 ${key === "servicios" ? "w-[320px]" : "w-[600px]"} bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn`}
                       style={{
                         animation: "fadeIn 0.3s ease-in-out",
                         transformOrigin: "top center",
                       }}
                     >
-                      <div className="flex">
-                        <div className="w-1/2 p-6 animate-slideRight" style={{ animation: "slideRight 0.4s ease-out" }}>
-                          <h3 className="text-lg font-bold text-[#2e7d32] mb-2 font-serif">{item.title}</h3>
-                          <p className="text-gray-600 font-serif">{item.description}</p>
-
-                          {item.children ? (
-                            <div className="mt-4 space-y-3">
-                              {item.children.map((child, index) => (
-                                <Link
-                                  key={index}
-                                  href={child.href || "#"}
-                                  className="block p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-                                >
-                                  <div className="font-medium text-[#2e7d32] font-serif">{child.title}</div>
-                                  <div className="text-sm text-gray-600 mt-1 font-serif">{child.description}</div>
-                                </Link>
-                              ))}
-                            </div>
-                          ) : (
+                      {key === "servicios" ? (
+                        <div className="p-3">
+                          <div className="space-y-1">
+                            {item.children.map((child, index) => (
+                              <Link
+                                key={index}
+                                href={child.href || "#"}
+                                className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                              >
+                                <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors">
+                                  {child.icon}
+                                </span>
+                                <div className="flex-1 min-w-0">
+                                  <span className="font-medium text-gray-900 text-sm block">{child.title}</span>
+                                  <span className="text-xs text-gray-500 truncate block">{child.description}</span>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="mt-3 pt-3 border-t border-gray-100">
                             <Link
-                              href={item.href || "#"}
-                              className="inline-flex items-center text-[#2e7d32] font-medium mt-4 group font-serif"
+                              href="/servicios"
+                              className="flex items-center justify-center gap-2 w-full py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
                             >
-                              Explorar
+                              Ver todos los servicios
                               <svg
-                                className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                                className="w-4 h-4"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -211,15 +273,44 @@ export default function Navbar() {
                                 />
                               </svg>
                             </Link>
-                          )}
+                          </div>
                         </div>
-                        <div
-                          className="w-1/2 relative animate-slideLeft bg-gradient-to-br from-[#2e7d32] to-[#81c784] flex items-center justify-center"
-                          style={{ animation: "slideLeft 0.4s ease-out" }}
-                        >
-                          <div className="text-white text-opacity-20 font-bold text-4xl font-serif">AS Labs</div>
+                      ) : (
+                        <div className="flex">
+                          <div
+                            className="w-1/2 p-6 animate-slideRight"
+                            style={{ animation: "slideRight 0.4s ease-out" }}
+                          >
+                            <h3 className="text-lg font-bold text-[#2e7d32] mb-2 font-serif">{item.title}</h3>
+                            <p className="text-gray-600 font-serif text-sm">{item.description}</p>
+                            <div className="mt-4 space-y-3">
+                              {item.children.map((child, index) => (
+                                <Link
+                                  key={index}
+                                  href={child.href || "#"}
+                                  className="block p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    {child.icon && (
+                                      <span className="text-[#2e7d32] group-hover:scale-110 transition-transform">
+                                        {child.icon}
+                                      </span>
+                                    )}
+                                    <span className="font-medium text-[#2e7d32] font-serif">{child.title}</span>
+                                  </div>
+                                  <div className="text-sm text-gray-600 mt-1 font-serif">{child.description}</div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                          <div
+                            className="w-1/2 relative animate-slideLeft bg-gradient-to-br from-[#2e7d32] to-[#81c784] flex items-center justify-center"
+                            style={{ animation: "slideLeft 0.4s ease-out" }}
+                          >
+                            <div className="text-white text-opacity-20 font-bold text-4xl font-serif">AS Labs</div>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -229,12 +320,12 @@ export default function Navbar() {
 
           {/* Desktop Right Side */}
           <div className="hidden lg:flex items-center h-full">
-            <div className="flex items-center gap-2 h-full">
+            <div className="flex items-center gap-3 h-full">
               <a
                 href="https://wa.me/51961996645"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif min-h-[40px]"
+                className="flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif text-sm whitespace-nowrap"
               >
                 <svg
                   className="w-4 h-4 mr-2"
@@ -250,18 +341,10 @@ export default function Navbar() {
                 href="https://forms.cloud.microsoft/r/wQWhqq0wR6"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center bg-[#148b7d] hover:bg-[#62a9a0] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif min-h-[40px]"
+                className="flex items-center bg-[#148b7d] hover:bg-[#62a9a0] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif text-sm whitespace-nowrap"
               >
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <Microscope className="h-4 w-4" />
-                </svg>
-
-                Investiga con nosotros
+                <Microscope className="h-4 w-4 mr-2" />
+                Investiga
               </a>
             </div>
 
@@ -285,14 +368,7 @@ export default function Navbar() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center bg-[#148b7d] hover:bg-[#62a9a0] text-white p-2 rounded-full transition-colors duration-300 font-serif min-w-[40px] min-h-[40px]"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <Microscope className="h-4 w-4" />
-                </svg> 
+                <Microscope className="h-4 w-4" /> 
               </a>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -313,16 +389,28 @@ export default function Navbar() {
                   <div key={key}>
                     {item.children ? (
                       <div className="space-y-2">
-                        <div className="font-medium text-gray-900 py-3 border-b border-gray-100 font-serif flex items-center">
-                          {item.title}
+                        <div className="font-medium text-gray-900 py-2 border-b border-gray-100 font-serif flex items-center gap-2">
+                          {item.href ? (
+                            <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)} className="flex-1">
+                              {item.title}
+                            </Link>
+                          ) : (
+                            item.title
+                          )}
+                          {key === "servicios" && (
+                            <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                              Lab
+                            </span>
+                          )}
                         </div>
                         {item.children.map((child, index) => (
                           <Link
                             key={index}
                             href={child.href || "#"}
-                            className="block py-3 pl-4 text-gray-700 hover:text-[#2e7d32] font-serif flex items-center"
+                            className="flex items-center gap-2 py-2 pl-4 text-gray-700 hover:text-[#2e7d32] font-serif"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
+                            {child.icon && <span className="text-[#2e7d32]">{child.icon}</span>}
                             {child.title}
                           </Link>
                         ))}
@@ -330,17 +418,16 @@ export default function Navbar() {
                     ) : (
                       <Link
                         href={item.href || "#"}
-                        className="block py-3 text-gray-700 hover:text-[#2e7d32] border-b border-gray-100 last:border-b-0 font-serif"
+                        className="flex items-center gap-2 py-2 text-gray-700 hover:text-[#2e7d32] border-b border-gray-100 last:border-b-0 font-serif"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <div className="flex items-center gap-2 min-h-[24px]">
-                          {item.title}
-                          {key === "seguimiento" && (
-                            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center">
-                              Track
-                            </span>
-                          )}
-                        </div>
+                        {item.title}
+                        {key === "seguimiento" && (
+                          <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">Track</span>
+                        )}
+                        {key === "control-biologico" && (
+                          <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">Bio</span>
+                        )}
                       </Link>
                     )}
                   </div>
@@ -370,7 +457,7 @@ export default function Navbar() {
         )}
       </nav>
 
-      <style jsx global>{`
+      <style jsx>{`
         @keyframes fadeIn {
           from {
             opacity: 0;
