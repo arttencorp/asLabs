@@ -2,6 +2,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { Microscope, MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Youtube } from "lucide-react"
 
+export { Footer }
+
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white font-serif">
@@ -19,7 +21,7 @@ export default function Footer() {
             <p className="text-gray-300 text-sm">
               Líder en biotecnología vegetal desde el año 2000. Especialistas en plantines in vitro, control biológico y
               materiales de laboratorio para agricultura sostenible.
-            </p>{/* 
+            </p>
             <div className="flex space-x-4">
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Facebook className="h-5 w-5" />
@@ -33,7 +35,7 @@ export default function Footer() {
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Youtube className="h-5 w-5" />
               </Link>
-            </div>*/}
+            </div>
           </div>
 
           {/* Quick Links */}
@@ -80,13 +82,13 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Servicios</h3>
             <ul className="space-y-2">
-              {/*<li>  
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
+              <li>
+                <Link href="/control-biologico" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Control Biológico
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/tienda" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Materiales de Laboratorio
                 </Link>
               </li>
@@ -99,7 +101,7 @@ export default function Footer() {
                 <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Capacitación
                 </Link>
-              </li>*/}
+              </li>
               <li>
                 <Link href="/seguimiento" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Seguimiento de Pedidos
@@ -194,7 +196,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-gray-400 mb-4 md:mb-0">
-              © 2025 AS Laboratorios. Todos los derechos reservados. 
+              © 2024 AS Laboratorios. Todos los derechos reservados. 
             </div>
             <div className="text-sm text-gray-400 mb-4 md:mb-0">
               Parte de la información en este sitio web esta generada por inteligencia artificial, por lo que puede no ser completamente precisa. Para mayor información contactarse con nosotros.
