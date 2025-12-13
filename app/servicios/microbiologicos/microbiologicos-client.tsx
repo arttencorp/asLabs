@@ -167,7 +167,7 @@ export default function MicrobiologicosClient() {
       <Navbar />
 
       <header className="relative h-[280px] overflow-hidden">
-        <Image src="/servicios/image.png" alt="Servicios Microbiológicos" fill className="object-cover" priority />
+        <Image src="/servicios/micro.jpeg" alt="Servicios Microbiológicos" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">

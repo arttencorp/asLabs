@@ -155,7 +155,7 @@ const servicios = [
       "Análisis de suelos agrícolas",
       "Presencia de hongos y bacterias",
     ],
-    image: "/servicios/image.png",
+    image: "/servicios/fito.jpg",
     count: 6,
   },
   {
@@ -169,7 +169,7 @@ const servicios = [
     borderColor: "border-emerald-200",
     textColor: "text-emerald-600",
     services: ["Recuento aerobios mesófilos", "Coliformes totales/fecales", "Detección E. coli", "Medición de pH"],
-    image: "/servicios/image.png",
+    image: "/servicios/ambiente.jpg",
     count: 7,
   },
   {
@@ -183,7 +183,7 @@ const servicios = [
     borderColor: "border-blue-200",
     textColor: "text-blue-600",
     services: ["Análisis de alimentos", "Control de calidad", "Detección de patógenos", "Recuentos microbianos"],
-    image: "/servicios/image.png",
+    image: "/servicios/micro.jpeg",
     count: 48,
   },
   {

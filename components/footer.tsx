@@ -122,8 +122,10 @@ export default function Footer() {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-[#4caf50] mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-gray-300">
-                  <p>Av. Juan Pablo II 306</p>
-                  <p>Trujillo, La Libertad, Perú</p>
+                  <p>Of. Central: Jr, Huancavelica 315, II Piso. Urb Palermo</p>
+                  <p>Lab. Biotecnologia: Mz J1 II Piso.</p>
+                  <p>Urb. San Isidro 2da Etapa</p>
+                  <p>Perú</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
