@@ -359,8 +359,8 @@ export default function ClientPage() {
       {/* Team Member Section */}
       <TeamMemberSection />
 
-      {/* Journey Section */}
-      <JourneySection />
+      {/* Journey Section 
+      <JourneySection />*/}
 
       {/* Footer */}
       <Footer />
