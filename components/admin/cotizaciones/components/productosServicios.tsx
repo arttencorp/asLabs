@@ -1,11 +1,128 @@
-import { ChevronRight, ChevronLeft, Plus, Trash2 } from "lucide-react"
+import { ChevronRight, ChevronLeft, Plus, Trash2, Check, ChevronsUpDown, Search } from "lucide-react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
 import { productosPreexistentes } from '../constants'
 import type { ProductosServiciosProps } from '../types'
+
+// Componente helper para el selector de productos con búsqueda
+interface ProductComboboxProps {
+  value: string
+  onChange: (value: string) => void
+  productos: Array<{ pro_id_int: string; pro_nomb_vac: string | null }>
+  loading: boolean
+  disabled: boolean
+}
+
+function ProductCombobox({ value, onChange, productos, loading, disabled }: ProductComboboxProps) {
+  const [open, setOpen] = useState(false)
+  const [searchValue, setSearchValue] = useState("")
+
+  // Encontrar el producto seleccionado
+  const selectedProduct = productos.find(p => p.pro_id_int === value)
+
+  // Función para normalizar texto (eliminar acentos y convertir a minúsculas)
+  const normalizeText = (text: string) => {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+  }
+
+  // Filtrar productos basado en la búsqueda
+  const filteredProducts = productos.filter(producto => {
+    const searchNormalized = normalizeText(searchValue)
+    const productName = normalizeText(producto.pro_nomb_vac || '')
+    return productName.includes(searchNormalized)
+  })
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          disabled={disabled || loading}
+          className="w-full justify-between font-normal"
+        >
+          <span className="truncate">
+            {loading ? "Cargando productos..." :
+              selectedProduct ? selectedProduct.pro_nomb_vac :
+                "Seleccionar producto..."}
+          </span>
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] sm:w-[300px] md:w-[400px] p-0" align="start" side="bottom">
+        <Command shouldFilter={false}>
+          <div className="flex items-center border-b px-3">
+          <CommandInput
+            placeholder="Buscar producto..."
+            value={searchValue}
+            onValueChange={setSearchValue}
+            className="border-0 focus:ring-0"
+          />
+        </div>
+        <CommandList>
+          <CommandEmpty>
+            <div className="py-6 text-center text-sm text-muted-foreground">
+              No se encontraron productos
+            </div>
+          </CommandEmpty>
+          <CommandGroup>
+            {/* Opción por defecto */}
+            <CommandItem
+              value="seleccionar"
+              onSelect={() => {
+                onChange("seleccionar")
+                setOpen(false)
+                setSearchValue("")
+              }}
+            >
+              <Check
+                className={cn(
+                  "mr-2 h-4 w-4",
+                  value === "seleccionar" ? "opacity-100" : "opacity-0"
+                )}
+              />
+              Seleccionar
+            </CommandItem>
+
+            {/* Lista de productos filtrados */}
+            {filteredProducts.map((producto) => (
+              <CommandItem
+                key={producto.pro_id_int}
+                value={producto.pro_id_int}
+                onSelect={(currentValue) => {
+                  onChange(currentValue)
+                  setOpen(false)
+                  setSearchValue("")
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    value === producto.pro_id_int ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                <span className="truncate">{producto.pro_nomb_vac || 'Sin nombre'}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </PopoverContent>
+    </Popover >
+  )
+}
+
 
 export function ProductosServicios({
   items,
@@ -22,9 +139,9 @@ export function ProductosServicios({
   onSiguiente
 }: ProductosServiciosProps) {
   const { subtotal, impuesto, total } = calcularTotales()
-  
+
   // Validación: verificar que hay al menos un producto seleccionado
-  const tieneProductosSeleccionados = items.some(item => 
+  const tieneProductosSeleccionados = items.some(item =>
     item.codigo && item.codigo.trim() !== '' && item.codigo !== 'personalizado' && item.codigo !== 'seleccionar'
   )
 
@@ -84,25 +201,13 @@ export function ProductosServicios({
                       />
                     </TableCell>
                     <TableCell>
-                      <Select
+                      <ProductCombobox
                         value={item.codigo || ""}
-                        onValueChange={(value) => seleccionarProducto(item.id, value)}
-                        disabled={productosLoading}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={productosLoading ? "Cargando productos..." : "Seleccionar"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {/* Opción vacía por defecto */}
-                          <SelectItem value="seleccionar">Seleccionar</SelectItem>
-                          {/* Productos de la base de datos */}
-                          {productos.map((producto) => (
-                            <SelectItem key={producto.pro_id_int} value={producto.pro_id_int}>
-                              {producto.pro_nomb_vac || 'Sin nombre'}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        onChange={(value) => seleccionarProducto(item.id, value)}
+                        productos={productos}
+                        loading={productosLoading}
+                        disabled={false}
+                      />
                     </TableCell>
                     <TableCell>
                       <Input
@@ -184,14 +289,13 @@ export function ProductosServicios({
             <ChevronLeft className="ml-2 h-4 w-4" />
             Volver a Información General
           </Button>
-          <Button 
+          <Button
             onClick={onSiguiente}
             disabled={!tieneProductosSeleccionados}
-            className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg ${
-              tieneProductosSeleccionados 
-                ? 'bg-green-600 hover:bg-green-700 text-white' 
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
+            className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg ${tieneProductosSeleccionados
+              ? 'bg-green-600 hover:bg-green-700 text-white'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
             size="lg"
           >
             {tieneProductosSeleccionados ? 'Continuar con Información Adicional' : 'Selecciona productos primero'}
