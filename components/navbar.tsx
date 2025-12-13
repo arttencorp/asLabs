@@ -202,9 +202,6 @@ export default function Navbar() {
                       <span className="flex items-center">
                         {item.title}
                       </span>
-                      {key === "seguimiento" && (
-                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center">Track</span>
-                      )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
                           }`}
@@ -404,9 +401,6 @@ export default function Navbar() {
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.title}
-                        {key === "seguimiento" && (
-                          <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">Track</span>
-                        )}
                       </Link>
                     )}
                   </div>
