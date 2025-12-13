@@ -81,7 +81,7 @@ export default function Navbar() {
       ],
     },
     plantines: {
-      title: "Nuestros Plantines",
+      title: "Plantines",
       href: "/plantines",
       description:
         "Explora nuestra variedad de plantines in vitro de alta calidad genética y fitosanitaria para diferentes cultivos.",
@@ -188,16 +188,6 @@ export default function Navbar() {
                         )}
                         <ChevronDown className="h-4 w-4" />
                       </span>
-                      {key === "biotecnologia" && (
-                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1 flex items-center">
-                          Ciencia
-                        </span>
-                      )}
-                      {key === "servicios" && (
-                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1 flex items-center">
-                          Lab
-                        </span>
-                      )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
                           }`}
@@ -214,9 +204,6 @@ export default function Navbar() {
                       </span>
                       {key === "seguimiento" && (
                         <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center">Track</span>
-                      )}
-                      {key === "control-biologico" && (
-                        <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center">Bio</span>
                       )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
@@ -397,11 +384,6 @@ export default function Navbar() {
                           ) : (
                             item.title
                           )}
-                          {key === "servicios" && (
-                            <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                              Lab
-                            </span>
-                          )}
                         </div>
                         {item.children.map((child, index) => (
                           <Link
@@ -424,9 +406,6 @@ export default function Navbar() {
                         {item.title}
                         {key === "seguimiento" && (
                           <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">Track</span>
-                        )}
-                        {key === "control-biologico" && (
-                          <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">Bio</span>
                         )}
                       </Link>
                     )}
