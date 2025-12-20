@@ -281,16 +281,19 @@ export default function ClientPage() {
             <div className="flex flex-col">
               <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-6 sm:gap-12 mb-8 sm:mb-10">
                 <div>
-                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">13+</h3>
-                  <p className="text-xs sm:text-sm mt-1">Years of progress</p>
+                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">25+</h3>
+                  <p className="text-xs sm:text-sm mt-1">años al servicio</p>
+                  <p className="text-xs sm:text-sm mt-1">del Perú</p>
                 </div>
                 <div>
-                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">45</h3>
-                  <p className="text-xs sm:text-sm mt-1">Development programs</p>
+                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">13</h3>
+                  <p className="text-xs sm:text-sm mt-1">programas de clonación</p>
+                  <p className="text-xs sm:text-sm mt-1">"in vitro"</p>
                 </div>
                 <div>
-                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">36</h3>
-                  <p className="text-xs sm:text-sm mt-1">Ongoing clinical trials</p>
+                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">4</h3>
+                  <p className="text-xs sm:text-sm mt-1">programas de</p>
+                  <p className="text-xs sm:text-sm mt-1">investigación</p>
                 </div>
               </div>
 
