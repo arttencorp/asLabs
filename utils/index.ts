@@ -10,7 +10,7 @@ export function formatDate(dateString: string | null | undefined, options?: {
   if (!dateString) {
     return 'Sin fecha'
   }
-  
+
   // Crear la fecha de forma que evite problemas de zona horaria
   const date = new Date(dateString + (dateString.includes('T') ? '' : 'T00:00:00'))
 
@@ -44,20 +44,20 @@ export function formatDate(dateString: string | null | undefined, options?: {
 // Función para convertir fecha ISO a formato de input date (YYYY-MM-DD)
 export function dateToInputValue(dateString: string | null): string {
   if (!dateString) return ''
-  
+
   try {
     // Si la fecha ya viene como YYYY-MM-DD, devolverla tal como está
     if (typeof dateString === 'string' && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
       return dateString
     }
-    
+
     // Si es fecha ISO completa, extraer solo la parte de fecha usando un método más simple
     const date = new Date(dateString)
     if (isNaN(date.getTime())) {
       console.warn('Fecha inválida recibida:', dateString)
       return ''
     }
-    
+
     // Método simple: usar toISOString y extraer solo la fecha
     return date.toISOString().split('T')[0]
   } catch (error) {
@@ -69,7 +69,7 @@ export function dateToInputValue(dateString: string | null): string {
 // Función para convertir fecha de input a ISO completa considerando zona horaria de Lima
 export function inputValueToISO(dateString: string): string {
   if (!dateString) return ''
-  
+
   // Crear fecha en zona horaria de Lima (UTC-5)
   const limaDate = new Date(dateString + 'T00:00:00-05:00')
   return limaDate.toISOString()
@@ -98,50 +98,88 @@ export function validarDNI(dni: string): boolean {
 export async function generarCodigoSeguimiento(): Promise<string> {
   try {
     const { createClient } = await import("@supabase/supabase-js")
-    
+
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    const year = new Date().getFullYear()
     const maxIntentos = 10
 
     for (let intento = 1; intento <= maxIntentos; intento++) {
-      let result = "ASL-"
-      for (let i = 0; i < 8; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length))
+      // Buscar el último código de seguimiento del año actual
+      const { data, error } = await supabase
+        .from("Pedidos")
+        .select("ped_cod_segui_vac")
+        .ilike("ped_cod_segui_vac", `ASL${year}-%`)
+        .order("ped_cod_segui_vac", { ascending: false })
+        .limit(1)
+
+      if (error) {
+        console.error("Error al obtener último código de seguimiento:", error)
+        // Fallback: usar timestamp si hay error
+        const timestamp = Date.now().toString().slice(-5)
+        return `ASL${year}-${timestamp}`
       }
 
+      let siguienteNumero = 1
+
+      if (data && data.length > 0) {
+        // Extraer el número del código (parte después del guión)
+        const ultimoCodigo = data[0].ped_cod_segui_vac
+        const match = ultimoCodigo.match(/^ASL\d{4}-(\d+)$/)
+
+        if (match) {
+          const ultimoNumero = parseInt(match[1], 10)
+          siguienteNumero = ultimoNumero + 1
+        }
+      }
+
+      // Formatear con ceros a la izquierda (5 dígitos)
+      const numeroFormateado = siguienteNumero.toString().padStart(5, "0")
+      const codigoGenerado = `ASL${year}-${numeroFormateado}`
+
+      // Comprobar si el código ya existe
       const { data: existeData, error: existeError } = await supabase
         .from("Pedidos")
         .select("ped_cod_segui_vac")
-        .eq("ped_cod_segui_vac", result)
+        .eq("ped_cod_segui_vac", codigoGenerado)
         .limit(1)
 
       if (existeError) {
+        console.error("Error al verificar unicidad:", existeError)
         continue // Reintentar
       }
 
       // Si no existe, retornar el código único
       if (!existeData || existeData.length === 0) {
-        return result
+        return codigoGenerado
       }
+
+      // Si existe, reintentar (esto maneja race conditions)
+      console.warn(`Código duplicado detectado: ${codigoGenerado}. Reintentando...`)
     }
 
-    const timestamp = Date.now().toString().slice(-4) // Últimos 4 dígitos del timestamp
-    return `ASL-${timestamp}${chars.charAt(Math.floor(Math.random() * chars.length))}${chars.charAt(Math.floor(Math.random() * chars.length))}${chars.charAt(Math.floor(Math.random() * chars.length))}${chars.charAt(Math.floor(Math.random() * chars.length))}`
+    // Si después de todos los intentos no se pudo generar un código único,
+    // usar timestamp como fallback
+    console.error("No se pudo generar código único después de", maxIntentos, "intentos")
+    const timestamp = Date.now().toString().slice(-5)
+    return `ASL${year}-${timestamp}`
 
   } catch (error) {
-    const timestamp = Date.now().toString().slice(-8)
-    return `ASL-${timestamp}`
+    console.error("Error en generarCodigoSeguimiento:", error)
+    // Fallback: usar timestamp si hay error
+    const year = new Date().getFullYear()
+    const timestamp = Date.now().toString().slice(-5)
+    return `ASL${year}-${timestamp}`
   }
 }
 
 export async function generarNumeroCotizacion(): Promise<string> {
   try {
     const { createClient } = await import("@supabase/supabase-js")
-    
+
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -172,7 +210,7 @@ export async function generarNumeroCotizacion(): Promise<string> {
         // Extraer el número de la cotización (parte antes del guión)
         const ultimaCotizacion = data[0].cot_num_vac
         const match = ultimaCotizacion.match(/^(\d+)-\d{4}$/)
-        
+
         if (match) {
           const ultimoNumero = parseInt(match[1], 10)
           siguienteNumero = ultimoNumero + 1
@@ -266,7 +304,7 @@ export function getEmailCliente(persona: ClientePersona): string {
   }
 
   return ''
-} 
+}
 
 export function getTelfCliente(persona: ClientePersona): string {
   if (persona?.per_telef_int) {
@@ -336,7 +374,7 @@ export function limpiarDatosParaBD(obj: any): any {
 // Función para formatear datos de cotización para impresión
 export function formatearDatosCotizacionParaImpresion(cotizacion: any, cliente?: ClientePersona) {
   const documento = cliente ? getDocumentoClienteParaImpresion(cliente) : { etiqueta: '', valor: '' }
-  
+
   return {
     razonSocial: cotizacion.razonSocial || '',
     documentoEtiqueta: documento.etiqueta,
@@ -382,10 +420,10 @@ export function calcularTotalCotizacion(
     igv = precioBase - subtotal
   }
 
-  return { 
-    subtotal: Math.round(subtotal * 100) / 100, 
-    igv: Math.round(igv * 100) / 100, 
-    total: Math.round(total * 100) / 100 
+  return {
+    subtotal: Math.round(subtotal * 100) / 100,
+    igv: Math.round(igv * 100) / 100,
+    total: Math.round(total * 100) / 100
   }
 }
 
@@ -413,7 +451,7 @@ export function numeroATexto(numero: number): string {
 
   function convertirGrupo(num: number): string {
     let resultado = ""
-    
+
     if (num >= 100) {
       if (num === 100) {
         resultado += "cien "

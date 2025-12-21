@@ -145,7 +145,7 @@ export async function crearPedido(pedidoData: {
             throw new Error('Esta cotización ya tiene un pedido asociado')
         }
 
-        const codigoSeguimiento = generarCodigoSeguimiento()
+        const codigoSeguimiento = await generarCodigoSeguimiento()
 
         const { data, error } = await supabase
             .from('Pedidos')

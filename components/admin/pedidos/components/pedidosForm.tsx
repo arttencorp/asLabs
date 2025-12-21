@@ -23,14 +23,14 @@ interface PedidoFormProps {
   loading: boolean
 }
 
-export function PedidoFormDialog({ 
-  open, 
-  onClose, 
-  onSubmit, 
-  pedido, 
-  cotizaciones, 
-  estadosPedido, 
-  loading 
+export function PedidoFormDialog({
+  open,
+  onClose,
+  onSubmit,
+  pedido,
+  cotizaciones,
+  estadosPedido,
+  loading
 }: PedidoFormProps) {
   const [formData, setFormData] = useState<PedidoForm>({
     cotizacion_id: '',
@@ -57,7 +57,7 @@ export function PedidoFormDialog({
         numero_comprobante: pedido.ped_num_comprob_vac || '',
         imagen_url: pedido.ped_imagen_url || ''
       })
-      
+
       // Si el pedido tiene imagen, mostrarla como preview
       if (pedido.ped_imagen_url) {
         setPreviewUrl(pedido.ped_imagen_url)
@@ -72,12 +72,12 @@ export function PedidoFormDialog({
         numero_comprobante: '',
         imagen_url: ''
       })
-      
+
       // Limpiar imagen states
       setImagenFile(null)
       setPreviewUrl(null)
     }
-    
+
     // Limpiar errores cuando se abre/cierra el modal
     setErrors({})
   }, [pedido, estadosPedido, open])
@@ -101,7 +101,7 @@ export function PedidoFormDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) return
 
     try {
@@ -116,11 +116,11 @@ export function PedidoFormDialog({
       }
 
       await onSubmit(finalFormData)
-      
+
       // Limpiar estados de imagen después del submit exitoso
       setImagenFile(null)
       setPreviewUrl(null)
-      
+
       onClose()
     } catch (error) {
       console.error('Error submitting form:', error)
@@ -144,7 +144,7 @@ export function PedidoFormDialog({
       }
 
       setImagenFile(file)
-      
+
       // Crear preview
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -161,26 +161,26 @@ export function PedidoFormDialog({
 
   const removeImage = async () => {
     setDeletingImage(true)
-    
+
     try {
       // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
       if (pedido?.ped_imagen_url) {
         await eliminarImagenPedido(pedido.ped_imagen_url)
-        
+
         // Actualizar inmediatamente la BD para quitar la referencia
         await actualizarPedido(pedido.ped_id_int, { imagen_url: '' })
       }
-      
+
       setImagenFile(null)
       setPreviewUrl(null)
       setFormData(prev => ({ ...prev, imagen_url: '' }))
-      
+
       // Limpiar el input file
       const fileInput = document.getElementById('imagen_file') as HTMLInputElement
       if (fileInput) {
         fileInput.value = ''
       }
-      
+
       // Limpiar errores
       if (errors.imagen) {
         setErrors(prev => ({ ...prev, imagen: '' }))
@@ -190,7 +190,7 @@ export function PedidoFormDialog({
       if (error instanceof Error) {
         errorMessage = error.message
       }
-      
+
       setErrors(prev => ({ ...prev, imagen: errorMessage }))
     } finally {
       setDeletingImage(false)
@@ -201,7 +201,7 @@ export function PedidoFormDialog({
     if (!imagenFile) return null
 
     setUploadingImage(true)
-    
+
     try {
       // Si hay una imagen anterior y estamos editando, eliminarla primero
       if (pedido?.ped_imagen_url) {
@@ -217,7 +217,7 @@ export function PedidoFormDialog({
       return imageUrl
     } catch (error: any) {
       let errorMessage = 'Error al subir la imagen. Inténtalo de nuevo.'
-      
+
       if (error instanceof Error) {
         if (error.message.includes('Bucket not found')) {
           errorMessage = 'Error de configuración: Bucket no encontrado. Contacta al administrador.'
@@ -229,7 +229,7 @@ export function PedidoFormDialog({
           errorMessage = error.message
         }
       }
-      
+
       setErrors(prev => ({ ...prev, imagen: errorMessage }))
       throw error
     } finally {
@@ -264,7 +264,7 @@ export function PedidoFormDialog({
                 <SelectContent>
                   {cotizaciones.length === 0 ? (
                     <div className="p-4 text-center text-gray-500">
-                      No hay cotizaciones disponibles. 
+                      No hay cotizaciones disponibles.
                       Todas las cotizaciones ya tienen pedidos asociados.
                     </div>
                   ) : (
@@ -273,7 +273,7 @@ export function PedidoFormDialog({
                         <div className="flex flex-col">
                           <span className="font-medium">{cotizacion.cot_num_vac}</span>
                           <span className="text-sm text-gray-500">
-                            {cotizacion.persona ? 
+                            {cotizacion.persona ?
                               (cotizacion.persona.tipo === 'natural' && cotizacion.persona.persona_natural ?
                                 `${cotizacion.persona.persona_natural.per_nat_nomb_vac} ${cotizacion.persona.persona_natural.per_nat_apell_vac}` :
                                 cotizacion.persona.persona_juridica?.per_jurd_razSocial_vac
@@ -289,7 +289,7 @@ export function PedidoFormDialog({
               {errors.cotizacion_id && (
                 <p className="text-sm text-red-500 mt-1">{errors.cotizacion_id}</p>
               )}
-              
+
               {/* Mensaje cuando no hay cotizaciones disponibles */}
               {cotizaciones.length === 0 && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-2">
@@ -308,7 +308,7 @@ export function PedidoFormDialog({
                   </div>
                 </div>
               )}
-              
+
               {/* Mensaje informativo */}
               {cotizaciones.length > 0 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
@@ -324,7 +324,7 @@ export function PedidoFormDialog({
                         <ul className="list-disc list-inside space-y-1">
                           <li><strong>Solo se muestran cotizaciones disponibles</strong> (sin pedido asociado)</li>
                           <li>Se creará automáticamente con estado "PEDIDO_RECIBIDO"</li>
-                          <li>Se generará código de seguimiento único (ASL-XXXXXXXX)</li>
+                          <li>Se generará código de seguimiento único (ASL2025-XXXXX)</li>
                           <li><strong>Cada cotización solo puede tener UN pedido</strong></li>
                         </ul>
                       </div>
@@ -356,7 +356,7 @@ export function PedidoFormDialog({
                           <div className="flex flex-col">
                             <span className="font-medium">{cotizacion.cot_num_vac}</span>
                             <span className="text-sm text-gray-500">
-                              {cotizacion.persona ? 
+                              {cotizacion.persona ?
                                 (cotizacion.persona.tipo === 'natural' && cotizacion.persona.persona_natural ?
                                   `${cotizacion.persona.persona_natural.per_nat_nomb_vac} ${cotizacion.persona.persona_natural.per_nat_apell_vac}` :
                                   cotizacion.persona.persona_juridica?.per_jurd_razSocial_vac
@@ -439,7 +439,7 @@ export function PedidoFormDialog({
                       <Upload className="h-4 w-4" />
                       {previewUrl ? 'Cambiar imagen' : 'Subir imagen'}
                     </Button>
-                    
+
                     {previewUrl && (
                       <Button
                         type="button"
@@ -496,7 +496,7 @@ export function PedidoFormDialog({
                   {errors.imagen && (
                     <p className="text-sm text-red-500">{errors.imagen}</p>
                   )}
-                  
+
                   <p className="text-xs text-gray-500">
                     Formatos soportados: JPG, PNG, WebP.
                   </p>
@@ -520,8 +520,8 @@ export function PedidoFormDialog({
             <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={loading || uploadingImage || deletingImage || (!pedido && cotizaciones.length === 0)}
             >
               {(loading || uploadingImage || deletingImage) ? (
