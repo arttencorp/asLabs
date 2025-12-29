@@ -48,9 +48,6 @@ import {
   financiamientoOptions,
   validateDNI,
   validateDriveLink,
-  formatApplicationEmail,
-  generateEmailSubject,
-  RECRUITMENT_EMAIL,
 } from "../utils"
 
 export default function TrabajaConNosotrosClient() {
@@ -91,30 +88,74 @@ export default function TrabajaConNosotrosClient() {
     setSubmitStatus("loading")
 
     try {
-      // Preparar el email
-      const emailBody = formatApplicationEmail(data)
-      const emailSubject = generateEmailSubject(data)
+      const response = await fetch("/api/job-application", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+          areasPreferidas: selectedAreas,
+        }),
+      })
 
-      // Crear el mailto link
-      const mailtoLink = `mailto:${RECRUITMENT_EMAIL}?subject=${encodeURIComponent(
-        emailSubject
-      )}&body=${encodeURIComponent(emailBody)}`
+      const result = await response.json()
 
-      // Abrir el cliente de correo
-      window.location.href = mailtoLink
-
-      setSubmitStatus("success")
-      
-      // Reset form después de éxito
-      setTimeout(() => {
-        reset()
-        setSelectedAreas([])
-        setSubmitStatus("idle")
-      }, 5000)
+      if (result.success) {
+        setSubmitStatus("success")
+        window.scrollTo({ top: 0, behavior: "smooth" })
+        setTimeout(() => {
+          reset()
+          setSelectedAreas([])
+          setSubmitStatus("idle")
+        }, 8000)
+      } else {
+        setSubmitStatus("error")
+      }
     } catch (error) {
-      console.error("Error al enviar:", error)
       setSubmitStatus("error")
     }
+  }
+
+  // Si se envió exitosamente, mostrar solo el mensaje de éxito
+  if (submitStatus === "success") {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-lg w-full"
+        >
+          <Card className="shadow-2xl border-green-200">
+            <CardContent className="p-8 text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle2 className="w-10 h-10 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                ¡Postulación Enviada! 🎉
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Hemos recibido tu postulación correctamente. Nuestro equipo revisará 
+                tu perfil y te contactaremos pronto.
+              </p>
+              <p className="text-sm text-green-600 mb-6">
+                Recibirás noticias nuestras en los próximos días. ¡Gracias por tu interés en AS Laboratorios!
+              </p>
+              <Button
+                onClick={() => {
+                  reset()
+                  setSelectedAreas([])
+                  setSubmitStatus("idle")
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Enviar otra postulación
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
@@ -280,36 +321,28 @@ export default function TrabajaConNosotrosClient() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-6 md:p-8">
-                {/* Success Message */}
+                {/* Error Message */}
                 <AnimatePresence>
-                  {submitStatus === "success" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                    >
-                      <Alert className="mb-6 bg-green-50 border-green-200">
-                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                        <AlertTitle className="text-green-800">¡Postulación lista!</AlertTitle>
-                        <AlertDescription className="text-green-700">
-                          Se abrirá tu cliente de correo con los datos del formulario.
-                          Envía el correo para completar tu postulación.
-                        </AlertDescription>
-                      </Alert>
-                    </motion.div>
-                  )}
-
                   {submitStatus === "error" && (
                     <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="mb-6"
                     >
-                      <Alert className="mb-6 bg-red-50 border-red-200">
-                        <AlertCircle className="h-4 w-4 text-red-600" />
-                        <AlertTitle className="text-red-800">Error</AlertTitle>
-                        <AlertDescription className="text-red-700">
-                          Hubo un problema al preparar tu postulación. Por favor, intenta nuevamente.
+                      <Alert className="bg-red-50 border-red-300 shadow-lg">
+                        <AlertCircle className="h-5 w-5 text-red-600" />
+                        <AlertTitle className="text-red-800 text-lg font-semibold">
+                          Error al enviar postulación
+                        </AlertTitle>
+                        <AlertDescription className="text-red-700 mt-2">
+                          <p className="mb-2">
+                            Hubo un problema al procesar tu postulación. Por favor, verifica tu conexión 
+                            a internet e intenta nuevamente.
+                          </p>
+                          <p className="text-sm text-red-600">
+                            Si el problema persiste, contáctanos directamente por WhatsApp.
+                          </p>
                         </AlertDescription>
                       </Alert>
                     </motion.div>
@@ -586,24 +619,24 @@ export default function TrabajaConNosotrosClient() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-green-600 hover:bg-green-700 text-white"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white h-12 text-base font-semibold"
                       disabled={isSubmitting || submitStatus === "loading" || selectedAreas.length === 0}
                     >
                       {submitStatus === "loading" ? (
                         <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Preparando postulación...
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Enviando postulación...
                         </>
                       ) : (
                         <>
-                          <Send className="w-4 h-4 mr-2" />
+                          <Send className="w-5 h-5 mr-2" />
                           Enviar Postulación
                         </>
                       )}
                     </Button>
                     <p className="text-xs text-center text-gray-500 mt-3">
-                      Al enviar, se abrirá tu cliente de correo con los datos del formulario.
-                      Deberás enviar el correo para completar tu postulación.
+                      Tu información será revisada por nuestro equipo de Recursos Humanos.
+                      Te contactaremos pronto.
                     </p>
                   </div>
                 </form>
