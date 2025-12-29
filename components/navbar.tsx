@@ -419,6 +419,9 @@ export default function Navbar() {
                     >
                       Pitch Deck
                     </Link>
+                    <Link href="/trabaja-con-nosotros" className="hover:underline">
+                      Trabajos
+                    </Link>
                     <Link
                       href="/tienda"
                       className="block py-2 text-sm text-gray-600 hover:text-[#2e7d32] font-medium font-serif flex items-center min-h-[32px]"
