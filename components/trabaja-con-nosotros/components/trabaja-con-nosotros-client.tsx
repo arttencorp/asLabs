@@ -88,14 +88,25 @@ export default function TrabajaConNosotrosClient() {
     setSubmitStatus("loading")
 
     try {
-      const response = await fetch("/api/job-application", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json",
         },
         body: JSON.stringify({
-          ...data,
-          areasPreferidas: selectedAreas,
+          access_key: "b069c010-5e77-441c-8f1c-f36d3029d45a",
+          subject: "Nueva Postulación - Prácticas",
+          nombre: data.nombresApellidos,
+          dni: data.dni,
+          universidad: data.universidadInstituto,
+          ciclo: data.ciclo,
+          carrera: data.carrera,
+          puesto: data.puestoActual,
+          areas: selectedAreas.join(", "),
+          financiamiento: data.financiamientoTesis,
+          cv_link: data.linkCurriculum,
+          info_adicional: data.sobreUsted,
         }),
       })
 
