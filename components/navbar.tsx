@@ -118,6 +118,9 @@ export default function Navbar() {
           <Link href="/pitch-deck" className="hover:underline">
             Pitch Deck
           </Link>
+          <Link href="/trabaja-con-nosotros" className="hover:underline">
+            Trabajos
+          </Link>
           <Link href="/control-biologico" className="hover:underline font-medium">
             Control Biológico
           </Link>
