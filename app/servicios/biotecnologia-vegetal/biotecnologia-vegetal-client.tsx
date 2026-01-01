@@ -145,7 +145,7 @@ export default function BiotecnologiaVegetalClient() {
 
       <header className="relative h-[280px] overflow-hidden">
         <Image
-          src="/servicios/image.png"
+          src="/images/image.png"
           alt="Biotecnología Vegetal - Cultivo de tejidos"
           fill
           className="object-cover"

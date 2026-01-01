@@ -24,7 +24,7 @@ export default function BiotechHero() {
           <div className="md:w-1/2 relative">
             <div className="relative rounded-lg overflow-hidden shadow-lg">
               <Image
-                src="/new/HEADER.webp"
+                src="/biotech-hero.png"
                 alt="Laboratorio de biotecnología vegetal"
                 width={600}
                 height={400}

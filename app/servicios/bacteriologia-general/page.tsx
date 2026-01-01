@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/servicios/image.png",
+        url: "/images/image.png",
         width: 1200,
         height: 630,
         alt: "Bacteriología General - AS Laboratorios Trujillo",
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     title: "Bacteriología en Trujillo | AS Laboratorios Perú",
     description:
       "Fermentación, biofertilizantes, curvas de crecimiento y suspensiones McFarland. Laboratorio especializado en Trujillo, La Libertad.",
-    images: ["/servicios/image.png"],
+    images: ["/images/image.png"],
     creator: "@aslaboratorios",
   },
   robots: {
@@ -166,7 +166,7 @@ export default function BacteriologiaPage() {
         serviceType="Bacteriología y Producción de Bioinsumos"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima"]}
         offers={bacteriologiaServices.map((s) => ({ name: s.name, description: s.description }))}
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BreadcrumbStructuredData
         items={[
@@ -185,7 +185,7 @@ export default function BacteriologiaPage() {
         description="Laboratorio de bacteriología certificado en Trujillo, La Libertad, Perú. Fermentación, biofertilizantes, curvas de crecimiento y suspensiones McFarland."
         url="https://aslaboratorios.com/servicios/bacteriologia-general"
         priceRange="$$"
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BacteriologiaClient />
     </>

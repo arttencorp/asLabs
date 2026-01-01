@@ -158,7 +158,7 @@ export default function BacteriologiaClient() {
 
       <header className="relative h-[280px] overflow-hidden">
         <Image
-          src="/servicios/image.png"
+          src="/images/image.png"
           alt="Bacteriología General - Análisis microbiológico"
           fill
           className="object-cover"

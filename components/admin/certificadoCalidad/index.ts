@@ -1,6 +1,0 @@
-export { CertificadosCalidadManagement } from './components/CertificadosCalidadManagement'
-export { CertificadosCalidadTable } from './components/CertificadosCalidadTable'
-export { CertificadoCalidadFormDialog } from './components/CertificadoCalidadFormDialog'
-export { CertificadosCalidadStatsComponent as CertificadosCalidadStats } from './components/CertificadosCalidadStats'
-export { useCertificadosCalidad } from './hooks/useCertificadosCalidad'
-export * from './types/index'

@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/servicios/image.png",
+        url: "/images/image.png",
         width: 1200,
         height: 630,
         alt: "Biotecnología Vegetal - AS Laboratorios Trujillo",
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     title: "Biotecnología Vegetal en Trujillo | AS Laboratorios Perú",
     description:
       "Micropropagación in vitro, cultivo de tejidos y plantas libres de virus. Laboratorio especializado en Trujillo, La Libertad.",
-    images: ["/servicios/image.png"],
+    images: ["/images/image.png"],
     creator: "@aslaboratorios",
   },
   robots: {
@@ -157,7 +157,7 @@ export default function BiotecnologiaVegetalPage() {
         serviceType="Biotecnología Vegetal y Cultivo de Tejidos"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima", "Ica"]}
         offers={biotecnologiaServices.map((s) => ({ name: s.name, description: s.description }))}
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BreadcrumbStructuredData
         items={[
@@ -176,7 +176,7 @@ export default function BiotecnologiaVegetalPage() {
         description="Laboratorio de biotecnología vegetal certificado en Trujillo, La Libertad, Perú. Micropropagación in vitro, cultivo de tejidos y plantas libres de virus."
         url="https://aslaboratorios.com/servicios/biotecnologia-vegetal"
         priceRange="$$"
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BiotecnologiaVegetalClient />
     </>

@@ -76,11 +76,7 @@ export default function GeneticaClient() {
     },
   ]
 
-  const FloatingElement: React.FC<{ children?: React.ReactNode; delay?: number; className?: string }> = ({
-    children,
-    delay = 0,
-    className = "",
-  }) => (
+  const FloatingElement = ({ children, delay = 0, className = "" }) => (
     <div
       className={`floating-element ${className}`}
       style={{
@@ -99,7 +95,7 @@ export default function GeneticaClient() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 relative overflow-hidden">
         {/* Elementos decorativos animados mejorados */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <FloatingElement className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-200 to-purple-200 rounded-full opacity-20"/>
+          <FloatingElement className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-200 to-purple-200 rounded-full opacity-20" />
           <FloatingElement
             delay={1}
             className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-r from-green-200 to-blue-200 rounded-full opacity-20"

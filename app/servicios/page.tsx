@@ -155,7 +155,7 @@ const servicios = [
       "Análisis de suelos agrícolas",
       "Presencia de hongos y bacterias",
     ],
-    image: "/servicios/fito.jpg",
+    image: "/images/image.png",
     count: 6,
   },
   {
@@ -169,7 +169,7 @@ const servicios = [
     borderColor: "border-emerald-200",
     textColor: "text-emerald-600",
     services: ["Recuento aerobios mesófilos", "Coliformes totales/fecales", "Detección E. coli", "Medición de pH"],
-    image: "/servicios/ambiente.jpg",
+    image: "/images/image.png",
     count: 7,
   },
   {
@@ -183,7 +183,7 @@ const servicios = [
     borderColor: "border-blue-200",
     textColor: "text-blue-600",
     services: ["Análisis de alimentos", "Control de calidad", "Detección de patógenos", "Recuentos microbianos"],
-    image: "/servicios/micro.jpeg",
+    image: "/images/image.png",
     count: 48,
   },
   {
@@ -197,7 +197,7 @@ const servicios = [
     borderColor: "border-teal-200",
     textColor: "text-teal-600",
     services: ["Micropropagación", "Cultivo in vitro", "Termoterapia", "Criopreservación"],
-    image: "/servicios/image.png",
+    image: "/images/image.png",
     count: 14,
   },
   {
@@ -211,7 +211,7 @@ const servicios = [
     borderColor: "border-purple-200",
     textColor: "text-purple-600",
     services: ["Suspensiones bacterianas", "Fermentación", "Biofertilizantes", "Curvas de crecimiento"],
-    image: "/servicios/image.png",
+    image: "/images/image.png",
     count: 13,
   },
 ]

@@ -1,7 +1,6 @@
 import type React from "react"
 import "./globals.css"
 import { DM_Serif_Text } from "next/font/google"
-import { Poppins } from "next/font/google"
 import type { Metadata, Viewport } from "next"
 import {
   OrganizationStructuredData,
@@ -15,13 +14,6 @@ const dmSerifText = DM_Serif_Text({
   display: "swap",
   variable: "--font-dm-serif",
   preload: true,
-})
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-poppins",
 })
 
 export const viewport: Viewport = {
@@ -156,7 +148,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={`${dmSerifText.variable} ${poppins.variable}`}>
+    <html lang="es-PE" className={`${dmSerifText.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

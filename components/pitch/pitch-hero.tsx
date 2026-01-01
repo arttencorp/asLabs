@@ -23,13 +23,13 @@ export default function PitchHero() {
                 className="inline-block bg-[#2e7d32] text-white px-6 py-3 rounded-md hover:bg-[#1b5e20] transition-colors"
               >
                 Contactar
-              </Link>{/*
+              </Link>
               <Link
                 href="#descargar"
                 className="inline-block border border-[#2e7d32] text-[#2e7d32] px-6 py-3 rounded-md hover:bg-[#e8f5e9] transition-colors"
               >
                 Descargar PDF
-              </Link> */}
+              </Link>
             </div>
           </div>
           <div className="md:w-1/2 relative">

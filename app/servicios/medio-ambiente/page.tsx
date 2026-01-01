@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/servicios/image.png",
+        url: "/images/image.png",
         width: 1200,
         height: 630,
         alt: "Análisis Microbiológico Ambiental - AS Laboratorios Trujillo",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     title: "Análisis Ambiental en Trujillo | AS Laboratorios Perú",
     description:
       "Control de calidad microbiológica certificado. Análisis de agua, superficies y ambientes en Trujillo, La Libertad.",
-    images: ["/servicios/image.png"],
+    images: ["/images/image.png"],
     creator: "@aslaboratorios",
   },
   robots: {
@@ -156,7 +156,7 @@ export default function MedioAmbientePage() {
         serviceType="Análisis Microbiológico Ambiental"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima"]}
         offers={medioAmbienteServices.map((s) => ({ name: s.name, description: s.description }))}
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BreadcrumbStructuredData
         items={[
@@ -175,7 +175,7 @@ export default function MedioAmbientePage() {
         description="Laboratorio de análisis microbiológico ambiental certificado en Trujillo, La Libertad, Perú. Control de calidad de agua, superficies y ambientes."
         url="https://aslaboratorios.com/servicios/medio-ambiente"
         priceRange="$$"
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <MedioAmbienteClient />
     </>

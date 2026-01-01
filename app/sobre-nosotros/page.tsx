@@ -9,6 +9,7 @@ import AboutUsFramework from "@/components/about-us/about-us-framework"
 import AboutUsValues from "@/components/about-us/about-us-values"
 import AboutUsMindsets from "@/components/about-us/about-us-mindsets"
 import AboutUsHeadquarters from "@/components/about-us/about-us-headquarters"
+import AboutUsTeam from "@/components/about-us/about-us-team"
 
 export const metadata: Metadata = constructMetadata({
   title: "Sobre Nosotros",
@@ -24,6 +25,7 @@ export default function SobreNosotros() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <AboutUsHeader />
+      <AboutUsTeam />
       <AboutUsStats />
       <AboutUsImpact />
       <AboutUsFramework />

@@ -6,7 +6,7 @@ type MetadataProps = {
   keywords?: string[]
   image?: string
   path?: string
-  type?: "website" | "article"
+  type?: "website" | "article" | "product"
   publishedTime?: string
   modifiedTime?: string
 }

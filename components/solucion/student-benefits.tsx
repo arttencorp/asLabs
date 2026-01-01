@@ -23,7 +23,7 @@ export default function StudentBenefits() {
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-100 rounded-full opacity-70"></div>
               <div className="relative bg-white rounded-xl shadow-xl overflow-hidden border-2 border-green-100 transform rotate-1">
                 <Image
-                  src="/unt-students.png"
+                  src="/unt-benefits.png"
                   alt="Estudiantes UNT en laboratorio"
                   width={600}
                   height={400}

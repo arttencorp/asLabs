@@ -121,7 +121,7 @@ export default function FitopatologiaClient() {
 
       <header className="relative h-[280px] overflow-hidden">
         <Image
-          src="/servicios/fito.jpg"
+          src="/images/image.png"
           alt="Fitopatología - Análisis de plantas"
           fill
           className="object-cover"

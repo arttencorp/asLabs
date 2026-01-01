@@ -1,533 +1,399 @@
 "use client"
 
 import type React from "react"
+
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Search, Package, Truck, CheckCircle, Clock, MapPin, Phone, Mail, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Search, Package, MapPin, Calendar, User, Phone, Mail, Loader2, Eye, AlertCircle, CheckCircle } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { obtenerPedidoPorCodigo } from "@/lib/supabase"
-import { formatCurrency, formatDate, getNombreCompleto, getDocumentoCliente, calcularTotalCotizacion } from "@/utils"
-import { ESTADOS_SEGUIMIENTO } from "@/constants/seguimiento"
-import type { Pedido } from "@/components/admin/pedidos/types"
+import { Separator } from "@/components/ui/separator"
+import Navbar from "@/components/navbar"
+import Footer from "@/components/footer"
+
+interface OrderStatus {
+  id: string
+  status: "pendiente" | "procesando" | "enviado" | "entregado"
+  customer: string
+  email: string
+  phone: string
+  address: string
+  items: Array<{
+    name: string
+    quantity: number
+    price: number
+  }>
+  total: number
+  orderDate: string
+  estimatedDelivery: string
+  trackingEvents: Array<{
+    date: string
+    status: string
+    location: string
+    description: string
+  }>
+}
+
+// Datos de ejemplo para demostración
+const mockOrders: OrderStatus[] = [
+  {
+    id: "ASL-2024-001",
+    status: "enviado",
+    customer: "María González",
+    email: "maria.gonzalez@email.com",
+    phone: "+51 987 654 321",
+    address: "Av. Larco 123, Trujillo, La Libertad",
+    items: [
+      { name: "Kit de Microbiología Básica", quantity: 1, price: 150 },
+      { name: "Placas Petri (Pack 50)", quantity: 2, price: 80 },
+    ],
+    total: 310,
+    orderDate: "2024-01-15",
+    estimatedDelivery: "2024-01-22",
+    trackingEvents: [
+      {
+        date: "2024-01-15 09:00",
+        status: "Pedido confirmado",
+        location: "AS Laboratorios - Trujillo",
+        description: "Tu pedido ha sido confirmado y está siendo preparado",
+      },
+      {
+        date: "2024-01-16 14:30",
+        status: "En preparación",
+        location: "AS Laboratorios - Trujillo",
+        description: "Los productos están siendo empaquetados",
+      },
+      {
+        date: "2024-01-17 10:15",
+        status: "Enviado",
+        location: "Centro de distribución - Trujillo",
+        description: "Tu pedido ha sido enviado y está en camino",
+      },
+    ],
+  },
+  {
+    id: "ASL-2024-002",
+    status: "entregado",
+    customer: "Carlos Mendoza",
+    email: "carlos.mendoza@email.com",
+    phone: "+51 976 543 210",
+    address: "Jr. Bolívar 456, Lima, Lima",
+    items: [
+      { name: "Plantines de Banano Baby", quantity: 10, price: 25 },
+      { name: "Medio de Cultivo MS", quantity: 5, price: 45 },
+    ],
+    total: 475,
+    orderDate: "2024-01-10",
+    estimatedDelivery: "2024-01-18",
+    trackingEvents: [
+      {
+        date: "2024-01-10 11:00",
+        status: "Pedido confirmado",
+        location: "AS Laboratorios - Trujillo",
+        description: "Tu pedido ha sido confirmado",
+      },
+      {
+        date: "2024-01-11 15:20",
+        status: "En preparación",
+        location: "AS Laboratorios - Trujillo",
+        description: "Preparando plantines con cuidado especial",
+      },
+      {
+        date: "2024-01-12 08:45",
+        status: "Enviado",
+        location: "Centro de distribución - Trujillo",
+        description: "Enviado con transporte especializado para plantas",
+      },
+      {
+        date: "2024-01-18 16:30",
+        status: "Entregado",
+        location: "Jr. Bolívar 456, Lima",
+        description: "Pedido entregado exitosamente",
+      },
+    ],
+  },
+]
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "pendiente":
+      return "bg-yellow-100 text-yellow-800"
+    case "procesando":
+      return "bg-blue-100 text-blue-800"
+    case "enviado":
+      return "bg-purple-100 text-purple-800"
+    case "entregado":
+      return "bg-green-100 text-green-800"
+    default:
+      return "bg-gray-100 text-gray-800"
+  }
+}
+
+const getStatusIcon = (status: string) => {
+  switch (status) {
+    case "pendiente":
+      return <Clock className="h-4 w-4" />
+    case "procesando":
+      return <Package className="h-4 w-4" />
+    case "enviado":
+      return <Truck className="h-4 w-4" />
+    case "entregado":
+      return <CheckCircle className="h-4 w-4" />
+    default:
+      return <Clock className="h-4 w-4" />
+  }
+}
 
 export default function SeguimientoClient() {
-  const [codigo, setCodigo] = useState("")
-  const [pedido, setPedido] = useState<Pedido | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [searched, setSearched] = useState(false)
+  const [trackingNumber, setTrackingNumber] = useState("")
+  const [searchResult, setSearchResult] = useState<OrderStatus | null>(null)
+  const [isSearching, setIsSearching] = useState(false)
+  const [error, setError] = useState("")
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!codigo.trim()) {
-      setError("Por favor ingresa un código de seguimiento")
+  const handleSearch = async () => {
+    if (!trackingNumber.trim()) {
+      setError("Por favor ingresa un número de seguimiento")
       return
     }
 
-    setLoading(true)
-    setError(null)
-    setPedido(null)
-    setSearched(false)
+    setIsSearching(true)
+    setError("")
 
-    try {
-      const pedidoEncontrado = await obtenerPedidoPorCodigo(codigo.trim())
-
-      if (pedidoEncontrado) {
-        setPedido(pedidoEncontrado)
+    // Simular búsqueda
+    setTimeout(() => {
+      const order = mockOrders.find((o) => o.id.toLowerCase() === trackingNumber.toLowerCase())
+      if (order) {
+        setSearchResult(order)
+        setError("")
       } else {
-        setError("No se encontró ningún pedido con ese código de seguimiento")
+        setSearchResult(null)
+        setError("No se encontró ningún pedido con ese número de seguimiento")
       }
-      setSearched(true)
-    } catch {
-      setError("Error al buscar el pedido. Inténtalo de nuevo.")
-      setSearched(true)
-    } finally {
-      setLoading(false)
+      setIsSearching(false)
+    }, 1000)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch()
     }
-  }
-
-  const getEstadoInfo = (estadoTipo: number) => {
-    return ESTADOS_SEGUIMIENTO.find((e) => e.id === estadoTipo) || ESTADOS_SEGUIMIENTO[0]
-  }
-
-  const getEstadoIndex = (estadoTipo: number) => {
-    return ESTADOS_SEGUIMIENTO.findIndex((e) => e.id === estadoTipo)
-  }
-
-  // Función para obtener estados que debe ver el cliente según el estado actual del pedido
-  const getEstadosVisibles = (estadoActual: number) => {
-    // Estados del flujo normal (siempre visibles)
-    const estadosNormales = ESTADOS_SEGUIMIENTO.filter(estado => 
-      [1, 2, 3, 4, 5, 6].includes(estado.id) // PEDIDO_RECIBIDO, PAGO_VERIFICADO, PREPARANDO, EMPACANDO, ENVIADO, RECIBIDO
-    )
-
-    // Si el pedido está cancelado, mostrar solo hasta donde llegó + CANCELADO
-    if (estadoActual === 7) { // CANCELADO
-      const estadoCancelado = ESTADOS_SEGUIMIENTO.find(e => e.id === 7)
-      return estadoCancelado ? [...estadosNormales, estadoCancelado] : estadosNormales
-    }
-
-    // Si el pedido está en reembolso, mostrar flujo completo + REEMBOLSO
-    if (estadoActual === 8) { // REEMBOLSO
-      const estadoReembolso = ESTADOS_SEGUIMIENTO.find(e => e.id === 8)
-      return estadoReembolso ? [...estadosNormales, estadoReembolso] : estadosNormales
-    }
-
-    // Si el pedido está en pago contraentrega, mostrar flujo hasta enviado + PAGO_CONTRAENTREGA + RECIBIDO
-    if (estadoActual === 9) { // PAGO_CONTRAENTREGA
-      const estadosHastaEnviado = ESTADOS_SEGUIMIENTO.filter(estado => 
-        [1, 2, 3, 4, 5].includes(estado.id) // Hasta ENVIADO
-      )
-      const estadoPagoContraentrega = ESTADOS_SEGUIMIENTO.find(e => e.id === 9)
-      const estadoRecibido = ESTADOS_SEGUIMIENTO.find(e => e.id === 6) // RECIBIDO como paso final
-      
-      const estadosVisibles = [...estadosHastaEnviado]
-      if (estadoPagoContraentrega) estadosVisibles.push(estadoPagoContraentrega)
-      if (estadoRecibido) estadosVisibles.push(estadoRecibido)
-      
-      return estadosVisibles
-    }
-
-    // Para cualquier otro estado, solo mostrar flujo normal
-    return estadosNormales
-  }
-
-  const getTotalPedido = (pedido: Pedido): number => {
-    if (!pedido.cotizacion?.detalle_cotizacion) return 0
-
-    const { total } = calcularTotalCotizacion(
-      pedido.cotizacion.detalle_cotizacion.map(d => ({
-        cantidad: d.det_cot_cant_int,
-        precio: d.det_cot_prec_hist_int
-      })),
-      pedido.cotizacion.cot_igv_bol
-    )
-
-    return total
-  }
-
-  const getProductosTexto = (pedido: Pedido): string => {
-    if (!pedido.cotizacion?.detalle_cotizacion) return 'Sin productos'
-
-    return pedido.cotizacion.detalle_cotizacion
-      .map(d => `${d.producto?.pro_nomb_vac || 'Producto'} (${d.det_cot_cant_int})`)
-      .join(', ')
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
+    <div className="min-h-screen bg-gray-50 font-serif">
+      <Navbar />
+
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Seguimiento de Pedidos</h1>
-              <p className="text-gray-600 mt-2">Rastrea tu pedido en tiempo real</p>
-            </div>
-            <div className="hidden md:flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm text-gray-500">¿Necesitas ayuda?</p>
-                <p className="text-sm font-medium text-blue-600">ventas@aslaboratorios.com</p>
-              </div>
-            </div>
-          </div>
+      <div className="bg-gradient-to-r from-[#2e7d32] to-[#4caf50] text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Seguimiento de Pedidos</h1>
+          <p className="text-xl mb-2">Rastrea tu pedido en tiempo real</p>
+          <p className="text-lg opacity-90">Contacto: ventas@aslaboratorios.com | +51 961 996 645</p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Search Form */}
-        <Card className="max-w-2xl mx-auto mb-8">
-          <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center gap-2">
-              <Search className="h-6 w-6 text-blue-600" />
-              Buscar Pedido
-            </CardTitle>
-            <CardDescription>Ingresa tu código de seguimiento para ver el estado de tu pedido</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSearch} className="space-y-4">
-              <div className="flex gap-2">
+      {/* Search Section */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-2xl mx-auto">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center text-2xl">Buscar Pedido</CardTitle>
+              <CardDescription className="text-center">
+                Ingresa tu número de seguimiento para ver el estado de tu pedido
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-4">
                 <Input
-                  type="text"
-                  placeholder="Ej: ASL-ABC123XY"
-                  value={codigo}
-                  onChange={(e) => setCodigo(e.target.value.toUpperCase())}
-                  className="flex-1 text-center font-mono text-lg"
-                  maxLength={12}
-                  disabled={loading}
+                  placeholder="Ej: ASL-2024-001"
+                  value={trackingNumber}
+                  onChange={(e) => setTrackingNumber(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="flex-1"
                 />
-                <Button type="submit" disabled={loading || !codigo.trim()}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 text-white" />}
+                <Button onClick={handleSearch} disabled={isSearching} className="bg-[#2e7d32] hover:bg-[#1b5e20]">
+                  {isSearching ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  ) : (
+                    <Search className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
-              <p className="text-sm text-gray-500 text-center">
-                El código de seguimiento se encuentra en tu confirmación de pedido
-              </p>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Error Alert */}
-        {error && (
-          <Alert variant="destructive" className="max-w-2xl mx-auto mb-8">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {/* No Results */}
-        {searched && !pedido && !error && !loading && (
-          <Card className="max-w-2xl mx-auto">
-            <CardContent className="text-center py-12">
-              <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontró el pedido</h3>
-              <p className="text-gray-500 mb-4">Verifica que el código de seguimiento sea correcto</p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setCodigo("")
-                  setSearched(false)
-                  setError(null)
-                }}
-              >
-                Intentar de nuevo
-              </Button>
+              {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
             </CardContent>
           </Card>
-        )}
 
-        {/* Order Details */}
-        {pedido && (
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Order Header */}
+          {/* Demo Numbers */}
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h3 className="font-semibold text-blue-900 mb-2">Números de prueba:</h3>
+            <div className="flex flex-wrap gap-2">
+              <Badge
+                variant="outline"
+                className="cursor-pointer hover:bg-blue-100"
+                onClick={() => setTrackingNumber("ASL-2024-001")}
+              >
+                ASL-2024-001
+              </Badge>
+              <Badge
+                variant="outline"
+                className="cursor-pointer hover:bg-blue-100"
+                onClick={() => setTrackingNumber("ASL-2024-002")}
+              >
+                ASL-2024-002
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Search Results */}
+        {searchResult && (
+          <div className="max-w-4xl mx-auto mt-12">
             <Card>
               <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="flex justify-between items-start">
                   <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Package className="h-6 w-6 text-blue-600" />
-                      Pedido {pedido.ped_cod_segui_vac}
-                    </CardTitle>
-                    <CardDescription className="mt-2">
-                      Código de seguimiento:{" "}
-                      <span className="font-mono font-bold text-blue-600">{pedido.ped_cod_segui_vac}</span>
+                    <CardTitle className="text-2xl">Pedido {searchResult.id}</CardTitle>
+                    <CardDescription>
+                      Realizado el {new Date(searchResult.orderDate).toLocaleDateString("es-PE")}
                     </CardDescription>
-                    {pedido.cotizacion && (
-                      <CardDescription className="mt-1">
-                        Cotización: {pedido.cotizacion.cot_num_vac}
-                      </CardDescription>
-                    )}
                   </div>
-                  <div className="text-right">
-                    {pedido.estado_pedido && (
-                      <Badge className={`${getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int || 1).color} text-sm px-3 py-1`}>
-                        {getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int || 1).nombre}
-                      </Badge>
-                    )}
-                    <p className="text-sm text-gray-500 mt-1">Total: {formatCurrency(getTotalPedido(pedido))}</p>
-                  </div>
+                  <Badge className={getStatusColor(searchResult.status)}>
+                    {getStatusIcon(searchResult.status)}
+                    <span className="ml-1 capitalize">{searchResult.status}</span>
+                  </Badge>
                 </div>
-              </CardHeader>
-            </Card>
-
-            {/* Progress Timeline */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Estado del Pedido</CardTitle>
-                {pedido.estado_pedido && (
-                  <CardDescription>
-                    {getEstadoInfo(pedido.estado_pedido.est_ped_tipo_int || 1).descripcion}
-                  </CardDescription>
-                )}
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {getEstadosVisibles(pedido.estado_pedido?.est_ped_tipo_int || 1).map((estado, index) => {
-                    const currentEstadoTipo = pedido.estado_pedido?.est_ped_tipo_int || 1
-                    const estadosVisibles = getEstadosVisibles(currentEstadoTipo)
-                    const isCompleted = estadosVisibles.findIndex(e => e.id === currentEstadoTipo) >= index
-                    const isCurrent = currentEstadoTipo === estado.id
-
-                    return (
-                      <div key={estado.id} className="flex items-center gap-4">
-                        <div
-                          className={`
-                          w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all
-                          ${isCompleted ? "bg-green-500 text-white" : "bg-gray-200 text-gray-500"}
-                          ${isCurrent ? "ring-4 ring-green-200 scale-110" : ""}
-                        `}
-                        >
-                          {isCompleted ? <CheckCircle className="h-4 w-4" /> : index + 1}
-                        </div>
-                        <div className="flex-1">
-                          <h4 className={`font-medium ${isCompleted ? "text-green-700" : "text-gray-500"}`}>
-                            {estado.nombre}
-                          </h4>
-                          <p className="text-sm text-gray-500">{estado.descripcion}</p>
-                        </div>
-                        {isCurrent && (
-                          <div className="text-sm text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
-                            Estado actual
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Order Details */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Products */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Package className="h-5 w-5" />
-                    Productos
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {pedido.cotizacion?.detalle_cotizacion?.map((detalle, index) => (
-                      <div key={index} className="flex justify-between items-center py-2 border-b last:border-b-0">
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-900">
-                            {detalle.producto?.pro_nomb_vac || 'Producto sin nombre'}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Cantidad: {detalle.det_cot_cant_int} | Precio: {formatCurrency(detalle.det_cot_prec_hist_int)}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium">
-                            {formatCurrency(detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int)}
-                          </p>
-                        </div>
-                      </div>
-                    )) || (
-                        <p className="text-gray-500 text-center py-4">No hay productos disponibles</p>
-                      )}
-
-                    <div className="pt-2 border-t">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Total:</span>
-                        <span className="font-bold text-lg">{formatCurrency(getTotalPedido(pedido))}</span>
-                      </div>
-                      {pedido.cotizacion?.cot_igv_bol && (
-                        <p className="text-xs text-gray-500 text-right">Incluye IGV</p>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Customer Info */}
-              {pedido.cotizacion?.persona && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5" />
-                      Información del Cliente
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Customer Info */}
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Información del Cliente</h3>
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gray-400" />
-                        <span>{getNombreCompleto(pedido.cotizacion.persona)}</span>
+                        <div className="font-medium">{searchResult.customer}</div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-gray-400" />
-                        <span>{pedido.cotizacion.persona.per_email_vac}</span>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Mail className="h-4 w-4" />
+                        {searchResult.email}
                       </div>
-                      {pedido.cotizacion.persona.per_telef_int && (
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-gray-400" />
-                          <span>{pedido.cotizacion.persona.per_telef_int}</span>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Phone className="h-4 w-4" />
+                        {searchResult.phone}
+                      </div>
+                      <div className="flex items-start gap-2 text-gray-600">
+                        <MapPin className="h-4 w-4 mt-1" />
+                        <div>{searchResult.address}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Details */}
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4">Detalles del Pedido</h3>
+                    <div className="space-y-3">
+                      {searchResult.items.map((item, index) => (
+                        <div key={index} className="flex justify-between">
+                          <div>
+                            <div className="font-medium">{item.name}</div>
+                            <div className="text-sm text-gray-600">Cantidad: {item.quantity}</div>
+                          </div>
+                          <div className="font-medium">S/ {item.price}</div>
                         </div>
-                      )}
-                      {pedido.cotizacion.persona.per_direc_vac && (
-                        <div className="flex items-start gap-2">
-                          <MapPin className="h-4 w-4 text-gray-400 mt-0.5" />
-                          <span className="text-sm">{pedido.cotizacion.persona.per_direc_vac}</span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">
-                          {getDocumentoCliente(pedido.cotizacion.persona)}
+                      ))}
+                      <Separator />
+                      <div className="flex justify-between font-bold text-lg">
+                        <span>Total:</span>
+                        <span>S/ {searchResult.total}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          Entrega estimada: {new Date(searchResult.estimatedDelivery).toLocaleDateString("es-PE")}
                         </span>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Order Timeline */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Historial del Pedido
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Imagen del Pedido - Lado Izquierdo */}
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
-                      <Package className="h-4 w-4" />
-                      Imagen del Pedido
-                    </h4>
-                    {pedido.ped_imagen_url ? (
-                      <div className="space-y-3">
-                        <div className="border border-gray-200 rounded-lg overflow-hidden">
-                          <img
-                            src={pedido.ped_imagen_url}
-                            alt="Imagen del pedido"
-                            className="w-full h-48 object-cover"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.style.display = 'none'
-                              target.nextElementSibling?.classList.remove('hidden')
-                            }}
-                          />
-                          <div className="hidden bg-gray-100 h-48 flex items-center justify-center">
-                            <div className="text-center text-gray-500">
-                              <Package className="h-8 w-8 mx-auto mb-2" />
-                              <p className="text-sm">Error al cargar imagen</p>
-                            </div>
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open(pedido.ped_imagen_url, '_blank')}
-                          className="w-full flex items-center gap-2"
-                        >
-                          <Eye className="h-4 w-4" />
-                          Ver completo
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="border border-gray-200 rounded-lg bg-gray-50 h-48 flex items-center justify-center">
-                        <div className="text-center text-gray-500">
-                          <Package className="h-8 w-8 mx-auto mb-2" />
-                          <p className="text-sm">No hay imagen disponible</p>
-                          <p className="text-xs">Se agregará cuando el pedido esté en preparación</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Historial - Lado Derecho */}
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      Cronología
-                    </h4>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4 p-3 bg-blue-50 rounded-lg">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <div className="flex-1">
-                          <p className="font-medium">Pedido creado</p>
-                          <p className="text-sm text-gray-500">
-                            {formatDate(pedido.ped_fec_pedido_dt, { includeTime: true })}
-                          </p>
-                        </div>
-                      </div>
-
-                      {pedido.ped_fec_actualizada_dt !== pedido.ped_fec_pedido_dt && (
-                        <div className="flex items-center gap-4 p-3 bg-green-50 rounded-lg">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <div className="flex-1">
-                            <p className="font-medium">Última actualización</p>
-                            <p className="text-sm text-gray-500">
-                              {formatDate(pedido.ped_fec_actualizada_dt, { includeTime: true })}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {pedido.ped_cod_rastreo_vac && (
-                        <div className="flex items-center gap-4 p-3 bg-purple-50 rounded-lg">
-                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                          <div className="flex-1">
-                            <p className="font-medium">Código de rastreo asignado</p>
-                            <p className="text-sm text-gray-500 font-mono">{pedido.ped_cod_rastreo_vac}</p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/*pedido.ped_observacion_vac && (
-                        <div className="flex items-start gap-4 p-3 bg-yellow-50 rounded-lg">
-                          <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                          <div className="flex-1">
-                            <p className="font-medium">Observaciones</p>
-                            <p className="text-sm text-gray-600">{pedido.ped_observacion_vac}</p>
-                          </div>
-                        </div>
-                      )*/}
-
-                      {/* Información adicional de la cotización */}
-                      {pedido.cotizacion?.informacion_adicional && (
-                        <>
-                          {pedido.cotizacion.informacion_adicional.inf_ad_lug_recojo_vac && (
-                            <div className="flex items-start gap-4 p-3 bg-orange-50 rounded-lg">
-                              <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
-                              <div className="flex-1">
-                                <p className="font-medium">Lugar de recojo</p>
-                                <p className="text-sm text-gray-600">
-                                  {pedido.cotizacion.informacion_adicional.inf_ad_lug_recojo_vac}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-
-                          {pedido.cotizacion.informacion_adicional.inf_ad_form_entr_vac && (
-                            <div className="flex items-start gap-4 p-3 bg-teal-50 rounded-lg">
-                              <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
-                              <div className="flex-1">
-                                <p className="font-medium">Forma de entrega</p>
-                                <p className="text-sm text-gray-600">
-                                  {pedido.cotizacion.informacion_adicional.inf_ad_form_entr_vac}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Contact Section */}
-            <Card>
-              <CardContent className="text-center py-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">¿Tienes alguna pregunta sobre tu pedido?</h3>
-                <p className="text-gray-600 mb-4">Nuestro equipo de atención al cliente está aquí para ayudarte</p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button variant="outline" className="flex items-center gap-2 bg-transparent">
-                    <Mail className="h-4 w-4" />
-                    ventas@aslaboratorios.com
-                  </Button>
-                  <Button variant="outline" className="flex items-center gap-2 bg-transparent">
-                    <Phone className="h-4 w-4" />
-                    +51 961 996 645
-                  </Button>
+                {/* Tracking Timeline */}
+                <div className="mt-8">
+                  <h3 className="font-semibold text-lg mb-6">Historial de Seguimiento</h3>
+                  <div className="space-y-4">
+                    {searchResult.trackingEvents.map((event, index) => (
+                      <div key={index} className="flex gap-4">
+                        <div className="flex flex-col items-center">
+                          <div className="w-3 h-3 bg-[#2e7d32] rounded-full"></div>
+                          {index < searchResult.trackingEvents.length - 1 && (
+                            <div className="w-0.5 h-16 bg-gray-300 mt-2"></div>
+                          )}
+                        </div>
+                        <div className="flex-1 pb-8">
+                          <div className="flex justify-between items-start mb-1">
+                            <h4 className="font-medium">{event.status}</h4>
+                            <span className="text-sm text-gray-500">
+                              {new Date(event.date).toLocaleString("es-PE")}
+                            </span>
+                          </div>
+                          <p className="text-gray-600 text-sm mb-1">{event.description}</p>
+                          <p className="text-gray-500 text-xs">{event.location}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
         )}
+
+        {/* Contact Section */}
+        <div className="max-w-4xl mx-auto mt-12">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">¿Necesitas Ayuda?</CardTitle>
+              <CardDescription className="text-center">
+                Nuestro equipo está aquí para ayudarte con cualquier consulta sobre tu pedido
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-6 text-center">
+                <div className="space-y-2">
+                  <Phone className="h-8 w-8 mx-auto text-[#2e7d32]" />
+                  <h3 className="font-semibold">Teléfono</h3>
+                  <p className="text-gray-600">+51 961 996 645</p>
+                  <p className="text-sm text-gray-500">Lun - Vie: 8:00 AM - 6:00 PM</p>
+                </div>
+                <div className="space-y-2">
+                  <Mail className="h-8 w-8 mx-auto text-[#2e7d32]" />
+                  <h3 className="font-semibold">Email</h3>
+                  <p className="text-gray-600">ventas@aslaboratorios.com</p>
+                  <p className="text-sm text-gray-500">Respuesta en 24 horas</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-8 w-8 mx-auto bg-[#25D366] rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                  </div>
+                  <h3 className="font-semibold">WhatsApp</h3>
+                  <a
+                    href="https://wa.me/51961996645"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#25D366] hover:underline"
+                  >
+                    Chatear ahora
+                  </a>
+                  <p className="text-sm text-gray-500">Respuesta inmediata</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
+
+      <Footer />
     </div>
   )
 }

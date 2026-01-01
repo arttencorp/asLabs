@@ -28,27 +28,23 @@ export default function GeographicChart({ dateRange }: GeographicChartProps) {
     setLoading(true)
     try {
       const { data: orders } = await supabase
-        .from("Pedidos")
+        .from("pedidos")
         .select(`
-          ped_total_int,
-          cotizacion:Cotizaciones!inner(
-            persona:Personas(per_direc_vac)
-          )
+          total,
+          clientes (ciudad)
         `)
-        .gte("ped_fec_dt", format(dateRange.from, "yyyy-MM-dd"))
-        .lte("ped_fec_dt", format(dateRange.to, "yyyy-MM-dd"))
+        .gte("fecha_pedido", format(dateRange.from, "yyyy-MM-dd"))
+        .lte("fecha_pedido", format(dateRange.to, "yyyy-MM-dd"))
 
       const cityStats =
         orders?.reduce(
           (acc, order) => {
-            // Extract city from address (simplified for now)
-            const address = order.cotizacion?.[0]?.persona?.[0]?.per_direc_vac || ""
-            const city = address ? address.split(",")[0] || "Sin especificar" : "Sin especificar"
+            const city = order.clientes?.ciudad || "Sin especificar"
             if (!acc[city]) {
               acc[city] = { orders: 0, revenue: 0 }
             }
             acc[city].orders += 1
-            acc[city].revenue += order.ped_total_int || 0
+            acc[city].revenue += order.total || 0
             return acc
           },
           {} as Record<string, { orders: number; revenue: number }>,

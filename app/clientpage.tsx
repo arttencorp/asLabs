@@ -8,8 +8,6 @@ import Footer from "@/components/footer"
 import OfferCarousel from "@/components/offer-carousel"
 import TeamMemberSection from "@/components/team-member-section"
 import JourneySection from "@/components/journey-section"
-import HomeResearchSection from "@/components/home-research-section"
-import { OrganizationStructuredData } from "@/components/structured-data"
 
 export default function ClientPage() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -80,21 +78,16 @@ export default function ClientPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <OrganizationStructuredData />
       <Navbar />
 
       {/* Hero Section with Video Background */}
       <section className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh]">
-        {/* Image Background - Replace video section */}
+        {/* Video Background */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <Image
-            src="/lab-header-bg.jpg"
-            alt="Modern laboratory with scientists working"
-            fill
-            style={{ objectFit: "cover" }}
-            className="w-full h-full"
-            priority
-          />
+          <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+            <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tecnalia-home-2025-6nnpnOerfOTzGhqWYaAA99f7xUBt0i.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
           {/* Overlay to ensure text readability */}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
@@ -306,9 +299,6 @@ export default function ClientPage() {
 
       {/* What We Offer Section */}
       <OfferCarousel />
-
-      {/* Research Section - Added after "What We Offer" */}
-      <HomeResearchSection />
 
       {/* Team Member Section */}
       <TeamMemberSection />

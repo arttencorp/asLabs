@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/servicios/image.png",
+        url: "/images/image.png",
         width: 1200,
         height: 630,
         alt: "Servicios Microbiológicos - AS Laboratorios Trujillo",
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     title: "Análisis Microbiológicos en Trujillo | AS Laboratorios Perú",
     description:
       "Análisis microbiológicos certificados: alimentos, agua, leche, cosméticos. Detección de Salmonella, Listeria, E. coli y más.",
-    images: ["/servicios/image.png"],
+    images: ["/images/image.png"],
     creator: "@aslaboratorios",
   },
   robots: {
@@ -164,7 +164,7 @@ export default function MicrobiologicosPage() {
         serviceType="Análisis Microbiológicos de Alimentos y Aguas"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima", "Ica", "Arequipa"]}
         offers={microbiologicosServices.map((s) => ({ name: s.name, description: s.description }))}
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BreadcrumbStructuredData
         items={[
@@ -183,7 +183,7 @@ export default function MicrobiologicosPage() {
         description="Laboratorio de análisis microbiológicos certificado en Trujillo, La Libertad, Perú. Análisis de alimentos, agua, leche y cosméticos. Detección de patógenos."
         url="https://aslaboratorios.com/servicios/microbiologicos"
         priceRange="$$"
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <MicrobiologicosClient />
     </>

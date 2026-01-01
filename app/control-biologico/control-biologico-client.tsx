@@ -79,7 +79,7 @@ export function ControlBiologicoClient() {
         {/* Hero Section */}
         <section className="relative h-[400px] overflow-hidden">
           <Image
-            src="/servicios/image.png"
+            src="/images/image.png"
             alt="Control Biológico - Agricultura Sostenible"
             fill
             className="object-cover"
@@ -257,7 +257,7 @@ export function ControlBiologicoClient() {
 
               <div className="relative">
                 <div className="relative h-[400px] rounded-3xl overflow-hidden">
-                  <Image src="/servicios/image.png" alt="Agricultura sostenible" fill className="object-cover" />
+                  <Image src="/images/image.png" alt="Agricultura sostenible" fill className="object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent" />
                 </div>
               </div>

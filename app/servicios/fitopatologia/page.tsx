@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/servicios/image.png",
+        url: "/images/image.png",
         width: 1200,
         height: 630,
         alt: "Servicios de Fitopatología - AS Laboratorios Trujillo Perú",
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     title: "Fitopatología en Trujillo | AS Laboratorios Perú",
     description:
       "Detección de patógenos, análisis de suelos y diagnóstico fitosanitario certificado. Laboratorio especializado en Trujillo, La Libertad.",
-    images: ["/servicios/image.png"],
+    images: ["/images/image.png"],
     creator: "@aslaboratorios",
   },
   robots: {
@@ -152,7 +152,7 @@ export default function FitopatologiaPage() {
         serviceType="Fitopatología y Diagnóstico Fitosanitario"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima"]}
         offers={fitopatologiaServices.map((s) => ({ name: s.name, description: s.description }))}
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <BreadcrumbStructuredData
         items={[
@@ -171,7 +171,7 @@ export default function FitopatologiaPage() {
         description="Laboratorio de fitopatología certificado en Trujillo, La Libertad, Perú. Detección de patógenos en plantas, análisis de suelos agrícolas y diagnóstico fitosanitario."
         url="https://aslaboratorios.com/servicios/fitopatologia"
         priceRange="$$"
-        image="/servicios/image.png"
+        image="/images/image.png"
       />
       <FitopatologiaClient />
     </>

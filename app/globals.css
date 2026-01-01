@@ -1,8 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: "DM Serif Text", serif;
+  color: #333;
+}
 
 @layer utilities {
   .text-balance {
@@ -46,7 +49,6 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -87,7 +89,6 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground font-serif;
   }
@@ -128,7 +129,6 @@ img {
     opacity: 0;
     transform: translateY(-10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -140,7 +140,6 @@ img {
     opacity: 0;
     transform: translateX(-20px);
   }
-
   to {
     opacity: 1;
     transform: translateX(0);
@@ -152,7 +151,6 @@ img {
     opacity: 0;
     transform: translateX(20px);
   }
-
   to {
     opacity: 1;
     transform: translateX(0);
@@ -181,228 +179,10 @@ img {
   @apply outline-2 outline-offset-2 outline-primary;
 }
 
-/* Fuente específica para la página de impresión */
-.print-page {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-}
-
-.print-page * {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-}
-
 /* Print styles */
 @media print {
-  @page {
-    size: A4;
-    margin: 0;
-  }
-  
-  /* Crear nuestros propios márgenes internos para evitar headers/footers */
-  body {
-    margin: 0 !important;
-    padding: 10mm !important;
-  }
-  
-  .print-page {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  html,
-  body,
-  * {
-    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-  }
-
-  body {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    font-family: var(--font-poppins), "Poppins", sans-serif !important;
-    font-weight: 400 !important;
-    font-size: 11pt;
-  }
-
-  * {
-    font-family: var(--font-poppins), "Poppins", sans-serif !important;
-  }
-
-  .print-page,
-  .print-page *,
-  div,
-  p,
-  span,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  td,
-  th,
-  table {
-    font-family: "Poppins", sans-serif !important;
-  }
-
-  h1,
-  h2,
-  .font-bold,
-  th {
-    font-weight: 700 !important;
-  }
-
-  /* SemiBold para labels */
-  .font-semibold,
-  strong {
-    font-weight: 600 !important;
-  }
-
-  /* Regular para texto normal */
-  p,
-  td,
-  .font-normal {
-    font-weight: 400 !important;
-  }
-
-  .page-break-before {
-    page-break-before: always;
-  }
-
-  .page-break-after {
-    page-break-after: always;
-  }
-
-  .ficha-tecnica-print {
-    width: 100%;
-    height: auto;
-    min-height: 270mm; /* Altura aproximada de página A4 menos márgenes */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    page-break-inside: avoid;
-  }
-
-  .ficha-tecnica-print img {
-    max-width: 190mm; /* Ancho de A4 menos márgenes */
-    max-height: 250mm; /* Alto de A4 menos márgenes */
-    width: auto;
-    height: auto;
-    object-fit: contain;
-  }
-
-  /* Asegurar que los colores se impriman correctamente */
-  .bg-\[\#5D9848\] {
-    background-color: #5d9848 !important;
-  }
-
-  .bg-\[\#C25B28\] {
-    background-color: #c25b28 !important;
-  }
-
-  .text-white {
-    color: white !important;
-  }
-
-  .bg-green-100 {
-    background-color: #dcfce7 !important;
-  }
-
-  .bg-red-50 {
-    background-color: #fef2f2 !important;
-  }
-
-  .border-green-300 {
-    border-color: #86efac !important;
-  }
-
-  /* Reducir espaciado para impresión */
-  .p-6 {
-    padding: 1rem !important;
-  }
-
-  .p-4 {
-    padding: 0.75rem !important;
-  }
-
-  .p-3 {
-    padding: 0.5rem !important;
-  }
-
-  .p-2 {
-    padding: 0.25rem !important;
-  }
-
-  .p-1 {
-    padding: 0.125rem !important;
-  }
-
-  .my-4 {
-    margin-top: 0.75rem !important;
-    margin-bottom: 0.75rem !important;
-  }
-
-  .my-3 {
-    margin-top: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  .mt-4 {
-    margin-top: 0.75rem !important;
-  }
-
-  .mt-3 {
-    margin-top: 0.5rem !important;
-  }
-
-  .mb-4 {
-    margin-bottom: 0.75rem !important;
-  }
-
-  .mb-3 {
-    margin-bottom: 0.5rem !important;
-  }
-
-  .gap-4 {
-    gap: 0.75rem !important;
-  }
-
-  .gap-3 {
-    gap: 0.5rem !important;
-  }
-
-  .gap-2 {
-    gap: 0.25rem !important;
-  }
-
-  /* Evitar saltos de página no deseados */
-  .page-break-before {
-    page-break-before: always;
-    break-before: page;
-  }
-
-  /* Evitar que las imágenes se dividan entre páginas */
-  img {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* Asegurar que los contenedores de imágenes no generen saltos de página adicionales */
-  .mb-4,
-  .mt-8 {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* Ajustar el tamaño de las imágenes para que se ajusten mejor a la página */
-  .object-contain {
-    max-height: 90vh;
-  }
-
-  /* Eliminar espacios en blanco innecesarios */
-  .mt-6.page-break-before {
-    margin-top: 0 !important;
+  .no-print {
+    display: none !important;
   }
 }
 
@@ -416,7 +196,6 @@ img {
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {

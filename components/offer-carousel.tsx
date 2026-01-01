@@ -31,7 +31,7 @@ export default function OfferCarousel() {
       title: "Biotecnología Vegetal",
       content:
         "Producimos plantas in vitro de alta calidad genética y fitosanitaria mediante técnicas de micropropagación. Ofrecemos plantines de banano, plátano, piña, arándanos y especies ornamentales, garantizando material vegetal libre de enfermedades y con características genéticas superiores.",
-      image: "/new/BiotecnologiaVegetal.webp",
+      image: "/biotecnologia-vegetal.png",
       link: "EXPLORA NUESTROS PLANTINES",
     },
     {
@@ -39,7 +39,7 @@ export default function OfferCarousel() {
       title: "Asesoría Técnica",
       content:
         "Brindamos consultoría especializada en biotecnología vegetal, manejo integrado de plagas y enfermedades, y sistemas de producción sostenible. Nuestro equipo de profesionales altamente capacitados ofrece soluciones personalizadas para optimizar la producción agrícola de nuestros clientes.",
-      image: "/scientists-meeting.png",
+      image: "/asesoria-tecnica.png",
       link: "SOLICITA UNA CONSULTA",
     },
     {
@@ -47,7 +47,7 @@ export default function OfferCarousel() {
       title: "Insumos de Laboratorio",
       content:
         "Suministramos materiales, equipos y reactivos para laboratorios de investigación y enseñanza universitaria. Desde medios de cultivo hasta instrumentos especializados, ofrecemos productos de alta calidad para estudiantes, docentes e investigadores en el campo de la biotecnología.",
-      image: "/pitch-hero.png",
+      image: "/insumos-laboratorio.png",
       link: "VER CATÁLOGO DE INSUMOS",
     },
   ]
@@ -98,8 +98,9 @@ export default function OfferCarousel() {
                     setActiveItem(item.id)
                     setIsPaused(true)
                   }}
-                  className={`text-left py-3 pl-4 pr-6 rounded-md transition-all duration-300 relative w-full ${activeItem === item.id ? "text-[#2e7d32] font-medium" : "text-[#01283c] hover:text-[#2e7d32]"
-                    }`}
+                  className={`text-left py-3 pl-4 pr-6 rounded-md transition-all duration-300 relative w-full ${
+                    activeItem === item.id ? "text-[#2e7d32] font-medium" : "text-[#01283c] hover:text-[#2e7d32]"
+                  }`}
                 >
                   {activeItem === item.id && (
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#d1343e] rounded-l-md"></div>
@@ -133,14 +134,13 @@ export default function OfferCarousel() {
 
           {/* Center - Image */}
           <div className="w-full lg:w-1/3 mb-8 lg:mb-0">
-            <div className="rounded-lg overflow-hidden h-[250px] sm:h-[300px] lg:h-[350px]">
+            <div className="rounded-lg overflow-hidden">
               <Image
-                key={offerItems[activeItem].id}
                 src={offerItems[activeItem].image || "/placeholder.svg"}
                 alt={offerItems[activeItem].title}
                 width={500}
                 height={500}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-auto object-cover rounded-lg"
               />
             </div>
           </div>
