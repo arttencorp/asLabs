@@ -68,7 +68,7 @@ const teamData = [
 
 export default function AboutUsTeam() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center mb-24">
           <p className="text-sm uppercase tracking-[2px] text-gray-500 mb-4">Equipo Profesional</p>
@@ -79,75 +79,57 @@ export default function AboutUsTeam() {
           </p>
         </div>
 
-        <div className="space-y-20">
+        <div className="space-y-16">
           {teamData.map((section, idx) => (
             <div key={idx}>
-              <div className="mb-16">
+              <div className="mb-12">
                 <div className="flex items-center gap-3 justify-center">
-                  <span className="text-gray-400">{section.icon}</span>
-                  <h3 className="text-lg font-light tracking-widest uppercase text-gray-900">{section.category}</h3>
-                  <span className="text-gray-400">{section.icon}</span>
+                  <span className="text-gray-300">{section.icon}</span>
+                  <h3 className="text-base font-light tracking-widest uppercase text-gray-700">{section.category}</h3>
+                  <span className="text-gray-300">{section.icon}</span>
                 </div>
-                <div className="w-16 h-px bg-gray-200 mx-auto mt-4"></div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {section.members.map((member, mIdx) => (
                   <div key={mIdx} className="group">
                     <div
-                      className={`h-full flex flex-col items-center transition-all duration-500 ${
-                        member.isProtected ? "opacity-60" : ""
+                      className={`relative w-full aspect-square rounded-lg overflow-hidden flex items-end transition-all duration-500 ${
+                        member.isVacancy
+                          ? "border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center"
+                          : member.isProtected
+                            ? "border border-gray-200 bg-gray-100"
+                            : "border border-gray-200 shadow-md hover:shadow-xl hover:border-gray-400"
                       }`}
                     >
-                      <div
-                        className={`w-48 h-56 mb-8 rounded-sm overflow-hidden flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
-                          member.isVacancy
-                            ? "border border-dashed border-gray-400 bg-gray-50"
-                            : member.isProtected
-                              ? "border border-gray-200 bg-gray-100"
-                              : "border border-gray-200 bg-gray-50 group-hover:border-gray-900 group-hover:shadow-xl"
-                        }`}
-                      >
-                        {member.hasPhoto ? (
-                          <Image
-                            src="/professional-portrait.png"
-                            alt={member.name}
-                            width={192}
-                            height={224}
-                            className="object-cover w-full h-full"
-                          />
-                        ) : member.isVacancy ? (
-                          <Plus className="w-16 h-16 text-gray-300" />
-                        ) : (
-                          <Users className="w-16 h-16 text-gray-300" />
-                        )}
-                      </div>
-
-                      <div className="text-center w-full">
-                        <h4
-                          className={`text-lg font-light mb-2 transition-colors duration-300 ${
-                            member.isProtected ? "text-gray-500 italic" : "text-gray-900 group-hover:text-gray-700"
-                          }`}
-                        >
-                          {member.name}
-                        </h4>
-                        <p
-                          className={`text-sm leading-relaxed mb-6 ${
-                            member.isVacancy ? "text-gray-500 font-medium" : "text-gray-600"
-                          }`}
-                        >
-                          {member.role}
-                        </p>
-                      </div>
-
-                      {!member.isVacancy && !member.isProtected && (
-                        <div className="flex gap-4 mt-2">
-                          <button className="p-3 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-sm transition-all duration-300">
-                            <Linkedin className="w-5 h-5" />
-                          </button>
-                          <button className="p-3 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-sm transition-all duration-300">
-                            <Mail className="w-5 h-5" />
-                          </button>
+                      {member.hasPhoto ? (
+                        <>
+                          <Image src="/professional-portrait.png" alt={member.name} fill className="object-cover" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-100 group-hover:opacity-95 transition-opacity duration-300"></div>
+                          <div className="absolute inset-0 flex flex-col justify-end p-4 text-white">
+                            <h4 className="text-sm font-light mb-1 line-clamp-2">{member.name}</h4>
+                            <p className="text-xs text-gray-200 mb-3 line-clamp-2">{member.role}</p>
+                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <button className="p-2 hover:bg-white/20 rounded transition-colors">
+                                <Linkedin className="w-4 h-4" />
+                              </button>
+                              <button className="p-2 hover:bg-white/20 rounded transition-colors">
+                                <Mail className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      ) : member.isVacancy ? (
+                        <div className="flex flex-col items-center justify-center w-full">
+                          <Plus className="w-8 h-8 text-gray-300 mb-2" />
+                          <p className="text-sm font-light text-gray-600">{member.name}</p>
+                          <p className="text-xs text-gray-500 mt-1">{member.role}</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center w-full p-4">
+                          <Users className="w-8 h-8 text-gray-300 mb-2" />
+                          <p className="text-sm font-light text-gray-600 text-center italic">{member.name}</p>
+                          <p className="text-xs text-gray-500 mt-1 text-center">{member.role}</p>
                         </div>
                       )}
                     </div>
