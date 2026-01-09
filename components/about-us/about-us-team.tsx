@@ -1,35 +1,35 @@
 import Image from "next/image"
-import { Users, ShieldCheck, Beaker, GraduationCap, PenTool, Search, Linkedin, Mail } from "lucide-react"
+import { Users, ShieldCheck, Beaker, GraduationCap, PenTool, Search, Linkedin, Mail, Plus } from "lucide-react"
 
 const teamData = [
   {
     category: "Gerencia",
     icon: <ShieldCheck className="w-5 h-5 text-[#d1343e]" />,
     members: [
-      { name: "Blga. Natasha Escobar Arana", role: "Gerente General", hasPhoto: false },
-      { name: "Luz Marleni Guevara Valverde", role: "Socio", hasPhoto: false },
+      { name: "Blga. Natasha Escobar Arana", role: "Gerente General", hasPhoto: true },
+      { name: "Luz Marleni Guevara Valverde", role: "Socio", hasPhoto: true },
     ],
   },
   {
     category: "Área Legal",
     icon: <ShieldCheck className="w-5 h-5 text-[#d1343e]" />,
-    members: [{ name: "Luis Guevara Valverde", role: "Contador Público", hasPhoto: false }],
+    members: [{ name: "Luis Guevara Valverde", role: "Contador Público", hasPhoto: true }],
   },
   {
     category: "Supervisores",
     icon: <Users className="w-5 h-5 text-[#d1343e]" />,
     members: [
-      { name: "Ing. Javier Verastegui Sancho", role: "Supervisor Ingeniero", hasPhoto: false },
+      { name: "Ing. Javier Verastegui Sancho", role: "Supervisor Ingeniero", hasPhoto: true },
       { name: "Información Protegida", role: "Supervisora Control Biológico", hasPhoto: false, isProtected: true },
-      { name: "Mblga. Melissa Torres Medina", role: "Supervisora Microbiología Aplicada", hasPhoto: false },
+      { name: "Mblga. Melissa Torres Medina", role: "Supervisora Microbiología Aplicada", hasPhoto: true },
     ],
   },
   {
     category: "Área Técnica",
     icon: <Beaker className="w-5 h-5 text-[#d1343e]" />,
     members: [
-      { name: "Jurith Aguilar Pichen", role: "Jefa del Área Técnica", hasPhoto: false },
-      { name: "Madeleine Isuiza Flores", role: "Técnica de Laboratorio", hasPhoto: false },
+      { name: "Jurith Aguilar Pichen", role: "Jefa del Área Técnica", hasPhoto: true },
+      { name: "Madeleine Isuiza Flores", role: "Técnica de Laboratorio", hasPhoto: true },
       { name: "Información Protegida", role: "Técnicos Secundarios (7 técnicos)", hasPhoto: false, isProtected: true },
     ],
   },
@@ -68,87 +68,92 @@ const teamData = [
 
 export default function AboutUsTeam() {
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4 max-w-5xl">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-[#01283c] mb-4 font-serif italic">Nuestro Equipo</h2>
+    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl font-bold text-[#01283c] mb-4 font-serif italic">Nuestro Equipo</h2>
           <div className="w-20 h-1 bg-[#d1343e] mx-auto rounded-full"></div>
+          <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+            Profesionales comprometidos con la excelencia en investigación y desarrollo biotecnológico
+          </p>
         </div>
 
-        <div className="space-y-20">
+        <div className="space-y-16">
           {teamData.map((section, idx) => (
-            <div key={idx} className="relative">
-              <div className="flex items-center gap-3 mb-10 justify-center">
-                <span className="h-px bg-gray-200 flex-grow max-w-[100px]"></span>
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-50 rounded-full border border-gray-100">
+            <div key={idx}>
+              <div className="flex items-center gap-3 mb-12 justify-center">
+                <div className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-[#d1343e] rounded-lg shadow-sm">
                   {section.icon}
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-gray-500">{section.category}</h3>
+                  <h3 className="text-base font-bold uppercase tracking-widest text-[#01283c]">{section.category}</h3>
                 </div>
-                <span className="h-px bg-gray-200 flex-grow max-w-[100px]"></span>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-2">
                 {section.members.map((member, mIdx) => (
                   <div
                     key={mIdx}
-                    className={`flex flex-col items-center text-center group max-w-[200px] ${
-                      member.isProtected ? "opacity-75" : ""
-                    }`}
+                    className={`group relative transition-all duration-300 ${member.isProtected ? "opacity-70" : ""}`}
                   >
-                    <div className="relative mb-4">
+                    <div
+                      className={`h-full p-6 rounded-lg border-2 transition-all duration-300 flex flex-col items-center text-center group-hover:shadow-xl group-hover:-translate-y-2 ${
+                        member.isVacancy
+                          ? "border-dashed border-[#d1343e] bg-red-50 group-hover:bg-red-100"
+                          : member.isProtected
+                            ? "border-gray-200 bg-gray-100"
+                            : "border-gray-200 bg-white group-hover:border-[#d1343e]"
+                      }`}
+                    >
                       <div
-                        className={`w-28 h-28 rounded-full border-2 p-1 transition-all duration-300 group-hover:scale-105 ${
+                        className={`w-32 h-32 mb-6 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 transition-all duration-300 border-2 ${
                           member.isVacancy
-                            ? "border-dashed border-[#d1343e]"
-                            : "border-gray-100 group-hover:border-[#d1343e]"
+                            ? "border-dashed border-[#d1343e] bg-red-100"
+                            : member.isProtected
+                              ? "border-gray-300 bg-gray-200"
+                              : "border-gray-300 group-hover:border-[#d1343e]"
                         }`}
                       >
-                        <div
-                          className={`w-full h-full rounded-full flex items-center justify-center overflow-hidden ${
-                            member.isVacancy ? "bg-red-50" : "bg-gray-50"
+                        {member.hasPhoto ? (
+                          <Image
+                            src="/professional-portrait.png"
+                            alt={member.name}
+                            width={128}
+                            height={128}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : member.isVacancy ? (
+                          <Plus className="w-12 h-12 text-[#d1343e]" />
+                        ) : (
+                          <Users className="w-12 h-12 text-gray-400" />
+                        )}
+                      </div>
+
+                      <div className="flex-grow w-full">
+                        <h4
+                          className={`font-bold text-lg leading-tight mb-2 ${
+                            member.isProtected ? "italic text-gray-600" : "text-[#01283c]"
                           }`}
                         >
-                          {member.hasPhoto ? (
-                            <Image
-                              src="/placeholder.svg"
-                              alt={member.name}
-                              width={112}
-                              height={112}
-                              className="object-cover"
-                            />
-                          ) : (
-                            <Users className={`w-10 h-10 ${member.isVacancy ? "text-[#d1343e]" : "text-gray-300"}`} />
-                          )}
-                        </div>
+                          {member.name}
+                        </h4>
+                        <p
+                          className={`text-sm leading-relaxed mb-4 ${
+                            member.isVacancy ? "text-[#d1343e] font-semibold" : "text-gray-600 font-medium"
+                          }`}
+                        >
+                          {member.role}
+                        </p>
                       </div>
 
                       {!member.isVacancy && !member.isProtected && (
-                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <button className="p-1.5 bg-white rounded-full shadow-md text-blue-600 hover:bg-blue-50">
-                            <Linkedin className="w-3.5 h-3.5" />
+                        <div className="flex gap-3 mt-4 w-full justify-center">
+                          <button className="flex-1 p-2.5 bg-blue-50 rounded-lg text-blue-600 hover:bg-blue-100 transition-colors duration-200 flex items-center justify-center group-hover:scale-105 transform">
+                            <Linkedin className="w-4 h-4" />
                           </button>
-                          <button className="p-1.5 bg-white rounded-full shadow-md text-gray-600 hover:bg-gray-50">
-                            <Mail className="w-3.5 h-3.5" />
+                          <button className="flex-1 p-2.5 bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center group-hover:scale-105 transform">
+                            <Mail className="w-4 h-4" />
                           </button>
                         </div>
                       )}
-                    </div>
-
-                    <div className="space-y-1">
-                      <h4
-                        className={`font-bold text-base leading-tight ${
-                          member.isProtected ? "italic text-gray-500" : "text-[#01283c]"
-                        }`}
-                      >
-                        {member.name}
-                      </h4>
-                      <p
-                        className={`text-xs leading-relaxed ${
-                          member.isVacancy ? "text-[#d1343e] font-semibold" : "text-gray-500 font-medium"
-                        }`}
-                      >
-                        {member.role}
-                      </p>
                     </div>
                   </div>
                 ))}
