@@ -68,73 +68,66 @@ const teamData = [
 
 export default function AboutUsTeam() {
   return (
-    <section className="py-24 bg-gradient-to-b from-white via-gray-50 to-white">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="text-center mb-20">
-          <p className="text-xs uppercase tracking-[3px] text-gray-400 mb-3 font-light">Equipo Profesional</p>
-          <h2 className="text-5xl md:text-6xl font-serif font-light text-gray-900 mb-6">Nuestro Equipo</h2>
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="w-16 h-px bg-gradient-to-r from-gray-200 to-transparent"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-            <div className="w-16 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
-          </div>
-          <p className="text-gray-500 text-base max-w-2xl mx-auto leading-relaxed font-light">
+    <section className="py-20 bg-white">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="text-center mb-16">
+          <p className="text-xs uppercase tracking-[3px] text-gray-400 mb-2 font-light">Equipo Profesional</p>
+          <h2 className="text-4xl md:text-5xl font-serif font-light text-gray-900 mb-4">Nuestro Equipo</h2>
+          <p className="text-gray-600 text-sm max-w-2xl mx-auto leading-relaxed font-light">
             Profesionales comprometidos con la excelencia en investigación y desarrollo biotecnológico
           </p>
         </div>
 
-        <div className="space-y-20">
+        <div className="space-y-16">
           {teamData.map((section, idx) => (
-            <div key={idx} className="flex flex-col items-center">
-              <div className="mb-10 text-center">
-                <h3 className="text-xs font-light tracking-widest uppercase text-gray-500 flex items-center justify-center gap-3">
-                  <span className="text-gray-300">{section.icon}</span>
+            <div key={idx} className="w-full">
+              <div className="text-center mb-8">
+                <h3 className="text-xs font-light tracking-widest uppercase text-gray-600 flex items-center justify-center gap-2">
+                  <span className="text-orange-500">{section.icon}</span>
                   {section.category}
-                  <span className="text-gray-300">{section.icon}</span>
                 </h3>
               </div>
 
-              <div className="w-full flex justify-center">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-5xl">
+              <div className="flex justify-center w-full">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-6xl">
                   {section.members.map((member, mIdx) => (
-                    <div key={mIdx} className="group flex justify-center">
+                    <div key={mIdx} className="flex justify-center">
                       <div
-                        className={`w-full aspect-square rounded-xl overflow-hidden flex items-end transition-all duration-500 ${
+                        className={`w-full max-w-[180px] aspect-square rounded-lg overflow-hidden flex items-end transition-all duration-300 ${
                           member.isVacancy
-                            ? "border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center cursor-pointer hover:bg-gradient-to-br hover:from-gray-100 hover:to-gray-150 hover:border-gray-300"
+                            ? "border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center hover:bg-gray-100 hover:border-gray-400"
                             : member.isProtected
-                              ? "border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100"
-                              : "border border-gray-100 shadow-sm hover:shadow-lg hover:border-gray-300"
+                              ? "border border-gray-200 bg-gray-50"
+                              : "border border-gray-200 shadow-sm hover:shadow-md"
                         }`}
                       >
                         {member.hasPhoto ? (
                           <>
                             <Image src="/professional-portrait.png" alt={member.name} fill className="object-cover" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-100 group-hover:opacity-95 transition-opacity duration-300"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                             <div className="absolute inset-0 flex flex-col justify-end p-3 text-white">
-                              <h4 className="text-xs font-light mb-1 leading-tight line-clamp-2">{member.name}</h4>
-                              <p className="text-xs text-gray-200 mb-3 line-clamp-2 font-light">{member.role}</p>
-                              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center">
-                                <button className="p-1.5 hover:bg-white/30 rounded-full transition-colors">
-                                  <Linkedin className="w-3.5 h-3.5" />
+                              <h4 className="text-xs font-light mb-0.5 leading-tight line-clamp-2">{member.name}</h4>
+                              <p className="text-xs text-gray-300 line-clamp-2 font-light text-[11px]">{member.role}</p>
+                              <div className="flex gap-1.5 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button className="p-1 hover:bg-white/20 rounded transition-colors">
+                                  <Linkedin className="w-3 h-3" />
                                 </button>
-                                <button className="p-1.5 hover:bg-white/30 rounded-full transition-colors">
-                                  <Mail className="w-3.5 h-3.5" />
+                                <button className="p-1 hover:bg-white/20 rounded transition-colors">
+                                  <Mail className="w-3 h-3" />
                                 </button>
                               </div>
                             </div>
                           </>
                         ) : member.isVacancy ? (
                           <div className="flex flex-col items-center justify-center w-full h-full">
-                            <Plus className="w-6 h-6 text-gray-400 mb-2" />
+                            <Plus className="w-5 h-5 text-gray-400 mb-1" />
                             <p className="text-xs font-light text-gray-600">{member.name}</p>
-                            <p className="text-xs text-gray-400 mt-0.5">{member.role}</p>
+                            <p className="text-xs text-gray-500 text-[11px] mt-0.5">{member.role}</p>
                           </div>
                         ) : (
                           <div className="flex flex-col items-center justify-center w-full h-full p-3">
-                            <Users className="w-6 h-6 text-gray-300 mb-2" />
-                            <p className="text-xs font-light text-gray-600 text-center italic">{member.name}</p>
-                            <p className="text-xs text-gray-400 mt-1 text-center">{member.role}</p>
+                            <Users className="w-5 h-5 text-gray-300 mb-1" />
+                            <p className="text-xs font-light text-gray-600 text-center">{member.name}</p>
                           </div>
                         )}
                       </div>
