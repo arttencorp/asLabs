@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 
 export default function AboutUsHeader() {
   const [activeTab, setActiveTab] = useState("mission")
@@ -25,8 +24,8 @@ export default function AboutUsHeader() {
   }
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
+    <section className="py-12 bg-white">
+      <div className="container mx-auto px-4 max-h-96">
         <div className="flex flex-col lg:flex-row items-start gap-8">
           <div className="lg:w-1/2">
             <h1 className="text-3xl font-bold text-[#01283c] mb-2">Sobre nosotros</h1>

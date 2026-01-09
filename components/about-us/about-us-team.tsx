@@ -69,7 +69,7 @@ const teamData = [
 export default function AboutUsTeam() {
   return (
     <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
           <p className="text-xs uppercase tracking-[3px] text-gray-400 mb-2 font-light">Equipo Profesional</p>
           <h2 className="text-4xl md:text-5xl font-serif font-light text-gray-900 mb-4">Nuestro Equipo</h2>
@@ -78,10 +78,10 @@ export default function AboutUsTeam() {
           </p>
         </div>
 
-        <div className="space-y-16">
+        <div className="space-y-12">
           {teamData.map((section, idx) => (
             <div key={idx} className="w-full">
-              <div className="text-center mb-8">
+              <div className="text-center mb-6">
                 <h3 className="text-xs font-light tracking-widest uppercase text-gray-600 flex items-center justify-center gap-2">
                   <span className="text-orange-500">{section.icon}</span>
                   {section.category}
@@ -89,16 +89,16 @@ export default function AboutUsTeam() {
               </div>
 
               <div className="flex justify-center w-full">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-6xl">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 w-full">
                   {section.members.map((member, mIdx) => (
                     <div key={mIdx} className="flex justify-center">
                       <div
-                        className={`w-full max-w-[180px] aspect-square rounded-lg overflow-hidden flex items-end transition-all duration-300 ${
+                        className={`w-full max-w-[160px] h-48 rounded-lg overflow-hidden flex items-end transition-all duration-300 ${
                           member.isVacancy
                             ? "border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center hover:bg-gray-100 hover:border-gray-400"
                             : member.isProtected
                               ? "border border-gray-200 bg-gray-50"
-                              : "border border-gray-200 shadow-sm hover:shadow-md"
+                              : "border border-gray-200 bg-gradient-to-b from-gray-900/0 to-gray-900/70"
                         }`}
                       >
                         {member.hasPhoto ? (
