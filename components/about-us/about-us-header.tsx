@@ -81,7 +81,7 @@ export default function AboutUsHeader() {
             </div>
           </div>
 
-          <div className="lg:w-1/2 relative">
+          <div className="lg:w-1/2 relative overflow-hidden">
             <div className="relative max-w-md mx-auto">
               <Image
                 src="/scientist-laptop.png"

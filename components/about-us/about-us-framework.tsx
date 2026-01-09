@@ -99,7 +99,7 @@ export default function AboutUsFramework() {
             </div>
 
             {/* Center - Image */}
-            <div className="lg:w-1/3 relative">
+            <div className="lg:w-1/3 relative min-h-96 h-full">
               <Image
                 src="/woman-red-shirt.png"
                 alt="Profesional de AS Labs en laboratorio"

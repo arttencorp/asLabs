@@ -25,12 +25,12 @@ export default function SobreNosotros() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <AboutUsHeader />
-      <AboutUsTeam />
       <AboutUsStats />
       <AboutUsImpact />
       <AboutUsFramework />
       <AboutUsValues />
       <AboutUsMindsets />
+      <AboutUsTeam />
       <AboutUsHeadquarters />
       <Footer />
     </div>
