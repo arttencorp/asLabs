@@ -3,7 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { SoilAnalysisSearch } from "@/components/services/soil-analysis-search"
+import { AnalysisSearch } from "@/components/services/soil-analysis-search" // Updated import
 import {
   ServiceStructuredData,
   BreadcrumbStructuredData,
@@ -22,7 +22,6 @@ import {
   Phone,
   MapPin,
   Clock,
-  Award,
 } from "lucide-react"
 import { Suspense } from "react"
 
@@ -251,7 +250,9 @@ export default function ServiciosPage() {
 
       <main className="min-h-screen bg-background font-serif">
         {/* Hero Section - Optimized */}
-        <section className="relative py-20 overflow-hidden">
+        <section className="relative py-12 overflow-hidden">
+          {" "}
+          {/* Updated py-20 to py-12 */}
           {/* Background Image Grid */}
           <div className="absolute inset-0 grid grid-cols-5 opacity-30">
             {servicios.map((s, i) => (
@@ -266,7 +267,6 @@ export default function ServiciosPage() {
             ))}
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
-
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl">
               <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -278,10 +278,7 @@ export default function ServiciosPage() {
                   <MapPin className="w-4 h-4" />
                   Trujillo, La Libertad, Perú
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 text-blue-600 rounded-full text-sm font-medium">
-                  <Award className="w-4 h-4" />
-                  Laboratorio Certificado
-                </span>
+                {/* Removed badge "Laboratorio Certificado" */}
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
                 Servicios de <span className="text-primary">Laboratorio</span> en Trujillo, Perú
@@ -309,9 +306,9 @@ export default function ServiciosPage() {
           </div>
         </section>
 
-        {/* Soil Analysis Search Section */}
+        {/* Analysis Search Section - General */}
         <Suspense fallback={null}>
-          <SoilAnalysisSearch />
+          <AnalysisSearch /> {/* Replaced SoilAnalysisSearch with AnalysisSearch */}
         </Suspense>
 
         {/* Services Grid */}

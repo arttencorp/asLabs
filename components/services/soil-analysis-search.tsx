@@ -1,110 +1,184 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Search, X } from "lucide-react"
+import { Search } from "lucide-react"
 
-interface SoilAnalysis {
+interface Analysis {
   id: string
   tipo: string
   concepto: string
   alcance: string
   costo: string
-  descripcion?: string
 }
 
-const soilAnalyses: SoilAnalysis[] = [
+// Todos los análisis combinados de todas las categorías
+const allAnalyses: Analysis[] = [
+  // Análisis de Suelo
   {
     id: "1",
     tipo: "Análisis de Suelo",
     concepto: "Recepción y preparación de muestra",
-    alcance: "Registro + homogenización + submuestreo (muestra compuesta)",
+    alcance: "Registro + homogenización + submuestreo",
     costo: "15",
-    descripcion: "Preparación estándar de muestras de suelo",
   },
-  {
-    id: "2",
-    tipo: "Análisis de Suelo",
-    concepto: "pH de suelo (lab)",
-    alcance: "Medición en suspensión (método declarado) + registro",
-    costo: "20",
-    descripcion: "Determinación de acidez/alcalinidad del suelo",
-  },
+  { id: "2", tipo: "Análisis de Suelo", concepto: "pH de suelo (lab)", alcance: "Medición en suspensión", costo: "20" },
   {
     id: "3",
     tipo: "Análisis de Suelo",
     concepto: "Conductividad eléctrica CE (lab)",
-    alcance: "CE en extracto (método declarado) + registro",
+    alcance: "CE en extracto",
     costo: "20",
-    descripcion: "Medición de salinidad del suelo",
   },
   {
     id: "4",
     tipo: "Análisis de Suelo",
     concepto: "Humedad (%) – indicador",
-    alcance: "Lectura con sensor (indicador rápido)",
+    alcance: "Lectura con sensor",
     costo: "15",
-    descripcion: "Determinación rápida de contenido de humedad",
   },
   {
     id: "5",
     tipo: "Análisis de Suelo",
-    concepto: "Índice de sales/nutrientes solubles (µS/cm)",
-    alcance: "Lectura 0–3000 µS/cm (indicador, no NPK)",
+    concepto: "Índice de sales/nutrientes solubles",
+    alcance: "Lectura 0–3000 µS/cm",
     costo: "15",
-    descripcion: "Medición de conductividad de sales solubles",
   },
   {
     id: "6",
     tipo: "Análisis de Suelo",
     concepto: "Carbonatos / alcalinidad (titulación)",
-    alcance: "Ensayo ácido–base con indicador + interpretación",
+    alcance: "Ensayo ácido–base con indicador",
     costo: "40",
-    descripcion: "Determinación de carbonatos mediante titulación",
   },
   {
     id: "7",
     tipo: "Análisis de Suelo",
     concepto: "Recuento de hongos (UFC/g)",
-    alcance: "Diluciones + siembra en PDA + conteo + reporte",
+    alcance: "Diluciones + siembra en PDA + conteo",
     costo: "80",
-    descripcion: "Recuento de hongos en unidades formadoras de colonias",
   },
   {
     id: "8",
     tipo: "Análisis de Suelo",
-    concepto: "Aislamiento presuntivo de hongos fitopatógenos + microscopía",
-    alcance: "Aislamiento en PDA (acidificado) + tinción + microfotografías + reporte",
+    concepto: "Aislamiento presuntivo de hongos fitopatógenos",
+    alcance: "Aislamiento + tinción + microfotografías",
     costo: "160",
-    descripcion: "Identificación de hongos patógenos mediante microscopía",
   },
   {
     id: "9",
     tipo: "Análisis de Suelo",
-    concepto: "Paquete Diagnóstico Rápido (lab)",
-    alcance: "pH + CE + humedad (indicador) + sales solubles + interpretación",
+    concepto: "Paquete Diagnóstico Rápido",
+    alcance: "pH + CE + humedad + sales + interpretación",
     costo: "60",
-    descripcion: "Paquete completo de parámetros rápidos",
   },
   {
     id: "10",
     tipo: "Análisis de Suelo",
-    concepto: "Paquete Sanidad Fúngica (lab)",
-    alcance: "Recuento hongos + aislamiento presuntivo + microscopía + conclusión",
+    concepto: "Paquete Sanidad Fúngica",
+    alcance: "Recuento + aislamiento + microscopía + conclusión",
     costo: "200",
-    descripcion: "Paquete completo para sanidad fúngica del suelo",
+  },
+  // Fitopatología
+  {
+    id: "11",
+    tipo: "Fitopatología",
+    concepto: "Detección de Patógenos en Muestras Vegetales",
+    alcance: "Identificación de bacterias y hongos",
+    costo: "Cotizar",
+  },
+  {
+    id: "12",
+    tipo: "Fitopatología",
+    concepto: "Prueba de Susceptibilidad",
+    alcance: "Pruebas de sensibilidad a fungicidas",
+    costo: "70",
+  },
+  {
+    id: "13",
+    tipo: "Fitopatología",
+    concepto: "Suspensión de Bacterias y Hongos Fitopatógenos",
+    alcance: "Preparación de suspensiones",
+    costo: "120",
+  },
+  {
+    id: "14",
+    tipo: "Fitopatología",
+    concepto: "Análisis de Suelos",
+    alcance: "Análisis agrícola completo",
+    costo: "Cotizar",
+  },
+  {
+    id: "15",
+    tipo: "Fitopatología",
+    concepto: "Presencia de Bacterias en Suelo",
+    alcance: "Recuento y aislamiento",
+    costo: "180",
+  },
+  {
+    id: "16",
+    tipo: "Fitopatología",
+    concepto: "Presencia de Hongos en Suelo",
+    alcance: "Identificación de géneros",
+    costo: "180",
+  },
+  // Medio Ambiente
+  {
+    id: "17",
+    tipo: "Medio Ambiente",
+    concepto: "Recuento Aerobios Mesófilos",
+    alcance: "UFC/mL en agua",
+    costo: "Cotizar",
+  },
+  {
+    id: "18",
+    tipo: "Medio Ambiente",
+    concepto: "Coliformes Totales/Fecales",
+    alcance: "Detección en agua",
+    costo: "Cotizar",
+  },
+  {
+    id: "19",
+    tipo: "Medio Ambiente",
+    concepto: "Detección de Escherichia coli",
+    alcance: "Confirmación bioquímica",
+    costo: "Cotizar",
+  },
+  {
+    id: "20",
+    tipo: "Medio Ambiente",
+    concepto: "Recuento de Enterobacterias",
+    alcance: "Conteo y aislamiento",
+    costo: "Cotizar",
+  },
+  { id: "21", tipo: "Medio Ambiente", concepto: "Medición de pH", alcance: "Análisis de acidez", costo: "20" },
+  {
+    id: "22",
+    tipo: "Medio Ambiente",
+    concepto: "Sensibilidad Desinfectante",
+    alcance: "Pruebas de efectividad",
+    costo: "Cotizar",
+  },
+  {
+    id: "23",
+    tipo: "Medio Ambiente",
+    concepto: "Recuento Cámara Neubauer",
+    alcance: "Conteo de microorganismos",
+    costo: "60",
   },
 ]
 
-export function SoilAnalysisSearch() {
+export function AnalysisSearch() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedType, setSelectedType] = useState<string | null>(null)
 
+  const uniqueTypes = Array.from(new Set(allAnalyses.map((a) => a.tipo)))
+
   const filteredAnalyses = useMemo(() => {
-    return soilAnalyses.filter((analysis) => {
+    return allAnalyses.filter((analysis) => {
       const matchesSearch =
         analysis.concepto.toLowerCase().includes(searchQuery.toLowerCase()) ||
         analysis.alcance.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        analysis.costo.includes(searchQuery)
+        analysis.costo.toLowerCase().includes(searchQuery.toLowerCase())
 
       const matchesType = !selectedType || analysis.tipo === selectedType
 
@@ -118,108 +192,106 @@ export function SoilAnalysisSearch() {
   }
 
   return (
-    <section className="py-12 bg-gradient-to-b from-background to-muted/30">
+    <section className="py-8 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Análisis de Suelo</h2>
-            <p className="text-muted-foreground text-lg">Encuentra el análisis que necesitas para tu suelo agrícola</p>
-          </div>
-
-          {/* Search and Filter Bar */}
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-8">
+          {/* Search Bar - Main Focus */}
+          <div className="bg-white rounded-2xl border border-border shadow-lg p-6 mb-8">
             <div className="space-y-4">
               {/* Search Input */}
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Buscar por concepto, alcance o costo..."
+                  placeholder="Busca análisis por nombre, alcance o costo..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-4 text-lg border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                 />
               </div>
 
-              {/* Active Filters Display */}
-              {(searchQuery || selectedType) && (
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex flex-wrap gap-2">
-                    {searchQuery && (
-                      <span className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
-                        Búsqueda: {searchQuery}
-                        <button onClick={() => setSearchQuery("")} className="hover:text-primary/70">
-                          <X className="w-4 h-4" />
-                        </button>
-                      </span>
-                    )}
-                  </div>
-                  {(searchQuery || selectedType) && (
-                    <button
-                      onClick={clearFilters}
-                      className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
-                    >
-                      Limpiar filtros
-                    </button>
-                  )}
-                </div>
-              )}
+              {/* Type Filter */}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedType(null)}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    !selectedType
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  Todos
+                </button>
+                {uniqueTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedType(type)}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                      selectedType === type
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
 
-              {/* Results Count */}
-              <div className="text-sm text-muted-foreground">
-                Mostrando {filteredAnalyses.length} de {soilAnalyses.length} análisis
+              {/* Active Filters and Results Count */}
+              <div className="flex items-center justify-between flex-wrap gap-3 text-sm">
+                <div className="text-muted-foreground">
+                  Mostrando <span className="font-semibold text-foreground">{filteredAnalyses.length}</span> de{" "}
+                  <span className="font-semibold text-foreground">{allAnalyses.length}</span> análisis
+                </div>
+                {(searchQuery || selectedType) && (
+                  <button onClick={clearFilters} className="text-primary hover:underline font-medium transition-colors">
+                    Limpiar filtros
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Table View for Desktop */}
-          <div className="hidden md:block bg-white rounded-2xl border border-border overflow-hidden shadow-sm">
+          {/* Results Table */}
+          <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-lg">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-muted/50 border-b border-border">
                   <tr>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Tipo de Análisis</th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Concepto</th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Alcance</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo (S/.)</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {filteredAnalyses.map((analysis) => (
                     <tr key={analysis.id} className="hover:bg-muted/50 transition-colors">
+                      <td className="px-6 py-4 text-sm text-primary font-semibold">{analysis.tipo}</td>
                       <td className="px-6 py-4 text-sm text-foreground font-medium">{analysis.concepto}</td>
                       <td className="px-6 py-4 text-sm text-muted-foreground">{analysis.alcance}</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-primary">S/. {analysis.costo}</td>
+                      <td className="px-6 py-4 text-sm font-semibold text-primary">
+                        {analysis.costo === "Cotizar" ? "Cotizar" : `S/. ${analysis.costo}`}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </div>
 
-          {/* Card View for Mobile */}
-          <div className="md:hidden space-y-4">
-            {filteredAnalyses.map((analysis) => (
-              <div key={analysis.id} className="bg-white rounded-xl border border-border p-4 space-y-3">
-                <h3 className="font-semibold text-foreground text-sm">{analysis.concepto}</h3>
-                <p className="text-xs text-muted-foreground">{analysis.alcance}</p>
-                <div className="flex items-center justify-between pt-2 border-t border-border">
-                  <span className="text-xs text-muted-foreground">Costo</span>
-                  <span className="text-sm font-semibold text-primary">S/. {analysis.costo}</span>
-                </div>
+            {/* Empty State */}
+            {filteredAnalyses.length === 0 && (
+              <div className="p-12 text-center">
+                <p className="text-muted-foreground mb-4">No se encontraron análisis que coincidan con tu búsqueda</p>
+                <button
+                  onClick={clearFilters}
+                  className="text-primary hover:underline text-sm font-medium transition-colors"
+                >
+                  Limpiar filtros e intentar de nuevo
+                </button>
               </div>
-            ))}
+            )}
           </div>
-
-          {/* Empty State */}
-          {filteredAnalyses.length === 0 && (
-            <div className="bg-white rounded-2xl border border-border p-12 text-center">
-              <p className="text-muted-foreground mb-4">No se encontraron análisis que coincidan con tu búsqueda</p>
-              <button onClick={clearFilters} className="text-primary hover:underline text-sm font-medium">
-                Limpiar filtros e intentar de nuevo
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </section>
