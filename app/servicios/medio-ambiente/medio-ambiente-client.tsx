@@ -26,6 +26,7 @@ const serviciosMedioAmbiente = [
     concepto: "Recuento Aerobios Mesófilos",
     icon: TestTube,
     unidad: "Muestra",
+    precio: "S/ 40",
     descripcionTecnica: {
       req: "Muestra de agua (100ml), superficie (hisopo estéril) o aire (placa)",
       proc: "Siembra en Agar Plate Count (PCA), incubación 35-37°C por 48h",
@@ -38,6 +39,7 @@ const serviciosMedioAmbiente = [
     concepto: "Coliformes Totales/Fecales",
     icon: Droplets,
     unidad: "100ml",
+    precio: "S/ 45",
     descripcionTecnica: {
       req: "100ml de agua en frasco estéril, mantener refrigerado (4°C)",
       proc: "Filtración por membrana o NMP en tubos múltiples, medios selectivos",
@@ -50,6 +52,7 @@ const serviciosMedioAmbiente = [
     concepto: "Detección de Escherichia coli",
     icon: Beaker,
     unidad: "100ml",
+    precio: "S/ 45",
     descripcionTecnica: {
       req: "100ml de agua o muestra alimentaria en recipiente estéril",
       proc: "Siembra en medios cromogénicos selectivos, confirmación IMViC",
@@ -62,6 +65,7 @@ const serviciosMedioAmbiente = [
     concepto: "Recuento de Enterobacterias",
     icon: TestTube,
     unidad: "Muestra",
+    precio: "S/ 35",
     descripcionTecnica: {
       req: "Muestra alimentaria (25g) o agua (100ml) en condiciones estériles",
       proc: "Siembra en Agar VRBG, incubación 37°C/24h",
@@ -74,6 +78,7 @@ const serviciosMedioAmbiente = [
     concepto: "Medición de pH",
     icon: Gauge,
     unidad: "Muestra",
+    precio: "S/ 15",
     descripcionTecnica: {
       req: "50ml mínimo de muestra líquida en recipiente limpio",
       proc: "Potenciometría con electrodo de vidrio calibrado",
@@ -86,6 +91,7 @@ const serviciosMedioAmbiente = [
     concepto: "Sensibilidad Desinfectante",
     icon: Droplets,
     unidad: "Prueba",
+    precio: "S/ 150",
     descripcionTecnica: {
       req: "Desinfectante a evaluar (50ml) y cepa objetivo o aislado",
       proc: "Método dilución-neutralización, determinación de CMB",
@@ -98,6 +104,7 @@ const serviciosMedioAmbiente = [
     concepto: "Recuento Cámara Neubauer",
     icon: Beaker,
     unidad: "Muestra",
+    precio: "S/ 30",
     descripcionTecnica: {
       req: "Suspensión celular o microbiana en medio líquido, volumen mínimo 1ml",
       proc: "Conteo directo en hemocitómetro calibrado, tinción vital opcional",
@@ -105,6 +112,32 @@ const serviciosMedioAmbiente = [
     },
     descripcion:
       "El recuento en cámara de Neubauer permite la cuantificación directa de células mediante microscopía óptica.",
+  },
+  {
+    concepto: "Control de esterilidad (agua/soluciones del cliente)",
+    icon: TestTube,
+    unidad: "Muestra",
+    precio: "S/ 40",
+    descripcionTecnica: {
+      req: "Muestra de agua o solución del cliente (100ml mínimo)",
+      proc: "Incubación en caldo de enriquecimiento, evaluación presencia/ausencia",
+      ent: "Certificado de esterilidad o identificación de contaminantes",
+    },
+    descripcion:
+      "Servicio de control de esterilidad para verificar la ausencia de microorganismos en agua y soluciones preparadas.",
+  },
+  {
+    concepto: "Monitoreo ambiental básico por sedimentación",
+    icon: Beaker,
+    unidad: "Campaña",
+    precio: "S/ 120",
+    descripcionTecnica: {
+      req: "Autorización de acceso a hasta 4 puntos de muestreo",
+      proc: "Exposición de placas, cuantificación UFC/placa, análisis temporal",
+      ent: "Informe con datos de UFC/placa por punto + interpretación",
+    },
+    descripcion:
+      "Monitoreo ambiental mediante sedimentación para evaluar la calidad microbiológica del aire en espacios.",
   },
 ]
 
@@ -214,6 +247,7 @@ export default function MedioAmbienteClient() {
                     Descripción Técnica
                   </th>
                   <th className="text-center py-3 px-4 font-semibold text-foreground w-24 text-sm">Unidad</th>
+                  <th className="text-center py-3 px-4 font-semibold text-foreground w-24 text-sm">Precio</th>
                 </tr>
               </thead>
               <tbody>
@@ -255,10 +289,15 @@ export default function MedioAmbienteClient() {
                           {servicio.unidad}
                         </span>
                       </td>
+                      <td className="py-3 px-4 text-center">
+                        <span className="inline-flex px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
+                          {servicio.precio}
+                        </span>
+                      </td>
                     </tr>
                     {expandedServices.includes(index) && (
                       <tr className="bg-emerald-50/30">
-                        <td colSpan={3} className="px-4 py-4">
+                        <td colSpan={4} className="px-4 py-4">
                           <div className="bg-white rounded-lg p-5 border border-emerald-200">
                             <div className="flex items-start gap-4 mb-4">
                               <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center flex-shrink-0">
@@ -269,7 +308,7 @@ export default function MedioAmbienteClient() {
                                 <p className="text-muted-foreground text-sm">{servicio.descripcion}</p>
                               </div>
                             </div>
-                            <div className="grid md:grid-cols-3 gap-3 pt-4 border-t border-emerald-100">
+                            <div className="grid md:grid-cols-4 gap-3 pt-4 border-t border-emerald-100">
                               <div className="bg-emerald-50 rounded-lg p-3">
                                 <div className="flex items-center gap-2 mb-1">
                                   <span className="w-5 h-5 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center font-bold">
@@ -296,6 +335,15 @@ export default function MedioAmbienteClient() {
                                   <span className="font-semibold text-emerald-700 text-sm">Entrega</span>
                                 </div>
                                 <p className="text-muted-foreground text-xs">{servicio.descripcionTecnica.ent}</p>
+                              </div>
+                              <div className="bg-emerald-50 rounded-lg p-3">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="w-5 h-5 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center font-bold">
+                                    4
+                                  </span>
+                                  <span className="font-semibold text-emerald-700 text-sm">Precio</span>
+                                </div>
+                                <p className="text-muted-foreground text-xs">{servicio.precio}</p>
                               </div>
                             </div>
                           </div>

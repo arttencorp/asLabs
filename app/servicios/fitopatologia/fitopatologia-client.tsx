@@ -26,6 +26,7 @@ const serviciosFitopatologia = [
     concepto: "Detección de Patógenos en Muestras Vegetales",
     icon: Bug,
     unidad: "Muestra",
+    precio: "S/ 180",
     descripcionTecnica: {
       req: "Muestra vegetal fresca (hojas, tallos o raíces) en bolsa estéril, mínimo 50g",
       proc: "Aislamiento en medios selectivos, tinción diferencial y microscopía óptica",
@@ -38,6 +39,7 @@ const serviciosFitopatologia = [
     concepto: "Prueba de Susceptibilidad",
     icon: FlaskConical,
     unidad: "Placa",
+    precio: "S/ 150",
     descripcionTecnica: {
       req: "Cepa aislada del patógeno o muestra infectada para aislamiento previo",
       proc: "Método de difusión en agar con discos de antimicrobianos/fungicidas",
@@ -49,7 +51,8 @@ const serviciosFitopatologia = [
   {
     concepto: "Suspensión de Bacterias y Hongos Fitopatógenos",
     icon: Microscope,
-    unidad: "100ml",
+    unidad: "500mL",
+    precio: "S/ 700",
     descripcionTecnica: {
       req: "Solicitud especificando especie y concentración requerida (UFC/mL)",
       proc: "Cultivo de cepas caracterizadas, cuantificación por espectrofotometría",
@@ -62,6 +65,7 @@ const serviciosFitopatologia = [
     concepto: "Análisis de Suelos",
     icon: Leaf,
     unidad: "100g",
+    precio: "S/ 60",
     descripcionTecnica: {
       req: "100g de suelo en bolsa estéril, profundidad 10-20cm",
       proc: "Diluciones seriadas, siembra en medios selectivos",
@@ -74,6 +78,7 @@ const serviciosFitopatologia = [
     concepto: "Presencia de Bacterias en Suelo",
     icon: Bug,
     unidad: "100g",
+    precio: "S/ 60",
     descripcionTecnica: {
       req: "100g de suelo en recipiente estéril, mantener refrigerado",
       proc: "Aislamiento en medios selectivos para Pseudomonas, Bacillus, Rhizobium",
@@ -86,6 +91,7 @@ const serviciosFitopatologia = [
     concepto: "Presencia de Hongos en Suelo",
     icon: Beaker,
     unidad: "100g",
+    precio: "S/ 80",
     descripcionTecnica: {
       req: "100g de suelo en bolsa estéril, evitar exposición solar directa",
       proc: "Siembra en PDA, Rosa de Bengala para identificar Fusarium, Rhizoctonia",
@@ -93,6 +99,71 @@ const serviciosFitopatologia = [
     },
     descripcion:
       "El análisis de hongos en suelo detecta y cuantifica la micobiota presente en sustratos agrícolas. Mediante siembra en medios selectivos como PDA, Rosa de Bengala y Czapek, se identifican hongos saprofíticos, micorrícicos y fitopatógenos.",
+  },
+  {
+    concepto: "Aislamiento y purificación de patógenos desde tejido vegetal",
+    icon: FlaskConical,
+    unidad: "Muestra",
+    precio: "S/ 160",
+    descripcionTecnica: {
+      req: "Muestra vegetal infectada (raíz/pseudotallo/hoja) en bolsa estéril",
+      proc: "Aislamiento en medios selectivos, purificación por repique, microfotografías",
+      ent: "Hasta 2 aislados puros + microfotografías + reporte presuntivo",
+    },
+    descripcion:
+      "Servicio especializado de aislamiento y purificación de patógenos desde diferentes tejidos vegetales. Incluye identificación presuntiva y documentación visual de los aislados obtenidos.",
+  },
+  {
+    concepto: "Banco de aislados del predio",
+    icon: Microscope,
+    unidad: "Aislado/mes",
+    precio: "S/ 60",
+    descripcionTecnica: {
+      req: "Aislado proporcionado o previamente identificado",
+      proc: "Conservación en glicerol, refrigeración y registro de trazabilidad",
+      ent: "Certificado de conservación con identificación de cepa",
+    },
+    descripcion:
+      "Sistema de conservación y trazabilidad de aislados patógenos del predio del cliente. Mantiene la viabilidad de cepas por 30 días renovables.",
+  },
+  {
+    concepto: "Prueba de antagonismo in vitro (dual culture)",
+    icon: Beaker,
+    unidad: "Enfrentamiento",
+    precio: "S/ 180",
+    descripcionTecnica: {
+      req: "1 antagonista vs 1 patógeno, cepas puras",
+      proc: "Dual culture en placa, 3 réplicas, fotografía de inhibición",
+      ent: "% inhibición + fotos + conclusión de efectividad",
+    },
+    descripcion:
+      "Evaluación in vitro del potencial antagónico de microorganismos controladores frente a patógenos específicos del cliente.",
+  },
+  {
+    concepto: "Sensibilidad comparativa in vitro a fungicidas/bactericidas",
+    icon: FlaskConical,
+    unidad: "Producto evaluado",
+    precio: "S/ 220",
+    descripcionTecnica: {
+      req: "Aislado patógeno + producto a evaluar",
+      proc: "3 concentraciones diferentes + control, método de difusión",
+      ent: "Reporte comparativo de inhibición y concentración óptima",
+    },
+    descripcion:
+      "Prueba de sensibilidad comparativa de aislados fitopatógenos frente a diferentes concentraciones de fungicidas o bactericidas.",
+  },
+  {
+    concepto: "Informe sanitario por lote/zona",
+    icon: FileText,
+    unidad: "Informe consolidado",
+    precio: "S/ 120",
+    descripcionTecnica: {
+      req: "Hasta 5 muestras del mismo lote/zona",
+      proc: "Análisis individual + consolidación de datos + análisis de tendencias",
+      ent: "Informe técnico integrado con conclusiones y recomendaciones",
+    },
+    descripcion:
+      "Análisis integrado de múltiples muestras de un lote o zona con tendencias sanitarias y recomendaciones de manejo.",
   },
 ]
 
@@ -208,6 +279,7 @@ export default function FitopatologiaClient() {
                     Descripción Técnica
                   </th>
                   <th className="text-center py-3 px-4 font-semibold text-foreground w-24 text-sm">Unidad</th>
+                  <th className="text-center py-3 px-4 font-semibold text-foreground w-24 text-sm">Precio</th>
                 </tr>
               </thead>
               <tbody>
@@ -249,10 +321,15 @@ export default function FitopatologiaClient() {
                           {servicio.unidad}
                         </span>
                       </td>
+                      <td className="py-3 px-4 text-center">
+                        <span className="inline-flex px-3 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
+                          {servicio.precio}
+                        </span>
+                      </td>
                     </tr>
                     {expandedServices.includes(index) && (
                       <tr className="bg-orange-50/30">
-                        <td colSpan={3} className="px-4 py-4">
+                        <td colSpan={4} className="px-4 py-4">
                           <div className="bg-white rounded-lg p-5 border border-orange-200">
                             <div className="flex items-start gap-4 mb-4">
                               <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center flex-shrink-0">
@@ -263,7 +340,7 @@ export default function FitopatologiaClient() {
                                 <p className="text-muted-foreground text-sm">{servicio.descripcion}</p>
                               </div>
                             </div>
-                            <div className="grid md:grid-cols-3 gap-3 pt-4 border-t border-orange-100">
+                            <div className="grid md:grid-cols-4 gap-3 pt-4 border-t border-orange-100">
                               <div className="bg-orange-50 rounded-lg p-3">
                                 <div className="flex items-center gap-2 mb-1">
                                   <span className="w-5 h-5 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-bold">
@@ -290,6 +367,15 @@ export default function FitopatologiaClient() {
                                   <span className="font-semibold text-orange-700 text-sm">Entrega</span>
                                 </div>
                                 <p className="text-muted-foreground text-xs">{servicio.descripcionTecnica.ent}</p>
+                              </div>
+                              <div className="bg-orange-50 rounded-lg p-3">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="w-5 h-5 rounded-full bg-orange-500 text-white text-xs flex items-center justify-center font-bold">
+                                    4
+                                  </span>
+                                  <span className="font-semibold text-orange-700 text-sm">Precio</span>
+                                </div>
+                                <p className="text-muted-foreground text-xs">{servicio.precio}</p>
                               </div>
                             </div>
                           </div>
