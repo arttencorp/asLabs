@@ -3,6 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { SoilAnalysisSearch } from "@/components/services/soil-analysis-search"
 import {
   ServiceStructuredData,
   BreadcrumbStructuredData,
@@ -23,6 +24,7 @@ import {
   Clock,
   Award,
 } from "lucide-react"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title:
@@ -306,6 +308,11 @@ export default function ServiciosPage() {
             </div>
           </div>
         </section>
+
+        {/* Soil Analysis Search Section */}
+        <Suspense fallback={null}>
+          <SoilAnalysisSearch />
+        </Suspense>
 
         {/* Services Grid */}
         <section className="py-16 bg-muted/30">
