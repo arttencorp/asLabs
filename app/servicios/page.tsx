@@ -250,11 +250,9 @@ export default function ServiciosPage() {
 
       <main className="min-h-screen bg-background font-serif">
         {/* Hero Section - Optimized */}
-        <section className="relative py-12 overflow-hidden">
-          {" "}
-          {/* Updated py-20 to py-12 */}
+        <section className="relative py-8 overflow-hidden">
           {/* Background Image Grid */}
-          <div className="absolute inset-0 grid grid-cols-5 opacity-30">
+          <div className="absolute inset-0 grid grid-cols-5 opacity-20">
             {servicios.map((s, i) => (
               <div key={i} className="relative h-full">
                 <Image
@@ -269,37 +267,30 @@ export default function ServiciosPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl">
-              <div className="flex flex-wrap items-center gap-3 mb-4">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-3">
+                <span className="inline-flex items-center gap-2 px-3 md:px-4 py-2 bg-primary/10 text-primary rounded-full text-xs md:text-sm font-medium">
                   <Microscope className="w-4 h-4" />
-                  {totalServicios}+ servicios especializados
+                  {totalServicios}+ servicios
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-600 rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-2 px-3 md:px-4 py-2 bg-emerald-500/10 text-emerald-600 rounded-full text-xs md:text-sm font-medium">
                   <MapPin className="w-4 h-4" />
-                  Trujillo, La Libertad, Perú
+                  Trujillo
                 </span>
-                {/* Removed badge "Laboratorio Certificado" */}
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Servicios de <span className="text-primary">Laboratorio</span> en Trujillo, Perú
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2 md:mb-3">
+                Servicios de <span className="text-primary">Laboratorio</span>
               </h1>
-              <p className="text-muted-foreground text-lg leading-relaxed max-w-3xl mb-6">
-                Soluciones integrales en análisis microbiológicos, fitopatología, biotecnología vegetal y bacteriología
-                con los más altos estándares de calidad. Laboratorio líder en La Libertad con más de 20 años de
-                experiencia.
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-3xl mb-4 md:mb-5">
+                Más de 100 análisis especializados: microbiología, fitopatología, biotecnología vegetal y bacteriología.
               </p>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-muted-foreground">
                 <span className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-primary" />
                   +51 961 996 645
                 </span>
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2 hidden sm:flex">
                   <Clock className="w-4 h-4 text-primary" />
-                  Lun-Vie: 8am-6pm | Sáb: 8am-1pm
-                </span>
-                <span className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  Huancavelica 315, Palermo, Trujillo
+                  Lun-Vie: 8am-6pm
                 </span>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Search } from "lucide-react"
+import { Search, X } from "lucide-react"
 
 interface Analysis {
   id: string
@@ -417,59 +417,83 @@ export function AnalysisSearch() {
   }
 
   return (
-    <section className="py-8 bg-background">
+    <section className="py-12 md:py-16 bg-gradient-to-b from-muted/50 to-background">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Search Bar - Main Focus */}
-          <div className="bg-white rounded-2xl border border-border shadow-lg p-6 mb-8">
-            <div className="space-y-4">
+          <div className="bg-white rounded-3xl border border-border shadow-xl p-6 md:p-8 mb-8">
+            <div className="space-y-4 md:space-y-5">
+              {/* Title */}
+              <div className="mb-4">
+                <h2 className="text-xl md:text-2xl font-bold text-foreground mb-1">Buscador de Análisis</h2>
+                <p className="text-sm md:text-base text-muted-foreground">
+                  Encuentra rápidamente el análisis que necesitas
+                </p>
+              </div>
+
               {/* Search Input */}
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <div className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 <input
                   type="text"
-                  placeholder="Busca análisis por nombre, alcance o costo..."
+                  placeholder="Busca por nombre de análisis, alcance o costo..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 text-lg border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 md:py-4 text-base md:text-lg border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted-foreground/60"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded-lg transition-colors"
+                    aria-label="Limpiar búsqueda"
+                  >
+                    <X className="w-5 h-5 text-muted-foreground hover:text-foreground" />
+                  </button>
+                )}
               </div>
 
               {/* Type Filter */}
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedType(null)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
                     !selectedType
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
-                  Todos
+                  Todos ({allAnalyses.length})
                 </button>
-                {uniqueTypes.map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setSelectedType(type)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                      selectedType === type
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground hover:bg-muted/80"
-                    }`}
-                  >
-                    {type}
-                  </button>
-                ))}
+                {uniqueTypes.map((type) => {
+                  const count = allAnalyses.filter((a) => a.tipo === type).length
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => setSelectedType(type)}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
+                        selectedType === type
+                          ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg"
+                          : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      {type} ({count})
+                    </button>
+                  )
+                })}
               </div>
 
               {/* Active Filters and Results Count */}
               <div className="flex items-center justify-between flex-wrap gap-3 text-sm">
                 <div className="text-muted-foreground">
-                  Mostrando <span className="font-semibold text-foreground">{filteredAnalyses.length}</span> de{" "}
-                  <span className="font-semibold text-foreground">{allAnalyses.length}</span> análisis
+                  Mostrando <span className="font-semibold text-foreground text-base">{filteredAnalyses.length}</span>{" "}
+                  de <span className="font-semibold text-foreground text-base">{allAnalyses.length}</span> análisis
                 </div>
                 {(searchQuery || selectedType) && (
-                  <button onClick={clearFilters} className="text-primary hover:underline font-medium transition-colors">
+                  <button
+                    onClick={clearFilters}
+                    className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors text-sm"
+                  >
+                    <X className="w-4 h-4" />
                     Limpiar filtros
                   </button>
                 )}
@@ -477,9 +501,10 @@ export function AnalysisSearch() {
             </div>
           </div>
 
-          {/* Results Table */}
+          {/* Results Table - Responsive */}
           <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-lg">
-            <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-muted/50 border-b border-border">
                   <tr>
@@ -504,13 +529,32 @@ export function AnalysisSearch() {
               </table>
             </div>
 
+            {/* Mobile Cards */}
+            <div className="md:hidden p-4 space-y-3">
+              {filteredAnalyses.map((analysis) => (
+                <div
+                  key={analysis.id}
+                  className="p-4 border border-border rounded-lg space-y-2 hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <h4 className="font-semibold text-sm text-primary">{analysis.tipo}</h4>
+                    <span className="text-sm font-bold text-primary whitespace-nowrap">
+                      {analysis.costo === "Cotizar" ? "Cotizar" : `S/. ${analysis.costo}`}
+                    </span>
+                  </div>
+                  <p className="text-sm font-medium text-foreground">{analysis.concepto}</p>
+                  <p className="text-xs text-muted-foreground">{analysis.alcance}</p>
+                </div>
+              ))}
+            </div>
+
             {/* Empty State */}
             {filteredAnalyses.length === 0 && (
               <div className="p-12 text-center">
                 <p className="text-muted-foreground mb-4">No se encontraron análisis que coincidan con tu búsqueda</p>
                 <button
                   onClick={clearFilters}
-                  className="text-primary hover:underline text-sm font-medium transition-colors"
+                  className="text-primary hover:text-primary/80 text-sm font-medium transition-colors"
                 >
                   Limpiar filtros e intentar de nuevo
                 </button>
