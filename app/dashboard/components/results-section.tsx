@@ -1,6 +1,4 @@
 "use client"
-
-import { useState } from "react"
 import type { ResultRow, DocumentType } from "../types"
 import ReferentialBarChart from "./referential-bar-chart"
 
@@ -11,8 +9,6 @@ interface ResultsSectionProps {
 }
 
 export default function ResultsSection({ results, onChange, documentType }: ResultsSectionProps) {
-  const [expandedChart, setExpandedChart] = useState<number | null>(null)
-
   const handleAddResult = () => {
     const newResult: ResultRow = {
       parametro: "",
@@ -45,16 +41,16 @@ export default function ResultsSection({ results, onChange, documentType }: Resu
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-serif font-semibold text-gray-900">
+    <div className="space-y-3">
+      <h2 className="text-sm font-serif font-semibold text-gray-900">
         {documentType === "informe" ? "Resultados" : "Resumen"}
       </h2>
 
       {results.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {results.map((result, index) => (
-            <div key={index} className="border-2 border-green-200 rounded-lg p-3 space-y-3 bg-green-50">
-              <div className="grid grid-cols-2 gap-3">
+            <div key={index} className="border border-gray-300 rounded-lg p-2 space-y-2 bg-white">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="text-xs font-serif font-semibold text-gray-700">Parámetro</label>
                   <input
@@ -93,7 +89,7 @@ export default function ResultsSection({ results, onChange, documentType }: Resu
                 </div>
               </div>
 
-              <div className="border-t pt-3 space-y-2">
+              <div className="border-t pt-2 space-y-2">
                 <label className="text-xs font-serif font-semibold text-gray-700">
                   Valor Referencial (Rango Normal)
                 </label>
@@ -141,12 +137,11 @@ export default function ResultsSection({ results, onChange, documentType }: Resu
                   </div>
                 </div>
 
-                {/* Mostrar gráfico si está habilitado */}
                 {result.valorReferencial?.showChart &&
                   result.valorReferencial?.min &&
                   result.valorReferencial?.max &&
                   result.resultado && (
-                    <div className="mt-3 p-2 bg-white rounded border border-green-300">
+                    <div className="mt-2">
                       <ReferentialBarChart
                         resultado={Number.parseFloat(result.resultado)}
                         min={result.valorReferencial.min}
@@ -182,7 +177,7 @@ export default function ResultsSection({ results, onChange, documentType }: Resu
 
       <button
         onClick={handleAddResult}
-        className="w-full py-2 border-2 border-green-600 text-green-600 rounded-lg hover:bg-green-50 font-serif font-semibold transition-colors text-sm"
+        className="w-full py-2 border-2 border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 font-serif font-semibold transition-colors text-sm"
       >
         + Agregar Resultado
       </button>
