@@ -102,6 +102,11 @@ export default function Navbar() {
       href: "/seguimiento",
       description: "Rastrea el estado de tu pedido ingresando tu número de seguimiento.",
     },
+    dashboard: {
+      title: "Dashboard",
+      href: "/dashboard",
+      description: "Emitir certificados e informes de análisis",
+    },
   }
 
   return (
@@ -201,6 +206,11 @@ export default function Navbar() {
                           Bio
                         </span>
                       )}
+                      {key === "dashboard" && (
+                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1">
+                          Dashboard
+                        </span>
+                      )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
                           activeItem === key ? "w-full" : "w-0"
@@ -220,6 +230,11 @@ export default function Navbar() {
                       )}
                       {key === "control-biologico" && (
                         <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">Bio</span>
+                      )}
+                      {key === "dashboard" && (
+                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                          Dashboard
+                        </span>
                       )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
@@ -393,6 +408,11 @@ export default function Navbar() {
                               Bio
                             </span>
                           )}
+                          {key === "dashboard" && (
+                            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                              Dashboard
+                            </span>
+                          )}
                         </div>
                         {item.children.map((child, index) => (
                           <Link
@@ -418,6 +438,11 @@ export default function Navbar() {
                         )}
                         {key === "control-biologico" && (
                           <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">Bio</span>
+                        )}
+                        {key === "dashboard" && (
+                          <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                            Dashboard
+                          </span>
                         )}
                       </Link>
                     )}
