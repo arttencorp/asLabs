@@ -47,14 +47,14 @@ const allAnalyses: Analysis[] = [
     tipo: "Análisis de Suelo",
     concepto: "Presencia de Bacterias en Suelo",
     alcance: "Recuento y aislamiento",
-    costo: "60",
+    costo: "250",
   },
   {
     id: "6",
     tipo: "Análisis de Suelo",
     concepto: "Presencia de Hongos en Suelo",
     alcance: "Identificación de géneros",
-    costo: "80",
+    costo: "199",
   },
   // Fitopatología
   {
@@ -62,7 +62,7 @@ const allAnalyses: Analysis[] = [
     tipo: "Fitopatología",
     concepto: "Aislamiento y purificación de patógenos desde tejido vegetal",
     alcance: "hasta 2 aislados puros + microfotografías",
-    costo: "160",
+    costo: "250",
   },
   {
     id: "8",

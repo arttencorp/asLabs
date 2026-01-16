@@ -78,7 +78,7 @@ const serviciosFitopatologia = [
     concepto: "Presencia de Bacterias en Suelo",
     icon: Bug,
     unidad: "100g",
-    precio: "S/ 60",
+    precio: "S/ 250",
     descripcionTecnica: {
       req: "100g de suelo en recipiente estéril, mantener refrigerado",
       proc: "Aislamiento en medios selectivos para Pseudomonas, Bacillus, Rhizobium",
@@ -91,7 +91,7 @@ const serviciosFitopatologia = [
     concepto: "Presencia de Hongos en Suelo",
     icon: Beaker,
     unidad: "100g",
-    precio: "S/ 80",
+    precio: "S/ 199",
     descripcionTecnica: {
       req: "100g de suelo en bolsa estéril, evitar exposición solar directa",
       proc: "Siembra en PDA, Rosa de Bengala para identificar Fusarium, Rhizoctonia",
@@ -104,7 +104,7 @@ const serviciosFitopatologia = [
     concepto: "Aislamiento y purificación de patógenos desde tejido vegetal",
     icon: FlaskConical,
     unidad: "Muestra",
-    precio: "S/ 160",
+    precio: "S/ 250",
     descripcionTecnica: {
       req: "Muestra vegetal infectada (raíz/pseudotallo/hoja) en bolsa estéril",
       proc: "Aislamiento en medios selectivos, purificación por repique, microfotografías",
