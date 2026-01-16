@@ -9,13 +9,28 @@ interface SampleSectionProps {
 
 const matrixTypes: MatrixType[] = ["suelo", "agua", "tejido", "alimento", "superficie", "plantin", "cultivo", "otro"]
 
+const fieldDescriptions = {
+  codigoMuestra: "Identificador único de la muestra para trazabilidad",
+  tipoMatriz: "Tipo de matriz analizada (origen de la muestra)",
+  fechaToma: "Fecha en que se recolectó la muestra en campo",
+  lugarMuestreo: "Ubicación geográfica donde se tomó la muestra",
+  lugarRegistro: "Sitio donde se registró y documentó la muestra",
+  centroRegistro: "Centro o laboratorio donde se procesó inicialmente",
+  fechaRecepcion: "Fecha en que la muestra llegó al laboratorio",
+  fechaAnalisis: "Fecha en que se realizó el análisis técnico",
+}
+
 export default function SampleSection({ samples, onChange }: SampleSectionProps) {
   const handleAddSample = () => {
     const newSample: Sample = {
-      codigoMuestra: `MUESTRA-${Date.now()}`,
+      codigoMuestra: `ASLAB-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
       tipoMatriz: "suelo",
       fechaToma: new Date().toISOString().split("T")[0],
       lugarMuestreo: "",
+      lugarRegistro: "",
+      centroRegistro: "AS Laboratorios - Trujillo",
+      fechaRecepcion: new Date().toISOString().split("T")[0],
+      fechaAnalisis: new Date().toISOString().split("T")[0],
       observaciones: "",
     }
     onChange([...samples, newSample])
@@ -49,43 +64,127 @@ export default function SampleSection({ samples, onChange }: SampleSectionProps)
             )}
           </div>
 
-          <input
-            type="text"
-            placeholder="Código de muestra"
-            value={sample.codigoMuestra}
-            onChange={(e) => handleUpdateSample(index, "codigoMuestra", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-          />
+          {/* Código de muestra */}
+          <div>
+            <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+              Código de Muestra
+              <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.codigoMuestra}</span>
+            </label>
+            <input
+              type="text"
+              placeholder="ASLAB-2026-XXXXXX"
+              value={sample.codigoMuestra}
+              onChange={(e) => handleUpdateSample(index, "codigoMuestra", e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            />
+          </div>
 
-          <select
-            value={sample.tipoMatriz}
-            onChange={(e) => handleUpdateSample(index, "tipoMatriz", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-          >
-            {matrixTypes.map((type) => (
-              <option key={type} value={type}>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </option>
-            ))}
-          </select>
+          {/* Tipo de matriz */}
+          <div>
+            <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+              Tipo de Matriz
+              <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.tipoMatriz}</span>
+            </label>
+            <select
+              value={sample.tipoMatriz}
+              onChange={(e) => handleUpdateSample(index, "tipoMatriz", e.target.value as MatrixType)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            >
+              {matrixTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type="date"
-            value={sample.fechaToma}
-            onChange={(e) => handleUpdateSample(index, "fechaToma", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-          />
+          {/* Grid de fechas */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+                Fecha de Toma
+                <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.fechaToma}</span>
+              </label>
+              <input
+                type="date"
+                value={sample.fechaToma}
+                onChange={(e) => handleUpdateSample(index, "fechaToma", e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+                Fecha de Recepción
+                <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.fechaRecepcion}</span>
+              </label>
+              <input
+                type="date"
+                value={sample.fechaRecepcion}
+                onChange={(e) => handleUpdateSample(index, "fechaRecepcion", e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+                Fecha de Análisis
+                <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.fechaAnalisis}</span>
+              </label>
+              <input
+                type="date"
+                value={sample.fechaAnalisis}
+                onChange={(e) => handleUpdateSample(index, "fechaAnalisis", e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Lugar de muestreo"
-            value={sample.lugarMuestreo}
-            onChange={(e) => handleUpdateSample(index, "lugarMuestreo", e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-          />
+          {/* Lugar y centro de registro */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+                Lugar de Registro
+                <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.lugarRegistro}</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Ej: Campo agrícola, zona norte"
+                value={sample.lugarRegistro}
+                onChange={(e) => handleUpdateSample(index, "lugarRegistro", e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+                Centro de Registro
+                <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.centroRegistro}</span>
+              </label>
+              <input
+                type="text"
+                value={sample.centroRegistro}
+                onChange={(e) => handleUpdateSample(index, "centroRegistro", e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+          </div>
 
+          {/* Lugar de muestreo */}
+          <div>
+            <label className="block text-xs font-serif font-semibold text-gray-700 mb-1">
+              Lugar de Muestreo
+              <span className="text-gray-500 ml-2 font-normal">{fieldDescriptions.lugarMuestreo}</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Coordenadas o descripción de ubicación"
+              value={sample.lugarMuestreo}
+              onChange={(e) => handleUpdateSample(index, "lugarMuestreo", e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          {/* Observaciones */}
           <textarea
-            placeholder="Observaciones"
+            placeholder="Observaciones adicionales sobre la muestra"
             value={sample.observaciones}
             onChange={(e) => handleUpdateSample(index, "observaciones", e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"

@@ -25,6 +25,10 @@ export interface Sample {
   tipoMatriz: MatrixType
   fechaToma: string
   lugarMuestreo: string
+  lugarRegistro: string
+  centroRegistro: string
+  fechaRecepcion: string
+  fechaAnalisis: string
   coordenadas?: string
   observaciones: string
 }
@@ -45,6 +49,14 @@ export interface ResultRow {
   observacion: string
 }
 
+export interface Signature {
+  id: string
+  nombre: string
+  cargo: string
+  fecha: string
+  imagen?: string
+}
+
 import type { ServiceSchema } from "./schemas"
 
 export interface Document {
@@ -57,7 +69,7 @@ export interface Document {
   evidencias: Evidence[]
   resultados: ResultRow[]
   responsable: string
-  firma?: string
+  firmas: Signature[]
   fechaEmision: string
   codigoDocumento: string
   conclusiones?: string

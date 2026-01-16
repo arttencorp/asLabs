@@ -1,10 +1,11 @@
 "use client"
 import { useState } from "react"
-import type { DocumentType, Service, Document, Client, Sample, ResultRow } from "../types"
+import type { DocumentType, Service, Document, Client, Sample, ResultRow, Signature } from "../types"
 import { useDocumentStore } from "../hooks/useDocumentStore"
 import ClientSection from "./client-section"
 import SampleSection from "./sample-section"
 import ResultsSection from "./results-section"
+import SignaturesSection from "./signatures-section"
 import PreviewSection from "./preview-section"
 import ActionButtons from "./action-buttons"
 
@@ -29,15 +30,20 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
 
   const [muestras, setMuestras] = useState<Sample[]>([
     {
-      codigoMuestra: `MUESTRA-${Date.now()}`,
+      codigoMuestra: `ASLAB-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
       tipoMatriz: "suelo",
       fechaToma: new Date().toISOString().split("T")[0],
       lugarMuestreo: "",
+      lugarRegistro: "",
+      centroRegistro: "AS Laboratorios - Trujillo",
+      fechaRecepcion: new Date().toISOString().split("T")[0],
+      fechaAnalisis: new Date().toISOString().split("T")[0],
       observaciones: "",
     },
   ])
 
   const [resultados, setResultados] = useState<ResultRow[]>([])
+  const [firmas, setFirmas] = useState<Signature[]>([])
   const [showPreview, setShowPreview] = useState(false)
 
   const handleSave = () => {
@@ -51,6 +57,7 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
       evidencias: [],
       resultados,
       responsable: "",
+      firmas, // Include firmas in document
       fechaEmision: new Date().toISOString().split("T")[0],
       codigoDocumento: generateDocumentCode(),
       createdAt: new Date(),
@@ -72,6 +79,7 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
           evidencias: [],
           resultados,
           responsable: "",
+          firmas, // Include firmas in preview
           fechaEmision: new Date().toISOString().split("T")[0],
           codigoDocumento: generateDocumentCode(),
           createdAt: new Date(),
@@ -96,6 +104,7 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
           <ClientSection client={cliente} onChange={setCliente} />
           <SampleSection samples={muestras} onChange={setMuestras} />
           <ResultsSection results={resultados} onChange={setResultados} documentType={documentType} />
+          <SignaturesSection firmas={firmas} onChange={setFirmas} />
         </div>
 
         <ActionButtons onSave={handleSave} onPreview={() => setShowPreview(true)} onNew={onClose} />
