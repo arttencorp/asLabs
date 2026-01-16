@@ -1,6 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import type { ResultRow, DocumentType } from "../types"
+import ReferentialBarChart from "./referential-bar-chart"
 
 interface ResultsSectionProps {
   results: ResultRow[]
@@ -9,6 +11,8 @@ interface ResultsSectionProps {
 }
 
 export default function ResultsSection({ results, onChange, documentType }: ResultsSectionProps) {
+  const [expandedChart, setExpandedChart] = useState<number | null>(null)
+
   const handleAddResult = () => {
     const newResult: ResultRow = {
       parametro: "",
@@ -16,13 +20,23 @@ export default function ResultsSection({ results, onChange, documentType }: Resu
       unidad: "",
       metodo: "",
       observacion: "",
+      valorReferencial: { min: undefined, max: undefined, showChart: false },
     }
     onChange([...results, newResult])
   }
 
-  const handleUpdateResult = (index: number, field: keyof ResultRow, value: string) => {
+  const handleUpdateResult = (index: number, field: keyof ResultRow, value: any) => {
     const updated = [...results]
     updated[index] = { ...updated[index], [field]: value }
+    onChange(updated)
+  }
+
+  const handleUpdateReferential = (index: number, field: "min" | "max" | "showChart", value: any) => {
+    const updated = [...results]
+    if (!updated[index].valorReferencial) {
+      updated[index].valorReferencial = {}
+    }
+    updated[index].valorReferencial![field] = value
     onChange(updated)
   }
 
@@ -37,70 +51,138 @@ export default function ResultsSection({ results, onChange, documentType }: Resu
       </h2>
 
       {results.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 px-3 py-2 text-left font-serif">Parámetro</th>
-                <th className="border border-gray-300 px-3 py-2 text-left font-serif">Resultado</th>
-                <th className="border border-gray-300 px-3 py-2 text-left font-serif">Unidad</th>
-                <th className="border border-gray-300 px-3 py-2 text-left font-serif">Método</th>
-                <th className="border border-gray-300 px-3 py-2 text-center font-serif">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((result, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-3 py-2">
+        <div className="space-y-3">
+          {results.map((result, index) => (
+            <div key={index} className="border-2 border-green-200 rounded-lg p-3 space-y-3 bg-green-50">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-serif font-semibold text-gray-700">Parámetro</label>
+                  <input
+                    type="text"
+                    value={result.parametro}
+                    onChange={(e) => handleUpdateResult(index, "parametro", e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-serif font-semibold text-gray-700">Resultado</label>
+                  <input
+                    type="text"
+                    value={result.resultado}
+                    onChange={(e) => handleUpdateResult(index, "resultado", e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-serif font-semibold text-gray-700">Unidad</label>
+                  <input
+                    type="text"
+                    value={result.unidad}
+                    onChange={(e) => handleUpdateResult(index, "unidad", e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-serif font-semibold text-gray-700">Método</label>
+                  <input
+                    type="text"
+                    value={result.metodo}
+                    onChange={(e) => handleUpdateResult(index, "metodo", e.target.value)}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="border-t pt-3 space-y-2">
+                <label className="text-xs font-serif font-semibold text-gray-700">
+                  Valor Referencial (Rango Normal)
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
                     <input
-                      type="text"
-                      value={result.parametro}
-                      onChange={(e) => handleUpdateResult(index, "parametro", e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-200 rounded text-sm"
+                      type="number"
+                      placeholder="Mín"
+                      value={result.valorReferencial?.min || ""}
+                      onChange={(e) =>
+                        handleUpdateReferential(
+                          index,
+                          "min",
+                          e.target.value ? Number.parseFloat(e.target.value) : undefined,
+                        )
+                      }
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
                     />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
+                  </div>
+                  <div>
                     <input
-                      type="text"
-                      value={result.resultado}
-                      onChange={(e) => handleUpdateResult(index, "resultado", e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-200 rounded text-sm"
+                      type="number"
+                      placeholder="Máx"
+                      value={result.valorReferencial?.max || ""}
+                      onChange={(e) =>
+                        handleUpdateReferential(
+                          index,
+                          "max",
+                          e.target.value ? Number.parseFloat(e.target.value) : undefined,
+                        )
+                      }
+                      className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
                     />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input
-                      type="text"
-                      value={result.unidad}
-                      onChange={(e) => handleUpdateResult(index, "unidad", e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-200 rounded text-sm"
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input
-                      type="text"
-                      value={result.metodo}
-                      onChange={(e) => handleUpdateResult(index, "metodo", e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-200 rounded text-sm"
-                    />
-                  </td>
-                  <td className="border border-gray-300 px-3 py-2 text-center">
-                    <button
-                      onClick={() => handleRemoveResult(index)}
-                      className="text-red-600 hover:text-red-700 text-xs font-serif"
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                  <div>
+                    <label className="flex items-center gap-2 text-xs font-serif text-gray-700">
+                      <input
+                        type="checkbox"
+                        checked={result.valorReferencial?.showChart || false}
+                        onChange={(e) => handleUpdateReferential(index, "showChart", e.target.checked)}
+                        className="w-3 h-3"
+                      />
+                      Mostrar gráfico
+                    </label>
+                  </div>
+                </div>
+
+                {/* Mostrar gráfico si está habilitado */}
+                {result.valorReferencial?.showChart &&
+                  result.valorReferencial?.min &&
+                  result.valorReferencial?.max &&
+                  result.resultado && (
+                    <div className="mt-3 p-2 bg-white rounded border border-green-300">
+                      <ReferentialBarChart
+                        resultado={Number.parseFloat(result.resultado)}
+                        min={result.valorReferencial.min}
+                        max={result.valorReferencial.max}
+                        unidad={result.unidad}
+                      />
+                    </div>
+                  )}
+              </div>
+
+              <div>
+                <label className="text-xs font-serif font-semibold text-gray-700">Observación</label>
+                <textarea
+                  value={result.observacion}
+                  onChange={(e) => handleUpdateResult(index, "observacion", e.target.value)}
+                  className="w-full px-2 py-1 border border-gray-300 rounded text-xs"
+                  rows={2}
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={() => handleRemoveResult(index)}
+                  className="text-red-600 hover:text-red-700 text-xs font-serif font-semibold"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
       <button
         onClick={handleAddResult}
-        className="w-full py-2 border-2 border-green-600 text-green-600 rounded-lg hover:bg-green-50 font-serif font-semibold transition-colors"
+        className="w-full py-2 border-2 border-green-600 text-green-600 rounded-lg hover:bg-green-50 font-serif font-semibold transition-colors text-sm"
       >
         + Agregar Resultado
       </button>

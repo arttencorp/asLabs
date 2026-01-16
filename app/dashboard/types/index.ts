@@ -47,6 +47,11 @@ export interface ResultRow {
   unidad: string
   metodo: string
   observacion: string
+  valorReferencial?: {
+    min?: number
+    max?: number
+    showChart?: boolean
+  }
 }
 
 export interface Signature {
