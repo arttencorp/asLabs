@@ -45,6 +45,8 @@ export interface ResultRow {
   observacion: string
 }
 
+import type { ServiceSchema } from "./schemas"
+
 export interface Document {
   id: string
   tipo: DocumentType
@@ -60,4 +62,6 @@ export interface Document {
   codigoDocumento: string
   conclusiones?: string
   createdAt: Date
+  serviceSchema?: ServiceSchema
+  serviceResults?: Record<string, any>
 }
