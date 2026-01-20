@@ -95,13 +95,13 @@ export default function ClientPage() {
             className="w-full h-full"
             priority
           />
-          {/* Overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          {/* Gradient overlay from dark left to light right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
         </div>
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 text-left">
             <div className="transition-opacity duration-500 ease-in-out" style={{ opacity: isTransitioning ? 0.5 : 1 }}>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 font-serif leading-tight">
                 {slides[currentSlide].title}
