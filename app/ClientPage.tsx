@@ -10,6 +10,7 @@ import TeamMemberSection from "@/components/team-member-section"
 import JourneySection from "@/components/journey-section"
 import HomeResearchSection from "@/components/home-research-section"
 import { OrganizationStructuredData } from "@/components/structured-data"
+import PromoModal from "@/components/promo-modal"
 
 export default function ClientPage() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -81,6 +82,7 @@ export default function ClientPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <OrganizationStructuredData />
+      <PromoModal />
       <Navbar />
 
       {/* Hero Section with Video Background */}
