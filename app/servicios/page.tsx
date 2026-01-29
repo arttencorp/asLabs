@@ -279,7 +279,7 @@ export default function ServiciosPage() {
                 </span>
                 <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 text-blue-600 rounded-full text-sm font-medium">
                   <Award className="w-4 h-4" />
-                  Laboratorio Certificado
+                  Laboratorio Certificado por Senasa (Plantines InVitro)
                 </span>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
