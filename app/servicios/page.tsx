@@ -3,6 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { AnalysisSearch } from "@/components/analysis-search"
 import {
   ServiceStructuredData,
   BreadcrumbStructuredData,
@@ -306,6 +307,9 @@ export default function ServiciosPage() {
             </div>
           </div>
         </section>
+
+        {/* Search Section */}
+        <AnalysisSearch />
 
         {/* Services Grid */}
         <section className="py-16 bg-muted/30">
