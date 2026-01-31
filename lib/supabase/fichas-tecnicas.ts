@@ -43,16 +43,7 @@ export async function crearFichaTecnica(fichaTecnicaData: {
             fit_tec_imag_vac: fichaTecnicaData.fit_tec_imag_vac?.trim() || null
         }
 
-        const { data: existingFicha } = await supabase
-            .from('Ficha_Tecnica')
-            .select('fit_tec_id_int')
-            .eq('pro_id_int', datosLimpios.pro_id_int)
-            .single()
-
-        if (existingFicha) {
-            throw new Error('Ya existe una ficha técnica para este producto')
-        }
-
+        // Relación 1:N - Un producto puede tener múltiples fichas técnicas
         const { data, error } = await supabase
             .from('Ficha_Tecnica')
             .insert(datosLimpios)
@@ -95,18 +86,8 @@ export async function actualizarFichaTecnica(id: string, fichaTecnicaData: {
             throw new Error('El nombre de la planta es requerido')
         }
 
-        if (updateData.pro_id_int) {
-            const { data: existingFicha } = await supabase
-                .from('Ficha_Tecnica')
-                .select('fit_tec_id_int')
-                .eq('pro_id_int', updateData.pro_id_int)
-                .neq('fit_tec_id_int', id)
-                .single()
-
-            if (existingFicha) {
-                throw new Error('Ya existe una ficha técnica para este producto')
-            }
-        }
+        // Relación 1:N - Un producto puede tener múltiples fichas técnicas
+        // No se valida unicidad de producto
 
         const { data, error } = await supabase
             .from('Ficha_Tecnica')
@@ -176,7 +157,8 @@ export async function obtenerFichaTecnicaPorId(id: string): Promise<FichaTecnica
     }
 }
 
-export async function obtenerFichaTecnicaPorProducto(productoId: string): Promise<FichaTecnicaDatabase | null> {
+// Relación 1:N - Un producto puede tener múltiples fichas técnicas
+export async function obtenerFichasTecnicasPorProducto(productoId: string): Promise<FichaTecnicaDatabase[]> {
     try {
         const { data, error } = await supabase
             .from('Ficha_Tecnica')
@@ -185,14 +167,20 @@ export async function obtenerFichaTecnicaPorProducto(productoId: string): Promis
         producto:Productos(*)
       `)
             .eq('pro_id_int', productoId)
-            .single()
+            .order('fit_tec_created_at_dt', { ascending: false })
 
-        if (error && error.code !== 'PGRST116') throw error
-        return data || null
+        if (error) throw error
+        return data || []
     } catch (error) {
-        console.error('Error obteniendo ficha técnica por producto:', error)
+        console.error('Error obteniendo fichas técnicas por producto:', error)
         throw error
     }
+}
+
+// Mantener compatibilidad: obtener la primera ficha de un producto (para casos legacy)
+export async function obtenerFichaTecnicaPorProducto(productoId: string): Promise<FichaTecnicaDatabase | null> {
+    const fichas = await obtenerFichasTecnicasPorProducto(productoId)
+    return fichas.length > 0 ? fichas[0] : null
 }
 
 // ============================================

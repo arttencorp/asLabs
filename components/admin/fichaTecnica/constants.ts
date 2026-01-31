@@ -18,7 +18,6 @@ export const ERROR_MESSAGES = {
   FILE_TOO_LARGE: 'El archivo es demasiado grande. Tamaño máximo: 500MB.',
   REQUIRED_NAME: 'El nombre de la planta es requerido',
   REQUIRED_PRODUCT: 'El producto es requerido',
-  PRODUCT_ALREADY_HAS_FICHA: 'Ya existe una ficha técnica para este producto',
   UPLOAD_ERROR: 'Error al subir la imagen',
   DELETE_ERROR: 'Error al eliminar la imagen'
 } as const
