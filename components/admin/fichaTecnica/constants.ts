@@ -6,8 +6,8 @@ export const ALLOWED_IMAGE_TYPES = [
   'image/webp'
 ] as const
 
-// Tamaño máximo de archivo (5MB)
-export const MAX_FILE_SIZE = 5 * 1024 * 1024
+// Tamaño máximo de archivo (sin límite práctico - 500MB)
+export const MAX_FILE_SIZE = 500 * 1024 * 1024
 
 // Extensiones de archivo permitidas
 export const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp']
@@ -15,7 +15,7 @@ export const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp']
 // Mensajes de error
 export const ERROR_MESSAGES = {
   INVALID_FILE_TYPE: 'Tipo de archivo no permitido. Solo se permiten imágenes JPG, PNG y WebP.',
-  FILE_TOO_LARGE: 'El archivo es demasiado grande. Tamaño máximo: 5MB.',
+  FILE_TOO_LARGE: 'El archivo es demasiado grande. Tamaño máximo: 500MB.',
   REQUIRED_NAME: 'El nombre de la planta es requerido',
   REQUIRED_PRODUCT: 'El producto es requerido',
   PRODUCT_ALREADY_HAS_FICHA: 'Ya existe una ficha técnica para este producto',

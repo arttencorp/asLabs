@@ -438,7 +438,7 @@ export function FichaTecnicaCompletaFormDialog({
                             Haz clic para seleccionar una imagen
                           </p>
                           <p className="text-xs text-gray-500">
-                            JPG, PNG o WebP (máx. 5MB)
+                            JPG, PNG o WebP
                           </p>
                         </div>
                       </div>
