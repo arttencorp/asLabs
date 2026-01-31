@@ -179,19 +179,32 @@ export default function ImprimirCotizacion() {
       </div>
       
       {/* Fichas técnicas - Páginas separadas */}
+      {/* Lógica: Si tiene imagen → solo imagen. Si no tiene imagen → solo texto */}
       <>
-        {/* 1. Prioridad: Fichas dinámicas (todas - con y sin imagen) */}
         {fichasDinamicas && fichasDinamicas.length > 0 && (
           <>
             {fichasDinamicas.map((ficha, index) => (
               <div key={index} className="page-break-before">
-                <FichaTecnicaTexto ficha={ficha} />
+                {/* Si la ficha tiene imagen, mostrar SOLO la imagen (prioridad) */}
+                {ficha.fit_tec_imag_vac ? (
+                  <div className="mx-auto max-w-[210mm] bg-white print:p-0">
+                    <div className="ficha-tecnica-print">
+                      <img 
+                        src={ficha.fit_tec_imag_vac} 
+                        alt={ficha.fit_tec_nom_planta_vac || 'Ficha técnica'}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  /* Si NO tiene imagen, mostrar el texto */
+                  <FichaTecnicaTexto ficha={ficha} />
+                )}
               </div>
             ))}
           </>
         )}
         
-        {/* 2. Fallback: Fichas con imágenes de BD (formato básico) - solo si no hay dinámicas */}
+        {/* Fallback: Si no hay fichas dinámicas, usar las del localStorage */}
         {(!fichasDinamicas || fichasDinamicas.length === 0) && cotizacion.fichasTecnicas && cotizacion.fichasTecnicas.length > 0 && (
           <FichasTecnicas fichasTecnicas={cotizacion.fichasTecnicas} />
         )}
