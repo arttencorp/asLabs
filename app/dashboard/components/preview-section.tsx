@@ -133,8 +133,9 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
             background: #fff9e6; 
             border: 1px solid #ffc107; 
             padding: 6px; 
-            margin-top: 8px; 
+            margin-top: 12px; 
             font-size: 8px;
+            line-height: 1.4;
           }
           .footer { 
             text-align: center; 
@@ -143,6 +144,24 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
             margin-top: 8px; 
             border-top: 1px solid #ccc; 
             padding-top: 6px;
+          }
+          .foto-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 200px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            border-radius: 4px;
+            overflow: hidden;
+          }
+          .foto-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
           }
           .back-button {
             position: fixed;
@@ -310,36 +329,13 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
               : ""
           }
 
-          <!-- Firmas -->
-          <div class="signatures">
-            ${
-              document.firmas.length > 0
-                ? document.firmas
-                    .map(
-                      (firma) => `
-              <div>
-                <div class="sig-line"></div>
-                <div class="sig-name">${firma.nombre}</div>
-                <div class="sig-cargo">${firma.cargo}</div>
-              </div>
-            `,
-                    )
-                    .join("")
-                : `
-              <div><div class="sig-line"></div><div style="font-size: 9px;">Firma Autorizada</div></div>
-              <div><div class="sig-line"></div><div style="font-size: 9px;">Firma Autorizada</div></div>
-              <div><div class="sig-line"></div><div style="font-size: 9px;">Firma Autorizada</div></div>
-            `
-            }
-          </div>
-
           <!-- DECLARACION (Bacteriología) -->
           ${
             document.area === "bacteriologia"
               ? `
             <div class="section-title">DECLARACIÓN</div>
             <div class="info-box">
-              <p>Este documento registra la información declarada por el remitente y la evaluación preanalítica realizada al momento de la recepción, además de resultados de tamizaje y pruebas bioquímicas según el alcance solicitado. La identificación puede ser presuntiva o confirmatoria dependiendo del panel aplicado, controles y consistencia del patrón bioquímico.</p>
+              <p style="line-height: 1.5; text-align: justify;">Este documento registra la información declarada por el remitente y la evaluación preanalítica realizada al momento de la recepción, además de resultados de tamizaje y pruebas bioquímicas según el alcance solicitado. La identificación puede ser presuntiva o confirmatoria dependiendo del panel aplicado, controles y consistencia del patrón bioquímico.</p>
             </div>
           `
               : ""
@@ -349,7 +345,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
           ${
             document.bacterialAnalysis
               ? `
-            <div class="section-title">4) AISLAMIENTO Y CARACTERIZACIÓN INICIAL</div>
+            <div class="section-title">AISLAMIENTO Y CARACTERIZACIÓN INICIAL</div>
             <div class="info-box">
               <table class="results-table">
                 <tr>
@@ -407,7 +403,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
           ${
             document.taxonomicInterpretation
               ? `
-            <div class="section-title">7) INTERPRETACIÓN TAXONÓMICA</div>
+            <div class="section-title">INTERPRETACIÓN TAXONÓMICA</div>
             <div class="info-box">
               <table class="results-table">
                 <tr>
@@ -439,40 +435,65 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
           ${
             document.photographicRegistry
               ? `
-            <div class="section-title">8) REGISTRO FOTOGRÁFICO</div>
+            <div class="section-title">REGISTRO FOTOGRÁFICO</div>
             <div class="info-box">
               ${
                 document.photographicRegistry.imagenes && document.photographicRegistry.imagenes.length > 0
                   ? `
                 <div style="margin-bottom: 12px;">
-                  <p style="font-size: 9px; font-weight: bold; margin-bottom: 8px;">Imágenes registradas:</p>
-                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                    ${document.photographicRegistry.imagenes
-                      .map(
-                        (img) => `
-                      <div style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
-                        <img src="${img.url}" style="width: 100%; height: 80px; object-fit: cover;" />
-                        <div style="padding: 4px; font-size: 8px;">
-                          ${img.titulo ? `<strong>${img.titulo}</strong>` : ""}
-                          ${img.descripcion ? `<p style="margin: 2px 0; color: #666;">${img.descripcion}</p>` : ""}
+                  <p style="font-size: 9px; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">Figuras registradas (${document.photographicRegistry.imagenes.length})</p>
+                  ${document.photographicRegistry.imagenes
+                    .map(
+                      (img, idx) => `
+                      <div style="margin-bottom: 14px; page-break-inside: avoid; border: 1px solid #eee; padding: 8px; border-radius: 4px;">
+                        <div style="font-size: 9px; font-weight: bold; margin-bottom: 8px; color: #222; border-bottom: 1px solid #ddd; padding-bottom: 4px;">Figura ${idx + 1}: ${img.titulo || "Sin título"}</div>
+                        <div class="foto-container" style="margin-bottom: 8px;">
+                          <img src="${img.url}" alt="Figura ${idx + 1}" />
                         </div>
+                        ${img.descripcion ? `<div style="font-size: 8px; color: #444; line-height: 1.5; padding: 6px; background: #f5f5f5; border-left: 3px solid #999; border-radius: 2px;"><strong>Observación:</strong> ${img.descripcion}</div>` : ""}
                       </div>
                     `,
-                      )
-                      .join("")}
-                  </div>
+                    )
+                    .join("")}
                 </div>
               `
                   : ""
               }
-              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #ddd;">
-                <div style="font-size: 9px; margin-bottom: 4px;"><strong>Figura:</strong> ${document.photographicRegistry.figura || "_______________"}</div>
-                <div style="font-size: 9px;"><strong>Nota:</strong> ${document.photographicRegistry.nota || "_____________________________________________________________________________"}</div>
-              </div>
+              ${
+                document.photographicRegistry.figura || document.photographicRegistry.nota
+                  ? `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #ddd;">
+                    ${document.photographicRegistry.figura ? `<div style="font-size: 9px; margin-bottom: 4px;"><strong>Descripción General:</strong> ${document.photographicRegistry.figura}</div>` : ""}
+                    ${document.photographicRegistry.nota ? `<div style="font-size: 8px; line-height: 1.4; padding: 4px; background: #fafafa; border-left: 2px solid #ddd;"><strong>Nota General:</strong> ${document.photographicRegistry.nota}</div>` : ""}
+                  </div>`
+                  : ""
+              }
             </div>
           `
               : ""
           }
+
+          <!-- Firmas (AL FINAL) -->
+          <div class="signatures" style="page-break-inside: avoid;">
+            ${
+              document.firmas.length > 0
+                ? document.firmas
+                    .map(
+                      (firma) => `
+              <div>
+                <div class="sig-line"></div>
+                <div class="sig-name">${firma.nombre}</div>
+                <div class="sig-cargo">${firma.cargo}</div>
+              </div>
+            `,
+                    )
+                    .join("")
+                : `
+              <div><div class="sig-line"></div><div style="font-size: 9px;">Firma Autorizada</div></div>
+              <div><div class="sig-line"></div><div style="font-size: 9px;">Firma Autorizada</div></div>
+              <div><div class="sig-line"></div><div style="font-size: 9px;">Firma Autorizada</div></div>
+            `
+            }
+          </div>
 
           <!-- Disclaimer -->
           <div class="disclaimer">
