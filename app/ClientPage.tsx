@@ -211,9 +211,10 @@ export default function ClientPage() {
                 <Image src="/trustUs/skyeast.jpg" alt="Skyeast" fill style={{ objectFit: "contain" }} />
               </div>
             </a>
-            <a href="https://www.coazucar.com/esp/agrolmos_nosotros.html" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
+            <a href="https://www.qub.ac.uk/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300 flex flex-col items-center">
+              <span className="text-xs text-gray-600 mb-1 font-medium">Investigadores de:</span>
               <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/agrolmos.jpg" alt="Agrolmos" fill style={{ objectFit: "contain" }} />
+                <Image src="/trustUs/queensU.png" alt="Queen's University Belfast" fill style={{ objectFit: "contain" }} />
               </div>
             </a>
             <a href="https://www.arttencorp.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
