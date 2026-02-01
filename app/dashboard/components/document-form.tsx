@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import type { DocumentType, Service, Document, Client, Sample, ResultRow, Signature } from "../types"
+import type { DocumentType, Service, Document, Client, Sample, ResultRow, Signature, BacterialAnalysis, QCControl, TaxonomicInterpretation, PhotographicRegistry } from "../types"
 import { useDocumentStore } from "../hooks/useDocumentStore"
 import ClientSection from "./client-section"
 import SampleSection from "./sample-section"
@@ -8,6 +8,10 @@ import ResultsSection from "./results-section"
 import SignaturesSection from "./signatures-section"
 import PreviewSection from "./preview-section"
 import ActionButtons from "./action-buttons"
+import BacterialAnalysisSection from "./bacterial-analysis-section"
+import QCControlSection from "./qc-control-section"
+import TaxonomicInterpretationSection from "./taxonomic-interpretation-section"
+import PhotographicRegistrySection from "./photographic-registry-section"
 
 interface DocumentFormProps {
   documentType: DocumentType
@@ -45,6 +49,10 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
   const [resultados, setResultados] = useState<ResultRow[]>([])
   const [firmas, setFirmas] = useState<Signature[]>([])
   const [showPreview, setShowPreview] = useState(false)
+  const [bacterialAnalysis, setBacterialAnalysis] = useState<BacterialAnalysis | undefined>(undefined)
+  const [qcControl, setQCControl] = useState<QCControl | undefined>(undefined)
+  const [taxonomicInterpretation, setTaxonomicInterpretation] = useState<TaxonomicInterpretation | undefined>(undefined)
+  const [photographicRegistry, setPhotographicRegistry] = useState<PhotographicRegistry | undefined>(undefined)
 
   const handleSave = () => {
     const newDocument: Document = {
@@ -57,10 +65,14 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
       evidencias: [],
       resultados,
       responsable: "",
-      firmas, // Include firmas in document
+      firmas,
       fechaEmision: new Date().toISOString().split("T")[0],
       codigoDocumento: generateDocumentCode(),
       createdAt: new Date(),
+      bacterialAnalysis,
+      qcControl,
+      taxonomicInterpretation,
+      photographicRegistry,
     }
     saveDocument(newDocument)
     alert("Documento guardado exitosamente")
@@ -79,10 +91,14 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
           evidencias: [],
           resultados,
           responsable: "",
-          firmas, // Include firmas in preview
+          firmas,
           fechaEmision: new Date().toISOString().split("T")[0],
           codigoDocumento: generateDocumentCode(),
           createdAt: new Date(),
+          bacterialAnalysis,
+          qcControl,
+          taxonomicInterpretation,
+          photographicRegistry,
         }}
         onBack={() => setShowPreview(false)}
       />
@@ -104,6 +120,29 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
           <ClientSection client={cliente} onChange={setCliente} />
           <SampleSection samples={muestras} onChange={setMuestras} />
           <ResultsSection results={resultados} onChange={setResultados} documentType={documentType} />
+          
+          {/* Secciones de Bacteriología (condicionales) */}
+          {service.area === "bacteriologia" && (
+            <>
+              <BacterialAnalysisSection 
+                analysis={bacterialAnalysis || {}} 
+                onChange={setBacterialAnalysis} 
+              />
+              <QCControlSection 
+                qcControl={qcControl || {}} 
+                onChange={setQCControl} 
+              />
+              <TaxonomicInterpretationSection 
+                interpretation={taxonomicInterpretation || {}} 
+                onChange={setTaxonomicInterpretation} 
+              />
+              <PhotographicRegistrySection 
+                registry={photographicRegistry || {}} 
+                onChange={setPhotographicRegistry} 
+              />
+            </>
+          )}
+          
           <SignaturesSection firmas={firmas} onChange={setFirmas} />
         </div>
 
