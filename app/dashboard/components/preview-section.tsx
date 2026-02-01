@@ -61,7 +61,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
             display: flex; 
             align-items: center; 
             gap: 12px; 
-            border-bottom: 2px solid #000; 
+            border-bottom: 3px solid #00A651; 
             padding-bottom: 8px; 
             margin-bottom: 8px;
           }
@@ -80,7 +80,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
           .section-title { 
             font-size: 10px; 
             font-weight: bold; 
-            background: #000; 
+            background: #00A651; 
             color: white; 
             padding: 4px; 
             margin: 6px 0 4px 0;
@@ -170,7 +170,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
         <div class="page">
           <!-- Header -->
           <div class="header">
-            <img src="/aslabs-logo.png" alt="Logo" class="logo">
+            <img src="/aslab-logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
             <div>
               <div class="title">AS LABORATORIOS</div>
               <div class="subtitle">${document.tipo === "certificado" ? "CERTIFICADO DE ANÁLISIS" : "INFORME DE ANÁLISIS"}</div>
@@ -232,26 +232,34 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
                   <div class="label">Matriz:</div>
                   <div class="value">${muestra.tipoMatriz}</div>
                 </div>
-                <div>
-                  <div class="label">Lugar Registro:</div>
-                  <div class="value">${muestra.lugarRegistro}</div>
-                </div>
-              </div>
-              <div class="grid-3" style="margin-top: 4px;">
-                <div>
-                  <div class="label">Centro Registro:</div>
-                  <div class="value">${muestra.centroRegistro}</div>
-                </div>
-                <div>
-                  <div class="label">Recepción:</div>
-                  <div class="value">${muestra.fechaRecepcion}</div>
-                </div>
-                <div>
-                  <div class="label">Análisis:</div>
-                  <div class="value">${muestra.fechaAnalisis}</div>
-                </div>
+              <div>
+                <div class="label">Lugar Registro:</div>
+                <div class="value">${muestra.lugarRegistro}</div>
               </div>
             </div>
+            <div class="grid-3" style="margin-top: 4px;">
+              <div>
+                <div class="label">Centro Registro:</div>
+                <div class="value">${muestra.centroRegistro}</div>
+              </div>
+              <div>
+                <div class="label">Recepción:</div>
+                <div class="value">${muestra.fechaRecepcion}</div>
+              </div>
+              <div>
+                <div class="label">Análisis:</div>
+                <div class="value">${muestra.fechaAnalisis}</div>
+              </div>
+            </div>
+            ${
+              muestra.observaciones
+                ? `<div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #ddd;">
+                <div class="label">Observaciones Muestra:</div>
+                <div class="value">${muestra.observaciones}</div>
+              </div>`
+                : ""
+            }
+          </div>
           `,
             )
             .join("")}
@@ -291,7 +299,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
                           ? `${result.valorReferencial.min}-${result.valorReferencial.max}`
                           : "-"
                     }</td>
-                    <td>${result.metodo}</td>
+                    <td>${result.metodo}${result.observaciones ? `<br><em style="font-size: 8px; color: #666;">Obs: ${result.observaciones}</em>` : ""}</td>
                   </tr>
                 `,
                   )
