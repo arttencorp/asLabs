@@ -99,6 +99,12 @@ export interface TaxonomicInterpretation {
 export interface PhotographicRegistry {
   figura?: string
   nota?: string
+  imagenes?: Array<{
+    id: string
+    url: string
+    titulo?: string
+    descripcion?: string
+  }>
 }
 
 export interface Signature {

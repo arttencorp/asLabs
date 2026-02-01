@@ -441,10 +441,34 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
               ? `
             <div class="section-title">8) REGISTRO FOTOGRÁFICO</div>
             <div class="info-box">
-              <div style="border: 1px dashed #999; padding: 20px; text-align: center; margin-bottom: 6px; min-height: 60px;">
-                <div style="font-size: 10px; font-weight: bold;">Figura: ${document.photographicRegistry.figura || "_______________"}</div>
+              ${
+                document.photographicRegistry.imagenes && document.photographicRegistry.imagenes.length > 0
+                  ? `
+                <div style="margin-bottom: 12px;">
+                  <p style="font-size: 9px; font-weight: bold; margin-bottom: 8px;">Imágenes registradas:</p>
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                    ${document.photographicRegistry.imagenes
+                      .map(
+                        (img) => `
+                      <div style="border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
+                        <img src="${img.url}" style="width: 100%; height: 80px; object-fit: cover;" />
+                        <div style="padding: 4px; font-size: 8px;">
+                          ${img.titulo ? `<strong>${img.titulo}</strong>` : ""}
+                          ${img.descripcion ? `<p style="margin: 2px 0; color: #666;">${img.descripcion}</p>` : ""}
+                        </div>
+                      </div>
+                    `,
+                      )
+                      .join("")}
+                  </div>
+                </div>
+              `
+                  : ""
+              }
+              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #ddd;">
+                <div style="font-size: 9px; margin-bottom: 4px;"><strong>Figura:</strong> ${document.photographicRegistry.figura || "_______________"}</div>
+                <div style="font-size: 9px;"><strong>Nota:</strong> ${document.photographicRegistry.nota || "_____________________________________________________________________________"}</div>
               </div>
-              <div style="font-size: 9px;"><strong>Nota:</strong> ${document.photographicRegistry.nota || "_____________________________________________________________________________"}</div>
             </div>
           `
               : ""
