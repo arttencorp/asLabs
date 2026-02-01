@@ -2,7 +2,6 @@
 
 import type { PhotographicRegistry } from '../types'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 
 interface PhotographicRegistrySectionProps {
   registry: PhotographicRegistry
@@ -30,11 +29,11 @@ export default function PhotographicRegistrySection({
 
       <div>
         <label className="text-xs font-bold block mb-1">Nota / Observación fotográfica:</label>
-        <Textarea
+        <textarea
           placeholder="Describa brevemente las características observadas en la fotografía..."
           value={registry.nota || ''}
           onChange={(e) => onChange({ ...registry, nota: e.target.value })}
-          className="text-xs h-20"
+          className="w-full border rounded p-2 text-xs h-20"
         />
       </div>
     </div>
