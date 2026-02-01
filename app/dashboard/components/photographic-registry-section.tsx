@@ -5,7 +5,7 @@ import React from "react"
 import { useState } from 'react'
 import type { PhotographicRegistry } from '../types'
 import { Input } from '@/components/ui/input'
-import { X, Upload } from 'lucide-react'
+import { X, Upload, Plus } from 'lucide-react'
 
 interface PhotographicRegistrySectionProps {
   registry: PhotographicRegistry
@@ -16,8 +16,6 @@ export default function PhotographicRegistrySection({
   registry,
   onChange,
 }: PhotographicRegistrySectionProps) {
-  const [previewUrl, setPreviewUrl] = useState<string>('')
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -33,7 +31,6 @@ export default function PhotographicRegistrySection({
       }
       const imagenes = [...(registry.imagenes || []), newImage]
       onChange({ ...registry, imagenes })
-      setPreviewUrl('')
       e.target.value = ''
     }
     reader.readAsDataURL(file)
@@ -58,12 +55,64 @@ export default function PhotographicRegistrySection({
         <h3 className="font-bold text-sm uppercase tracking-wide">8) Registro Fotográfico</h3>
       </div>
 
-      {/* Sección de carga de imágenes */}
-      <div className="mb-6 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition">
-        <label className="flex flex-col items-center justify-center cursor-pointer gap-2">
-          <Upload className="w-6 h-6 text-gray-600" />
-          <span className="text-xs font-semibold text-gray-700">Haz clic para subir foto</span>
-          <span className="text-xs text-gray-500">(JPG, PNG, WebP - Máx 5MB)</span>
+      {/* Galería de figuras */}
+      {registry.imagenes && registry.imagenes.length > 0 && (
+        <div className="mb-8 space-y-4">
+          <h4 className="text-xs font-bold text-gray-800 bg-gray-100 px-3 py-2 rounded">Figuras registradas ({registry.imagenes.length})</h4>
+          <div className="space-y-4">
+            {registry.imagenes.map((imagen, index) => (
+              <div key={imagen.id} className="border-2 border-gray-200 rounded-lg p-4 bg-white hover:border-gray-400 transition">
+                <div className="flex gap-4">
+                  {/* Imagen */}
+                  <div className="flex-shrink-0">
+                    <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
+                      <img src={imagen.url || "/placeholder.svg"} alt={`Figura ${index + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+
+                  {/* Contenido */}
+                  <div className="flex-1 space-y-2">
+                    <div>
+                      <label className="text-xs font-bold text-gray-700 block mb-1">Figura {index + 1}: Descripción/Etiqueta</label>
+                      <Input
+                        type="text"
+                        placeholder="Ej: Cultivo en agar nutritivo, Tinción de Gram, etc."
+                        value={imagen.titulo || ''}
+                        onChange={(e) => handleUpdateImage(imagen.id, e.target.value, imagen.descripcion || '')}
+                        className="h-7 text-xs border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-bold text-gray-700 block mb-1">Nota / Observación</label>
+                      <textarea
+                        placeholder="Describa brevemente las características observadas en esta fotografía..."
+                        value={imagen.descripcion || ''}
+                        onChange={(e) => handleUpdateImage(imagen.id, imagen.titulo || '', e.target.value)}
+                        className="w-full text-xs border border-gray-300 rounded px-2 py-1 h-14 resize-none focus:outline-none focus:ring-1 focus:ring-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Botón eliminar */}
+                  <button
+                    onClick={() => handleRemoveImage(imagen.id)}
+                    className="flex-shrink-0 text-red-600 hover:bg-red-50 p-2 rounded-lg transition"
+                    title="Eliminar figura"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Botón Añadir Figura */}
+      <div className="flex gap-2 mb-6">
+        <label className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-400 rounded-lg bg-white hover:bg-gray-50 cursor-pointer transition font-semibold text-sm">
+          <Plus className="w-5 h-5" />
+          Añadir Figura
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
@@ -73,67 +122,14 @@ export default function PhotographicRegistrySection({
         </label>
       </div>
 
-      {/* Galería de imágenes */}
-      {registry.imagenes && registry.imagenes.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-xs font-bold text-gray-700 mb-3">Imágenes cargadas ({registry.imagenes.length})</h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {registry.imagenes.map((imagen) => (
-              <div key={imagen.id} className="border border-gray-200 rounded-lg overflow-hidden bg-white">
-                <div className="aspect-square overflow-hidden bg-gray-100">
-                  <img src={imagen.url || "/placeholder.svg"} alt="preview" className="w-full h-full object-cover" />
-                </div>
-                <div className="p-2 space-y-2">
-                  <input
-                    type="text"
-                    placeholder="Título (ej: Cultivo en agar)"
-                    value={imagen.titulo || ''}
-                    onChange={(e) => handleUpdateImage(imagen.id, e.target.value, imagen.descripcion || '')}
-                    className="w-full text-xs border border-gray-200 rounded px-2 py-1"
-                  />
-                  <textarea
-                    placeholder="Descripción..."
-                    value={imagen.descripcion || ''}
-                    onChange={(e) => handleUpdateImage(imagen.id, imagen.titulo || '', e.target.value)}
-                    className="w-full text-xs border border-gray-200 rounded px-2 py-1 h-12 resize-none"
-                  />
-                  <button
-                    onClick={() => handleRemoveImage(imagen.id)}
-                    className="w-full flex items-center justify-center gap-1 text-xs text-red-600 hover:bg-red-50 py-1 rounded"
-                  >
-                    <X className="w-3 h-3" />
-                    Eliminar
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Información general */}
+      {(!registry.imagenes || registry.imagenes.length === 0) && (
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-center mb-6">
+          <p className="text-xs text-gray-700">
+            <strong>Haz clic en "Añadir Figura"</strong> para subir fotos y agregarles descripción y notas
+          </p>
         </div>
       )}
-
-      {/* Campos principales */}
-      <div className="space-y-4">
-        <div>
-          <label className="text-xs font-bold text-gray-700 block mb-2">Figura (descripción/etiqueta general):</label>
-          <Input
-            type="text"
-            placeholder="Ej: Cultivo en agar nutritivo, Tinción de Gram, Colonia aislada..."
-            value={registry.figura || ''}
-            onChange={(e) => onChange({ ...registry, figura: e.target.value })}
-            className="h-8 text-xs border-gray-300"
-          />
-        </div>
-
-        <div>
-          <label className="text-xs font-bold text-gray-700 block mb-2">Nota / Observación fotográfica general:</label>
-          <textarea
-            placeholder="Describa brevemente las características generales observadas en las fotografías..."
-            value={registry.nota || ''}
-            onChange={(e) => onChange({ ...registry, nota: e.target.value })}
-            className="w-full border border-gray-300 rounded p-2 text-xs h-16 font-serif resize-none focus:outline-none focus:ring-1 focus:ring-gray-400"
-          />
-        </div>
-      </div>
     </div>
   )
 }
