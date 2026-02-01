@@ -170,7 +170,7 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
         <div class="page">
           <!-- Header -->
           <div class="header">
-            <img src="/aslab-logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+            <div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 2px solid #00A651; border-radius: 4px; background: #f9f9f9; font-weight: bold; color: #00A651; font-size: 14px;">AS</div>
             <div>
               <div class="title">AS LABORATORIOS</div>
               <div class="subtitle">${document.tipo === "certificado" ? "CERTIFICADO DE ANÁLISIS" : "INFORME DE ANÁLISIS"}</div>
@@ -332,6 +332,123 @@ export default function PreviewSection({ document, onBack }: PreviewSectionProps
             `
             }
           </div>
+
+          <!-- DECLARACION (Bacteriología) -->
+          ${
+            document.area === "bacteriologia"
+              ? `
+            <div class="section-title">DECLARACIÓN</div>
+            <div class="info-box">
+              <p>Este documento registra la información declarada por el remitente y la evaluación preanalítica realizada al momento de la recepción, además de resultados de tamizaje y pruebas bioquímicas según el alcance solicitado. La identificación puede ser presuntiva o confirmatoria dependiendo del panel aplicado, controles y consistencia del patrón bioquímico.</p>
+            </div>
+          `
+              : ""
+          }
+
+          <!-- AISLAMIENTO Y CARACTERIZACION INICIAL (Bacteriología) -->
+          ${
+            document.bacterialAnalysis
+              ? `
+            <div class="section-title">4) AISLAMIENTO Y CARACTERIZACIÓN INICIAL</div>
+            <div class="info-box">
+              <table class="results-table">
+                <tr>
+                  <td colspan="2"><strong>Medios de cultivo utilizados:</strong> ${document.bacterialAnalysis.mediostilizados?.join(", ") || "__"}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Condiciones de incubación:</strong> T° ${document.bacterialAnalysis.temperatura || "___"}°C | Atmósfera: ${document.bacterialAnalysis.atmosfera?.join(", ") || "__"} | Tiempo: ${document.bacterialAnalysis.tiempoIncubacion || "___"}h</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Morfología de colonia:</strong> Tamaño: ${document.bacterialAnalysis.tamanoColonia?.join(", ") || "__"} | Forma: ${document.bacterialAnalysis.forma?.join(", ") || "__"} | Borde: ${document.bacterialAnalysis.borde?.join(", ") || "__"}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Características adicionales:</strong> Elevación: ${document.bacterialAnalysis.elevacion?.join(", ") || "__"} | Superficie: ${document.bacterialAnalysis.superficie?.join(", ") || "__"} | Pigmento: ${document.bacterialAnalysis.pigmento || "__"}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Tinción de Gram:</strong> Gram+ ${document.bacterialAnalysis.gramPositivo ? "☑" : "☐"} | Gram- ${document.bacterialAnalysis.gramNegativo ? "☑" : "☐"} | Morfología: ${document.bacterialAnalysis.morfologia?.join(", ") || "__"} | Arreglo: ${document.bacterialAnalysis.arreglo?.join(", ") || "__"}</td>
+                </tr>
+              </table>
+              ${document.bacterialAnalysis.notas ? `<p style="margin-top: 4px; font-size: 9px;"><strong>Notas:</strong> ${document.bacterialAnalysis.notas}</p>` : ""}
+            </div>
+          `
+              : ""
+          }
+
+          <!-- CONTROL DE CALIDAD (Bacteriología) -->
+          ${
+            document.qcControl
+              ? `
+            <div class="section-title">CONTROL DE CALIDAD (OBLIGATORIO)</div>
+            <div class="info-box">
+              <table class="results-table">
+                <tr>
+                  <td><strong>Lote de medios:</strong> ${document.qcControl.loteMedios || "__"}</td>
+                  <td><strong>Vence:</strong> ${document.qcControl.venceMedios || "__"}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Control positivo:</strong> ${document.qcControl.controlPositivoAplicado ? "Aplicado ☑" : "No aplicado ☐"} | Cepa: ${document.qcControl.controlPositivoCepa || "__"}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Control negativo:</strong> ${document.qcControl.controlNegativoAplicado ? "Aplicado ☑" : "No aplicado ☐"} | Cepa: ${document.qcControl.controlNegativoCepa || "__"}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Incubadora verificada:</strong> ${document.qcControl.incubadoraVerificada ? "Si ☑" : "No ☐"} | T° registrada: ${document.qcControl.temperaturaRegistrada || "___"}°C</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><strong>Desviaciones / acciones:</strong> ${document.qcControl.desviaciones || "__"}</td>
+                </tr>
+              </table>
+            </div>
+          `
+              : ""
+          }
+
+          <!-- INTERPRETACION TAXONOMICA (Bacteriología) -->
+          ${
+            document.taxonomicInterpretation
+              ? `
+            <div class="section-title">7) INTERPRETACIÓN TAXONÓMICA</div>
+            <div class="info-box">
+              <table class="results-table">
+                <tr>
+                  <td><strong>Grupo probable:</strong> ${document.taxonomicInterpretation.grupoProbable?.join(", ") || "__"}</td>
+                </tr>
+                <tr>
+                  <td><strong>Identificación propuesta - Género:</strong> ${document.taxonomicInterpretation.generoIdentificado || "__"} | Especie: ${document.taxonomicInterpretation.especieIdentificada || "__"}</td>
+                </tr>
+                <tr>
+                  <td><strong>Nivel de confianza:</strong> ${document.taxonomicInterpretation.nivelConfianza?.toUpperCase() || "__"}</td>
+                </tr>
+                <tr>
+                  <td><strong>Base de asignación:</strong> ${document.taxonomicInterpretation.baseAsignacion?.join(", ") || "__"}</td>
+                </tr>
+                <tr>
+                  <td><strong>Limitaciones técnicas:</strong> ${document.taxonomicInterpretation.limitacionesTecnicas?.join(", ") || "__"}</td>
+                </tr>
+                <tr>
+                  <td><strong>Recomendación de confirmación:</strong> ${document.taxonomicInterpretation.recomendacionConfirmacion?.join(", ") || "__"}</td>
+                </tr>
+              </table>
+              ${document.taxonomicInterpretation.notas ? `<p style="margin-top: 4px; font-size: 9px;"><strong>Notas:</strong> ${document.taxonomicInterpretation.notas}</p>` : ""}
+            </div>
+          `
+              : ""
+          }
+
+          <!-- REGISTRO FOTOGRAFICO (Bacteriología) -->
+          ${
+            document.photographicRegistry
+              ? `
+            <div class="section-title">8) REGISTRO FOTOGRÁFICO</div>
+            <div class="info-box">
+              <div style="border: 1px dashed #999; padding: 20px; text-align: center; margin-bottom: 6px; min-height: 60px;">
+                <div style="font-size: 10px; font-weight: bold;">Figura: ${document.photographicRegistry.figura || "_______________"}</div>
+              </div>
+              <div style="font-size: 9px;"><strong>Nota:</strong> ${document.photographicRegistry.nota || "_____________________________________________________________________________"}</div>
+            </div>
+          `
+              : ""
+          }
 
           <!-- Disclaimer -->
           <div class="disclaimer">

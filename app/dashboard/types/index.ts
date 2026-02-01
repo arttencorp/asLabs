@@ -46,12 +46,59 @@ export interface ResultRow {
   resultado: string
   unidad: string
   metodo: string
-  observacion: string
+  observaciones?: string
+  observacion?: string
   valorReferencial?: {
     min?: number
     max?: number
     showChart?: boolean
   }
+}
+
+export interface BacterialAnalysis {
+  mediostilizados?: string[]
+  temperatura?: string
+  atmosfera?: string[]
+  tiempoIncubacion?: string
+  tamanoColonia?: string[]
+  forma?: string[]
+  borde?: string[]
+  elevacion?: string[]
+  superficie?: string[]
+  pigmento?: string
+  gramPositivo?: boolean
+  gramNegativo?: boolean
+  morfologia?: string[]
+  arreglo?: string[]
+  notas?: string
+}
+
+export interface QCControl {
+  loteMedios?: string
+  venceMedios?: string
+  controlPositivoAplicado?: boolean
+  controlPositivoCepa?: string
+  controlNegativoAplicado?: boolean
+  controlNegativoCepa?: string
+  incubadoraVerificada?: boolean
+  temperaturaRegistrada?: string
+  desviaciones?: string
+}
+
+export interface TaxonomicInterpretation {
+  grupoProbable?: string[]
+  generoIdentificado?: string
+  especieIdentificada?: string
+  nivelConfianza?: "alto" | "medio" | "bajo"
+  baseAsignacion?: string[]
+  limitacionesTecnicas?: string[]
+  recomendacionConfirmacion?: string[]
+  notas?: string
+}
+
+export interface PhotographicRegistry {
+  figura?: string
+  nota?: string
 }
 
 export interface Signature {
@@ -81,4 +128,8 @@ export interface Document {
   createdAt: Date
   serviceSchema?: ServiceSchema
   serviceResults?: Record<string, any>
+  bacterialAnalysis?: BacterialAnalysis
+  qcControl?: QCControl
+  taxonomicInterpretation?: TaxonomicInterpretation
+  photographicRegistry?: PhotographicRegistry
 }
