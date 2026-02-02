@@ -42,6 +42,7 @@ export function formatDate(dateString: string | null | undefined, options?: {
 }
 
 // Función para convertir fecha ISO a formato de input date (YYYY-MM-DD)
+// Convierte respetando la zona horaria de Lima/Perú
 export function dateToInputValue(dateString: string | null): string {
   if (!dateString) return ''
 
@@ -51,15 +52,20 @@ export function dateToInputValue(dateString: string | null): string {
       return dateString
     }
 
-    // Si es fecha ISO completa, extraer solo la parte de fecha usando un método más simple
+    // Si es fecha ISO completa, convertir a zona horaria de Lima
     const date = new Date(dateString)
     if (isNaN(date.getTime())) {
       console.warn('Fecha inválida recibida:', dateString)
       return ''
     }
 
-    // Método simple: usar toISOString y extraer solo la fecha
-    return date.toISOString().split('T')[0]
+    // Formatear en zona horaria de Lima para evitar problemas de desfase
+    return date.toLocaleDateString('en-CA', {
+      timeZone: 'America/Lima',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
   } catch (error) {
     console.error('Error en dateToInputValue:', error, 'Input:', dateString)
     return ''
@@ -73,6 +79,36 @@ export function inputValueToISO(dateString: string): string {
   // Crear fecha en zona horaria de Lima (UTC-5)
   const limaDate = new Date(dateString + 'T00:00:00-05:00')
   return limaDate.toISOString()
+}
+
+/**
+ * Obtiene la fecha actual en zona horaria de Lima/Perú (GMT-5)
+ * Retorna en formato YYYY-MM-DD
+ */
+export function obtenerFechaActualLima(): string {
+  const ahora = new Date()
+  // Obtener la fecha formateada en Lima
+  const fechaLima = ahora.toLocaleDateString('en-CA', {
+    timeZone: 'America/Lima',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  })
+  return fechaLima // formato YYYY-MM-DD
+}
+
+/**
+ * Obtiene la fecha y hora actual en zona horaria de Lima/Perú (GMT-5)
+ * Retorna en formato ISO
+ */
+export function obtenerFechaHoraActualLima(): string {
+  const ahora = new Date()
+  // Convertir a string ISO considerando Lima
+  const offsetLima = -5 * 60 // GMT-5 en minutos
+  const offsetLocal = ahora.getTimezoneOffset()
+  const diff = offsetLocal - offsetLima
+  const fechaLima = new Date(ahora.getTime() + diff * 60 * 1000)
+  return fechaLima.toISOString()
 }
 
 // Formateo de moneda
@@ -521,7 +557,15 @@ export function numeroATexto(numero: number): string {
 
 // Helpers de fechas específicos
 export function calcularFechaVencimiento(dias: number): string {
-  const fecha = new Date()
+  // Obtener fecha actual en Lima y añadir los días
+  const fechaActualLima = obtenerFechaActualLima()
+  const fecha = new Date(fechaActualLima + 'T12:00:00-05:00')
   fecha.setDate(fecha.getDate() + dias)
-  return fecha.toISOString().split("T")[0]
+  // Retornar en formato YYYY-MM-DD
+  return fecha.toLocaleDateString('en-CA', {
+    timeZone: 'America/Lima',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  })
 }

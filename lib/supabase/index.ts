@@ -27,3 +27,6 @@ export * from './cotizaciones'
 
 // Tienda (categorías y productos de tienda)
 export * from './tienda'
+
+// Documentos de laboratorio (certificados e informes)
+export * from './documentos-lab'

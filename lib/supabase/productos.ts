@@ -182,26 +182,6 @@ export async function obtenerCertificadosPorProducto(productoId: string): Promis
     }
 }
 
-// Obtener fichas técnicas para un producto específico
-export async function obtenerFichasTecnicasPorProducto(productoId: string): Promise<FichaTecnicaDatabase[]> {
-    try {
-        const { data, error } = await supabase
-            .from('Productos_Fichas_Tecnicas')
-            .select(`
-        ficha_tecnica:Fichas_Tecnicas(*)
-      `)
-            .eq('pro_id_int', productoId)
-
-        if (error) throw error
-
-        // Extraer solo las fichas técnicas de la respuesta
-        return (data?.map(item => item.ficha_tecnica).filter(Boolean) || []) as unknown as FichaTecnicaDatabase[]
-    } catch (error) {
-        console.error('Error obteniendo fichas técnicas del producto:', error)
-        throw error
-    }
-}
-
 // Obtener certificados de calidad para múltiples productos
 export async function obtenerCertificadosPorProductos(productosIds: string[]): Promise<{ [key: string]: CertificadoCalidadDatabase[] }> {
     try {
