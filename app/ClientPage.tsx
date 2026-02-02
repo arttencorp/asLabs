@@ -217,6 +217,12 @@ export default function ClientPage() {
                 <Image src="/trustUs/queensU.png" alt="Queen's University Belfast" fill style={{ objectFit: "contain" }} />
               </div>
             </a>
+            <a href="https://www.unitru.edu.pe/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300 flex flex-col items-center">
+              <span className="text-xs text-gray-600 mb-1 font-medium">Trabajamos con profesionales de:</span>
+              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+                <Image src="/trustUs/untLogo.png" alt="Universidad Nacional de Trujillo" fill style={{ objectFit: "contain" }} />
+              </div>
+            </a>
             <a href="https://www.arttencorp.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
               <div className="relative w-32 h-16 sm:w-40 sm:h-20">
                 <Image src="/trustUs/arttencorp.jpg" alt="ArttenCorp" fill style={{ objectFit: "contain" }} />
