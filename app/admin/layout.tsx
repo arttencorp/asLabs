@@ -6,7 +6,7 @@ import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { createBrowserClient } from "@supabase/ssr"
-import { ChartColumn, Store, FileText, FileBadge, FileSpreadsheet, Package, Package2, Users, LogOut, FileInput } from "lucide-react"
+import { ChartColumn, Store, FileText, FileBadge, FileSpreadsheet, Package, Package2, Users, LogOut, FileInput, Signature } from "lucide-react"
 
 import {
   Sidebar,
@@ -115,6 +115,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Certificados de Calidad", href: "/admin/certificadoCalidad", icon: FileBadge },
     { name: "Análisis", href: "/admin/analytics", icon: ChartColumn },
     { name: "Documentos de Laboratorio", href: "/admin/documentoLab", icon: FileInput },
+    { name: "Firmas", href: "/admin/firma", icon: Signature },
   ]
 
   return (

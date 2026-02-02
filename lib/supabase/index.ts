@@ -30,3 +30,6 @@ export * from './tienda'
 
 // Documentos de laboratorio (certificados e informes)
 export * from './documentos-lab'
+
+// Firmas (catálogo y asignaciones a documentos)
+export * from './firmas'
