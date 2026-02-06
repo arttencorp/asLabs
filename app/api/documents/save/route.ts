@@ -1,56 +1,89 @@
-import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { Pool } from '@neondatabase/serverless'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL_NON_POOLING,
+})
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase credentials')
+async function ensureDocumentsTable() {
+  const client = await pool.connect()
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS documents (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        codigo_documento VARCHAR(255) UNIQUE NOT NULL,
+        contrasena VARCHAR(255) NOT NULL,
+        tipo VARCHAR(50),
+        area VARCHAR(50),
+        cliente_razon_social VARCHAR(255),
+        cliente_ruc VARCHAR(50),
+        servicio VARCHAR(255),
+        documento_html TEXT,
+        documento_json JSONB,
+        fecha_emision DATE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE INDEX IF NOT EXISTS idx_documents_codigo ON documents(codigo_documento);
+    `)
+  } finally {
+    client.release()
+  }
 }
-
-const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { codigoDocumento, documentoHTML, documentoData } = body
 
-    // Generar una contraseña aleatoria de 6 caracteres alfanuméricos
-    const password = crypto.randomBytes(3).toString('hex').toUpperCase()
-
-    // Guardar en Supabase
-    const { data, error } = await supabase
-      .from('documents')
-      .insert([
-        {
-          codigo: codigoDocumento,
-          password: password,
-          html_content: documentoHTML,
-          data_json: documentoData,
-          created_at: new Date().toISOString(),
-        },
-      ])
-      .select()
-
-    if (error) {
-      console.error('Error al guardar documento:', error)
+    if (!codigoDocumento || !documentoHTML) {
       return NextResponse.json(
-        { error: 'Error al guardar documento', details: error.message },
-        { status: 500 }
+        { error: 'Datos incompletos' },
+        { status: 400 }
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      codigo: codigoDocumento,
-      password: password,
-      message: `Documento guardado. Comparte este código y contraseña con el cliente.`,
-    })
+    // Asegurar que la tabla existe
+    await ensureDocumentsTable()
+
+    // Generar una contraseña aleatoria de 6 caracteres alfanuméricos
+    const password = crypto.randomBytes(3).toString('hex').toUpperCase()
+
+    const client = await pool.connect()
+    try {
+      await client.query(
+        `INSERT INTO documents 
+         (codigo_documento, contrasena, tipo, area, cliente_razon_social, cliente_ruc, servicio, documento_html, documento_json, fecha_emision)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        [
+          codigoDocumento,
+          password,
+          documentoData?.tipo,
+          documentoData?.area,
+          documentoData?.cliente?.razonSocial,
+          documentoData?.cliente?.ruc,
+          documentoData?.servicio?.servicio,
+          documentoHTML,
+          JSON.stringify(documentoData),
+          documentoData?.fechaEmision,
+        ]
+      )
+
+      return NextResponse.json({
+        success: true,
+        codigo: codigoDocumento,
+        password: password,
+        message: `Documento guardado. Comparte este código y contraseña con el cliente.`,
+      })
+    } finally {
+      client.release()
+    }
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
-      { error: 'Error procesando la solicitud' },
+      { error: 'Error procesando la solicitud', details: String(error) },
       { status: 500 }
     )
   }

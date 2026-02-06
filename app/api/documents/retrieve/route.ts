@@ -1,14 +1,9 @@
-import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { Pool } from '@neondatabase/serverless'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase credentials')
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey)
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL_NON_POOLING,
+})
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,35 +17,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Buscar documento
-    const { data, error } = await supabase
-      .from('documents')
-      .select('*')
-      .eq('codigo', codigo)
-      .eq('password', password)
-      .single()
-
-    if (error || !data) {
-      console.error('Documento no encontrado:', error)
-      return NextResponse.json(
-        { error: 'Código o contraseña incorrectos' },
-        { status: 404 }
+    const client = await pool.connect()
+    try {
+      const result = await client.query(
+        `SELECT * FROM documents WHERE codigo_documento = $1 AND contrasena = $2`,
+        [codigo, password]
       )
-    }
 
-    return NextResponse.json({
-      success: true,
-      documento: {
-        codigo: data.codigo,
-        html_content: data.html_content,
-        data_json: data.data_json,
-        created_at: data.created_at,
-      },
-    })
+      if (result.rows.length === 0) {
+        return NextResponse.json(
+          { error: 'Código o contraseña incorrectos' },
+          { status: 404 }
+        )
+      }
+
+      const data = result.rows[0]
+
+      return NextResponse.json({
+        success: true,
+        documento: {
+          codigo: data.codigo_documento,
+          html_content: data.documento_html,
+          data_json: data.documento_json,
+          created_at: data.created_at,
+        },
+      })
+    } finally {
+      client.release()
+    }
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
-      { error: 'Error procesando la solicitud' },
+      { error: 'Error procesando la solicitud', details: String(error) },
       { status: 500 }
     )
   }
