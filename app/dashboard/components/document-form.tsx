@@ -52,7 +52,8 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
   const [taxonomicInterpretation, setTaxonomicInterpretation] = useState<TaxonomicInterpretation | undefined>(undefined)
   const [photographicRegistry, setPhotographicRegistry] = useState<PhotographicRegistry | undefined>(undefined)
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const codigoDocumento = generateDocumentCode()
     const newDocument: Document = {
       id: Date.now().toString(),
       tipo: documentType,
@@ -65,15 +66,42 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
       responsable: "",
       firmas,
       fechaEmision: new Date().toISOString().split("T")[0],
-      codigoDocumento: generateDocumentCode(),
+      codigoDocumento,
       createdAt: new Date(),
       bacterialAnalysis,
       qcControl,
       taxonomicInterpretation,
       photographicRegistry,
     }
+    
+    // Guardar localmente
     saveDocument(newDocument)
-    alert("Documento guardado exitosamente")
+    
+    // Guardar en Supabase con contraseña
+    const documentHTML = generateDocumentHTML(newDocument)
+    
+    try {
+      const response = await fetch("/api/documents/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          codigoDocumento,
+          documentoHTML: documentHTML,
+          documentoData: newDocument,
+        }),
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        alert(`✅ Documento guardado exitosamente\n\nCódigo: ${data.codigo}\nContraseña: ${data.password}\n\nComparte estos datos con el cliente para que vea sus resultados en: ${window.location.origin}/buscar-informe`)
+      } else {
+        alert("⚠️ Documento guardado localmente pero hubo un error en la nube")
+      }
+    } catch (error) {
+      console.error("Error guardando en Supabase:", error)
+      alert("Documento guardado localmente (error de conexión con servidor)")
+    }
   }
 
   const handlePreview = () => {
