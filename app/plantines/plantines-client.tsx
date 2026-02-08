@@ -10,12 +10,14 @@ import TechnicalSheetModal from "@/components/plantines/technical-sheet-modal"
 import CallToActionSection from "@/components/plantines/call-to-action"
 import { plantines } from "@/components/plantines/data"
 import { Plantin } from "@/components/plantines/types"
-import { Leaf } from "lucide-react"
+import { Leaf, Calculator, MessageCircle } from "lucide-react"
+import { handleWhatsAppContact } from "@/components/plantines/utils"
 
 export default function PlantinesClient() {
   const [selectedCategory, setSelectedCategory] = useState("Todos")
   const [showTechnicalSheet, setShowTechnicalSheet] = useState(false)
   const [selectedTechnicalData, setSelectedTechnicalData] = useState<Plantin | null>(null)
+  const [hectareas, setHectareas] = useState(5)
 
   const filteredPlantines =
     selectedCategory === "Todos" ? plantines : plantines.filter((plantin) => plantin.category === selectedCategory)
@@ -81,6 +83,57 @@ export default function PlantinesClient() {
                   <p className="text-gray-500">Intenta seleccionar otra categoría</p>
                 </div>
               )}
+
+              {/* Calculadora de Rentabilidad */}
+              <div className="mt-6 bg-white rounded-lg shadow border border-gray-200 overflow-hidden max-w-md mx-auto">
+                <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-3 py-2">
+                  <h3 className="text-sm font-bold flex items-center gap-2">
+                    <Calculator className="w-4 h-4" />
+                    Calculadora de Rentabilidad
+                  </h3>
+                </div>
+                <div className="p-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-600">Hectáreas:</span>
+                    <div className="flex gap-1">
+                      {[1, 5, 10, 20, 50].map((value) => (
+                        <button
+                          key={value}
+                          onClick={() => setHectareas(value)}
+                          className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                            hectareas === value
+                              ? "bg-emerald-600 text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
+                        >
+                          {value}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <div className="flex-1 bg-red-50 px-2 py-1 rounded text-center">
+                      <span className="text-red-700 font-bold">S/. {(hectareas * 14 * 2500).toLocaleString()}</span>
+                      <span className="text-xs text-red-600 ml-1">Tradicional</span>
+                    </div>
+                    <div className="flex-1 bg-emerald-50 px-2 py-1 rounded text-center">
+                      <span className="text-emerald-700 font-bold">S/. {(hectareas * 20 * 2500).toLocaleString()}</span>
+                      <span className="text-xs text-emerald-600 ml-1">In Vitro</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between bg-blue-50 px-2 py-1 rounded">
+                    <span className="text-xs text-blue-800">Ganancia Extra:</span>
+                    <span className="text-sm font-bold text-blue-700">+S/. {((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}</span>
+                  </div>
+                  <button
+                    onClick={() => handleWhatsAppContact(`Quiero cotizar ${hectareas} hectáreas. Ganancia estimada: S/. ${((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}`)}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1.5 rounded font-medium transition-colors flex items-center justify-center gap-2 text-xs"
+                  >
+                    <MessageCircle className="w-3 h-3" />
+                    Cotizar {hectareas} hectáreas
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
