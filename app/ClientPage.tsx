@@ -20,9 +20,9 @@ export default function ClientPage() {
 
   const slides = [
     {
-      title: "Creamos soluciones biotecnológicas para la preservación del medio ambiente.",
+      title: "Presentamos clones de orquídeas y otras especies de alta calidad.",
       subtitle:
-        "Brindamos soluciones a estudiantes universitarios, docentes y asesorías personalizadas enfocadas en la Biología y Genética.",
+        "Aplicamos embriogénesis vegetal para desarrollar orquídeas con floración destacada, uniformidad genética y sanidad controlada, con costos optimizados y desempeño superior en vivero.",
     },
     {
       title: "Innovación en microorganismos para la agricultura sostenible.",
@@ -61,23 +61,24 @@ export default function ClientPage() {
     setIsPaused(!isPaused)
   }
 
-  useEffect(() => {
-    if (!isPaused) {
-      timerRef.current = setInterval(() => {
-        nextSlide()
-      }, 5000)
-    } else {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-      }
-    }
+  // Auto-slide disabled - showing only first slide
+  // useEffect(() => {
+  //   if (!isPaused) {
+  //     timerRef.current = setInterval(() => {
+  //       nextSlide()
+  //     }, 5000)
+  //   } else {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current)
+  //     }
+  //   }
 
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-      }
-    }
-  }, [currentSlide, isTransitioning, isPaused])
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearInterval(timerRef.current)
+  //     }
+  //   }
+  // }, [currentSlide, isTransitioning, isPaused])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -110,10 +111,10 @@ export default function ClientPage() {
               </h1>
               <p className="text-sm sm:text-base text-white mb-6 leading-relaxed">{slides[currentSlide].subtitle}</p>
               <Link
-                href="#"
+                href="/plantines"
                 className="inline-block border border-[#e65100] bg-[#e65100] text-white px-4 sm:px-6 py-2 text-xs sm:text-sm uppercase rounded-md hover:bg-transparent hover:text-white transition-colors"
               >
-                LEER MÁS
+                VER PLANTINES
               </Link>
             </div>
           </div>
@@ -131,7 +132,7 @@ export default function ClientPage() {
           </div>
         </div>
 
-        {/* Carousel Controls */}
+        {/* Carousel Controls - Hidden
         <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-10">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center">
@@ -190,6 +191,7 @@ export default function ClientPage() {
             </div>
           </div>
         </div>
+        */}
       </section>
       {/* Trust on Us Section*/}
       <section className="py-8 sm:py-8">
