@@ -74,15 +74,17 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
         </p>
 
         {/* Métricas en grid responsivo */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-4">
+        <div className={`grid ${plantin.yield === "-" ? "grid-cols-3" : "grid-cols-2"} gap-3 sm:gap-6 mb-4`}>
           <div className="text-center">
             <div className="text-xs text-gray-500 mb-1 font-medium">Precio</div>
             <div className="font-bold text-emerald-600 text-sm">{plantin.price}</div>
           </div>
-          <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
-            <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
-          </div>
+          {plantin.yield !== "-" && (
+            <div className="text-center">
+              <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
+              <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
+            </div>
+          )}
           <div className="text-center">
             <div className="text-xs text-gray-500 mb-1 font-medium">
               {plantin.category === "Ornamentales" ? "Tolerancia" : "Cosecha"}

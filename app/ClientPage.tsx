@@ -20,7 +20,7 @@ export default function ClientPage() {
 
   const slides = [
     {
-      title: "Presentamos clones de orquídeas y otras especies de alta calidad.",
+      title: "Presentamos nuestros nuevos clones de bananos, orquídeas y otras especies de alta calidad.",
       subtitle:
         "Aplicamos embriogénesis vegetal para desarrollar orquídeas con floración destacada, uniformidad genética y sanidad controlada, con costos optimizados y desempeño superior en vivero.",
     },
