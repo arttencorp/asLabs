@@ -24,7 +24,7 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
         />
         
         {/* Badge de estado sobre la imagen */}
-        <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
+        <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
           {plantin.isProduction && (
             <span className="bg-amber-500 text-white text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg">
               En Producción
