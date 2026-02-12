@@ -545,124 +545,89 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
               ? `
             <div class="section-title">PRUEBA DE PATOGENICIDAD</div>
             <div class="info-box">
-              <!-- Organismo de Prueba -->
               <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
                 <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">ORGANISMO DE PRUEBA</div>
-                <table class="results-table" style="width: 100%;">
-                  <tr><td><strong>Nombre:</strong> ${doc.pathogenicityTest.organismoNombre || "__"}</td><td><strong>Tipo:</strong> ${doc.pathogenicityTest.organismoTipo || "__"}</td></tr>
-                  <tr><td colspan="2"><strong>Concentración:</strong> ${doc.pathogenicityTest.organismoConcentracion || "__"} ${doc.pathogenicityTest.organismoUnidad || ""}</td></tr>
-                </table>
+                <div style="font-size: 8px;"><strong>Nombre:</strong> ${doc.pathogenicityTest.organismoNombre || "____"} | <strong>Tipo:</strong> ${doc.pathogenicityTest.organismoTipo || "____"}</div>
+                <div style="font-size: 8px; margin-top: 2px;"><strong>Concentración:</strong> ${doc.pathogenicityTest.organismoConcentracion || "____"} ${doc.pathogenicityTest.organismoUnidad || ""}</div>
               </div>
 
-              <!-- Planta Hospedante -->
               <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
                 <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">PLANTA HOSPEDANTE</div>
-                <table class="results-table" style="width: 100%;">
-                  <tr><td><strong>Especie:</strong> ${doc.pathogenicityTest.plantaEspecie || "__"}</td><td><strong>Variedad:</strong> ${doc.pathogenicityTest.plantaVariedad || "__"}</td></tr>
-                  <tr><td colspan="2"><strong>Edad:</strong> ${doc.pathogenicityTest.plantaEdad || "__"} ${doc.pathogenicityTest.plantaEdadUnidad || "días"}</td></tr>
-                </table>
+                <div style="font-size: 8px;"><strong>Especie:</strong> ${doc.pathogenicityTest.plantaEspecie || "____"} | <strong>Variedad:</strong> ${doc.pathogenicityTest.plantaVariedad || "____"}</div>
+                <div style="font-size: 8px; margin-top: 2px;"><strong>Edad:</strong> ${doc.pathogenicityTest.plantaEdad || "____"} ${doc.pathogenicityTest.plantaEdadUnidad || "días"}</div>
               </div>
 
-              <!-- Método de Inoculación -->
               <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
                 <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">MÉTODO DE INOCULACIÓN</div>
-                <table class="results-table" style="width: 100%;">
-                  <tr><td><strong>Método(s):</strong> ${doc.pathogenicityTest.metodoInoculacion?.join(", ") || "__"}</td></tr>
-                  <tr><td><strong>Lugar:</strong> ${doc.pathogenicityTest.lugarInoculacion || "__"}</td><td><strong>Cantidad:</strong> ${doc.pathogenicityTest.cantidadInoculo || "__"}</td></tr>
-                </table>
+                <div style="font-size: 8px;"><strong>Método(s):</strong> ${doc.pathogenicityTest.metodoInoculacion?.join(", ") || "____"}</div>
+                <div style="font-size: 8px; margin-top: 2px;"><strong>Lugar:</strong> ${doc.pathogenicityTest.lugarInoculacion || "____"} | <strong>Cantidad:</strong> ${doc.pathogenicityTest.cantidadInoculo || "____"}</div>
               </div>
 
-              <!-- Condiciones Ambientales -->
               <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
                 <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONDICIONES AMBIENTALES</div>
-                <table class="results-table" style="width: 100%;">
-                  <tr>
-                    <td><strong>T°:</strong> ${doc.pathogenicityTest.temperatura || "__"}°C</td>
-                    <td><strong>Humedad:</strong> ${doc.pathogenicityTest.humedad || "__"}%</td>
-                    <td><strong>Fotoperiodo:</strong> ${doc.pathogenicityTest.fotoperiodo || "__"}</td>
-                  </tr>
-                  <tr><td colspan="3"><strong>Duración:</strong> ${doc.pathogenicityTest.duracionPrueba || "__"} ${doc.pathogenicityTest.duracionUnidad || "días"}</td></tr>
-                </table>
+                <div style="font-size: 8px;"><strong>Temperatura:</strong> ${doc.pathogenicityTest.temperatura || "____"}°C | <strong>Humedad:</strong> ${doc.pathogenicityTest.humedad || "____"}% | <strong>Fotoperiodo:</strong> ${doc.pathogenicityTest.fotoperiodo || "____"}</div>
+                <div style="font-size: 8px; margin-top: 2px;"><strong>Duración:</strong> ${doc.pathogenicityTest.duracionPrueba || "____"} ${doc.pathogenicityTest.duracionUnidad || "días"}</div>
               </div>
 
-              <!-- Controles -->
               <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
                 <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONTROLES</div>
                 <div style="font-size: 8px;">
-                  ${doc.pathogenicityTest.controlNegativo ? `<div>✓ Control Negativo: ${doc.pathogenicityTest.controlNegativoResultado || "__"}</div>` : "<div>✗ Control Negativo: No aplicado</div>"}
-                  ${doc.pathogenicityTest.controlPositivo ? `<div>✓ Control Positivo: ${doc.pathogenicityTest.controlPositivoResultado || "__"}</div>` : "<div>✗ Control Positivo: No aplicado</div>"}
+                  ${doc.pathogenicityTest.controlNegativo ? "✓ Control Negativo: " + (doc.pathogenicityTest.controlNegativoResultado || "____") : "✗ Control Negativo: No aplicado"}
+                </div>
+                <div style="font-size: 8px; margin-top: 2px;">
+                  ${doc.pathogenicityTest.controlPositivo ? "✓ Control Positivo: " + (doc.pathogenicityTest.controlPositivoResultado || "____") : "✗ Control Positivo: No aplicado"}
                 </div>
               </div>
 
-              <!-- Observaciones Diarias -->
               ${
                 doc.pathogenicityTest.diasObservacion && doc.pathogenicityTest.diasObservacion.length > 0
-                  ? `
-                <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
-                  <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">OBSERVACIONES DIARIAS</div>
-                  ${doc.pathogenicityTest.diasObservacion
-                    .map(
-                      (obs) => `
-                    <div style="margin-bottom: 6px; padding: 4px; background: #f9f9f9; border-left: 2px solid #999; font-size: 8px;">
-                      <strong>Día ${obs.dia}:</strong> Intensidad: ${obs.intensidad || "___"} | Planta afectada: ${obs.porcentajePlanta || "___"}%
-                      <div style="margin-top: 2px; color: #555;">Síntomas: ${obs.sintomas || "__"}</div>
-                      ${obs.observaciones ? `<div style="margin-top: 2px; color: #666; font-style: italic;">Obs: ${obs.observaciones}</div>` : ""}
-                    </div>
-                  `,
-                    )
-                    .join("")}
-                </div>
-              `
+                  ? `<div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                    <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">OBSERVACIONES DIARIAS</div>
+                    ${doc.pathogenicityTest.diasObservacion.map(obs => 
+                      `<div style="margin-bottom: 6px; padding: 4px; background: #f9f9f9; border-left: 2px solid #999; font-size: 8px;">
+                        <strong>Día ${obs.dia}:</strong> Intensidad: ${obs.intensidad || "____"} | Planta: ${obs.porcentajePlanta || "____"}%<br/>
+                        Síntomas: ${obs.sintomas || "____"}
+                        ${obs.observaciones ? `<br/>Obs: ${obs.observaciones}` : ""}
+                      </div>`
+                    ).join("")}
+                  </div>`
                   : ""
               }
 
-              <!-- Imágenes -->
               ${
                 doc.pathogenicityTest.imagenes && doc.pathogenicityTest.imagenes.length > 0
-                  ? `
-                <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
-                  <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">IMÁGENES DE LA PRUEBA (${doc.pathogenicityTest.imagenes.length})</div>
-                  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
-                    ${doc.pathogenicityTest.imagenes
-                      .map(
-                        (img) => `
-                      <div style="border: 1px solid #ddd; padding: 4px; border-radius: 4px;">
-                        <img src="${img.url}" style="width: 100%; height: 100px; object-fit: contain; margin-bottom: 4px;" />
-                        <div style="font-size: 8px; font-weight: bold;">Día ${img.dia}</div>
-                        ${img.descripcion ? `<div style="font-size: 7px; color: #666; margin-top: 2px;">${img.descripcion}</div>` : ""}
-                      </div>
-                    `,
-                      )
-                      .join("")}
-                  </div>
-                </div>
-              `
+                  ? `<div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                    <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">IMÁGENES DE LA PRUEBA (${doc.pathogenicityTest.imagenes.length})</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                      ${doc.pathogenicityTest.imagenes.map(img =>
+                        `<div style="border: 1px solid #ddd; padding: 4px; border-radius: 4px; text-align: center;">
+                          <img src="${img.url}" style="width: 100%; height: 100px; object-fit: contain; margin-bottom: 4px;" alt="Día ${img.dia}"/>
+                          <div style="font-size: 8px; font-weight: bold;">Día ${img.dia}</div>
+                          ${img.descripcion ? `<div style="font-size: 7px; color: #666; margin-top: 2px;">${img.descripcion}</div>` : ""}
+                        </div>`
+                      ).join("")}
+                    </div>
+                  </div>`
                   : ""
               }
 
-              <!-- Resultados -->
               <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
                 <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">RESULTADOS</div>
-                <div style="font-size: 8px;">
-                  <div><strong>Resultado Patogenicidad:</strong> ${doc.pathogenicityTest.resultadoPositivo ? "POSITIVO (Patógeno Confirmado)" : "NEGATIVO (No patógeno)"}</div>
-                  ${doc.pathogenicityTest.sintomaTipico ? `<div style="margin-top: 2px;"><strong>Síntoma Típico:</strong> ${doc.pathogenicityTest.sintomaTipico}</div>` : ""}
-                  ${doc.pathogenicityTest.reaislamiento ? `<div style="margin-top: 2px;"><strong>Reaislamiento:</strong> ${doc.pathogenicityTest.reaislado || "Realizado"}</div>` : ""}
-                </div>
+                <div style="font-size: 8px;"><strong>Patogenicidad:</strong> ${doc.pathogenicityTest.resultadoPositivo ? "POSITIVO" : "NEGATIVO"}</div>
+                ${doc.pathogenicityTest.sintomaTipico ? `<div style="font-size: 8px; margin-top: 2px;"><strong>Síntoma Típico:</strong> ${doc.pathogenicityTest.sintomaTipico}</div>` : ""}
+                ${doc.pathogenicityTest.reaislamiento ? `<div style="font-size: 8px; margin-top: 2px;"><strong>Reaislamiento:</strong> ${doc.pathogenicityTest.reaislado || "Realizado"}</div>` : ""}
               </div>
 
-              <!-- Conclusiones -->
               ${doc.pathogenicityTest.conclusiones ? `
-                <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
-                  <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONCLUSIONES</div>
-                  <div style="font-size: 8px; line-height: 1.4; padding: 4px; background: #fafafa; border-left: 2px solid #999;">${doc.pathogenicityTest.conclusiones}</div>
-                </div>
-              ` : ""}
+              <div style="margin-bottom: 10px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONCLUSIONES</div>
+                <div style="font-size: 8px; line-height: 1.4; padding: 4px; background: #fafafa; border-left: 2px solid #999;">${doc.pathogenicityTest.conclusiones}</div>
+              </div>` : ""}
 
               ${doc.pathogenicityTest.notas ? `
-                <div style="font-size: 8px; padding: 4px; background: #fafafa; border-left: 2px solid #999;">
-                  <strong>Notas Adicionales:</strong> ${doc.pathogenicityTest.notas}
-                </div>
-              ` : ""}
+              <div style="font-size: 8px; padding: 4px; background: #fafafa; border-left: 2px solid #999;">
+                <strong>Notas:</strong> ${doc.pathogenicityTest.notas}
+              </div>` : ""}
             </div>
           `
               : ""
