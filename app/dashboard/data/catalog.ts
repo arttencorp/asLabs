@@ -311,6 +311,15 @@ export const serviceCatalog: Service[] = [
     costo: 250,
     moneda: "PEN",
   },
+
+  // Prueba de Patogenicidad
+  {
+    area: "fitopatologia",
+    servicio: "Prueba de Patogenicidad",
+    alcance: "Evaluación in vivo en planta hospedante con seguimiento de síntomas",
+    costo: 400,
+    moneda: "PEN",
+  },
 ]
 
 export const getServicesByArea = (area: ServiceArea): Service[] => {

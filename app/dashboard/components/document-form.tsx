@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import type { DocumentType, Service, Document, Client, Sample, ResultRow, Signature, BacterialAnalysis, QCControl, TaxonomicInterpretation, PhotographicRegistry } from "../types"
+import type { DocumentType, Service, Document, Client, Sample, ResultRow, Signature, BacterialAnalysis, QCControl, TaxonomicInterpretation, PhotographicRegistry, PathogenicityTest } from "../types"
 import { useDocumentStore } from "../hooks/useDocumentStore"
 import ClientSection from "./client-section"
 import SampleSection from "./sample-section"
@@ -11,6 +11,7 @@ import BacterialAnalysisSection from "./bacterial-analysis-section"
 import QCControlSection from "./qc-control-section"
 import TaxonomicInterpretationSection from "./taxonomic-interpretation-section"
 import PhotographicRegistrySection from "./photographic-registry-section"
+import PathogenicityTestSection from "./pathogenicity-test-section"
 
 interface DocumentFormProps {
   documentType: DocumentType
@@ -51,6 +52,7 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
   const [qcControl, setQCControl] = useState<QCControl | undefined>(undefined)
   const [taxonomicInterpretation, setTaxonomicInterpretation] = useState<TaxonomicInterpretation | undefined>(undefined)
   const [photographicRegistry, setPhotographicRegistry] = useState<PhotographicRegistry | undefined>(undefined)
+  const [pathogenicityTest, setPathogenicityTest] = useState<PathogenicityTest | undefined>(undefined)
 
   const handleSave = async () => {
     const codigoDocumento = generateDocumentCode()
@@ -72,12 +74,13 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
       qcControl,
       taxonomicInterpretation,
       photographicRegistry,
+      pathogenicityTest,
     }
     
     // Guardar localmente
     saveDocument(newDocument)
     
-    // Guardar en Supabase con contraseña
+          // Guardar en base de datos
     const documentHTML = generateDocumentHTML(newDocument)
     
     try {
@@ -536,6 +539,135 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
               : ""
           }
 
+          <!-- PRUEBA DE PATOGENICIDAD (Fitopatología) -->
+          ${
+            doc.pathogenicityTest
+              ? `
+            <div class="section-title">PRUEBA DE PATOGENICIDAD</div>
+            <div class="info-box">
+              <!-- Organismo de Prueba -->
+              <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">ORGANISMO DE PRUEBA</div>
+                <table class="results-table" style="width: 100%;">
+                  <tr><td><strong>Nombre:</strong> ${doc.pathogenicityTest.organismoNombre || "__"}</td><td><strong>Tipo:</strong> ${doc.pathogenicityTest.organismoTipo || "__"}</td></tr>
+                  <tr><td colspan="2"><strong>Concentración:</strong> ${doc.pathogenicityTest.organismoConcentracion || "__"} ${doc.pathogenicityTest.organismoUnidad || ""}</td></tr>
+                </table>
+              </div>
+
+              <!-- Planta Hospedante -->
+              <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">PLANTA HOSPEDANTE</div>
+                <table class="results-table" style="width: 100%;">
+                  <tr><td><strong>Especie:</strong> ${doc.pathogenicityTest.plantaEspecie || "__"}</td><td><strong>Variedad:</strong> ${doc.pathogenicityTest.plantaVariedad || "__"}</td></tr>
+                  <tr><td colspan="2"><strong>Edad:</strong> ${doc.pathogenicityTest.plantaEdad || "__"} ${doc.pathogenicityTest.plantaEdadUnidad || "días"}</td></tr>
+                </table>
+              </div>
+
+              <!-- Método de Inoculación -->
+              <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">MÉTODO DE INOCULACIÓN</div>
+                <table class="results-table" style="width: 100%;">
+                  <tr><td><strong>Método(s):</strong> ${doc.pathogenicityTest.metodoInoculacion?.join(", ") || "__"}</td></tr>
+                  <tr><td><strong>Lugar:</strong> ${doc.pathogenicityTest.lugarInoculacion || "__"}</td><td><strong>Cantidad:</strong> ${doc.pathogenicityTest.cantidadInoculo || "__"}</td></tr>
+                </table>
+              </div>
+
+              <!-- Condiciones Ambientales -->
+              <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONDICIONES AMBIENTALES</div>
+                <table class="results-table" style="width: 100%;">
+                  <tr>
+                    <td><strong>T°:</strong> ${doc.pathogenicityTest.temperatura || "__"}°C</td>
+                    <td><strong>Humedad:</strong> ${doc.pathogenicityTest.humedad || "__"}%</td>
+                    <td><strong>Fotoperiodo:</strong> ${doc.pathogenicityTest.fotoperiodo || "__"}</td>
+                  </tr>
+                  <tr><td colspan="3"><strong>Duración:</strong> ${doc.pathogenicityTest.duracionPrueba || "__"} ${doc.pathogenicityTest.duracionUnidad || "días"}</td></tr>
+                </table>
+              </div>
+
+              <!-- Controles -->
+              <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONTROLES</div>
+                <div style="font-size: 8px;">
+                  ${doc.pathogenicityTest.controlNegativo ? `<div>✓ Control Negativo: ${doc.pathogenicityTest.controlNegativoResultado || "__"}</div>` : "<div>✗ Control Negativo: No aplicado</div>"}
+                  ${doc.pathogenicityTest.controlPositivo ? `<div>✓ Control Positivo: ${doc.pathogenicityTest.controlPositivoResultado || "__"}</div>` : "<div>✗ Control Positivo: No aplicado</div>"}
+                </div>
+              </div>
+
+              <!-- Observaciones Diarias -->
+              ${
+                doc.pathogenicityTest.diasObservacion && doc.pathogenicityTest.diasObservacion.length > 0
+                  ? `
+                <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                  <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">OBSERVACIONES DIARIAS</div>
+                  ${doc.pathogenicityTest.diasObservacion
+                    .map(
+                      (obs) => `
+                    <div style="margin-bottom: 6px; padding: 4px; background: #f9f9f9; border-left: 2px solid #999; font-size: 8px;">
+                      <strong>Día ${obs.dia}:</strong> Intensidad: ${obs.intensidad || "___"} | Planta afectada: ${obs.porcentajePlanta || "___"}%
+                      <div style="margin-top: 2px; color: #555;">Síntomas: ${obs.sintomas || "__"}</div>
+                      ${obs.observaciones ? `<div style="margin-top: 2px; color: #666; font-style: italic;">Obs: ${obs.observaciones}</div>` : ""}
+                    </div>
+                  `,
+                    )
+                    .join("")}
+                </div>
+              `
+                  : ""
+              }
+
+              <!-- Imágenes -->
+              ${
+                doc.pathogenicityTest.imagenes && doc.pathogenicityTest.imagenes.length > 0
+                  ? `
+                <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                  <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">IMÁGENES DE LA PRUEBA (${doc.pathogenicityTest.imagenes.length})</div>
+                  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                    ${doc.pathogenicityTest.imagenes
+                      .map(
+                        (img) => `
+                      <div style="border: 1px solid #ddd; padding: 4px; border-radius: 4px;">
+                        <img src="${img.url}" style="width: 100%; height: 100px; object-fit: contain; margin-bottom: 4px;" />
+                        <div style="font-size: 8px; font-weight: bold;">Día ${img.dia}</div>
+                        ${img.descripcion ? `<div style="font-size: 7px; color: #666; margin-top: 2px;">${img.descripcion}</div>` : ""}
+                      </div>
+                    `,
+                      )
+                      .join("")}
+                  </div>
+                </div>
+              `
+                  : ""
+              }
+
+              <!-- Resultados -->
+              <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">RESULTADOS</div>
+                <div style="font-size: 8px;">
+                  <div><strong>Resultado Patogenicidad:</strong> ${doc.pathogenicityTest.resultadoPositivo ? "POSITIVO (Patógeno Confirmado)" : "NEGATIVO (No patógeno)"}</div>
+                  ${doc.pathogenicityTest.sintomaTipico ? `<div style="margin-top: 2px;"><strong>Síntoma Típico:</strong> ${doc.pathogenicityTest.sintomaTipico}</div>` : ""}
+                  ${doc.pathogenicityTest.reaislamiento ? `<div style="margin-top: 2px;"><strong>Reaislamiento:</strong> ${doc.pathogenicityTest.reaislado || "Realizado"}</div>` : ""}
+                </div>
+              </div>
+
+              <!-- Conclusiones -->
+              ${doc.pathogenicityTest.conclusiones ? `
+                <div style="margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 6px;">
+                  <div style="font-weight: bold; font-size: 9px; margin-bottom: 4px;">CONCLUSIONES</div>
+                  <div style="font-size: 8px; line-height: 1.4; padding: 4px; background: #fafafa; border-left: 2px solid #999;">${doc.pathogenicityTest.conclusiones}</div>
+                </div>
+              ` : ""}
+
+              ${doc.pathogenicityTest.notas ? `
+                <div style="font-size: 8px; padding: 4px; background: #fafafa; border-left: 2px solid #999;">
+                  <strong>Notas Adicionales:</strong> ${doc.pathogenicityTest.notas}
+                </div>
+              ` : ""}
+            </div>
+          `
+              : ""
+          }
+
           <!-- REGISTRO FOTOGRAFICO (Bacteriología) -->
           ${
             doc.photographicRegistry
@@ -651,6 +783,14 @@ export default function DocumentForm({ documentType, service, onClose }: Documen
                 onChange={setPhotographicRegistry} 
               />
             </>
+          )}
+
+          {/* Sección de Prueba de Patogenicidad (Fitopatología) */}
+          {service.servicio === "Prueba de Patogenicidad" && (
+            <PathogenicityTestSection 
+              test={pathogenicityTest || {}} 
+              onChange={setPathogenicityTest} 
+            />
           )}
           
           <SignaturesSection firmas={firmas} onChange={setFirmas} />

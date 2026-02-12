@@ -107,6 +107,64 @@ export interface PhotographicRegistry {
   }>
 }
 
+export interface PathogenicityTest {
+  // Datos del organismo de prueba
+  organismoNombre?: string
+  organismoTipo?: string
+  organismoConcentracion?: string
+  organismoUnidad?: string
+  
+  // Planta hospedante
+  plantaEspecie?: string
+  plantaVariedad?: string
+  plantaEdad?: string
+  plantaEdadUnidad?: "dias" | "semanas"
+  
+  // Método de inoculación
+  metodoInoculacion?: string[]
+  lugarInoculacion?: string
+  cantidadInoculo?: string
+  
+  // Condiciones ambientales
+  temperatura?: string
+  humedad?: string
+  fotoperiodo?: string
+  duracionPrueba?: string
+  duracionUnidad?: "dias" | "semanas"
+  
+  // Observaciones durante la prueba
+  diasObservacion?: Array<{
+    dia: number
+    sintomas: string
+    intensidad?: "leve" | "moderado" | "severo"
+    porcentajePlanta?: string
+    observaciones?: string
+  }>
+  
+  // Resultados
+  resultadoPositivo?: boolean
+  sintomaTipico?: string
+  reaislamiento?: boolean
+  reaislado?: string
+  conclusiones?: string
+  
+  // Imágenes
+  imagenes?: Array<{
+    id: string
+    url: string
+    dia: string
+    descripcion?: string
+  }>
+  
+  // Control
+  controlNegativo?: boolean
+  controlNegativoResultado?: string
+  controlPositivo?: boolean
+  controlPositivoResultado?: string
+  
+  notas?: string
+}
+
 export interface Signature {
   id: string
   nombre: string
@@ -138,4 +196,5 @@ export interface Document {
   qcControl?: QCControl
   taxonomicInterpretation?: TaxonomicInterpretation
   photographicRegistry?: PhotographicRegistry
+  pathogenicityTest?: PathogenicityTest
 }
