@@ -12,11 +12,117 @@ import HomeResearchSection from "@/components/home-research-section"
 import { OrganizationStructuredData } from "@/components/structured-data"
 import PromoModal from "@/components/promo-modal"
 
+function LogosCarousel({ logos }: { logos: Array<{ src: string; alt: string; href: string; label?: string }> }) {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [isReady, setIsReady] = useState(false)
+  const [setWidth, setSetWidth] = useState(0)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    // Esperar a que las imágenes carguen
+    const images = track.querySelectorAll('img')
+    let loadedCount = 0
+    const totalImages = images.length
+
+    const checkAllLoaded = () => {
+      loadedCount++
+      if (loadedCount >= totalImages) {
+        const firstSet = track.querySelector('.logos-set') as HTMLElement
+        if (firstSet) {
+          setSetWidth(firstSet.offsetWidth)
+          setIsReady(true)
+        }
+      }
+    }
+
+    images.forEach((img) => {
+      if (img.complete) {
+        checkAllLoaded()
+      } else {
+        img.addEventListener('load', checkAllLoaded)
+        img.addEventListener('error', checkAllLoaded)
+      }
+    })
+
+    // Fallback si no hay imágenes o ya cargaron
+    if (totalImages === 0) {
+      const firstSet = track.querySelector('.logos-set') as HTMLElement
+      if (firstSet) {
+        setSetWidth(firstSet.offsetWidth)
+        setIsReady(true)
+      }
+    }
+
+    const handleResize = () => {
+      const firstSet = track.querySelector('.logos-set') as HTMLElement
+      if (firstSet) {
+        setSetWidth(firstSet.offsetWidth)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const renderLogosSet = (keyPrefix: string, ariaHidden = false) => (
+    <div className="logos-set" aria-hidden={ariaHidden}>
+      {logos.map((logo, index) => (
+        <a
+          key={`${keyPrefix}-${index}`}
+          href={logo.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="logos-carousel-item"
+          tabIndex={ariaHidden ? -1 : undefined}
+        >
+          {logo.label && (
+            <span className="text-xs text-gray-600 mb-1 font-medium">{logo.label}</span>
+          )}
+          <div className="relative w-32 h-16 sm:w-40 sm:h-20">
+            <Image src={logo.src} alt={logo.alt} fill style={{ objectFit: "contain" }} />
+          </div>
+        </a>
+      ))}
+    </div>
+  )
+
+  return (
+    <div className="logos-carousel-wrapper group">
+      <div
+        ref={trackRef}
+        className="logos-carousel-track"
+        style={isReady && setWidth > 0 ? {
+          animationName: 'scroll-logos-dynamic',
+          animationDuration: '40s',
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
+          ['--set-width' as string]: `${setWidth}px`
+        } : undefined}
+      >
+        {renderLogosSet('a')}
+        {renderLogosSet('b', true)}
+      </div>
+    </div>
+  )
+}
+
 export default function ClientPage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const trustLogos = [
+    { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo", href: "https://agroindustriallaredo.com/" },
+    { src: "/trustUs/CGIAR.jpeg", alt: "Centro Internacional de la Papa", href: "https://cipotato.org/es/" },
+    { src: "/trustUs/manuelita.jpg", alt: "Manuelita", href: "https://agroindustriallaredo.com/" },
+    { src: "/trustUs/skyeast.jpg", alt: "Skyeast", href: "https://www.skyeast.co.uk/en/" },
+    { src: "/trustUs/queensU.png", alt: "Queen's University Belfast", href: "https://www.qub.ac.uk/", label: "Investigadores de:" },
+    { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", href: "https://www.unitru.edu.pe/", label: "Trabajamos con profesionales de:" },
+    { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", href: "https://www.arttencorp.com" },
+  ]
 
   const slides = [
     {
@@ -193,44 +299,11 @@ export default function ClientPage() {
         </div>
         */}
       </section>
-      {/* Trust on Us Section*/}
-      <section className="py-8 sm:py-8">
+      {/* Trust on Us Section - Carousel */}
+      <section className="py-8 sm:py-8 overflow-hidden">
         <div className="container mx-auto px-4">
           <h2 className="text-lg sm:text-xl font-medium mb-8 font-serif text-center">Confían en Nosotros</h2>
-          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12 lg:gap-16">
-            <a href="https://agroindustriallaredo.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
-              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/soldelaredo.jpg" alt="Sol de Laredo" fill style={{ objectFit: "contain" }} />
-              </div>
-            </a>
-            <a href="https://agroindustriallaredo.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
-              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/manuelita.jpg" alt="Manuelita" fill style={{ objectFit: "contain" }} />
-              </div>
-            </a>
-            <a href="https://www.skyeast.co.uk/en/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
-              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/skyeast.jpg" alt="Skyeast" fill style={{ objectFit: "contain" }} />
-              </div>
-            </a>
-            <a href="https://www.qub.ac.uk/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300 flex flex-col items-center">
-              <span className="text-xs text-gray-600 mb-1 font-medium">Investigadores de:</span>
-              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/queensU.png" alt="Queen's University Belfast" fill style={{ objectFit: "contain" }} />
-              </div>
-            </a>
-            <a href="https://www.unitru.edu.pe/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300 flex flex-col items-center">
-              <span className="text-xs text-gray-600 mb-1 font-medium">Trabajamos con profesionales de:</span>
-              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/untLogo.png" alt="Universidad Nacional de Trujillo" fill style={{ objectFit: "contain" }} />
-              </div>
-            </a>
-            <a href="https://www.arttencorp.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300">
-              <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-                <Image src="/trustUs/arttencorp.jpg" alt="ArttenCorp" fill style={{ objectFit: "contain" }} />
-              </div>
-            </a>
-          </div>
+          <LogosCarousel logos={trustLogos} />
         </div>
       </section>
       {/* Products Section */}

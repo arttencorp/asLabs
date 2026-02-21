@@ -425,3 +425,62 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Logo carousel infinite scroll */
+.logos-carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.logos-carousel-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.logos-carousel-wrapper:hover .logos-carousel-track {
+  animation-play-state: paused !important;
+}
+
+.logos-set {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-shrink: 0;
+  padding-right: 3rem;
+}
+
+@media (min-width: 640px) {
+  .logos-set {
+    gap: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logos-set {
+    gap: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+.logos-carousel-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  transition: opacity 0.3s;
+}
+
+.logos-carousel-item:hover {
+  opacity: 0.8;
+}
+
+@keyframes scroll-logos-dynamic {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * var(--set-width)));
+  }
+}
