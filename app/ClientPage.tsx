@@ -13,59 +13,6 @@ import { OrganizationStructuredData } from "@/components/structured-data"
 import PromoModal from "@/components/promo-modal"
 
 function LogosCarousel({ logos }: { logos: Array<{ src: string; alt: string; href: string; label?: string }> }) {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [isReady, setIsReady] = useState(false)
-  const [setWidth, setSetWidth] = useState(0)
-
-  useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-
-    // Esperar a que las imágenes carguen
-    const images = track.querySelectorAll('img')
-    let loadedCount = 0
-    const totalImages = images.length
-
-    const checkAllLoaded = () => {
-      loadedCount++
-      if (loadedCount >= totalImages) {
-        const firstSet = track.querySelector('.logos-set') as HTMLElement
-        if (firstSet) {
-          setSetWidth(firstSet.offsetWidth)
-          setIsReady(true)
-        }
-      }
-    }
-
-    images.forEach((img) => {
-      if (img.complete) {
-        checkAllLoaded()
-      } else {
-        img.addEventListener('load', checkAllLoaded)
-        img.addEventListener('error', checkAllLoaded)
-      }
-    })
-
-    // Fallback si no hay imágenes o ya cargaron
-    if (totalImages === 0) {
-      const firstSet = track.querySelector('.logos-set') as HTMLElement
-      if (firstSet) {
-        setSetWidth(firstSet.offsetWidth)
-        setIsReady(true)
-      }
-    }
-
-    const handleResize = () => {
-      const firstSet = track.querySelector('.logos-set') as HTMLElement
-      if (firstSet) {
-        setSetWidth(firstSet.offsetWidth)
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
   const renderLogosSet = (keyPrefix: string, ariaHidden = false) => (
     <div className="logos-set" aria-hidden={ariaHidden}>
       {logos.map((logo, index) => (
@@ -90,19 +37,10 @@ function LogosCarousel({ logos }: { logos: Array<{ src: string; alt: string; hre
 
   return (
     <div className="logos-carousel-wrapper group">
-      <div
-        ref={trackRef}
-        className="logos-carousel-track"
-        style={isReady && setWidth > 0 ? {
-          animationName: 'scroll-logos-dynamic',
-          animationDuration: '40s',
-          animationTimingFunction: 'linear',
-          animationIterationCount: 'infinite',
-          ['--set-width' as string]: `${setWidth}px`
-        } : undefined}
-      >
+      <div className="logos-carousel-track animate-scroll-logos">
         {renderLogosSet('a')}
         {renderLogosSet('b', true)}
+        {renderLogosSet('c', true)}
       </div>
     </div>
   )

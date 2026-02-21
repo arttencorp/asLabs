@@ -438,7 +438,8 @@ img {
   will-change: transform;
 }
 
-.logos-carousel-wrapper:hover .logos-carousel-track {
+.logos-carousel-wrapper:hover .logos-carousel-track,
+.logos-carousel-wrapper:hover .animate-scroll-logos {
   animation-play-state: paused !important;
 }
 
@@ -483,4 +484,18 @@ img {
   to {
     transform: translateX(calc(-1 * var(--set-width)));
   }
+}
+
+/* Nueva animación del carousel de logos */
+@keyframes scroll-logos {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-scroll-logos {
+  animation: scroll-logos 30s linear infinite;
 }
