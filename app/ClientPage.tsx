@@ -127,7 +127,7 @@ export default function ClientPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <OrganizationStructuredData />
-      <PromoModal />
+      {/*<PromoModal />*/}
       <Navbar />
 
       {/* Hero Section with Video Background */}
