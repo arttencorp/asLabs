@@ -95,6 +95,16 @@ export function validarDNI(dni: string): boolean {
 }
 
 // Generadores únicos (sin duplicaciones)
+// Genera un código alfanumérico aleatorio de la longitud especificada
+function generarCodigoAleatorio(longitud: number = 8): string {
+  const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // Sin caracteres confusos (0, O, 1, I)
+  let codigo = ''
+  for (let i = 0; i < longitud; i++) {
+    codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length))
+  }
+  return codigo
+}
+
 export async function generarCodigoSeguimiento(): Promise<string> {
   try {
     const { createClient } = await import("@supabase/supabase-js")
@@ -105,42 +115,16 @@ export async function generarCodigoSeguimiento(): Promise<string> {
     )
 
     const year = new Date().getFullYear()
-    const maxIntentos = 10
 
-    for (let intento = 1; intento <= maxIntentos; intento++) {
-      // Buscar el último código de seguimiento del año actual
-      const { data, error } = await supabase
-        .from("Pedidos")
-        .select("ped_cod_segui_vac")
-        .ilike("ped_cod_segui_vac", `ASL${year}-%`)
-        .order("ped_cod_segui_vac", { ascending: false })
-        .limit(1)
+    // Generar código completamente aleatorio sin límite de intentos
+    // Formato: ASL2026-XXXXXXXX (16 caracteres total)
+    // El espacio de posibilidades es tan grande que colisiones son prácticamente imposibles
+    // 32^8 = 1,099,511,627,776 combinaciones posibles por año
+    while (true) {
+      const codigoAleatorio = generarCodigoAleatorio(8)
+      const codigoGenerado = `ASL${year}-${codigoAleatorio}`
 
-      if (error) {
-        console.error("Error al obtener último código de seguimiento:", error)
-        // Fallback: usar timestamp si hay error
-        const timestamp = Date.now().toString().slice(-5)
-        return `ASL${year}-${timestamp}`
-      }
-
-      let siguienteNumero = 1
-
-      if (data && data.length > 0) {
-        // Extraer el número del código (parte después del guión)
-        const ultimoCodigo = data[0].ped_cod_segui_vac
-        const match = ultimoCodigo.match(/^ASL\d{4}-(\d+)$/)
-
-        if (match) {
-          const ultimoNumero = parseInt(match[1], 10)
-          siguienteNumero = ultimoNumero + 1
-        }
-      }
-
-      // Formatear con ceros a la izquierda (5 dígitos)
-      const numeroFormateado = siguienteNumero.toString().padStart(5, "0")
-      const codigoGenerado = `ASL${year}-${numeroFormateado}`
-
-      // Comprobar si el código ya existe
+      // Verificar que no exista
       const { data: existeData, error: existeError } = await supabase
         .from("Pedidos")
         .select("ped_cod_segui_vac")
@@ -149,7 +133,9 @@ export async function generarCodigoSeguimiento(): Promise<string> {
 
       if (existeError) {
         console.error("Error al verificar unicidad:", existeError)
-        continue // Reintentar
+        // En caso de error de BD, generar uno con timestamp para no bloquear
+        const timestamp = Date.now().toString(36).toUpperCase()
+        return `ASL${year}-${timestamp}${generarCodigoAleatorio(3)}`
       }
 
       // Si no existe, retornar el código único
@@ -157,22 +143,16 @@ export async function generarCodigoSeguimiento(): Promise<string> {
         return codigoGenerado
       }
 
-      // Si existe, reintentar (esto maneja race conditions)
-      console.warn(`Código duplicado detectado: ${codigoGenerado}. Reintentando...`)
+      // Si existe (extremadamente improbable), el while continúa y genera otro
+      console.warn(`Código duplicado detectado: ${codigoGenerado}. Generando nuevo...`)
     }
-
-    // Si después de todos los intentos no se pudo generar un código único,
-    // usar timestamp como fallback
-    console.error("No se pudo generar código único después de", maxIntentos, "intentos")
-    const timestamp = Date.now().toString().slice(-5)
-    return `ASL${year}-${timestamp}`
 
   } catch (error) {
     console.error("Error en generarCodigoSeguimiento:", error)
-    // Fallback: usar timestamp si hay error
+    // Fallback: código con timestamp + aleatorio
     const year = new Date().getFullYear()
-    const timestamp = Date.now().toString().slice(-5)
-    return `ASL${year}-${timestamp}`
+    const timestamp = Date.now().toString(36).toUpperCase()
+    return `ASL${year}-${timestamp}${generarCodigoAleatorio(3)}`
   }
 }
 

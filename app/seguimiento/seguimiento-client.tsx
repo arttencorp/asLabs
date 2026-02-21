@@ -153,11 +153,11 @@ export default function SeguimientoClient() {
               <div className="flex gap-2">
                 <Input
                   type="text"
-                  placeholder="Ej: ASL-ABC123XY"
+                  placeholder="Ej: ASL2026-ABCD1234"
                   value={codigo}
                   onChange={(e) => setCodigo(e.target.value.toUpperCase())}
                   className="flex-1 text-center font-mono text-lg"
-                  maxLength={12}
+                  maxLength={16}
                   disabled={loading}
                 />
                 <Button type="submit" disabled={loading || !codigo.trim()}>
