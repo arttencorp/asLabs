@@ -6,8 +6,6 @@
 
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
-    /* Fallback para navegadores que no soportan text-wrap: balance */
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
