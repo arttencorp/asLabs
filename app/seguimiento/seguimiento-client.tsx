@@ -157,7 +157,6 @@ export default function SeguimientoClient() {
                   value={codigo}
                   onChange={(e) => setCodigo(e.target.value.toUpperCase())}
                   className="flex-1 text-center font-mono text-lg"
-                  maxLength={16}
                   disabled={loading}
                 />
                 <Button type="submit" disabled={loading || !codigo.trim()}>
