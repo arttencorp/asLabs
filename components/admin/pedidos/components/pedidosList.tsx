@@ -113,7 +113,7 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                 <TableHead>Estado</TableHead>
                 <TableHead>Fecha Pedido</TableHead>
                 <TableHead>Código Rastreo</TableHead>
-                <TableHead>Imagen</TableHead>
+                <TableHead>Archivos</TableHead>
                 <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
@@ -152,23 +152,31 @@ export function PedidosList({ pedidos, loading, onEdit, onDelete, onRefresh, onV
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-center">
-                        {pedido.ped_imagen_url ? (
+                        {pedido.documentos && pedido.documentos.length > 0 ? (
                           <div className="flex items-center gap-1">
                             <Image className="h-4 w-4 text-green-600" />
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => window.open(pedido.ped_imagen_url!, '_blank')}
+                              onClick={() => {
+                                // Abrir la primera imagen, o se puede mostrar un modal con galería
+                                if (pedido.documentos && pedido.documentos.length === 1) {
+                                  window.open(pedido.documentos[0].ped_doc_url_vac, '_blank')
+                                } else {
+                                  // Para múltiples, abrir la primera
+                                  window.open(pedido.documentos![0].ped_doc_url_vac, '_blank')
+                                }
+                              }}
                               className="h-6 px-1 text-xs text-green-600 hover:text-green-700"
-                              title="Ver imagen"
+                              title="Ver imágenes"
                             >
-                              Ver
+                              {pedido.documentos.length} {pedido.documentos.length === 1 ? 'archivo' : 'archivos'}
                             </Button>
                           </div>
                         ) : (
                           <div className="flex items-center gap-1 text-gray-400">
                             <Image className="h-4 w-4" />
-                            <span className="text-xs">Sin imagen</span>
+                            <span className="text-xs">Sin archivos</span>
                           </div>
                         )}
                       </div>

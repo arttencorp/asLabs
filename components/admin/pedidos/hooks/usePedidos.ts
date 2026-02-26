@@ -37,8 +37,7 @@ const PEDIDO_FORM_INITIAL: PedidoForm = {
   estado_id: '',
   codigo_rastreo: '',
   observaciones: '',
-  numero_comprobante: '',
-  imagen_url: ''
+  numero_comprobante: ''
 }
 
 export function usePedidos() {

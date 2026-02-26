@@ -337,14 +337,18 @@ export default function SeguimientoClient() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gray-400" />
-                        <span>{getNombreCompleto(pedido.cotizacion.persona)}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-gray-400" />
-                        <span>{pedido.cotizacion.persona.per_email_vac}</span>
-                      </div>
+                      {getNombreCompleto(pedido.cotizacion.persona) && (
+                        <div className="flex items-center gap-2">
+                          <User className="h-4 w-4 text-gray-400" />
+                          <span>{getNombreCompleto(pedido.cotizacion.persona)}</span>
+                        </div>
+                      )}
+                      {pedido.cotizacion.persona.per_email_vac && (
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-4 w-4 text-gray-400" />
+                          <span>{pedido.cotizacion.persona.per_email_vac}</span>
+                        </div>
+                      )}
                       {pedido.cotizacion.persona.per_telef_int && (
                         <div className="flex items-center gap-2">
                           <Phone className="h-4 w-4 text-gray-400" />
@@ -357,11 +361,13 @@ export default function SeguimientoClient() {
                           <span className="text-sm">{pedido.cotizacion.persona.per_direc_vac}</span>
                         </div>
                       )}
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600">
-                          {getDocumentoCliente(pedido.cotizacion.persona)}
-                        </span>
-                      </div>
+                      {getDocumentoCliente(pedido.cotizacion.persona) && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-600">
+                            {getDocumentoCliente(pedido.cotizacion.persona)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -377,56 +383,7 @@ export default function SeguimientoClient() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Imagen del Pedido - Lado Izquierdo */}
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
-                      <Package className="h-4 w-4" />
-                      Imagen del Pedido
-                    </h4>
-                    {pedido.ped_imagen_url ? (
-                      <div className="space-y-3">
-                        <div className="border border-gray-200 rounded-lg overflow-hidden">
-                          <img
-                            src={pedido.ped_imagen_url}
-                            alt="Imagen del pedido"
-                            className="w-full h-48 object-cover"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.style.display = 'none'
-                              target.nextElementSibling?.classList.remove('hidden')
-                            }}
-                          />
-                          <div className="hidden bg-gray-100 h-48 flex items-center justify-center">
-                            <div className="text-center text-gray-500">
-                              <Package className="h-8 w-8 mx-auto mb-2" />
-                              <p className="text-sm">Error al cargar imagen</p>
-                            </div>
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open(pedido.ped_imagen_url, '_blank')}
-                          className="w-full flex items-center gap-2"
-                        >
-                          <Eye className="h-4 w-4" />
-                          Ver completo
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="border border-gray-200 rounded-lg bg-gray-50 h-48 flex items-center justify-center">
-                        <div className="text-center text-gray-500">
-                          <Package className="h-8 w-8 mx-auto mb-2" />
-                          <p className="text-sm">No hay imagen disponible</p>
-                          <p className="text-xs">Se agregará cuando el pedido esté en preparación</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Historial - Lado Derecho */}
-                  <div>
+                <div>
                     <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
                       <Calendar className="h-4 w-4" />
                       Cronología
@@ -503,7 +460,6 @@ export default function SeguimientoClient() {
                         </>
                       )}
                     </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>

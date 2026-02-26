@@ -7,11 +7,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Loader2, Upload, X, Eye } from "lucide-react"
-import { obtenerPedidoPorCodigo } from "@/lib/supabase"
-import { subirImagenPedido, eliminarImagenPedido, actualizarPedido } from "@/lib/supabase"
+import { Loader2, Upload, X, Eye, ImagePlus } from "lucide-react"
+import { subirDocumentoPedido, eliminarDocumentoPedido } from "@/lib/supabase"
 import type { EstadoPedido } from '@/types/database'
-import type { PedidoForm, Cotizacion, Pedido } from '../types'
+import type { PedidoForm, Cotizacion, Pedido, PedidoDoc } from '../types'
 
 interface PedidoFormProps {
   open: boolean
@@ -21,6 +20,12 @@ interface PedidoFormProps {
   cotizaciones: Cotizacion[]
   estadosPedido: EstadoPedido[]
   loading: boolean
+  onDocumentosChange?: () => void
+}
+
+interface ArchivoPreview {
+  file: File
+  previewUrl: string
 }
 
 export function PedidoFormDialog({
@@ -30,22 +35,24 @@ export function PedidoFormDialog({
   pedido,
   cotizaciones,
   estadosPedido,
-  loading
+  loading,
+  onDocumentosChange
 }: PedidoFormProps) {
   const [formData, setFormData] = useState<PedidoForm>({
     cotizacion_id: '',
     estado_id: '',
     codigo_rastreo: '',
     observaciones: '',
-    numero_comprobante: '',
-    imagen_url: ''
+    numero_comprobante: ''
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [imagenFile, setImagenFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [uploadingImage, setUploadingImage] = useState(false)
-  const [deletingImage, setDeletingImage] = useState(false)
+  // Archivos nuevos pendientes de subir
+  const [archivosNuevos, setArchivosNuevos] = useState<ArchivoPreview[]>([])
+  // Documentos existentes (ya subidos en BD)
+  const [documentosExistentes, setDocumentosExistentes] = useState<PedidoDoc[]>([])
+  const [uploadingImages, setUploadingImages] = useState(false)
+  const [deletingDocId, setDeletingDocId] = useState<string | null>(null)
 
   useEffect(() => {
     if (pedido) {
@@ -54,43 +61,34 @@ export function PedidoFormDialog({
         estado_id: pedido.est_ped_id_int,
         codigo_rastreo: pedido.ped_cod_rastreo_vac || '',
         observaciones: pedido.ped_observacion_vac || '',
-        numero_comprobante: pedido.ped_num_comprob_vac || '',
-        imagen_url: pedido.ped_imagen_url || ''
+        numero_comprobante: pedido.ped_num_comprob_vac || ''
       })
 
-      // Si el pedido tiene imagen, mostrarla como preview
-      if (pedido.ped_imagen_url) {
-        setPreviewUrl(pedido.ped_imagen_url)
-      }
+      // Cargar documentos existentes
+      setDocumentosExistentes(pedido.documentos || [])
     } else {
-      // Para crear pedido nuevo: solo resetear cotización, estado se asigna automáticamente
       setFormData({
         cotizacion_id: '',
         estado_id: '',
         codigo_rastreo: '',
         observaciones: '',
-        numero_comprobante: '',
-        imagen_url: ''
+        numero_comprobante: ''
       })
-
-      // Limpiar imagen states
-      setImagenFile(null)
-      setPreviewUrl(null)
+      setDocumentosExistentes([])
     }
 
-    // Limpiar errores cuando se abre/cierra el modal
+    // Limpiar archivos nuevos y errores al abrir/cerrar
+    setArchivosNuevos([])
     setErrors({})
-  }, [pedido, estadosPedido, open])
+  }, [pedido, open])
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
-    // Cotización siempre es obligatoria (crear y editar)
     if (!formData.cotizacion_id || formData.cotizacion_id.trim() === '') {
       newErrors.cotizacion_id = 'Debe seleccionar una cotización'
     }
 
-    // Estado solo es obligatorio al editar
     if (pedido && (!formData.estado_id || formData.estado_id.trim() === '')) {
       newErrors.estado_id = 'El estado es obligatorio'
     }
@@ -105,22 +103,27 @@ export function PedidoFormDialog({
     if (!validateForm()) return
 
     try {
-      let finalFormData = { ...formData }
+      // Primero guardar el pedido (crear o actualizar)
+      await onSubmit(formData)
 
-      // Si hay una nueva imagen, subirla primero
-      if (imagenFile) {
-        const imageUrl = await uploadImage()
-        if (imageUrl) {
-          finalFormData.imagen_url = imageUrl
+      // Si hay archivos nuevos y estamos editando, subir documentos
+      if (archivosNuevos.length > 0 && pedido) {
+        setUploadingImages(true)
+        try {
+          for (const archivo of archivosNuevos) {
+            await subirDocumentoPedido(archivo.file, pedido.ped_id_int)
+          }
+          onDocumentosChange?.()
+        } catch (uploadError) {
+          console.error('Error subiendo documentos:', uploadError)
+          setErrors(prev => ({ ...prev, imagen: 'Algunos archivos no se pudieron subir' }))
+        } finally {
+          setUploadingImages(false)
         }
       }
 
-      await onSubmit(finalFormData)
-
-      // Limpiar estados de imagen después del submit exitoso
-      setImagenFile(null)
-      setPreviewUrl(null)
-
+      // Limpiar estados
+      setArchivosNuevos([])
       onClose()
     } catch (error) {
       console.error('Error submitting form:', error)
@@ -134,112 +137,63 @@ export function PedidoFormDialog({
     }
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      // Validar tipo de archivo
-      if (!file.type.startsWith('image/')) {
-        setErrors(prev => ({ ...prev, imagen: 'Solo se permiten archivos de imagen' }))
-        return
-      }
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
 
-      setImagenFile(file)
+    const nuevosArchivos: ArchivoPreview[] = []
+    const erroresArchivo: string[] = []
 
-      // Crear preview
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setPreviewUrl(e.target?.result as string)
+    for (const file of files) {
+      if (!file.type.startsWith('image/') && !file.type.startsWith('application/pdf')) {
+        erroresArchivo.push(`${file.name}: solo se permiten imágenes y PDFs`)
+        continue
       }
-      reader.readAsDataURL(file)
-
-      // Limpiar errores de imagen
-      if (errors.imagen) {
-        setErrors(prev => ({ ...prev, imagen: '' }))
-      }
+      const previewUrl = file.type.startsWith('image/')
+        ? URL.createObjectURL(file)
+        : '' // No preview for PDFs
+      nuevosArchivos.push({ file, previewUrl })
     }
+
+    if (erroresArchivo.length > 0) {
+      setErrors(prev => ({ ...prev, imagen: erroresArchivo.join(', ') }))
+    } else if (errors.imagen) {
+      setErrors(prev => ({ ...prev, imagen: '' }))
+    }
+
+    setArchivosNuevos(prev => [...prev, ...nuevosArchivos])
+
+    // Limpiar input
+    e.target.value = ''
   }
 
-  const removeImage = async () => {
-    setDeletingImage(true)
-
-    try {
-      // Si estamos editando y hay una imagen existente en la BD, eliminarla del storage
-      if (pedido?.ped_imagen_url) {
-        await eliminarImagenPedido(pedido.ped_imagen_url)
-
-        // Actualizar inmediatamente la BD para quitar la referencia
-        await actualizarPedido(pedido.ped_id_int, { imagen_url: '' })
+  const removeArchivoNuevo = (index: number) => {
+    setArchivosNuevos(prev => {
+      const updated = [...prev]
+      // Revocar URL para liberar memoria
+      if (updated[index].previewUrl) {
+        URL.revokeObjectURL(updated[index].previewUrl)
       }
-
-      setImagenFile(null)
-      setPreviewUrl(null)
-      setFormData(prev => ({ ...prev, imagen_url: '' }))
-
-      // Limpiar el input file
-      const fileInput = document.getElementById('imagen_file') as HTMLInputElement
-      if (fileInput) {
-        fileInput.value = ''
-      }
-
-      // Limpiar errores
-      if (errors.imagen) {
-        setErrors(prev => ({ ...prev, imagen: '' }))
-      }
-    } catch (error: any) {
-      let errorMessage = 'Error al eliminar la imagen del servidor'
-      if (error instanceof Error) {
-        errorMessage = error.message
-      }
-
-      setErrors(prev => ({ ...prev, imagen: errorMessage }))
-    } finally {
-      setDeletingImage(false)
-    }
+      updated.splice(index, 1)
+      return updated
+    })
   }
 
-  const uploadImage = async (): Promise<string | null> => {
-    if (!imagenFile) return null
-
-    setUploadingImage(true)
-
+  const removeDocumentoExistente = async (docId: string) => {
+    setDeletingDocId(docId)
     try {
-      // Si hay una imagen anterior y estamos editando, eliminarla primero
-      if (pedido?.ped_imagen_url) {
-        try {
-          await eliminarImagenPedido(pedido.ped_imagen_url)
-        } catch (error) {
-          // No lanzar error, continuar con la subida de la nueva imagen
-        }
-      }
-
-      // Subir nueva imagen
-      const imageUrl = await subirImagenPedido(imagenFile, pedido?.ped_id_int)
-      return imageUrl
+      await eliminarDocumentoPedido(docId)
+      setDocumentosExistentes(prev => prev.filter(d => d.ped_doc_id_int !== docId))
+      onDocumentosChange?.()
     } catch (error: any) {
-      let errorMessage = 'Error al subir la imagen. Inténtalo de nuevo.'
-
-      if (error instanceof Error) {
-        if (error.message.includes('Bucket not found')) {
-          errorMessage = 'Error de configuración: Bucket no encontrado. Contacta al administrador.'
-        } else if (error.message.includes('permission')) {
-          errorMessage = 'Error de permisos. Contacta al administrador.'
-        } else if (error.message.includes('File type')) {
-          errorMessage = 'Tipo de archivo no válido. Solo se permiten imágenes.'
-        } else {
-          errorMessage = error.message
-        }
-      }
-
-      setErrors(prev => ({ ...prev, imagen: errorMessage }))
-      throw error
+      setErrors(prev => ({ ...prev, imagen: error.message || 'Error al eliminar documento' }))
     } finally {
-      setUploadingImage(false)
+      setDeletingDocId(null)
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {pedido ? 'Editar Pedido' : 'Iniciar Nuevo Pedido'}
@@ -290,7 +244,6 @@ export function PedidoFormDialog({
                 <p className="text-sm text-red-500 mt-1">{errors.cotizacion_id}</p>
               )}
 
-              {/* Mensaje cuando no hay cotizaciones disponibles */}
               {cotizaciones.length === 0 && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-2">
                   <div className="flex items-start space-x-3">
@@ -309,7 +262,6 @@ export function PedidoFormDialog({
                 </div>
               )}
 
-              {/* Mensaje informativo */}
               {cotizaciones.length > 0 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                   <div className="flex items-start space-x-3">
@@ -416,89 +368,128 @@ export function PedidoFormDialog({
                 />
               </div>
 
-              {/* Campo de Imagen */}
-              <div>
-                <Label htmlFor="imagen">Imagen del Pedido</Label>
+              {/* Campo de Imágenes / Documentos */}
+              <div className="col-span-2">
+                <Label htmlFor="imagenes">Imágenes del Pedido</Label>
                 <div className="space-y-3">
-                  {/* Input para subir archivo */}
+                  {/* Botón para subir archivos */}
                   <div className="flex items-center gap-2">
                     <Input
-                      id="imagen_file"
+                      id="imagenes_file"
                       type="file"
                       accept="image/*"
-                      onChange={handleImageChange}
+                      multiple
+                      onChange={handleFilesChange}
                       className="hidden"
                     />
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => document.getElementById('imagen_file')?.click()}
-                      disabled={uploadingImage || deletingImage}
+                      onClick={() => document.getElementById('imagenes_file')?.click()}
+                      disabled={uploadingImages || !!deletingDocId}
                       className="flex items-center gap-2"
                     >
-                      <Upload className="h-4 w-4" />
-                      {previewUrl ? 'Cambiar imagen' : 'Subir imagen'}
+                      <ImagePlus className="h-4 w-4" />
+                      Agregar imágenes
                     </Button>
-
-                    {previewUrl && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={removeImage}
-                        disabled={uploadingImage || deletingImage}
-                        className="text-red-600 hover:text-red-700"
-                        title="Eliminar imagen"
-                      >
-                        {deletingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
-                      </Button>
-                    )}
+                    <span className="text-xs text-gray-500">
+                      {documentosExistentes.length + archivosNuevos.length} archivo(s) adjunto(s)
+                    </span>
                   </div>
 
-                  {/* Preview de la imagen */}
-                  {previewUrl && (
-                    <div className="relative border border-gray-200 rounded-lg overflow-hidden">
-                      <img
-                        src={previewUrl}
-                        alt="Preview del pedido"
-                        className="w-full h-32 object-cover"
-                      />
-                      <div className="absolute top-2 right-2">
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => window.open(previewUrl, '_blank')}
-                          className="bg-white/80 hover:bg-white/90"
-                        >
-                          <Eye className="h-3 w-3" />
-                        </Button>
+                  {/* Documentos existentes (ya en BD) */}
+                  {documentosExistentes.length > 0 && (
+                    <div>
+                      <p className="text-xs font-medium text-gray-600 mb-2">Archivos guardados:</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {documentosExistentes.map((doc) => (
+                          <div key={doc.ped_doc_id_int} className="relative group border border-gray-200 rounded-lg overflow-hidden">
+                            <img
+                              src={doc.ped_doc_url_vac}
+                              alt="Documento del pedido"
+                              className="w-full h-24 object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement
+                                target.src = ''
+                                target.alt = 'Error al cargar'
+                                target.style.display = 'none'
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => window.open(doc.ped_doc_url_vac, '_blank')}
+                                className="h-7 w-7 p-0 bg-white/80 hover:bg-white/90"
+                              >
+                                <Eye className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => removeDocumentoExistente(doc.ped_doc_id_int)}
+                                disabled={deletingDocId === doc.ped_doc_id_int}
+                                className="h-7 w-7 p-0 bg-red-500/80 hover:bg-red-600/90 text-white"
+                              >
+                                {deletingDocId === doc.ped_doc_id_int ? (
+                                  <Loader2 className="h-3 w-3 animate-spin" />
+                                ) : (
+                                  <X className="h-3 w-3" />
+                                )}
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Input URL manual (como alternativa) */}
-                  <div>
-                    <Input
-                      id="imagen_url"
-                      value={formData.imagen_url}
-                      onChange={(e) => {
-                        handleChange('imagen_url', e.target.value)
-                        if (e.target.value && !imagenFile) {
-                          setPreviewUrl(e.target.value)
-                        }
-                      }}
-                      placeholder="O pega la URL de la imagen aquí"
-                      className="text-sm"
-                    />
-                  </div>
+                  {/* Archivos nuevos pendientes de subir */}
+                  {archivosNuevos.length > 0 && (
+                    <div>
+                      <p className="text-xs font-medium text-gray-600 mb-2">Nuevos archivos (se subirán al guardar):</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {archivosNuevos.map((archivo, index) => (
+                          <div key={index} className="relative group border border-blue-200 rounded-lg overflow-hidden bg-blue-50">
+                            {archivo.previewUrl ? (
+                              <img
+                                src={archivo.previewUrl}
+                                alt={`Preview ${archivo.file.name}`}
+                                className="w-full h-24 object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-24 flex items-center justify-center text-xs text-gray-500">
+                                {archivo.file.name}
+                              </div>
+                            )}
+                            <div className="absolute top-1 right-1">
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => removeArchivoNuevo(index)}
+                                className="h-6 w-6 p-0 bg-red-500/80 hover:bg-red-600/90 text-white rounded-full"
+                              >
+                                <X className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 bg-blue-600/80 text-white text-[10px] px-1 py-0.5 truncate">
+                              {archivo.file.name}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {errors.imagen && (
                     <p className="text-sm text-red-500">{errors.imagen}</p>
                   )}
 
                   <p className="text-xs text-gray-500">
-                    Formatos soportados: JPG, PNG, WebP.
+                    Formatos soportados: JPG, PNG, WebP. Puedes adjuntar varias imágenes.
                   </p>
                 </div>
               </div>
@@ -522,12 +513,12 @@ export function PedidoFormDialog({
             </Button>
             <Button
               type="submit"
-              disabled={loading || uploadingImage || deletingImage || (!pedido && cotizaciones.length === 0)}
+              disabled={loading || uploadingImages || !!deletingDocId || (!pedido && cotizaciones.length === 0)}
             >
-              {(loading || uploadingImage || deletingImage) ? (
+              {(loading || uploadingImages || !!deletingDocId) ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
               ) : null}
-              {uploadingImage ? 'Subiendo imagen...' : deletingImage ? 'Eliminando imagen...' : (pedido ? 'Actualizar Pedido' : 'Iniciar Pedido')}
+              {uploadingImages ? 'Subiendo imágenes...' : !!deletingDocId ? 'Eliminando...' : (pedido ? 'Actualizar Pedido' : 'Iniciar Pedido')}
             </Button>
           </div>
         </form>
