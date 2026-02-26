@@ -162,7 +162,6 @@ export default function RecepcionPage() {
           <Button
             variant="outline"
             size="sm"
-            variant="outline"
             onClick={cargarCotizaciones}
             disabled={loading}
           >
