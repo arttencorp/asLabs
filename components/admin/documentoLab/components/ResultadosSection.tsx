@@ -20,18 +20,23 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table'
-import { Plus, Trash2, TestTube, BarChart3 } from 'lucide-react'
-import { UNIDADES_RESULTADO, METODOS_ANALISIS } from '../constants'
+import { Plus, Trash2, TestTube, BarChart3, Settings2 } from 'lucide-react'
+import { UNIDADES_RESULTADO, METODOS_ANALISIS, CAMPOS_EXTRA_POR_SERVICIO } from '../constants'
+import { DataExtraPopover } from './DataExtraPopover'
 import type { ResultadosSectionProps, MuestraUI } from '../types'
 
 export function ResultadosSection({
   resultados,
   muestras,
+  servicioConfExtra,
   onAgregarResultado,
   onActualizarResultado,
   onEliminarResultado,
   disabled = false
 }: ResultadosSectionProps) {
+  // Config de campos extra para este servicio (si existe)
+  const extraConfig = servicioConfExtra ? CAMPOS_EXTRA_POR_SERVICIO[servicioConfExtra] : undefined
+
   // Obtener nombre de muestra por ID
   const obtenerNombreMuestra = (muestraId: string | undefined): string => {
     if (!muestraId) return 'General'
@@ -101,6 +106,7 @@ export function ResultadosSection({
                   <TableHead className="w-[80px]">Min</TableHead>
                   <TableHead className="w-[80px]">Max</TableHead>
                   <TableHead className="w-[80px] text-center">Gráfico</TableHead>
+                  {extraConfig && <TableHead className="w-[50px] text-center">Extra</TableHead>}
                   <TableHead className="w-[60px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -185,7 +191,7 @@ export function ResultadosSection({
                     <TableCell>
                       <Input
                         type="number"
-                        value={resultado.valorMin || ''}
+                        value={resultado.valorMin ?? ''}
                         onChange={(e) => onActualizarResultado(resultado.id, 'valorMin', e.target.value ? Number(e.target.value) : undefined)}
                         className="h-8 text-sm w-16"
                         disabled={disabled}
@@ -194,7 +200,7 @@ export function ResultadosSection({
                     <TableCell>
                       <Input
                         type="number"
-                        value={resultado.valorMax || ''}
+                        value={resultado.valorMax ?? ''}
                         onChange={(e) => onActualizarResultado(resultado.id, 'valorMax', e.target.value ? Number(e.target.value) : undefined)}
                         className="h-8 text-sm w-16"
                         disabled={disabled}
@@ -209,6 +215,16 @@ export function ResultadosSection({
                         disabled={disabled}
                       />
                     </TableCell>
+                    {extraConfig && (
+                      <TableCell className="text-center">
+                        <DataExtraPopover
+                          config={extraConfig}
+                          dataExtra={resultado.dataExtra || {}}
+                          onUpdate={(data) => onActualizarResultado(resultado.id, 'dataExtra', data)}
+                          disabled={disabled}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell>
                       <Button
                         variant="ghost"
@@ -229,13 +245,22 @@ export function ResultadosSection({
 
         {/* Leyenda */}
         {resultados.length > 0 && (
-          <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
               <BarChart3 className="h-3 w-3" />
               <span>Gráfico: Mostrar indicador visual de rango</span>
             </div>
             <span>|</span>
             <span>Min/Max: Valores de referencia para el rango aceptable</span>
+            {extraConfig && (
+              <>
+                <span>|</span>
+                <div className="flex items-center gap-1">
+                  <Settings2 className="h-3 w-3" />
+                  <span>Extra: {extraConfig.nombre} — campos adicionales</span>
+                </div>
+              </>
+            )}
           </div>
         )}
       </CardContent>

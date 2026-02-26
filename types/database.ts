@@ -210,6 +210,7 @@ export interface ServicioDatabase {
   serv_id_int: string
   serv_nombre_vac: string | null
   serv_costo_int: number | null
+  serv_conf_extra_int: number | null  // clave numérica para CAMPOS_EXTRA_POR_SERVICIO
   serv_updt_dt: string | null
   serv_created_dt: string
   area_id_int: string // FK a Areas
@@ -230,6 +231,7 @@ export interface TipoDocumentoDatabase {
 export interface EstadoDocumentoDatabase {
   est_doc_id_int: string
   est_doc_nomb_vac: string | null
+  est_doc_ord_int: number | null
   est_doc_updt_dt: string | null
   est_doc_created_dt: string
 }
@@ -274,13 +276,14 @@ export interface MuestraDatabase {
   mue_lab_cod_vac: string | null // Código de muestra en laboratorio
   mue_mtrz_vac: string | null // Matriz (suelo, agua, tejido vegetal, etc.)
   mue_lugar_vac: string | null // Lugar de muestreo
+  mue_centro_vac: string | null // Centro de registro / muestreo
   mue_fec_toma_dt: string | null
   mue_fec_recep_dt: string | null
   mue_fec_inicio_dt: string | null // Inicio de análisis
   mue_fec_fin_dt: string | null // Fin de análisis
   mue_rechazada_bol: boolean | null
   mue_motiv_rech_vac: string | null
-  mue_recomend_vac: string | null // Recomendaciones
+  mue_recomend_vac: string | null // Observaciones
   mue_updt_dt: string | null
   mue_created_dt: string
   doc_lab_id_int: string // FK a Documento_Lab
@@ -322,9 +325,10 @@ export interface ResultadoNotaDatabase {
 // Anexos de Documento
 export interface AnexoDocumentoDatabase {
   anx_doc_id_int: string
-  anx_doc_url_vac: string | null // URL del archivo
+  anx_doc_url_blob: string | null // URL del archivo
   anx_doc_tipo_vac: string | null // Tipo de anexo (foto, documento, etc.)
   anx_doc_nota_vac: string | null // Nota/descripción
+  anx_doc_titulo_vac: string | null // Título del anexo ("Imagen 1: título")
   anx_doc_updt_dt: string | null
   anx_doc_created_dt: string
   doc_lab_id_int: string // FK a Documento_Lab
@@ -391,13 +395,18 @@ export interface DocumentoLabForm {
 }
 
 export interface MuestraForm {
+  _tempId?: string  // ID temporal para mapeo con resultados/agentes
+  _atributosDinamicos?: Record<string, string>  // configCampoId → valor (se guarda aparte)
   mue_lab_cod_vac?: string
   mue_mtrz_vac?: string
   mue_lugar_vac?: string
+  mue_centro_vac?: string
   mue_fec_toma_dt?: string
   mue_fec_recep_dt?: string
   mue_fec_inicio_dt?: string
   mue_fec_fin_dt?: string
+  mue_rechazada_bol?: boolean
+  mue_motiv_rech_vac?: string
   mue_recomend_vac?: string
 }
 
@@ -431,5 +440,5 @@ export interface DocumentoLabCompletoForm {
   muestras: MuestraForm[]
   resultados: ResultadoEnsayoForm[]
   agentes?: AgenteIdentificadoForm[]
-  anexos?: { url: string; tipo: string; nota?: string }[]
+  anexos?: { url: string; tipo: string; titulo?: string; nota?: string }[]
 }

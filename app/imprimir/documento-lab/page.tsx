@@ -1,28 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Printer, Home } from 'lucide-react'
+import { ArrowLeft, Printer, Home, Download, Loader2 } from 'lucide-react'
 import { 
   INFO_EMPRESA, 
   TIPOS_AGENTE, 
   MATRICES_MUESTRA, 
   DECLARACIONES_AREA 
 } from '@/components/admin/documentoLab/constants'
-import type { DocumentoLabUI } from '@/components/admin/documentoLab/types'
+import type { DocumentoLabUI, FirmaDocumentoUI } from '@/components/admin/documentoLab/types'
 import { formatDate } from '@/utils'
+import { generarPdfDocumentoLab } from '@/utils/generarPdfDocumentoLab'
 
 // Componente para los controles de impresión (no se imprimen)
 function ControlesImpresion({ 
   onVolver, 
-  onImprimir,
-  tipoDocumento
+  onDescargarPDF,
+  tipoDocumento,
+  generandoPDF
 }: { 
   onVolver: () => void
-  onImprimir: () => void
+  onDescargarPDF: () => void
   tipoDocumento?: string
+  generandoPDF: boolean
 }) {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b shadow-sm print:hidden">
@@ -37,9 +40,17 @@ function ControlesImpresion({
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={onImprimir} className="bg-[#5D9848] hover:bg-[#4a7a39]">
-            <Printer className="h-4 w-4 mr-2" />
-            Imprimir / Guardar PDF
+          <Button 
+            onClick={onDescargarPDF} 
+            className="bg-[#5D9848] hover:bg-[#4a7a39]"
+            disabled={generandoPDF}
+          >
+            {generandoPDF ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4 mr-2" />
+            )}
+            {generandoPDF ? 'Generando PDF...' : 'Descargar PDF'}
           </Button>
         </div>
       </div>
@@ -149,6 +160,7 @@ function TablaMuestras({
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Código</th>
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Matriz</th>
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Lugar de Muestreo</th>
+            <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Centro Registro</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">F. Toma</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">F. Recepción</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">Estado</th>
@@ -160,6 +172,7 @@ function TablaMuestras({
               <td className="border border-gray-300 px-2 py-1.5 font-medium">{muestra.codigo}</td>
               <td className="border border-gray-300 px-2 py-1.5">{getMatrizLabel(muestra.matriz)}</td>
               <td className="border border-gray-300 px-2 py-1.5">{muestra.lugarMuestreo || '-'}</td>
+              <td className="border border-gray-300 px-2 py-1.5">{muestra.centroRegistro || '-'}</td>
               <td className="border border-gray-300 px-2 py-1.5 text-center">
                 {muestra.fechaToma ? formatDate(muestra.fechaToma) : '-'}
               </td>
@@ -314,26 +327,72 @@ function DeclaracionDocumento({ areaNombre }: { areaNombre?: string }) {
   )
 }
 
-// Componente para pie de firma
-function PieFirma() {
+// Componente para sección de firmas
+function SeccionFirmas({ firmas }: { firmas: FirmaDocumentoUI[] }) {
+  // Si no hay firmas asignadas, mostrar el formato por defecto
+  if (!firmas || firmas.length === 0) {
+    return (
+      <div className="mt-8 pt-4 border-t border-gray-300">
+        <div className="grid grid-cols-2 gap-8">
+          <div className="text-center">
+            <div className="h-16 border-b border-gray-400 mb-2"></div>
+            <p className="text-xs text-gray-600">Firma del Responsable</p>
+            <p className="text-xs text-gray-500">Director Técnico</p>
+          </div>
+          <div className="text-center">
+            <div className="h-16 border-b border-gray-400 mb-2"></div>
+            <p className="text-xs text-gray-600">Sello del Laboratorio</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Determinar el número de columnas según la cantidad de firmas
+  const gridCols = firmas.length === 1 
+    ? 'grid-cols-1' 
+    : firmas.length === 2 
+      ? 'grid-cols-2' 
+      : firmas.length === 3 
+        ? 'grid-cols-3' 
+        : 'grid-cols-2'
+
   return (
     <div className="mt-8 pt-4 border-t border-gray-300">
-      <div className="grid grid-cols-2 gap-8">
-        <div className="text-center">
-          <div className="h-16 border-b border-gray-400 mb-2"></div>
-          <p className="text-xs text-gray-600">Firma del Responsable</p>
-          <p className="text-xs text-gray-500">Director Técnico</p>
-        </div>
-        <div className="text-center">
-          <div className="h-16 border-b border-gray-400 mb-2"></div>
-          <p className="text-xs text-gray-600">Sello del Laboratorio</p>
-        </div>
+      <div className={`grid ${gridCols} gap-6`}>
+        {firmas.map(firma => (
+          <div key={firma.id} className="text-center">
+            {/* Imagen de la firma */}
+            <div className="h-16 flex items-end justify-center mb-1">
+              {firma.imagenUrl ? (
+                <Image
+                  src={firma.imagenUrl}
+                  alt={`Firma de ${firma.nombre}`}
+                  width={120}
+                  height={60}
+                  className="max-h-14 w-auto object-contain"
+                />
+              ) : (
+                <div className="w-full border-b border-gray-400"></div>
+              )}
+            </div>
+            {/* Línea debajo si no hay imagen */}
+            {!firma.imagenUrl && (
+              <div className="border-b border-gray-400 mb-2"></div>
+            )}
+            {/* Nombre y cargo */}
+            <p className="text-xs font-medium text-gray-700">{firma.nombre}</p>
+            {firma.cargo && (
+              <p className="text-xs text-gray-500">{firma.cargo}</p>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
-// Componente para anexos (imágenes en páginas separadas)
+// Componente para anexos (imágenes en páginas separadas) — APA 7ª edición
 function AnexosImpresion({ anexos }: { anexos: DocumentoLabUI['anexos'] }) {
   if (!anexos || anexos.length === 0) {
     return null
@@ -355,19 +414,24 @@ function AnexosImpresion({ anexos }: { anexos: DocumentoLabUI['anexos'] }) {
         <div key={anexo.id} className="page-break-before">
           <div className="mx-auto max-w-[210mm] bg-white print:p-0">
             <div className="p-4">
-              <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                Anexo {index + 1}: {anexo.tipo.replace('_', ' ')}
-              </h4>
-              {anexo.nota && (
-                <p className="text-xs text-gray-500 mb-3">{anexo.nota}</p>
-              )}
-              <div className="ficha-tecnica-print">
+              {/* APA 7ª ed.: Número de imagen + título en negrita */}
+              <p className="text-sm font-bold text-gray-800 mb-1">
+                Imagen {index + 1}{anexo.titulo ? `: ${anexo.titulo}` : ''}
+              </p>
+              <div className="ficha-tecnica-print mb-3">
                 <img 
                   src={anexo.url} 
-                  alt={`Anexo ${index + 1}`}
+                  alt={`Figura ${index + 1}`}
                   className="max-w-full h-auto"
                 />
               </div>
+              {/* APA 7ª ed.: "Nota. " en itálica + texto normal */}
+              {anexo.nota && (
+                <p className="text-xs text-gray-600 mt-2">
+                  <span className="italic">Nota. </span>
+                  {anexo.nota}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -383,6 +447,9 @@ export default function ImprimirDocumentoLab() {
   const [documento, setDocumento] = useState<DocumentoLabUI | null>(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [generandoPDF, setGenerandoPDF] = useState(false)
+  const documentoRef = useRef<HTMLDivElement>(null)
+  const anexosRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     try {
@@ -406,8 +473,18 @@ export default function ImprimirDocumentoLab() {
     router.back()
   }
 
-  const handleImprimir = () => {
-    window.print()
+  const handleDescargarPDF = async () => {
+    if (!documento) return
+    
+    setGenerandoPDF(true)
+    try {
+      await generarPdfDocumentoLab(documento)
+    } catch (err) {
+      console.error('Error generando PDF:', err)
+      alert('Error al generar el PDF. Intente nuevamente.')
+    } finally {
+      setGenerandoPDF(false)
+    }
   }
 
   if (cargando) {
@@ -454,15 +531,16 @@ export default function ImprimirDocumentoLab() {
       {/* Controles - No se imprimen */}
       <ControlesImpresion
         onVolver={handleVolver}
-        onImprimir={handleImprimir}
+        onDescargarPDF={handleDescargarPDF}
         tipoDocumento={documento.tipoDocumentoNombre}
+        generandoPDF={generandoPDF}
       />
 
       {/* Espacio para los controles fijos */}
       <div className="h-16 print:hidden"></div>
 
       {/* Documento principal */}
-      <div className="print-page">
+      <div className="print-page" ref={documentoRef}>
         <div className="mx-auto max-w-[210mm] bg-white p-6 print:p-0 text-sm">
           {/* Encabezado */}
           <EncabezadoDocumento 
@@ -520,8 +598,8 @@ export default function ImprimirDocumentoLab() {
           {/* Declaración */}
           <DeclaracionDocumento areaNombre={documento.areaNombre} />
 
-          {/* Pie de firma */}
-          <PieFirma />
+          {/* Firmas del documento */}
+          <SeccionFirmas firmas={documento.firmas || []} />
 
           {/* Pie de página */}
           <div className="mt-6 pt-3 border-t border-gray-200 text-center text-xs text-gray-500">
@@ -533,7 +611,9 @@ export default function ImprimirDocumentoLab() {
       </div>
 
       {/* Anexos en páginas separadas */}
-      <AnexosImpresion anexos={documento.anexos} />
+      <div ref={anexosRef}>
+        <AnexosImpresion anexos={documento.anexos} />
+      </div>
     </>
   )
 }

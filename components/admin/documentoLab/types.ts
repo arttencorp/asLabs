@@ -26,9 +26,17 @@ export type {
 }
 
 // Tipos para la UI
-export type TabDocumentoLab = 'informacion' | 'muestras' | 'resultados' | 'agentes' | 'anexos' | 'preview'
-export type TabName = 'lista' | 'crear' | 'cliente' | 'muestras' | 'resultados' | 'preview'
+export type TabDocumentoLab = 'informacion' | 'muestras' | 'resultados' | 'agentes' | 'anexos' | 'firmas' | 'preview'
+export type TabName = 'lista' | 'crear' | 'cliente' | 'muestras' | 'resultados' | 'firmas' | 'preview'
 export type EstadoDocumentoUI = 'borrador' | 'pendiente' | 'en_proceso' | 'emitido' | 'anulado'
+
+// Atributo dinámico de muestra (EAV)
+export interface AtributoMuestraUI {
+  configCampoId: string
+  etiqueta: string
+  tipoDato: string   // 'texto' | 'numerico' | 'fecha'
+  valor: string
+}
 
 // Muestra para UI (simplificada)
 export interface MuestraUI {
@@ -36,6 +44,7 @@ export interface MuestraUI {
   codigo: string
   matriz: string
   lugarMuestreo: string
+  centroRegistro: string
   fechaToma: string
   fechaRecepcion: string
   fechaInicio: string
@@ -44,6 +53,8 @@ export interface MuestraUI {
   motivoRechazo?: string
   recomendaciones?: string
   observaciones?: string
+  atributosDinamicos: Record<string, string>  // configCampoId → valor
+  atributosEtiquetas: Record<string, string>   // configCampoId → etiqueta
 }
 
 // Resultado para UI
@@ -59,6 +70,7 @@ export interface ResultadoUI {
   rangoReferencial?: string
   observaciones?: string
   muestraId?: string
+  dataExtra?: Record<string, any>
 }
 
 // Agente identificado para UI
@@ -75,11 +87,19 @@ export interface AgenteUI {
   muestraId?: string
 }
 
+// Nota de resultado para UI
+export interface NotaUI {
+  id: string
+  contenido: string
+  resultadoId: string  // FK a ResultadoUI — siempre vinculada
+}
+
 // Anexo para UI
 export interface AnexoUI {
   id: string
   url: string
   tipo: string
+  titulo?: string
   nota?: string
 }
 
@@ -102,6 +122,7 @@ export interface DocumentoLabUI {
   tipoDocumentoNombre?: string
   servicioId: string
   servicioNombre?: string
+  servicioConfExtra?: number  // clave numérica para config de campos extra
   areaId?: string
   areaNombre?: string
   estadoId?: string
@@ -110,8 +131,10 @@ export interface DocumentoLabUI {
   cliente: ClienteUI
   muestras: MuestraUI[]
   resultados: ResultadoUI[]
+  notas: NotaUI[]
   agentes: AgenteUI[]
   anexos: AnexoUI[]
+  firmas: FirmaDocumentoUI[]
   createdAt?: string
 }
 
@@ -121,6 +144,7 @@ export interface InformacionDocumentoProps {
   areas: AreaDatabase[]
   servicios: ServicioDatabase[]
   tiposDocumento: TipoDocumentoDatabase[]
+  estadosDocumento: EstadoDocumentoDatabase[]
   clientes: Persona[]
   areaSeleccionada: string
   onAreaChange: (areaId: string) => void
@@ -128,6 +152,7 @@ export interface InformacionDocumentoProps {
   onTipoDocumentoChange: (tipoId: string) => void
   onClienteChange: (clienteId: string) => void
   onFechaEmisionChange?: (fecha: string) => void
+  onEstadoChange?: (estadoId: string) => void
   disabled?: boolean
 }
 
@@ -135,6 +160,7 @@ export interface InformacionDocumentoProps {
 export interface MuestrasSectionProps {
   muestras: MuestraUI[]
   codigoDocumento: string
+  configCampos: import('@/types/database').ConfigCampoMuestraDatabase[]
   onAgregarMuestra: () => void
   onActualizarMuestra: (muestraId: string, campo: keyof MuestraUI, valor: any) => void
   onEliminarMuestra: (muestraId: string) => void
@@ -145,9 +171,20 @@ export interface MuestrasSectionProps {
 export interface ResultadosSectionProps {
   resultados: ResultadoUI[]
   muestras: MuestraUI[]
+  servicioConfExtra?: number
   onAgregarResultado: (muestraId?: string) => void
   onActualizarResultado: (resultadoId: string, campo: keyof ResultadoUI, valor: any) => void
   onEliminarResultado: (resultadoId: string) => void
+  disabled?: boolean
+}
+
+// Props para NotasResultadoSection
+export interface NotasSectionProps {
+  notas: NotaUI[]
+  resultados: ResultadoUI[]
+  onAgregarNota: (resultadoId?: string) => void
+  onActualizarNota: (notaId: string, campo: keyof NotaUI, valor: any) => void
+  onEliminarNota: (notaId: string) => void
   disabled?: boolean
 }
 
@@ -164,7 +201,9 @@ export interface AgentesSectionProps {
 // Props para AnexosSection
 export interface AnexosSectionProps {
   anexos: AnexoUI[]
-  onAgregarAnexo: (url: string, tipo: string, nota?: string) => void
+  configAnexos: import('@/types/database').ConfigAnexoServicioDatabase[]
+  onAgregarAnexo: (url: string, tipo: string, titulo?: string, nota?: string) => void
+  onActualizarAnexo: (anexoId: string, campos: { url?: string; titulo?: string; nota?: string }) => void
   onEliminarAnexo: (anexoId: string) => void
   disabled?: boolean
 }
@@ -172,7 +211,6 @@ export interface AnexosSectionProps {
 // Props para PreviewSection
 export interface PreviewSectionProps {
   documento: DocumentoLabUI
-  onEmitir: () => Promise<void>
   onImprimir: () => void
   onVolver: () => void
 }
@@ -227,4 +265,22 @@ export interface DocumentoLabFiltros {
   estadoId?: string
   fechaDesde?: string
   fechaHasta?: string
+}
+
+// Tipos para Firmas del documento
+export interface FirmaDocumentoUI {
+  id: string // firm_doc_id_int
+  firmaId: string // firm_id_int
+  nombre: string
+  cargo: string
+  imagenUrl: string | null
+  fechaAsignacion?: string
+}
+
+// Props para FirmasSection
+export interface FirmasSectionProps {
+  firmasAsignadas: FirmaDocumentoUI[]
+  onAgregarFirma: (firmaId: string) => void
+  onRemoverFirma: (firmaDocId: string) => void
+  disabled?: boolean
 }

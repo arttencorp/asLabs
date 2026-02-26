@@ -18,6 +18,7 @@ export function InformacionDocumento({
   areas,
   servicios,
   tiposDocumento,
+  estadosDocumento,
   clientes,
   areaSeleccionada,
   onAreaChange,
@@ -25,6 +26,7 @@ export function InformacionDocumento({
   onTipoDocumentoChange,
   onClienteChange,
   onFechaEmisionChange,
+  onEstadoChange,
   disabled = false
 }: InformacionDocumentoProps) {
   return (
@@ -134,17 +136,22 @@ export function InformacionDocumento({
           {/* Estado */}
           <div className="space-y-2">
             <Label>Estado</Label>
-            <div className={`
-              inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium
-              ${documento.estadoNombre?.toLowerCase().includes('borrador') 
-                ? 'bg-gray-100 text-gray-700' 
-                : documento.estadoNombre?.toLowerCase().includes('emitido')
-                ? 'bg-green-100 text-green-700'
-                : 'bg-blue-100 text-blue-700'
-              }
-            `}>
-              {documento.estadoNombre || 'Borrador'}
-            </div>
+            <Select
+              value={documento.estadoId || undefined}
+              onValueChange={(val) => onEstadoChange?.(val)}
+              disabled={disabled}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seleccionar estado" />
+              </SelectTrigger>
+              <SelectContent>
+                {estadosDocumento.map((estado) => (
+                  <SelectItem key={estado.est_doc_id_int} value={estado.est_doc_id_int}>
+                    {estado.est_doc_nomb_vac}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>

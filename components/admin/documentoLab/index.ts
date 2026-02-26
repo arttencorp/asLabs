@@ -5,8 +5,10 @@ export { useDocumentoLab } from './hooks/useDocumentoLab'
 export { InformacionDocumento } from './components/InformacionDocumento'
 export { MuestrasSection } from './components/MuestrasSection'
 export { ResultadosSection } from './components/ResultadosSection'
+export { NotasResultadoSection } from './components/NotasResultadoSection'
 export { AgentesSection } from './components/AgentesSection'
 export { AnexosSection } from './components/AnexosSection'
+export { FirmasSection } from './components/FirmasSection'
 export { DocumentoLabList } from './components/DocumentoLabList'
 export { DocumentoLabStats } from './components/DocumentoLabStats'
 export { PreviewSection } from './components/PreviewSection'
@@ -20,11 +22,15 @@ export type {
   ClienteUI,
   DocumentoLabUI,
   TabDocumentoLab,
+  NotaUI,
+  FirmaDocumentoUI,
   InformacionDocumentoProps,
   MuestrasSectionProps,
   ResultadosSectionProps,
+  NotasSectionProps,
   AgentesSectionProps,
   AnexosSectionProps,
+  FirmasSectionProps,
   PreviewSectionProps,
   DocumentoLabListProps,
   DocumentoLabStatsProps
@@ -54,6 +60,8 @@ export {
   resultadoDBToUI,
   resultadoUIToDB,
   agenteDBToUI,
+  notaDBToUI,
+  notaUIToDB,
   anexoDBToUI,
   documentoDBToUI,
   obtenerDeclaracion,

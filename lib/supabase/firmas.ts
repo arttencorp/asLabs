@@ -85,6 +85,26 @@ export async function actualizarFirma(id: string, firmaData: {
 
 export async function eliminarFirma(id: string): Promise<void> {
   try {
+    // Primero obtener la firma para ver si tiene imagen
+    const { data: firma } = await supabase
+      .from('Firma')
+      .select('firm_url_blob')
+      .eq('firm_id_int', id)
+      .single()
+
+    // Si tiene imagen, eliminarla del storage
+    if (firma?.firm_url_blob) {
+      try {
+        const result = await eliminarImagenFirma(firma.firm_url_blob)
+        if (!result.success) {
+          console.error('Error al eliminar imagen del storage:', result.error)
+        }
+      } catch (imageError) {
+        console.error('Error al eliminar imagen del storage, continuando con eliminación de la firma:', imageError)
+      }
+    }
+
+    // Eliminar el registro de la BD
     const { error } = await supabase
       .from('Firma')
       .delete()
@@ -205,10 +225,10 @@ export async function subirImagenFirma(archivo: File, nombreArchivo: string): Pr
 
     const timestamp = Date.now()
     const nombreFinal = `firma_${timestamp}.${extension}`
-    const rutaArchivo = `admin/firmas/${nombreFinal}`
+    const rutaArchivo = `firmas/${nombreFinal}`
 
     const { data, error } = await supabaseAuth.storage
-      .from('firmas')
+      .from('admin')
       .upload(rutaArchivo, archivo)
 
     if (error) {
@@ -217,7 +237,7 @@ export async function subirImagenFirma(archivo: File, nombreArchivo: string): Pr
     }
 
     const { data: urlData } = supabaseAuth.storage
-      .from('firmas')
+      .from('admin')
       .getPublicUrl(rutaArchivo)
 
     return { success: true, url: urlData.publicUrl }
@@ -238,17 +258,17 @@ export async function eliminarImagenFirma(url: string): Promise<{ success: boole
       return { success: false, error: 'No hay una sesión autenticada activa' }
     }
 
-    const urlParts = url.split('/admin/firmas/')
+    const urlParts = url.split('/firmas/')
     if (urlParts.length !== 2) {
       console.warn('URL de imagen no válida:', url)
       return { success: false, error: 'URL de imagen inválida' }
     }
 
     const fileName = urlParts[1]
-    const filePath = `admin/firmas/${fileName}`
+    const filePath = `firmas/${fileName}`
 
     const { error } = await supabaseAuth.storage
-      .from('firmas')
+      .from('admin')
       .remove([filePath])
 
     if (error) {

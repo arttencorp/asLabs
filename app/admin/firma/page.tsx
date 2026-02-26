@@ -155,7 +155,6 @@ export default function FirmasPage() {
         loading={loading}
         uploadLoading={uploadLoading}
         onSubmit={handleSubmit}
-        onUploadImage={handleUploadImage}
       />
 
       {/* Loading Overlay */}

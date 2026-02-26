@@ -29,6 +29,7 @@ export interface FirmaForm {
   firm_nomb_vac: string | null
   firm_cargo_vac: string | null
   firm_url_blob: string | null
+  imagen?: File | null  // Archivo de imagen seleccionado (para subir)
 }
 
 // Formulario para asignar firma a documento

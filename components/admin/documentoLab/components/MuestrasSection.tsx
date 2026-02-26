@@ -27,18 +27,35 @@ import {
   AccordionItem,
   AccordionTrigger 
 } from '@/components/ui/accordion'
-import { Plus, Trash2, FlaskConical, AlertTriangle } from 'lucide-react'
+import { Plus, Trash2, FlaskConical, AlertTriangle, Puzzle } from 'lucide-react'
 import { MATRICES_MUESTRA } from '../constants'
 import type { MuestrasSectionProps } from '../types'
 
 export function MuestrasSection({
   muestras,
   codigoDocumento,
+  configCampos,
   onAgregarMuestra,
   onActualizarMuestra,
   onEliminarMuestra,
   disabled = false
 }: MuestrasSectionProps) {
+  // Helper para actualizar un atributo dinámico dentro del Record
+  const actualizarAtributoDinamico = (muestraId: string, configCampoId: string, valor: string) => {
+    const muestra = muestras.find(m => m.id === muestraId)
+    if (!muestra) return
+    const nuevosAtributos = { ...muestra.atributosDinamicos, [configCampoId]: valor }
+    onActualizarMuestra(muestraId, 'atributosDinamicos', nuevosAtributos)
+  }
+
+  // Determinar tipo de input según config
+  const getInputType = (tipoDato: string | null): string => {
+    switch (tipoDato?.toLowerCase()) {
+      case 'numerico': case 'numérico': case 'number': return 'number'
+      case 'fecha': case 'date': return 'date'
+      default: return 'text'
+    }
+  }
   return (
     <Card>
       <CardHeader className="pb-4">
@@ -129,15 +146,26 @@ export function MuestrasSection({
                       </div>
                     </div>
 
-                    {/* Lugar de muestreo */}
-                    <div className="space-y-2">
-                      <Label>Lugar de Muestreo</Label>
-                      <Input
-                        value={muestra.lugarMuestreo}
-                        onChange={(e) => onActualizarMuestra(muestra.id, 'lugarMuestreo', e.target.value)}
-                        placeholder="Ej: Parcela 3, Sector Norte, Fundo San Juan"
-                        disabled={disabled}
-                      />
+                    {/* Lugar de muestreo y Centro de registro */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Lugar de Muestreo</Label>
+                        <Input
+                          value={muestra.lugarMuestreo}
+                          onChange={(e) => onActualizarMuestra(muestra.id, 'lugarMuestreo', e.target.value)}
+                          placeholder="Ej: Parcela 3, Sector Norte, Fundo San Juan"
+                          disabled={disabled}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Centro de Registro</Label>
+                        <Input
+                          value={muestra.centroRegistro}
+                          onChange={(e) => onActualizarMuestra(muestra.id, 'centroRegistro', e.target.value)}
+                          placeholder="Ej: Lab. Central, Sede Norte"
+                          disabled={disabled}
+                        />
+                      </div>
                     </div>
 
                     {/* Fechas */}
@@ -180,7 +208,7 @@ export function MuestrasSection({
                       </div>
                     </div>
 
-                    {/* Rechazo y Recomendaciones */}
+                    {/* Rechazo y Observaciones */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-4">
                         <div className="flex items-center space-x-2">
@@ -213,17 +241,47 @@ export function MuestrasSection({
                           </div>
                         )}
                       </div>
+                    </div>
 
-                      <div className="space-y-2">
-                        <Label>Recomendaciones</Label>
-                        <Textarea
-                          value={muestra.recomendaciones || ''}
-                          onChange={(e) => onActualizarMuestra(muestra.id, 'recomendaciones', e.target.value)}
-                          placeholder="Recomendaciones para esta muestra..."
-                          rows={muestra.rechazada ? 4 : 2}
-                          disabled={disabled}
-                        />
+                    {/* Separador y Observaciones Muestra */}
+                    <div className="px-4">
+                      <div className="border-t border-gray-200 my-4"></div>
+                    </div>
+
+                    {/* Campos Dinámicos EAV */}
+                    {configCampos.length > 0 && (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Puzzle className="h-4 w-4 text-muted-foreground" />
+                          <Label className="text-sm font-semibold">Campos adicionales del servicio</Label>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {configCampos.map((campo) => (
+                            <div key={campo.config_mue_id_int} className="space-y-1">
+                              <Label className="text-xs">{campo.config_mue_etique_vac || 'Campo'}</Label>
+                              <Input
+                                type={getInputType(campo.config_mue_tipo_dato_vac)}
+                                value={muestra.atributosDinamicos?.[campo.config_mue_id_int] || ''}
+                                onChange={(e) => actualizarAtributoDinamico(muestra.id, campo.config_mue_id_int, e.target.value)}
+                                placeholder={campo.config_mue_tipo_dato_vac || 'Valor'}
+                                disabled={disabled}
+                                className="h-8 text-sm"
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
+                    )}
+                    
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold">Observaciones Muestra:</Label>
+                      <Textarea
+                        value={muestra.recomendaciones || ''}
+                        onChange={(e) => onActualizarMuestra(muestra.id, 'recomendaciones', e.target.value)}
+                        placeholder="Observaciones para esta muestra..."
+                        rows={2}
+                        disabled={disabled}
+                      />
                     </div>
 
                     {/* Botón eliminar */}

@@ -42,7 +42,10 @@ export const createAuthenticatedClient = () => {
 export function cleanData(obj: any) {
     const cleaned = { ...obj }
     for (const key in cleaned) {
-        if (cleaned[key] === '') {
+        // Excluir campos internos que comienzan con _
+        if (key.startsWith('_')) {
+            delete cleaned[key]
+        } else if (cleaned[key] === '') {
             cleaned[key] = null
         }
     }

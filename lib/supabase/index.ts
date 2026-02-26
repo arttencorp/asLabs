@@ -31,5 +31,8 @@ export * from './tienda'
 // Documentos de laboratorio (certificados e informes)
 export * from './documentos-lab'
 
+// Módulo de recepción (flujo cotización → orden → documento)
+export * from './recepcion'
+
 // Firmas (catálogo y asignaciones a documentos)
 export * from './firmas'

@@ -7,20 +7,21 @@ import {
   ArrowLeft, 
   Plus, 
   Save, 
-  Send, 
   Printer,
   Loader2,
   Settings
 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { 
   useDocumentoLab,
   InformacionDocumento,
   MuestrasSection,
   ResultadosSection,
+  NotasResultadoSection,
   AgentesSection,
   AnexosSection,
+  FirmasSection,
   DocumentoLabList,
   DocumentoLabStats,
   PreviewSection
@@ -29,6 +30,7 @@ import type { TabDocumentoLab } from '@/components/admin/documentoLab'
 
 export default function DocumentoLabPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [mainTab, setMainTab] = useState<'lista' | 'crear'>('lista')
   
   const {
@@ -67,6 +69,7 @@ export default function DocumentoLabPage() {
     seleccionarArea,
     seleccionarServicio,
     seleccionarTipoDocumento,
+    seleccionarEstado,
     
     // Gestión de muestras
     agregarMuestra,
@@ -78,6 +81,11 @@ export default function DocumentoLabPage() {
     actualizarResultado,
     eliminarResultado,
     
+    // Gestión de notas
+    agregarNota,
+    actualizarNota,
+    eliminarNota,
+    
     // Gestión de agentes
     agregarAgente,
     actualizarAgente,
@@ -85,11 +93,20 @@ export default function DocumentoLabPage() {
     
     // Gestión de anexos
     agregarAnexo,
+    actualizarAnexo,
     eliminarAnexo,
+    
+    // Configuraciones EAV
+    configCampos,
+    configAnexos,
+    
+    // Gestión de firmas
+    firmasDisponibles,
+    agregarFirma,
+    removerFirma,
     
     // Acciones principales
     guardarDocumento,
-    emitirDocumento,
     cargarDocumentoParaEdicion,
     nuevoDocumento,
     
@@ -101,6 +118,22 @@ export default function DocumentoLabPage() {
   useEffect(() => {
     cargarDocumentos()
   }, [cargarDocumentos])
+
+  // Deep-linking: abrir documento desde el módulo de recepción u otros
+  const returnTo = searchParams.get('returnTo')
+  useEffect(() => {
+    const docId = searchParams.get('docId')
+    const modo = searchParams.get('modo')
+    if (docId) {
+      cargarDocumentoParaEdicion(docId)
+      setMainTab('crear')
+      if (modo === 'ver') {
+        setActiveTab('preview')
+      }
+    }
+    // Solo ejecutar cuando cambian los searchParams
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   // Handlers
   const handleNuevoDocumento = () => {
@@ -131,21 +164,16 @@ export default function DocumentoLabPage() {
     }
   }
 
-  const handleEmitir = async () => {
-    const exito = await emitirDocumento()
-    if (exito) {
-      // Mostrar mensaje de éxito
-      console.log('Documento emitido exitosamente')
-    }
-  }
-
   const handleVolverALista = () => {
+    if (returnTo) {
+      router.push(returnTo)
+      return
+    }
     setMainTab('lista')
     cargarDocumentos()
   }
 
   const stats = estadisticas()
-  const esDocumentoEmitido = documento.estadoNombre?.toLowerCase().includes('emitido')
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -168,10 +196,10 @@ export default function DocumentoLabPage() {
                 Configuración
               </Button>
             </Link>
-            <Button onClick={handleNuevoDocumento}>
+            {/* <Button onClick={handleNuevoDocumento}>
               <Plus className="h-4 w-4 mr-2" />
               Nuevo Documento
-            </Button>
+            </Button>*/}
           </div>
         )}
       </div>
@@ -222,36 +250,23 @@ export default function DocumentoLabPage() {
             </Button>
 
             <div className="flex items-center gap-2">
-              {!esDocumentoEmitido && (
-                <>
-                  <Button
-                    variant="outline"
-                    onClick={handleGuardar}
-                    disabled={guardando || catalogosLoading}
-                  >
-                    {guardando ? (
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    ) : (
-                      <Save className="h-4 w-4 mr-2" />
-                    )}
-                    Guardar Borrador
-                  </Button>
-                  <Button
-                    onClick={handleEmitir}
-                    disabled={guardando || catalogosLoading}
-                  >
-                    {guardando ? (
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    ) : (
-                      <Send className="h-4 w-4 mr-2" />
-                    )}
-                    Emitir Documento
-                  </Button>
-                </>
-              )}
+              <Button
+                onClick={handleGuardar}
+                disabled={guardando || catalogosLoading}
+              >
+                {guardando ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
+                Guardar
+              </Button>
               
-              {esDocumentoEmitido && documento.id && (
-                <Button onClick={() => handleImprimirDocumento(documento.id)}>
+              {documento.id && !documento.id.startsWith('temp_') && (
+                <Button 
+                  variant="outline"
+                  onClick={() => handleImprimirDocumento(documento.id)}
+                >
                   <Printer className="h-4 w-4 mr-2" />
                   Imprimir
                 </Button>
@@ -269,7 +284,7 @@ export default function DocumentoLabPage() {
               value={activeTab} 
               onValueChange={(v) => setActiveTab(v as TabDocumentoLab)}
             >
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-7">
                 <TabsTrigger value="informacion">Información</TabsTrigger>
                 <TabsTrigger value="muestras">
                   Muestras ({documento.muestras.length})
@@ -283,8 +298,11 @@ export default function DocumentoLabPage() {
                 <TabsTrigger value="anexos">
                   Anexos ({documento.anexos.length})
                 </TabsTrigger>
+                <TabsTrigger value="firmas">
+                  Firmas ({documento.firmas?.length || 0})
+                </TabsTrigger>
                 <TabsTrigger value="preview" className="bg-green-50 data-[state=active]:bg-green-100">
-                  👁️ Preview
+                  Preview
                 </TabsTrigger>
               </TabsList>
 
@@ -295,13 +313,14 @@ export default function DocumentoLabPage() {
                   areas={areas}
                   servicios={servicios}
                   tiposDocumento={tiposDocumento}
+                  estadosDocumento={estadosDocumento}
                   clientes={clientes}
                   areaSeleccionada={areaSeleccionada}
                   onAreaChange={seleccionarArea}
                   onServicioChange={seleccionarServicio}
                   onTipoDocumentoChange={seleccionarTipoDocumento}
                   onClienteChange={seleccionarCliente}
-                  disabled={esDocumentoEmitido}
+                  onEstadoChange={seleccionarEstado}
                 />
               </TabsContent>
 
@@ -310,10 +329,10 @@ export default function DocumentoLabPage() {
                 <MuestrasSection
                   muestras={documento.muestras}
                   codigoDocumento={documento.codigo}
+                  configCampos={configCampos}
                   onAgregarMuestra={agregarMuestra}
                   onActualizarMuestra={actualizarMuestra}
                   onEliminarMuestra={eliminarMuestra}
-                  disabled={esDocumentoEmitido}
                 />
               </TabsContent>
 
@@ -322,11 +341,21 @@ export default function DocumentoLabPage() {
                 <ResultadosSection
                   resultados={documento.resultados}
                   muestras={documento.muestras}
+                  servicioConfExtra={documento.servicioConfExtra}
                   onAgregarResultado={agregarResultado}
                   onActualizarResultado={actualizarResultado}
                   onEliminarResultado={eliminarResultado}
-                  disabled={esDocumentoEmitido}
                 />
+                {/* Sub-sección de Notas */}
+                <div className="mt-6">
+                  <NotasResultadoSection
+                    notas={documento.notas}
+                    resultados={documento.resultados}
+                    onAgregarNota={agregarNota}
+                    onActualizarNota={actualizarNota}
+                    onEliminarNota={eliminarNota}
+                  />
+                </div>
               </TabsContent>
 
               {/* Tab Agentes */}
@@ -337,7 +366,6 @@ export default function DocumentoLabPage() {
                   onAgregarAgente={agregarAgente}
                   onActualizarAgente={actualizarAgente}
                   onEliminarAgente={eliminarAgente}
-                  disabled={esDocumentoEmitido}
                 />
               </TabsContent>
 
@@ -345,9 +373,20 @@ export default function DocumentoLabPage() {
               <TabsContent value="anexos">
                 <AnexosSection
                   anexos={documento.anexos}
+                  configAnexos={configAnexos}
                   onAgregarAnexo={agregarAnexo}
+                  onActualizarAnexo={actualizarAnexo}
                   onEliminarAnexo={eliminarAnexo}
-                  disabled={esDocumentoEmitido}
+                />
+              </TabsContent>
+
+              {/* Tab Firmas */}
+              <TabsContent value="firmas">
+                <FirmasSection
+                  firmasAsignadas={documento.firmas || []}
+                  firmasDisponibles={firmasDisponibles}
+                  onAgregarFirma={agregarFirma}
+                  onRemoverFirma={removerFirma}
                 />
               </TabsContent>
 
@@ -355,8 +394,7 @@ export default function DocumentoLabPage() {
               <TabsContent value="preview">
                 <PreviewSection
                   documento={documento}
-                  onEmitir={handleEmitir}
-                  onImprimir={() => window.print()}
+                  onImprimir={() => documento.id && handleImprimirDocumento(documento.id)}
                   onVolver={() => setActiveTab('informacion')}
                 />
               </TabsContent>

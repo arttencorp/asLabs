@@ -7,7 +7,6 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { 
   Printer, 
-  Send, 
   ArrowLeft, 
   FileText,
   Beaker,
@@ -19,7 +18,7 @@ import {
   ExternalLink
 } from 'lucide-react'
 import Image from 'next/image'
-import type { PreviewSectionProps } from '../types'
+import type { PreviewSectionProps, FirmaDocumentoUI } from '../types'
 import { INFO_EMPRESA, TIPOS_AGENTE, MATRICES_MUESTRA, DECLARACIONES_AREA } from '../constants'
 import { formatDate } from '@/utils'
 
@@ -131,6 +130,7 @@ function TablaMuestras({
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Código</th>
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Matriz</th>
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Lugar de Muestreo</th>
+            <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Centro Registro</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">F. Toma</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">F. Recepción</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">Estado</th>
@@ -142,6 +142,7 @@ function TablaMuestras({
               <td className="border border-gray-300 px-2 py-1.5 font-medium">{muestra.codigo}</td>
               <td className="border border-gray-300 px-2 py-1.5">{getMatrizLabel(muestra.matriz)}</td>
               <td className="border border-gray-300 px-2 py-1.5">{muestra.lugarMuestreo || '-'}</td>
+              <td className="border border-gray-300 px-2 py-1.5">{muestra.centroRegistro || '-'}</td>
               <td className="border border-gray-300 px-2 py-1.5 text-center">
                 {muestra.fechaToma ? formatDate(muestra.fechaToma) : '-'}
               </td>
@@ -299,26 +300,72 @@ function DeclaracionDocumento({ areaNombre }: { areaNombre?: string }) {
   )
 }
 
-// Componente para pie de firma
-function PieFirma() {
+// Componente para sección de firmas
+function SeccionFirmas({ firmas }: { firmas: FirmaDocumentoUI[] }) {
+  // Si no hay firmas asignadas, mostrar el formato por defecto
+  if (!firmas || firmas.length === 0) {
+    return (
+      <div className="mt-8 pt-4 border-t border-gray-300">
+        <div className="grid grid-cols-2 gap-8">
+          <div className="text-center">
+            <div className="h-16 border-b border-gray-400 mb-2"></div>
+            <p className="text-xs text-gray-600">Firma del Responsable</p>
+            <p className="text-xs text-gray-500">Director Técnico</p>
+          </div>
+          <div className="text-center">
+            <div className="h-16 border-b border-gray-400 mb-2"></div>
+            <p className="text-xs text-gray-600">Sello del Laboratorio</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Determinar el número de columnas según la cantidad de firmas
+  const gridCols = firmas.length === 1 
+    ? 'grid-cols-1' 
+    : firmas.length === 2 
+      ? 'grid-cols-2' 
+      : firmas.length === 3 
+        ? 'grid-cols-3' 
+        : 'grid-cols-2 lg:grid-cols-4'
+
   return (
     <div className="mt-8 pt-4 border-t border-gray-300">
-      <div className="grid grid-cols-2 gap-8">
-        <div className="text-center">
-          <div className="h-16 border-b border-gray-400 mb-2"></div>
-          <p className="text-xs text-gray-600">Firma del Responsable</p>
-          <p className="text-xs text-gray-500">Director Técnico</p>
-        </div>
-        <div className="text-center">
-          <div className="h-16 border-b border-gray-400 mb-2"></div>
-          <p className="text-xs text-gray-600">Sello del Laboratorio</p>
-        </div>
+      <div className={`grid ${gridCols} gap-6`}>
+        {firmas.map(firma => (
+          <div key={firma.id} className="text-center">
+            {/* Imagen de la firma */}
+            <div className="h-16 flex items-end justify-center mb-1">
+              {firma.imagenUrl ? (
+                <Image
+                  src={firma.imagenUrl}
+                  alt={`Firma de ${firma.nombre}`}
+                  width={120}
+                  height={60}
+                  className="max-h-14 w-auto object-contain"
+                />
+              ) : (
+                <div className="w-full border-b border-gray-400"></div>
+              )}
+            </div>
+            {/* Línea debajo si no hay imagen */}
+            {!firma.imagenUrl && (
+              <div className="border-b border-gray-400 mb-2"></div>
+            )}
+            {/* Nombre y cargo */}
+            <p className="text-xs font-medium text-gray-700">{firma.nombre}</p>
+            {firma.cargo && (
+              <p className="text-xs text-gray-500">{firma.cargo}</p>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
-// Componente para lista de anexos
+// Componente para lista de anexos — formato APA 7ª edición
 function ListaAnexos({ anexos }: { anexos: PreviewSectionProps['documento']['anexos'] }) {
   if (!anexos || anexos.length === 0) {
     return null
@@ -328,17 +375,40 @@ function ListaAnexos({ anexos }: { anexos: PreviewSectionProps['documento']['ane
     <div className="mt-4">
       <h3 className="font-semibold text-[#5D9848] mb-2 flex items-center gap-2">
         <FileText className="h-4 w-4" />
-        Anexos ({anexos.length})
+        Registro Fotográfico ({anexos.length})
       </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {anexos.map((anexo, index) => (
           <div 
             key={anexo.id} 
-            className="border border-gray-200 rounded p-2 text-xs bg-gray-50"
+            className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50"
           >
-            <p className="font-medium">Anexo {index + 1}</p>
-            <p className="text-gray-500 capitalize">{anexo.tipo.replace('_', ' ')}</p>
-            {anexo.nota && <p className="text-gray-400 truncate">{anexo.nota}</p>}
+            {/* Imagen */}
+            {/\.(jpg|jpeg|png|gif|webp)/i.test(anexo.url) && (
+              <div className="bg-white flex items-center justify-center p-2">
+                <img
+                  src={anexo.url}
+                  alt={anexo.nota || `Imagen ${index + 1}`}
+                  className="max-h-40 max-w-full object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none'
+                  }}
+                />
+              </div>
+            )}
+            {/* APA 7ª ed.: Número de imagen + título en negrita */}
+            <div className="px-3 py-2 border-t border-gray-200">
+              <p className="text-xs font-bold">
+                Imagen {index + 1}{anexo.titulo ? `: ${anexo.titulo}` : ''}
+              </p>
+              {/* APA: "Nota. " en itálica + texto normal */}
+              {anexo.nota && (
+                <p className="text-xs text-gray-500 mt-0.5">
+                  <span className="italic">Nota. </span>
+                  {anexo.nota}
+                </p>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -349,7 +419,6 @@ function ListaAnexos({ anexos }: { anexos: PreviewSectionProps['documento']['ane
 // Componente principal de Preview
 export function PreviewSection({ 
   documento, 
-  onEmitir, 
   onImprimir, 
   onVolver 
 }: PreviewSectionProps) {
@@ -358,8 +427,6 @@ export function PreviewSection({
   const esValido = documento.cliente.razonSocial && 
                    documento.muestras.length > 0 && 
                    documento.resultados.length > 0
-
-  const esEmitido = documento.estadoNombre?.toLowerCase().includes('emitido')
 
   // Función para abrir la vista de impresión en nueva pestaña
   const handleAbrirVistaImpresion = () => {
@@ -401,24 +468,13 @@ export function PreviewSection({
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Abrir Vista de Impresión
               </Button>
-              
-              {!esEmitido && (
-                <Button 
-                  onClick={onEmitir} 
-                  disabled={!esValido}
-                  className="bg-[#5D9848] hover:bg-[#4a7a39]"
-                >
-                  <Send className="h-4 w-4 mr-2" />
-                  Emitir Documento
-                </Button>
-              )}
             </div>
           </div>
           
           {!esValido && (
             <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm">
               <p className="font-medium text-yellow-800">
-                Para emitir el documento, asegúrese de completar:
+                Documento incompleto. Datos pendientes:
               </p>
               <ul className="list-disc list-inside text-yellow-700 mt-1 space-y-0.5">
                 {!documento.cliente.razonSocial && <li>Datos del cliente</li>}
@@ -496,8 +552,8 @@ export function PreviewSection({
           {/* Declaración */}
           <DeclaracionDocumento areaNombre={documento.areaNombre} />
 
-          {/* Pie de firma */}
-          <PieFirma />
+          {/* Firmas del documento */}
+          <SeccionFirmas firmas={documento.firmas || []} />
 
           {/* Pie de página */}
           <div className="mt-6 pt-3 border-t border-gray-200 text-center text-xs text-gray-500">

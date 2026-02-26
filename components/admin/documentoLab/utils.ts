@@ -3,6 +3,7 @@ import type {
   DocumentoLabDatabase, 
   MuestraDatabase, 
   ResultadoEnsayoDatabase,
+  ResultadoNotaDatabase,
   AgenteIdentificadoDatabase,
   AnexoDocumentoDatabase,
   Persona
@@ -13,6 +14,7 @@ import type {
   ResultadoUI, 
   AgenteUI, 
   AnexoUI,
+  NotaUI,
   ClienteUI 
 } from './types'
 import { INFO_EMPRESA, DECLARACIONES_AREA } from './constants'
@@ -93,18 +95,33 @@ export function personaToClienteUI(persona: Persona | null | undefined): Cliente
  * Convierte MuestraDatabase a MuestraUI
  */
 export function muestraDBToUI(muestra: MuestraDatabase): MuestraUI {
+  // Convertir atributos EAV a Record<configCampoId, valor> y Record<configCampoId, etiqueta>
+  const atributosDinamicos: Record<string, string> = {}
+  const atributosEtiquetas: Record<string, string> = {}
+  if (muestra.atributos && muestra.atributos.length > 0) {
+    for (const attr of muestra.atributos) {
+      atributosDinamicos[attr.config_mue_id_int] = attr.atr_mue_valor_vac || ''
+      if (attr.config?.config_mue_etique_vac) {
+        atributosEtiquetas[attr.config_mue_id_int] = attr.config.config_mue_etique_vac
+      }
+    }
+  }
+
   return {
     id: muestra.mue_id_int,
     codigo: muestra.mue_lab_cod_vac || '',
     matriz: muestra.mue_mtrz_vac || '',
     lugarMuestreo: muestra.mue_lugar_vac || '',
+    centroRegistro: muestra.mue_centro_vac || '',
     fechaToma: muestra.mue_fec_toma_dt?.split('T')[0] || '',
     fechaRecepcion: muestra.mue_fec_recep_dt?.split('T')[0] || '',
     fechaInicio: muestra.mue_fec_inicio_dt?.split('T')[0] || '',
     fechaFin: muestra.mue_fec_fin_dt?.split('T')[0] || '',
     rechazada: muestra.mue_rechazada_bol || false,
     motivoRechazo: muestra.mue_motiv_rech_vac || undefined,
-    recomendaciones: muestra.mue_recomend_vac || undefined
+    recomendaciones: muestra.mue_recomend_vac || undefined,
+    atributosDinamicos,
+    atributosEtiquetas
   }
 }
 
@@ -116,6 +133,7 @@ export function muestraUIToDB(muestra: MuestraUI): Partial<MuestraDatabase> {
     mue_lab_cod_vac: muestra.codigo || null,
     mue_mtrz_vac: muestra.matriz || null,
     mue_lugar_vac: muestra.lugarMuestreo || null,
+    mue_centro_vac: muestra.centroRegistro || null,
     mue_fec_toma_dt: muestra.fechaToma || null,
     mue_fec_recep_dt: muestra.fechaRecepcion || null,
     mue_fec_inicio_dt: muestra.fechaInicio || null,
@@ -136,11 +154,12 @@ export function resultadoDBToUI(resultado: ResultadoEnsayoDatabase): ResultadoUI
     resultado: resultado.res_ens_result_vac || '',
     unidad: resultado.res_ens_und_vac || '',
     metodo: resultado.res_ens_metod_vac || '',
-    valorMin: resultado.res_ens_min_int || undefined,
-    valorMax: resultado.res_ens_max_num || undefined,
+    valorMin: resultado.res_ens_min_int ?? undefined,
+    valorMax: resultado.res_ens_max_num ?? undefined,
     mostrarGrafico: resultado.res_ens_graf_bol || false,
     rangoReferencial: resultado.res_ens_rang_ref_vac || undefined,
-    muestraId: resultado.mue_id_int || undefined
+    muestraId: resultado.mue_id_int || undefined,
+    dataExtra: resultado.res_ens_data_extra_json || undefined
   }
 }
 
@@ -153,10 +172,11 @@ export function resultadoUIToDB(resultado: ResultadoUI): Partial<ResultadoEnsayo
     res_ens_result_vac: resultado.resultado || null,
     res_ens_und_vac: resultado.unidad || null,
     res_ens_metod_vac: resultado.metodo || null,
-    res_ens_min_int: resultado.valorMin || null,
-    res_ens_max_num: resultado.valorMax || null,
+    res_ens_min_int: resultado.valorMin ?? null,
+    res_ens_max_num: resultado.valorMax ?? null,
     res_ens_graf_bol: resultado.mostrarGrafico,
     res_ens_rang_ref_vac: resultado.rangoReferencial || null,
+    res_ens_data_extra_json: resultado.dataExtra && Object.keys(resultado.dataExtra).length > 0 ? resultado.dataExtra : null,
     mue_id_int: resultado.muestraId || null
   }
 }
@@ -185,9 +205,31 @@ export function agenteDBToUI(agente: AgenteIdentificadoDatabase): AgenteUI {
 export function anexoDBToUI(anexo: AnexoDocumentoDatabase): AnexoUI {
   return {
     id: anexo.anx_doc_id_int,
-    url: anexo.anx_doc_url_vac || '',
+    url: anexo.anx_doc_url_blob || '',
     tipo: anexo.anx_doc_tipo_vac || '',
+    titulo: anexo.anx_doc_titulo_vac || undefined,
     nota: anexo.anx_doc_nota_vac || undefined
+  }
+}
+
+/**
+ * Convierte ResultadoNotaDatabase a NotaUI
+ */
+export function notaDBToUI(nota: ResultadoNotaDatabase): NotaUI {
+  return {
+    id: nota.resul_not_id_int,
+    contenido: nota.resul_not_cont_vac || '',
+    resultadoId: nota.res_ens_id_int
+  }
+}
+
+/**
+ * Convierte NotaUI a datos para BD
+ */
+export function notaUIToDB(nota: NotaUI): Partial<ResultadoNotaDatabase> {
+  return {
+    resul_not_cont_vac: nota.contenido || null,
+    res_ens_id_int: nota.resultadoId
   }
 }
 
@@ -195,8 +237,29 @@ export function anexoDBToUI(anexo: AnexoDocumentoDatabase): AnexoUI {
  * Convierte DocumentoLabDatabase completo a DocumentoLabUI
  */
 export function documentoDBToUI(doc: DocumentoLabDatabase): DocumentoLabUI {
-  const persona = (doc.orden_servicio as any)?.persona as Persona | undefined
+  const rawPersona = (doc.orden_servicio as any)?.persona
+  // Normalizar persona_natural y persona_juridica: Supabase join los devuelve como arrays
+  let persona: Persona | undefined = undefined
+  if (rawPersona) {
+    persona = {
+      ...rawPersona,
+      persona_natural: Array.isArray(rawPersona.persona_natural)
+        ? rawPersona.persona_natural[0] || null
+        : rawPersona.persona_natural || null,
+      persona_juridica: Array.isArray(rawPersona.persona_juridica)
+        ? rawPersona.persona_juridica[0] || null
+        : rawPersona.persona_juridica || null
+    }
+  }
   
+  // Extraer notas anidadas de cada resultado
+  const notasDB: ResultadoNotaDatabase[] = []
+  for (const r of (doc.resultados || [])) {
+    if (r.notas && r.notas.length > 0) {
+      notasDB.push(...r.notas)
+    }
+  }
+
   return {
     id: doc.doc_lab_id_int,
     codigo: doc.doc_lab_cod_vac || '',
@@ -204,6 +267,7 @@ export function documentoDBToUI(doc: DocumentoLabDatabase): DocumentoLabUI {
     tipoDocumentoNombre: doc.tipo_documento?.tip_doc_nomb_vac || '',
     servicioId: doc.serv_id_int,
     servicioNombre: doc.servicio?.serv_nombre_vac || '',
+    servicioConfExtra: doc.servicio?.serv_conf_extra_int ?? undefined,
     areaId: doc.servicio?.area_id_int,
     areaNombre: (doc.servicio as any)?.area?.area_nombre_vac || '',
     estadoId: doc.est_doc_id_int,
@@ -212,8 +276,10 @@ export function documentoDBToUI(doc: DocumentoLabDatabase): DocumentoLabUI {
     cliente: personaToClienteUI(persona),
     muestras: (doc.muestras || []).map(muestraDBToUI),
     resultados: (doc.resultados || []).map(resultadoDBToUI),
+    notas: notasDB.map(notaDBToUI),
     agentes: (doc.agentes || []).map(agenteDBToUI),
     anexos: (doc.anexos || []).map(anexoDBToUI),
+    firmas: [],
     createdAt: doc.doc_lab_created_dt
   }
 }

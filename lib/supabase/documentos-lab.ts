@@ -1,4 +1,4 @@
-import { supabase, cleanData } from './client'
+import { supabase, cleanData, createAuthenticatedClient } from './client'
 import type {
   AreaDatabase,
   ServicioDatabase,
@@ -268,7 +268,7 @@ export async function obtenerEstadosDocumento(): Promise<EstadoDocumentoDatabase
     const { data, error } = await supabase
       .from('Estado_Documento')
       .select('*')
-      .order('est_doc_nomb_vac', { ascending: true })
+      .order('est_doc_ord_int', { ascending: true, nullsFirst: false })
 
     if (error) throw error
     return data || []
@@ -280,6 +280,7 @@ export async function obtenerEstadosDocumento(): Promise<EstadoDocumentoDatabase
 
 export async function crearEstadoDocumento(estadoData: {
   est_doc_nomb_vac: string
+  est_doc_ord_int?: number | null
 }): Promise<EstadoDocumentoDatabase> {
   try {
     const { data, error } = await supabase
@@ -298,6 +299,7 @@ export async function crearEstadoDocumento(estadoData: {
 
 export async function actualizarEstadoDocumento(id: string, estadoData: {
   est_doc_nomb_vac?: string
+  est_doc_ord_int?: number | null
 }): Promise<EstadoDocumentoDatabase> {
   try {
     const { data, error } = await supabase
@@ -376,8 +378,8 @@ export async function obtenerDocumentosLab(filtros?: {
         ),
         orden_servicio:Orden_Servicio(*,
           persona:Personas(*,
-            Persona_Natural(*),
-            Persona_Juridica(*)
+            persona_natural:Persona_Natural(*),
+            persona_juridica:Persona_Juridica(*)
           )
         ),
         tipo_documento:Tipo_Documento(*),
@@ -419,8 +421,8 @@ export async function obtenerDocumentoLabPorId(id: string): Promise<DocumentoLab
         ),
         orden_servicio:Orden_Servicio(*,
           persona:Personas(*,
-            Persona_Natural(*),
-            Persona_Juridica(*)
+            persona_natural:Persona_Natural(*),
+            persona_juridica:Persona_Juridica(*)
           )
         ),
         tipo_documento:Tipo_Documento(*),
@@ -511,27 +513,65 @@ export async function crearDocumentoLab(formData: DocumentoLabCompletoForm): Pro
 
     if (docError) throw docError
 
-    // 5. Crear muestras
+    // 5. Crear muestras y obtener mapeo de IDs temporales a IDs reales
+    const muestraIdMap: Record<string, string> = {}
+    
     if (muestras && muestras.length > 0) {
-      const muestrasData = muestras.map((m, index) => ({
-        ...cleanData(m),
-        mue_lab_cod_vac: m.mue_lab_cod_vac || `${codigo}-M${String(index + 1).padStart(2, '0')}`,
-        doc_lab_id_int: docLab.doc_lab_id_int
-      }))
+      for (let index = 0; index < muestras.length; index++) {
+        const m = muestras[index]
+        const muestraData = {
+          ...cleanData({ ...m, _tempId: undefined }), // Excluir _tempId del insert
+          mue_lab_cod_vac: m.mue_lab_cod_vac || `${codigo}-M${String(index + 1).padStart(2, '0')}`,
+          doc_lab_id_int: docLab.doc_lab_id_int
+        }
+        
+        const { data: muestraCreada, error: mueError } = await supabase
+          .from('Muestras')
+          .insert(muestraData)
+          .select('mue_id_int')
+          .single()
+        
+        if (mueError) throw mueError
+        
+        // Guardar mapeo de ID temporal a ID real
+        if (m._tempId && muestraCreada) {
+          muestraIdMap[m._tempId] = muestraCreada.mue_id_int
+        }
 
-      const { error: mueError } = await supabase
-        .from('Muestras')
-        .insert(muestrasData)
-
-      if (mueError) throw mueError
+        // Guardar atributos dinámicos EAV si existen
+        if (m._atributosDinamicos && muestraCreada) {
+          const filas = Object.entries(m._atributosDinamicos)
+            .filter(([, valor]) => valor !== '' && valor != null)
+            .map(([configCampoId, valor]) => ({
+              config_mue_id_int: configCampoId,
+              mue_id_int: muestraCreada.mue_id_int,
+              atr_mue_valor_vac: valor
+            }))
+          if (filas.length > 0) {
+            const { error: attrError } = await supabase
+              .from('Atributo_Muestra_Valor')
+              .insert(filas)
+            if (attrError) console.error('Error creando atributos de muestra:', attrError)
+          }
+        }
+      }
     }
 
-    // 6. Crear resultados
+    // 6. Crear resultados (usando el mapeo de IDs)
     if (resultados && resultados.length > 0) {
-      const resultadosData = resultados.map(r => ({
-        ...cleanData(r),
-        doc_lab_id_int: docLab.doc_lab_id_int
-      }))
+      const resultadosData = resultados.map(r => {
+        const cleaned = cleanData(r)
+        // Traducir mue_id_int temporal a ID real si existe en el mapeo
+        const mueIdReal = r.mue_id_int && muestraIdMap[r.mue_id_int] 
+          ? muestraIdMap[r.mue_id_int] 
+          : (r.mue_id_int?.startsWith('temp_') ? null : r.mue_id_int)
+        
+        return {
+          ...cleaned,
+          mue_id_int: mueIdReal || null,
+          doc_lab_id_int: docLab.doc_lab_id_int
+        }
+      })
 
       const { error: resError } = await supabase
         .from('Resultado_Ensayo')
@@ -540,12 +580,21 @@ export async function crearDocumentoLab(formData: DocumentoLabCompletoForm): Pro
       if (resError) throw resError
     }
 
-    // 7. Crear agentes identificados
+    // 7. Crear agentes identificados (usando el mapeo de IDs)
     if (agentes && agentes.length > 0) {
-      const agentesData = agentes.map(a => ({
-        ...cleanData(a),
-        doc_lab_id_int: docLab.doc_lab_id_int
-      }))
+      const agentesData = agentes.map(a => {
+        const cleaned = cleanData(a)
+        // Traducir mue_id_int temporal a ID real si existe en el mapeo
+        const mueIdReal = a.mue_id_int && muestraIdMap[a.mue_id_int] 
+          ? muestraIdMap[a.mue_id_int] 
+          : (a.mue_id_int?.startsWith('temp_') ? null : a.mue_id_int)
+        
+        return {
+          ...cleaned,
+          mue_id_int: mueIdReal || null,
+          doc_lab_id_int: docLab.doc_lab_id_int
+        }
+      })
 
       const { error: agenError } = await supabase
         .from('Agente_Identificado')
@@ -555,19 +604,26 @@ export async function crearDocumentoLab(formData: DocumentoLabCompletoForm): Pro
     }
 
     // 8. Crear anexos
+    console.log('[crearDocumentoLab] Paso 8 - anexos recibidos:', anexos?.length, JSON.stringify(anexos, null, 2))
     if (anexos && anexos.length > 0) {
       const anexosData = anexos.map(a => ({
-        anx_doc_url_vac: a.url,
+        anx_doc_url_blob: a.url,
         anx_doc_tipo_vac: a.tipo,
+        anx_doc_titulo_vac: a.titulo || null,
         anx_doc_nota_vac: a.nota || null,
         doc_lab_id_int: docLab.doc_lab_id_int
       }))
 
-      const { error: anxError } = await supabase
+      console.log('[crearDocumentoLab] Insertando anexosData:', JSON.stringify(anexosData, null, 2))
+      const { data: anxData, error: anxError } = await supabase
         .from('Anexos_Documento')
         .insert(anexosData)
+        .select()
 
+      console.log('[crearDocumentoLab] Resultado insert anexos - data:', anxData, 'error:', anxError)
       if (anxError) throw anxError
+    } else {
+      console.log('[crearDocumentoLab] NO hay anexos para insertar')
     }
 
     // Retornar documento completo
@@ -778,6 +834,43 @@ export async function eliminarMuestra(muestraId: string): Promise<void> {
   }
 }
 
+/**
+ * Guardar atributos dinámicos de una muestra (patrón EAV).
+ * Estrategia: borrar existentes + re-insertar (upsert simple).
+ */
+export async function guardarAtributosMuestra(
+  muestraId: string,
+  atributos: Record<string, string> // configCampoId → valor
+): Promise<void> {
+  try {
+    // 1. Eliminar todos los atributos previos de esta muestra
+    await supabase
+      .from('Atributo_Muestra_Valor')
+      .delete()
+      .eq('mue_id_int', muestraId)
+
+    // 2. Insertar solo los que tienen valor no vacío
+    const filas = Object.entries(atributos)
+      .filter(([, valor]) => valor !== '' && valor != null)
+      .map(([configCampoId, valor]) => ({
+        config_mue_id_int: configCampoId,
+        mue_id_int: muestraId,
+        atr_mue_valor_vac: valor
+      }))
+
+    if (filas.length > 0) {
+      const { error } = await supabase
+        .from('Atributo_Muestra_Valor')
+        .insert(filas)
+
+      if (error) throw error
+    }
+  } catch (error) {
+    console.error('Error guardando atributos de muestra:', error)
+    throw error
+  }
+}
+
 // ============================================
 // FUNCIONES PARA RESULTADOS DE ENSAYO
 // ============================================
@@ -843,6 +936,69 @@ export async function eliminarResultado(resultadoId: string): Promise<void> {
     if (error) throw error
   } catch (error) {
     console.error('Error eliminando resultado:', error)
+    throw error
+  }
+}
+
+// ============================================
+// FUNCIONES PARA NOTAS DE RESULTADO
+// ============================================
+
+export async function agregarNotaResultado(
+  resultadoId: string,
+  contenido: string
+): Promise<ResultadoNotaDatabase> {
+  try {
+    const { data, error } = await supabase
+      .from('Resultado_Nota')
+      .insert({
+        resul_not_cont_vac: contenido,
+        res_ens_id_int: resultadoId
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error agregando nota:', error)
+    throw error
+  }
+}
+
+export async function actualizarNotaResultado(
+  notaId: string,
+  datos: { resul_not_cont_vac?: string; res_ens_id_int?: string }
+): Promise<ResultadoNotaDatabase> {
+  try {
+    const { data, error } = await supabase
+      .from('Resultado_Nota')
+      .update({
+        ...datos,
+        resul_not_updt_dt: new Date().toISOString()
+      })
+      .eq('resul_not_id_int', notaId)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  } catch (error) {
+    console.error('Error actualizando nota:', error)
+    throw error
+  }
+}
+
+export async function eliminarNotaResultado(notaId: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('Resultado_Nota')
+      .delete()
+      .eq('resul_not_id_int', notaId)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error eliminando nota:', error)
     throw error
   }
 }
@@ -1074,30 +1230,75 @@ export async function eliminarConfigAnexoServicio(id: string): Promise<void> {
 
 export async function agregarAnexo(
   docLabId: string,
-  anexoData: { url: string; tipo: string; nota?: string }
+  anexoData: { url: string; tipo: string; titulo?: string; nota?: string }
 ): Promise<AnexoDocumentoDatabase> {
   try {
+    console.log('[agregarAnexo] docLabId:', docLabId, 'data:', JSON.stringify(anexoData))
+    const insertPayload = {
+      anx_doc_url_blob: anexoData.url,
+      anx_doc_tipo_vac: anexoData.tipo,
+      anx_doc_titulo_vac: anexoData.titulo || null,
+      anx_doc_nota_vac: anexoData.nota || null,
+      doc_lab_id_int: docLabId
+    }
+    console.log('[agregarAnexo] insertPayload:', JSON.stringify(insertPayload))
     const { data, error } = await supabase
       .from('Anexos_Documento')
-      .insert({
-        anx_doc_url_vac: anexoData.url,
-        anx_doc_tipo_vac: anexoData.tipo,
-        anx_doc_nota_vac: anexoData.nota || null,
-        doc_lab_id_int: docLabId
-      })
+      .insert(insertPayload)
       .select()
       .single()
 
+    console.log('[agregarAnexo] result - data:', data, 'error:', error)
     if (error) throw error
     return data
   } catch (error) {
-    console.error('Error agregando anexo:', error)
+    console.error('[agregarAnexo] ERROR:', error)
+    throw error
+  }
+}
+
+export async function actualizarAnexoBD(
+  anexoId: string,
+  campos: { url?: string; titulo?: string; nota?: string }
+): Promise<void> {
+  try {
+    const updateData: Record<string, any> = {}
+    if (campos.url !== undefined) updateData.anx_doc_url_blob = campos.url
+    if (campos.titulo !== undefined) updateData.anx_doc_titulo_vac = campos.titulo || null
+    if (campos.nota !== undefined) updateData.anx_doc_nota_vac = campos.nota || null
+
+    if (Object.keys(updateData).length === 0) return
+
+    const { error } = await supabase
+      .from('Anexos_Documento')
+      .update(updateData)
+      .eq('anx_doc_id_int', anexoId)
+
+    if (error) throw error
+  } catch (error) {
+    console.error('Error actualizando anexo:', error)
     throw error
   }
 }
 
 export async function eliminarAnexo(anexoId: string): Promise<void> {
   try {
+    // Obtener la URL del anexo antes de eliminar para limpiar storage
+    const { data: anexo } = await supabase
+      .from('Anexos_Documento')
+      .select('anx_doc_url_blob')
+      .eq('anx_doc_id_int', anexoId)
+      .single()
+
+    // Eliminar imagen del storage si existe
+    if (anexo?.anx_doc_url_blob) {
+      try {
+        await eliminarImagenAnexo(anexo.anx_doc_url_blob)
+      } catch (imgError) {
+        console.error('Error eliminando imagen de anexo del storage, continuando:', imgError)
+      }
+    }
+
     const { error } = await supabase
       .from('Anexos_Documento')
       .delete()
@@ -1107,5 +1308,97 @@ export async function eliminarAnexo(anexoId: string): Promise<void> {
   } catch (error) {
     console.error('Error eliminando anexo:', error)
     throw error
+  }
+}
+
+// ============================================
+// STORAGE - ANEXOS (bucket: admin, carpeta: anexos/)
+// ============================================
+
+export async function subirImagenAnexo(
+  archivo: File,
+  nombreArchivo: string
+): Promise<{ success: boolean; url?: string; error?: string }> {
+  try {
+    const supabaseAuth = createAuthenticatedClient()
+
+    const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
+
+    if (sessionError || !session) {
+      console.error('Error de sesión:', sessionError || 'No hay sesión activa')
+      return { success: false, error: 'No hay una sesión autenticada activa' }
+    }
+
+    const extension = nombreArchivo.includes('.') ? nombreArchivo.split('.').pop() : ''
+    if (!extension) {
+      return { success: false, error: 'El archivo debe tener una extensión válida' }
+    }
+
+    // Validar que sea imagen
+    const extensionesPermitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp']
+    if (!extensionesPermitidas.includes(extension.toLowerCase())) {
+      return { success: false, error: `Solo se permiten imágenes (${extensionesPermitidas.join(', ')})` }
+    }
+
+    const timestamp = Date.now()
+    const nombreFinal = `anexo_${timestamp}.${extension}`
+    const rutaArchivo = `anexos/${nombreFinal}`
+
+    const { data, error } = await supabaseAuth.storage
+      .from('admin')
+      .upload(rutaArchivo, archivo)
+
+    if (error) {
+      console.error('Error subiendo imagen de anexo:', error)
+      return { success: false, error: error.message }
+    }
+
+    const { data: urlData } = supabaseAuth.storage
+      .from('admin')
+      .getPublicUrl(rutaArchivo)
+
+    return { success: true, url: urlData.publicUrl }
+  } catch (error) {
+    console.error('Error en subirImagenAnexo:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Error desconocido' }
+  }
+}
+
+export async function eliminarImagenAnexo(
+  url: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabaseAuth = createAuthenticatedClient()
+
+    const { data: { session }, error: sessionError } = await supabaseAuth.auth.getSession()
+
+    if (sessionError || !session) {
+      console.error('Error de sesión:', sessionError || 'No hay sesión activa')
+      return { success: false, error: 'No hay una sesión autenticada activa' }
+    }
+
+    // Extraer la ruta relativa dentro del bucket
+    const urlParts = url.split('/anexos/')
+    if (urlParts.length !== 2) {
+      console.warn('URL de imagen de anexo no válida:', url)
+      return { success: false, error: 'URL de imagen inválida' }
+    }
+
+    const fileName = urlParts[1]
+    const filePath = `anexos/${fileName}`
+
+    const { error } = await supabaseAuth.storage
+      .from('admin')
+      .remove([filePath])
+
+    if (error) {
+      console.error('Error eliminando imagen de anexo del storage:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error en eliminarImagenAnexo:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Error desconocido' }
   }
 }

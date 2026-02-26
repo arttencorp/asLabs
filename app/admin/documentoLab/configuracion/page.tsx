@@ -71,6 +71,7 @@ interface TipoDocumentoForm {
 
 interface EstadoDocumentoForm {
   est_doc_nomb_vac: string
+  est_doc_ord_int: number | null
 }
 
 interface ConfigCampoForm {
@@ -743,7 +744,7 @@ function EstadosDocumentoManager() {
   const [saving, setSaving] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingEstado, setEditingEstado] = useState<EstadoDocumentoDatabase | null>(null)
-  const [form, setForm] = useState<EstadoDocumentoForm>({ est_doc_nomb_vac: '' })
+  const [form, setForm] = useState<EstadoDocumentoForm>({ est_doc_nomb_vac: '', est_doc_ord_int: null })
 
   const cargarEstados = useCallback(async () => {
     try {
@@ -779,7 +780,7 @@ function EstadosDocumentoManager() {
       }
       setDialogOpen(false)
       setEditingEstado(null)
-      setForm({ est_doc_nomb_vac: '' })
+      setForm({ est_doc_nomb_vac: '', est_doc_ord_int: null })
       cargarEstados()
     } catch (error) {
       toast.error('Error al guardar estado')
@@ -791,7 +792,7 @@ function EstadosDocumentoManager() {
 
   const handleEdit = (estado: EstadoDocumentoDatabase) => {
     setEditingEstado(estado)
-    setForm({ est_doc_nomb_vac: estado.est_doc_nomb_vac || '' })
+    setForm({ est_doc_nomb_vac: estado.est_doc_nomb_vac || '', est_doc_ord_int: estado.est_doc_ord_int ?? null })
     setDialogOpen(true)
   }
 
@@ -808,7 +809,7 @@ function EstadosDocumentoManager() {
 
   const openNew = () => {
     setEditingEstado(null)
-    setForm({ est_doc_nomb_vac: '' })
+    setForm({ est_doc_nomb_vac: '', est_doc_ord_int: null })
     setDialogOpen(true)
   }
 
@@ -843,9 +844,21 @@ function EstadosDocumentoManager() {
                   <Input
                     id="est_nombre"
                     value={form.est_doc_nomb_vac}
-                    onChange={(e) => setForm({ est_doc_nomb_vac: e.target.value })}
+                    onChange={(e) => setForm({ ...form, est_doc_nomb_vac: e.target.value })}
                     placeholder="Ej: En Proceso"
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="est_orden">Orden en rastreo</Label>
+                  <Input
+                    id="est_orden"
+                    type="number"
+                    min={1}
+                    value={form.est_doc_ord_int ?? ''}
+                    onChange={(e) => setForm({ ...form, est_doc_ord_int: e.target.value ? parseInt(e.target.value) : null })}
+                    placeholder="Ej: 1, 2, 3..."
+                  />
+                  <p className="text-xs text-muted-foreground">Define el orden en que aparecerá este estado en el rastreo del documento</p>
                 </div>
               </div>
               <DialogFooter>
@@ -872,6 +885,7 @@ function EstadosDocumentoManager() {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>Nombre</TableHead>
+                <TableHead>Orden</TableHead>
                 <TableHead>Creado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
@@ -881,6 +895,13 @@ function EstadosDocumentoManager() {
                 <TableRow key={estado.est_doc_id_int}>
                   <TableCell className="font-mono">{estado.est_doc_id_int}</TableCell>
                   <TableCell className="font-medium">{estado.est_doc_nomb_vac}</TableCell>
+                  <TableCell>
+                    {estado.est_doc_ord_int != null ? (
+                      <Badge variant="outline">{estado.est_doc_ord_int}</Badge>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">—</span>
+                    )}
+                  </TableCell>
                   <TableCell>{new Date(estado.est_doc_created_dt).toLocaleDateString()}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(estado)}>
