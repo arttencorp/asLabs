@@ -40,13 +40,20 @@ export interface Cotizacion {
   informacion_adicional?: InformacionAdicional
 }
 
+export interface PedidoDoc {
+  ped_doc_id_int: string
+  ped_doc_url_vac: string
+  ped_doc_created_at_dt: string
+  ped_doc_upd_at_dt?: string
+  ped_id_int: string
+}
+
 export interface Pedido {
   ped_id_int: string
   ped_cod_segui_vac: string
   ped_cod_rastreo_vac?: string
   ped_fec_pedido_dt: string
   ped_fec_actualizada_dt: string
-  ped_imagen_url?: string
   ped_observacion_vac?: string
   ped_num_comprob_vac?: string
   ped_created_at_dt: string
@@ -55,6 +62,7 @@ export interface Pedido {
   cot_id_int: string
   estado_pedido?: EstadoPedido
   cotizacion?: Cotizacion
+  documentos?: PedidoDoc[]
 }
 
 // Tipos para formularios
@@ -64,7 +72,6 @@ export interface PedidoForm {
   codigo_rastreo: string
   observaciones: string
   numero_comprobante: string
-  imagen_url?: string
 }
 
 export interface CotizacionForm {

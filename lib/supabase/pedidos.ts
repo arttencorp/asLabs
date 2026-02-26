@@ -12,6 +12,7 @@ export async function obtenerPedidos() {
             .select(`
         *,
         estado_pedido:Estado_Pedido(*),
+        documentos:Pedidos_Doc(*),
         cotizacion:Cotizaciones(
           *,
           estado_cotizacion:Estado_Cotizacion(*),
@@ -160,6 +161,7 @@ export async function crearPedido(pedidoData: {
             .select(`
         *,
         estado_pedido:Estado_Pedido(*),
+        documentos:Pedidos_Doc(*),
         cotizacion:Cotizaciones(
           *,
           persona:Personas(
@@ -185,7 +187,6 @@ export async function actualizarPedido(id: string, pedidoData: {
     codigo_rastreo?: string
     observaciones?: string
     numero_comprobante?: string
-    imagen_url?: string
 }) {
     try {
         if (pedidoData.cotizacion_id) {
@@ -214,7 +215,6 @@ export async function actualizarPedido(id: string, pedidoData: {
         if (pedidoData.codigo_rastreo !== undefined) updateData.ped_cod_rastreo_vac = pedidoData.codigo_rastreo
         if (pedidoData.observaciones !== undefined) updateData.ped_observacion_vac = pedidoData.observaciones
         if (pedidoData.numero_comprobante !== undefined) updateData.ped_num_comprob_vac = pedidoData.numero_comprobante
-        if (pedidoData.imagen_url !== undefined) updateData.ped_imagen_url = pedidoData.imagen_url
 
         const { data, error } = await supabase
             .from('Pedidos')
@@ -223,6 +223,7 @@ export async function actualizarPedido(id: string, pedidoData: {
             .select(`
         *,
         estado_pedido:Estado_Pedido(*),
+        documentos:Pedidos_Doc(*),
         cotizacion:Cotizaciones(
           *,
           persona:Personas(
@@ -244,22 +245,36 @@ export async function actualizarPedido(id: string, pedidoData: {
 
 export async function eliminarPedido(id: string): Promise<void> {
     try {
-        const { data: pedido, error: pedidoError } = await supabase
-            .from('Pedidos')
-            .select('ped_imagen_url')
+        // Obtener todos los documentos asociados al pedido
+        const { data: documentos, error: docsError } = await supabase
+            .from('Pedidos_Doc')
+            .select('ped_doc_url_vac')
             .eq('ped_id_int', id)
-            .single()
 
-        if (pedidoError) throw pedidoError
+        if (docsError) throw docsError
 
-        if (pedido?.ped_imagen_url) {
-            try {
-                await eliminarImagenPedido(pedido.ped_imagen_url)
-            } catch (imageError) {
-                console.error('Error al eliminar imagen del storage, continuando con eliminación del pedido:', imageError)
+        // Eliminar cada imagen del storage
+        if (documentos && documentos.length > 0) {
+            for (const doc of documentos) {
+                if (doc.ped_doc_url_vac) {
+                    try {
+                        await eliminarImagenPedido(doc.ped_doc_url_vac)
+                    } catch (imageError) {
+                        console.error('Error al eliminar imagen del storage, continuando:', imageError)
+                    }
+                }
             }
         }
 
+        // Eliminar registros de Pedidos_Doc (por FK cascade o manualmente)
+        const { error: deleteDocsError } = await supabase
+            .from('Pedidos_Doc')
+            .delete()
+            .eq('ped_id_int', id)
+
+        if (deleteDocsError) throw deleteDocsError
+
+        // Eliminar el pedido
         const { error } = await supabase
             .from('Pedidos')
             .delete()
@@ -296,7 +311,8 @@ export async function obtenerPedidoPorCodigo(codigoSeguimiento: string) {
             *,
             forma_pago:Forma_Pago(*)
           )
-        )
+        ),
+        documentos:Pedidos_Doc(*)
       `)
             .eq('ped_cod_segui_vac', codigoSeguimiento)
             .single()
@@ -432,6 +448,114 @@ export async function eliminarImagenPedido(imageUrl: string): Promise<void> {
     }
 }
 
+// ============================================
+// FUNCIONES CRUD PARA PEDIDOS_DOC
+// ============================================
+
+/**
+ * Sube una imagen al storage y crea el registro en Pedidos_Doc
+ */
+export async function subirDocumentoPedido(file: File, pedidoId: string): Promise<{ url: string; docId: string }> {
+    try {
+        // Subir la imagen al storage
+        const imageUrl = await subirImagenPedido(file, pedidoId)
+
+        // Crear registro en Pedidos_Doc
+        const { data, error } = await supabase
+            .from('Pedidos_Doc')
+            .insert({
+                ped_doc_url_vac: imageUrl,
+                ped_id_int: pedidoId
+            })
+            .select('*')
+            .single()
+
+        if (error) {
+            // Si falla la inserción en BD, intentar eliminar la imagen del storage
+            try {
+                await eliminarImagenPedido(imageUrl)
+            } catch (cleanupError) {
+                console.error('Error limpiando imagen huérfana:', cleanupError)
+            }
+            throw error
+        }
+
+        return { url: imageUrl, docId: data.ped_doc_id_int }
+    } catch (error) {
+        console.error('Error subiendo documento de pedido:', error)
+        throw error
+    }
+}
+
+/**
+ * Sube múltiples imágenes y crea registros en Pedidos_Doc
+ */
+export async function subirDocumentosPedido(files: File[], pedidoId: string): Promise<{ url: string; docId: string }[]> {
+    const resultados: { url: string; docId: string }[] = []
+
+    for (const file of files) {
+        const resultado = await subirDocumentoPedido(file, pedidoId)
+        resultados.push(resultado)
+    }
+
+    return resultados
+}
+
+/**
+ * Elimina un documento específico de Pedidos_Doc y su imagen del storage
+ */
+export async function eliminarDocumentoPedido(docId: string): Promise<void> {
+    try {
+        // Obtener la URL del documento
+        const { data: doc, error: docError } = await supabase
+            .from('Pedidos_Doc')
+            .select('ped_doc_url_vac')
+            .eq('ped_doc_id_int', docId)
+            .single()
+
+        if (docError) throw docError
+
+        // Eliminar la imagen del storage
+        if (doc?.ped_doc_url_vac) {
+            try {
+                await eliminarImagenPedido(doc.ped_doc_url_vac)
+            } catch (imageError) {
+                console.error('Error eliminando imagen del storage, continuando con eliminación del registro:', imageError)
+            }
+        }
+
+        // Eliminar el registro de la BD
+        const { error } = await supabase
+            .from('Pedidos_Doc')
+            .delete()
+            .eq('ped_doc_id_int', docId)
+
+        if (error) throw error
+    } catch (error) {
+        console.error('Error eliminando documento de pedido:', error)
+        throw error
+    }
+}
+
+/**
+ * Obtiene todos los documentos de un pedido
+ */
+export async function obtenerDocumentosPedido(pedidoId: string) {
+    try {
+        const { data, error } = await supabase
+            .from('Pedidos_Doc')
+            .select('*')
+            .eq('ped_id_int', pedidoId)
+            .order('ped_doc_created_at_dt', { ascending: false })
+
+        if (error) throw error
+        return data || []
+    } catch (error) {
+        console.error('Error obteniendo documentos del pedido:', error)
+        throw error
+    }
+}
+
 export async function obtenerPersonaPorId(id: string) {
     try {
         const { data, error } = await supabase
@@ -538,6 +662,7 @@ export async function obtenerPedidosPorCliente(clienteId: string) {
             .select(`
         *,
         estado_pedido:Estado_Pedido(*),
+        documentos:Pedidos_Doc(*),
         cotizacion:Cotizaciones(
           *,
           estado_cotizacion:Estado_Cotizacion(*),
