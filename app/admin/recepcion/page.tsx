@@ -38,11 +38,11 @@ import type { CotizacionRecepcion } from "@/lib/supabase/recepcion"
 
 function obtenerColorEstado(tipo: number | null | undefined): string {
   switch (tipo) {
-    case 1: return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
-    case 2: return "bg-green-500/20 text-green-400 border-green-500/30"
-    case 3: return "bg-red-500/20 text-red-400 border-red-500/30"
-    case 4: return "bg-blue-500/20 text-blue-400 border-blue-500/30"
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30"
+    case 1: return "bg-yellow-100 text-yellow-700 border-yellow-300"
+    case 2: return "bg-green-100 text-green-700 border-green-300"
+    case 3: return "bg-red-100 text-red-700 border-red-300"
+    case 4: return "bg-blue-100 text-blue-700 border-blue-300"
+    default: return "bg-gray-100 text-gray-600 border-gray-300"
   }
 }
 
@@ -150,11 +150,11 @@ export default function RecepcionPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <FlaskConical className="h-7 w-7 text-emerald-400" />
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <FlaskConical className="h-7 w-7 text-emerald-600" />
             Recepción de Muestras
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             Cotizaciones con órdenes de servicio activas. Seleccione una para gestionar sus ingresos.
           </p>
         </div>
@@ -162,7 +162,7 @@ export default function RecepcionPage() {
           <Button
             variant="outline"
             size="sm"
-            className="border-gray-600 text-gray-300 hover:text-white hover:bg-[#2a2a4a]"
+            variant="outline"
             onClick={cargarCotizaciones}
             disabled={loading}
           >
@@ -180,28 +180,28 @@ export default function RecepcionPage() {
       </div>
 
       {/* Filtro de búsqueda */}
-      <Card className="bg-[#1e1e3a] border-gray-700">
+      <Card>
         <CardContent className="pt-4 pb-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar por cliente o N° cotización..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              className="pl-10 bg-[#2a2a4a] border-gray-600 text-white"
+              className="pl-10"
             />
           </div>
         </CardContent>
       </Card>
 
       {/* Tabla principal: cotizaciones con órdenes */}
-      <Card className="bg-[#1e1e3a] border-gray-700">
+      <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-white text-lg flex items-center gap-2">
-            <ClipboardList className="h-5 w-5 text-emerald-400" />
+          <CardTitle className="text-lg flex items-center gap-2">
+            <ClipboardList className="h-5 w-5 text-emerald-600" />
             Cotizaciones con Órdenes de Servicio
           </CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardDescription>
             {loading
               ? "Cargando..."
               : `${cotizacionesFiltradas.length} cotización(es) con ingresos registrados`}
@@ -211,11 +211,11 @@ export default function RecepcionPage() {
           {loading ? (
             <div className="space-y-3">
               {[1, 2, 3, 4, 5].map(i => (
-                <Skeleton key={i} className="h-14 w-full bg-gray-700/30" />
+                <Skeleton key={i} className="h-14 w-full" />
               ))}
             </div>
           ) : cotizacionesFiltradas.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
+            <div className="text-center py-12 text-muted-foreground">
               <FlaskConical className="h-12 w-12 mx-auto mb-3 opacity-30" />
               {cotizaciones.length === 0 ? (
                 <>
@@ -235,46 +235,46 @@ export default function RecepcionPage() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-gray-700 hover:bg-transparent">
-                    <TableHead className="text-gray-400">N° Cotización</TableHead>
-                    <TableHead className="text-gray-400">Cliente</TableHead>
-                    <TableHead className="text-gray-400">Fecha Emisión</TableHead>
-                    <TableHead className="text-gray-400 text-center">Productos</TableHead>
-                    <TableHead className="text-gray-400 text-right">Total (S/)</TableHead>
-                    <TableHead className="text-gray-400">Estado</TableHead>
-                    <TableHead className="text-gray-400 text-right">Acción</TableHead>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead>N° Cotización</TableHead>
+                    <TableHead>Cliente</TableHead>
+                    <TableHead>Fecha Emisión</TableHead>
+                    <TableHead className="text-center">Productos</TableHead>
+                    <TableHead className="text-right">Total (S/)</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead className="text-right">Acción</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {cotizacionesFiltradas.map((cot) => (
                     <TableRow
                       key={cot.cot_id_int}
-                      className="border-gray-700/50 hover:bg-[#2a2a4a]/50 cursor-pointer"
+                      className="cursor-pointer"
                       onClick={() => router.push(`/admin/recepcion/${cot.cot_id_int}`)}
                     >
-                      <TableCell className="text-white font-medium">
+                      <TableCell className="font-medium">
                         {cot.cot_num_vac || "—"}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Users className="h-4 w-4 text-gray-500 shrink-0" />
-                          <span className="text-gray-300 truncate max-w-[200px]">
+                          <Users className="h-4 w-4 text-muted-foreground shrink-0" />
+                          <span className="text-muted-foreground truncate max-w-[200px]">
                             {obtenerNombrePersona(cot.persona)}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-gray-300">
+                      <TableCell className="text-muted-foreground">
                         {formatDate(cot.cot_fec_emis_dt, { short: true })}
                       </TableCell>
                       <TableCell className="text-center">
                         <div className="flex items-center justify-center gap-1">
-                          <Package className="h-3.5 w-3.5 text-gray-500" />
-                          <span className="text-gray-300">
+                          <Package className="h-3.5 w-3.5 text-muted-foreground" />
+                          <span className="text-muted-foreground">
                             {cot.detalle_cotizacion?.length || 0}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right text-gray-300 font-mono">
+                      <TableCell className="text-right text-muted-foreground font-mono">
                         {calcularTotal(cot)}
                       </TableCell>
                       <TableCell>
@@ -286,7 +286,7 @@ export default function RecepcionPage() {
                             {cot.estado_cotizacion.est_cot_desc_vac}
                           </Badge>
                         ) : (
-                          <Badge variant="outline" className="bg-gray-500/20 text-gray-400">
+                          <Badge variant="outline" className="bg-gray-100 text-gray-600">
                             Sin estado
                           </Badge>
                         )}
@@ -295,7 +295,7 @@ export default function RecepcionPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
+                          className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                         >
                           Ver <ChevronRight className="h-4 w-4 ml-1" />
                         </Button>
@@ -311,25 +311,25 @@ export default function RecepcionPage() {
 
       {/* Dialog: Seleccionar cotización para nuevo ingreso */}
       <Dialog open={showSeleccionDialog} onOpenChange={setShowSeleccionDialog}>
-        <DialogContent className="bg-[#1e1e3a] border-gray-700 sm:max-w-2xl max-h-[80vh] flex flex-col">
+        <DialogContent className="sm:max-w-2xl max-h-[80vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle className="text-white flex items-center gap-2">
-              <FileText className="h-5 w-5 text-emerald-400" />
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-emerald-600" />
               Seleccionar Cotización
             </DialogTitle>
-            <DialogDescription className="text-gray-400">
+            <DialogDescription>
               Cotizaciones sin órdenes de servicio. Seleccione una para crear el primer ingreso.
             </DialogDescription>
           </DialogHeader>
 
           {/* Buscador dentro del dialog */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar por cliente o N° cotización..."
               value={busquedaDisponible}
               onChange={(e) => setBusquedaDisponible(e.target.value)}
-              className="pl-10 bg-[#2a2a4a] border-gray-600 text-white"
+              className="pl-10"
               autoFocus
             />
           </div>
@@ -339,11 +339,11 @@ export default function RecepcionPage() {
             {loadingDisponibles ? (
               <div className="space-y-3 py-4">
                 {[1, 2, 3].map(i => (
-                  <Skeleton key={i} className="h-16 w-full bg-gray-700/30" />
+                  <Skeleton key={i} className="h-16 w-full" />
                 ))}
               </div>
             ) : disponiblesFiltradas.length === 0 ? (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-muted-foreground">
                 <FileText className="h-10 w-10 mx-auto mb-2 opacity-30" />
                 {cotizacionesDisponibles.length === 0 ? (
                   <p className="text-sm">Todas las cotizaciones ya tienen órdenes de servicio.</p>
@@ -356,14 +356,14 @@ export default function RecepcionPage() {
                 {disponiblesFiltradas.map((cot) => (
                   <div
                     key={cot.cot_id_int}
-                    className="flex items-center justify-between p-3 rounded-lg border border-gray-700/50 hover:bg-[#2a2a4a]/70 hover:border-emerald-500/30 transition-colors cursor-pointer group"
+                    className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted hover:border-emerald-300 transition-colors cursor-pointer group"
                     onClick={() => {
                       if (!creandoOrden) handleSeleccionarCotizacion(cot)
                     }}
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-white font-medium text-sm">
+                        <span className="font-medium text-sm">
                           {cot.cot_num_vac || "Sin número"}
                         </span>
                         {cot.estado_cotizacion && (
@@ -375,7 +375,7 @@ export default function RecepcionPage() {
                           </Badge>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                      <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Users className="h-3 w-3" />
                           {obtenerNombrePersona(cot.persona)}
