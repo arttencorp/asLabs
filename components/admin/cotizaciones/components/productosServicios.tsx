@@ -50,7 +50,7 @@ function ProductCombobox({ value, onChange, productos, loading, disabled }: Prod
           role="combobox"
           aria-expanded={open}
           disabled={disabled || loading}
-          className="w-full justify-between font-normal"
+          className="w-full justify-between font-normal h-auto min-h-10 whitespace-normal text-left"
         >
           <span className="truncate">
             {loading ? "Cargando productos..." :
@@ -63,45 +63,25 @@ function ProductCombobox({ value, onChange, productos, loading, disabled }: Prod
       <PopoverContent className="w-[200px] sm:w-[300px] md:w-[400px] p-0" align="start" side="bottom">
         <Command shouldFilter={false}>
           <div className="flex items-center border-b px-3">
-          <CommandInput
-            placeholder="Buscar producto..."
-            value={searchValue}
-            onValueChange={setSearchValue}
-            className="border-0 focus:ring-0"
-          />
-        </div>
-        <CommandList>
-          <CommandEmpty>
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              No se encontraron productos
-            </div>
-          </CommandEmpty>
-          <CommandGroup>
-            {/* Opción por defecto */}
-            <CommandItem
-              value="seleccionar"
-              onSelect={() => {
-                onChange("seleccionar")
-                setOpen(false)
-                setSearchValue("")
-              }}
-            >
-              <Check
-                className={cn(
-                  "mr-2 h-4 w-4",
-                  value === "seleccionar" ? "opacity-100" : "opacity-0"
-                )}
-              />
-              Seleccionar
-            </CommandItem>
-
-            {/* Lista de productos filtrados */}
-            {filteredProducts.map((producto) => (
+            <CommandInput
+              placeholder="Buscar producto..."
+              value={searchValue}
+              onValueChange={setSearchValue}
+              className="border-0 focus:ring-0"
+            />
+          </div>
+          <CommandList>
+            <CommandEmpty>
+              <div className="py-6 text-center text-sm text-muted-foreground">
+                No se encontraron productos
+              </div>
+            </CommandEmpty>
+            <CommandGroup>
+              {/* Opción por defecto */}
               <CommandItem
-                key={producto.pro_id_int}
-                value={producto.pro_id_int}
-                onSelect={(currentValue) => {
-                  onChange(currentValue)
+                value="seleccionar"
+                onSelect={() => {
+                  onChange("seleccionar")
                   setOpen(false)
                   setSearchValue("")
                 }}
@@ -109,16 +89,36 @@ function ProductCombobox({ value, onChange, productos, loading, disabled }: Prod
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === producto.pro_id_int ? "opacity-100" : "opacity-0"
+                    value === "seleccionar" ? "opacity-100" : "opacity-0"
                   )}
                 />
-                <span className="truncate">{producto.pro_nomb_vac || 'Sin nombre'}</span>
+                Seleccionar
               </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </Command>
-    </PopoverContent>
+
+              {/* Lista de productos filtrados */}
+              {filteredProducts.map((producto) => (
+                <CommandItem
+                  key={producto.pro_id_int}
+                  value={producto.pro_id_int}
+                  onSelect={(currentValue) => {
+                    onChange(currentValue)
+                    setOpen(false)
+                    setSearchValue("")
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === producto.pro_id_int ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  <span className="truncate">{producto.pro_nomb_vac || 'Sin nombre'}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
     </Popover >
   )
 }
@@ -177,15 +177,15 @@ export function ProductosServicios({
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
-            <Table>
+            <Table className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[40%]">Descripción</TableHead>
-                  <TableHead>Producto</TableHead>
-                  <TableHead>Cantidad</TableHead>
-                  <TableHead>Precio Unitario</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead className="w-[50px]"></TableHead>
+                  <TableHead className="w-[30%]">Descripción</TableHead>
+                  <TableHead className="w-[25%]">Producto</TableHead>
+                  <TableHead className="w-[12%]">Cantidad</TableHead>
+                  <TableHead className="w-[14%]">Precio Unitario</TableHead>
+                  <TableHead className="w-[12%]">Total</TableHead>
+                  <TableHead className="w-[7%]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

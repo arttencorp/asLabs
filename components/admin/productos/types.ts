@@ -5,6 +5,7 @@ export interface ProductoForm {
   pro_nomb_vac: string
   pro_desc_vac: string | null
   pro_prec_unitario_int: number
+  pro_stock_int: number
 }
 
 // Tipo para actualización parcial de producto

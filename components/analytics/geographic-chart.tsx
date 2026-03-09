@@ -35,8 +35,8 @@ export default function GeographicChart({ dateRange }: GeographicChartProps) {
             persona:Personas(per_direc_vac)
           )
         `)
-        .gte("ped_fec_dt", format(dateRange.from, "yyyy-MM-dd"))
-        .lte("ped_fec_dt", format(dateRange.to, "yyyy-MM-dd"))
+        .gte("ped_created_at_dt", format(dateRange.from, "yyyy-MM-dd"))
+        .lte("ped_created_at_dt", format(dateRange.to, "yyyy-MM-dd"))
 
       const cityStats =
         orders?.reduce(

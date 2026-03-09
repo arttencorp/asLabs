@@ -11,6 +11,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { obtenerPersonaPorId, obtenerCotizacionesPorCliente, obtenerPedidosPorCliente } from '@/lib/supabase'
 import { formatDate, formatCurrency, getEstadoColor, getNombreCompleto } from '@/utils/index'
+import { PedidosCliente } from '@/components/admin/clientes/components/pedidosCliente'
+import type { Pedido } from '@/components/admin/pedidos/types'
 import type { ClientePersona } from '@/types/database'
 
 interface CotizacionCliente {
@@ -29,25 +31,6 @@ interface CotizacionCliente {
   }>
 }
 
-interface PedidoCliente {
-  ped_id_int: string
-  ped_cod_segui_vac: string
-  ped_fec_pedido_dt: string
-  ped_cod_rastreo_vac?: string
-  estado_pedido?: {
-    est_ped_desc_vac: string
-    est_ped_tipo_int: number
-  }
-  cotizacion?: {
-    cot_num_vac: string
-    detalle_cotizacion?: Array<{
-      det_cot_cant_int: number
-      det_cot_prec_hist_int: number
-    }>
-    cot_igv_bol: boolean
-  }
-}
-
 export default function ClienteDetallePage() {
   const params = useParams()
   const router = useRouter()
@@ -55,7 +38,7 @@ export default function ClienteDetallePage() {
 
   const [cliente, setCliente] = useState<ClientePersona | null>(null)
   const [cotizaciones, setCotizaciones] = useState<CotizacionCliente[]>([])
-  const [pedidos, setPedidos] = useState<PedidoCliente[]>([])
+  const [pedidos, setPedidos] = useState<Pedido[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -87,10 +70,10 @@ export default function ClienteDetallePage() {
   }, [clienteId])
 
   const calcularTotalCotizacion = (detalles: Array<{ det_cot_cant_int: number, det_cot_prec_hist_int: number }>, incluyeIgv: boolean) => {
-    const precioBase = detalles.reduce((sum, detalle) => 
+    const precioBase = detalles.reduce((sum, detalle) =>
       sum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int), 0
     )
-    
+
     if (incluyeIgv) {
       // CON IGV: El precio base NO incluye IGV, se agrega 18%
       return precioBase + (precioBase * 0.18)
@@ -171,11 +154,23 @@ export default function ClienteDetallePage() {
             {/* Información básica */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Badge variant={cliente.tipo === 'natural' ? 'default' : 'secondary'}>
-                  {cliente.tipo === 'natural' ? 'Persona Natural' : 'Persona Jurídica'}
-                </Badge>
+                {cliente.tipo === 'natural' ? (
+                  <>
+                    <User className="h-4 w-4 text-blue-600" />
+                    <Badge variant="outline" className="text-blue-600 border-blue-200">
+                      Persona Natural
+                    </Badge>
+                  </>
+                ) : (
+                  <>
+                    <Building2 className="h-4 w-4 text-purple-600" />
+                    <Badge variant="outline" className="text-purple-600 border-purple-200">
+                      Persona Jurídica
+                    </Badge>
+                  </>
+                )}
               </div>
-              
+
               {cliente.tipo === 'natural' && cliente.persona_natural ? (
                 <div className="space-y-2">
                   <p className="text-sm"><strong>DNI:</strong> {cliente.persona_natural.per_nat_dni_int || 'No registrado'}</p>
@@ -250,47 +245,33 @@ export default function ClienteDetallePage() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Número</TableHead>
-                        <TableHead>Fecha Emisión</TableHead>
-                        <TableHead>Fecha Vencimiento</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>IGV</TableHead>
-                        <TableHead>Total</TableHead>
+                        <TableHead className="text-center">Número</TableHead>
+                        <TableHead className="text-center">Fecha Emisión</TableHead>
+                        <TableHead className="text-center">Fecha Vencimiento</TableHead>
+                        <TableHead className="text-center">IGV</TableHead>
+                        <TableHead className="text-center">Total</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {cotizaciones.map((cotizacion) => {
-                        const total = cotizacion.detalle_cotizacion ? 
+                        const total = cotizacion.detalle_cotizacion ?
                           calcularTotalCotizacion(cotizacion.detalle_cotizacion, cotizacion.cot_igv_bol) : 0
-                        
+
                         return (
                           <TableRow key={cotizacion.cot_id_int}>
-                            <TableCell className="font-medium">
+                            <TableCell className="font-medium text-center">
                               {cotizacion.cot_num_vac}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="text-center">
                               {formatDate(cotizacion.cot_fec_emis_dt)}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="text-center">
                               {formatDate(cotizacion.cot_fec_venc_dt)}
                             </TableCell>
-                            <TableCell>
-                              <Badge 
-                                variant="outline" 
-                                className={getEstadoColor(
-                                  cotizacion.estado_cotizacion?.est_cot_tipo_int || 0,
-                                  'cotizacion'
-                                )}
-                              >
-                                {cotizacion.estado_cotizacion?.est_cot_desc_vac || 'Sin estado'}
-                              </Badge>
+                            <TableCell className="text-center">
+                              {cotizacion.cot_igv_bol ? 'Con IGV' : 'Sin IGV'}
                             </TableCell>
-                            <TableCell>
-                              <Badge variant={cotizacion.cot_igv_bol ? "default" : "secondary"}>
-                                {cotizacion.cot_igv_bol ? 'Con IGV' : 'Sin IGV'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="font-medium">
+                            <TableCell className="font-medium text-center">
                               {formatCurrency(total)}
                             </TableCell>
                           </TableRow>
@@ -306,71 +287,7 @@ export default function ClienteDetallePage() {
 
         {/* Tab de Pedidos */}
         <TabsContent value="pedidos">
-          <Card>
-            <CardHeader>
-              <CardTitle>Pedidos del Cliente</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {pedidos.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                  <p>Este cliente no tiene pedidos registrados</p>
-                </div>
-              ) : (
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Código Seguimiento</TableHead>
-                        <TableHead>Cotización</TableHead>
-                        <TableHead>Fecha Pedido</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>Código Rastreo</TableHead>
-                        <TableHead>Total</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {pedidos.map((pedido) => {
-                        const total = pedido.cotizacion?.detalle_cotizacion ? 
-                          calcularTotalCotizacion(pedido.cotizacion.detalle_cotizacion, pedido.cotizacion.cot_igv_bol) : 0
-                        
-                        return (
-                          <TableRow key={pedido.ped_id_int}>
-                            <TableCell className="font-mono font-bold text-blue-600">
-                              {pedido.ped_cod_segui_vac}
-                            </TableCell>
-                            <TableCell className="font-mono">
-                              {pedido.cotizacion?.cot_num_vac || 'Sin número'}
-                            </TableCell>
-                            <TableCell>
-                              {formatDate(pedido.ped_fec_pedido_dt)}
-                            </TableCell>
-                            <TableCell>
-                              <Badge 
-                                variant="outline" 
-                                className={getEstadoColor(
-                                  pedido.estado_pedido?.est_ped_tipo_int || 0,
-                                  'pedido'
-                                )}
-                              >
-                                {pedido.estado_pedido?.est_ped_desc_vac || 'Sin estado'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="font-mono text-sm">
-                              {pedido.ped_cod_rastreo_vac || 'Sin código'}
-                            </TableCell>
-                            <TableCell className="font-medium">
-                              {formatCurrency(total)}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <PedidosCliente pedidos={pedidos} loading={loading} />
         </TabsContent>
       </Tabs>
 

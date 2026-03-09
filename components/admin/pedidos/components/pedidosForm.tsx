@@ -212,7 +212,7 @@ export function PedidoFormDialog({
                 value={formData.cotizacion_id}
                 onValueChange={(value) => handleChange('cotizacion_id', value)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-auto min-h-10">
                   <SelectValue placeholder="Seleccionar cotización para iniciar pedido" />
                 </SelectTrigger>
                 <SelectContent>
@@ -224,9 +224,10 @@ export function PedidoFormDialog({
                   ) : (
                     cotizaciones.map((cotizacion) => (
                       <SelectItem key={cotizacion.cot_id_int} value={cotizacion.cot_id_int}>
-                        <div className="flex flex-col">
+                        <span className="text-center leading-snug">
                           <span className="font-medium">{cotizacion.cot_num_vac}</span>
-                          <span className="text-sm text-gray-500">
+                          <span className="text-gray-400 mx-1">—</span>
+                          <span className="text-gray-600">
                             {cotizacion.persona ?
                               (cotizacion.persona.tipo === 'natural' && cotizacion.persona.persona_natural ?
                                 `${cotizacion.persona.persona_natural.per_nat_nomb_vac} ${cotizacion.persona.persona_natural.per_nat_apell_vac}` :
@@ -234,7 +235,7 @@ export function PedidoFormDialog({
                               ) : 'Sin cliente'
                             }
                           </span>
-                        </div>
+                        </span>
                       </SelectItem>
                     ))
                   )}
@@ -294,7 +295,7 @@ export function PedidoFormDialog({
                   value={formData.cotizacion_id}
                   onValueChange={(value) => handleChange('cotizacion_id', value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-auto min-h-10">
                     <SelectValue placeholder="Seleccionar cotización" />
                   </SelectTrigger>
                   <SelectContent>
@@ -305,9 +306,10 @@ export function PedidoFormDialog({
                     ) : (
                       cotizaciones.map((cotizacion) => (
                         <SelectItem key={cotizacion.cot_id_int} value={cotizacion.cot_id_int}>
-                          <div className="flex flex-col">
+                          <span className="text-center leading-snug">
                             <span className="font-medium">{cotizacion.cot_num_vac}</span>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-gray-400 mx-1">—</span>
+                            <span className="text-gray-600">
                               {cotizacion.persona ?
                                 (cotizacion.persona.tipo === 'natural' && cotizacion.persona.persona_natural ?
                                   `${cotizacion.persona.persona_natural.per_nat_nomb_vac} ${cotizacion.persona.persona_natural.per_nat_apell_vac}` :
@@ -315,7 +317,7 @@ export function PedidoFormDialog({
                                 ) : 'Sin cliente'
                               }
                             </span>
-                          </div>
+                          </span>
                         </SelectItem>
                       ))
                     )}
