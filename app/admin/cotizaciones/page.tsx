@@ -4,9 +4,9 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { 
-  Eye, 
-  Edit, 
+import {
+  Eye,
+  Edit,
   ArrowLeft,
   Download
 } from "lucide-react"
@@ -54,7 +54,7 @@ interface CotizacionItem {
 
 export default function CotizacionesPage() {
   const [mainTab, setMainTab] = useState<'lista' | 'crear'>('lista')
-  
+
   // Estados para el modal de visualización
   const [showViewDialog, setShowViewDialog] = useState(false)
   const [selectedCotizacion, setSelectedCotizacion] = useState<CotizacionItem | null>(null)
@@ -105,19 +105,19 @@ export default function CotizacionesPage() {
   const handleDescargarCotizacion = async (cotizacion: CotizacionItem) => {
     try {
       // Importar funciones necesarias desde supabase
-      const { 
+      const {
         obtenerCotizacionPorId,
         obtenerCertificadosPorProductos,
         obtenerFichasTecnicasPorProductos,
-        transformarFichasTecnicasBD 
+        transformarFichasTecnicasBD
       } = await import('@/lib/supabase')
-      
+
       // Importar utilidades necesarias
       const { calcularTotalCotizacion, numeroATexto } = await import('@/utils/index')
-      
+
       // Obtener los datos completos de la cotización con todas las relaciones
       const cotizacionCompleta = await obtenerCotizacionPorId(cotizacion.cot_id_int)
-      
+
       if (!cotizacionCompleta) {
         alert('No se pudo cargar la cotización completa')
         return
@@ -251,7 +251,7 @@ export default function CotizacionesPage() {
       // Guardar en localStorage y abrir impresión
       localStorage.setItem("cotizacionActual", JSON.stringify(cotizacionParaImpresion))
       window.open("/imprimir", "_blank")
-      
+
     } catch (error) {
       console.error('Error descargando cotización:', error)
       alert('Error al preparar la cotización para descarga: ' + (error as Error).message)
@@ -267,15 +267,15 @@ export default function CotizacionesPage() {
       </div>
 
       {/* Tabs principales: Lista y Crear */}
-      <Tabs 
-        value={mainTab} 
+      <Tabs
+        value={mainTab}
         onValueChange={(value) => {
           if (value === 'crear' && !cotizacionHook.isEditMode) {
             handleNuevaCotizacion()
           } else {
             setMainTab(value as 'lista' | 'crear')
           }
-        }} 
+        }}
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-2">
@@ -320,12 +320,12 @@ export default function CotizacionesPage() {
 
         {/* Tab Crear */}
         <TabsContent value="crear">
-          <CrearCotizacionContent 
-            cotizacionHook={cotizacionHook} 
+          <CrearCotizacionContent
+            cotizacionHook={cotizacionHook}
             onSuccess={() => {
               setMainTab('lista')
               recargarCotizaciones()
-            }} 
+            }}
           />
         </TabsContent>
       </Tabs>
@@ -344,12 +344,12 @@ export default function CotizacionesPage() {
 }
 
 // Componente separado para el contenido de crear cotización
-function CrearCotizacionContent({ 
-  cotizacionHook, 
-  onSuccess 
-}: { 
-  cotizacionHook: any, 
-  onSuccess: () => void 
+function CrearCotizacionContent({
+  cotizacionHook,
+  onSuccess
+}: {
+  cotizacionHook: any,
+  onSuccess: () => void
 }) {
   const {
     activeTab,
@@ -406,7 +406,8 @@ function CrearCotizacionContent({
     tieneLaboratorio,
     obtenerTituloDocumento,
     // Estados de edición
-    isEditMode
+    isEditMode,
+    completedTabs
   } = cotizacionHook
 
   const handleGuardar = async () => {
@@ -469,7 +470,13 @@ function CrearCotizacionContent({
       </div>
 
       {/* Tabs del formulario */}
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "informacion" | "productos" | "adicional")} className="w-full">
+      <Tabs value={activeTab} onValueChange={(value) => {
+        const tab = value as "informacion" | "productos" | "adicional"
+        // Solo permitir navegar a tabs ya completados o al actual
+        if (tab === 'informacion' || completedTabs.has('informacion') && tab === 'productos' || completedTabs.has('productos') && tab === 'adicional') {
+          setActiveTab(tab)
+        }
+      }} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger
             value="informacion"
@@ -479,13 +486,15 @@ function CrearCotizacionContent({
           </TabsTrigger>
           <TabsTrigger
             value="productos"
-            className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
+            disabled={!completedTabs.has('informacion')}
+            className="data-[state=active]:bg-green-600 data-[state=active]:text-white disabled:opacity-40 disabled:cursor-not-allowed"
           >
             2. Productos y Servicios
           </TabsTrigger>
           <TabsTrigger
             value="adicional"
-            className="data-[state=active]:bg-green-600 data-[state=active]:text-white"
+            disabled={!completedTabs.has('productos')}
+            className="data-[state=active]:bg-green-600 data-[state=active]:text-white disabled:opacity-40 disabled:cursor-not-allowed"
           >
             3. Información Adicional
           </TabsTrigger>

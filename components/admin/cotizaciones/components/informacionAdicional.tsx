@@ -67,8 +67,8 @@ export function InformacionAdicional({
 
           <div className="grid gap-2">
             <Label htmlFor="formaPagoBD">Método de Pago</Label>
-            <Select 
-              value={formaPagoSeleccionada} 
+            <Select
+              value={formaPagoSeleccionada}
               onValueChange={cambiarFormaPagoSeleccionada}
               disabled={formasPagoLoading}
             >
@@ -138,14 +138,14 @@ export function InformacionAdicional({
           </Button>
           <Button
             onClick={onGuardar}
-            className="gap-2 bg-[#1a1a2e] hover:bg-[#24243c]"
+            className="gap-2 bg-[#1a1a2e] hover:bg-[#24243c] text-white"
             type="button">
             <Save className="h-4 w-4" />
             {isEditMode ? 'Actualizar' : 'Guardar'}
           </Button>
           <Button
             onClick={onVistaPrevia}
-            className="gap-2 bg-green-600 hover:bg-green-700"
+            className="gap-2 bg-green-600 hover:bg-green-700 text-white"
             type="button">
             <Eye className="h-4 w-4" />
             Vista Previa

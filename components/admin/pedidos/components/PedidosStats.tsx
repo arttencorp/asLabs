@@ -105,14 +105,14 @@ export function PedidosStats({ pedidos, loading }: PedidosStatsProps) {
       description: "Cancelados o reembolsados",
       icon: XCircle,
       color: "text-red-600"
-    },
+    },/* 
     {
       title: "Ingresos Totales",
       value: formatCurrency(ingresosNetos),
       description: "Suma total de pedidos completados",
       icon: TrendingUp,
       color: "text-green-600"
-    }
+    }*/
   ]
 
   return (

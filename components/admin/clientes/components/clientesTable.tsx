@@ -41,14 +41,14 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tipo</TableHead>
+              <TableHead className="text-center" >Tipo</TableHead>
               <TableHead>Cliente</TableHead>
-              <TableHead>Documento</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Teléfono</TableHead>
-              <TableHead>Cultivo</TableHead>
-              <TableHead>Hectáreas Disp.</TableHead>
-              <TableHead>Acciones</TableHead>
+              <TableHead className="text-center">Documento</TableHead>
+              <TableHead className="text-center">Email</TableHead>
+              <TableHead className="text-center">Teléfono</TableHead>
+              <TableHead className="text-center">Cultivo</TableHead>
+              <TableHead className="text-center">Hectáreas Disp.</TableHead>
+              <TableHead className="text-center">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -118,24 +118,22 @@ export function ClientesTable({ clientes, loading, onEdit, onDelete }: ClientesT
                     {formatHectareas(cliente.per_hec_disp_int)}
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors duration-150"
                         onClick={() => handleViewDetalle(cliente)}
-                        className="flex items-center gap-1"
+                        title="Ver detalle"
                       >
                         <Eye className="h-4 w-4" />
-                        Ver
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      </button>
+                      <button
+                        className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => onEdit(cliente)}
                         disabled={loading}
+                        title="Editar cliente"
                       >
                         <Edit className="h-4 w-4" />
-                      </Button>
+                      </button>
                     </div>
                   </TableCell>
                 </TableRow>

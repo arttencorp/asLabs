@@ -78,13 +78,13 @@ export function PedidosCliente({ pedidos, loading }: PedidosClienteProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Código Seguimiento</TableHead>
-                    <TableHead>Cotización</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead>Fecha Pedido</TableHead>
-                    <TableHead>Código Rastreo</TableHead>
-                    <TableHead>Total</TableHead>
-                    <TableHead className="w-[120px]">Acciones</TableHead>
+                    <TableHead className="text-center">Código Seguimiento</TableHead>
+                    <TableHead className="text-center">Cotización</TableHead>
+                    <TableHead className="text-center">Estado</TableHead>
+                    <TableHead className="text-center">Fecha Pedido</TableHead>
+                    <TableHead className="text-center">Código Rastreo</TableHead>
+                    <TableHead className="text-center">Total</TableHead>
+                    <TableHead className="text-center w-[120px]">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -100,13 +100,13 @@ export function PedidosCliente({ pedidos, loading }: PedidosClienteProps) {
 
                     return (
                       <TableRow key={pedido.ped_id_int}>
-                        <TableCell className="font-mono font-bold text-green-600">
+                        <TableCell className="font-mono font-bold text-green-600 text-center">
                           {pedido.ped_cod_segui_vac}
                         </TableCell>
-                        <TableCell className="font-mono text-blue-600">
+                        <TableCell className="font-mono text-blue-600 text-center">
                           {pedido.cotizacion?.cot_num_vac || 'Sin número'}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-center">
                           <Badge 
                             variant="outline"
                             className={getEstadoColor(pedido.estado_pedido?.est_ped_tipo_int || 0, 'pedido')}
@@ -114,15 +114,15 @@ export function PedidosCliente({ pedidos, loading }: PedidosClienteProps) {
                             {pedido.estado_pedido?.est_ped_desc_vac || 'Sin estado'}
                           </Badge>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2 text-sm">
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2 text-sm">
                             <Calendar className="h-4 w-4 text-gray-400" />
                             {formatDate(pedido.ped_fec_pedido_dt)}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-center">
                           {pedido.ped_cod_rastreo_vac ? (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center justify-center gap-2">
                               <Truck className="h-4 w-4 text-orange-500" />
                               <span className="font-mono text-sm">{pedido.ped_cod_rastreo_vac}</span>
                             </div>
@@ -130,25 +130,25 @@ export function PedidosCliente({ pedidos, loading }: PedidosClienteProps) {
                             <span className="text-gray-400 text-sm">Sin código</span>
                           )}
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
                             <DollarSign className="h-4 w-4 text-green-600" />
                             <span className="font-semibold">
                               S/ {total.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
                             </span>
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleViewCotizacion(pedido)}
-                            disabled={!pedido.cotizacion}
-                            className="flex items-center gap-1"
-                          >
-                            <Eye className="h-4 w-4" />
-                            Ver Cotización
-                          </Button>
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center">
+                            <button
+                              className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => handleViewCotizacion(pedido)}
+                              disabled={!pedido.cotizacion}
+                              title="Ver Cotización"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     )

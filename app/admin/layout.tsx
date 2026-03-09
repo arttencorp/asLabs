@@ -154,7 +154,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         text-base
                         ${pathname === item.href
                           ? "bg-[#9d8462]/20 text-white hover:bg-[#9d8462]/30"
-                          : "text-gray-400 hover:bg-[#1f1f3a] hover:text-white"
+                          : "text-white hover:bg-[#1f1f3a] hover:text-white"
                         }
                       `}
                     >
@@ -177,7 +177,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={handleSignOut}
                 tooltip="Cerrar sesión"
                 size="lg"
-                className="text-base text-gray-400 hover:bg-[#1f1f3a] hover:text-white flex items-center gap-2 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full"
+                className="text-base text-white hover:bg-[#1f1f3a] hover:text-white flex items-center gap-2 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full"
               >
                 <LogOut className="h-5 w-5 shrink-0" />
                 <span className="group-data-[collapsible=icon]:hidden">Cerrar sesión</span>

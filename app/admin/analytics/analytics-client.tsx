@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Percent, Clock, UserCheck, Target, DollarSign, TrendingUp, TrendingDown, ShoppingCart, Users } from "lucide-react"
+import { Percent, Clock, UserCheck, Target, DollarSign, TrendingUp, TrendingDown, ShoppingCart, Users, Wallet, BarChart3 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { format, subDays, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns"
 import { es } from "date-fns/locale"
@@ -63,6 +63,9 @@ export default function AnalyticsClient() {
     retentionGrowth: 0,
   })
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([])
+  const [allTimeRevenue, setAllTimeRevenue] = useState(0)
+  const [allTimeOrders, setAllTimeOrders] = useState(0)
+  const [allTimeTicketPromedio, setAllTimeTicketPromedio] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -87,7 +90,7 @@ export default function AnalyticsClient() {
         .from("Pedidos")
         .select(`
           ped_id_int,
-          ped_fec_pedido_dt,
+          ped_created_at_dt,
           cot_id_int,
           estado_pedido:Estado_Pedido(*),
           cotizacion:Cotizaciones(
@@ -99,8 +102,8 @@ export default function AnalyticsClient() {
             )
           )
         `)
-        .gte("ped_fec_pedido_dt", format(dateRange.from, "yyyy-MM-dd"))
-        .lte("ped_fec_pedido_dt", format(dateRange.to, "yyyy-MM-dd"))
+        .gte("ped_created_at_dt", format(dateRange.from, "yyyy-MM-dd"))
+        .lte("ped_created_at_dt", format(dateRange.to, "yyyy-MM-dd"))
 
       // Fetch all cotizaciones in period
       const { data: quotations } = await supabase
@@ -128,7 +131,7 @@ export default function AnalyticsClient() {
       // Fetch all orders for customer analysis
       const { data: allOrders } = await supabase
         .from("Pedidos")
-        .select("ped_id_int, ped_fec_pedido_dt, cot_id_int")
+        .select("ped_id_int, ped_created_at_dt, cot_id_int")
 
       // Fetch all quotations for mapping
       const { data: allQuotations } = await supabase
@@ -138,20 +141,14 @@ export default function AnalyticsClient() {
       // === CALCULATE CURRENT PERIOD KPIs ===
       // Calculate REAL total revenue using EXACTLY the same logic as PedidosStats
       
-      // FIXED: estado_pedido is an OBJECT, not an array
-      const completedOrders = orders?.filter((p: any) => {
+      // FIXED: Contar ingresos de TODOS los pedidos excepto cancelados/reembolsados
+      const validOrdersForRevenue = orders?.filter((p: any) => {
         const estadoDesc = p.estado_pedido?.est_ped_desc_vac
-        // Incluir tanto "PEDIDO_RECIBIDO" como "PAGO_VERIFICADO" para ingresos
-        return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
-      }) // Solo pedidos RECIBIDOS
+        return !["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
+      }) || []
       
-      // Calculate revenue using EXACTLY the same logic as PedidosStats
-      // Ingresos de pedidos completados
-      const ingresosEntregados = orders
-        ?.filter((p: any) => {
-          const estadoDesc = p.estado_pedido?.est_ped_desc_vac
-          return estadoDesc === "PEDIDO_RECIBIDO" || estadoDesc === "PAGO_VERIFICADO"
-        })
+      // Calculate revenue from all valid (non-cancelled) orders
+      const totalRevenue = validOrdersForRevenue
         .reduce((sum, p: any) => {
           const cotizacion = Array.isArray(p.cotizacion) ? p.cotizacion[0] : p.cotizacion
           const precioBase = cotizacion?.detalle_cotizacion?.reduce(
@@ -171,17 +168,9 @@ export default function AnalyticsClient() {
           
           return sum + total
         }, 0) || 0
-
-      // Los pedidos cancelados NO se restan porque no hubo transacción real
-      // Solo mostramos los ingresos reales de pedidos completados
-      const totalRevenue = ingresosEntregados
       
       // Filter non-cancelled orders for total orders count (exclude CANCELADO/REEMBOLSO)
-      const validOrders = orders?.filter((order: any) => {
-        const estadoDesc = order.estado_pedido?.est_ped_desc_vac
-        // Excluir estados cancelados y reembolsos
-        return !["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
-      }) || []
+      const validOrders = validOrdersForRevenue
       
       let totalOrders = validOrders.length
       let newCustomers = customers?.length || 0
@@ -206,9 +195,9 @@ export default function AnalyticsClient() {
       
       orders?.forEach(order => {
         const quotation = quotationMap.get(order.cot_id_int)
-        if (quotation?.cot_fec_emis_dt && order.ped_fec_pedido_dt) {
+        if (quotation?.cot_fec_emis_dt && order.ped_created_at_dt) {
           const quotationDate = new Date(quotation.cot_fec_emis_dt)
-          const orderDate = new Date(order.ped_fec_pedido_dt)
+          const orderDate = new Date(order.ped_created_at_dt)
           const daysDiff = Math.ceil((orderDate.getTime() - quotationDate.getTime()) / (1000 * 60 * 60 * 24))
           if (daysDiff >= 0) {
             totalConversionDays += daysDiff
@@ -246,9 +235,22 @@ export default function AnalyticsClient() {
 
       const { data: previousOrders } = await supabase
         .from("Pedidos")
-        .select("ped_id_int, ped_fec_pedido_dt, cot_id_int")
-        .gte("ped_fec_pedido_dt", format(previousPeriodStart, "yyyy-MM-dd"))
-        .lte("ped_fec_pedido_dt", format(previousPeriodEnd, "yyyy-MM-dd"))
+        .select(`
+          ped_id_int,
+          ped_created_at_dt,
+          cot_id_int,
+          estado_pedido:Estado_Pedido(*),
+          cotizacion:Cotizaciones(
+            cot_id_int,
+            cot_igv_bol,
+            detalle_cotizacion:Detalle_Cotizacion(
+              det_cot_cant_int,
+              det_cot_prec_hist_int
+            )
+          )
+        `)
+        .gte("ped_created_at_dt", format(previousPeriodStart, "yyyy-MM-dd"))
+        .lte("ped_created_at_dt", format(previousPeriodEnd, "yyyy-MM-dd"))
 
       const { data: previousQuotations } = await supabase
         .from("Cotizaciones")
@@ -263,8 +265,29 @@ export default function AnalyticsClient() {
         .lte("per_created_at_dt", format(previousPeriodEnd, "yyyy-MM-dd"))
 
       // === CALCULATE PREVIOUS PERIOD METRICS ===
-      const previousRevenue = 0 // Will be calculated when revenue calculation is implemented for historical periods
-      const previousOrdersCount = previousOrders?.length || 0
+      const previousRevenue = previousOrders
+        ?.filter((p: any) => {
+          const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+          return !["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
+        })
+        .reduce((sum, p: any) => {
+          const cotizacion = Array.isArray(p.cotizacion) ? p.cotizacion[0] : p.cotizacion
+          const precioBase = cotizacion?.detalle_cotizacion?.reduce(
+            (detSum: number, detalle: any) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
+            0
+          ) || 0
+          let total: number
+          if (cotizacion?.cot_igv_bol) {
+            total = precioBase + (precioBase * 0.18)
+          } else {
+            total = precioBase
+          }
+          return sum + total
+        }, 0) || 0
+      const previousOrdersCount = previousOrders?.filter((order: any) => {
+        const estadoDesc = order.estado_pedido?.est_ped_desc_vac
+        return !["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
+      }).length || 0
       const previousCustomersCount = previousCustomers?.length || 0
       const previousTotalQuotations = previousQuotations?.length || 0
       const previousConversionRate = previousTotalQuotations > 0 ? (previousOrdersCount / previousTotalQuotations) * 100 : 0
@@ -275,9 +298,9 @@ export default function AnalyticsClient() {
       
       previousOrders?.forEach(order => {
         const quotation = quotationMap.get(order.cot_id_int)
-        if (quotation?.cot_fec_emis_dt && order.ped_fec_pedido_dt) {
+        if (quotation?.cot_fec_emis_dt && order.ped_created_at_dt) {
           const quotationDate = new Date(quotation.cot_fec_emis_dt)
-          const orderDate = new Date(order.ped_fec_pedido_dt)
+          const orderDate = new Date(order.ped_created_at_dt)
           const daysDiff = Math.ceil((orderDate.getTime() - quotationDate.getTime()) / (1000 * 60 * 60 * 24))
           if (daysDiff >= 0) {
             prevTotalConversionDays += daysDiff
@@ -317,34 +340,105 @@ export default function AnalyticsClient() {
         retentionGrowth,
       })
 
-      // Fetch recent orders - simplificada para evitar HTTP 400
+      // Fetch recent orders with full data for display
       const { data: recentPedidos, error: recentOrdersError } = await supabase
         .from("Pedidos")
         .select(`
           ped_id_int,
-          ped_fec_pedido_dt,
+          ped_cod_segui_vac,
+          ped_created_at_dt,
           cot_id_int,
-          estado_pedido:Estado_Pedido(*)
+          estado_pedido:Estado_Pedido(*),
+          cotizacion:Cotizaciones(
+            cot_id_int,
+            cot_igv_bol,
+            per_id_int,
+            persona:Personas(
+              per_id_int,
+              Persona_Natural(per_nat_nomb_vac, per_nat_apell_vac),
+              Persona_Juridica(per_jurd_razSocial_vac)
+            ),
+            detalle_cotizacion:Detalle_Cotizacion(
+              det_cot_cant_int,
+              det_cot_prec_hist_int
+            )
+          )
         `)
         .order("ped_created_at_dt", { ascending: false })
         .limit(5)
 
-      // Transform recent orders to match expected interface - simplified
+      // Transform recent orders with real data
       const recentOrdersFormatted = recentPedidos?.map((pedido: any) => {
+        const cotizacion = Array.isArray(pedido.cotizacion) ? pedido.cotizacion[0] : pedido.cotizacion
+        const persona = cotizacion?.persona
+        
+        // Get client name
+        let clienteNombre = 'Sin cliente'
+        if (persona) {
+          const natural = Array.isArray(persona.Persona_Natural) ? persona.Persona_Natural[0] : persona.Persona_Natural
+          const juridica = Array.isArray(persona.Persona_Juridica) ? persona.Persona_Juridica[0] : persona.Persona_Juridica
+          if (natural?.per_nat_nomb_vac) {
+            clienteNombre = `${natural.per_nat_nomb_vac} ${natural.per_nat_apell_vac || ''}`.trim()
+          } else if (juridica?.per_jurd_razSocial_vac) {
+            clienteNombre = juridica.per_jurd_razSocial_vac
+          }
+        }
+
+        // Calculate total
+        const precioBase = cotizacion?.detalle_cotizacion?.reduce(
+          (sum: number, d: any) => sum + (d.det_cot_cant_int * d.det_cot_prec_hist_int), 0
+        ) || 0
+        const total = cotizacion?.cot_igv_bol ? precioBase + (precioBase * 0.18) : precioBase
+
         return {
           id: pedido.ped_id_int,
-          numero_pedido: pedido.ped_id_int.slice(-8) || 'N/A', // Usar parte del ID como número
-          cliente_nombre: 'Cliente', 
-          total: 0, // Simplified for now - could fetch cotizacion separately if needed
+          numero_pedido: pedido.ped_cod_segui_vac || pedido.ped_id_int.slice(-8),
+          cliente_nombre: clienteNombre,
+          total,
           estado: pedido.estado_pedido?.est_ped_desc_vac === 'PEDIDO_RECIBIDO' ? 'completado' : 
                   pedido.estado_pedido?.est_ped_desc_vac === 'PAGO_VERIFICADO' ? 'en_proceso' : 
                   ['CANCELADO', 'PEDIDO_CANCELADO', 'PEDIDO_REEMBOLSO'].includes(pedido.estado_pedido?.est_ped_desc_vac || '') ? 'cancelado' :
                   'pendiente',
-          fecha_pedido: pedido.ped_fec_pedido_dt
+          fecha_pedido: pedido.ped_created_at_dt
         }
       }) || []
 
-      setRecentOrders(recentOrdersFormatted) 
+      setRecentOrders(recentOrdersFormatted)
+
+      // === FETCH ALL-TIME REVENUE (sin filtro de fecha) ===
+      const { data: allTimeOrdersData } = await supabase
+        .from("Pedidos")
+        .select(`
+          ped_id_int,
+          estado_pedido:Estado_Pedido(*),
+          cotizacion:Cotizaciones(
+            cot_id_int,
+            cot_igv_bol,
+            detalle_cotizacion:Detalle_Cotizacion(
+              det_cot_cant_int,
+              det_cot_prec_hist_int
+            )
+          )
+        `)
+
+      const allTimeValid = allTimeOrdersData?.filter((p: any) => {
+        const estadoDesc = p.estado_pedido?.est_ped_desc_vac
+        return !["CANCELADO", "PEDIDO_CANCELADO", "PEDIDO_REEMBOLSO"].includes(estadoDesc || "")
+      }) || []
+
+      const allTimeTotal = allTimeValid.reduce((sum, p: any) => {
+        const cotizacion = Array.isArray(p.cotizacion) ? p.cotizacion[0] : p.cotizacion
+        const precioBase = cotizacion?.detalle_cotizacion?.reduce(
+          (detSum: number, detalle: any) => detSum + (detalle.det_cot_cant_int * detalle.det_cot_prec_hist_int),
+          0
+        ) || 0
+        const total = cotizacion?.cot_igv_bol ? precioBase + (precioBase * 0.18) : precioBase
+        return sum + total
+      }, 0)
+
+      setAllTimeRevenue(allTimeTotal)
+      setAllTimeOrders(allTimeValid.length)
+      setAllTimeTicketPromedio(allTimeValid.length > 0 ? allTimeTotal / allTimeValid.length : 0)
     } catch (error) {
       setError("Error al cargar los datos analíticos")
     } finally {
@@ -389,7 +483,7 @@ export default function AnalyticsClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-white p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -424,6 +518,41 @@ export default function AnalyticsClient() {
 {/*<DateRangePicker dateRange={dateRange} onDateRangeChange={setDateRange} /> */}
           </div>
         </div>
+
+        {/* Resumen General - Ganancia Total Histórica */}
+        <Card className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 shadow-lg">
+          <CardContent className="py-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-white/20 rounded-full p-3">
+                  <Wallet className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-sm font-medium">Ganancia Total (Histórico)</p>
+                  <p className="text-3xl font-bold">{formatCurrency(allTimeRevenue)}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="bg-white/20 rounded-full p-3">
+                  <ShoppingCart className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-sm font-medium">Total Pedidos (Histórico)</p>
+                  <p className="text-3xl font-bold">{allTimeOrders}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="bg-white/20 rounded-full p-3">
+                  <BarChart3 className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-sm font-medium">Ticket Promedio</p>
+                  <p className="text-3xl font-bold">{formatCurrency(allTimeTicketPromedio)}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* KPI Cards - 3 arriba, 3 abajo */}
         <div className="space-y-6">
@@ -592,6 +721,42 @@ export default function AnalyticsClient() {
           <TopProductsChart dateRange={dateRange} />{/* 
           <GeographicChart dateRange={dateRange} />*/}
         </div>
+
+        {/* Pedidos Recientes */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Pedidos Recientes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {recentOrders.length === 0 ? (
+              <p className="text-center text-gray-500 py-4">No hay pedidos recientes</p>
+            ) : (
+              <div className="space-y-3">
+                {recentOrders.map((order) => (
+                  <div key={order.id} className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <p className="font-mono font-semibold text-sm text-blue-600">{order.numero_pedido}</p>
+                        <p className="text-sm text-gray-600">{order.cliente_nombre}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <p className="font-semibold text-sm">{formatCurrency(order.total)}</p>
+                        <p className="text-xs text-gray-500">{format(new Date(order.fecha_pedido), "dd MMM yyyy", { locale: es })}</p>
+                      </div>
+                      <Badge className={getStatusColor(order.estado)}>
+                        {order.estado === 'completado' ? 'Completado' : 
+                         order.estado === 'en_proceso' ? 'En Proceso' : 
+                         order.estado === 'cancelado' ? 'Cancelado' : 'Pendiente'}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

@@ -33,5 +33,4 @@ export interface ClientesStats {
   totalClientes: number
   clientesNaturales: number
   clientesJuridicos: number
-  nuevosEsteMes: number
 }

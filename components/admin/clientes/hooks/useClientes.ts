@@ -86,11 +86,6 @@ export function useClientes() {
     totalClientes: clientes.length,
     clientesNaturales: clientes.filter(c => c.tipo === 'natural').length,
     clientesJuridicos: clientes.filter(c => c.tipo === 'juridica').length,
-    nuevosEsteMes: clientes.filter(c => {
-      const fechaActual = new Date()
-      const inicioMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1)
-      return new Date(c.per_created_at_dt) >= inicioMes
-    }).length
   }
 
   return {
