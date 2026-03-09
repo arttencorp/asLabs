@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -13,9 +13,10 @@ interface OfferItem {
 }
 
 export default function OfferCarousel() {
-  const [activeItem, setActiveItem] = useState(0) // Start with "Control Biológico"
+  const [activeItem, setActiveItem] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const offerItems: OfferItem[] = [
     {
@@ -52,31 +53,43 @@ export default function OfferCarousel() {
     },
   ]
 
-  const togglePause = () => {
-    setIsPaused(!isPaused)
-  }
+  const togglePause = useCallback(() => {
+    setIsPaused(prev => !prev)
+  }, [])
 
-  const nextSlide = () => {
-    setActiveItem((prev) => (prev === offerItems.length - 1 ? 0 : prev + 1))
-  }
+  const nextSlide = useCallback(() => {
+    setActiveItem(prev => (prev === offerItems.length - 1 ? 0 : prev + 1))
+  }, [offerItems.length])
 
+  // Marcar como montado después de la hidratación
   useEffect(() => {
-    if (!isPaused) {
-      timerRef.current = setInterval(() => {
-        nextSlide()
-      }, 5000)
-    } else {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-      }
+    setIsMounted(true)
+  }, [])
+
+  // Manejar el autoplay del carrusel
+  useEffect(() => {
+    // Solo ejecutar en el cliente después del montaje
+    if (!isMounted) return
+    
+    // Limpiar intervalo anterior
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
     }
 
+    // Si no está pausado, iniciar el intervalo
+    if (!isPaused) {
+      timerRef.current = setInterval(nextSlide, 5000)
+    }
+
+    // Cleanup al desmontar o cuando cambien las dependencias
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current)
+        timerRef.current = null
       }
     }
-  }, [isPaused])
+  }, [isPaused, isMounted, nextSlide])
 
   return (
     <section className="py-16 bg-white">

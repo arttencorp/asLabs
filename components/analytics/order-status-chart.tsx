@@ -60,25 +60,7 @@ export default function OrderStatusChart({ dateRange }: OrderStatusChartProps) {
   const fetchStatusData = async () => {
     setLoading(true)
     try {
-      let dateField = 'ped_fec_pedido_dt'
-      
-      const { data: sampleData } = await supabase
-        .from("Pedidos")
-        .select("*")
-        .limit(1)
-      
-      if (sampleData && sampleData.length > 0) {
-        const sample = sampleData[0]
-        
-        // Find the correct date field
-        const possibleDateFields = ['ped_fec_pedido_dt', 'ped_fec_dt', 'fecha_pedido', 'created_at', 'ped_created_at_dt']
-        for (const field of possibleDateFields) {
-          if (field in sample) {
-            dateField = field
-            break
-          }
-        }
-      }
+      const dateField = 'ped_created_at_dt'
 
       // First get all pedidos in the date range with their status
       const { data: orders } = await supabase

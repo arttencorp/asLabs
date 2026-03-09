@@ -74,7 +74,7 @@ export function ProductosTable({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
-              placeholder="Buscar por nombre, descripción o ID..."
+              placeholder="Buscar por nombre o descripción..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -88,20 +88,21 @@ export function ProductosTable({
           </div>
         ) : (
           <>
-            <div className="rounded-md border">
-              <Table>
+            <div className="rounded-md border overflow-hidden">
+              <Table className="table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Nombre</TableHead>
-                    <TableHead>Descripción</TableHead>
-                    <TableHead>Precio</TableHead> 
-                    <TableHead className="w-[100px]">Acciones</TableHead>
+                    <TableHead className="w-[30%]">Nombre</TableHead>
+                    <TableHead className="w-[30%]">Descripción</TableHead>
+                    <TableHead className="w-[13%] text-center">Precio</TableHead>
+                    <TableHead className="w-[12%] text-center">Stock</TableHead>
+                    <TableHead className="w-[15%] text-center">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {pagination.totalItems === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                         {searchTerm ? 'No se encontraron productos que coincidan con la búsqueda' : 'No hay productos registrados. Crea el primer producto usando el botón "Nuevo Producto".'}
                       </TableCell>
                     </TableRow>
@@ -112,25 +113,38 @@ export function ProductosTable({
                       return (
                         <TableRow key={producto.pro_id_int}>
                           <TableCell className="font-medium">
-                            {producto.pro_nomb_vac || 'Sin nombre'}
+                            <div className="truncate max-w-[300px]" title={producto.pro_nomb_vac || ''}>
+                              {producto.pro_nomb_vac || 'Sin nombre'}
+                            </div>
                           </TableCell>
-                          <TableCell className="max-w-xs">
-                            <div className="truncate">
+                          <TableCell>
+                            <div className="truncate max-w-[300px]" title={producto.pro_desc_vac || ''}>
                               {producto.pro_desc_vac || 'Sin descripción'}
                             </div>
                           </TableCell>
-                          <TableCell className="font-mono">
+                          <TableCell className="font-mono text-center">
                             {formatearPrecio(producto.pro_prec_unitario_int)}
-                          </TableCell> 
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <span className={`font-semibold ${
+                              (producto.pro_stock_int ?? 0) === 0 
+                                ? 'text-red-600' 
+                                : (producto.pro_stock_int ?? 0) <= 10 
+                                  ? 'text-amber-600' 
+                                  : 'text-green-600'
+                            }`}>
+                              {producto.pro_stock_int ?? 0}
+                            </span>
+                          </TableCell>
                           <TableCell>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
+                            <div className="flex items-center justify-center">
+                              <button
+                                className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-colors duration-150"
                                 onClick={() => onEdit(producto)}
+                                title="Editar producto"
                               >
                                 <Edit className="h-4 w-4" />
-                              </Button>
+                              </button>
                             </div>
                           </TableCell>
                         </TableRow>

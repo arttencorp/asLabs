@@ -15,60 +15,63 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-white opacity-60"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full">
           
-          {/* Panel Principal - TEXTO */}
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-2 rounded-full text-xs sm:text-sm font-medium mb-4">
-              <FlaskConical className="w-3 h-3 sm:w-4 sm:h-4" />
-              Biotecnología Vegetal de Vanguardia
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            {/* TEXTO - Izquierda */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full text-xs font-medium mb-3">
+                <FlaskConical className="w-3 h-3" />
+                Biotecnología Vegetal de Vanguardia
+              </div>
+
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 text-gray-900 leading-tight">
+                Plantines de <span className="text-emerald-600">Elite Genética</span>
+                <br className="hidden sm:block" />
+                <span className="block sm:inline"> para Agricultura Profesional</span>
+              </h1>
+
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                Desarrollados con tecnología in vitro de vanguardia para maximizar tu productividad agrícola. 
+                Libres de plagas, alta resistencia y rendimientos superiores garantizados.
+              </p>
+
+              <button
+                onClick={() => handleWhatsAppContact("información completa sobre plantines premium")}
+                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition-colors text-sm"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Asesoría Gratuita
+              </button>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 text-gray-900 leading-tight">
-              Plantines de <span className="text-emerald-600">Elite Genética</span>
-              <br className="hidden sm:block" />
-              <span className="block sm:inline"> para Agricultura Profesional</span>
-            </h1>
-
-            <p className="text-base sm:text-lg text-gray-600 mb-6 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Desarrollados con tecnología in vitro de vanguardia para maximizar tu productividad agrícola. 
-              Libres de plagas, alta resistencia y rendimientos superiores garantizados.
-            </p>
-
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 max-w-lg mx-auto">
-              <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-100 text-center">
-                <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+            {/* CUADRADOS - Derecha, 2x2 grid (solo 3, el 3ro centrado abajo) */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100 text-center">
+                <div className="w-6 h-6 bg-emerald-100 rounded flex items-center justify-center mb-1 mx-auto">
+                  <TrendingUp className="w-3 h-3 text-emerald-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 text-xs sm:text-sm">Mayor Productividad</h3>
+                <h3 className="font-semibold text-gray-900 text-xs">Mayor Productividad</h3>
                 <p className="text-xs text-gray-600">+{Math.round(((20 - 14) / 14) * 100)}% rendimiento</p>
               </div>
               
-              <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-100 text-center">
-                <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                  <Shield className="w-4 h-4 text-emerald-600" />
+              <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100 text-center">
+                <div className="w-6 h-6 bg-emerald-100 rounded flex items-center justify-center mb-1 mx-auto">
+                  <Shield className="w-3 h-3 text-emerald-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 text-xs sm:text-sm">Libres de Plagas</h3>
+                <h3 className="font-semibold text-gray-900 text-xs">Libres de Plagas</h3>
                 <p className="text-xs text-gray-600">In vitro</p>
               </div>
               
-              <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-100 text-center">
-                <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                  <DollarSign className="w-4 h-4 text-emerald-600" />
+              <div className="col-span-2 flex justify-center">
+                <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100 text-center w-[calc(50%-0.25rem)]">
+                  <div className="w-6 h-6 bg-emerald-100 rounded flex items-center justify-center mb-1 mx-auto">
+                    <DollarSign className="w-3 h-3 text-emerald-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-xs">ROI Garantizado</h3>
+                  <p className="text-xs text-gray-600">Rentable</p>
                 </div>
-                <h3 className="font-semibold text-gray-900 text-xs sm:text-sm">ROI Garantizado</h3>
-                <p className="text-xs text-gray-600">Rentable</p>
               </div>
-            </div>
-
-            <div className="text-center">
-              <button
-                onClick={() => handleWhatsAppContact("información completa sobre plantines premium")}
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors text-sm sm:text-base"
-              >
-                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                Asesoría Gratuita
-              </button>
             </div>
           </div>
         </div>

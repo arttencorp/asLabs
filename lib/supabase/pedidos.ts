@@ -156,7 +156,8 @@ export async function crearPedido(pedidoData: {
                 ped_cod_segui_vac: codigoSeguimiento,
                 ped_cod_rastreo_vac: pedidoData.codigo_rastreo || null,
                 ped_observacion_vac: pedidoData.observaciones || null,
-                ped_num_comprob_vac: pedidoData.numero_comprobante || null
+                ped_num_comprob_vac: pedidoData.numero_comprobante || null,
+                ped_fec_pedido_dt: new Date().toISOString()
             })
             .select(`
         *,

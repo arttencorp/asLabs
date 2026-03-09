@@ -50,29 +50,7 @@ export default function TopProductsChart({ dateRange }: TopProductsChartProps) {
         .limit(1) 
 
       // Auto-detectar campos de fecha
-      let dateField = 'ped_fec_pedido_dt'
-      let totalField = 'ped_total_int'
-      
-      if (samplePedidos && samplePedidos.length > 0) {
-        const sample = samplePedidos[0] 
-        
-        const possibleDateFields = ['ped_fec_pedido_dt', 'ped_fec_dt', 'fecha_pedido', 'created_at', 'ped_created_at_dt']
-        const possibleTotalFields = ['ped_total_int', 'total', 'ped_total', 'amount']
-        
-        for (const field of possibleDateFields) {
-          if (field in sample) {
-            dateField = field 
-            break
-          }
-        }
-        
-        for (const field of possibleTotalFields) {
-          if (field in sample) {
-            totalField = field 
-            break
-          }
-        }
-      }
+      const dateField = 'ped_created_at_dt'
 
       // === CONSULTA PRINCIPAL: Pedidos con productos ===
       const { data: ordersWithProducts, error: queryError } = await supabase

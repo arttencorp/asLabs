@@ -80,6 +80,7 @@ export async function crearProducto(productoData: {
     pro_nomb_vac: string
     pro_desc_vac: string | null
     pro_prec_unitario_int: number
+    pro_stock_int?: number
 }): Promise<ProductoDatabase> {
     try {
         // Limpiar datos antes de insertar (convertir strings vacíos a null)
@@ -87,7 +88,7 @@ export async function crearProducto(productoData: {
             pro_nomb_vac: productoData.pro_nomb_vac?.trim() || null,
             pro_desc_vac: productoData.pro_desc_vac?.trim() || null,
             pro_prec_unitario_int: productoData.pro_prec_unitario_int || null,
-            pro_stock_int: 0 // Stock inicial en 0
+            pro_stock_int: productoData.pro_stock_int ?? 0
         }
 
         // Validar que el nombre no esté vacío
@@ -178,26 +179,6 @@ export async function obtenerCertificadosPorProducto(productoId: string): Promis
         return (data?.map(item => item.certificado).filter(Boolean) || []) as unknown as CertificadoCalidadDatabase[]
     } catch (error) {
         console.error('Error obteniendo certificados del producto:', error)
-        throw error
-    }
-}
-
-// Obtener fichas técnicas para un producto específico
-export async function obtenerFichasTecnicasPorProducto(productoId: string): Promise<FichaTecnicaDatabase[]> {
-    try {
-        const { data, error } = await supabase
-            .from('Productos_Fichas_Tecnicas')
-            .select(`
-        ficha_tecnica:Fichas_Tecnicas(*)
-      `)
-            .eq('pro_id_int', productoId)
-
-        if (error) throw error
-
-        // Extraer solo las fichas técnicas de la respuesta
-        return (data?.map(item => item.ficha_tecnica).filter(Boolean) || []) as unknown as FichaTecnicaDatabase[]
-    } catch (error) {
-        console.error('Error obteniendo fichas técnicas del producto:', error)
         throw error
     }
 }

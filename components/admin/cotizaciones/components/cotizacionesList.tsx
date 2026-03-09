@@ -138,22 +138,22 @@ export function CotizacionesTable({
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Número
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Cliente
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Fecha Emisión
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Total
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       IGV
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Acciones
                     </th>
                   </tr>
@@ -182,47 +182,44 @@ export function CotizacionesTable({
 
                     return (
                       <tr key={cotizacion.cot_id_int} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">
                           {cotizacion.cot_num_vac}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {nombreCliente}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900">
                           {formatDate(cotizacion.cot_fec_emis_dt, { short: true })}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900">
                           S/ {total.toFixed(2)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900">
                           {cotizacion.cot_igv_bol ? 'Con IGV' : 'Sin IGV'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <div className="flex items-center space-x-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
+                          <div className="flex items-center justify-center gap-2">
+                            <button 
+                              className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors duration-150"
                               onClick={() => onVerCotizacion(cotizacion)}
+                              title="Ver cotización"
                             >
-                              <Eye className="h-4 w-4 mr-1" />
-                              Ver
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
+                              <Eye className="h-4 w-4" /> 
+                            </button>
+                            <button 
+                              className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-colors duration-150"
                               onClick={() => onEditarCotizacion(cotizacion)}
+                              title="Editar cotización"
                             >
-                              <Edit className="h-4 w-4 mr-1" />
-                              Editar
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
+                              <Edit className="h-4 w-4" /> 
+                            </button>
+                            <button 
+                              className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-700 transition-colors duration-150"
                               onClick={() => onDescargarCotizacion(cotizacion)}
+                              title="Descargar cotización"
                             >
-                              <Download className="h-4 w-4 mr-1" />
-                              Descargar
-                            </Button>
+                              <Download className="h-4 w-4" />
+                            </button>
                           </div>
                         </td>
                       </tr>
