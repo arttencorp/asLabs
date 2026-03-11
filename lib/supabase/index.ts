@@ -27,3 +27,6 @@ export * from './cotizaciones'
 
 // Tienda (categorías y productos de tienda)
 export * from './tienda'
+
+// Convocatorias (puestos, postulantes, áreas de interés)
+export * from './convocatorias'
