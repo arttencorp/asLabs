@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Plus, CheckCircle, AlertCircle } from "lucide-react"
 import { useBaseCrud } from '@/hooks/useBaseCrud'
+import { transformarError } from '@/utils'
 import { 
   obtenerCategorias, 
   crearCategoria, 
@@ -128,8 +129,8 @@ export default function CategoriasManagement() {
       setEditingCategoria(null)
       setIsDialogOpen(false)
       
-    } catch (error: any) {
-      setError(error.message || 'Error al guardar categoría')
+    } catch (error) {
+      setError(transformarError(error, 'Error al guardar categoría'))
     }
   }
 
@@ -148,8 +149,8 @@ export default function CategoriasManagement() {
         setCategoriaAOcultar(categoria)
         setProductosCount(count)
         setOcultarDialogOpen(true)
-      } catch (error: any) {
-        setError(error.message || 'Error al verificar productos de la categoría')
+      } catch (error) {
+        setError(transformarError(error, 'Error al verificar productos de la categoría'))
       }
     } else {
       // Está oculto, queremos mostrarlo - mostrar modal para productos ocultos
@@ -159,8 +160,8 @@ export default function CategoriasManagement() {
         setCategoriaAMostrar(categoria)
         setProductosOcultosCount(count)
         setMostrarDialogOpen(true)
-      } catch (error: any) {
-        setError(error.message || 'Error al verificar productos ocultos de la categoría')
+      } catch (error) {
+        setError(transformarError(error, 'Error al verificar productos ocultos de la categoría'))
       }
     }
   }
@@ -185,8 +186,8 @@ export default function CategoriasManagement() {
       setCategoriaAOcultar(null)
       setProductosCount(0)
       
-    } catch (error: any) {
-      setError(error.message || 'Error al ocultar categoría')
+    } catch (error) {
+      setError(transformarError(error, 'Error al ocultar categoría'))
     }
   }
 
@@ -216,8 +217,8 @@ export default function CategoriasManagement() {
       setCategoriaAMostrar(null)
       setProductosOcultosCount(0)
       
-    } catch (error: any) {
-      setError(error.message || 'Error al mostrar categoría')
+    } catch (error) {
+      setError(transformarError(error, 'Error al mostrar categoría'))
     }
   }
 

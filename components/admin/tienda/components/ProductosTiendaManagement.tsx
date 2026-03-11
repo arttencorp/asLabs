@@ -17,6 +17,7 @@ import {
 import { ProductoTiendaFormDialog } from './ProductoTiendaFormDialog'
 import { ProductosTiendaTable } from './ProductosTiendaTable'
 import { formatDate } from '@/utils/index'
+import { transformarError } from '@/utils'
 import type { ProductoTiendaDatabase, CategoriaDatabase } from '@/types/database'
 import type { ProductoTiendaForm } from '../types'
 
@@ -52,8 +53,8 @@ export function ProductosTiendaManagement() {
       ])
       setProductos(productosData)
       setCategorias(categoriasData) 
-    } catch (error: any) {
-      setError(error.message || 'Error al cargar datos')
+    } catch (error) {
+      setError(transformarError(error, 'Error al cargar datos'))
     } finally {
       setLoading(false)
     }
@@ -107,8 +108,8 @@ export function ProductosTiendaManagement() {
       setEditingProducto(null)
       setIsDialogOpen(false)
       
-    } catch (error: any) {
-      setError(error.message || 'Error al guardar producto')
+    } catch (error) {
+      setError(transformarError(error, 'Error al guardar producto'))
     }
   }
 
@@ -121,8 +122,8 @@ export function ProductosTiendaManagement() {
       await eliminarProductoTienda(producto.prod_tiend_id_int)
       await loadData()
       showSuccess('Producto eliminado exitosamente')
-    } catch (error: any) {
-      setError(error.message || 'Error al eliminar producto')
+    } catch (error) {
+      setError(transformarError(error, 'Error al eliminar producto'))
     }
   }
 
@@ -143,8 +144,8 @@ export function ProductosTiendaManagement() {
       // Recargar datos
       await loadData()
       
-    } catch (error: any) {
-      setError(error.message || 'Error al cambiar visibilidad del producto')
+    } catch (error) {
+      setError(transformarError(error, 'Error al cambiar visibilidad del producto'))
     }
   }
 

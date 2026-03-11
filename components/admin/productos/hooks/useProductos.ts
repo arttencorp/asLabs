@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { obtenerProductos, crearProducto, actualizarProducto } from '@/lib/supabase'
+import { transformarError } from '@/utils'
 import type { ProductoDatabase } from '@/types/database'
 import type { ProductoForm } from '../types'
 import { validarProducto } from '../utils'
@@ -23,8 +24,8 @@ export function useProductos() {
     try {
       const data = await obtenerProductos()
       setItems(data) 
-    } catch (error: any) {
-      setError(error.message || 'Error al cargar productos')
+    } catch (err) {
+      setError(transformarError(err, 'Error al cargar productos'))
     } finally {
       setLoading(false)
     }
@@ -44,8 +45,8 @@ export function useProductos() {
       setItems(prevItems => [newItem, ...prevItems])
       setIsDialogOpen(false)
       showSuccess('Producto creado exitosamente')
-    } catch (error: any) {
-      setError(error.message || 'Error al crear producto')
+    } catch (err) {
+      setError(transformarError(err, 'Error al crear producto'))
     } finally {
       setLoading(false)
     }
@@ -70,8 +71,8 @@ export function useProductos() {
       setIsDialogOpen(false)
       setEditingItem(null)
       showSuccess('Producto actualizado exitosamente')
-    } catch (error: any) {
-      setError(error.message || 'Error al actualizar producto')
+    } catch (err) {
+      setError(transformarError(err, 'Error al actualizar producto'))
     } finally {
       setLoading(false)
     }

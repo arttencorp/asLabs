@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Loader2, Upload, X, Eye, ImagePlus } from "lucide-react"
 import { subirDocumentoPedido, eliminarDocumentoPedido } from "@/lib/supabase"
+import { transformarError } from '@/utils'
 import type { EstadoPedido } from '@/types/database'
 import type { PedidoForm, Cotizacion, Pedido, PedidoDoc } from '../types'
 
@@ -184,8 +185,8 @@ export function PedidoFormDialog({
       await eliminarDocumentoPedido(docId)
       setDocumentosExistentes(prev => prev.filter(d => d.ped_doc_id_int !== docId))
       onDocumentosChange?.()
-    } catch (error: any) {
-      setErrors(prev => ({ ...prev, imagen: error.message || 'Error al eliminar documento' }))
+    } catch (error) {
+      setErrors(prev => ({ ...prev, imagen: transformarError(error, 'Error al eliminar documento') }))
     } finally {
       setDeletingDocId(null)
     }
