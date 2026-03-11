@@ -2,6 +2,7 @@
 
 export interface JobApplicationFormData {
   nombresApellidos: string
+  tipoDocumento: string
   dni: string
   universidadInstituto: string
   ciclo: string

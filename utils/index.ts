@@ -1,6 +1,8 @@
 import { ESTADO_COLORS } from '@/constants'
 import type { ClientePersona } from '@/types/database'
 
+export { transformarError } from './error-messages'
+
 // Formateo de fechas centralizado
 export function formatDate(dateString: string | null | undefined, options?: {
   includeTime?: boolean

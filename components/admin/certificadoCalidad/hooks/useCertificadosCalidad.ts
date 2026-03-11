@@ -10,6 +10,7 @@ import {
   eliminarImagenCertificado,
   obtenerProductos
 } from '@/lib/supabase'
+import { transformarError } from '@/utils'
 import type { 
   CertificadoCalidadDatabase, 
   ProductoDatabase
@@ -41,8 +42,8 @@ export function useCertificadosCalidad() {
     try {
       const data = await obtenerCertificadosCalidad()
       setItems(data) 
-    } catch (err: any) {
-      setError(err.message || 'Error al cargar certificados de calidad')
+    } catch (err) {
+      setError(transformarError(err, 'Error al cargar certificados de calidad'))
     } finally {
       setLoading(false)
     }
@@ -72,8 +73,8 @@ export function useCertificadosCalidad() {
         setError(result.error || 'Error al subir imagen')
         return null
       }
-    } catch (err: any) {
-      setError(err.message || 'Error al subir imagen')
+    } catch (err) {
+      setError(transformarError(err, 'Error al subir imagen'))
       return null
     } finally {
       setUploadLoading(false)
@@ -88,8 +89,8 @@ export function useCertificadosCalidad() {
         return false
       }
       return true
-    } catch (error: any) {
-      setError(error.message || 'Error al eliminar imagen')
+    } catch (error) {
+      setError(transformarError(error, 'Error al eliminar imagen'))
       return false
     }
   }, [])
@@ -137,8 +138,8 @@ export function useCertificadosCalidad() {
       setItems(prevItems => [nuevoCertificado, ...prevItems])
       setIsDialogOpen(false)
       showSuccess('Certificado de calidad creado exitosamente')
-    } catch (err: any) {
-      setError(err.message || 'Error al crear certificado de calidad')
+    } catch (err) {
+      setError(transformarError(err, 'Error al crear certificado de calidad'))
     } finally {
       setLoading(false)
     }
@@ -179,8 +180,8 @@ export function useCertificadosCalidad() {
       setIsDialogOpen(false)
       setEditingItem(null)
       showSuccess('Certificado de calidad actualizado exitosamente')
-    } catch (err: any) {
-      setError(err.message || 'Error al actualizar certificado de calidad')
+    } catch (err) {
+      setError(transformarError(err, 'Error al actualizar certificado de calidad'))
     } finally {
       setLoading(false)
     }
@@ -197,8 +198,8 @@ export function useCertificadosCalidad() {
       await eliminarCertificadoCalidad(id)
       setItems(prevItems => prevItems.filter(item => item.cer_cal_id_int !== id))
       showSuccess('Certificado de calidad eliminado exitosamente')
-    } catch (err: any) {
-      setError(err.message || 'Error al eliminar certificado de calidad')
+    } catch (err) {
+      setError(transformarError(err, 'Error al eliminar certificado de calidad'))
     } finally {
       setLoading(false)
     }

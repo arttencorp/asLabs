@@ -9,6 +9,7 @@ import { FichaTecnicaFormDialog } from './FichaTecnicaFormDialog'
 import { FichasTecnicasTable } from './FichasTecnicasTable'
 import { FichasTecnicasStats } from './FichasTecnicasStats'
 import { useFichasTecnicas } from '../hooks/useFichasTecnicas'
+import { transformarError } from '@/utils'
 import type { FichaTecnicaForm } from '../types'
 
 export function FichasTecnicasManagement() {
@@ -67,8 +68,8 @@ export function FichasTecnicasManagement() {
       } else {
         await handleCreateWithForm(finalData)
       }
-    } catch (error: any) {
-      setError(error.message || 'Error al procesar la ficha técnica')
+    } catch (error) {
+      setError(transformarError(error, 'Error al procesar la ficha técnica'))
     }
   }
 

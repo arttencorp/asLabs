@@ -7,6 +7,7 @@ import {
   obtenerPedidosPorCliente 
 } from '@/lib/supabase'
 import { calcularTotalCotizacion } from '@/utils/index'
+import { transformarError } from '@/utils'
 import type { ClientePersona } from '@/types/database'
 import type { Cotizacion, Pedido } from '@/components/admin/pedidos/types'
 
@@ -40,8 +41,8 @@ export function useClienteDetalle(clienteId: string) {
       setCliente(clienteData)
       setCotizaciones(cotizacionesData)
       setPedidos(pedidosData)
-    } catch (error: any) {
-      setError(error.message || 'Error al cargar la información del cliente')
+    } catch (error) {
+      setError(transformarError(error, 'Error al cargar la información del cliente'))
     } finally {
       setLoading(false)
     }

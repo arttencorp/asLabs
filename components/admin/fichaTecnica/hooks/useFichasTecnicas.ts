@@ -8,6 +8,7 @@ import {
   eliminarImagenFichaTecnica,
   obtenerProductos
 } from '@/lib/supabase'
+import { transformarError } from '@/utils'
 import type { FichaTecnicaDatabase, ProductoDatabase } from '@/types/database'
 import type { FichaTecnicaForm } from '../types'
 import { validarFichaTecnica } from '../utils'
@@ -34,8 +35,8 @@ export function useFichasTecnicas() {
     try {
       const data = await obtenerFichasTecnicas()
       setItems(data) 
-    } catch (error: any) {
-      setError(error.message || 'Error al cargar fichas técnicas')
+    } catch (err) {
+      setError(transformarError(err, 'Error al cargar fichas técnicas'))
     } finally {
       setLoading(false)
     }
@@ -67,8 +68,8 @@ export function useFichasTecnicas() {
       setItems(prevItems => [newItem, ...prevItems])
       setIsDialogOpen(false)
       showSuccess('Ficha técnica creada exitosamente')
-    } catch (error: any) {
-      setError(error.message || 'Error al crear ficha técnica')
+    } catch (err) {
+      setError(transformarError(err, 'Error al crear ficha técnica'))
     } finally {
       setLoading(false)
     }
@@ -93,8 +94,8 @@ export function useFichasTecnicas() {
       setIsDialogOpen(false)
       setEditingItem(null)
       showSuccess('Ficha técnica actualizada exitosamente')
-    } catch (error: any) {
-      setError(error.message || 'Error al actualizar ficha técnica')
+    } catch (err) {
+      setError(transformarError(err, 'Error al actualizar ficha técnica'))
     } finally {
       setLoading(false)
     }
@@ -112,8 +113,8 @@ export function useFichasTecnicas() {
       await eliminarFichaTecnica(id)
       setItems(prevItems => prevItems.filter(item => item.fit_tec_id_int !== id))
       showSuccess('Ficha técnica eliminada exitosamente')
-    } catch (error: any) {
-      setError(error.message || 'Error al eliminar ficha técnica')
+    } catch (err) {
+      setError(transformarError(err, 'Error al eliminar ficha técnica'))
     } finally {
       setLoading(false)
     }
@@ -129,8 +130,8 @@ export function useFichasTecnicas() {
         return null
       }
       return result.url
-    } catch (error: any) {
-      setError(error.message || 'Error al subir imagen')
+    } catch (err) {
+      setError(transformarError(err, 'Error al subir imagen'))
       return null
     } finally {
       setUploadLoading(false)
@@ -145,8 +146,8 @@ export function useFichasTecnicas() {
         return false
       }
       return true
-    } catch (error: any) {
-      setError(error.message || 'Error al eliminar imagen')
+    } catch (err) {
+      setError(transformarError(err, 'Error al eliminar imagen'))
       return false
     }
   }, [])
