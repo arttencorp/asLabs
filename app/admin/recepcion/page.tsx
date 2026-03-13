@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,7 @@ import {
   Loader2,
   RefreshCw,
   ClipboardList,
+  FileInput,
 } from "lucide-react"
 import { formatDate } from "@/utils"
 import {
@@ -35,6 +37,25 @@ import {
   obtenerNombrePersona,
 } from "@/lib/supabase/recepcion"
 import type { CotizacionRecepcion } from "@/lib/supabase/recepcion"
+
+// Lazy import del contenido de documentoLab para no romper el bundle
+import {
+  useDocumentoLab,
+  InformacionDocumento,
+  MuestrasSection,
+  ResultadosSection,
+  NotasResultadoSection,
+  AgentesSection,
+  AnexosSection,
+  FirmasSection,
+  DocumentoLabList,
+  DocumentoLabStats,
+  GuiaUso,
+} from "@/components/admin/documentoLab"
+import type { TabDocumentoLab } from "@/components/admin/documentoLab"
+import { generarPdfDocumentoLab } from "@/utils/generarPdfDocumentoLab"
+import Link from "next/link"
+import { ArrowLeft, Save, Download, Settings } from "lucide-react"
 
 function obtenerColorEstado(tipo: number | null | undefined): string {
   switch (tipo) {
@@ -46,15 +67,14 @@ function obtenerColorEstado(tipo: number | null | undefined): string {
   }
 }
 
-export default function RecepcionPage() {
-  const router = useRouter()
+// ─── Sección Órdenes ────────────────────────────────────────────────────────
 
-  // Lista principal: cotizaciones que YA tienen órdenes de servicio
+function OrdenesSection() {
+  const router = useRouter()
   const [cotizaciones, setCotizaciones] = useState<CotizacionRecepcion[]>([])
   const [loading, setLoading] = useState(true)
   const [busqueda, setBusqueda] = useState("")
 
-  // Dialog de selección: cotizaciones SIN órdenes de servicio
   const [showSeleccionDialog, setShowSeleccionDialog] = useState(false)
   const [cotizacionesDisponibles, setCotizacionesDisponibles] = useState<CotizacionRecepcion[]>([])
   const [loadingDisponibles, setLoadingDisponibles] = useState(false)
@@ -77,7 +97,6 @@ export default function RecepcionPage() {
     cargarCotizaciones()
   }, [cargarCotizaciones])
 
-  // Cargar cotizaciones disponibles al abrir el dialog
   async function cargarCotizacionesDisponibles() {
     try {
       setLoadingDisponibles(true)
@@ -96,16 +115,11 @@ export default function RecepcionPage() {
     cargarCotizacionesDisponibles()
   }
 
-  // Seleccionar una cotización y crear la primera orden de servicio
   async function handleSeleccionarCotizacion(cot: CotizacionRecepcion) {
     try {
       setCreandoOrden(cot.cot_id_int)
-      const nuevaOrden = await crearOrdenServicioParaCotizacion(
-        cot.cot_id_int,
-        cot.per_id_int
-      )
+      await crearOrdenServicioParaCotizacion(cot.cot_id_int, cot.per_id_int)
       setShowSeleccionDialog(false)
-      // Navegar directamente a la cotización (que ahora tiene su primera orden)
       router.push(`/admin/recepcion/${cot.cot_id_int}`)
     } catch (error) {
       console.error("Error creando orden de servicio:", error)
@@ -114,24 +128,22 @@ export default function RecepcionPage() {
     }
   }
 
-  // Filtrar lista principal
   const cotizacionesFiltradas = useMemo(() => {
     if (!busqueda) return cotizaciones
     const term = busqueda.toLowerCase()
     return cotizaciones.filter(cot => {
       const nombre = obtenerNombrePersona(cot.persona).toLowerCase()
-      const num = (cot.cot_num_vac || '').toLowerCase()
+      const num = (cot.cot_num_vac || "").toLowerCase()
       return nombre.includes(term) || num.includes(term)
     })
   }, [cotizaciones, busqueda])
 
-  // Filtrar cotizaciones disponibles en el dialog
   const disponiblesFiltradas = useMemo(() => {
     if (!busquedaDisponible) return cotizacionesDisponibles
     const term = busquedaDisponible.toLowerCase()
     return cotizacionesDisponibles.filter(cot => {
       const nombre = obtenerNombrePersona(cot.persona).toLowerCase()
-      const num = (cot.cot_num_vac || '').toLowerCase()
+      const num = (cot.cot_num_vac || "").toLowerCase()
       return nombre.includes(term) || num.includes(term)
     })
   }, [cotizacionesDisponibles, busquedaDisponible])
@@ -146,39 +158,26 @@ export default function RecepcionPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-4">
+      {/* Acciones */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <FlaskConical className="h-7 w-7 text-emerald-600" />
-            Recepción de Muestras
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Cotizaciones con órdenes de servicio activas. Seleccione una para gestionar sus ingresos.
-          </p>
-        </div>
+        <p className="text-muted-foreground text-sm">
+          Cotizaciones con órdenes de servicio activas. Seleccione una para gestionar sus ingresos.
+        </p>
         <div className="flex gap-2 shrink-0">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={cargarCotizaciones}
-            disabled={loading}
-          >
+          <GuiaUso />
+          <Button variant="outline" size="sm" onClick={cargarCotizaciones} disabled={loading}>
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Actualizar
           </Button>
-          <Button
-            className="bg-emerald-600 hover:bg-emerald-700 text-white"
-            onClick={handleAbrirDialog}
-          >
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={handleAbrirDialog}>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Ingreso
           </Button>
         </div>
       </div>
 
-      {/* Filtro de búsqueda */}
+      {/* Búsqueda */}
       <Card>
         <CardContent className="pt-4 pb-4">
           <div className="relative">
@@ -193,7 +192,7 @@ export default function RecepcionPage() {
         </CardContent>
       </Card>
 
-      {/* Tabla principal: cotizaciones con órdenes */}
+      {/* Tabla */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
@@ -308,7 +307,7 @@ export default function RecepcionPage() {
         </CardContent>
       </Card>
 
-      {/* Dialog: Seleccionar cotización para nuevo ingreso */}
+      {/* Dialog seleccion */}
       <Dialog open={showSeleccionDialog} onOpenChange={setShowSeleccionDialog}>
         <DialogContent className="sm:max-w-2xl max-h-[80vh] flex flex-col">
           <DialogHeader>
@@ -321,7 +320,6 @@ export default function RecepcionPage() {
             </DialogDescription>
           </DialogHeader>
 
-          {/* Buscador dentro del dialog */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -333,7 +331,6 @@ export default function RecepcionPage() {
             />
           </div>
 
-          {/* Lista de cotizaciones disponibles */}
           <div className="flex-1 overflow-y-auto min-h-0 -mx-6 px-6">
             {loadingDisponibles ? (
               <div className="space-y-3 py-4">
@@ -379,15 +376,8 @@ export default function RecepcionPage() {
                           <Users className="h-3 w-3" />
                           {obtenerNombrePersona(cot.persona)}
                         </span>
-                        <span>
-                          {formatDate(cot.cot_fec_emis_dt, { short: true })}
-                        </span>
-                        <span>
-                          {cot.detalle_cotizacion?.length || 0} producto(s)
-                        </span>
-                        <span className="font-mono">
-                          S/ {calcularTotal(cot)}
-                        </span>
+                        <span>{formatDate(cot.cot_fec_emis_dt, { short: true })}</span>
+                        <span>{cot.detalle_cotizacion?.length || 0} producto(s)</span>
                       </div>
                     </div>
                     <Button
@@ -415,6 +405,248 @@ export default function RecepcionPage() {
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+  )
+}
+
+// ─── Sección Documentos (reutiliza lógica de documentoLab) ──────────────────
+
+function DocumentosSection() {
+  const router = useRouter()
+  const [mainTab, setMainTab] = useState<"lista" | "crear">("lista")
+  const [descargando, setDescargando] = useState(false)
+
+  const {
+    areas, servicios, tiposDocumento, estadosDocumento, clientes,
+    catalogosLoading, documentosLoading, guardando,
+    documento, modoEdicion, activeTab, setActiveTab,
+    documentos, cargarDocumentos,
+    areaSeleccionada, setAreaSeleccionada,
+    filtroEstado, setFiltroEstado,
+    filtroBusqueda, setFiltroBusqueda,
+    seleccionarCliente, seleccionarArea, seleccionarServicio,
+    seleccionarTipoDocumento, seleccionarEstado,
+    agregarMuestra, actualizarMuestra, eliminarMuestra,
+    agregarResultado, actualizarResultado, eliminarResultado,
+    agregarNota, actualizarNota, eliminarNota,
+    agregarAgente, actualizarAgente, eliminarAgente,
+    agregarAnexo, actualizarAnexo, eliminarAnexo,
+    configCampos, configAnexos,
+    firmasDisponibles, agregarFirma, removerFirma,
+    guardarDocumento, cargarDocumentoParaEdicion, nuevoDocumento,
+    estadisticas,
+  } = useDocumentoLab()
+
+  useEffect(() => {
+    cargarDocumentos()
+  }, [cargarDocumentos])
+
+  const handleGuardar = async () => {
+    await guardarDocumento()
+  }
+
+  const handleVerDocumento = (documentoId: string) => {
+    cargarDocumentoParaEdicion(documentoId)
+    setMainTab("crear")
+  }
+
+  const handleEditarDocumento = (documentoId: string) => {
+    cargarDocumentoParaEdicion(documentoId)
+    setMainTab("crear")
+  }
+
+  const handleImprimirDocumento = (documentoId: string) => {
+    router.push(`/imprimir/documento-lab/${documentoId}`)
+  }
+
+  const handleDescargar = async () => {
+    setDescargando(true)
+    try {
+      await generarPdfDocumentoLab(documento)
+    } finally {
+      setDescargando(false)
+    }
+  }
+
+  const handleVolverALista = () => {
+    setMainTab("lista")
+    cargarDocumentos()
+  }
+
+  const stats = estadisticas()
+
+  if (mainTab === "crear") {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Button variant="outline" onClick={handleVolverALista}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver a la lista
+          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleGuardar} disabled={guardando || catalogosLoading}>
+              {guardando ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              Guardar
+            </Button>
+            {documento.id && !documento.id.startsWith("temp_") && (
+              <Button
+                variant="outline"
+                onClick={handleDescargar}
+                disabled={descargando || !documento.id || documento.id.startsWith("temp_")}
+              >
+                {descargando ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4 mr-2" />
+                )}
+                Descargar
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {catalogosLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabDocumentoLab)}>
+            <TabsList className="h-auto flex-wrap gap-1 justify-start">
+              <TabsTrigger value="informacion">Información</TabsTrigger>
+              <TabsTrigger value="muestras">Muestras ({documento.muestras.length})</TabsTrigger>
+              <TabsTrigger value="resultados">Resultados ({documento.resultados.length})</TabsTrigger>
+              <TabsTrigger value="agentes">Agentes ({documento.agentes.length})</TabsTrigger>
+              <TabsTrigger value="anexos">Anexos ({documento.anexos.length})</TabsTrigger>
+              <TabsTrigger value="firmas">Firmas ({documento.firmas?.length || 0})</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="informacion">
+              <InformacionDocumento
+                documento={documento} areas={areas} servicios={servicios}
+                tiposDocumento={tiposDocumento} estadosDocumento={estadosDocumento}
+                clientes={clientes} areaSeleccionada={areaSeleccionada}
+                onAreaChange={seleccionarArea} onServicioChange={seleccionarServicio}
+                onTipoDocumentoChange={seleccionarTipoDocumento}
+                onClienteChange={seleccionarCliente} onEstadoChange={seleccionarEstado}
+              />
+            </TabsContent>
+            <TabsContent value="muestras">
+              <MuestrasSection
+                muestras={documento.muestras} codigoDocumento={documento.codigo}
+                configCampos={configCampos} onAgregarMuestra={agregarMuestra}
+                onActualizarMuestra={actualizarMuestra} onEliminarMuestra={eliminarMuestra}
+              />
+            </TabsContent>
+            <TabsContent value="resultados">
+              <ResultadosSection
+                resultados={documento.resultados} muestras={documento.muestras}
+                servicioConfExtra={documento.servicioConfExtra}
+                onAgregarResultado={agregarResultado} onActualizarResultado={actualizarResultado}
+                onEliminarResultado={eliminarResultado}
+              />
+              <div className="mt-6">
+                <NotasResultadoSection
+                  notas={documento.notas} resultados={documento.resultados}
+                  onAgregarNota={agregarNota} onActualizarNota={actualizarNota}
+                  onEliminarNota={eliminarNota}
+                />
+              </div>
+            </TabsContent>
+            <TabsContent value="agentes">
+              <AgentesSection
+                agentes={documento.agentes} muestras={documento.muestras}
+                onAgregarAgente={agregarAgente} onActualizarAgente={actualizarAgente}
+                onEliminarAgente={eliminarAgente}
+              />
+            </TabsContent>
+            <TabsContent value="anexos">
+              <AnexosSection
+                anexos={documento.anexos} configAnexos={configAnexos}
+                onAgregarAnexo={agregarAnexo} onActualizarAnexo={actualizarAnexo}
+                onEliminarAnexo={eliminarAnexo}
+              />
+            </TabsContent>
+            <TabsContent value="firmas">
+              <FirmasSection
+                firmasAsignadas={documento.firmas || []} firmasDisponibles={firmasDisponibles}
+                onAgregarFirma={agregarFirma} onRemoverFirma={removerFirma}
+              />
+            </TabsContent>
+          </Tabs>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-muted-foreground text-sm">
+          Gestión de certificados, informes y otros documentos de laboratorio.
+        </p>
+        <Link href="/admin/documentoLab/configuracion">
+          <Button variant="outline">
+            <Settings className="h-4 w-4 mr-2" />
+            Configuración
+          </Button>
+        </Link>
+      </div>
+
+      <DocumentoLabStats total={stats.total} porEstado={stats.porEstado} />
+
+      <DocumentoLabList
+        documentos={documentos} areas={areas} estadosDocumento={estadosDocumento}
+        filtroEstado={filtroEstado} filtroBusqueda={filtroBusqueda}
+        areaSeleccionada={areaSeleccionada}
+        onFiltroEstadoChange={setFiltroEstado} onFiltroBusquedaChange={setFiltroBusqueda}
+        onAreaChange={setAreaSeleccionada} onVerDocumento={handleVerDocumento}
+        onEditarDocumento={handleEditarDocumento} onImprimirDocumento={handleImprimirDocumento}
+        onRefrescar={cargarDocumentos} loading={documentosLoading}
+      />
+    </div>
+  )
+}
+
+// ─── Página Principal ────────────────────────────────────────────────────────
+
+export default function RecepcionPage() {
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          <FlaskConical className="h-7 w-7 text-emerald-600" />
+          Recepción / Lab
+        </h1>
+        <p className="text-muted-foreground mt-1">
+          Gestión de ingresos de muestras y documentos de laboratorio.
+        </p>
+      </div>
+
+      <Tabs defaultValue="ordenes">
+        <TabsList>
+          <TabsTrigger value="ordenes" className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" />
+            Órdenes de Servicio
+          </TabsTrigger>
+          <TabsTrigger value="documentos" className="flex items-center gap-2">
+            <FileInput className="h-4 w-4" />
+            Documentos de Lab
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="ordenes" className="mt-4">
+          <OrdenesSection />
+        </TabsContent>
+
+        <TabsContent value="documentos" className="mt-4">
+          <DocumentosSection />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

@@ -12,6 +12,7 @@ export { FirmasSection } from './components/FirmasSection'
 export { DocumentoLabList } from './components/DocumentoLabList'
 export { DocumentoLabStats } from './components/DocumentoLabStats'
 export { PreviewSection } from './components/PreviewSection'
+export { GuiaUso } from './components/GuiaUso'
 
 // Types
 export type {

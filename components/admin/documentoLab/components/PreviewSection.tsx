@@ -424,9 +424,7 @@ export function PreviewSection({
 }: PreviewSectionProps) {
   const router = useRouter()
   
-  const esValido = documento.cliente.razonSocial && 
-                   documento.muestras.length > 0 && 
-                   documento.resultados.length > 0
+  const esValido = !!documento.cliente.razonSocial
 
   // Función para abrir la vista de impresión en nueva pestaña
   const handleAbrirVistaImpresion = () => {
@@ -478,8 +476,6 @@ export function PreviewSection({
               </p>
               <ul className="list-disc list-inside text-yellow-700 mt-1 space-y-0.5">
                 {!documento.cliente.razonSocial && <li>Datos del cliente</li>}
-                {documento.muestras.length === 0 && <li>Al menos una muestra</li>}
-                {documento.resultados.length === 0 && <li>Al menos un resultado</li>}
               </ul>
             </div>
           )}

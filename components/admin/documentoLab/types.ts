@@ -26,7 +26,7 @@ export type {
 }
 
 // Tipos para la UI
-export type TabDocumentoLab = 'informacion' | 'muestras' | 'resultados' | 'agentes' | 'anexos' | 'firmas' | 'preview'
+export type TabDocumentoLab = 'informacion' | 'muestras' | 'resultados' | 'agentes' | 'anexos' | 'firmas'
 export type TabName = 'lista' | 'crear' | 'cliente' | 'muestras' | 'resultados' | 'firmas' | 'preview'
 export type EstadoDocumentoUI = 'borrador' | 'pendiente' | 'en_proceso' | 'emitido' | 'anulado'
 

@@ -44,18 +44,6 @@ export function FirmaStats({ stats }: FirmaStatsProps) {
           </div>
         </CardContent>
       </Card>
-
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center">
-            <CalendarPlus className="h-8 w-8 text-purple-600" />
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Nuevas este mes</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.nuevasEsteMes}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

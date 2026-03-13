@@ -37,7 +37,6 @@ import {
   ClipboardList,
   TestTubes,
   Loader2,
-  ExternalLink,
 } from "lucide-react"
 import { formatDate } from "@/utils"
 import {
@@ -54,16 +53,15 @@ import type {
   DocumentoLabDatabase,
 } from "@/types/database"
 
-// Obtener color para estado del documento
 function obtenerColorEstadoDoc(nombre: string | null): string {
-  if (!nombre) return "bg-gray-500/20 text-gray-400 border-gray-500/30"
+  if (!nombre) return "bg-gray-100 text-gray-600 border-gray-300"
   const n = nombre.toLowerCase()
-  if (n.includes("borrador")) return "bg-gray-500/20 text-gray-400 border-gray-500/30"
-  if (n.includes("pendiente")) return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
-  if (n.includes("proceso")) return "bg-blue-500/20 text-blue-400 border-blue-500/30"
-  if (n.includes("emitido") || n.includes("final")) return "bg-green-500/20 text-green-400 border-green-500/30"
-  if (n.includes("anulado")) return "bg-red-500/20 text-red-400 border-red-500/30"
-  return "bg-gray-500/20 text-gray-400 border-gray-500/30"
+  if (n.includes("borrador")) return "bg-gray-100 text-gray-600 border-gray-300"
+  if (n.includes("pendiente")) return "bg-yellow-100 text-yellow-700 border-yellow-300"
+  if (n.includes("proceso")) return "bg-blue-100 text-blue-700 border-blue-300"
+  if (n.includes("emitido") || n.includes("final")) return "bg-green-100 text-green-700 border-green-300"
+  if (n.includes("anulado")) return "bg-red-100 text-red-700 border-red-300"
+  return "bg-gray-100 text-gray-600 border-gray-300"
 }
 
 interface AreaConServicios extends AreaDatabase {
@@ -76,11 +74,9 @@ export default function OrdenServicioDetallePage() {
   const cotizacionId = params.cotizacionId as string
   const ordenId = params.ordenId as string
 
-  // Data
   const [orden, setOrden] = useState<OrdenServicioConDocumentos | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Dialog para crear documento
   const [showCrearDialog, setShowCrearDialog] = useState(false)
   const [areas, setAreas] = useState<AreaConServicios[]>([])
   const [tiposDocumento, setTiposDocumento] = useState<TipoDocumentoDatabase[]>([])
@@ -106,7 +102,6 @@ export default function OrdenServicioDetallePage() {
     cargarDatos()
   }, [cargarDatos])
 
-  // Cargar catálogos cuando se abre el dialog
   async function cargarCatalogos() {
     if (catalogosCargados) return
     try {
@@ -119,14 +114,12 @@ export default function OrdenServicioDetallePage() {
     }
   }
 
-  // Servicios filtrados por área seleccionada
   const serviciosFiltrados = useMemo(() => {
     if (!selectedAreaId) return []
     const area = areas.find(a => a.area_id_int === selectedAreaId)
     return area?.servicios || []
   }, [areas, selectedAreaId])
 
-  // Reset servicio when area changes
   useEffect(() => {
     setSelectedServicioId("")
   }, [selectedAreaId])
@@ -135,13 +128,12 @@ export default function OrdenServicioDetallePage() {
     if (!selectedServicioId || !selectedTipoDocId) return
     try {
       setCreandoDoc(true)
-      const nuevoDoc = await crearDocumentoLabParaOrden({
+      await crearDocumentoLabParaOrden({
         ord_serv_id_int: ordenId,
         serv_id_int: selectedServicioId,
         tip_doc_id_int: selectedTipoDocId,
       })
       setShowCrearDialog(false)
-      // Recargar datos para ver el nuevo documento
       await cargarDatos()
     } catch (error) {
       console.error("Error creando documento:", error)
@@ -159,7 +151,6 @@ export default function OrdenServicioDetallePage() {
   }
 
   function navegarADocumento(docId: string, modo: "ver" | "editar") {
-    // Navigate to the existing documentoLab page with query params
     router.push(`/admin/documentoLab?docId=${docId}&modo=${modo}&returnTo=/admin/recepcion/${cotizacionId}/orden/${ordenId}`)
   }
 
@@ -169,21 +160,21 @@ export default function OrdenServicioDetallePage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-8 w-72 bg-gray-700/30" />
-        <Skeleton className="h-32 w-full bg-gray-700/30" />
-        <Skeleton className="h-64 w-full bg-gray-700/30" />
+        <Skeleton className="h-8 w-72" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-64 w-full" />
       </div>
     )
   }
 
   if (!orden) {
     return (
-      <div className="text-center py-20 text-gray-400">
+      <div className="text-center py-20 text-muted-foreground">
         <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-30" />
         <p>Orden de servicio no encontrada</p>
         <Button
           variant="ghost"
-          className="mt-4 text-emerald-400"
+          className="mt-4 text-emerald-600"
           onClick={() => router.push(`/admin/recepcion/${cotizacionId}`)}
         >
           <ArrowLeft className="h-4 w-4 mr-2" /> Volver a cotización
@@ -198,25 +189,22 @@ export default function OrdenServicioDetallePage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink
-              href="/admin/recepcion"
-              className="text-gray-400 hover:text-white"
-            >
-              Recepción
+            <BreadcrumbLink href="/admin/recepcion" className="text-muted-foreground hover:text-foreground">
+              Recepción / Lab
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator className="text-gray-600" />
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
               href={`/admin/recepcion/${cotizacionId}`}
-              className="text-gray-400 hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               Cotización {orden.cotizacion?.cot_num_vac || cotizacionId.slice(0, 8)}
             </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator className="text-gray-600" />
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-white">
+            <BreadcrumbPage className="text-foreground font-medium">
               Orden de Servicio
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -229,46 +217,46 @@ export default function OrdenServicioDetallePage() {
           <Button
             variant="ghost"
             size="icon"
-            className="text-gray-400 hover:text-white"
+            className="text-muted-foreground hover:text-foreground"
             onClick={() => router.push(`/admin/recepcion/${cotizacionId}`)}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-              <ClipboardList className="h-6 w-6 text-emerald-400" />
+            <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <ClipboardList className="h-6 w-6 text-emerald-600" />
               Orden de Servicio
             </h1>
-            <p className="text-gray-400 text-sm">{nombreCliente}</p>
+            <p className="text-muted-foreground text-sm">{nombreCliente}</p>
           </div>
         </div>
       </div>
 
       {/* Info de la orden */}
-      <Card className="bg-[#1e1e3a] border-gray-700">
+      <Card>
         <CardContent className="pt-5 pb-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex items-start gap-3">
-              <Calendar className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+              <Calendar className="h-5 w-5 text-emerald-600 mt-0.5 shrink-0" />
               <div>
-                <span className="text-gray-400 block text-xs">Fecha de Recepción</span>
-                <span className="text-white text-sm">
+                <span className="text-muted-foreground block text-xs">Fecha de Recepción</span>
+                <span className="text-foreground text-sm">
                   {formatDate(orden.ord_serv_fec_recep_dt, { includeTime: true })}
                 </span>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <User className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+              <User className="h-5 w-5 text-emerald-600 mt-0.5 shrink-0" />
               <div>
-                <span className="text-gray-400 block text-xs">Cliente</span>
-                <span className="text-white text-sm">{nombreCliente}</span>
+                <span className="text-muted-foreground block text-xs">Cliente</span>
+                <span className="text-foreground text-sm">{nombreCliente}</span>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <FileText className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+              <FileText className="h-5 w-5 text-emerald-600 mt-0.5 shrink-0" />
               <div>
-                <span className="text-gray-400 block text-xs">Cotización</span>
-                <span className="text-white text-sm">
+                <span className="text-muted-foreground block text-xs">Cotización</span>
+                <span className="text-foreground text-sm">
                   {orden.cotizacion?.cot_num_vac || "—"}
                 </span>
               </div>
@@ -278,15 +266,15 @@ export default function OrdenServicioDetallePage() {
       </Card>
 
       {/* Documentos de Laboratorio */}
-      <Card className="bg-[#1e1e3a] border-gray-700">
+      <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <CardTitle className="text-white text-lg flex items-center gap-2">
-                <TestTubes className="h-5 w-5 text-emerald-400" />
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TestTubes className="h-5 w-5 text-emerald-600" />
                 Documentos de Laboratorio
               </CardTitle>
-              <CardDescription className="text-gray-400 mt-1">
+              <CardDescription className="mt-1">
                 Informes y certificados generados para esta orden.
                 {documentos.length > 0 && ` ${documentos.length} documento(s).`}
               </CardDescription>
@@ -303,7 +291,7 @@ export default function OrdenServicioDetallePage() {
         </CardHeader>
         <CardContent>
           {documentos.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
+            <div className="text-center py-12 text-muted-foreground">
               <FlaskConical className="h-12 w-12 mx-auto mb-3 opacity-30" />
               <p>No hay documentos de laboratorio</p>
               <p className="text-sm mt-1">
@@ -314,46 +302,43 @@ export default function OrdenServicioDetallePage() {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-gray-700 hover:bg-transparent">
-                    <TableHead className="text-gray-400">Código</TableHead>
-                    <TableHead className="text-gray-400">Tipo</TableHead>
-                    <TableHead className="text-gray-400">Área / Servicio</TableHead>
-                    <TableHead className="text-gray-400">Fecha Emisión</TableHead>
-                    <TableHead className="text-gray-400 text-center">Muestras</TableHead>
-                    <TableHead className="text-gray-400">Estado</TableHead>
-                    <TableHead className="text-gray-400 text-right">Acciones</TableHead>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead>Código</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Área / Servicio</TableHead>
+                    <TableHead>Fecha Emisión</TableHead>
+                    <TableHead className="text-center">Muestras</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {documentos.map((doc: DocumentoLabDatabase) => (
-                    <TableRow
-                      key={doc.doc_lab_id_int}
-                      className="border-gray-700/50 hover:bg-[#2a2a4a]/50"
-                    >
-                      <TableCell className="text-white font-mono text-sm">
+                    <TableRow key={doc.doc_lab_id_int}>
+                      <TableCell className="font-mono text-sm font-medium">
                         {doc.doc_lab_cod_vac || "—"}
                       </TableCell>
                       <TableCell>
                         <Badge
                           variant="outline"
-                          className="bg-indigo-500/10 text-indigo-400 border-indigo-500/30"
+                          className="bg-indigo-50 text-indigo-700 border-indigo-200"
                         >
                           {doc.tipo_documento?.tip_doc_nomb_vac || "—"}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          <span className="text-gray-300">
+                          <span className="text-foreground">
                             {doc.servicio?.serv_nombre_vac || "—"}
                           </span>
                           {doc.servicio?.area && (
-                            <span className="text-gray-500 text-xs block">
+                            <span className="text-muted-foreground text-xs block">
                               {doc.servicio.area.area_nombre_vac}
                             </span>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="text-gray-300 text-sm">
+                      <TableCell className="text-muted-foreground text-sm">
                         {doc.doc_lab_emision_dt
                           ? formatDate(doc.doc_lab_emision_dt, { short: true })
                           : "Sin emitir"}
@@ -361,7 +346,7 @@ export default function OrdenServicioDetallePage() {
                       <TableCell className="text-center">
                         <Badge
                           variant="outline"
-                          className="bg-purple-500/10 text-purple-400 border-purple-500/30"
+                          className="bg-purple-50 text-purple-700 border-purple-200"
                         >
                           {doc.muestras?.length || 0}
                         </Badge>
@@ -381,7 +366,7 @@ export default function OrdenServicioDetallePage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                             onClick={() => navegarADocumento(doc.doc_lab_id_int, "ver")}
                           >
                             <Eye className="h-4 w-4 mr-1" /> Ver
@@ -389,7 +374,7 @@ export default function OrdenServicioDetallePage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
+                            className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                             onClick={() => navegarADocumento(doc.doc_lab_id_int, "editar")}
                           >
                             <Edit className="h-4 w-4 mr-1" /> Editar
@@ -407,23 +392,22 @@ export default function OrdenServicioDetallePage() {
 
       {/* Dialog para crear documento */}
       <Dialog open={showCrearDialog} onOpenChange={setShowCrearDialog}>
-        <DialogContent className="bg-[#1e1e3a] border-gray-700 sm:max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-white">Crear Documento de Laboratorio</DialogTitle>
-            <DialogDescription className="text-gray-400">
+            <DialogTitle>Crear Documento de Laboratorio</DialogTitle>
+            <DialogDescription>
               Seleccione el área, servicio y tipo de documento a generar.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-2">
-            {/* Área */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Área</Label>
+              <Label>Área</Label>
               <Select value={selectedAreaId} onValueChange={setSelectedAreaId}>
-                <SelectTrigger className="bg-[#2a2a4a] border-gray-600 text-white">
+                <SelectTrigger>
                   <SelectValue placeholder="Seleccionar área..." />
                 </SelectTrigger>
-                <SelectContent className="bg-[#2a2a4a] border-gray-600">
+                <SelectContent>
                   {areas.map((area) => (
                     <SelectItem key={area.area_id_int} value={area.area_id_int}>
                       {area.area_nombre_vac || "Sin nombre"}
@@ -433,18 +417,17 @@ export default function OrdenServicioDetallePage() {
               </Select>
             </div>
 
-            {/* Servicio */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Servicio</Label>
+              <Label>Servicio</Label>
               <Select
                 value={selectedServicioId}
                 onValueChange={setSelectedServicioId}
                 disabled={!selectedAreaId}
               >
-                <SelectTrigger className="bg-[#2a2a4a] border-gray-600 text-white">
+                <SelectTrigger>
                   <SelectValue placeholder={selectedAreaId ? "Seleccionar servicio..." : "Primero seleccione un área"} />
                 </SelectTrigger>
-                <SelectContent className="bg-[#2a2a4a] border-gray-600">
+                <SelectContent>
                   {serviciosFiltrados.map((serv) => (
                     <SelectItem key={serv.serv_id_int} value={serv.serv_id_int}>
                       {serv.serv_nombre_vac || "Sin nombre"}
@@ -454,19 +437,18 @@ export default function OrdenServicioDetallePage() {
               </Select>
             </div>
 
-            {/* Tipo de Documento */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Tipo de Documento</Label>
+              <Label>Tipo de Documento</Label>
               <Select value={selectedTipoDocId} onValueChange={setSelectedTipoDocId}>
-                <SelectTrigger className="bg-[#2a2a4a] border-gray-600 text-white">
+                <SelectTrigger>
                   <SelectValue placeholder="Seleccionar tipo..." />
                 </SelectTrigger>
-                <SelectContent className="bg-[#2a2a4a] border-gray-600">
+                <SelectContent>
                   {tiposDocumento.map((tipo) => (
                     <SelectItem key={tipo.tip_doc_id_int} value={tipo.tip_doc_id_int}>
                       {tipo.tip_doc_nomb_vac || "Sin nombre"}
                       {tipo.tip_doc_cod_vac && (
-                        <span className="text-gray-500 ml-1">({tipo.tip_doc_cod_vac})</span>
+                        <span className="text-muted-foreground ml-1">({tipo.tip_doc_cod_vac})</span>
                       )}
                     </SelectItem>
                   ))}
@@ -479,7 +461,6 @@ export default function OrdenServicioDetallePage() {
             <Button
               variant="ghost"
               onClick={() => setShowCrearDialog(false)}
-              className="text-gray-400 hover:text-white"
             >
               Cancelar
             </Button>

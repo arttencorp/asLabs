@@ -16,6 +16,20 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { ArrowLeft, Plus, Pencil, Trash2, Loader2, Settings, Building2, FileText, CheckCircle2, FlaskConical, Paperclip, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
+
+function formatFecha(value: string | null | undefined): string {
+  if (!value) return '-'
+  const d = new Date(value)
+  return d.toLocaleString('es-PE', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).replace('.', '.')
+}
 import {
   obtenerAreas,
   crearArea,
@@ -232,19 +246,19 @@ function AreasManager() {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
+              <TableRow> 
                 <TableHead>Nombre</TableHead>
                 <TableHead>Creado</TableHead>
+                <TableHead>Actualizado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {areas.map((area) => (
-                <TableRow key={area.area_id_int}>
-                  <TableCell className="font-mono">{area.area_id_int}</TableCell>
+                <TableRow key={area.area_id_int}> 
                   <TableCell className="font-medium">{area.area_nombre_vac}</TableCell>
-                  <TableCell>{new Date(area.area_created_dt).toLocaleDateString()}</TableCell>
+                  <TableCell>{formatFecha(area.area_created_dt)}</TableCell>
+                  <TableCell>{formatFecha(area.area_updt_dt)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(area)}>
                       <Pencil className="h-4 w-4" />
@@ -482,22 +496,24 @@ function ServiciosManager() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Área</TableHead>
                 <TableHead>Costo</TableHead>
+                <TableHead>Creado</TableHead>
+                <TableHead>Actualizado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {serviciosFiltrados.map((servicio) => (
-                <TableRow key={servicio.serv_id_int}>
-                  <TableCell className="font-mono">{servicio.serv_id_int}</TableCell>
+                <TableRow key={servicio.serv_id_int}> 
                   <TableCell className="font-medium">{servicio.serv_nombre_vac}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{getAreaNombre(servicio.area_id_int)}</Badge>
                   </TableCell>
                   <TableCell>Bs. {servicio.serv_costo_int?.toLocaleString() || 0}</TableCell>
+                  <TableCell>{formatFecha(servicio.serv_created_dt)}</TableCell>
+                  <TableCell>{formatFecha(servicio.serv_updt_dt)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(servicio)}>
                       <Pencil className="h-4 w-4" />
@@ -684,23 +700,23 @@ function TiposDocumentoManager() {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
+              <TableRow> 
                 <TableHead>Código</TableHead>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Creado</TableHead>
+                <TableHead>Actualizado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {tipos.map((tipo) => (
-                <TableRow key={tipo.tip_doc_id_int}>
-                  <TableCell className="font-mono">{tipo.tip_doc_id_int}</TableCell>
+                <TableRow key={tipo.tip_doc_id_int}> 
                   <TableCell>
                     <Badge variant="secondary">{tipo.tip_doc_cod_vac}</Badge>
                   </TableCell>
                   <TableCell className="font-medium">{tipo.tip_doc_nomb_vac}</TableCell>
-                  <TableCell>{new Date(tipo.tip_doc_created_dt).toLocaleDateString()}</TableCell>
+                  <TableCell>{formatFecha(tipo.tip_doc_created_dt)}</TableCell>
+                  <TableCell>{formatFecha(tipo.tip_doc_updt_dt)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(tipo)}>
                       <Pencil className="h-4 w-4" />
@@ -882,18 +898,17 @@ function EstadosDocumentoManager() {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
+              <TableRow> 
                 <TableHead>Nombre</TableHead>
                 <TableHead>Orden</TableHead>
                 <TableHead>Creado</TableHead>
+                <TableHead>Actualizado</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {estados.map((estado) => (
                 <TableRow key={estado.est_doc_id_int}>
-                  <TableCell className="font-mono">{estado.est_doc_id_int}</TableCell>
                   <TableCell className="font-medium">{estado.est_doc_nomb_vac}</TableCell>
                   <TableCell>
                     {estado.est_doc_ord_int != null ? (
@@ -902,7 +917,8 @@ function EstadosDocumentoManager() {
                       <span className="text-muted-foreground text-sm">—</span>
                     )}
                   </TableCell>
-                  <TableCell>{new Date(estado.est_doc_created_dt).toLocaleDateString()}</TableCell>
+                  <TableCell>{formatFecha(estado.est_doc_created_dt)}</TableCell>
+                  <TableCell>{formatFecha(estado.est_doc_updt_dt)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(estado)}>
                       <Pencil className="h-4 w-4" />

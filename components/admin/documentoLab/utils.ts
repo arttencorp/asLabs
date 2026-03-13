@@ -367,14 +367,6 @@ export function validarDocumentoParaEmision(documento: DocumentoLabUI): { valido
     errores.push('Debe seleccionar un servicio')
   }
   
-  if (documento.muestras.length === 0) {
-    errores.push('Debe agregar al menos una muestra')
-  }
-  
-  if (documento.resultados.length === 0) {
-    errores.push('Debe agregar al menos un resultado')
-  }
-  
   // Verificar que las muestras tengan datos mínimos
   documento.muestras.forEach((muestra, index) => {
     if (!muestra.matriz) {

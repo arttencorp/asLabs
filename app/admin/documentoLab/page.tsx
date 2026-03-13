@@ -7,7 +7,7 @@ import {
   ArrowLeft, 
   Plus, 
   Save, 
-  Printer,
+  Download,
   Loader2,
   Settings
 } from 'lucide-react'
@@ -24,14 +24,15 @@ import {
   FirmasSection,
   DocumentoLabList,
   DocumentoLabStats,
-  PreviewSection
 } from '@/components/admin/documentoLab'
 import type { TabDocumentoLab } from '@/components/admin/documentoLab'
+import { generarPdfDocumentoLab } from '@/utils/generarPdfDocumentoLab'
 
 export default function DocumentoLabPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [mainTab, setMainTab] = useState<'lista' | 'crear'>('lista')
+  const [descargando, setDescargando] = useState(false)
   
   const {
     // Catálogos
@@ -127,9 +128,6 @@ export default function DocumentoLabPage() {
     if (docId) {
       cargarDocumentoParaEdicion(docId)
       setMainTab('crear')
-      if (modo === 'ver') {
-        setActiveTab('preview')
-      }
     }
     // Solo ejecutar cuando cambian los searchParams
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,7 +142,6 @@ export default function DocumentoLabPage() {
   const handleVerDocumento = (documentoId: string) => {
     cargarDocumentoParaEdicion(documentoId)
     setMainTab('crear')
-    setActiveTab('preview')
   }
 
   const handleEditarDocumento = (documentoId: string) => {
@@ -154,6 +151,15 @@ export default function DocumentoLabPage() {
 
   const handleImprimirDocumento = (documentoId: string) => {
     router.push(`/imprimir/documento-lab/${documentoId}`)
+  }
+
+  const handleDescargar = async () => {
+    setDescargando(true)
+    try {
+      await generarPdfDocumentoLab(documento)
+    } finally {
+      setDescargando(false)
+    }
   }
 
   const handleGuardar = async () => {
@@ -188,20 +194,16 @@ export default function DocumentoLabPage() {
           </p>
         </div>
         
-        {mainTab === 'lista' && (
-          <div className="flex gap-2">
+        <div className="flex gap-2">
+          {mainTab === 'lista' && (
             <Link href="/admin/documentoLab/configuracion">
               <Button variant="outline">
                 <Settings className="h-4 w-4 mr-2" />
                 Configuración
               </Button>
             </Link>
-            {/* <Button onClick={handleNuevoDocumento}>
-              <Plus className="h-4 w-4 mr-2" />
-              Nuevo Documento
-            </Button>*/}
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Main Tabs */}
@@ -251,6 +253,7 @@ export default function DocumentoLabPage() {
 
             <div className="flex items-center gap-2">
               <Button
+                className="text-white"
                 onClick={handleGuardar}
                 disabled={guardando || catalogosLoading}
               >
@@ -262,15 +265,18 @@ export default function DocumentoLabPage() {
                 Guardar
               </Button>
               
-              {documento.id && !documento.id.startsWith('temp_') && (
-                <Button 
-                  variant="outline"
-                  onClick={() => handleImprimirDocumento(documento.id)}
-                >
-                  <Printer className="h-4 w-4 mr-2" />
-                  Imprimir
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                onClick={handleDescargar}
+                disabled={descargando || !documento.id || documento.id.startsWith('temp_')}
+              >
+                {descargando ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4 mr-2" />
+                )}
+                Descargar
+              </Button>
             </div>
           </div>
 
@@ -284,7 +290,7 @@ export default function DocumentoLabPage() {
               value={activeTab} 
               onValueChange={(v) => setActiveTab(v as TabDocumentoLab)}
             >
-              <TabsList className="grid w-full grid-cols-7">
+              <TabsList className="h-auto flex-wrap gap-1 justify-start">
                 <TabsTrigger value="informacion">Información</TabsTrigger>
                 <TabsTrigger value="muestras">
                   Muestras ({documento.muestras.length})
@@ -300,9 +306,6 @@ export default function DocumentoLabPage() {
                 </TabsTrigger>
                 <TabsTrigger value="firmas">
                   Firmas ({documento.firmas?.length || 0})
-                </TabsTrigger>
-                <TabsTrigger value="preview" className="bg-green-50 data-[state=active]:bg-green-100">
-                  Preview
                 </TabsTrigger>
               </TabsList>
 
@@ -390,14 +393,6 @@ export default function DocumentoLabPage() {
                 />
               </TabsContent>
 
-              {/* Tab Preview */}
-              <TabsContent value="preview">
-                <PreviewSection
-                  documento={documento}
-                  onImprimir={() => documento.id && handleImprimirDocumento(documento.id)}
-                  onVolver={() => setActiveTab('informacion')}
-                />
-              </TabsContent>
             </Tabs>
           )}
         </TabsContent>
