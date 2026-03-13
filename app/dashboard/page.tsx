@@ -1,6 +1,5 @@
 "use client"
 import { useState } from "react"
-import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import DocumentSelector from "./components/document-selector"
@@ -9,7 +8,6 @@ import ServiceCard from "./components/service-card"
 import DocumentForm from "./components/document-form"
 import { serviceCatalog } from "./data/catalog"
 import type { DocumentType, ServiceArea, Service } from "./types"
-import { Search } from "lucide-react"
 
 export default function DashboardPage() {
   const [documentType, setDocumentType] = useState<DocumentType | null>(null)
@@ -31,18 +29,9 @@ export default function DashboardPage() {
           <>
             {/* Hero Section */}
             <section className="py-8 lg:py-12 bg-white border-b">
-              <div className="container mx-auto px-4 flex items-center justify-between">
-                <div>
-                  <h1 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">Emisión de Documentos</h1>
-                  <p className="text-gray-600 font-serif">Genera certificados e informes de análisis profesionales</p>
-                </div>
-                <Link 
-                  href="/buscar-informe"
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
-                >
-                  <Search size={20} />
-                  Buscar Informe
-                </Link>
+              <div className="container mx-auto px-4">
+                <h1 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">Emisión de Documentos</h1>
+                <p className="text-gray-600 font-serif">Genera certificados e informes de análisis profesionales</p>
               </div>
             </section>
 
