@@ -2,13 +2,13 @@ import type { Metadata } from "next"
 import { constructMetadata } from "@/lib/metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import AboutUsHeader from "@/components/about-us/about-us-header"
-import AboutUsStats from "@/components/about-us/about-us-stats"
-import AboutUsImpact from "@/components/about-us/about-us-impact"
-import AboutUsFramework from "@/components/about-us/about-us-framework"
-import AboutUsValues from "@/components/about-us/about-us-values"
-import AboutUsMindsets from "@/components/about-us/about-us-mindsets"
-import AboutUsHeadquarters from "@/components/about-us/about-us-headquarters"
+import AboutHeader from "@/components/about-us/about-header"
+import AboutNavigation from "@/components/about-us/about-navigation"
+import AboutMission from "@/components/about-us/about-mission"
+import AboutValues from "@/components/about-us/about-values"
+import AboutOrganigram from "@/components/about-us/about-organigram"
+import AboutImpact from "@/components/about-us/about-impact"
+import AboutCTA from "@/components/about-us/about-cta"
 
 export const metadata: Metadata = constructMetadata({
   title: "Sobre Nosotros",
@@ -19,18 +19,20 @@ export const metadata: Metadata = constructMetadata({
   image: "/about-us-preview.png",
 })
 
-export default function SobreNosotros() {
+function SobreNosotrosPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
-      <AboutUsHeader />
-      <AboutUsStats />
-      <AboutUsImpact />
-      <AboutUsFramework />
-      <AboutUsValues />
-      <AboutUsMindsets />
-      <AboutUsHeadquarters />
+      <AboutHeader />
+      <AboutNavigation />
+      <AboutMission />
+      <AboutValues />
+      <AboutOrganigram />
+      <AboutImpact />
+      <AboutCTA />
       <Footer />
     </div>
   )
 }
+
+export default SobreNosotrosPage
