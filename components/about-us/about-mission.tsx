@@ -14,28 +14,28 @@ export default function AboutMission() {
                 Fundación
               </p>
               <h2 className="text-5xl font-serif font-bold text-gray-900 mb-6">Nuestra Historia</h2>
-              <p className="text-lg text-gray-600 font-light leading-relaxed mb-4">
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 Fundada en 2015, AS Laboratorios nació como una visión de aplicar biotecnología avanzada 
                 al servicio de la agricultura peruana. Comenzamos como un pequeño laboratorio especializado 
                 en cultivo in vitro de plantas de banano.
               </p>
-              <p className="text-lg text-gray-600 font-light leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Hoy somos una empresa integral con soluciones en biotecnología vegetal, control biológico 
                 sostenible, diagnóstico agrícola y educación científica de excelencia.
               </p>
             </div>
 
             <div className="pt-8 border-t border-gray-200 space-y-4">
-              <h3 className="text-2xl font-light text-gray-900">Misión</h3>
-              <p className="text-lg text-gray-600 font-light leading-relaxed">
+              <h3 className="text-2xl font-bold text-gray-900">Misión</h3>
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Desarrollar y proveer soluciones biotecnológicas innovadoras y sostenibles para la agricultura 
                 peruana, contribuyendo a la seguridad alimentaria, conservación ambiental y formación de nuevos científicos.
               </p>
             </div>
 
             <div className="pt-8 border-t border-gray-200 space-y-4">
-              <h3 className="text-2xl font-light text-gray-900">Visión</h3>
-              <p className="text-lg text-gray-600 font-light leading-relaxed">
+              <h3 className="text-2xl font-bold text-gray-900">Visión</h3>
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Ser líderes en biotecnología agrícola en América Latina, reconocidos por nuestra investigación 
                 de calidad, innovación continua y compromiso con la sostenibilidad.
               </p>

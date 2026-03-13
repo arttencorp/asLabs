@@ -3,19 +3,19 @@
 export default function AboutImpact() {
   const impacts = [
     {
-      number: "9+",
+      number: "27",
       label: "Años",
-      description: "Innovando en biotecnología agrícola",
-    },
-    {
-      number: "50+",
-      label: "Universidades",
-      description: "Confían en nuestros materiales educativos",
+      description: "Trayectoria en biotecnología agrícola",
     },
     {
       number: "1000+",
       label: "Hectáreas",
       description: "Donde se implementan nuestras soluciones",
+    },
+    {
+      number: "30+",
+      label: "Profesionales",
+      description: "Equipo dedicado a la excelencia",
     },
     {
       number: "100%",
@@ -32,7 +32,7 @@ export default function AboutImpact() {
             Resultados
           </p>
           <h2 className="text-5xl font-serif font-bold text-white mb-6">Nuestro Impacto</h2>
-          <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-green-50 max-w-2xl mx-auto">
             Contribuciones concretas a la agricultura sostenible y la educación científica en el Perú
           </p>
         </div>

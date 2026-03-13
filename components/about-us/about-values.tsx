@@ -32,7 +32,7 @@ export default function AboutValues() {
             Principios
           </p>
           <h2 className="text-5xl font-serif font-bold text-gray-900 mb-6">Nuestros Valores</h2>
-          <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto font-medium">
             Los principios fundamentales que guían cada decisión y acción en AS Laboratorios
           </p>
         </div>
