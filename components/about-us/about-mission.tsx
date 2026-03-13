@@ -10,10 +10,10 @@ export default function AboutMission() {
           {/* Left - Text Content */}
           <div className="space-y-8">
             <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.15em] mb-4">
+              <p className="text-sm font-bold text-[#2e7d32] uppercase tracking-[0.15em] mb-4">
                 Fundación
               </p>
-              <h2 className="text-5xl font-light text-gray-900 mb-6">Nuestra Historia</h2>
+              <h2 className="text-5xl font-serif font-bold text-gray-900 mb-6">Nuestra Historia</h2>
               <p className="text-lg text-gray-600 font-light leading-relaxed mb-4">
                 Fundada en 2015, AS Laboratorios nació como una visión de aplicar biotecnología avanzada 
                 al servicio de la agricultura peruana. Comenzamos como un pequeño laboratorio especializado 

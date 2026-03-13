@@ -1,13 +1,17 @@
+'use client'
+
 import type { Metadata } from "next"
 import { constructMetadata } from "@/lib/metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import AboutHero from "@/components/about-us/about-hero"
+import AboutHeader from "@/components/about-us/about-header"
+import AboutNavigation from "@/components/about-us/about-navigation"
 import AboutMission from "@/components/about-us/about-mission"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
 import AboutImpact from "@/components/about-us/about-impact"
 import AboutCTA from "@/components/about-us/about-cta"
+import { useState } from "react"
 
 export const metadata: Metadata = constructMetadata({
   title: "Sobre Nosotros",
@@ -18,11 +22,14 @@ export const metadata: Metadata = constructMetadata({
   image: "/about-us-preview.png",
 })
 
-export default function SobreNosotros() {
+function SobreNosotrosContent() {
+  const [activeSection, setActiveSection] = useState('mision')
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
-      <AboutHero />
+      <AboutHeader />
+      <AboutNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutMission />
       <AboutValues />
       <AboutOrganigram />
@@ -32,3 +39,5 @@ export default function SobreNosotros() {
     </div>
   )
 }
+
+export default SobreNosotrosContent
