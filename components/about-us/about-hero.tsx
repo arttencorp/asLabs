@@ -4,17 +4,25 @@ import Image from "next/image"
 
 export default function AboutHero() {
   return (
-    <section className="relative w-full h-96 bg-gradient-to-r from-[#01283c] to-[#2e7d32] overflow-hidden flex items-center justify-center">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
-      </div>
-
-      <div className="relative z-10 container mx-auto px-4 text-center text-white">
-        <h1 className="text-5xl font-bold mb-4 text-balance">AS Laboratorios</h1>
-        <p className="text-xl text-gray-100 max-w-2xl mx-auto text-balance">
-          Innovación biotecnológica al servicio de la agricultura peruana
-        </p>
+    <section className="w-full pt-40 pb-32 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-5xl mx-auto">
+        <div className="space-y-8 text-center">
+          <div>
+            <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.15em] mb-4">
+              Nuestra Historia
+            </p>
+            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-light text-gray-900 leading-tight">
+              Biotecnología<br />al Servicio
+            </h1>
+          </div>
+          <p className="text-lg text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
+            En AS Laboratorios transformamos la agricultura peruana a través de la investigación 
+            científica, control biológico sostenible y educación de excelencia.
+          </p>
+          <div className="pt-8 border-t border-gray-200">
+            <p className="text-sm text-gray-500">Desde 2015 innovando en biotecnología</p>
+          </div>
+        </div>
       </div>
     </section>
   )

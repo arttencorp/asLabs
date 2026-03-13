@@ -1,43 +1,52 @@
-"use client"
+'use client'
 
 export default function AboutValues() {
   const values = [
     {
-      icon: "🔬",
+      number: "01",
       title: "Excelencia Científica",
-      description: "Comprometidos con la investigación de calidad y la innovación continua en biotecnología",
+      description: "Investigación rigurosa, innovación continua y compromiso con la calidad en cada proyecto",
     },
     {
-      icon: "🌱",
+      number: "02",
       title: "Sostenibilidad",
-      description: "Promovemos prácticas agrícolas amigables con el medio ambiente y el uso responsable de recursos",
+      description: "Prácticas agrícolas responsables que respetan el medio ambiente y sus recursos naturales",
     },
     {
-      icon: "🤝",
-      title: "Responsabilidad Social",
-      description: "Contribuimos al desarrollo de las comunidades agrícolas a través de capacitación y transferencia tecnológica",
+      number: "03",
+      title: "Compromiso Social",
+      description: "Transferencia de conocimiento y capacitación para el desarrollo de comunidades agrícolas",
     },
     {
-      icon: "✨",
+      number: "04",
       title: "Integridad",
-      description: "Operamos bajo principios éticos rigurosos y transparencia en todas nuestras operaciones",
+      description: "Operamos con principios éticos rigurosos y transparencia en todas nuestras relaciones",
     },
   ]
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-[#01283c] text-center mb-4">Nuestros Valores</h2>
-        <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-          Los principios que guían nuestras acciones y decisiones en cada proyecto
-        </p>
+    <section className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.15em] mb-4">
+            Principios
+          </p>
+          <h2 className="text-5xl font-light text-gray-900 mb-6">Nuestros Valores</h2>
+          <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
+            Los principios fundamentales que guían cada decisión y acción en AS Laboratorios
+          </p>
+        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 gap-12">
           {values.map((value, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-4xl mb-4">{value.icon}</div>
-              <h3 className="text-xl font-bold text-[#01283c] mb-3">{value.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{value.description}</p>
+            <div key={index} className="flex gap-6">
+              <div className="flex-shrink-0">
+                <p className="text-4xl font-light text-gray-300">{value.number}</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-light text-gray-900 mb-3">{value.title}</h3>
+                <p className="text-gray-600 font-light leading-relaxed">{value.description}</p>
+              </div>
             </div>
           ))}
         </div>

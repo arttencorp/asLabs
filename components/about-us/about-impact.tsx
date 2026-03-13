@@ -1,51 +1,57 @@
-"use client"
+'use client'
 
 export default function AboutImpact() {
   const impacts = [
     {
-      number: "+20",
-      label: "Años de Trayectoria",
-      description: "Más de dos décadas en investigación y desarrollo biotecnológico",
+      number: "9+",
+      label: "Años",
+      description: "Innovando en biotecnología agrícola",
     },
     {
-      number: "+50",
+      number: "50+",
       label: "Universidades",
-      description: "Instituciones educativas que confían en nuestros materiales",
+      description: "Confían en nuestros materiales educativos",
     },
     {
-      number: "+1000",
+      number: "1000+",
       label: "Hectáreas",
-      description: "Terrenos donde se han implementado nuestras soluciones",
+      description: "Donde se implementan nuestras soluciones",
     },
     {
       number: "100%",
-      label: "Calidad",
-      description: "Compromiso con estándares de calidad internacionales",
+      label: "Sostenible",
+      description: "Compromiso con el medio ambiente",
     },
   ]
 
   return (
-    <section className="py-20 bg-gradient-to-r from-[#01283c] to-[#2e7d32] text-white">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-4">Nuestro Impacto</h2>
-        <p className="text-lg text-gray-100 text-center mb-12 max-w-2xl mx-auto">
-          Resultados concretos que demuestran nuestro compromiso con la innovación y la sostenibilidad
-        </p>
+    <section className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.15em] mb-4">
+            Resultados
+          </p>
+          <h2 className="text-5xl font-light text-gray-900 mb-6">Nuestro Impacto</h2>
+          <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
+            Contribuciones concretas a la agricultura sostenible y la educación científica en el Perú
+          </p>
+        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {impacts.map((impact, index) => (
-            <div key={index} className="text-center">
-              <div className="text-5xl font-bold mb-2">{impact.number}</div>
-              <p className="text-lg font-semibold mb-2">{impact.label}</p>
-              <p className="text-gray-100 text-sm">{impact.description}</p>
+            <div key={index} className="text-center space-y-3">
+              <p className="text-5xl font-light text-gray-900">{impact.number}</p>
+              <p className="text-sm font-medium text-gray-500 uppercase tracking-widest">{impact.label}</p>
+              <p className="text-gray-600 font-light">{impact.description}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-16 max-w-3xl mx-auto text-center">
-          <h3 className="text-2xl font-bold mb-4">Compromiso Ambiental</h3>
-          <p className="text-gray-100 leading-relaxed">
-            A través de nuestras soluciones en biotecnología vegetal y control biológico, contribuimos a la reducción del uso de agroquímicos, promoviendo prácticas agrícolas sostenibles que protegen tanto la producción como el medio ambiente.
+        <div className="pt-16 border-t border-gray-200">
+          <h3 className="text-2xl font-light text-gray-900 mb-4 text-center">Compromiso con la Sostenibilidad</h3>
+          <p className="text-lg text-gray-600 font-light max-w-3xl mx-auto text-center leading-relaxed">
+            Nuestras soluciones en biotecnología vegetal y control biológico reducen significativamente el uso de agroquímicos, 
+            promoviendo una agricultura responsable que beneficia tanto a productores como al medio ambiente.
           </p>
         </div>
       </div>
