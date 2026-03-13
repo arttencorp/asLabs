@@ -25,7 +25,8 @@ export function ProductoFormDialog({
   const [form, setForm] = useState<ProductoForm>({
     pro_nomb_vac: '',
     pro_desc_vac: null,
-    pro_prec_unitario_int: 0
+    pro_prec_unitario_int: 0,
+    pro_stock_int: 0
   })
 
   // Actualizar formulario cuando se cambia el producto en edición
@@ -34,13 +35,15 @@ export function ProductoFormDialog({
       setForm({
         pro_nomb_vac: editingProducto.pro_nomb_vac || '',
         pro_desc_vac: editingProducto.pro_desc_vac,
-        pro_prec_unitario_int: editingProducto.pro_prec_unitario_int || 0
+        pro_prec_unitario_int: editingProducto.pro_prec_unitario_int || 0,
+        pro_stock_int: editingProducto.pro_stock_int ?? 0
       })
     } else {
       setForm({
         pro_nomb_vac: '',
         pro_desc_vac: null,
-        pro_prec_unitario_int: 0
+        pro_prec_unitario_int: 0,
+        pro_stock_int: 0
       })
     }
   }, [editingProducto, isOpen])
@@ -53,7 +56,8 @@ export function ProductoFormDialog({
     setForm({
       pro_nomb_vac: '',
       pro_desc_vac: null,
-      pro_prec_unitario_int: 0
+      pro_prec_unitario_int: 0,
+      pro_stock_int: 0
     })
     onClose()
   }
@@ -114,6 +118,23 @@ export function ProductoFormDialog({
               Ingrese el precio en soles (S/.)
             </p>
           </div>
+
+          <div>
+            <Label htmlFor="stock">Stock</Label>
+            <Input
+              id="stock"
+              type="number"
+              step="1"
+              min="0"
+              value={form.pro_stock_int}
+              onChange={(e) => setForm({ ...form, pro_stock_int: parseInt(e.target.value) || 0 })}
+              placeholder="0"
+              disabled={loading}
+            />
+            <p className="text-sm text-muted-foreground mt-1">
+              Cantidad disponible en inventario
+            </p>
+          </div>
         </div>
 
         {error && (
@@ -127,7 +148,7 @@ export function ProductoFormDialog({
           <Button variant="outline" onClick={handleClose} disabled={loading}>
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} disabled={loading}>
+          <Button onClick={handleSubmit} disabled={loading} className="text-white">
             {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             {editingProducto ? 'Actualizar Producto' : 'Crear Producto'}
           </Button>

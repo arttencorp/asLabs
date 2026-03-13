@@ -19,6 +19,7 @@ export interface Plantin {
   features: string[]
   available: boolean
   isResearch?: boolean
+  isProduction?: boolean
   icon: any
   image?: string
   price?: string

@@ -5,12 +5,12 @@ import { crearCotizacion, actualizarCotizacion, obtenerCotizacionPorId, obtenerF
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
 import { useCertificadosFichas } from './useCertificadosFichas'
-import { 
-  productosPreexistentes, terminosCondicionesDefault, 
-  terminosCondicionesLaboratorio, certificadosDefault 
+import {
+  productosPreexistentes, terminosCondicionesDefault,
+  terminosCondicionesLaboratorio, certificadosDefault
 } from '../constants'
 import { calcularFechaVencimiento, numeroATexto } from '@/utils/index'
-import {  generarCertificadosTexto } from '../utils'
+import { generarCertificadosTexto } from '../utils'
 import type { Item, FichaTecnica, TipoDocumento, FormaPagoUI, TabName } from '../types'
 import type { FormaPago } from '@/types/database'
 
@@ -18,44 +18,45 @@ export function useCotizacion() {
   const router = useRouter()
   const { clientes } = useClientes()
   const { productos, loading: productosLoading, obtenerProductoPorId, formatearProductoParaSelector } = useProductos()
-  const { 
-    cargarCertificadosParaProductos, 
+  const {
+    cargarCertificadosParaProductos,
     cargarFichasParaProductos,
     obtenerCertificadosProducto,
     obtenerFichasProducto,
     certificadosLoading,
     fichasLoading
   } = useCertificadosFichas()
-  
+
   // Estados principales
   const [activeTab, setActiveTab] = useState<TabName>('informacion')
+  const [completedTabs, setCompletedTabs] = useState<Set<TabName>>(new Set())
   const [tipoDocumento, setTipoDocumento] = useState<TipoDocumento>('cotizacion')
   const [preciosConIGV, setPreciosConIGV] = useState(false)
-  
+
   // Estados para modo de edición
   const [isEditMode, setIsEditMode] = useState(false)
   const [editingCotizacionId, setEditingCotizacionId] = useState<string | null>(null)
-  
+
   // Información de la cotización
   const [numeroCotizacion, setNumeroCotizacion] = useState('')
   const [fechaEmision, setFechaEmision] = useState(() => obtenerFechaActualLima())
   const [fechaVencimiento, setFechaVencimiento] = useState(calcularFechaVencimiento(10))
-  
+
   // Información del cliente
   const [clienteSeleccionado, setClienteSeleccionado] = useState('')
   const [razonSocial, setRazonSocial] = useState('')
   const [dniRuc, setDniRuc] = useState('')
   const [direccion, setDireccion] = useState('')
   const [telefono, setTelefono] = useState('')
-  
+
   // Productos y servicios
   const [items, setItems] = useState<Item[]>([
     { id: 1, nombre: '', descripcion: '', cantidad: 1, precioUnitario: 0, total: 0, codigo: '' }
   ])
-  
+
   // Ref para acceder a los items actuales sin dependencia de closure
   const itemsRef = useRef(items)
-  
+
   // Sincronizar ref con state
   useEffect(() => {
     itemsRef.current = items
@@ -95,7 +96,7 @@ export function useCotizacion() {
 
     generarNumero()
   }, [])
-  
+
   // Información adicional
   const [terminosCondiciones, setTerminosCondiciones] = useState(terminosCondicionesDefault)
   const [lugarRecojo, setLugarRecojo] = useState('')
@@ -115,7 +116,7 @@ export function useCotizacion() {
   // Helper para cambiar forma de pago seleccionada y sincronizar con el tipo UI
   const cambiarFormaPagoSeleccionada = useCallback((nuevaFormaPagoId: string) => {
     setFormaPagoSeleccionada(nuevaFormaPagoId)
-    
+
     // Obtener el tipo desde formasPago y mapear correctamente
     const formaPagoBD = formasPago.find(fp => fp.form_pa_id_int === nuevaFormaPagoId)
     const formaPagoUI = formaPagoBD?.form_pa_tipo_int === 1 ? 'completo' : 'parcial'
@@ -125,7 +126,7 @@ export function useCotizacion() {
   // Calcular totales usando utility global
   const calcularTotales = useCallback(() => {
     const precioBase = items.reduce((sum, item) => sum + (item.total || 0), 0)
-    
+
     if (preciosConIGV) {
       // CON IGV: El precio base NO incluye IGV, se agrega 18%
       // Ejemplo: base=100 → subtotal=100, impuesto=18, total=118
@@ -178,12 +179,12 @@ export function useCotizacion() {
 
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       let todosCertificados: any[] = []
-      
-      
+
+
       // Cargar certificados de BD para todos los productos
       if (codigosUnicos.length > 0) {
         await cargarCertificadosParaProductos(codigosUnicos)
-        
+
         codigosUnicos.forEach((productoId) => {
           const certificadosBD = obtenerCertificadosProducto(productoId)
           if (certificadosBD && certificadosBD.length > 0) {
@@ -192,7 +193,7 @@ export function useCotizacion() {
           }
         })
       }
-      
+
 
       if (todosCertificados.length > 0) {
         const certificadosTexto = generarCertificadosTexto(todosCertificados)
@@ -225,16 +226,16 @@ export function useCotizacion() {
 
       const codigosUnicos = [...new Set(codigosSeleccionados)]
       const todasFichas: FichaTecnica[] = []
-      
+
       // Cargar fichas técnicas de BD para todos los productos
       if (codigosUnicos.length > 0) {
         await cargarFichasParaProductos(codigosUnicos)
-        
+
         codigosUnicos.forEach((productoId) => {
           const fichasBD = obtenerFichasProducto(productoId)
           // Solo agregar fichas si realmente existen y tienen contenido válido
           if (fichasBD && fichasBD.length > 0) {
-            const fichasValidas = fichasBD.filter(ficha => 
+            const fichasValidas = fichasBD.filter(ficha =>
               ficha && (ficha.titulo || ficha.descripcion || ficha.archivo)
             )
             if (fichasValidas.length > 0) {
@@ -264,13 +265,13 @@ export function useCotizacion() {
   // Seleccionar producto
   const seleccionarProducto = useCallback((id: number, productoId: string) => {
     if (!productoId) return
-    
+
 
     if (productoId === "personalizado") {
       setItems(items.map((item) => {
         if (item.id === id) {
-          return { 
-            ...item, 
+          return {
+            ...item,
             codigo: "personalizado",
             descripcion: "",
             precioUnitario: 0,
@@ -284,7 +285,7 @@ export function useCotizacion() {
 
     // Buscar producto en BD
     const productoBD = obtenerProductoPorId(productoId)
-    
+
     if (productoBD) {
       setItems(items.map((item) => {
         if (item.id === id) {
@@ -299,10 +300,10 @@ export function useCotizacion() {
         }
         return item
       }))
-      
+
       setTipoProductoSeleccionado("database")
       setTerminosCondiciones(terminosCondicionesDefault)
-      
+
       // Actualizar certificados y fichas DESPUÉS del próximo render
       setTimeout(() => {
         actualizarCertificadosYFichas()
@@ -351,14 +352,14 @@ export function useCotizacion() {
   const agregarItem = useCallback(() => {
     try {
       const nuevoId = Math.max(...items.map((item) => item.id), 0) + 1
-      setItems([...items, { 
-        id: nuevoId, 
+      setItems([...items, {
+        id: nuevoId,
         nombre: "",
-        descripcion: "", 
-        cantidad: 1, 
-        precioUnitario: 0, 
-        total: 0, 
-        codigo: "" 
+        descripcion: "",
+        cantidad: 1,
+        precioUnitario: 0,
+        total: 0,
+        codigo: ""
       }])
     } catch (error) {
       console.error("Error al agregar item:", error)
@@ -382,16 +383,16 @@ export function useCotizacion() {
   const vistaPrevia = useCallback(() => {
     try {
       const totales = calcularTotales()
-      
+
       const itemsValidados = Array.isArray(items)
         ? items.map((item) => ({
-            id: item?.id || 0,
-            descripcion: item?.descripcion || "",
-            cantidad: item?.cantidad || 0,
-            precioUnitario: item?.precioUnitario || 0,
-            total: item?.total || 0,
-            codigo: item?.codigo || "",
-          }))
+          id: item?.id || 0,
+          descripcion: item?.descripcion || "",
+          cantidad: item?.cantidad || 0,
+          precioUnitario: item?.precioUnitario || 0,
+          total: item?.total || 0,
+          codigo: item?.codigo || "",
+        }))
         : []
 
       // Encontrar el cliente seleccionado para determinar el tipo
@@ -444,7 +445,7 @@ export function useCotizacion() {
       if (!clienteSeleccionado) {
         throw new Error('Debe seleccionar un cliente')
       }
-      
+
       // Preparar productos válidos para BD
       const productosValidos = items
         .filter(item => item.codigo && item.cantidad > 0 && item.precioUnitario > 0)
@@ -467,13 +468,13 @@ export function useCotizacion() {
       })
 
       const cotizacionCreada = await crearCotizacion(cotizacionData)
-      
+
       // Mostrar mensaje de éxito y redirigir
       alert(`Cotización ${cotizacionCreada.cot_num_vac} guardada exitosamente`)
       router.push('/admin/cotizaciones') // o donde corresponda ver las cotizaciones
-      
+
       return cotizacionCreada
-    } catch (error) { 
+    } catch (error) {
       alert('Error al guardar la cotización: ' + (error as Error).message)
       throw error
     }
@@ -485,8 +486,10 @@ export function useCotizacion() {
   // Navegación entre tabs
   const avanzarPaso = useCallback(() => {
     if (activeTab === "informacion") {
+      setCompletedTabs(prev => new Set(prev).add('informacion'))
       setActiveTab("productos")
     } else if (activeTab === "productos") {
+      setCompletedTabs(prev => new Set(prev).add('productos'))
       setActiveTab("adicional")
     } else if (activeTab === "adicional") {
       vistaPrevia()
@@ -522,7 +525,7 @@ export function useCotizacion() {
   const cargarCotizacionParaEdicion = useCallback(async (cotizacionId: string) => {
     try {
       const cotizacion = await obtenerCotizacionPorId(cotizacionId)
-      
+
       if (!cotizacion) {
         throw new Error('Cotización no encontrada')
       }
@@ -536,7 +539,7 @@ export function useCotizacion() {
       setFechaEmision(dateToInputValue(cotizacion.cot_fec_emis_dt))
       setFechaVencimiento(dateToInputValue(cotizacion.cot_fec_venc_dt))
       setPreciosConIGV(cotizacion.cot_igv_bol)
-      
+
       // Cargar información del cliente
       setClienteSeleccionado(cotizacion.per_id_int)
       if (cotizacion.persona) {
@@ -571,25 +574,26 @@ export function useCotizacion() {
         const info = cotizacion.informacion_adicional[0]
         setLugarRecojo(info.inf_ad_lug_recojo_vac || '')
         setFormaEntrega(info.inf_ad_form_entr_vac || '')
-        
+
         // Cargar forma de pago
         if (info.form_pa_id_int) {
           setFormaPagoSeleccionada(info.form_pa_id_int)
-          
+
           // Obtener el form_pa_tipo_int desde forma_pago para mapear correctamente
           const tipoFormaPago = info.forma_pago?.form_pa_tipo_int
           // Mapear forma de pago: tipo 1 = completo (PAGO_100), tipo 2 = parcial (PAGO_50_50)
           const formaPagoUI = tipoFormaPago === 1 ? 'completo' : 'parcial'
           setFormaPago(formaPagoUI)
         }
-        
+
         // Cargar términos y condiciones
         setTerminosCondiciones(info.inf_ad_term_cond_vac || terminosCondicionesDefault)
       }
 
-      // Ir al tab de información general
+      // Ir al tab de información general (en modo edición todos los tabs son accesibles)
       setActiveTab('informacion')
-      
+      setCompletedTabs(new Set(['informacion', 'productos']))
+
       return cotizacion
     } catch (error) {
       console.error('Error cargando cotización para edición:', error)
@@ -601,12 +605,13 @@ export function useCotizacion() {
   const limpiarModoEdicion = useCallback(async () => {
     setIsEditMode(false)
     setEditingCotizacionId(null)
-    
+
     // Resetear todos los campos del formulario
     setActiveTab('informacion')
+    setCompletedTabs(new Set())
     setTipoDocumento('cotizacion')
     setPreciosConIGV(false)
-    
+
     // Generar nuevo número de cotización
     try {
       const numero = await generarNumeroCotizacion()
@@ -620,19 +625,19 @@ export function useCotizacion() {
     
     setFechaEmision(obtenerFechaActualLima())
     setFechaVencimiento(calcularFechaVencimiento(10))
-    
+
     // Limpiar información del cliente
     setClienteSeleccionado('')
     setRazonSocial('')
     setDniRuc('')
     setDireccion('')
     setTelefono('')
-    
+
     // Resetear productos a estado inicial
     setItems([
       { id: 1, nombre: '', descripcion: '', cantidad: 1, precioUnitario: 0, total: 0, codigo: '' }
     ])
-    
+
     // Limpiar información adicional
     setTerminosCondiciones(terminosCondicionesDefault)
     setLugarRecojo('')
@@ -648,7 +653,7 @@ export function useCotizacion() {
       if (!clienteSeleccionado) {
         throw new Error('Debe seleccionar un cliente')
       }
-      
+
       // Preparar productos válidos para BD
       const productosValidos = items
         .filter(item => item.codigo && item.cantidad > 0 && item.precioUnitario > 0)
@@ -680,7 +685,7 @@ export function useCotizacion() {
       const cotizacionData = limpiarDatosParaBD(baseCotizacionData)
 
       let cotizacionCreada
-      
+
       if (isEditMode && editingCotizacionId) {
         // Actualizar cotización existente
         cotizacionCreada = await actualizarCotizacion(editingCotizacionId, cotizacionData)
@@ -690,19 +695,19 @@ export function useCotizacion() {
         cotizacionCreada = await crearCotizacion(cotizacionData)
         alert(`Cotización ${cotizacionCreada.cot_num_vac} guardada exitosamente`)
       }
-      
+
       // Limpiar modo de edición y redirigir
       limpiarModoEdicion()
       router.push('/admin/cotizaciones')
-      
+
       return cotizacionCreada
-    } catch (error) { 
+    } catch (error) {
       alert(`Error al ${isEditMode ? 'actualizar' : 'guardar'} la cotización: ` + (error as Error).message)
       throw error
     }
   }, [
     clienteSeleccionado, calcularTotales, items, fechaEmision, fechaVencimiento,
-    preciosConIGV, lugarRecojo, formaEntrega, terminosCondiciones, formaPagoSeleccionada, 
+    preciosConIGV, lugarRecojo, formaEntrega, terminosCondiciones, formaPagoSeleccionada,
     isEditMode, editingCotizacionId, numeroCotizacion, limpiarModoEdicion, router
   ])
 
@@ -723,6 +728,7 @@ export function useCotizacion() {
     // Estados
     activeTab,
     setActiveTab,
+    completedTabs,
     tipoDocumento,
     setTipoDocumento,
     preciosConIGV,
@@ -761,18 +767,18 @@ export function useCotizacion() {
     // Productos de BD
     productos,
     productosLoading,
-    
+
     // Estados de carga de certificados y fichas
     certificadosLoading,
     fichasLoading,
-    
+
     // Formas de pago de BD
     formasPago,
     formaPagoSeleccionada,
     setFormaPagoSeleccionada,
     cambiarFormaPagoSeleccionada,
     formasPagoLoading,
-    
+
     // Funciones
     seleccionarProducto,
     actualizarItem,

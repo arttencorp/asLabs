@@ -80,6 +80,7 @@ export async function crearProducto(productoData: {
     pro_nomb_vac: string
     pro_desc_vac: string | null
     pro_prec_unitario_int: number
+    pro_stock_int?: number
 }): Promise<ProductoDatabase> {
     try {
         // Limpiar datos antes de insertar (convertir strings vacíos a null)
@@ -87,7 +88,7 @@ export async function crearProducto(productoData: {
             pro_nomb_vac: productoData.pro_nomb_vac?.trim() || null,
             pro_desc_vac: productoData.pro_desc_vac?.trim() || null,
             pro_prec_unitario_int: productoData.pro_prec_unitario_int || null,
-            pro_stock_int: 0 // Stock inicial en 0
+            pro_stock_int: productoData.pro_stock_int ?? 0
         }
 
         // Validar que el nombre no esté vacío

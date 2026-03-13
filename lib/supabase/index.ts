@@ -36,3 +36,5 @@ export * from './recepcion'
 
 // Firmas (catálogo y asignaciones a documentos)
 export * from './firmas'
+// Convocatorias (puestos, postulantes, áreas de interés)
+export * from './convocatorias'

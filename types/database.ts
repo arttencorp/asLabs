@@ -151,6 +151,83 @@ export interface ProductoTiendaDatabase {
 }
 
 // ============================================
+// CONVOCATORIAS / PUESTOS
+// ============================================
+
+export interface ModalidadTrabajo {
+  modalid_id_int: string
+  modalid_nom_vac: string | null
+  puest_created_at_dt: string
+  puest_updated_at_dt: string
+}
+
+export interface EstadoPuesto {
+  estpuest_id_int: string
+  estpuest_nom_vac: string | null
+  estpuest_created_at_dt: string
+  estpuest_updated_at_dt: string
+}
+
+export interface AreaInteres {
+  area_id_int: string
+  area_nom_vac: string | null
+  area_created_at_dt: string
+  area_updated_at_dt: string
+}
+
+export interface TipoDocumentoIdentidad {
+  tip_doc_iden_id_int: string
+  tip_doc_iden_nom_vac: string | null
+  tip_doc_iden_created_at_dt: string
+  tip_doc_iden_updated_at_dt: string
+}
+
+export interface EstadoPostulacion {
+  estpost_id_int: string
+  estpost_nom_vac: string | null
+  estpost_created_at_dt: string
+  estpost_updated_at_dt: string
+}
+
+export interface PuestoDatabase {
+  puest_id_int: string
+  puest_nom_vac: string | null
+  puest_dec_vac: string | null
+  puest_perfil_vac: string | null
+  puest_ofrece_vac: string | null
+  puest_benef_vac: string | null
+  puest_salario_vac: string | null
+  puest_created_at_dt: string
+  puest_updated_at_dt: string
+  post_id_int: string | null
+  modalid_id_int: string | null
+  estpuest_id_int: string | null
+  // Relaciones
+  modalidad_trabajo?: ModalidadTrabajo | null
+  Estado_Puesto?: EstadoPuesto | null
+}
+
+export interface PostulanteDatabase {
+  post_id_int: string
+  post_nom_vac: string | null
+  post_nrodoc_vac: string | null
+  post_institucion_vac: string | null
+  post_ciclo_int: number | null
+  post_carrera_vac: string | null
+  post_cv_vac: string | null
+  post_presentac_vac: string | null
+  post_financiam_vac: string | null
+  post_created_at_dt: string
+  post_updated_at_dt: string
+  tip_doc_iden_id_int: string | null
+  estpost_id_int: string | null
+  // Relaciones
+  Tipo_Documento_Identidad?: TipoDocumentoIdentidad | null
+  Estado_Postulacion?: EstadoPostulacion | null
+  Postulacion_Detalle_Area?: { area_id_int: string; Area_Interes: AreaInteres | null }[] | null
+}
+
+// ============================================
 // TIPOS PARA FORMULARIOS
 // ============================================
 

@@ -40,19 +40,6 @@ export default function ResearchPageClient() {
     return total + subsection.projects.length
   }, 0)
 
-  const totalPlantsProduced = investigacionesTerminadas.reduce((total, subsection) => {
-    return (
-      total +
-      subsection.projects.reduce((subTotal, project: any) => {
-        if (project.plantsProduced) {
-          const number = parseInt(project.plantsProduced.replace(/[^0-9]/g, ""), 10)
-          return subTotal + (isNaN(number) ? 0 : number)
-        }
-        return subTotal
-      }, 0)
-    )
-  }, 0)
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       {/* Statistics Overview */}
@@ -94,7 +81,7 @@ export default function ResearchPageClient() {
                 <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Award className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-purple-600 mb-2">700 000+</h3>
+                <h3 className="text-3xl font-bold text-purple-600 mb-2">2 Millones+</h3>
                 <p className="text-gray-600">Plantas Producidas</p>
               </CardContent>
             </Card>
@@ -188,7 +175,7 @@ export default function ResearchPageClient() {
                     <p className="text-green-800">Proyectos Completados</p>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-green-600">{totalPlantsProduced.toLocaleString()}+</h3>
+                    <h3 className="text-2xl font-bold text-green-600">2 Millones+</h3>
                     <p className="text-green-800">Plantas Producidas</p>
                   </div>
                   <div>

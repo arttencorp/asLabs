@@ -8,7 +8,7 @@ interface ClientesStatsProps {
 
 export function ClientesStats({ stats }: ClientesStatsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card>
         <CardContent className="p-6">
           <div className="flex items-center">
@@ -45,17 +45,6 @@ export function ClientesStats({ stats }: ClientesStatsProps) {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center">
-            <Users className="h-8 w-8 text-orange-600" />
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Nuevos este mes</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.nuevosEsteMes}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

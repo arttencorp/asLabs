@@ -123,6 +123,7 @@ export default function PedidosPage() {
         cotizaciones={getCotizacionesParaFormulario(editingPedido)}
         estadosPedido={estadosPedido}
         loading={loading}
+        onDocumentosChange={loadData}
       />
 
       {/* Modal para ver cotización */}

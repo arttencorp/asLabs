@@ -29,12 +29,9 @@ export default function RevenueChart({ dateRange }: RevenueChartProps) {
     setLoading(true)
     try {
       // Try multiple possible field names
-      const possibleDateFields = ['ped_fec_pedido_dt', 'ped_fec_dt', 'fecha_pedido', 'created_at', 'ped_created_at_dt']
-      const possibleTotalFields = ['ped_total_int', 'total', 'ped_total', 'amount', 'monto', 'valor']
-      
-      let dateField = 'ped_fec_pedido_dt'
+      const dateField = 'ped_created_at_dt'
       let totalField = null // Skip total field since it doesn't exist
-      
+
       const { data: sampleData } = await supabase
         .from("Pedidos")
         .select("*")
@@ -42,15 +39,8 @@ export default function RevenueChart({ dateRange }: RevenueChartProps) {
       
       if (sampleData && sampleData.length > 0) {
         const sample = sampleData[0]
-        
-        // Find the correct date field
-        for (const field of possibleDateFields) {
-          if (field in sample) {
-            dateField = field
-            break
-          }
-        }
-        
+        const possibleTotalFields = ['ped_total_int', 'total', 'ped_total', 'amount', 'monto', 'valor']
+
         // Find the correct total field
         for (const field of possibleTotalFields) {
           if (field in sample) {
@@ -72,13 +62,13 @@ export default function RevenueChart({ dateRange }: RevenueChartProps) {
       // Find the REAL minimum date from database instead of hardcoding July
       const { data: oldestOrder } = await supabase
         .from("Pedidos")
-        .select("ped_fec_pedido_dt")
-        .order("ped_fec_pedido_dt", { ascending: true })
+        .select("ped_created_at_dt")
+        .order("ped_created_at_dt", { ascending: true })
         .limit(1)
       
       let actualStartDate = dateRange.from
       if (oldestOrder && oldestOrder.length > 0) {
-        const dbStartDate = new Date(oldestOrder[0].ped_fec_pedido_dt)
+        const dbStartDate = new Date(oldestOrder[0].ped_created_at_dt)
         actualStartDate = new Date(Math.max(dateRange.from.getTime(), dbStartDate.getTime()))
       }
       

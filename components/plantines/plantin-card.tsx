@@ -24,13 +24,18 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
         />
         
         {/* Badge de estado sobre la imagen */}
-        <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
+        <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+          {plantin.isProduction && (
+            <span className="bg-amber-500 text-white text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg">
+              En Producción
+            </span>
+          )}
           {plantin.isResearch && (
             <span className="bg-blue-500 text-white text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg">
               En Investigación
             </span>
           )}
-          {plantin.profitability && !plantin.isResearch && (
+          {plantin.profitability && !plantin.isResearch && !plantin.isProduction && (
             <span className={`text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg ${getProfitabilityColor(plantin.profitability)}`}>
               {plantin.profitability}
             </span>
@@ -69,17 +74,21 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
         </p>
 
         {/* Métricas en grid responsivo */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-4">
+        <div className={`grid ${plantin.yield === "-" ? "grid-cols-3" : "grid-cols-2"} gap-3 sm:gap-6 mb-4`}>
           <div className="text-center">
             <div className="text-xs text-gray-500 mb-1 font-medium">Precio</div>
             <div className="font-bold text-emerald-600 text-sm">{plantin.price}</div>
           </div>
+          {plantin.yield !== "-" && (
+            <div className="text-center">
+              <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
+              <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
+            </div>
+          )}
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
-            <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1 font-medium">Cosecha</div>
+            <div className="text-xs text-gray-500 mb-1 font-medium">
+              {plantin.category === "Ornamentales" ? "Tolerancia" : "Cosecha"}
+            </div>
             <div className="font-bold text-purple-600 text-sm">{plantin.harvestTime}</div>
           </div>
           <div className="text-center">

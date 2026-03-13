@@ -31,13 +31,13 @@ export default function SalesChart({ dateRange }: SalesChartProps) {
       // Find the REAL minimum date from database
       const { data: oldestOrder } = await supabase
         .from("Pedidos")
-        .select("ped_fec_pedido_dt")
-        .order("ped_fec_pedido_dt", { ascending: true })
+        .select("ped_created_at_dt")
+        .order("ped_created_at_dt", { ascending: true })
         .limit(1)
       
       let actualStartDate = dateRange.from
       if (oldestOrder && oldestOrder.length > 0) {
-        const dbStartDate = new Date(oldestOrder[0].ped_fec_pedido_dt)
+        const dbStartDate = new Date(oldestOrder[0].ped_created_at_dt)
         actualStartDate = new Date(Math.max(dateRange.from.getTime(), dbStartDate.getTime()))
       }
       
@@ -46,9 +46,9 @@ export default function SalesChart({ dateRange }: SalesChartProps) {
       // Fetch orders data
       const { data: orders } = await supabase
         .from("Pedidos")
-        .select("ped_fec_pedido_dt")
-        .gte("ped_fec_pedido_dt", format(actualStartDate, "yyyy-MM-dd"))
-        .lte("ped_fec_pedido_dt", format(actualEndDate, "yyyy-MM-dd"))
+        .select("ped_created_at_dt")
+        .gte("ped_created_at_dt", format(actualStartDate, "yyyy-MM-dd"))
+        .lte("ped_created_at_dt", format(actualEndDate, "yyyy-MM-dd"))
       
       // Create all dates in range
       const allDates = eachDayOfInterval({ start: actualStartDate, end: actualEndDate })
@@ -59,7 +59,7 @@ export default function SalesChart({ dateRange }: SalesChartProps) {
         
         const dateStr = format(date, "yyyy-MM-dd")
         const dayOrders = orders?.filter((order: any) => {
-          const orderDate = format(new Date(order.ped_fec_pedido_dt), "yyyy-MM-dd")
+          const orderDate = format(new Date(order.ped_created_at_dt), "yyyy-MM-dd")
           return orderDate === dateStr
         }) || []
 

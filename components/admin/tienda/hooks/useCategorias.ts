@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { obtenerCategorias } from '@/lib/supabase'
+import { transformarError } from '@/utils'
 import type { CategoriaDatabase } from '@/types/database'
 
 export function useCategorias() {
@@ -15,9 +16,9 @@ export function useCategorias() {
       setError(null)
       const data = await obtenerCategorias()
       setCategorias(data)
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error cargando categorías:', err)
-      setError(err.message || 'Error al cargar categorías')
+      setError(transformarError(err, 'Error al cargar categorías'))
     } finally {
       setLoading(false)
     }

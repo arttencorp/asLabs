@@ -17,6 +17,7 @@ import {
 } from '@/lib/supabase'
 import { useBaseCrud } from '@/hooks/useBaseCrud'
 import { calcularTotalCotizacion } from '@/utils/index'
+import { transformarError } from '@/utils'
 import type { 
   Pedido, 
   Cotizacion, 
@@ -37,8 +38,7 @@ const PEDIDO_FORM_INITIAL: PedidoForm = {
   estado_id: '',
   codigo_rastreo: '',
   observaciones: '',
-  numero_comprobante: '',
-  imagen_url: ''
+  numero_comprobante: ''
 }
 
 export function usePedidos() {
@@ -119,8 +119,8 @@ export function usePedidos() {
       // Cargar pedidos usando useBaseCrud
       await loadPedidos()
        
-    } catch (error: any) {
-      setError(error.message || "Error al cargar los datos")
+    } catch (error) {
+      setError(transformarError(error, "Error al cargar los datos"))
     } finally {
       setRelatedDataLoading(false)
     }

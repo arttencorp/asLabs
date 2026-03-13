@@ -22,6 +22,7 @@ import type {
   TaxonomiaForm,
   ZonaColectaForm
 } from '@/types/database'
+import { transformarError } from '@/utils'
 import { validarFichaTecnica } from '../utils'
 
 interface FormDataCompleta {
@@ -140,8 +141,8 @@ export function useFichasTecnicasCompletas() {
     try {
       const data = await obtenerFichasTecnicasCompletas()
       setItems(data) 
-    } catch (err: any) {
-      setError(err.message || 'Error al cargar fichas técnicas')
+    } catch (err) {
+      setError(transformarError(err, 'Error al cargar fichas técnicas'))
     } finally {
       setLoading(false)
     }
@@ -255,8 +256,8 @@ export function useFichasTecnicasCompletas() {
       await loadData()
       setIsDialogOpen(false)
       showSuccess('Ficha técnica completa creada exitosamente')
-    } catch (err: any) {
-      setError(err.message || 'Error al crear ficha técnica completa')
+    } catch (err) {
+      setError(transformarError(err, 'Error al crear ficha técnica completa'))
     } finally {
       setLoading(false)
     }
@@ -335,8 +336,8 @@ export function useFichasTecnicasCompletas() {
       setIsDialogOpen(false)
       setEditingItem(null)
       showSuccess('Ficha técnica completa actualizada exitosamente')
-    } catch (err: any) {
-      setError(err.message || 'Error al actualizar ficha técnica completa')
+    } catch (err) {
+      setError(transformarError(err, 'Error al actualizar ficha técnica completa'))
     } finally {
       setLoading(false)
     }
@@ -353,8 +354,8 @@ export function useFichasTecnicasCompletas() {
       await eliminarFichaTecnica(id)
       setItems(prevItems => prevItems.filter(item => item.fit_tec_id_int !== id))
       showSuccess('Ficha técnica eliminada exitosamente')
-    } catch (err: any) {
-      setError(err.message || 'Error al eliminar ficha técnica')
+    } catch (err) {
+      setError(transformarError(err, 'Error al eliminar ficha técnica'))
     } finally {
       setLoading(false)
     }
@@ -376,8 +377,8 @@ export function useFichasTecnicasCompletas() {
       setEditingItem(fichaCompleta)
       setIsDialogOpen(true)
       setError(null)
-    } catch (err: any) {
-      setError(err.message || 'Error al cargar datos completos de la ficha técnica')
+    } catch (err) {
+      setError(transformarError(err, 'Error al cargar datos completos de la ficha técnica'))
     } finally {
       setLoading(false)
     }
