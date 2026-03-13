@@ -39,26 +39,32 @@ export default function AboutNavigation() {
   ]
 
   return (
-    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40 hidden lg:flex">
-      <div className="bg-white rounded-l-2xl shadow-2xl overflow-hidden">
-        <div className="flex flex-col gap-0">
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex">
+      <div className="relative rounded-3xl bg-gradient-to-b from-white/95 to-[#f3f8f5]/95 backdrop-blur-md p-2 shadow-[0_18px_45px_-18px_rgba(24,75,52,0.45)] border border-[#d8e7de]">
+        <div className="absolute inset-x-2 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" aria-hidden="true" />
+        <div className="flex flex-col gap-2">
           {sections.map((section, index) => (
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              className={`flex items-center justify-center w-16 h-16 transition-all duration-300 group relative ${
+              aria-label={section.label}
+              className={`relative flex items-center justify-center w-14 h-14 rounded-2xl transition-all duration-300 group ${
                 activeSection === section.id
-                  ? 'bg-gradient-to-r from-[#2e7d32] to-[#1b5e20]'
-                  : 'bg-white hover:bg-gray-50'
-              } ${index !== sections.length - 1 ? 'border-b border-gray-200' : ''}`}
+                  ? 'bg-gradient-to-br from-[#2f7a57] to-[#245f45] text-white shadow-[0_10px_24px_-12px_rgba(36,95,69,0.85)] scale-[1.02]'
+                  : 'bg-white/80 text-[#2b5040] hover:bg-white hover:shadow-md'
+              }`}
               title={section.label}
             >
-              <div className={`text-2xl transition-all ${activeSection === section.id ? 'scale-125' : 'scale-100'}`}>
+              {activeSection === section.id && (
+                <span className="absolute -left-3 h-8 w-1.5 rounded-full bg-[#c27737]" aria-hidden="true" />
+              )}
+
+              <div className={`text-xl transition-all ${activeSection === section.id ? 'scale-110' : 'scale-100'}`}>
                 {section.icon}
               </div>
 
               {/* Tooltip */}
-              <div className="absolute right-full mr-4 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <div className="absolute right-full mr-3 bg-[#16392c] text-[#e6f4ed] px-3 py-1.5 rounded-lg text-xs tracking-wide whitespace-nowrap opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all pointer-events-none shadow-lg">
                 {section.label}
               </div>
             </button>

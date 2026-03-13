@@ -1,6 +1,13 @@
 'use client'
 
 export default function AboutValues() {
+  const palette = [
+    { border: "#2f7a57", badge: "#2f7a57", glow: "#dff3e8" },
+    { border: "#b56a2e", badge: "#b56a2e", glow: "#fdebdc" },
+    { border: "#2f5e7a", badge: "#2f5e7a", glow: "#e2edf5" },
+    { border: "#6e7f31", badge: "#6e7f31", glow: "#edf3d7" },
+  ]
+
   const values = [
     {
       number: "01",
@@ -25,10 +32,10 @@ export default function AboutValues() {
   ]
 
   return (
-    <section id="valores" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-green-50">
+    <section id="valores" className="w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#f7f8f4] via-[#f3f8f5] to-[#eef5f8]">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <p className="text-sm font-bold text-[#e65100] uppercase tracking-[0.15em] mb-4">
+          <p className="text-sm font-bold text-[#b56a2e] uppercase tracking-[0.15em] mb-4">
             Principios
           </p>
           <h2 className="text-5xl font-serif font-bold text-gray-900 mb-6">Nuestros Valores</h2>
@@ -39,10 +46,22 @@ export default function AboutValues() {
 
         <div className="grid md:grid-cols-2 gap-8">
           {values.map((value, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow border-t-4" style={{borderTopColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}>
+            <div
+              key={index}
+              className="relative overflow-hidden bg-white/95 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border"
+              style={{ borderColor: palette[index].border }}
+            >
+              <div
+                className="absolute -right-10 -top-10 h-24 w-24 rounded-full opacity-60 blur-2xl"
+                style={{ backgroundColor: palette[index].glow }}
+                aria-hidden="true"
+              />
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-md text-white font-bold text-xl" style={{backgroundColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}>
+                  <div
+                    className="flex items-center justify-center h-12 w-12 rounded-lg text-white font-bold text-xl shadow-sm"
+                    style={{ backgroundColor: palette[index].badge }}
+                  >
                     {value.number}
                   </div>
                 </div>

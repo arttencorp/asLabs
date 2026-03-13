@@ -25,7 +25,9 @@ export default function AboutImpact() {
   ]
 
   return (
-    <section id="impacto" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#2e7d32] to-[#1b5e20]">
+    <section id="impacto" className="relative w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#143a2d] via-[#1d543f] to-[#2b6f4f] overflow-hidden">
+      <div className="absolute left-0 top-0 h-56 w-56 rounded-full bg-[#f2a95a]/15 blur-3xl" aria-hidden="true" />
+      <div className="absolute right-0 bottom-0 h-64 w-64 rounded-full bg-[#9ad0b2]/15 blur-3xl" aria-hidden="true" />
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-bold text-green-100 uppercase tracking-[0.15em] mb-4">
@@ -37,10 +39,10 @@ export default function AboutImpact() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 relative">
           {impacts.map((impact, index) => (
-            <div key={index} className="bg-white bg-opacity-95 rounded-lg p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-              <p className="text-5xl font-serif font-bold text-[#2e7d32] mb-2">{impact.number}</p>
+            <div key={index} className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-white/60">
+              <p className="text-5xl font-serif font-bold text-[#245f45] mb-2">{impact.number}</p>
               <p className="text-sm font-bold text-gray-700 uppercase tracking-widest mb-2">{impact.label}</p>
               <p className="text-gray-600 text-sm">{impact.description}</p>
             </div>

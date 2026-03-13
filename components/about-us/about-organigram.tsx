@@ -2,7 +2,7 @@
 
 export default function AboutOrganigram() {
   return (
-    <section id="organigrama" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section id="organigrama" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#f8faf9] via-[#f4f7fb] to-[#eef4f2]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-bold text-[#2e7d32] uppercase tracking-[0.15em] mb-4">
@@ -18,7 +18,7 @@ export default function AboutOrganigram() {
         <div className="flex justify-center items-start gap-8 mb-12 flex-col sm:flex-row">
           {/* Gerencia General - Principal */}
           <div className="flex-1 max-w-sm">
-            <div className="bg-gradient-to-r from-[#e65100] to-[#bf360c] text-white rounded-lg p-6 shadow-lg text-center">
+            <div className="bg-gradient-to-r from-[#c27737] to-[#9e5b25] text-white rounded-2xl p-6 shadow-lg text-center">
               <p className="text-2xl font-serif font-bold mb-2">Gerencia General</p>
               <p className="font-semibold">Natasha Escobar A.</p>
               <p className="text-sm text-orange-100">Gerente General</p>
@@ -27,7 +27,7 @@ export default function AboutOrganigram() {
 
           {/* Socio - Chiquito al costado */}
           <div className="flex-1 max-w-xs">
-            <div className="bg-gradient-to-r from-[#2e7d32] to-[#1b5e20] text-white rounded-lg p-4 shadow-lg text-center">
+            <div className="bg-gradient-to-r from-[#2f7a57] to-[#245f45] text-white rounded-2xl p-4 shadow-lg text-center">
               <p className="text-lg font-serif font-bold mb-1">Socio</p>
               <p className="font-semibold text-sm">Marleni G. Valverde</p>
               <p className="text-xs text-green-100">Socio Ejecutivo</p>
@@ -37,12 +37,12 @@ export default function AboutOrganigram() {
 
         {/* Connecting line */}
         <div className="flex justify-center mb-8">
-          <div className="w-1 h-8 bg-gradient-to-b from-[#e65100] to-transparent"></div>
+          <div className="w-1 h-8 bg-gradient-to-b from-[#b56a2e] to-transparent"></div>
         </div>
 
         {/* Nivel 2 - Administrador */}
         <div className="flex justify-center mb-12">
-          <div className="bg-blue-500 text-white rounded-lg p-5 shadow-lg max-w-md w-full text-center">
+          <div className="bg-gradient-to-r from-[#2f5e7a] to-[#254e66] text-white rounded-2xl p-5 shadow-lg max-w-md w-full text-center">
             <p className="text-xl font-serif font-bold mb-2">Administración</p>
             <p className="font-semibold">Antonio Guevara E.</p>
             <p className="text-sm text-blue-100">Administrador</p>
@@ -51,37 +51,37 @@ export default function AboutOrganigram() {
 
         {/* Connecting line */}
         <div className="flex justify-center mb-8">
-          <div className="w-1 h-8 bg-gradient-to-b from-blue-500 to-transparent"></div>
+          <div className="w-1 h-8 bg-gradient-to-b from-[#2f5e7a] to-transparent"></div>
         </div>
 
         {/* Nivel 3 - Área Técnica y Comercial */}
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* Área Técnica */}
           <div className="flex flex-col items-center">
-            <div className="bg-green-600 text-white rounded-lg p-5 shadow-lg w-full text-center">
+            <div className="bg-gradient-to-r from-[#2f7a57] to-[#245f45] text-white rounded-2xl p-5 shadow-lg w-full text-center">
               <p className="text-lg font-serif font-bold mb-2">Área Técnica</p>
               <p className="font-semibold">Ing. Javier Verastegui Sancho</p>
               <p className="text-sm text-green-100">Jefe en Biotecnología</p>
             </div>
 
             {/* Connecting line down */}
-            <div className="w-1 h-6 bg-green-600 my-2"></div>
+            <div className="w-1 h-6 bg-[#2f7a57] my-2"></div>
 
             {/* Supervisoras Técnicas */}
             <div className="w-full space-y-3">
-              <div className="bg-emerald-500 text-white rounded-lg p-4 shadow-md text-center">
+              <div className="bg-[#4f9a76] text-white rounded-xl p-4 shadow-md text-center">
                 <p className="font-semibold">Melissa Torres M.</p>
                 <p className="text-sm text-emerald-100">Supervisora - Practicantes</p>
               </div>
-              <div className="bg-emerald-500 text-white rounded-lg p-4 shadow-md text-center">
+              <div className="bg-[#4f9a76] text-white rounded-xl p-4 shadow-md text-center">
                 <p className="font-semibold">Hellem Guevara N.</p>
                 <p className="text-sm text-emerald-100">Supervisora - Técnica</p>
               </div>
             </div>
 
             {/* Equipo Técnico */}
-            <div className="w-1 h-6 bg-green-600 my-2"></div>
-            <div className="w-full bg-white rounded-lg p-4 shadow-md border-l-4 border-green-600">
+            <div className="w-1 h-6 bg-[#2f7a57] my-2"></div>
+            <div className="w-full bg-white rounded-xl p-4 shadow-md border-l-4 border-[#2f7a57]">
               <h4 className="font-semibold text-gray-900 mb-3">Equipo Técnico</h4>
               <div className="space-y-2">
                 <div>
@@ -102,17 +102,17 @@ export default function AboutOrganigram() {
 
           {/* Comercial */}
           <div className="flex flex-col items-center">
-            <div className="bg-purple-600 text-white rounded-lg p-5 shadow-lg w-full text-center">
+            <div className="bg-gradient-to-r from-[#4a6f8d] to-[#3d5d76] text-white rounded-2xl p-5 shadow-lg w-full text-center">
               <p className="text-lg font-serif font-bold mb-2">Comercial</p>
               <p className="font-semibold">Jaime Palomino Cuenca</p>
-              <p className="text-sm text-purple-100">Jefe Comercial</p>
+              <p className="text-sm text-slate-200">Jefe Comercial</p>
             </div>
 
             {/* Connecting line down */}
-            <div className="w-1 h-6 bg-purple-600 my-2"></div>
+            <div className="w-1 h-6 bg-[#4a6f8d] my-2"></div>
 
             {/* Equipo Comercial */}
-            <div className="w-full bg-white rounded-lg p-4 shadow-md border-l-4 border-purple-600">
+            <div className="w-full bg-white rounded-xl p-4 shadow-md border-l-4 border-[#4a6f8d]">
               <h4 className="font-semibold text-gray-900 mb-3">Equipo Comercial</h4>
               <div className="space-y-2">
                 <div>
@@ -133,10 +133,10 @@ export default function AboutOrganigram() {
           <div className="w-full max-w-md">
             {/* Connection from Admin */}
             <div className="flex justify-center mb-4">
-              <div className="w-1 h-6 bg-blue-500"></div>
+              <div className="w-1 h-6 bg-[#2f5e7a]"></div>
             </div>
 
-            <div className="bg-white rounded-lg p-6 shadow-md border-l-4 border-blue-500">
+            <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-[#2f5e7a]">
               <h4 className="font-semibold text-gray-900 mb-4 text-center">Áreas de Apoyo</h4>
               <div className="space-y-3">
                 <div>
