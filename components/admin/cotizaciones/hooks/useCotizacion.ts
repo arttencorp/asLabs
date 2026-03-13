@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { generarNumeroCotizacion, limpiarDatosParaBD, dateToInputValue } from '@/utils'
+import { generarNumeroCotizacion, limpiarDatosParaBD, dateToInputValue, obtenerFechaActualLima } from '@/utils'
 import { crearCotizacion, actualizarCotizacion, obtenerCotizacionPorId, obtenerFormasPago } from '@/lib/supabase'
 import { useClientes } from '@/components/admin/clientes'
 import { useProductos } from './useProductos'
@@ -39,7 +39,7 @@ export function useCotizacion() {
 
   // Información de la cotización
   const [numeroCotizacion, setNumeroCotizacion] = useState('')
-  const [fechaEmision, setFechaEmision] = useState(new Date().toISOString().split('T')[0])
+  const [fechaEmision, setFechaEmision] = useState(() => obtenerFechaActualLima())
   const [fechaVencimiento, setFechaVencimiento] = useState(calcularFechaVencimiento(10))
 
   // Información del cliente
@@ -622,8 +622,8 @@ export function useCotizacion() {
       const year = new Date().getFullYear()
       setNumeroCotizacion(`${timestamp.toString().slice(-6)}-${year}`)
     }
-
-    setFechaEmision(new Date().toISOString().split('T')[0])
+    
+    setFechaEmision(obtenerFechaActualLima())
     setFechaVencimiento(calcularFechaVencimiento(10))
 
     // Limpiar información del cliente
