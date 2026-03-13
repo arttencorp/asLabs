@@ -25,7 +25,7 @@ export default function AboutValues() {
   ]
 
   return (
-    <section className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-green-50">
+    <section id="valores" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-green-50">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-bold text-[#e65100] uppercase tracking-[0.15em] mb-4">

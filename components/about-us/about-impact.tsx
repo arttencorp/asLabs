@@ -25,7 +25,7 @@ export default function AboutImpact() {
   ]
 
   return (
-    <section className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#2e7d32] to-[#1b5e20]">
+    <section id="impacto" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#2e7d32] to-[#1b5e20]">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-bold text-green-100 uppercase tracking-[0.15em] mb-4">

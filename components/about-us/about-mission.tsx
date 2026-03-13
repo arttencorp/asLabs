@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export default function AboutMission() {
   return (
-    <section className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="mision" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-5xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left - Text Content */}
