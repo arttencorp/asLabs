@@ -129,9 +129,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Certificados de Calidad", href: "/admin/certificadoCalidad", icon: FileBadge },
     { name: "Convocatorias", href: "/admin/convocatorias", icon: Briefcase },
     { name: "Postulaciones", href: "/admin/postulaciones", icon: UserCheck },
-    { name: "Análisis", href: "/admin/analytics", icon: ChartColumn },
     { name: "Informes / Certificados", href: "/admin/recepcion", icon: FlaskConical },
-    { name: "Firmas", href: "/admin/firma", icon: PenLine }
+    { name: "Firmas", href: "/admin/firma", icon: PenLine },
+    { name: "Análisis", href: "/admin/analytics", icon: ChartColumn },
   ]
 
   return (
