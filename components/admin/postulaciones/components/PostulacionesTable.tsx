@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Trash2, Eye, ExternalLink } from 'lucide-react'
+import { AlertTriangle, Trash2, Eye, ExternalLink } from 'lucide-react'
 import {
     Table,
     TableBody,
@@ -158,20 +158,23 @@ export function PostulacionesTable({
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </AlertDialogTrigger>
-                                                <AlertDialogContent>
+                                                <AlertDialogContent className="sm:max-w-[420px]">
                                                     <AlertDialogHeader>
-                                                        <AlertDialogTitle>¿Eliminar postulación?</AlertDialogTitle>
+                                                        <AlertDialogTitle className="flex items-center gap-2 text-red-700">
+                                                            <AlertTriangle className="h-5 w-5" />
+                                                            Eliminar postulación
+                                                        </AlertDialogTitle>
                                                         <AlertDialogDescription>
-                                                            Se eliminará la postulación de <strong>{post.post_nom_vac}</strong>. Esta acción no se puede deshacer.
+                                                            Se eliminará la postulación de <strong>{post.post_nom_vac}</strong>. Esta acción es permanente y no se puede deshacer.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
-                                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                        <AlertDialogCancel className="border-gray-300">Cancelar</AlertDialogCancel>
                                                         <AlertDialogAction
                                                             onClick={() => onEliminar(post.post_id_int)}
-                                                            className="bg-red-600 hover:bg-red-700"
+                                                            className="bg-red-600 hover:bg-red-700 text-white"
                                                         >
-                                                            Eliminar
+                                                            Eliminar definitivamente
                                                         </AlertDialogAction>
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
@@ -274,7 +277,7 @@ export function PostulacionesTable({
                                 </div>
                             )}
 
-                            <div className="text-xs text-gray-400 pt-2 border-t">
+                            <div className="text-sm pt-2 border-t">
                                 Fecha de postulación:{' '}
                                 {viewingDetail.post_created_at_dt
                                     ? new Date(viewingDetail.post_created_at_dt).toLocaleString('es-PE')
