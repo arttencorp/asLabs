@@ -30,10 +30,15 @@ export interface PuestoFormDialogProps {
 // Props de la tabla de puestos
 export interface PuestosTableProps {
   puestos: PuestoDatabase[]
+  postulaciones: import('@/components/admin/postulaciones').PostulanteConPuesto[]
+  estadoPostulacionOptions: string[]
+  postulacionesLoading: boolean
   loading: boolean
   onEdit: (puesto: PuestoDatabase) => void
   onDelete: (id: string) => void
   onToggleEstado: (puesto: PuestoDatabase) => void
+  onCambiarEstadoPostulacion: (postId: string, nuevoEstado: string) => void
+  onEliminarPostulacion: (postId: string) => void
 }
 
 // Props de stats

@@ -9,6 +9,7 @@ import {
   PuestosStats,
   type PuestoForm
 } from '@/components/admin/convocatorias'
+import { usePostulaciones } from '@/components/admin/postulaciones'
 
 export default function ConvocatoriasPage() {
   const {
@@ -27,6 +28,16 @@ export default function ConvocatoriasPage() {
     handleDelete,
     handleToggleEstado,
   } = usePuestos()
+
+  const {
+    items: postulaciones,
+    estadoOptions: estadoPostulacionOptions,
+    loading: postulacionesLoading,
+    error: postulacionesError,
+    success: postulacionesSuccess,
+    handleCambiarEstado,
+    handleEliminar,
+  } = usePostulaciones()
 
   const openEditDialog = (puesto: any) => {
     setEditingItem(puesto)
@@ -72,9 +83,21 @@ export default function ConvocatoriasPage() {
         </div>
       )}
 
+      {postulacionesSuccess && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          {postulacionesSuccess}
+        </div>
+      )}
+
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error}
+        </div>
+      )}
+
+      {postulacionesError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {postulacionesError}
         </div>
       )}
 
@@ -84,10 +107,15 @@ export default function ConvocatoriasPage() {
       {/* Table */}
       <PuestosTable
         puestos={puestos}
+        postulaciones={postulaciones}
+        estadoPostulacionOptions={estadoPostulacionOptions}
+        postulacionesLoading={postulacionesLoading}
         loading={loading}
         onEdit={openEditDialog}
         onDelete={handleDelete}
         onToggleEstado={handleToggleEstado}
+        onCambiarEstadoPostulacion={handleCambiarEstado}
+        onEliminarPostulacion={handleEliminar}
       />
 
       {/* Dialog */}
