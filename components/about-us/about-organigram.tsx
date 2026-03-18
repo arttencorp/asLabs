@@ -46,11 +46,10 @@ export default function AboutOrganigram() {
 
           {/* NIVEL 2 - Gerente de Gestión */}
           <div className="flex justify-center">
-            <div className="w-40">
+            <div className="w-48">
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-3 shadow-lg hover:shadow-xl transition-all text-center">
-                <p className="text-xs font-bold text-blue-100 uppercase tracking-wider mb-1">Gestión</p>
-                <p className="text-sm font-semibold">Antonio Victor</p>
-                <p className="text-xs text-blue-100">Guevara</p>
+                <p className="text-xs font-bold text-blue-100 uppercase tracking-wider mb-1">Gerente de Gestión</p>
+                <p className="text-sm font-semibold">Antonio Victor Guevara</p>
               </div>
             </div>
           </div>
@@ -91,9 +90,11 @@ export default function AboutOrganigram() {
                   <div className="bg-white rounded-md p-2 shadow-sm border-l-2 border-emerald-500 space-y-1">
                     <div className="bg-emerald-50 rounded p-2">
                       <p className="text-xs font-semibold text-gray-900">Jurith Aguilar P.</p>
+                      <p className="text-xs text-gray-600">Líder Técnica</p>
                     </div>
                     <div className="bg-emerald-50 rounded p-2">
                       <p className="text-xs font-semibold text-gray-900">Tec. Quím. Madeleine I.</p>
+                      <p className="text-xs text-gray-600">Técnica</p>
                     </div>
                   </div>
                 </div>
@@ -113,6 +114,7 @@ export default function AboutOrganigram() {
                   <div className="bg-white rounded-md p-2 shadow-sm border-l-2 border-teal-500 space-y-1">
                     <div className="bg-teal-50 rounded p-2">
                       <p className="text-xs font-semibold text-gray-900">Estrella Silva Núñez</p>
+                      <p className="text-xs text-gray-600">Practicante</p>
                     </div>
                   </div>
                 </div>
@@ -140,7 +142,7 @@ export default function AboutOrganigram() {
                 {/* Microbiología Agroindustrial */}
                 <div className="space-y-2">
                   <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-lg p-2 shadow-sm hover:shadow-md transition-all text-center">
-                    <p className="text-xs font-bold text-amber-100 uppercase tracking-wider mb-1">Microbiología</p>
+                    <p className="text-xs font-bold text-amber-100 uppercase tracking-wider mb-1">Jefe Microbiología Agroindustrial</p>
                     <p className="text-xs font-semibold">Hassan Espinales</p>
                   </div>
 
@@ -148,7 +150,7 @@ export default function AboutOrganigram() {
                   <div className="bg-white rounded-md p-2 shadow-sm border-l-2 border-amber-500 space-y-1">
                     <div className="bg-amber-50 rounded p-2">
                       <p className="text-xs font-semibold text-gray-900">Luis Alonso Flores R.</p>
-                      <p className="text-xs text-gray-600">Técnico Lab.</p>
+                      <p className="text-xs text-gray-600">Técnico de Laboratorio</p>
                     </div>
                   </div>
                 </div>
@@ -177,7 +179,7 @@ export default function AboutOrganigram() {
                   <div className="bg-white rounded-md p-2 shadow-sm border-l-2 border-purple-600 space-y-1">
                     <div className="bg-purple-50 rounded p-2">
                       <p className="text-xs font-semibold text-gray-900">Arq. Sebastian Carranza</p>
-                      <p className="text-xs text-gray-600">Marketing</p>
+                      <p className="text-xs text-gray-600">Responsable Marketing</p>
                     </div>
                   </div>
                 </div>
