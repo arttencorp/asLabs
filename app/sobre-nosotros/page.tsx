@@ -31,8 +31,8 @@ function SobreNosotrosContent() {
       <AboutHeader />
       <AboutNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutMission />
-      <AboutValues />
       <AboutOrganigram />
+      <AboutValues />
       <AboutImpact />
       <AboutCTA />
       <Footer />
