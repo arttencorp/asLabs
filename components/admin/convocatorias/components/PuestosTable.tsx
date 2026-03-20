@@ -79,6 +79,11 @@ export function PuestosTable({
                     <TableCell>
                       <div>
                         <p className="font-medium text-gray-900">{puesto.puest_nom_vac || 'Sin nombre'}</p>
+                        {puesto.puest_lugar_vac && (
+                          <p className="text-xs text-gray-500">
+                            Lugar: {puesto.puest_lugar_vac}
+                          </p>
+                        )}
                         <p className="text-xs text-gray-500">
                           {format(new Date(puesto.puest_created_at_dt), "dd MMM yyyy", { locale: es })}
                         </p>

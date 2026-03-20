@@ -193,6 +193,7 @@ export interface PuestoDatabase {
   puest_id_int: string
   puest_nom_vac: string | null
   puest_dec_vac: string | null
+  puest_lugar_vac: string | null
   puest_perfil_vac: string | null
   puest_ofrece_vac: string | null
   puest_benef_vac: string | null

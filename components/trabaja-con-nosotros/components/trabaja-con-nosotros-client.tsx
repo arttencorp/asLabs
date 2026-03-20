@@ -345,11 +345,14 @@ export default function TrabajaConNosotrosClient() {
                       </div>
                       <div>
                         <CardTitle className="text-2xl">{puesto.puest_nom_vac}</CardTitle>
-                        {puesto.modalidad_trabajo?.modalid_nom_vac && (
-                          <CardDescription className="text-green-100">
-                            {puesto.modalidad_trabajo.modalid_nom_vac}
+                        {(puesto.modalidad_trabajo?.modalid_nom_vac || puesto.puest_salario_vac || puesto.puest_lugar_vac) && (
+                          <CardDescription className="text-white">
+                            {puesto.modalidad_trabajo?.modalid_nom_vac || 'Modalidad no especificada'}
                             {puesto.puest_salario_vac && (
                               <> · {puesto.puest_salario_vac}</>
+                            )}
+                            {puesto.puest_lugar_vac && (
+                              <> · {puesto.puest_lugar_vac}</>
                             )}
                           </CardDescription>
                         )}
