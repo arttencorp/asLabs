@@ -4,6 +4,7 @@ import type { PuestoDatabase } from '@/types/database'
 export interface PuestoForm {
   puest_nom_vac: string
   puest_dec_vac: string
+  puest_lugar_vac: string
   puest_perfil_vac: string
   puest_ofrece_vac: string
   puest_benef_vac: string

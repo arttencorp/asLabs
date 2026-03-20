@@ -15,6 +15,10 @@ export const validarPuesto = (data: PuestoForm): string[] => {
     errors.push('La descripción es requerida')
   }
 
+  if (!data.puest_lugar_vac?.trim()) {
+    errors.push('El lugar del puesto es requerido')
+  }
+
   if (!data.modalid_nom_vac?.trim()) {
     errors.push('La modalidad de trabajo es requerida')
   }

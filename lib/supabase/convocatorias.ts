@@ -130,6 +130,7 @@ export async function obtenerPuestosActivos(): Promise<PuestoDatabase[]> {
 export async function crearPuesto(puestoData: {
     puest_nom_vac: string
     puest_dec_vac?: string | null
+    puest_lugar_vac?: string | null
     puest_perfil_vac?: string | null
     puest_ofrece_vac?: string | null
     puest_benef_vac?: string | null
@@ -178,6 +179,7 @@ export async function crearPuesto(puestoData: {
         .insert({
             puest_nom_vac: puestoData.puest_nom_vac,
             puest_dec_vac: puestoData.puest_dec_vac || null,
+            puest_lugar_vac: puestoData.puest_lugar_vac || null,
             puest_perfil_vac: puestoData.puest_perfil_vac || null,
             puest_ofrece_vac: puestoData.puest_ofrece_vac || null,
             puest_benef_vac: puestoData.puest_benef_vac || null,
@@ -197,6 +199,7 @@ export async function actualizarPuesto(
     puestoData: {
         puest_nom_vac?: string
         puest_dec_vac?: string | null
+        puest_lugar_vac?: string | null
         puest_perfil_vac?: string | null
         puest_ofrece_vac?: string | null
         puest_benef_vac?: string | null
@@ -208,6 +211,7 @@ export async function actualizarPuesto(
     const updateData: Record<string, unknown> = {
         puest_nom_vac: puestoData.puest_nom_vac,
         puest_dec_vac: puestoData.puest_dec_vac || null,
+        puest_lugar_vac: puestoData.puest_lugar_vac || null,
         puest_perfil_vac: puestoData.puest_perfil_vac || null,
         puest_ofrece_vac: puestoData.puest_ofrece_vac || null,
         puest_benef_vac: puestoData.puest_benef_vac || null,

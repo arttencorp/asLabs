@@ -30,6 +30,7 @@ export function PuestoFormDialog({
   const [formData, setFormData] = useState<PuestoForm>({
     puest_nom_vac: '',
     puest_dec_vac: '',
+    puest_lugar_vac: '',
     puest_perfil_vac: '',
     puest_ofrece_vac: '',
     puest_benef_vac: '',
@@ -43,6 +44,7 @@ export function PuestoFormDialog({
       setFormData({
         puest_nom_vac: editingPuesto.puest_nom_vac || '',
         puest_dec_vac: editingPuesto.puest_dec_vac || '',
+        puest_lugar_vac: editingPuesto.puest_lugar_vac || '',
         puest_perfil_vac: editingPuesto.puest_perfil_vac || '',
         puest_ofrece_vac: editingPuesto.puest_ofrece_vac || '',
         puest_benef_vac: editingPuesto.puest_benef_vac || '',
@@ -54,6 +56,7 @@ export function PuestoFormDialog({
       setFormData({
         puest_nom_vac: '',
         puest_dec_vac: '',
+        puest_lugar_vac: '',
         puest_perfil_vac: '',
         puest_ofrece_vac: '',
         puest_benef_vac: '',
@@ -106,6 +109,16 @@ export function PuestoFormDialog({
               onChange={(e) => setFormData(prev => ({ ...prev, puest_dec_vac: e.target.value }))}
               placeholder="Descripción detallada del puesto..."
               rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="puest_lugar_vac">Lugar del Puesto *</Label>
+            <Input
+              id="puest_lugar_vac"
+              value={formData.puest_lugar_vac}
+              onChange={(e) => setFormData(prev => ({ ...prev, puest_lugar_vac: e.target.value }))}
+              placeholder="Ej: Trujillo, La Libertad"
             />
           </div>
 

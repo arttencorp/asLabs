@@ -190,7 +190,7 @@ export function PostulacionesTable({
 
             {/* Dialog de Detalle */}
             <Dialog open={!!viewingDetail} onOpenChange={(open) => !open && setViewingDetail(null)}>
-                <DialogContent className="max-w-lg">
+                <DialogContent className="max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>Detalle de Postulación</DialogTitle>
                         <DialogDescription>
@@ -198,7 +198,7 @@ export function PostulacionesTable({
                         </DialogDescription>
                     </DialogHeader>
                     {viewingDetail && (
-                        <div className="space-y-4">
+                        <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm font-medium text-gray-500">Nombre</p>
