@@ -53,12 +53,11 @@ export default function ClientPage() {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const trustLogos = [
-    { src: "/trustUs/CCLL.png", alt: "Cámara de Comercio de La Libertad", href: "https://camaralalibertad.org.pe", label: "Socios de:" },
     { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo", href: "https://agroindustriallaredo.com/" },
     { src: "/trustUs/CGIAR.jpeg", alt: "Centro Internacional de la Papa", href: "https://cipotato.org/es/" },
     { src: "/trustUs/manuelita.jpg", alt: "Manuelita", href: "https://agroindustriallaredo.com/" },
     { src: "/trustUs/skyeast.jpg", alt: "Skyeast", href: "https://www.skyeast.co.uk/en/" },
-    { src: "/trustUs/queensU.png", alt: "Queen's University Belfast", href: "https://www.qub.ac.uk/", label: "Investigadores de:" },
+    { src: "/trustUs/CCLL.png", alt: "Cámara de Comercio de La Libertad", href: "https://camaralalibertad.org.pe", label: "Socios de:" },
     { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", href: "https://www.unitru.edu.pe/", label: "Trabajamos con profesionales de:" },
     { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", href: "https://www.arttencorp.com" },
   ]

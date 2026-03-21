@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -34,6 +36,8 @@ export function ResultadosSection({
   onEliminarResultado,
   disabled = false
 }: ResultadosSectionProps) {
+  const [muestraSeleccionada, setMuestraSeleccionada] = useState('')
+
   // Config de campos extra para este servicio (si existe)
   const extraConfig = servicioConfExtra ? CAMPOS_EXTRA_POR_SERVICIO[servicioConfExtra] : undefined
 
@@ -56,7 +60,11 @@ export function ResultadosSection({
           <div className="flex gap-2">
             {muestras.length > 0 && (
               <Select
-                onValueChange={(muestraId) => onAgregarResultado(muestraId === 'general' ? undefined : muestraId)}
+                value={muestraSeleccionada}
+                onValueChange={(muestraId) => {
+                  onAgregarResultado(muestraId === 'general' ? undefined : muestraId)
+                  setMuestraSeleccionada('')
+                }}
                 disabled={disabled}
               >
                 <SelectTrigger className="w-48">

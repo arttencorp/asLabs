@@ -59,7 +59,7 @@ export function MuestrasSection({
   return (
     <Card>
       <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between text-white">
           <CardTitle className="text-lg flex items-center gap-2">
             <FlaskConical className="h-5 w-5 text-primary" />
             Muestras ({muestras.length})
@@ -100,7 +100,7 @@ export function MuestrasSection({
                       </span>
                     )}
                     {muestra.matriz && (
-                      <span className="text-xs bg-secondary px-2 py-1 rounded">
+                      <span className="text-xs bg-secondary px-2 py-1 rounded text-white">
                         {muestra.matriz}
                       </span>
                     )}
