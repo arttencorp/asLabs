@@ -27,6 +27,14 @@ export function PuestoFormDialog({
   loading,
   error,
 }: PuestoFormDialogProps) {
+  const toLocalDateTimeInput = (value: string | null | undefined): string => {
+    if (!value) return ''
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return ''
+    const pad = (num: number) => String(num).padStart(2, '0')
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  }
+
   const [formData, setFormData] = useState<PuestoForm>({
     puest_nom_vac: '',
     puest_dec_vac: '',
@@ -34,6 +42,10 @@ export function PuestoFormDialog({
     puest_perfil_vac: '',
     puest_ofrece_vac: '',
     puest_benef_vac: '',
+    puest_adicio_vac: '',
+    puest_fec_limite_dt: '',
+    puest_vacantes_vac: '',
+    puest_duracion_vac: '',
     modalid_nom_vac: '',
     puest_salario_vac: '',
     estpuest_nom_vac: 'EN CONVOCATORIA',
@@ -48,6 +60,10 @@ export function PuestoFormDialog({
         puest_perfil_vac: editingPuesto.puest_perfil_vac || '',
         puest_ofrece_vac: editingPuesto.puest_ofrece_vac || '',
         puest_benef_vac: editingPuesto.puest_benef_vac || '',
+        puest_adicio_vac: editingPuesto.puest_adicio_vac || '',
+        puest_fec_limite_dt: toLocalDateTimeInput(editingPuesto.puest_fec_limite_dt),
+        puest_vacantes_vac: editingPuesto.puest_vacantes_vac || '',
+        puest_duracion_vac: editingPuesto.puest_duracion_vac || '',
         modalid_nom_vac: editingPuesto.modalidad_trabajo?.modalid_nom_vac || '',
         puest_salario_vac: editingPuesto.puest_salario_vac || '',
         estpuest_nom_vac: editingPuesto.Estado_Puesto?.estpuest_nom_vac || estadoOptions[0] || '',
@@ -60,6 +76,10 @@ export function PuestoFormDialog({
         puest_perfil_vac: '',
         puest_ofrece_vac: '',
         puest_benef_vac: '',
+        puest_adicio_vac: '',
+        puest_fec_limite_dt: '',
+        puest_vacantes_vac: '',
+        puest_duracion_vac: '',
         modalid_nom_vac: '',
         puest_salario_vac: '',
         estpuest_nom_vac: estadoOptions[0] || '',
@@ -179,6 +199,37 @@ export function PuestoFormDialog({
             />
           </div>
 
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="puest_vacantes_vac">Vacantes</Label>
+              <Input
+                id="puest_vacantes_vac"
+                value={formData.puest_vacantes_vac}
+                onChange={(e) => setFormData(prev => ({ ...prev, puest_vacantes_vac: e.target.value }))}
+                placeholder="Ej: Ilimitadas"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="puest_duracion_vac">Duración</Label>
+              <Input
+                id="puest_duracion_vac"
+                value={formData.puest_duracion_vac}
+                onChange={(e) => setFormData(prev => ({ ...prev, puest_duracion_vac: e.target.value }))}
+                placeholder="Ej: 3 meses"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="puest_fec_limite_dt">Fecha límite</Label>
+            <Input
+              id="puest_fec_limite_dt"
+              type="datetime-local"
+              value={formData.puest_fec_limite_dt}
+              onChange={(e) => setFormData(prev => ({ ...prev, puest_fec_limite_dt: e.target.value }))}
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="puest_perfil_vac">Perfil Requerido</Label>
             <Textarea
@@ -209,6 +260,17 @@ export function PuestoFormDialog({
               onChange={(e) => setFormData(prev => ({ ...prev, puest_benef_vac: e.target.value }))}
               placeholder="Beneficios adicionales (separa por líneas)..."
               rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="puest_adicio_vac">Información adicional</Label>
+            <Textarea
+              id="puest_adicio_vac"
+              value={formData.puest_adicio_vac}
+              onChange={(e) => setFormData(prev => ({ ...prev, puest_adicio_vac: e.target.value }))}
+              placeholder="Información adicional de la convocatoria..."
+              rows={2}
             />
           </div>
 

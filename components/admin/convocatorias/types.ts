@@ -8,6 +8,10 @@ export interface PuestoForm {
   puest_perfil_vac: string
   puest_ofrece_vac: string
   puest_benef_vac: string
+  puest_adicio_vac: string
+  puest_fec_limite_dt: string
+  puest_vacantes_vac: string
+  puest_duracion_vac: string
   // Modalidad de trabajo
   modalid_nom_vac: string
   // Salario

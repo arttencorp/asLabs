@@ -84,6 +84,21 @@ export function PuestosTable({
                             Lugar: {puesto.puest_lugar_vac}
                           </p>
                         )}
+                        {puesto.puest_vacantes_vac && (
+                          <p className="text-xs text-gray-500">
+                            Vacantes: {puesto.puest_vacantes_vac}
+                          </p>
+                        )}
+                        {puesto.puest_duracion_vac && (
+                          <p className="text-xs text-gray-500">
+                            Duración: {puesto.puest_duracion_vac}
+                          </p>
+                        )}
+                        {puesto.puest_fec_limite_dt && (
+                          <p className="text-xs text-gray-500">
+                            Límite: {format(new Date(puesto.puest_fec_limite_dt), "dd MMM yyyy HH:mm", { locale: es })}
+                          </p>
+                        )}
                         <p className="text-xs text-gray-500">
                           {format(new Date(puesto.puest_created_at_dt), "dd MMM yyyy", { locale: es })}
                         </p>

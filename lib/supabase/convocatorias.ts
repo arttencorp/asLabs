@@ -134,6 +134,10 @@ export async function crearPuesto(puestoData: {
     puest_perfil_vac?: string | null
     puest_ofrece_vac?: string | null
     puest_benef_vac?: string | null
+    puest_adicio_vac?: string | null
+    puest_fec_limite_dt?: string | null
+    puest_vacantes_vac?: string | null
+    puest_duracion_vac?: string | null
     modalid_nom_vac?: string | null
     puest_salario_vac?: string | null
     estpuest_nom_vac?: string | null
@@ -184,6 +188,10 @@ export async function crearPuesto(puestoData: {
             puest_ofrece_vac: puestoData.puest_ofrece_vac || null,
             puest_benef_vac: puestoData.puest_benef_vac || null,
             puest_salario_vac: puestoData.puest_salario_vac || null,
+            puest_adicio_vac: puestoData.puest_adicio_vac || null,
+            puest_fec_limite_dt: puestoData.puest_fec_limite_dt || null,
+            puest_vacantes_vac: puestoData.puest_vacantes_vac || null,
+            puest_duracion_vac: puestoData.puest_duracion_vac || null,
             modalid_id_int: modalidId,
             estpuest_id_int: estpuestId,
         })
@@ -203,6 +211,10 @@ export async function actualizarPuesto(
         puest_perfil_vac?: string | null
         puest_ofrece_vac?: string | null
         puest_benef_vac?: string | null
+        puest_adicio_vac?: string | null
+        puest_fec_limite_dt?: string | null
+        puest_vacantes_vac?: string | null
+        puest_duracion_vac?: string | null
         modalid_nom_vac?: string | null
         puest_salario_vac?: string | null
         estpuest_nom_vac?: string | null
@@ -216,6 +228,10 @@ export async function actualizarPuesto(
         puest_ofrece_vac: puestoData.puest_ofrece_vac || null,
         puest_benef_vac: puestoData.puest_benef_vac || null,
         puest_salario_vac: puestoData.puest_salario_vac || null,
+        puest_adicio_vac: puestoData.puest_adicio_vac || null,
+        puest_fec_limite_dt: puestoData.puest_fec_limite_dt || null,
+        puest_vacantes_vac: puestoData.puest_vacantes_vac || null,
+        puest_duracion_vac: puestoData.puest_duracion_vac || null,
     }
 
     // Buscar o crear modalidad

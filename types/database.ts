@@ -198,6 +198,10 @@ export interface PuestoDatabase {
   puest_ofrece_vac: string | null
   puest_benef_vac: string | null
   puest_salario_vac: string | null
+  puest_adicio_vac: string | null
+  puest_fec_limite_dt: string | null
+  puest_vacantes_vac: string | null
+  puest_duracion_vac: string | null
   puest_created_at_dt: string
   puest_updated_at_dt: string
   post_id_int: string | null
