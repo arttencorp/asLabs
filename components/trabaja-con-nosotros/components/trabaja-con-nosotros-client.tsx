@@ -273,6 +273,8 @@ export default function TrabajaConNosotrosClient() {
                   {consultaResultados.map((post) => {
                     const parsed = parsePresentacionPostulante(post.post_presentac_vac)
                     const estadoNombre = post.Estado_Postulacion?.estpost_nom_vac || "Sin estado"
+                    const isConcluido = estadoNombre.toUpperCase().includes("CONCLUIDO")
+                    const isAceptado = estadoNombre.toUpperCase().includes("ACEPTADO/A")
                     const areas = post.Postulacion_Detalle_Area || []
                     return (
                       <Card key={post.post_id_int} className="border">
@@ -313,6 +315,16 @@ export default function TrabajaConNosotrosClient() {
                                   </Badge>
                                 ))}
                               </div>
+                            </div>
+                          )}
+                          {isConcluido && (
+                            <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+                              Gracias por dedicar tiempo a postular y compartir tu perfil con nosotros. En esta etapa no continuaremos con tu proceso, pero valoramos tu interes y el esfuerzo puesto en tu candidatura. Te animamos a seguir atento a nuevas convocatorias y futuras oportunidades.
+                            </div>
+                          )}
+                          {isAceptado && (
+                            <div className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+                              ¡Felicidades! Has sido aceptado para el puesto. Nuestro equipo se pondrá en contacto contigo. Agradecemos tu interés en formar parte de nuestro laboratorio y esperamos contar contigo pronto.
                             </div>
                           )}
                         </CardContent>
