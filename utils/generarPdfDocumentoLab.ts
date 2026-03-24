@@ -626,18 +626,20 @@ export async function generarPdfDocumentoLab(
         // ── Tabla de resultados con soporte para gráfico referencial ──
         const resCols: TableCol[] = [
             { header: "Parámetro", width: 35 },
-            { header: "Resultado", width: 20, align: "center" },
+            { header: "Resultado", width: 42.5, align: "center" },
             { header: "Unidad", width: 16, align: "center" },
             { header: "Min", width: 14, align: "center" },
             { header: "Max", width: 14, align: "center" },
-            { header: "Valor Referencial", width: 45, align: "center" },
+            { header: "Valor Referencial", width: 22.5, align: "center" },
             { header: "Método", width: 36 },
         ];
         const hdrH = 6.5;
-        const rowH = 6;
+        const baseRowH = 6;
+        const lineH = 3.2;
+        const cellPadX = 1.5;
         const totalW = resCols.reduce((s, c) => s + c.width, 0);
 
-        y = checkPage(pdf, y, hdrH + rowH);
+        y = checkPage(pdf, y, hdrH + baseRowH);
 
         // Cabecera
         pdf.setFillColor(...LIGHT_BG);
@@ -665,6 +667,32 @@ export async function generarPdfDocumentoLab(
 
         for (let i = 0; i < documento.resultados.length; i++) {
             const r = documento.resultados[i];
+
+            const textCells = [
+                { idx: 0, text: r.parametro },
+                { idx: 1, text: r.resultado },
+                { idx: 2, text: r.unidad },
+                { idx: 3, text: r.valorMin != null ? String(r.valorMin) : "-" },
+                { idx: 4, text: r.valorMax != null ? String(r.valorMax) : "-" },
+                { idx: 6, text: r.metodo },
+            ];
+
+            const textLines = textCells.map((cell) => {
+                const col = resCols[cell.idx];
+                return pdf.splitTextToSize(cell.text || "-", col.width - cellPadX * 2);
+            });
+
+            const refText = r.rangoReferencial
+                || (r.valorMin != null && r.valorMax != null ? `${r.valorMin} – ${r.valorMax}` : "-");
+            const refLines = pdf.splitTextToSize(refText, resCols[5].width - cellPadX * 2);
+
+            const maxLines = Math.max(
+                1,
+                ...textLines.map((lines) => lines.length),
+                refLines.length,
+            );
+            const rowH = Math.max(baseRowH, maxLines * lineH + 2.4);
+
             y = checkPage(pdf, y, rowH);
 
             // Restaurar estado de dibujo al inicio de cada fila
@@ -685,27 +713,27 @@ export async function generarPdfDocumentoLab(
             }
 
             // Texto en columnas normales (0=Parámetro, 1=Resultado, 2=Unidad, 3=Min, 4=Max, 6=Método)
-            const textCells = [
-                { idx: 0, text: r.parametro },
-                { idx: 1, text: r.resultado },
-                { idx: 2, text: r.unidad },
-                { idx: 3, text: r.valorMin != null ? String(r.valorMin) : "-" },
-                { idx: 4, text: r.valorMax != null ? String(r.valorMax) : "-" },
-                { idx: 6, text: r.metodo },
-            ];
             pdf.setFont("helvetica", "normal");
             pdf.setFontSize(6.5);
             pdf.setTextColor(50, 50, 50);
 
-            for (const cell of textCells) {
+            for (let c = 0; c < textCells.length; c++) {
+                const cell = textCells[c];
                 const col = resCols[cell.idx];
+                const lines = textLines[c];
                 let cellX = M;
                 for (let k = 0; k < cell.idx; k++) cellX += resCols[k].width;
-                const text = trunc(cell.text || "-", pdf, col.width - 3);
-                if (col.align === "center") {
-                    pdf.text(text, cellX + col.width / 2, y + rowH / 2 + 0.8, { align: "center" });
-                } else {
-                    pdf.text(text, cellX + 1.5, y + rowH / 2 + 0.8);
+
+                const textBlockH = lines.length * lineH;
+                let textY = y + (rowH - textBlockH) / 2 + lineH - 0.6;
+
+                for (const line of lines) {
+                    if (col.align === "center") {
+                        pdf.text(line, cellX + col.width / 2, textY, { align: "center" });
+                    } else {
+                        pdf.text(line, cellX + cellPadX, textY);
+                    }
+                    textY += lineH;
                 }
             }
 
@@ -727,10 +755,13 @@ export async function generarPdfDocumentoLab(
                 pdf.setTextColor(50, 50, 50);
             } else {
                 // Texto plano del rango
-                const refText = r.rangoReferencial
-                    || (r.valorMin != null && r.valorMax != null ? `${r.valorMin} – ${r.valorMax}` : "-");
+                const textBlockH = refLines.length * lineH;
+                let textY = y + (rowH - textBlockH) / 2 + lineH - 0.6;
                 pdf.setTextColor(50, 50, 50);
-                pdf.text(trunc(refText, pdf, refCol.width - 3), refX + refCol.width / 2, y + rowH / 2 + 0.8, { align: "center" });
+                for (const line of refLines) {
+                    pdf.text(line, refX + refCol.width / 2, textY, { align: "center" });
+                    textY += lineH;
+                }
             }
 
             y += rowH;
