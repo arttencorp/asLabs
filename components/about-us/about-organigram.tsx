@@ -56,47 +56,47 @@ function TeamCard({ member }: TeamCardProps) {
   return (
     <Link href={`/team/${member.id}`}>
       <div className="group cursor-pointer h-full">
-        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-xl transition-all duration-300 aspect-square flex flex-col shadow-md">
-          {/* Image Container */}
-          <div className="relative w-full h-2/3 bg-gray-100 overflow-hidden">
+        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg">
+          {/* Image Container - Vertical Format */}
+          <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
             <Image
               src={member.image}
               alt={`${member.name} ${member.lastName}`}
               fill
-              className="object-cover group-hover:opacity-80 transition-opacity duration-300"
+              className="object-cover group-hover:opacity-85 transition-opacity duration-300"
             />
           </div>
 
           {/* Info Container */}
-          <div className="flex-1 p-4 bg-white flex flex-col justify-between">
-            <div className="space-y-2">
+          <div className="p-3 bg-white flex flex-col justify-between flex-1">
+            <div className="space-y-1.5">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{member.area}</p>
               <div>
-                <p className="text-sm font-semibold text-gray-900">{member.name}</p>
-                <p className="text-sm font-semibold text-gray-900">{member.lastName}</p>
+                <p className="text-xs font-semibold text-gray-900 leading-tight">{member.name}</p>
+                <p className="text-xs font-semibold text-gray-900 leading-tight">{member.lastName}</p>
               </div>
               <p className="text-xs text-gray-600 line-clamp-2">{member.role}</p>
             </div>
 
             {/* Contact Icons */}
-            <div className="flex gap-2 pt-3 border-t border-gray-100">
+            <div className="flex gap-2 pt-2 border-t border-gray-100 mt-2">
               <a
                 href={`mailto:${member.email}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 inline-flex items-center justify-center p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="flex-1 inline-flex items-center justify-center p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                 title="Email"
               >
-                <Mail size={16} className="text-gray-600" />
+                <Mail size={14} className="text-gray-600" />
               </a>
               <a
                 href={member.linkedIn}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 inline-flex items-center justify-center p-2 bg-gray-100 hover:bg-[#0A66C2] hover:text-white rounded-lg transition-colors"
+                className="flex-1 inline-flex items-center justify-center p-1.5 bg-gray-100 hover:bg-[#0A66C2] hover:text-white rounded-lg transition-colors"
                 title="LinkedIn"
               >
-                <Linkedin size={16} className="text-gray-600 group-hover:text-white" />
+                <Linkedin size={14} className="text-gray-600 group-hover:text-white" />
               </a>
             </div>
           </div>
