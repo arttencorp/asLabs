@@ -7,9 +7,9 @@ import { teamData } from '@/lib/team-data'
 
 export default function AboutOrganigram() {
   return (
-    <section id="organigrama" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
+    <section id="organigrama" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative">
+      {/* Decorative background - allow overflow */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
@@ -35,7 +35,7 @@ export default function AboutOrganigram() {
               </div>
 
               {/* Team Members Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {section.members.map((member) => (
                   <TeamCard key={member.id} member={member} />
                 ))}
@@ -58,7 +58,7 @@ function TeamCard({ member }: TeamCardProps) {
       <div className="group cursor-pointer h-full">
         <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg">
           {/* Image Container - Vertical Format */}
-          <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
+          <div className="relative w-full aspect-[2/3] bg-gray-100 overflow-hidden">
             <Image
               src={member.image}
               alt={`${member.name} ${member.lastName}`}
@@ -68,35 +68,35 @@ function TeamCard({ member }: TeamCardProps) {
           </div>
 
           {/* Info Container */}
-          <div className="p-3 bg-white flex flex-col justify-between flex-1">
-            <div className="space-y-1.5">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{member.area}</p>
+          <div className="p-2.5 bg-white flex flex-col justify-between flex-1">
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{member.area}</p>
               <div>
-                <p className="text-xs font-semibold text-gray-900 leading-tight">{member.name}</p>
-                <p className="text-xs font-semibold text-gray-900 leading-tight">{member.lastName}</p>
+                <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-1">{member.name}</p>
+                <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-1">{member.lastName}</p>
               </div>
               <p className="text-xs text-gray-600 line-clamp-2">{member.role}</p>
             </div>
 
             {/* Contact Icons */}
-            <div className="flex gap-2 pt-2 border-t border-gray-100 mt-2">
+            <div className="flex gap-1.5 pt-2 border-t border-gray-100 mt-2">
               <a
                 href={`mailto:${member.email}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 inline-flex items-center justify-center p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
                 title="Email"
               >
-                <Mail size={14} className="text-gray-600" />
+                <Mail size={12} className="text-gray-600" />
               </a>
               <a
                 href={member.linkedIn}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 inline-flex items-center justify-center p-1.5 bg-gray-100 hover:bg-[#0A66C2] hover:text-white rounded-lg transition-colors"
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-[#0A66C2] hover:text-white rounded transition-colors"
                 title="LinkedIn"
               >
-                <Linkedin size={14} className="text-gray-600 group-hover:text-white" />
+                <Linkedin size={12} className="text-gray-600 group-hover:text-white" />
               </a>
             </div>
           </div>
