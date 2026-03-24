@@ -1,3 +1,4 @@
+import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Mail, Linkedin, ArrowLeft } from 'lucide-react'
@@ -31,8 +32,14 @@ export function generateMetadata({ params }: TeamMemberPageProps) {
   }
 }
 
+'use client'
+
 export default function TeamMemberPage({ params }: TeamMemberPageProps) {
   const member = getTeamMemberById(params.id)
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [params.id])
 
   if (!member) {
     notFound()
@@ -125,44 +132,7 @@ export default function TeamMemberPage({ params }: TeamMemberPageProps) {
           </div>
         </section>
 
-        {/* Related Team Members */}
-        <section className="px-4 sm:px-6 lg:px-8 py-20">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-12">Conoce al resto del equipo</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {teamData.map((section) =>
-                section.members
-                  .filter((m) => m.id !== member.id)
-                  .slice(0, 4)
-                  .map((teamMember) => (
-                    <Link key={teamMember.id} href={`/team/${teamMember.id}`}>
-                      <div className="group cursor-pointer">
-                        <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-all duration-300 aspect-square flex flex-col">
-                          <div className="relative w-full h-2/3 bg-gray-100 overflow-hidden">
-                            <Image
-                              src={teamMember.image}
-                              alt={`${teamMember.name} ${teamMember.lastName}`}
-                              fill
-                              className="object-cover group-hover:opacity-80 transition-opacity duration-300"
-                            />
-                          </div>
-                          <div className="flex-1 p-3 bg-white flex flex-col justify-between">
-                            <div className="space-y-1">
-                              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{teamMember.area}</p>
-                              <p className="text-sm font-semibold text-gray-900 line-clamp-2">
-                                {teamMember.name} {teamMember.lastName}
-                              </p>
-                              <p className="text-xs text-gray-600 line-clamp-2">{teamMember.role}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))
-              )}
-            </div>
-          </div>
-        </section>
+
       </main>
       <Footer />
     </>
