@@ -106,11 +106,16 @@ export const teamData: TeamSection[] = [
         linkedIn: '#',
         bio: 'Biografía por completar',
       },
+    ],
+  },
+  {
+    title: 'Técnicas Químicas Principales',
+    members: [
       {
         id: 'jurith-aguilar',
         name: 'Jurith',
         lastName: 'Aguilar P.',
-        role: 'Líder Técnica',
+        role: 'Técnica Química Principal',
         area: 'Técnica',
         image: '/team/default-profile.jpg',
         email: 'ajurithp@aslaboratorios.com',
@@ -119,9 +124,9 @@ export const teamData: TeamSection[] = [
       },
       {
         id: 'madeleine-isuiza',
-        name: 'Tec. Quím.',
-        lastName: 'Madeleine Isuiza F.',
-        role: 'Técnica',
+        name: 'Madeleine',
+        lastName: 'Isuiza F.',
+        role: 'Técnica Química Principal',
         area: 'Técnica',
         image: '/team/default-profile.jpg',
         email: 'misuizaf@aslaboratorios.com',
