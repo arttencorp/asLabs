@@ -4,21 +4,24 @@ import Image from "next/image"
 
 export default function AboutMission() {
   return (
-    <section id="mision" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+    <section id="mision" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
       {/* Decorative background */}
-      <div className="absolute top-20 right-0 w-96 h-96 bg-gradient-to-br from-green-100 opacity-20 rounded-full blur-3xl translate-x-1/2"></div>
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid lg:grid-cols-2 gap-24 items-start">
           {/* Left - Text Content */}
-          <div className="space-y-10">
-            <div className="space-y-6">
+          <div className="space-y-12">
+            <div className="space-y-8">
               <div className="inline-block">
-                <span className="text-xs font-bold text-[#2e7d32] uppercase tracking-[0.2em] bg-green-50 px-4 py-2 rounded-full">
+                <span className="text-xs font-semibold text-[#2e7d32] uppercase tracking-[0.2em] bg-[#e8f5e9] px-5 py-3 rounded-full border border-[#2e7d32]/20">
                   Nuestra Trayectoria
                 </span>
               </div>
-              <h2 className="text-5xl md:text-6xl font-serif font-bold text-gray-900 leading-tight">Nuestra Historia</h2>
+              <div>
+                <h2 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 leading-tight mb-2">Nuestra</h2>
+                <h2 className="text-6xl md:text-7xl font-serif font-bold text-[#2e7d32] leading-tight">Historia</h2>
+              </div>
               <p className="text-lg text-gray-700 leading-relaxed font-medium">
                 Fundada en 1997, AS Laboratorios nació como una visión de aplicar biotecnología avanzada 
                 al servicio de la agricultura peruana. Comenzamos como un pequeño laboratorio especializado 
@@ -30,24 +33,28 @@ export default function AboutMission() {
               </p>
             </div>
 
-            <div className="pt-12 border-t-2 border-green-200 space-y-6">
+            <div className="pt-12 border-t-2 border-gray-200 space-y-10">
               <div>
-                <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4 flex items-center gap-3">
-                  <span className="w-2 h-2 bg-[#2e7d32] rounded-full"></span>
-                  Misión
-                </h3>
-                <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-[#e8f5e9] rounded-full flex items-center justify-center">
+                    <span className="text-2xl font-serif text-[#2e7d32]">◆</span>
+                  </div>
+                  <h3 className="text-2xl font-serif font-bold text-gray-900">Misión</h3>
+                </div>
+                <p className="text-lg text-gray-700 leading-relaxed font-medium pl-16">
                   Desarrollar y proveer soluciones biotecnológicas innovadoras y sostenibles para la agricultura 
                   peruana, contribuyendo a la seguridad alimentaria, conservación ambiental y formación de nuevos científicos.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4 flex items-center gap-3">
-                  <span className="w-2 h-2 bg-[#e65100] rounded-full"></span>
-                  Visión
-                </h3>
-                <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center">
+                    <span className="text-2xl font-serif text-[#e65100]">◆</span>
+                  </div>
+                  <h3 className="text-2xl font-serif font-bold text-gray-900">Visión</h3>
+                </div>
+                <p className="text-lg text-gray-700 leading-relaxed font-medium pl-16">
                   Ser líderes en biotecnología agrícola en América Latina, reconocidos por nuestra investigación 
                   de calidad, innovación continua y compromiso con la sostenibilidad.
                 </p>
@@ -56,9 +63,9 @@ export default function AboutMission() {
           </div>
 
           {/* Right - Stats */}
-          <div className="space-y-8">
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-8 shadow-lg">
-              <div className="space-y-10">
+          <div className="space-y-8 lg:pt-6">
+            <div className="bg-gradient-to-br from-[#f8f6f1] to-[#f0ebe5] rounded-3xl p-12 shadow-xl border border-gray-200/50">
+              <div className="space-y-12">
                 <div className="flex items-start gap-6">
                   <div className="text-5xl font-serif font-bold text-[#2e7d32] leading-none">27</div>
                   <div>

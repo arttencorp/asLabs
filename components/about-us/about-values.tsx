@@ -25,39 +25,39 @@ export default function AboutValues() {
   ]
 
   return (
-    <section id="valores" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 relative overflow-hidden">
+    <section id="valores" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative overflow-hidden">
       {/* Decorative background */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-100 opacity-30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-green-100 opacity-30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-[#2e7d32] opacity-5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#e65100] opacity-4 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-block mb-4">
-            <span className="text-xs font-bold text-[#e65100] uppercase tracking-[0.2em] bg-orange-50 px-4 py-2 rounded-full">
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-left mb-24 max-w-2xl">
+          <div className="inline-block mb-6">
+            <span className="text-xs font-semibold text-[#e65100] uppercase tracking-[0.2em] bg-orange-50 px-5 py-3 rounded-full border border-[#e65100]/20">
               Principios Fundamentales
             </span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-serif font-bold text-gray-900 mb-6 leading-tight">Nuestros Valores</h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto font-medium">
+          <h2 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 mb-8 leading-tight">Nuestros Valores</h2>
+          <p className="text-xl text-gray-700 font-medium">
             Los principios fundamentales que guían cada decisión y acción en AS Laboratorios
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
+        <div className="grid md:grid-cols-2 gap-8">
           {values.map((value, index) => (
-            <div key={index} className="group bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 border-b-4 overflow-hidden relative" style={{borderBottomColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}>
+            <div key={index} className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200/50 hover:border-gray-300 overflow-hidden relative" style={{}}>
               {/* Background accent */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-5 group-hover:opacity-10 transition-opacity" style={{backgroundColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}></div>
+              <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full opacity-3 group-hover:opacity-5 transition-opacity" style={{backgroundColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}></div>
 
               <div className="flex items-start gap-6 relative z-10">
                 <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-16 w-16 rounded-xl text-white font-bold text-2xl font-serif" style={{backgroundColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}>
+                  <div className="flex items-center justify-center h-20 w-20 rounded-2xl text-white font-bold text-3xl font-serif flex-shrink-0" style={{backgroundColor: ['#2e7d32', '#e65100', '#01283c', '#7b1fa2'][index]}}>
                     {value.number}
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">{value.title}</h3>
-                  <p className="text-gray-700 leading-relaxed font-medium">{value.description}</p>
+                  <h3 className="text-2xl font-serif font-bold text-gray-900 mb-4">{value.title}</h3>
+                  <p className="text-gray-700 leading-relaxed">{value.description}</p>
                 </div>
               </div>
             </div>

@@ -48,14 +48,14 @@ export const teamData: TeamSection[] = [
     members: [
       {
         id: 'antonio-guevara',
-        name: 'Antonio Victor',
-        lastName: 'Guevara',
+        name: 'Antonio Victor Gabriel',
+        lastName: 'Guevara Escobar',
         role: 'Gerente de Gestión',
         area: 'Administración',
-        image: '/team/default-profile.jpg',
+        image: '/team/antonio-guevara-real.jpg',
         email: 'avguevaraes@aslaboratorios.com',
         linkedIn: '#',
-        bio: 'Biografía por completar',
+        bio: 'Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nSu formación académica comprende estudios de especialización en administración y gestión de empresas en The Wharton School y Microbiología y Parasitología en la Universidad Nacional de Trujillo. Complementa esta preparación con estudios de inglés en instituciones como la Asociación Cultural Peruano Británica y la Asociación Peruano Americana El Cultural.\n\nHa fortalecido su perfil con certificaciones y cursos en gestión ambiental, análisis de datos, lógica de sistemas, seguridad y salud en el trabajo, marketing digital y diseño gráfico avanzado. Entre estos figuran estudios realizados con el Colegio de Ingenieros del Perú, IBS – International Business School Americas y Fundación Romero.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.',
       },
       {
         id: 'luis-guevara',
