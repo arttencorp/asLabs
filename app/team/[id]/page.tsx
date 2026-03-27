@@ -51,15 +51,10 @@ export default function TeamMemberPage({ params }: TeamMemberPageProps) {
     <>
       <Navbar />
       <main className="min-h-screen bg-white">
-        {/* Back Button */}
-        <div className="sticky top-20 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
-          <div className="max-w-6xl mx-auto">
-            <Link href="/sobre-nosotros#organigrama" className="inline-flex items-center gap-3 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 transition-all rounded-lg group font-medium text-sm">
-              <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-              <span>Volver al equipo</span>
-            </Link>
-          </div>
-        </div>
+        {/* Floating Back Button */}
+        <Link href="/sobre-nosotros#organigrama" className="fixed top-24 left-6 z-40 flex items-center justify-center w-12 h-12 bg-white border border-gray-300 rounded-full hover:border-gray-400 hover:shadow-lg transition-all group">
+          <ArrowLeft size={20} className="text-gray-600 group-hover:text-gray-900 group-hover:-translate-x-0.5 transition-all" />
+        </Link>
 
         {/* Profile Header */}
         <section className="px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-[#f8f6f1] to-white relative overflow-visible">
