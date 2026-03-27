@@ -52,18 +52,20 @@ export default function TeamMemberPage({ params }: TeamMemberPageProps) {
       <Navbar />
       <main className="min-h-screen bg-white">
         {/* Back Button */}
-        <div className="sticky top-20 z-40 bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-3">
+        <div className="sticky top-20 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
           <div className="max-w-6xl mx-auto">
-            <Link href="/sobre-nosotros" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group">
+            <Link href="/sobre-nosotros#organigrama" className="inline-flex items-center gap-3 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 transition-all rounded-lg group font-medium text-sm">
               <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-              <span className="font-medium text-sm">Volver al equipo</span>
+              <span>Volver al equipo</span>
             </Link>
           </div>
         </div>
 
         {/* Profile Header */}
-        <section className="px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-[#f8f6f1] to-white">
-          <div className="max-w-6xl mx-auto">
+        <section className="px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-[#f8f6f1] to-white relative overflow-visible">
+          {/* Decorative background blur */}
+          <div className="absolute top-0 right-0 w-[900px] h-[900px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
+          <div className="max-w-6xl mx-auto relative z-10">
             <div className="grid lg:grid-cols-3 gap-12 items-start">
               {/* Photo */}
               <div className="lg:col-span-1 flex justify-center lg:justify-start">
@@ -96,35 +98,35 @@ export default function TeamMemberPage({ params }: TeamMemberPageProps) {
                 </div>
 
                 {/* Contact Info */}
-                <div className="space-y-4 pt-8 border-t-2 border-gray-200">
-                  <div className="flex items-start gap-4">
+                <div className="space-y-6 pt-8 border-t-2 border-gray-200">
+                  <a href={`mailto:${member.email}`} className="flex items-start gap-4 hover:opacity-80 transition-opacity">
                     <div className="mt-1">
                       <Mail className="text-[#2e7d32]" size={24} />
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Email</p>
-                      <a href={`mailto:${member.email}`} className="text-lg text-gray-900 hover:text-[#2e7d32] transition-colors font-medium">
+                      <p className="text-lg text-gray-900 font-medium">
                         {member.email}
-                      </a>
+                      </p>
                     </div>
-                  </div>
+                  </a>
 
-                  <div className="flex items-start gap-4">
+                  <a 
+                    href={member.linkedIn} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-4 hover:opacity-80 transition-opacity"
+                  >
                     <div className="mt-1">
                       <Linkedin className="text-[#0A66C2]" size={24} />
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">LinkedIn</p>
-                      <a 
-                        href={member.linkedIn} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-lg text-[#0A66C2] hover:text-[#084A94] transition-colors font-medium"
-                      >
+                      <p className="text-lg text-[#0A66C2] font-medium">
                         Ver perfil
-                      </a>
+                      </p>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
