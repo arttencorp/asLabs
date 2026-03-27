@@ -8,6 +8,7 @@ export interface TeamMember {
   email: string
   linkedIn: string
   bio?: string
+  education?: string[]
 }
 
 export interface TeamSection {
@@ -29,6 +30,7 @@ export const teamData: TeamSection[] = [
         email: 'marleni@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'natasha-escobar',
@@ -39,7 +41,12 @@ export const teamData: TeamSection[] = [
         image: '/team/default-profile.jpg',
         email: 'natasha@aslaboratorios.com',
         linkedIn: '#',
-        bio: 'Natasha Escobar Arana es una bióloga especializada en entomología y crianza de insectos benéficos para control biológico. Como Gerente General de AS Laboratorios Control Biológico S.A.C. desde 2005, dirige la producción de organismos benéficos como Paratheresia claripalpis, Chrysoperla sp. y Trichogramma spp. SENASA la registra como proveedora autorizada de agentes de control biológico, reconociendo específicamente la cría de Paratheresia claripalpis en sus instalaciones.\n\nSu trabajo ha permitido abastecer programas de control biológico en empresas de envergadura como Agroindustrial Laredo (Sol de Laredo), que logró cultivar más de 6 000 hectáreas sin plaguicidas y obtuvo certificación de "Fundo Verde" de SENASA, y Agrolmos S.A., que utilizó insectos benéficos antes de inaugurar su propio laboratorio entomológico en 2021. También ha apoyado a productores del Proyecto Especial Chavimochic, donde el uso de biocontroladores ha reducido hasta en 50% la aplicación de agroquímicos en cultivos como maíz y piña.\n\n## Formación Académica\n• Biología - Universidad Nacional de Trujillo\n• Especialización en Entomología - Universidad Nacional de Trujillo\n• Master en Gestión Pública - Universidad Nacional de Trujillo',
+        bio: 'Natasha Escobar Arana es una bióloga especializada en entomología y crianza de insectos benéficos para control biológico. Como Gerente General de AS Laboratorios Control Biológico S.A.C. desde 2005, dirige la producción de organismos benéficos como Paratheresia claripalpis, Chrysoperla sp. y Trichogramma spp. SENASA la registra como proveedora autorizada de agentes de control biológico, reconociendo específicamente la cría de Paratheresia claripalpis en sus instalaciones.\n\nSu trabajo ha permitido abastecer programas de control biológico en empresas de envergadura como Agroindustrial Laredo (Sol de Laredo), que logró cultivar más de 6 000 hectáreas sin plaguicidas y obtuvo certificación de "Fundo Verde" de SENASA, y Agrolmos S.A., que utilizó insectos benéficos antes de inaugurar su propio laboratorio entomológico en 2021. También ha apoyado a productores del Proyecto Especial Chavimochic, donde el uso de biocontroladores ha reducido hasta en 50% la aplicación de agroquímicos en cultivos como maíz y piña.',
+        education: [
+          'Biología - Universidad Nacional de Trujillo',
+          'Especialización en Entomología - Universidad Nacional de Trujillo',
+          'Master en Gestión Pública - Universidad Nacional de Trujillo',
+        ],
       },
     ],
   },
@@ -55,7 +62,16 @@ export const teamData: TeamSection[] = [
         image: '/team/antonio-guevara-real.jpg',
         email: 'avguevaraes@aslaboratorios.com',
         linkedIn: '#',
-        bio: 'Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.\n\n## Formación Académica\n• Especialización en Administración y Gestión de Empresas - The Wharton School\n• Microbiología y Parasitología - Universidad Nacional de Trujillo\n• Inglés Avanzado - Asociación Cultural Peruano Británica\n• Inglés Intermedio - Asociación Peruano Americana El Cultural\n• Gestión Ambiental - Colegio de Ingenieros del Perú\n• Análisis de Datos - IBS International Business School Americas\n• Marketing Digital y Diseño Gráfico Avanzado - Fundación Romero',
+        bio: 'Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.',
+        education: [
+          'Especialización en Administración y Gestión de Empresas - The Wharton School',
+          'Microbiología y Parasitología - Universidad Nacional de Trujillo',
+          'Inglés Avanzado - Asociación Cultural Peruano Británica',
+          'Inglés Intermedio - Asociación Peruano Americana El Cultural',
+          'Gestión Ambiental - Colegio de Ingenieros del Perú',
+          'Análisis de Datos - IBS International Business School Americas',
+          'Marketing Digital y Diseño Gráfico Avanzado - Fundación Romero',
+        ],
       },
       {
         id: 'luis-guevara',
@@ -67,6 +83,7 @@ export const teamData: TeamSection[] = [
         email: 'lguevaracano@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'diego-alfaro',
@@ -78,6 +95,7 @@ export const teamData: TeamSection[] = [
         email: 'diegoal@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
     ],
   },
@@ -94,6 +112,7 @@ export const teamData: TeamSection[] = [
         email: 'javier@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'hellem-guevara',
@@ -105,6 +124,7 @@ export const teamData: TeamSection[] = [
         email: 'higuevaranu@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
     ],
   },
@@ -121,6 +141,7 @@ export const teamData: TeamSection[] = [
         email: 'ajurithp@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'madeleine-isuiza',
@@ -132,6 +153,7 @@ export const teamData: TeamSection[] = [
         email: 'misuizaf@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
     ],
   },
@@ -148,6 +170,7 @@ export const teamData: TeamSection[] = [
         email: 'melissa@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'estrella-silva',
@@ -159,6 +182,7 @@ export const teamData: TeamSection[] = [
         email: 'estrellaj@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'rosa-nancy-mejia',
@@ -170,6 +194,7 @@ export const teamData: TeamSection[] = [
         email: 'rnancym@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
     ],
   },
@@ -186,6 +211,7 @@ export const teamData: TeamSection[] = [
         email: 'yvonne@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'hassan-espinales',
@@ -197,6 +223,7 @@ export const teamData: TeamSection[] = [
         email: 'ahassane@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'luis-alonso-flores',
@@ -208,6 +235,7 @@ export const teamData: TeamSection[] = [
         email: 'luisf@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
     ],
   },
@@ -224,6 +252,7 @@ export const teamData: TeamSection[] = [
         email: 'jricardop@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
       {
         id: 'sebastian-carranza',
@@ -235,6 +264,7 @@ export const teamData: TeamSection[] = [
         email: 'sebastian@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Biografía por completar',
+        education: [],
       },
     ],
   },
