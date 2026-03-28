@@ -51,7 +51,7 @@ export const teamData: TeamSection[] = [
     ],
   },
   {
-    title: 'Gestión Administrativa',
+    title: 'Gestión Ejecutiva',
     members: [
       {
         id: 'antonio-guevara',
@@ -73,6 +73,11 @@ export const teamData: TeamSection[] = [
           'Marketing Digital y Diseño Gráfico Avanzado - Fundación Romero',
         ],
       },
+    ],
+  },
+  {
+    title: 'Gestión Administrativa',
+    members: [
       {
         id: 'luis-guevara',
         name: 'Luis',
