@@ -25,23 +25,25 @@ export default function AboutOrganigram() {
           </p>
         </div>
 
-        {/* Team Sections */}
-        <div className="space-y-24">
-          {teamData.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="space-y-10">
-              {/* Section Title */}
-              <div className="border-b-2 border-gray-300 pb-6">
-                <h3 className="text-3xl font-serif font-bold text-gray-900">{section.title}</h3>
+        {/* Team Organigram - Single Horizontal Line */}
+        <div className="overflow-x-auto pb-4">
+          <div className="flex gap-6 min-w-min">
+            {teamData.map((section, sectionIndex) => (
+              <div key={sectionIndex} className="flex flex-col gap-4">
+                {/* Section Label */}
+                <div className="text-center px-3">
+                  <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">{section.title}</p>
+                </div>
+                
+                {/* Section Members */}
+                <div className="flex gap-4 pb-4 border-b-2 border-gray-300">
+                  {section.members.map((member) => (
+                    <TeamCard key={member.id} member={member} />
+                  ))}
+                </div>
               </div>
-
-              {/* Team Members Grid - Single Row */}
-              <div className="flex flex-wrap gap-4">
-                {section.members.map((member) => (
-                  <TeamCard key={member.id} member={member} />
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
