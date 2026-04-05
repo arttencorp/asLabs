@@ -48,7 +48,7 @@ export default function OfferCarousel() {
       title: "Insumos de Laboratorio",
       content:
         "Suministramos materiales, equipos y reactivos para laboratorios de investigación y enseñanza universitaria. Desde medios de cultivo hasta instrumentos especializados, ofrecemos productos de alta calidad para estudiantes, docentes e investigadores en el campo de la biotecnología.",
-      image: "/pitch-hero.png",
+      image: "/offer/insumosLab.jpeg",
       link: "VER CATÁLOGO DE INSUMOS",
     },
   ]

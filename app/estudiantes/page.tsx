@@ -46,7 +46,7 @@ export default function EstudiantesPage() {
       <StudentHero />
       <StudentMaterialsPopup />
       <StudentDiscount />
-      <StudentFAQ />
+      {/* <StudentFAQ /> */}
       <Footer />
     </div>
   )

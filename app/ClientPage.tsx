@@ -344,7 +344,7 @@ export default function ClientPage() {
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="relative h-48 sm:h-64 md:h-80">
                 <Image
-                  src="/new/AlternativasSosteniblesParaeLFuturo.webp"
+                  src="/new/AlternativasSosteniblesParaeLFuturo.jpeg"
                   alt="Scientists in lab"
                   fill
                   style={{ objectFit: "cover" }}

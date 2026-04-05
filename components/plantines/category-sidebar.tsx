@@ -8,15 +8,22 @@ import { useState } from "react"
 interface CategorySidebarProps {
   selectedCategory: string
   onCategoryChange: (category: string) => void
+  showDesktop?: boolean
+  mobileWrapperClassName?: string
 }
 
-export default function CategorySidebar({ selectedCategory, onCategoryChange }: CategorySidebarProps) {
+export default function CategorySidebar({
+  selectedCategory,
+  onCategoryChange,
+  showDesktop = true,
+  mobileWrapperClassName = "mb-6",
+}: CategorySidebarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
     <>
       {/* Botón móvil para abrir menú */}
-      <div className="lg:hidden mb-6">
+      <div className={`lg:hidden ${mobileWrapperClassName}`}>
         <button
           onClick={() => setIsMobileMenuOpen(true)}
           className="w-full bg-emerald-600 text-white px-4 py-3 rounded-lg font-medium flex items-center justify-center gap-2"
@@ -86,44 +93,46 @@ export default function CategorySidebar({ selectedCategory, onCategoryChange }: 
       )}
 
       {/* Sidebar desktop */}
-      <div className="hidden lg:block w-64 flex-shrink-0">
-        <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Explora Nuestro Catálogo</h3>
-          <div className="space-y-3">
-            {categories.map((category) => (
+      {showDesktop && (
+        <div className="hidden lg:block w-64 flex-shrink-0">
+          <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Explora Nuestro Catálogo</h3>
+            <div className="space-y-3">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => onCategoryChange(category)}
+                  className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-between ${
+                    selectedCategory === category
+                      ? "bg-emerald-600 text-white shadow-lg"
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  }`}
+                >
+                  <span>{category}</span>
+                  {selectedCategory === category && (
+                    <CheckCircle className="w-4 h-4" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Información adicional en el sidebar */}
+            <div className="mt-8 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+              <h4 className="font-semibold text-emerald-800 mb-2">¿Necesitas ayuda?</h4>
+              <p className="text-sm text-emerald-700 mb-3">
+                Nuestros especialistas están listos para asesorarte
+              </p>
               <button
-                key={category}
-                onClick={() => onCategoryChange(category)}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-between ${
-                  selectedCategory === category
-                    ? "bg-emerald-600 text-white shadow-lg"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200"
-                }`}
+                onClick={() => handleWhatsAppContact("asesoría especializada para elegir los mejores plantines")}
+                className="w-full bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
               >
-                <span>{category}</span>
-                {selectedCategory === category && (
-                  <CheckCircle className="w-4 h-4" />
-                )}
+                <MessageCircle className="w-4 h-4" />
+                Consulta Gratis
               </button>
-            ))}
-          </div>
-          
-          {/* Información adicional en el sidebar */}
-          <div className="mt-8 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
-            <h4 className="font-semibold text-emerald-800 mb-2">¿Necesitas ayuda?</h4>
-            <p className="text-sm text-emerald-700 mb-3">
-              Nuestros especialistas están listos para asesorarte
-            </p>
-            <button
-              onClick={() => handleWhatsAppContact("asesoría especializada para elegir los mejores plantines")}
-              className="w-full bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Consulta Gratis
-            </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

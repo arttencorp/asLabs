@@ -150,17 +150,6 @@ export default function GeneticaClient() {
                 </div>
                 <div className="absolute -inset-4 bg-gradient-to-r from-blue-400 to-green-400 rounded-full opacity-20 animate-ping" />
               </div>
-
-              <button
-                onClick={() => setIsAnimating(!isAnimating)}
-                className="bg-white/90 backdrop-blur-sm p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-110 group"
-              >
-                {isAnimating ? (
-                  <Pause className="h-8 w-8 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                ) : (
-                  <Play className="h-8 w-8 text-gray-600 group-hover:text-green-600 transition-colors" />
-                )}
-              </button>
             </div>
 
             <div className="mb-8">

@@ -5,6 +5,14 @@ import { Footer } from "@/components/footer"
 import Image from "next/image"
 import { Bug, Leaf, Shield, Users, CheckCircle2, Phone, Sprout, Target, Award, MessageCircle } from "lucide-react"
 
+function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M20.52 3.48A11.78 11.78 0 0 0 12.11 0C5.58 0 .27 5.3.27 11.83c0 2.09.55 4.13 1.6 5.94L0 24l6.41-1.82a11.78 11.78 0 0 0 5.7 1.46h.01c6.53 0 11.83-5.31 11.83-11.83 0-3.16-1.23-6.13-3.43-8.33ZM12.12 21.65h-.01a9.8 9.8 0 0 1-4.99-1.37l-.36-.22-3.8 1.08 1.1-3.71-.24-.38a9.83 9.83 0 0 1-1.5-5.22C2.32 6.4 6.7 2.02 12.11 2.02c2.62 0 5.09 1.02 6.95 2.88a9.76 9.76 0 0 1 2.87 6.95c0 5.41-4.4 9.8-9.81 9.8Zm5.37-7.36c-.3-.15-1.8-.88-2.08-.98-.28-.1-.48-.15-.69.15-.2.3-.79.98-.97 1.18-.18.2-.36.23-.66.08-.3-.15-1.29-.48-2.46-1.53a9.12 9.12 0 0 1-1.71-2.13c-.18-.3-.02-.46.14-.61.13-.13.3-.33.45-.5.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.69-1.65-.94-2.26-.25-.59-.51-.51-.69-.52h-.58c-.2 0-.53.08-.81.38-.28.3-1.06 1.03-1.06 2.52 0 1.49 1.09 2.93 1.24 3.13.15.2 2.14 3.27 5.18 4.58.72.31 1.28.5 1.72.64.72.23 1.37.2 1.89.12.58-.09 1.8-.74 2.06-1.45.25-.71.25-1.32.18-1.45-.08-.13-.28-.2-.58-.35Z" />
+    </svg>
+  )
+}
+
 const productos = [
   {
     name: "Billaea claripalpis",
@@ -266,16 +274,16 @@ export function ControlBiologicoClient() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="relative bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-10 md:p-14 overflow-hidden">
+        <section className="py-14">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="relative bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-5 md:p-10 overflow-hidden">
               <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-white rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-60 h-60 bg-white rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-2xl" />
               </div>
-              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="text-center md:text-left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2.5">
                     ¿Listo para una agricultura más sostenible?
                   </h2>
                   <p className="text-white/80 text-lg">
@@ -286,11 +294,12 @@ export function ControlBiologicoClient() {
                   href="https://wa.me/51961996645?text=Hola,%20me%20interesa%20información%20sobre%20control%20biológico%20y%20asesoría%20para%20mis%20cultivos"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 bg-white text-green-700 px-10 py-5 rounded-2xl font-bold hover:bg-white/90 hover:scale-105 transition-all shadow-xl text-lg"
+                  className="inline-flex items-center justify-center bg-white text-primary w-20 h-20 rounded-full hover:bg-white/90 hover:scale-105 transition-all shadow-xl"
                 >
-                  <Phone className="w-6 h-6" />
-                  Solicitar Asesoría
+                  <WhatsAppIcon className="w-10 h-10" />
+                  
                 </a>
+               
               </div>
             </div>
           </div>

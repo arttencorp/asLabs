@@ -184,7 +184,7 @@ const servicios = [
     borderColor: "border-blue-200",
     textColor: "text-blue-600",
     services: ["Análisis de alimentos", "Control de calidad", "Detección de patógenos", "Recuentos microbianos"],
-    image: "/servicios/micro.jpeg",
+    image: "/servicios/servMicrobiologicos.jpeg",
     count: 48,
   },
   {
@@ -216,6 +216,14 @@ const servicios = [
     count: 13,
   },
 ]
+
+function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M20.52 3.48A11.78 11.78 0 0 0 12.11 0C5.58 0 .27 5.3.27 11.83c0 2.09.55 4.13 1.6 5.94L0 24l6.41-1.82a11.78 11.78 0 0 0 5.7 1.46h.01c6.53 0 11.83-5.31 11.83-11.83 0-3.16-1.23-6.13-3.43-8.33ZM12.12 21.65h-.01a9.8 9.8 0 0 1-4.99-1.37l-.36-.22-3.8 1.08 1.1-3.71-.24-.38a9.83 9.83 0 0 1-1.5-5.22C2.32 6.4 6.7 2.02 12.11 2.02c2.62 0 5.09 1.02 6.95 2.88a9.76 9.76 0 0 1 2.87 6.95c0 5.41-4.4 9.8-9.81 9.8Zm5.37-7.36c-.3-.15-1.8-.88-2.08-.98-.28-.1-.48-.15-.69.15-.2.3-.79.98-.97 1.18-.18.2-.36.23-.66.08-.3-.15-1.29-.48-2.46-1.53a9.12 9.12 0 0 1-1.71-2.13c-.18-.3-.02-.46.14-.61.13-.13.3-.33.45-.5.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.69-1.65-.94-2.26-.25-.59-.51-.51-.69-.52h-.58c-.2 0-.53.08-.81.38-.28.3-1.06 1.03-1.06 2.52 0 1.49 1.09 2.93 1.24 3.13.15.2 2.14 3.27 5.18 4.58.72.31 1.28.5 1.72.64.72.23 1.37.2 1.89.12.58-.09 1.8-.74 2.06-1.45.25-.71.25-1.32.18-1.45-.08-.13-.28-.2-.58-.35Z" />
+    </svg>
+  )
+}
 
 export default function ServiciosPage() {
   const totalServicios = servicios.reduce((acc, s) => acc + s.count, 0)
@@ -250,7 +258,7 @@ export default function ServiciosPage() {
 
       <main className="min-h-screen bg-background font-serif">
         {/* Hero Section - Optimized */}
-        <section className="relative py-20 overflow-hidden">
+        <section className="relative py-16 overflow-hidden">
           {/* Background Image Grid */}
           <div className="absolute inset-0 grid grid-cols-5 opacity-30">
             {servicios.map((s, i) => (
@@ -266,26 +274,26 @@ export default function ServiciosPage() {
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container mx-auto max-w-6xl px-4 relative z-10">
             <div className="max-w-4xl">
               <div className="flex flex-wrap items-center gap-3 mb-4">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-medium md:text-sm">
                   <Microscope className="w-4 h-4" />
                   {totalServicios}+ servicios especializados
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-600 rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-medium md:text-sm">
                   <MapPin className="w-4 h-4" />
                   Trujillo, La Libertad, Perú
                 </span>
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 text-blue-600 rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-600 rounded-full text-xs font-medium md:text-sm">
                   <Award className="w-4 h-4" />
                   Laboratorio Certificado por Senasa (Plantines InVitro)
                 </span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                 Servicios de <span className="text-primary">Laboratorio</span> en Trujillo, Perú
               </h1>
-              <p className="text-muted-foreground text-lg leading-relaxed max-w-3xl mb-6">
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-3xl mb-6">
                 Soluciones integrales en análisis microbiológicos, fitopatología, biotecnología vegetal y bacteriología
                 con los más altos estándares de calidad. Laboratorio líder en La Libertad con más de 20 años de
                 experiencia.
@@ -312,39 +320,39 @@ export default function ServiciosPage() {
         <AnalysisSearch />
 
         {/* Services Grid */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="grid gap-8">
+        <section className="py-14 bg-muted/30">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="grid gap-6">
               {servicios.map((servicio, index) => (
                 <Link
                   key={servicio.title}
                   href={servicio.href}
-                  className="group block bg-card rounded-3xl border border-border overflow-hidden hover:shadow-2xl hover:border-primary/20 transition-all duration-500"
+                  className="group block bg-card rounded-2xl border border-border overflow-hidden hover:shadow-2xl hover:border-primary/20 transition-all duration-500"
                   aria-label={`Ver servicios de ${servicio.title} en Trujillo`}
                 >
                   <div className="flex flex-col lg:flex-row">
                     {/* Image Section */}
                     <div
-                      className={`relative w-full lg:w-[400px] h-64 lg:h-[280px] flex-shrink-0 overflow-hidden ${index % 2 === 1 ? "lg:order-2" : ""}`}
+                      className={`relative w-full lg:w-[340px] h-56 lg:h-[240px] flex-shrink-0 overflow-hidden ${index % 2 === 1 ? "lg:order-2" : ""}`}
                     >
                       <Image
                         src={servicio.image || "/placeholder.svg"}
                         alt={`Servicio de ${servicio.title} - AS Laboratorios Trujillo Perú`}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        sizes="(max-width: 768px) 100vw, 400px"
+                        sizes="(max-width: 768px) 100vw, 340px"
                       />
                       <div
                         className={`absolute inset-0 bg-gradient-to-t ${servicio.color} opacity-30 group-hover:opacity-20 transition-opacity`}
                       />
                       <div className="absolute top-4 left-4">
-                        <div className="w-14 h-14 bg-white/90 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-xl">
-                          <servicio.icon className={`w-7 h-7 ${servicio.textColor}`} />
+                        <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-xl">
+                          <servicio.icon className={`w-6 h-6 ${servicio.textColor}`} />
                         </div>
                       </div>
                       <div className="absolute bottom-4 right-4">
                         <span
-                          className={`inline-flex items-center px-4 py-2 bg-white/90 backdrop-blur-sm ${servicio.textColor} text-sm font-bold rounded-full shadow-lg`}
+                          className={`inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm ${servicio.textColor} text-xs font-bold rounded-full shadow-lg`}
                         >
                           {servicio.count} servicios
                         </span>
@@ -353,29 +361,29 @@ export default function ServiciosPage() {
 
                     {/* Content Section */}
                     <div
-                      className={`flex-1 p-8 lg:p-10 flex flex-col justify-center ${index % 2 === 1 ? "lg:order-1" : ""}`}
+                      className={`flex-1 p-6 lg:p-8 flex flex-col justify-center ${index % 2 === 1 ? "lg:order-1" : ""}`}
                     >
-                      <div className="flex items-start justify-between gap-4 mb-4">
-                        <h2 className="text-2xl lg:text-3xl font-bold text-foreground group-hover:text-primary transition-colors">
+                      <div className="flex items-start justify-between gap-4 mb-3">
+                        <h2 className="text-xl lg:text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
                           {servicio.title}
                         </h2>
                         <div
-                          className={`w-12 h-12 rounded-full ${servicio.bgColor} flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all`}
+                          className={`w-10 h-10 rounded-full ${servicio.bgColor} flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all`}
                         >
                           <ArrowRight
-                            className={`w-6 h-6 ${servicio.textColor} group-hover:translate-x-1 transition-transform`}
+                            className={`w-5 h-5 ${servicio.textColor} group-hover:translate-x-1 transition-transform`}
                           />
                         </div>
                       </div>
 
-                      <p className="text-muted-foreground mb-6 leading-relaxed text-base lg:text-lg">
+                      <p className="text-muted-foreground mb-5 leading-relaxed text-sm lg:text-base">
                         {servicio.description}
                       </p>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid sm:grid-cols-2 gap-2.5">
                         {servicio.services.map((service, i) => (
                           <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <CheckCircle2 className={`w-5 h-5 ${servicio.textColor} flex-shrink-0`} />
+                            <CheckCircle2 className={`w-4 h-4 ${servicio.textColor} flex-shrink-0`} />
                             <span>{service}</span>
                           </div>
                         ))}
@@ -389,19 +397,19 @@ export default function ServiciosPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="relative bg-gradient-to-r from-primary to-primary/80 rounded-3xl p-10 md:p-14 overflow-hidden">
+        <section className="py-14">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="relative bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-5 md:p-10 overflow-hidden">
               <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-white rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-60 h-60 bg-white rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-2xl" />
               </div>
-              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="text-center md:text-left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-3">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2.5">
                     ¿Necesitas análisis de laboratorio en Trujillo?
                   </h2>
-                  <p className="text-primary-foreground/80 text-lg">
+                  <p className="text-white text-base md:text-lg">
                     Contáctanos para cotizaciones especiales o consultas técnicas. Atendemos toda La Libertad y norte
                     del Perú.
                   </p>
@@ -410,11 +418,10 @@ export default function ServiciosPage() {
                   href="https://wa.me/51961996645?text=Hola,%20necesito%20información%20sobre%20servicios%20de%20laboratorio%20en%20Trujillo"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 bg-white text-primary px-10 py-5 rounded-2xl font-bold hover:bg-white/90 hover:scale-105 transition-all shadow-xl text-lg"
+                  className="inline-flex items-center justify-center bg-white text-primary w-25 h-25 rounded-full hover:bg-white/90 hover:scale-105 transition-all shadow-xl"
                   aria-label="Contactar AS Laboratorios Trujillo por WhatsApp"
                 >
-                  <Phone className="w-6 h-6" />
-                  Contactar por WhatsApp
+                  <WhatsAppIcon className="w-7 h-7" />
                 </a>
               </div>
             </div>
