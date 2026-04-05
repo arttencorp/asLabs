@@ -34,15 +34,11 @@ export default function AboutOrganigram() {
                 <h3 className="text-3xl font-serif font-bold text-gray-900">{section.title}</h3>
               </div>
 
-              {/* Team Members Grid */}
-              <div className={sectionIndex === 0 ? "grid grid-cols-1 sm:grid-cols-2 gap-8" : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"}>
-                {section.members.map((member) => 
-                  sectionIndex === 0 ? (
-                    <ExecutiveCard key={member.id} member={member} />
-                  ) : (
-                    <TeamCard key={member.id} member={member} />
-                  )
-                )}
+              {/* Team Members Grid - Single Row */}
+              <div className="flex flex-wrap gap-4">
+                {section.members.map((member) => (
+                  <TeamCard key={member.id} member={member} />
+                ))}
               </div>
             </div>
           ))}
@@ -56,67 +52,13 @@ interface TeamCardProps {
   member: (typeof teamData)[0]['members'][0]
 }
 
-function ExecutiveCard({ member }: TeamCardProps) {
-  return (
-    <Link href={`/team/${member.id}`}>
-      <div className="group cursor-pointer h-full">
-        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-xl transition-all duration-300 flex flex-row shadow-sm hover:shadow-xl h-56">
-          {/* Image Container - Horizontal Format */}
-          <div className="relative w-2/5 bg-gray-100 overflow-hidden flex-shrink-0">
-            <Image
-              src={member.image}
-              alt={`${member.name} ${member.lastName}`}
-              fill
-              className="object-cover group-hover:opacity-85 transition-opacity duration-300"
-            />
-          </div>
-
-          {/* Info Container */}
-          <div className="w-3/5 p-6 bg-white flex flex-col justify-between">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{member.area}</p>
-              <div>
-                <p className="text-lg font-semibold text-gray-900 leading-tight">{member.name}</p>
-                <p className="text-lg font-semibold text-gray-900 leading-tight">{member.lastName}</p>
-              </div>
-              <p className="text-sm text-gray-700">{member.role}</p>
-            </div>
-
-            {/* Contact Icons */}
-            <div className="flex gap-3 pt-4 border-t border-gray-100 mt-4">
-              <a
-                href={`mailto:${member.email}`}
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center justify-center p-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                title="Email"
-              >
-                <Mail size={18} className="text-gray-600" />
-              </a>
-              <a
-                href={member.linkedIn}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center justify-center p-2.5 bg-gray-100 hover:bg-[#0A66C2] hover:text-white rounded-lg transition-colors"
-                title="LinkedIn"
-              >
-                <Linkedin size={18} className="text-gray-600 group-hover:text-white" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Link>
-  )
-}
-
 function TeamCard({ member }: TeamCardProps) {
   return (
     <Link href={`/team/${member.id}`}>
-      <div className="group cursor-pointer h-full">
-        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg">
+      <div className="group cursor-pointer">
+        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg w-48">
           {/* Image Container - Vertical Format */}
-          <div className="relative w-full aspect-[2/3] bg-gray-100 overflow-hidden">
+          <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
             <Image
               src={member.image}
               alt={`${member.name} ${member.lastName}`}
