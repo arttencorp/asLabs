@@ -25,10 +25,22 @@ export default function AboutOrganigram() {
           </p>
         </div>
 
-        {/* Team Organigram - Single Grid with All Members */}
-        <div className="grid grid-cols-5 lg:grid-cols-6 gap-4">
-          {teamData.flatMap((section) => section.members).map((member) => (
-            <TeamCard key={member.id} member={member} />
+        {/* Team Organigram - Grouped by Area */}
+        <div className="space-y-12">
+          {teamData.map((section, sectionIndex) => (
+            <div key={sectionIndex} className="space-y-4">
+              {/* Area Title */}
+              <div className="border-b-2 border-gray-300 pb-4">
+                <h3 className="text-2xl font-serif font-bold text-gray-900">{section.title}</h3>
+              </div>
+              
+              {/* Members Grid - 5-6 per line */}
+              <div className="grid grid-cols-5 lg:grid-cols-6 gap-4">
+                {section.members.map((member) => (
+                  <TeamCard key={member.id} member={member} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
