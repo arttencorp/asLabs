@@ -136,7 +136,7 @@ export function AnalysisSearch() {
                   onClick={() => setSelectedType(null)}
                   className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
                     !selectedType
-                      ? "bg-primary text-primary-foreground shadow-md"
+                      ? "bg-primary text-white shadow-md"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
@@ -150,7 +150,7 @@ export function AnalysisSearch() {
                       onClick={() => setSelectedType(type)}
                       className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
                         selectedType === type
-                          ? "bg-primary text-primary-foreground shadow-md"
+                          ? "bg-primary text-white shadow-md"
                           : "bg-muted text-muted-foreground hover:bg-muted/80"
                       }`}
                     >

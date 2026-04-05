@@ -32,7 +32,7 @@ export default function BiotechIntro() {
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden shadow-md">
               <Image
-                src="/biotech-concept.png"
+                src="/biotecnologia-vegetal/biotecnologia.jpeg"
                 alt="Concepto de biotecnología vegetal"
                 fill
                 style={{ objectFit: "cover" }}

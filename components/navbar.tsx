@@ -119,7 +119,7 @@ export default function Navbar() {
             Pitch Deck
           </Link>
           <Link href="/trabaja-con-nosotros" className="hover:underline">
-            Trabajos
+            Trabaja con nosotros
           </Link>
           <Link href="/control-biologico" className="hover:underline font-medium">
             Control Biológico
@@ -420,7 +420,7 @@ export default function Navbar() {
                       Pitch Deck
                     </Link>
                     <Link href="/trabaja-con-nosotros" className="hover:underline">
-                      Trabajos
+                      Trabaja con nosotros
                     </Link>
                     <Link
                       href="/tienda"

@@ -85,24 +85,11 @@ export default function CallToActionSection() {
                 <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
               </div>
               <div className="text-left">
-                <div className="text-base sm:text-lg lg:text-xl font-bold">Asesoría VIP Gratuita</div>
+                <div className="text-base sm:text-lg lg:text-xl font-bold">Asesoría Gratuita</div>
                 <div className="text-xs sm:text-sm opacity-80">Respuesta en menos de 5 minutos</div>
               </div>
               <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
             </button>
-
-            <div className="text-white/60 hidden lg:block">o</div>
-
-            <a
-              href="tel:+51961996645"
-              className="group bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-slate-900 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-base sm:text-lg lg:text-xl transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center gap-3 sm:gap-4 w-full sm:w-auto"
-            >
-              <Phone className="w-5 h-5 sm:w-6 sm:h-6 group-hover:animate-pulse" />
-              <div className="text-left">
-                <div>Llamar Ahora</div>
-                <div className="text-xs sm:text-sm opacity-70 group-hover:opacity-100">Línea directa</div>
-              </div>
-            </a>
           </div>
 
           {/* Garantías y beneficios */}
