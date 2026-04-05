@@ -25,25 +25,23 @@ export default function AboutOrganigram() {
           </p>
         </div>
 
-        {/* Team Organigram - Single Horizontal Line */}
-        <div className="overflow-x-auto pb-4">
-          <div className="flex gap-6 min-w-min">
-            {teamData.map((section, sectionIndex) => (
-              <div key={sectionIndex} className="flex flex-col gap-4">
-                {/* Section Label */}
-                <div className="text-center px-3">
-                  <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">{section.title}</p>
-                </div>
-                
-                {/* Section Members */}
-                <div className="flex gap-4 pb-4 border-b-2 border-gray-300">
-                  {section.members.map((member) => (
-                    <TeamCard key={member.id} member={member} />
-                  ))}
-                </div>
+        {/* Team Organigram - Responsive Grid */}
+        <div className="space-y-8">
+          {teamData.map((section, sectionIndex) => (
+            <div key={sectionIndex} className="space-y-4">
+              {/* Section Label */}
+              <div className="px-2">
+                <p className="text-sm font-semibold text-gray-700 uppercase tracking-wider">{section.title}</p>
               </div>
-            ))}
-          </div>
+              
+              {/* Section Members - Responsive Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+                {section.members.map((member) => (
+                  <TeamCard key={member.id} member={member} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -54,11 +52,33 @@ interface TeamCardProps {
   member: (typeof teamData)[0]['members'][0]
 }
 
+function getAreaColor(area: string): string {
+  const colors: Record<string, string> = {
+    'Dirección': '#2e7d32',
+    'Administración': '#e65100',
+    'Gerencia': '#01283c',
+    'Técnica': '#7b1fa2',
+    'Contabilidad': '#f9a825',
+    'Recursos Humanos': '#d32f2f',
+    'Control Biológico': '#1976d2',
+    'Microbiología': '#388e3c',
+    'Laboratorio': '#00897b',
+    'Prácticas': '#5e35b1',
+    'Innovación': '#f57c00',
+    'Marketing': '#c2185b',
+  }
+  return colors[area] || '#666666'
+}
+
 function TeamCard({ member }: TeamCardProps) {
+  const areaColor = getAreaColor(member.area)
+  
   return (
     <Link href={`/team/${member.id}`}>
       <div className="group cursor-pointer">
-        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg w-48">
+        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg w-full">
+          {/* Area Color Bar */}
+          <div className="h-1" style={{ backgroundColor: areaColor }}></div>
           {/* Image Container - Vertical Format */}
           <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
             <Image
