@@ -6,33 +6,8 @@ import { Mail, Linkedin } from 'lucide-react'
 import { teamData } from '@/lib/team-data'
 
 export default function AboutOrganigram() {
-  // Group all members by area
+  // Get all members maintaining section order (which reflects hierarchy)
   const allMembers = teamData.flatMap(section => section.members)
-  const groupedByArea = allMembers.reduce((acc, member) => {
-    if (!acc[member.area]) {
-      acc[member.area] = []
-    }
-    acc[member.area].push(member)
-    return acc
-  }, {} as Record<string, typeof allMembers>)
-
-  // Define area order for consistent display
-  const areaOrder = [
-    'Dirección',
-    'Gerencia',
-    'Administración',
-    'Recursos Humanos',
-    'Técnica',
-    'Microbiología',
-    'Laboratorio',
-    'Control Biológico',
-    'Prácticas',
-    'Innovación',
-    'Contabilidad',
-    'Marketing',
-  ]
-
-  const sortedAreas = areaOrder.filter(area => groupedByArea[area])
 
   return (
     <section id="organigrama" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative">
@@ -53,22 +28,10 @@ export default function AboutOrganigram() {
           </p>
         </div>
 
-        {/* Team Organigram - Grouped by Area */}
-        <div className="space-y-12">
-          {sortedAreas.map((area) => (
-            <div key={area} className="space-y-4">
-              {/* Area Title */}
-              <div className="border-b-2 border-gray-300 pb-4">
-                <h3 className="text-2xl font-serif font-bold text-gray-900">{area}</h3>
-              </div>
-              
-              {/* Members Grid - 6 per line */}
-              <div className="grid grid-cols-6 gap-4">
-                {groupedByArea[area].map((member) => (
-                  <TeamCard key={member.id} member={member} />
-                ))}
-              </div>
-            </div>
+        {/* Team Organigram - No Titles, 5 per line */}
+        <div className="grid grid-cols-5 gap-4">
+          {allMembers.map((member) => (
+            <TeamCard key={member.id} member={member} />
           ))}
         </div>
       </div>
