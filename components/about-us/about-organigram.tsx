@@ -89,6 +89,13 @@ function TeamCard({ member }: TeamCardProps) {
                 <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-1">{member.lastName}</p>
               </div>
               <p className="text-xs text-gray-600 line-clamp-2">{member.role}</p>
+              <a 
+                href={`mailto:${member.email}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-xs text-[#2e7d32] hover:text-[#1b5e20] break-all"
+              >
+                {member.email}
+              </a>
             </div>
 
             {/* Contact Icons */}
