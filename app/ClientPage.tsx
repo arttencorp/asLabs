@@ -9,6 +9,7 @@ import OfferCarousel from "@/components/offer-carousel"
 import TeamMemberSection from "@/components/team-member-section"
 import JourneySection from "@/components/journey-section"
 import HomeResearchSection from "@/components/home-research-section"
+import HomeBlogSection from "@/components/home-blog-section"
 import { OrganizationStructuredData } from "@/components/structured-data"
 
 export default function ClientPage() {
@@ -309,6 +310,9 @@ export default function ClientPage() {
 
       {/* Research Section - Added after "What We Offer" */}
       <HomeResearchSection />
+
+      {/* Blog Section */}
+      <HomeBlogSection />
 
       {/* Team Member Section */}
       <TeamMemberSection />
