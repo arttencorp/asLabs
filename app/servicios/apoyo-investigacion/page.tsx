@@ -31,9 +31,9 @@ export default function ApoyoInvestigacionPage() {
   return (
     <>
       <ServiceStructuredData
-        name="Apoyo a la Investigación"
-        description="Servicios de apoyo a investigación bacteriológica incluyendo identificación molecular, aislamiento, formulación de protocolos y análisis bioinformático."
-        url={`${process.env.NEXT_PUBLIC_SITE_URL}/servicios/apoyo-investigacion`}
+        serviceName="Apoyo a la Investigación"
+        serviceDescription="Servicios de apoyo a investigación bacteriológica incluyendo identificación molecular, aislamiento, formulación de protocolos y análisis bioinformático."
+        serviceUrl={`${process.env.NEXT_PUBLIC_SITE_URL}/servicios/apoyo-investigacion`}
       />
       <BreadcrumbStructuredData
         items={[
