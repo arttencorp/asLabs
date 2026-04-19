@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   Award,
   Microscope,
+  Droplets,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
