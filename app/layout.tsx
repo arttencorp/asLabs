@@ -1,6 +1,6 @@
 import type React from "react"
 import "./globals.css"
-import { DM_Serif_Text } from "next/font/google"
+import { Poppins } from "next/font/google"
 import type { Metadata, Viewport } from "next"
 import {
   OrganizationStructuredData,
@@ -8,11 +8,11 @@ import {
   WebsiteStructuredData,
 } from "@/components/structured-data"
 
-const dmSerifText = DM_Serif_Text({
-  weight: ["400"],
+const poppins = Poppins({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-dm-serif",
+  variable: "--font-poppins",
   preload: true,
 })
 
@@ -148,7 +148,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={`${dmSerifText.variable}`}>
+    <html lang="es-PE" className={`${poppins.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -163,7 +163,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="msapplication-TileColor" content="#2e7d32" />
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
-      <body className="min-h-screen bg-background text-foreground font-serif antialiased">
+      <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         <OrganizationStructuredData />
         <LocalBusinessStructuredData />
         <WebsiteStructuredData />
