@@ -22,6 +22,7 @@ import {
   Phone,
   MapPin,
   Clock,
+  TestTubes,
 } from "lucide-react"
 import { Suspense } from "react"
 
@@ -214,6 +215,20 @@ const servicios = [
     services: ["Suspensiones bacterianas", "Fermentación", "Biofertilizantes", "Curvas de crecimiento"],
     image: "/images/image.png",
     count: 13,
+  },
+  {
+    title: "Apoyo a la Investigación",
+    description:
+      "Identificación molecular por 16S RNA, aislamiento bacteriano y formulación de protocolos en Trujillo. Servicios especializados de análisis bioinformático para proyectos de investigación científica.",
+    href: "/servicios/apoyo-investigacion",
+    icon: TestTubes,
+    color: "from-blue-500 to-cyan-500",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-200",
+    textColor: "text-blue-600",
+    services: ["Identificación 16S RNA", "Aislamiento bacteriano", "Formulación de protocolos", "Bioinformática"],
+    image: "/images/image.png",
+    count: 9,
   },
 ]
 
