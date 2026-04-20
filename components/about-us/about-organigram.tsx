@@ -1,155 +1,95 @@
-'use client'
+import Image from "next/image"
+import Link from "next/link"
+import { Linkedin, Mail } from "lucide-react"
+
+import BlackProfilePlaceholder from "@/components/about-us/black-profile-placeholder"
+import { teamMembers } from "@/data/team-members"
 
 export default function AboutOrganigram() {
   return (
-    <section id="organigrama" className="w-full py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#f8faf9] via-[#f4f7fb] to-[#eef4f2]">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm font-bold text-[#2e7d32] uppercase tracking-[0.15em] mb-4">
-            Estructura
-          </p>
-          <h2 className="text-5xl font-serif font-bold text-gray-900 mb-6">Organigrama</h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Un equipo multidisciplinario de profesionales comprometidos con la excelencia
-          </p>
-        </div>
+    <section
+      id="equipo"
+      className="relative w-full overflow-hidden bg-gradient-to-r from-[#f5f6f7] via-[#f5f5f4] to-[#bcd5bc] px-4 py-20 sm:px-6 lg:px-8"
+    >
+      <div
+        className="pointer-events-none absolute inset-y-0 right-[-12%] w-[46%] bg-[radial-gradient(circle_at_center,rgba(76,145,93,0.4)_0%,rgba(76,145,93,0.18)_35%,rgba(76,145,93,0)_75%)]"
+        aria-hidden="true"
+      />
 
-        {/* Nivel 1 - Gerencia General con Socio al costado */}
-        <div className="flex justify-center items-start gap-8 mb-12 flex-col sm:flex-row">
-          {/* Gerencia General - Principal */}
-          <div className="flex-1 max-w-sm">
-            <div className="bg-gradient-to-r from-[#c27737] to-[#9e5b25] text-white rounded-2xl p-6 shadow-lg text-center">
-              <p className="text-2xl font-serif font-bold mb-2">Gerencia General</p>
-              <p className="font-semibold">Natasha Escobar A.</p>
-              <p className="text-sm text-orange-100">Gerente General</p>
-            </div>
-          </div>
+      <div className="relative mx-auto max-w-7xl">
+        <span className="inline-flex items-center rounded-full border border-[#bad4bd] bg-[#dfeadf]/95 px-8 py-3 text-xs font-bold uppercase tracking-[0.28em] text-[#1e7b2f]">
+          Nuestro Equipo
+        </span>
+        <h2 className="mt-8 text-[clamp(2.2rem,5.3vw,4.4rem)] font-sans font-extrabold leading-[0.95] tracking-tight text-[#071a40]">
+          <span className="block">Equipo AS</span>
+          <span className="block">Laboratorios</span>
+        </h2>
+        <p className="mt-7 max-w-3xl text-[clamp(1rem,1.4vw,1.32rem)] font-sans leading-relaxed text-[#1f3658]">
+          Conoce a los profesionales que hacen posible nuestra misión de excelencia
+        </p>
 
-          {/* Socio - Chiquito al costado */}
-          <div className="flex-1 max-w-xs">
-            <div className="bg-gradient-to-r from-[#2f7a57] to-[#245f45] text-white rounded-2xl p-4 shadow-lg text-center">
-              <p className="text-lg font-serif font-bold mb-1">Socio</p>
-              <p className="font-semibold text-sm">Marleni G. Valverde</p>
-              <p className="text-xs text-green-100">Socio Ejecutivo</p>
-            </div>
-          </div>
-        </div>
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          {teamMembers.map((member) => (
+            <article
+              key={member.slug}
+              className="flex h-full flex-col overflow-hidden rounded-[1.05rem] border border-[#d8dde3] bg-[#f7f8fa] shadow-[0_6px_14px_-12px_rgba(24,39,59,0.35)] transition-[border-color,box-shadow] duration-200 hover:border-[#98aabd] hover:shadow-[0_10px_20px_-14px_rgba(24,39,59,0.45)]"
+              style={{ borderTopColor: member.accent, borderTopWidth: "3px" }}
+            >
+              <Link href={`/sobre-nosotros/equipo/${member.slug}`} className="block flex-1">
+                {member.imagePath ? (
+                  <div className="relative h-[15rem] w-full overflow-hidden bg-white">
+                    <Image
+                      src={member.imagePath}
+                      alt={member.name}
+                      fill
+                      sizes="(min-width: 768px) 20vw, (min-width: 640px) 33vw, 50vw"
+                      className="object-cover object-center"
+                    />
+                  </div>
+                ) : (
+                  <BlackProfilePlaceholder className="h-[15rem] w-full" />
+                )}
 
-        {/* Connecting line */}
-        <div className="flex justify-center mb-8">
-          <div className="w-1 h-8 bg-gradient-to-b from-[#b56a2e] to-transparent"></div>
-        </div>
+                <div className="space-y-0.5 border-t border-[#e4e8ed] px-3.5 pb-2 pt-2">
+                  <p className="text-[0.74rem] font-semibold uppercase tracking-[0.14em] text-[#5c6e86]">{member.area}</p>
+                  <h3 className="max-w-[11rem] break-words text-[0.95rem] font-sans font-bold leading-[1.15] text-[#071a40]">
+                    {member.name}
+                  </h3>
+                  <p className="text-[0.86rem] font-sans leading-snug text-[#314c70]">{member.role}</p>
+                  <p className="break-words text-[0.86rem] font-sans leading-snug text-[#1b7d2d]">{member.email}</p>
+                </div>
+              </Link>
 
-        {/* Nivel 2 - Administrador */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-gradient-to-r from-[#2f5e7a] to-[#254e66] text-white rounded-2xl p-5 shadow-lg max-w-md w-full text-center">
-            <p className="text-xl font-serif font-bold mb-2">Administración</p>
-            <p className="font-semibold">Antonio Guevara E.</p>
-            <p className="text-sm text-blue-100">Administrador</p>
-          </div>
-        </div>
-
-        {/* Connecting line */}
-        <div className="flex justify-center mb-8">
-          <div className="w-1 h-8 bg-gradient-to-b from-[#2f5e7a] to-transparent"></div>
-        </div>
-
-        {/* Nivel 3 - Área Técnica y Comercial */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          {/* Área Técnica */}
-          <div className="flex flex-col items-center">
-            <div className="bg-gradient-to-r from-[#2f7a57] to-[#245f45] text-white rounded-2xl p-5 shadow-lg w-full text-center">
-              <p className="text-lg font-serif font-bold mb-2">Área Técnica</p>
-              <p className="font-semibold">Ing. Javier Verastegui Sancho</p>
-              <p className="text-sm text-green-100">Jefe en Biotecnología</p>
-            </div>
-
-            {/* Connecting line down */}
-            <div className="w-1 h-6 bg-[#2f7a57] my-2"></div>
-
-            {/* Supervisoras Técnicas */}
-            <div className="w-full space-y-3">
-              <div className="bg-[#4f9a76] text-white rounded-xl p-4 shadow-md text-center">
-                <p className="font-semibold">Melissa Torres M.</p>
-                <p className="text-sm text-emerald-100">Supervisora - Practicantes</p>
+              <div className="grid grid-cols-2 gap-1.5 border-t border-[#e3e8ed] px-2.5 pb-2.5 pt-2">
+                <a
+                  href={`mailto:${member.email}`}
+                  className="inline-flex items-center justify-center rounded-md bg-[#eceff3] py-0.5 text-[#66738b] transition-colors hover:bg-[#dfe5eb]"
+                  aria-label={`Enviar correo a ${member.name}`}
+                >
+                  <Mail className="h-4 w-4" />
+                </a>
+                {member.linkedin ? (
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-md bg-[#eceff3] py-0.5 text-[#66738b] transition-colors hover:bg-[#dfe5eb]"
+                    aria-label={`Ver LinkedIn de ${member.name}`}
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                ) : (
+                  <Link
+                    href={`/sobre-nosotros/equipo/${member.slug}`}
+                    className="inline-flex items-center justify-center rounded-md bg-[#eceff3] py-0.5 text-[#66738b] transition-colors hover:bg-[#dfe5eb]"
+                    aria-label={`Ver biografía de ${member.name}`}
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </Link>
+                )}
               </div>
-              <div className="bg-[#4f9a76] text-white rounded-xl p-4 shadow-md text-center">
-                <p className="font-semibold">Hellem Guevara N.</p>
-                <p className="text-sm text-emerald-100">Supervisora - Técnica</p>
-              </div>
-            </div>
-
-            {/* Equipo Técnico */}
-            <div className="w-1 h-6 bg-[#2f7a57] my-2"></div>
-            <div className="w-full bg-white rounded-xl p-4 shadow-md border-l-4 border-[#2f7a57]">
-              <h4 className="font-semibold text-gray-900 mb-3">Equipo Técnico</h4>
-              <div className="space-y-2">
-                <div>
-                  <p className="font-semibold text-sm text-gray-900">Estrella Silva Núñez</p>
-                  <p className="text-xs text-gray-600">Analista de Calidad</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-sm text-gray-900">Jurith Aguilar P.</p>
-                  <p className="text-xs text-gray-600">Líder Técnica</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-sm text-gray-900">Madeleine Isuiza F.</p>
-                  <p className="text-xs text-gray-600">Analista Técnica</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Comercial */}
-          <div className="flex flex-col items-center">
-            <div className="bg-gradient-to-r from-[#4a6f8d] to-[#3d5d76] text-white rounded-2xl p-5 shadow-lg w-full text-center">
-              <p className="text-lg font-serif font-bold mb-2">Comercial</p>
-              <p className="font-semibold">Jaime Palomino Cuenca</p>
-              <p className="text-sm text-slate-200">Jefe Comercial</p>
-            </div>
-
-            {/* Connecting line down */}
-            <div className="w-1 h-6 bg-[#4a6f8d] my-2"></div>
-
-            {/* Equipo Comercial */}
-            <div className="w-full bg-white rounded-xl p-4 shadow-md border-l-4 border-[#4a6f8d]">
-              <h4 className="font-semibold text-gray-900 mb-3">Equipo Comercial</h4>
-              <div className="space-y-2">
-                <div>
-                  <p className="font-semibold text-sm text-gray-900">Sebastian Carranza A.</p>
-                  <p className="text-xs text-gray-600">Marketing y Publicidad</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-sm text-gray-900">Por asignar</p>
-                  <p className="text-xs text-gray-600">Ventas</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Nivel 4 - Áreas de Apoyo bajo Administración */}
-        <div className="flex justify-center">
-          <div className="w-full max-w-md">
-            {/* Connection from Admin */}
-            <div className="flex justify-center mb-4">
-              <div className="w-1 h-6 bg-[#2f5e7a]"></div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-[#2f5e7a]">
-              <h4 className="font-semibold text-gray-900 mb-4 text-center">Áreas de Apoyo</h4>
-              <div className="space-y-3">
-                <div>
-                  <p className="font-semibold text-gray-900">Luis Guevara</p>
-                  <p className="text-sm text-gray-600">Contador / Contabilidad</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Yvonne Lopez L.</p>
-                  <p className="text-sm text-gray-600">Gerente Financiero y Administrativo</p>
-                </div>
-              </div>
-            </div>
-          </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

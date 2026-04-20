@@ -71,6 +71,16 @@ const allAnalyses: Analysis[] = [
   { id: "51", tipo: "Bacteriología", concepto: "Ensayo de estabilidad de suspensión", alcance: "recuento UFC/mL a día 0, 7, 14 y 30", costo: "450" },
   { id: "52", tipo: "Bacteriología", concepto: "Preparación de consorcios bacterianos bajo especificación", alcance: "mezcla de hasta 3 cepas + control de pureza", costo: "900" },
   { id: "53", tipo: "Bacteriología", concepto: "Control de calidad de lote", alcance: "pureza + UFC + trazabilidad", costo: "250" },
+  // Apoyo a la Investigación
+  { id: "54", tipo: "Apoyo a la Investigación", concepto: "Suspensiones Bacterianas", alcance: "estándares de pureza y viabilidad", costo: "700" },
+  { id: "55", tipo: "Apoyo a la Investigación", concepto: "Producción de Bacterias para Investigación", alcance: "biomasa para proyectos con control de calidad", costo: "900" },
+  { id: "56", tipo: "Apoyo a la Investigación", concepto: "Suspensiones de Bacterias para Biorremediación de Concreto", alcance: "cepas con capacidad de mineralización", costo: "1200" },
+  { id: "57", tipo: "Apoyo a la Investigación", concepto: "Cepas Bacterianas para Investigación", alcance: "cepas caracterizadas y documentadas", costo: "80" },
+  { id: "58", tipo: "Apoyo a la Investigación", concepto: "Identificación Molecular de Bacterias en Cultivo Puro", alcance: "MALDI-TOF, PCR y secuenciación", costo: "220" },
+  { id: "59", tipo: "Apoyo a la Investigación", concepto: "Identificación por 16S RNA de Microorganismos", alcance: "secuenciación y análisis filogenético", costo: "850" },
+  { id: "60", tipo: "Apoyo a la Investigación", concepto: "Formulación de Protocolos y Estandarización", alcance: "protocolos optimizados y documentados", costo: "600" },
+  { id: "61", tipo: "Apoyo a la Investigación", concepto: "Aislamiento de Bacterias", alcance: "aislamiento selectivo y purificación", costo: "180" },
+  { id: "62", tipo: "Apoyo a la Investigación", concepto: "Servicio Análisis e Informes Bioinformática", alcance: "procesamiento y visualización de datos moleculares", costo: "350" },
 ]
 
 export function AnalysisSearch() {
@@ -188,7 +198,7 @@ export function AnalysisSearch() {
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Tipo</th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Concepto</th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Alcance</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo</th>
+                    {/*<th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo</th>*/}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -197,7 +207,7 @@ export function AnalysisSearch() {
                       <td className="px-6 py-4 text-sm text-primary font-semibold">{analysis.tipo}</td>
                       <td className="px-6 py-4 text-sm text-foreground font-medium">{analysis.concepto}</td>
                       <td className="px-6 py-4 text-sm text-muted-foreground">{analysis.alcance}</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-primary">S/. {analysis.costo}</td>
+                      {/*<td className="px-6 py-4 text-sm font-semibold text-primary">S/. {analysis.costo}</td>*/}
                     </tr>
                   ))}
                 </tbody>
