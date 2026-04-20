@@ -3,7 +3,6 @@ import { constructMetadata } from "@/lib/metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import AboutHeader from "@/components/about-us/about-header"
-import AboutNavigation from "@/components/about-us/about-navigation"
 import AboutMission from "@/components/about-us/about-mission"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
@@ -24,10 +23,9 @@ function SobreNosotrosPage() {
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
       <AboutHeader />
-      <AboutNavigation />
       <AboutMission />
-      <AboutValues />
       <AboutOrganigram />
+      <AboutValues />
       <AboutImpact />
       <AboutCTA />
       <Footer />

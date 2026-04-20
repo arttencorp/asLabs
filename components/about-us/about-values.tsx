@@ -1,76 +1,81 @@
 'use client'
 
 export default function AboutValues() {
-  const palette = [
-    { border: "#2f7a57", badge: "#2f7a57", glow: "#dff3e8" },
-    { border: "#b56a2e", badge: "#b56a2e", glow: "#fdebdc" },
-    { border: "#2f5e7a", badge: "#2f5e7a", glow: "#e2edf5" },
-    { border: "#6e7f31", badge: "#6e7f31", glow: "#edf3d7" },
-  ]
-
   const values = [
     {
       number: "01",
       title: "Excelencia Científica",
       description: "Investigación rigurosa, innovación continua y compromiso con la calidad en cada proyecto",
+      badge: "#2f8a3f",
+      corner: "#2f8a3f",
     },
     {
       number: "02",
       title: "Sostenibilidad",
       description: "Prácticas agrícolas responsables que respetan el medio ambiente y sus recursos naturales",
+      badge: "#eb5a00",
+      corner: "#eb5a00",
     },
     {
       number: "03",
       title: "Compromiso Social",
       description: "Transferencia de conocimiento y capacitación para el desarrollo de comunidades agrícolas",
+      badge: "#01304f",
+      corner: "#01304f",
     },
     {
       number: "04",
       title: "Integridad",
       description: "Operamos con principios éticos rigurosos y transparencia en todas nuestras relaciones",
+      badge: "#7a24b3",
+      corner: "#7a24b3",
     },
   ]
 
   return (
-    <section id="valores" className="w-full py-8 sm:py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#f7f8f4] via-[#f3f8f5] to-[#eef5f8]">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm font-bold text-[#b56a2e] uppercase tracking-[0.15em] mb-4">
-            Principios
-          </p>
-          <h2 className="text-5xl font-serif font-bold text-gray-900 mb-6">Nuestros Valores</h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto font-medium">
+    <section id="valores" className="relative w-full overflow-hidden bg-[#f2f2f0] px-4 py-20 sm:px-6 lg:px-8">
+      <div
+        className="pointer-events-none absolute right-[-15%] top-[34%] h-[34rem] w-[34rem] rounded-full bg-[#f0a36f]/35 blur-[92px]"
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-6xl">
+        <div className="max-w-3xl">
+          <span className="inline-flex items-center rounded-full border border-[#efbd9b] bg-[#f8efe8] px-8 py-3 text-xs font-bold uppercase tracking-[0.28em] text-[#eb5a00]">
+            Principios Fundamentales
+          </span>
+          <h2 className="mt-8 text-[clamp(2.25rem,5.4vw,4.2rem)] font-sans font-extrabold leading-[0.96] tracking-tight text-[#071a40]">
+            Nuestros Valores
+          </h2>
+          <p className="mt-7 max-w-2xl text-[clamp(1rem,1.45vw,1.3rem)] font-sans leading-relaxed text-[#1f3658]">
             Los principios fundamentales que guían cada decisión y acción en AS Laboratorios
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {values.map((value, index) => (
-            <div
-              key={index}
-              className="relative overflow-hidden bg-white/95 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border"
-              style={{ borderColor: palette[index].border }}
+        <div className="mt-12 grid gap-8 md:grid-cols-2">
+          {values.map((value) => (
+            <article
+              key={value.number}
+              className="relative overflow-hidden rounded-[1.7rem] border border-[#e8ecef] bg-white px-8 py-8 shadow-[0_20px_38px_-30px_rgba(16,26,45,0.6)]"
             >
               <div
-                className="absolute -right-10 -top-10 h-24 w-24 rounded-full opacity-60 blur-2xl"
-                style={{ backgroundColor: palette[index].glow }}
+                className="pointer-events-none absolute -right-2 -top-2 h-36 w-36 rounded-bl-[999px]"
+                style={{ backgroundColor: value.corner }}
                 aria-hidden="true"
               />
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0">
-                  <div
-                    className="flex items-center justify-center h-12 w-12 rounded-lg text-white font-bold text-xl shadow-sm"
-                    style={{ backgroundColor: palette[index].badge }}
-                  >
-                    {value.number}
-                  </div>
+              <div className="relative flex items-start gap-6 pr-16">
+                <div
+                  className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl text-[1.7rem] font-sans font-extrabold text-white"
+                  style={{ backgroundColor: value.badge }}
+                >
+                  {value.number}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{value.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                  <h3 className="text-[1.65rem] font-sans font-extrabold leading-tight text-[#071a40]">{value.title}</h3>
+                  <p className="mt-3 text-[1rem] font-sans leading-relaxed text-[#223f65]">{value.description}</p>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
