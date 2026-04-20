@@ -198,7 +198,7 @@ export function AnalysisSearch() {
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Tipo</th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Concepto</th>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Alcance</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo</th>
+                    {/*<th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo</th>*/}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -207,7 +207,7 @@ export function AnalysisSearch() {
                       <td className="px-6 py-4 text-sm text-primary font-semibold">{analysis.tipo}</td>
                       <td className="px-6 py-4 text-sm text-foreground font-medium">{analysis.concepto}</td>
                       <td className="px-6 py-4 text-sm text-muted-foreground">{analysis.alcance}</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-primary">S/. {analysis.costo}</td>
+                      {/*<td className="px-6 py-4 text-sm font-semibold text-primary">S/. {analysis.costo}</td>*/}
                     </tr>
                   ))}
                 </tbody>

@@ -37,7 +37,7 @@ export const teamMembers: TeamMember[] = [
     area: "Gerencia",
     name: "Antonio Guevara E.",
     role: "Gerente de Gestión",
-    email: "avguevaraes@aslaboratorios.com",
+    email: "antoniog@aslaboratorios.com",
     accent: "#01304f",
     biography: "Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas. \n\n Cuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.",
     imagePath: "/about-us/Antonio.webp",

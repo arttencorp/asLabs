@@ -20,14 +20,16 @@ export const metadata: Metadata = constructMetadata({
 
 function SobreNosotrosPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <Navbar />
-      <AboutHeader />
-      <AboutMission />
-      <AboutOrganigram />
-      <AboutValues />
-      <AboutImpact />
-      <AboutCTA />
+      <main className="about-nosotros-font">
+        <AboutHeader />
+        <AboutMission />
+        <AboutOrganigram />
+        <AboutValues />
+        <AboutImpact />
+        <AboutCTA />
+      </main>
       <Footer />
     </div>
   )

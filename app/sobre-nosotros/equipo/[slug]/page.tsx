@@ -64,7 +64,8 @@ export default function TeamMemberPage({ params }: TeamMemberPageProps) {
     <div className="min-h-screen bg-[#f4f5f6]">
       <Navbar />
 
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#f6f7f7] via-[#f5f5f5] to-[#b7d1b6] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <main className="about-nosotros-font">
+        <section className="relative overflow-hidden bg-gradient-to-r from-[#f6f7f7] via-[#f5f5f5] to-[#b7d1b6] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div
           className="pointer-events-none absolute inset-y-0 right-[-10%] w-[44%] bg-[radial-gradient(circle_at_center,rgba(76,145,93,0.42)_0%,rgba(76,145,93,0.18)_35%,rgba(76,145,93,0)_74%)]"
           aria-hidden="true"
@@ -148,24 +149,25 @@ export default function TeamMemberPage({ params }: TeamMemberPageProps) {
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      <section className="bg-white px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-[clamp(1.45rem,2.4vw,2.15rem)] font-sans font-extrabold text-[#071a40]">Biografía</h2>
-          <div className="mt-5 max-w-4xl text-[clamp(0.95rem,1.08vw,1.05rem)] leading-relaxed text-[#344e70]">
-            {biographyParagraphs.length > 0 ? (
-              biographyParagraphs.map((paragraph, index) => (
-                <p key={index} className={`${index > 0 ? "mt-4" : ""} whitespace-pre-line`}>
-                  {paragraph}
-                </p>
-              ))
-            ) : (
-              <p className="whitespace-pre-line">{member.biography}</p>
-            )}
+        <section className="bg-white px-4 py-14 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-[clamp(1.45rem,2.4vw,2.15rem)] font-sans font-extrabold text-[#071a40]">Biografía</h2>
+            <div className="mt-5 max-w-4xl text-[clamp(0.95rem,1.08vw,1.05rem)] leading-relaxed text-[#344e70]">
+              {biographyParagraphs.length > 0 ? (
+                biographyParagraphs.map((paragraph, index) => (
+                  <p key={index} className={`${index > 0 ? "mt-4" : ""} whitespace-pre-line`}>
+                    {paragraph}
+                  </p>
+                ))
+              ) : (
+                <p className="whitespace-pre-line">{member.biography}</p>
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <Footer />
     </div>
