@@ -94,6 +94,12 @@
   }
 }
 
+/* Scoped typography override for Sobre Nosotros: keep layout, remove Poppins */
+.about-nosotros-font,
+.about-nosotros-font * {
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif !important;
+}
+
 /* Responsive optimizations */
 @media (max-width: 640px) {
   .container {

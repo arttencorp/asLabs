@@ -17,6 +17,7 @@ import {
   FlaskConical,
   Bug,
   Beaker,
+  BookOpenCheck,
   ArrowRight,
   CheckCircle2,
   Phone,
@@ -215,6 +216,25 @@ const servicios = [
     image: "/servicios/image.png",
     count: 13,
   },
+  {
+    title: "Apoyo a la Investigación",
+    description:
+      "Acompañamiento técnico para tesis y proyectos de investigación en Trujillo. Incluye 16S rRNA, identificación bacteriana, aislamiento ambiental y análisis bioinformático.",
+    href: "/servicios/apoyo-investigacion",
+    icon: BookOpenCheck,
+    color: "from-sky-500 to-blue-600",
+    bgColor: "bg-sky-50",
+    borderColor: "border-sky-200",
+    textColor: "text-sky-600",
+    services: [
+      "Suspensiones bacterianas",
+      "Análisis 16S rRNA",
+      "Diseño de protocolos",
+      "Análisis bioinformático",
+    ],
+    image: "/servicios/micro.jpeg",
+    count: 9,
+  },
 ]
 
 function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -260,7 +280,7 @@ export default function ServiciosPage() {
         {/* Hero Section - Optimized */}
         <section className="relative py-16 overflow-hidden">
           {/* Background Image Grid */}
-          <div className="absolute inset-0 grid grid-cols-5 opacity-30">
+          <div className="absolute inset-0 grid grid-cols-3 md:grid-cols-6 opacity-30">
             {servicios.map((s, i) => (
               <div key={i} className="relative h-full">
                 <Image

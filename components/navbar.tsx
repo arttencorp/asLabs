@@ -4,7 +4,18 @@ import type React from "react"
 
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Menu, X, ChevronDown, FlaskConical, Leaf, Droplets, Microscope, Bug } from "lucide-react"
+import {
+  ExternalLink,
+  Menu,
+  X,
+  ChevronDown,
+  FlaskConical,
+  Leaf,
+  Droplets,
+  Microscope,
+  Bug,
+  BookOpenCheck,
+} from "lucide-react"
 
 interface NavItem {
   title: string
@@ -77,6 +88,12 @@ export default function Navbar() {
           href: "/servicios/bacteriologia-general",
           description: "Suspensiones y fermentación",
           icon: <FlaskConical className="h-4 w-4" />,
+        },
+        {
+          title: "Apoyo a la Investigación",
+          href: "/servicios/apoyo-investigacion",
+          description: "Tesis, 16S y bioinformática",
+          icon: <BookOpenCheck className="h-4 w-4" />,
         },
       ],
     },

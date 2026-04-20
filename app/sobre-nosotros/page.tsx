@@ -3,7 +3,6 @@ import { constructMetadata } from "@/lib/metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import AboutHeader from "@/components/about-us/about-header"
-import AboutNavigation from "@/components/about-us/about-navigation"
 import AboutMission from "@/components/about-us/about-mission"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
@@ -21,15 +20,16 @@ export const metadata: Metadata = constructMetadata({
 
 function SobreNosotrosPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <Navbar />
-      <AboutHeader />
-      <AboutNavigation />
-      <AboutMission />
-      <AboutValues />
-      <AboutOrganigram />
-      <AboutImpact />
-      <AboutCTA />
+      <main className="about-nosotros-font">
+        <AboutHeader />
+        <AboutMission />
+        <AboutOrganigram />
+        <AboutValues />
+        <AboutImpact />
+        <AboutCTA />
+      </main>
       <Footer />
     </div>
   )
