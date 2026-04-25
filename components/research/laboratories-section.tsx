@@ -126,67 +126,49 @@ export default function LaboratoriesSection() {
             Nuestros Laboratorios
           </h2>
           <p className="text-gray-600 max-w-2xl">
-            Cinco laboratorios especializados con tecnología moderna para investigación en biotecnología, control biológico y análisis agroindustriales.
+            Laboratorios especializados con tecnología moderna para investigación.
           </p>
         </div>
 
-        {/* Laboratories Grid */}
-        <div className="space-y-8">
+        {/* Laboratories Grid 2x2 */}
+        <div className="grid md:grid-cols-2 gap-6">
           {laboratories.map((lab) => (
-            <div
+            <a
               key={lab.id}
-              className={`border rounded-lg overflow-hidden hover:shadow-md transition-shadow ${lab.borderColor}`}
+              href={`/laboratorios/${lab.id}`}
+              className="group border rounded-lg overflow-hidden hover:shadow-lg transition-all"
             >
-              {/* Header */}
-              <div className={`${lab.bgColor} border-b ${lab.borderColor} p-6 flex items-center gap-4`}>
-                <div className={`${lab.color} p-2`}>
+              {/* Banner Image */}
+              <div className={`${lab.bgColor} h-40 flex items-center justify-center relative overflow-hidden`}>
+                <div className={`${lab.color} text-5xl opacity-20`}>
                   {lab.icon}
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900">{lab.name}</h3>
-                </div>
-                {lab.status === "construction" && (
-                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded">
-                    Por construir
-                  </span>
-                )}
               </div>
 
               {/* Content */}
-              <div className="p-6 grid md:grid-cols-2 gap-6">
-                {/* Info */}
-                <div className="space-y-4">
-                  <p className="text-gray-700 text-sm leading-relaxed">{lab.description}</p>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-3 text-sm">Capacidades:</h4>
-                    <ul className="space-y-2">
-                      {lab.capabilities.map((capability, idx) => (
-                        <li key={idx} className="text-gray-700 text-sm flex gap-2">
-                          <span className={`${lab.color} font-bold`}>•</span>
-                          {capability}
-                        </li>
-                      ))}
-                    </ul>
+              <div className="p-5">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className={`${lab.color} p-2 rounded`}>
+                    {lab.icon}
                   </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors">
+                      {lab.name}
+                    </h3>
+                  </div>
+                  {lab.status === "construction" && (
+                    <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">
+                      Por construir
+                    </span>
+                  )}
                 </div>
-
-                {/* Images Grid */}
-                <div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {lab.images.map((_, idx) => (
-                      <div
-                        key={idx}
-                        className={`aspect-square rounded bg-gray-100 border ${lab.borderColor} flex items-center justify-center text-center`}
-                      >
-                        <div className={`${lab.color} text-xs text-gray-500`}>
-                          Foto {idx + 1}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <p className="text-gray-600 text-sm line-clamp-2">{lab.description}</p>
+                <div className="mt-4 text-green-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
+                  Ver más
+                  <span>→</span>
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
