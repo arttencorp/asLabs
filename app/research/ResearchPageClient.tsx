@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart3, Award, Microscope, Dna, Leaf, Shield, CheckCircle, Clock } from "lucide-react"
 import CategorySection from "@/components/research/category-section"
+import LaboratoriesSection from "@/components/research/laboratories-section"
 import {
   pipelineData,
   ingenieriaGenetica,
@@ -55,6 +56,9 @@ export default function ResearchPageClient() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      {/* Laboratories Section */}
+      <LaboratoriesSection />
+
       {/* Statistics Overview */}
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl">
