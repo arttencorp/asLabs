@@ -57,25 +57,7 @@ const laboratories: Laboratory[] = [
     images: ["/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg"],
     status: "active",
   },
-  {
-    id: "biotecnologia",
-    name: "Laboratorio de Biotecnología",
-    icon: <Microscope className="w-8 h-8" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
-    darkColor: "from-blue-600 to-blue-700",
-    borderColor: "border-blue-200",
-    description:
-      "Laboratorio integral de biotecnología molecular con equipamiento avanzado. Realizamos análisis genómico, PCR, secuenciación e ingeniería genética aplicada a mejoramiento vegetal.",
-    capabilities: [
-      "PCR y qPCR (Reacción en cadena de la polimerasa)",
-      "Secuenciación genómica",
-      "Análisis molecular de ADN",
-      "Amplificación de fragmentos genómicos",
-    ],
-    images: ["/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg"],
-    status: "active",
-  },
+
   {
     id: "analisis-agroindustriales",
     name: "Laboratorio de Análisis Agroindustriales",
