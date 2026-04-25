@@ -118,114 +118,76 @@ const laboratories: Laboratory[] = [
 
 export default function LaboratoriesSection() {
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-slate-50 via-white to-slate-50">
-      <div className="container mx-auto max-w-7xl">
+    <section className="py-12 px-4 bg-white">
+      <div className="container mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-16 text-center">
-          <div className="mb-4 inline-block">
-            <span className="px-4 py-2 bg-green-100 text-green-700 text-xs font-semibold rounded-full tracking-wider uppercase">
-              Infraestructura de Investigación
-            </span>
-          </div>
-          <h2 className="text-5xl md:text-5xl font-bold text-gray-900 mb-6 max-w-3xl mx-auto leading-tight">
-            Nuestros Laboratorios Especializados
+        <div className="mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Nuestros Laboratorios
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Cinco modernos laboratorios equipados con tecnología de punta para investigación y desarrollo en biotecnología, control biológico y análisis agroindustriales.
+          <p className="text-gray-600 max-w-2xl">
+            Cinco laboratorios especializados con tecnología moderna para investigación en biotecnología, control biológico y análisis agroindustriales.
           </p>
         </div>
 
         {/* Laboratories Grid */}
-        <div className="space-y-12">
-          {laboratories.map((lab, index) => (
+        <div className="space-y-8">
+          {laboratories.map((lab) => (
             <div
               key={lab.id}
-              className={`group rounded-2xl overflow-hidden border ${lab.borderColor} hover:shadow-2xl transition-all duration-300`}
+              className={`border rounded-lg overflow-hidden hover:shadow-md transition-shadow ${lab.borderColor}`}
             >
-              {/* Header con color distintivo */}
-              <div className={`bg-gradient-to-r ${lab.darkColor} p-8 flex items-center justify-between`}>
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
-                    <div className="text-white">{lab.icon}</div>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white">{lab.name}</h3>
-                  </div>
+              {/* Header */}
+              <div className={`${lab.bgColor} border-b ${lab.borderColor} p-6 flex items-center gap-4`}>
+                <div className={`${lab.color} p-2`}>
+                  {lab.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900">{lab.name}</h3>
                 </div>
                 {lab.status === "construction" && (
-                  <div className="px-4 py-2 bg-yellow-400 text-yellow-900 text-sm font-bold rounded-full whitespace-nowrap">
-                    Construyendo
-                  </div>
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded">
+                    Por construir
+                  </span>
                 )}
               </div>
 
               {/* Content */}
-              <div className={`p-8 ${lab.bgColor}`}>
-                <div className="grid md:grid-cols-2 gap-8">
-                  {/* Left Column - Description and Capabilities */}
-                  <div className="space-y-6">
-                    <div>
-                      <p className="text-gray-700 leading-relaxed text-base">{lab.description}</p>
-                    </div>
-
-                    {/* Capabilities */}
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <span className={`w-3 h-3 rounded-full ${lab.color.replace("text-", "bg-")}`}></span>
-                        Capacidades Principales
-                      </h4>
-                      <ul className="space-y-3">
-                        {lab.capabilities.map((capability, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-gray-700">
-                            <ArrowRight size={18} className={`${lab.color} flex-shrink-0 mt-0.5`} />
-                            <span className="text-sm">{capability}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  {/* Right Column - Images Grid */}
+              <div className="p-6 grid md:grid-cols-2 gap-6">
+                {/* Info */}
+                <div className="space-y-4">
+                  <p className="text-gray-700 text-sm leading-relaxed">{lab.description}</p>
                   <div>
-                    <div className="grid grid-cols-2 gap-4">
-                      {lab.images.map((image, idx) => (
-                        <div
-                          key={idx}
-                          className="relative group/image aspect-square rounded-xl overflow-hidden bg-gray-200 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-300"
-                        >
-                          <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                            <div className="text-center">
-                              <div className={`${lab.color} mb-2 flex justify-center`}>
-                                {lab.icon}
-                              </div>
-                              <p className="text-gray-500 text-xs">Foto {idx + 1}</p>
-                            </div>
-                          </div>
-                          {/* Overlay en hover */}
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover/image:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                            <div className="opacity-0 group-hover/image:opacity-100 transition-opacity">
-                              <span className="text-white text-xs font-semibold">Hacer clic para ver</span>
-                            </div>
-                          </div>
-                        </div>
+                    <h4 className="font-bold text-gray-900 mb-3 text-sm">Capacidades:</h4>
+                    <ul className="space-y-2">
+                      {lab.capabilities.map((capability, idx) => (
+                        <li key={idx} className="text-gray-700 text-sm flex gap-2">
+                          <span className={`${lab.color} font-bold`}>•</span>
+                          {capability}
+                        </li>
                       ))}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-4 text-center">Las fotos se agregan en construcción</p>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Images Grid */}
+                <div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {lab.images.map((_, idx) => (
+                      <div
+                        key={idx}
+                        className={`aspect-square rounded bg-gray-100 border ${lab.borderColor} flex items-center justify-center text-center`}
+                      >
+                        <div className={`${lab.color} text-xs text-gray-500`}>
+                          Foto {idx + 1}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-600 mb-6">
-            ¿Interesado en conocer más sobre nuestros servicios de investigación?
-          </p>
-          <button className="px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">
-            Solicitar Información
-          </button>
         </div>
       </div>
     </section>
