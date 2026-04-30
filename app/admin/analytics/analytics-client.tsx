@@ -687,7 +687,7 @@ export default function AnalyticsClient() {
               <iframe
                 title="ASLABSREPORTE"
                 className="absolute top-0 left-0 w-full h-full"
-                src="https://app.powerbi.com/reportEmbed?reportId=c88a433c-6a3c-43d3-8116-e50f4873241f&autoAuth=true&ctid=be6becf1-4fef-4388-a21c-7184584d38cb"
+                src="https://app.powerbi.com/view?r=eyJrIjoiODY0NGQ0MGUtYWYyMi00OWZjLWI3YzQtNTBiY2I0YWE1NWViIiwidCI6ImJlNmJlY2YxLTRmZWYtNDM4OC1hMjFjLTcxODQ1ODRkMzhjYiIsImMiOjR9"
                 frameBorder={0}
                 allowFullScreen={true}
               />
