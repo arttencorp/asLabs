@@ -299,8 +299,11 @@ export default function DashboardClient() {
               </div>
               <div className="grid grid-cols-3 gap-4">
                 {zones.map((zone) => (
-                  <div key={zone.id} className="bg-white rounded-lg border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => setSelectedZone(zone.id)}>
+                  <div
+                    key={zone.id}
+                    className="bg-white rounded-lg border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => setSelectedZone(zone.id)}
+                  >
                     <div className="flex items-start justify-between mb-4">
                       <div className="bg-green-100 p-3 rounded-lg">
                         <Leaf className="w-6 h-6 text-green-600" />
