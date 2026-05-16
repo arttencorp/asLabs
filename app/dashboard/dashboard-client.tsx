@@ -159,9 +159,9 @@ export default function DashboardClient() {
   }
 
   const statsCards = [
-    { label: "Zonas Activas", value: zones.length, icon: MapPin, color: "bg-green-500" },
-    { label: "Servicios Completados", value: services.filter((s) => s.status === "completed").length, icon: CheckCircle, color: "bg-blue-500" },
-    { label: "En Procesamiento", value: services.filter((s) => s.status === "processing").length, icon: Clock, color: "bg-orange-500" },
+    { label: "Zonas Activas", value: zones.length.toString(), icon: MapPin, color: "bg-green-500" },
+    { label: "Servicios Completados", value: services.filter((s) => s.status === "completed").length.toString(), icon: CheckCircle, color: "bg-blue-500" },
+    { label: "En Procesamiento", value: services.filter((s) => s.status === "processing").length.toString(), icon: Clock, color: "bg-orange-500" },
     {
       label: "Área Total",
       value: `${zones.reduce((sum, z) => sum + z.area, 0).toFixed(1)} ha`,
@@ -273,7 +273,7 @@ export default function DashboardClient() {
                         <div>
                           <p className="font-semibold text-gray-900">{service.type}</p>
                           <p className="text-sm text-gray-500">{zone?.name} • {service.date}</p>
-                          {service.result && <p className="text-sm text-green-600 mt-1">✓ {service.result}</p>}
+                          {service.result && <p className="text-sm text-green-600 mt-1"><strong>Resultado:</strong> {service.result}</p>}
                         </div>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(service.status)}`}>
                           {getStatusIcon(service.status)}
