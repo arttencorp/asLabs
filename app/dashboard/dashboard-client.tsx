@@ -20,6 +20,9 @@ import {
   AlertCircle,
   ChevronRight,
   MessageSquare,
+  PieChart,
+  LineChart,
+  Filter,
 } from "lucide-react"
 
 interface Zone {
@@ -51,7 +54,7 @@ interface Evolution {
 export default function DashboardClient() {
   const router = useRouter()
   const [username, setUsername] = useState("")
-  const [activeTab, setActiveTab] = useState<"inicio" | "zonas" | "servicios" | "evolucion" | "solicitar">("inicio")
+  const [activeTab, setActiveTab] = useState<"inicio" | "zonas" | "servicios" | "evolucion" | "graficos" | "informes" | "solicitar">("inicio")
   const [zones, setZones] = useState<Zone[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [evolution, setEvolution] = useState<Evolution[]>([])
@@ -185,6 +188,8 @@ export default function DashboardClient() {
             { id: "zonas", label: "Mis Zonas", icon: MapPin },
             { id: "servicios", label: "Servicios", icon: FileText },
             { id: "evolucion", label: "Evolución del Campo", icon: TrendingUp },
+            { id: "graficos", label: "Gráficos", icon: LineChart },
+            { id: "informes", label: "Informes", icon: FileText },
             { id: "solicitar", label: "Solicitar Análisis", icon: Plus },
           ].map((item) => {
             const Icon = item.icon as any
@@ -414,6 +419,195 @@ export default function DashboardClient() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* GRAFICOS TAB */}
+          {activeTab === "graficos" && (
+            <div className="space-y-6">
+              <h3 className="text-lg font-bold text-gray-900">Gráficos de Análisis</h3>
+
+              <div className="grid grid-cols-2 gap-6">
+                {/* Análisis por tipo de servicio */}
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  <h4 className="font-bold text-gray-900 mb-4">Servicios Realizados por Tipo</h4>
+                  <div className="space-y-3">
+                    {[
+                      { type: "Análisis de Suelo", count: 8, color: "bg-green-500", percentage: 40 },
+                      { type: "Control Biológico", count: 6, color: "bg-blue-500", percentage: 30 },
+                      { type: "Identificación 16S", count: 5, color: "bg-purple-500", percentage: 25 },
+                      { type: "Agroindustrial", count: 1, color: "bg-orange-500", percentage: 5 },
+                    ].map((item, idx) => (
+                      <div key={idx}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-700">{item.type}</span>
+                          <span className="text-sm font-bold text-gray-900">{item.count}</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`${item.color} h-2 rounded-full`}
+                            style={{ width: `${item.percentage}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Análisis por zona */}
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  <h4 className="font-bold text-gray-900 mb-4">Análisis por Zona</h4>
+                  <div className="space-y-3">
+                    {zones.map((zone) => {
+                      const zoneServiceCount = services.filter((s) => s.zoneId === zone.id).length
+                      const maxServices = 8
+                      return (
+                        <div key={zone.id}>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-gray-700">{zone.name}</span>
+                            <span className="text-sm font-bold text-gray-900">{zoneServiceCount}</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-green-500 h-2 rounded-full"
+                              style={{ width: `${(zoneServiceCount / maxServices) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* Estado de servicios */}
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  <h4 className="font-bold text-gray-900 mb-6">Estado de Servicios</h4>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-3xl font-bold text-green-600">
+                        {services.filter((s) => s.status === "completed").length}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-2">Completados</p>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold text-blue-600">
+                        {services.filter((s) => s.status === "processing").length}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-2">Procesando</p>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold text-yellow-600">
+                        {services.filter((s) => s.status === "pending").length}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-2">Pendiente</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Línea temporal de análisis */}
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  <h4 className="font-bold text-gray-900 mb-4">Últimos 30 Días</h4>
+                  <div className="flex items-end justify-between h-32 gap-1">
+                    {[45, 60, 40, 75, 65, 50, 55, 70, 45, 80].map((height, idx) => (
+                      <div
+                        key={idx}
+                        className="flex-1 bg-gradient-to-t from-green-400 to-green-500 rounded-t opacity-80 hover:opacity-100 transition-opacity"
+                        style={{ height: `${height}%` }}
+                        title={`Día ${idx + 1}`}
+                      ></div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500 text-center mt-4">Actividad de análisis</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* INFORMES TAB */}
+          {activeTab === "informes" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-900">Informes Disponibles</h3>
+                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <Filter className="w-4 h-4" />
+                  Filtrar
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    title: "Informe Completo de Análisis - Lote Norte",
+                    zone: "Lote Norte",
+                    date: "2026-05-10",
+                    services: 3,
+                    type: "Completo",
+                  },
+                  {
+                    title: "Reporte Mensual - Control Biológico",
+                    zone: "Lote Sur",
+                    date: "2026-04-30",
+                    services: 2,
+                    type: "Especializado",
+                  },
+                  {
+                    title: "Análisis de Salud del Cultivo - Invernadero A",
+                    zone: "Invernadero A",
+                    date: "2026-05-08",
+                    services: 1,
+                    type: "Rápido",
+                  },
+                  {
+                    title: "Comparativo Trimestral",
+                    zone: "Todas las Zonas",
+                    date: "2026-05-01",
+                    services: 6,
+                    type: "Comparativo",
+                  },
+                ].map((informe, idx) => (
+                  <div key={idx} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h4 className="font-bold text-gray-900 mb-2">{informe.title}</h4>
+                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4" />
+                            {informe.zone}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {informe.date}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <FileText className="w-4 h-4" />
+                            {informe.services} análisis
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 ml-4">
+                        <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+                          {informe.type}
+                        </span>
+                        <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+                          <Download className="w-5 h-5 text-green-600" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Generar nuevo informe */}
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200 p-6">
+                <h4 className="font-bold text-gray-900 mb-3">Generar Nuevo Informe</h4>
+                <p className="text-sm text-gray-700 mb-4">
+                  Crea un informe personalizado con los análisis que desees incluir
+                </p>
+                <button className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+                  <Plus className="w-5 h-5" />
+                  Crear Informe
+                </button>
+              </div>
             </div>
           )}
 
