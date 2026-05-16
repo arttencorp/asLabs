@@ -4,7 +4,7 @@ import type React from "react"
 
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Menu, X, ChevronDown, FlaskConical, Leaf, Droplets, Microscope, Bug, TestTubes } from "lucide-react"
+import { ExternalLink, Menu, X, ChevronDown, FlaskConical, Leaf, Droplets, Microscope, Bug, TestTubes, LogIn } from "lucide-react"
 
 interface NavItem {
   title: string
@@ -197,26 +197,6 @@ export default function Navbar() {
                         item.title
                       )}
                       <ChevronDown className="h-4 w-4" />
-                      {key === "biotecnologia" && (
-                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1">
-                          Ciencia
-                        </span>
-                      )}
-                      {key === "servicios" && (
-                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1">
-                          Lab
-                        </span>
-                      )}
-                      {key === "control-biologico" && (
-                        <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold ml-1">
-                          Bio
-                        </span>
-                      )}
-                      {key === "dashboard" && (
-                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold ml-1">
-                          Dashboard
-                        </span>
-                      )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
                           activeItem === key ? "w-full" : "w-0"
@@ -231,17 +211,6 @@ export default function Navbar() {
                       }`}
                     >
                       {item.title}
-                      {key === "seguimiento" && (
-                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">Track</span>
-                      )}
-                      {key === "control-biologico" && (
-                        <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">Bio</span>
-                      )}
-                      {key === "dashboard" && (
-                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                          Dashboard
-                        </span>
-                      )}
                       <span
                         className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
                           activeItem === key ? "w-full" : "w-0"
@@ -344,7 +313,14 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Right Side */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden lg:flex items-center gap-3">
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-serif text-gray-700"
+            >
+              <LogIn className="w-4 h-4" />
+              Ingresar
+            </Link>
             <div className="flex items-center">
               <a
                 href="https://wa.me/51961996645"
@@ -404,21 +380,6 @@ export default function Navbar() {
                           ) : (
                             item.title
                           )}
-                          {key === "servicios" && (
-                            <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                              Lab
-                            </span>
-                          )}
-                          {key === "control-biologico" && (
-                            <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">
-                              Bio
-                            </span>
-                          )}
-                          {key === "dashboard" && (
-                            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                              Dashboard
-                            </span>
-                          )}
                         </div>
                         {item.children.map((child, index) => (
                           <Link
@@ -439,17 +400,6 @@ export default function Navbar() {
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.title}
-                        {key === "seguimiento" && (
-                          <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">Track</span>
-                        )}
-                        {key === "control-biologico" && (
-                          <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-bold">Bio</span>
-                        )}
-                        {key === "dashboard" && (
-                          <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                            Dashboard
-                          </span>
-                        )}
                       </Link>
                     )}
                   </div>
