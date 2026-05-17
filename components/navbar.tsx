@@ -92,6 +92,12 @@ export default function Navbar() {
       description:
         "Explora nuestra variedad de plantines in vitro de alta calidad genética y fitosanitaria para diferentes cultivos.",
     },
+    cepas: {
+      title: "Cepas",
+      href: "/cepas",
+      description:
+        "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
+    },
     research: {
       title: "Investigación",
       href: "/research",
