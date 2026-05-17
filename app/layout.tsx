@@ -1,6 +1,6 @@
 import type React from "react"
 import "./globals.css"
-import { Playfair_Display } from "next/font/google"
+import { DM_Serif_Text } from "next/font/google"
 import type { Metadata, Viewport } from "next"
 import {
   OrganizationStructuredData,
@@ -8,11 +8,11 @@ import {
   WebsiteStructuredData,
 } from "@/components/structured-data"
 
-const playfairDisplay = Playfair_Display({
-  weight: ["400", "500", "600", "700", "800", "900"],
+const dmSerifText = DM_Serif_Text({
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-playfair",
+  variable: "--font-dm-serif",
   preload: true,
 })
 
@@ -148,7 +148,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={`${playfairDisplay.variable}`}>
+    <html lang="es-PE" className={`${dmSerifText.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

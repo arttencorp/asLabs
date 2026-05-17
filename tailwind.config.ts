@@ -11,8 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-playfair)", "system-ui", "serif"],
-        serif: ["var(--font-playfair)", "system-ui", "serif"],
+        sans: ["DM Serif Text", "serif"],
+        serif: ["DM Serif Text", "serif"],
       },
       fontWeight: {
         thin: "100",
