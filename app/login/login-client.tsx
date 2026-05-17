@@ -15,21 +15,8 @@ export default function LoginClient() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-    setLoading(true)
-
-    // Validación simple de credenciales
-    if (username === "admin" && password === "pass") {
-      // Guardamos token en localStorage
-      localStorage.setItem("authToken", "admin-token-" + Date.now())
-      localStorage.setItem("username", username)
-      // Redirigimos al panel
-      router.push("/dashboard")
-    } else {
-      setError("Usuario o contraseña incorrectos")
-    }
-
-    setLoading(false)
+    setError("El Panel de Control está en desarrollo. Pronto estará disponible.")
+    return
   }
 
   return (
@@ -86,19 +73,25 @@ export default function LoginClient() {
         <div className="max-w-sm mx-auto w-full">
           {/* Header */}
           <div className="mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Bienvenido</h2>
-            <p className="text-gray-600">Accede a tu panel de resultados con tus credenciales</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Panel de Control</h2>
+            <p className="text-gray-600">Acceso restringido - Próximamente disponible</p>
+          </div>
+
+          {/* Development Notice */}
+          <div className="mb-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded">
+            <p className="text-amber-700 text-sm font-bold">⚠️ Panel en Construcción</p>
+            <p className="text-amber-700 text-xs mt-1">Este servicio estará disponible muy pronto con funcionalidades innovadoras para tu negocio agrícola.</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded">
-              <p className="text-red-700 text-sm font-medium">{error}</p>
+            <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+              <p className="text-blue-700 text-sm font-medium">{error}</p>
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Form - Disabled */}
+          <form onSubmit={handleSubmit} className="space-y-6 opacity-50 pointer-events-none">
             {/* Username */}
             <div>
               <label htmlFor="username" className="block text-sm font-semibold text-gray-800 mb-2">
@@ -111,7 +104,7 @@ export default function LoginClient() {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="tu_usuario"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
-                disabled={loading}
+                disabled={true}
                 autoComplete="username"
               />
             </div>
@@ -129,14 +122,14 @@ export default function LoginClient() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="•••••••••"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
-                  disabled={loading}
+                  disabled={true}
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition-colors"
-                  disabled={loading}
+                  disabled={true}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -146,26 +139,59 @@ export default function LoginClient() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-8"
+              disabled={true}
+              className="w-full bg-gray-400 text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-8"
             >
-              {loading ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Ingresando...
-                </div>
-              ) : (
-                "Ingresar"
-              )}
+              Próximamente Disponible
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-900 text-xs font-bold mb-2">CREDENCIALES DE PRUEBA</p>
-            <div className="space-y-1 text-xs text-blue-800">
-              <p>Usuario: <code className="font-mono font-bold">admin</code></p>
-              <p>Contraseña: <code className="font-mono font-bold">pass</code></p>
+          {/* Demo Credentials - REMOVED */}
+          {/* Under Development Section */}
+          <div className="mt-8 p-6 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-300 rounded-lg space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center flex-shrink-0 font-bold text-sm">!</div>
+              <div>
+                <p className="font-black text-amber-900 text-sm mb-3">Panel de Control en Desarrollo</p>
+                <ul className="space-y-2 text-amber-800 text-xs leading-relaxed">
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Gestión de Zonas Personalizadas:</strong> Define tus cultivos y zonas de siembra con ubicación geográfica precisa</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Monitoreo en Tiempo Real:</strong> Visualiza resultados de análisis mientras nuestros equipos trabajan</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Evolución de Cultivos:</strong> Gráficos interactivos que muestran la historia y tendencias de tus cultivos</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Solicitudes Virtuales:</strong> Pide análisis, asesoramiento y servicios sin moverte de casa u oficina</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Asistente IA Especializado:</strong> Chat disponible 24/7 para clientes premium con recomendaciones inteligentes</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Reportes Automáticos:</strong> Descarga informes detallados en PDF con análisis de suelo, plagas y recomendaciones</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Historial de Servicios:</strong> Consulta todos tus análisis anteriores y compara resultados</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Notificaciones Inteligentes:</strong> Recibe alertas sobre plagas, déficits de nutrientes o cambios climáticos</span>
+                  </li>
+                  <li className="flex gap-2 items-start">
+                    <span className="text-amber-500 font-bold mt-0.5">✓</span>
+                    <span><strong>Consultoría Premium:</strong> Videollamadas con nuestros agrónomos para asesoramiento personalizado</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
