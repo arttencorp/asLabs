@@ -106,23 +106,17 @@ export default function CepasClient() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-20">
+      {/* Hero Section - Compacto */}
+      <section className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Cepas Biológicas Certificadas</h1>
-            <p className="text-xl text-green-100 mb-8">
-              Soluciones biológicas de alta calidad para control de plagas, enfermedades y mejora de nutrición. 
-              Todas nuestras cepas son identificadas y validadas en laboratorio.
-            </p>
-            <p className="text-green-100">Selecciona una cepa para ver todas las presentaciones disponibles y hacer tu pedido.</p>
-          </div>
+          <h1 className="text-3xl font-bold mb-2">Cepas Biológicas</h1>
+          <p className="text-green-100 text-sm max-w-2xl">Soluciones biológicas certificadas para control de plagas y mejora de nutrición</p>
         </div>
       </section>
 
       {/* Filters */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row gap-6 mb-12">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
           {/* Search */}
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-3">Buscar</label>

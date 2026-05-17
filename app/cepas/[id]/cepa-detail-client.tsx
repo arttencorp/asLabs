@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
-import { ShoppingCart, Plus, Minus, X, MessageSquare, ArrowLeft } from "lucide-react"
+import { Plus, Minus, X, MessageSquare, ArrowLeft, ShoppingCart } from "lucide-react"
 
 interface Presentacion {
   id: string
@@ -290,18 +290,22 @@ const allCepas: Cepa[] = [
 ]
 
 export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
-  const cepa = allCepas.find((c) => c.id === cepaId)
   const [cart, setCart] = useState<CartItem[]>([])
-  const [showCart, setShowCart] = useState(false)
+  const [selectedPresentacion, setSelectedPresentacion] = useState<string | null>(null)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [cepaId])
+
+  const cepa = allCepas.find((c) => c.id === cepaId)
 
   if (!cepa) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="min-h-screen flex flex-col">
         <Navbar />
-        <div className="flex-1 container mx-auto px-4 py-16 text-center">
-          <p className="text-gray-600 text-lg mb-6">Cepa no encontrada</p>
-          <Link href="/cepas" className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
-            <ArrowLeft className="w-5 h-5" />
+        <div className="flex-1 container mx-auto px-4 py-12 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Cepa no encontrada</h1>
+          <Link href="/cepas" className="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
             Volver al Catálogo
           </Link>
         </div>
@@ -321,9 +325,11 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
     const existingItem = cart.find((item) => item.presentacionId === presentacionId)
 
     if (existingItem) {
-      setCart(cart.map((item) =>
-        item.presentacionId === presentacionId ? { ...item, cantidad: item.cantidad + 1 } : item
-      ))
+      setCart(
+        cart.map((item) =>
+          item.presentacionId === presentacionId ? { ...item, cantidad: item.cantidad + 1 } : item
+        )
+      )
     } else {
       setCart([
         ...cart,
@@ -347,9 +353,7 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
     if (nueva <= 0) {
       removerDelCarrito(presentacionId)
     } else {
-      setCart(cart.map((item) =>
-        item.presentacionId === presentacionId ? { ...item, cantidad: nueva } : item
-      ))
+      setCart(cart.map((item) => (item.presentacionId === presentacionId ? { ...item, cantidad: nueva } : item)))
     }
   }
 
@@ -360,157 +364,143 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-12">
-        <div className="container mx-auto px-4">
-          <Link
-            href="/cepas"
-            className="inline-flex items-center gap-2 text-green-100 hover:text-white mb-6 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
+      {/* Breadcrumb */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 py-4">
+          <Link href="/cepas" className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium">
+            <ArrowLeft className="w-4 h-4" />
             Volver al Catálogo
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">{cepa.nombre}</h1>
-          <p className="text-green-100 italic text-lg mb-4">{cepa.cientifico}</p>
-          <p className="text-green-100 max-w-2xl">{cepa.descripcion}</p>
         </div>
-      </section>
+      </div>
 
-      {/* Content */}
+      {/* Product Section - 2 Column Layout */}
       <div className="flex-1 container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Beneficios */}
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Beneficios Principales</h2>
-              <ul className="space-y-3">
-                {cepa.beneficios.map((beneficio, idx) => (
-                  <li key={idx} className="flex gap-3">
-                    <span className="text-green-600 font-bold text-xl">✓</span>
-                    <span className="text-gray-700">{beneficio}</span>
-                  </li>
-                ))}
-              </ul>
+        <div className="grid lg:grid-cols-2 gap-12 mb-12">
+          {/* Izquierda - Imagen del Producto */}
+          <div className="bg-white rounded-lg border border-gray-200 p-8 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-8xl mb-4">🧬</div>
+              <p className="text-gray-600 font-medium">{cepa.nombre}</p>
+            </div>
+          </div>
+
+          {/* Derecha - Detalles y Opciones */}
+          <div className="space-y-6">
+            {/* Header Info */}
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{cepa.nombre}</h1>
+              <p className="text-lg text-gray-600 italic mb-4">{cepa.cientifico}</p>
+              <div className="flex items-center gap-4 mb-6">
+                <span className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-bold text-sm">
+                  {cepa.categoria}
+                </span>
+              </div>
             </div>
 
-            {/* Ficha Técnica */}
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Ficha Técnica</h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-xs text-gray-600 font-medium mb-2">Viabilidad</p>
-                  <p className="text-lg font-bold text-gray-900">{cepa.viabilidad}</p>
+            {/* Ficha Técnica Visible */}
+            <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+              <h3 className="font-bold text-gray-900 mb-4">Especificaciones Técnicas</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-gray-600 font-medium mb-1">Viabilidad</p>
+                  <p className="font-bold text-gray-900">{cepa.viabilidad}</p>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-xs text-gray-600 font-medium mb-2">Concentración</p>
-                  <p className="text-lg font-bold text-gray-900">{cepa.concentracion}</p>
+                <div>
+                  <p className="text-xs text-gray-600 font-medium mb-1">Concentración</p>
+                  <p className="font-bold text-gray-900">{cepa.concentracion}</p>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-xs text-gray-600 font-medium mb-2">Almacenamiento</p>
-                  <p className="text-lg font-bold text-gray-900">{cepa.almacenamiento}</p>
+                <div>
+                  <p className="text-xs text-gray-600 font-medium mb-1">Almacenamiento</p>
+                  <p className="font-bold text-gray-900">{cepa.almacenamiento}</p>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-xs text-gray-600 font-medium mb-2">Aplicación</p>
-                  <p className="text-lg font-bold text-gray-900">{cepa.aplicacion}</p>
+                <div>
+                  <p className="text-xs text-gray-600 font-medium mb-1">Aplicación</p>
+                  <p className="font-bold text-gray-900">{cepa.aplicacion}</p>
                 </div>
               </div>
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-xs text-blue-600 font-medium mb-2">Compatibilidad</p>
+              <div className="mt-4 pt-4 border-t border-gray-300">
+                <p className="text-xs text-gray-600 font-medium mb-1">Compatibilidad</p>
                 <p className="text-gray-900">{cepa.compatibilidad}</p>
               </div>
             </div>
 
-            {/* Presentaciones */}
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Presentaciones Disponibles</h2>
-              <div className="grid md:grid-cols-2 gap-4">
+            {/* Presentaciones Dropdown */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-3">Selecciona una presentación:</label>
+              <select
+                value={selectedPresentacion || ""}
+                onChange={(e) => setSelectedPresentacion(e.target.value || null)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 font-medium text-gray-900"
+              >
+                <option value="">-- Elige una presentación --</option>
                 {cepa.presentaciones.map((pres) => {
                   const presLabel = pres.volumen
                     ? `${pres.tipo} - ${pres.medio} - ${pres.volumen}`
                     : `${pres.tipo} - ${pres.medio}`
-
                   return (
-                    <div key={pres.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <p className="font-medium text-gray-900">{presLabel}</p>
-                          <p className="text-2xl font-bold text-green-600 mt-2">S/ {pres.precio.toFixed(2)}</p>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => agregarAlCarrito(pres.id)}
-                        className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
-                      >
-                        Agregar al Carrito
-                      </button>
-                    </div>
+                    <option key={pres.id} value={pres.id}>
+                      {presLabel} - S/ {pres.precio.toFixed(2)}
+                    </option>
                   )
                 })}
-              </div>
+              </select>
             </div>
+
+            {/* Add to Cart Button */}
+            {selectedPresentacion && (
+              <button
+                onClick={() => agregarAlCarrito(selectedPresentacion)}
+                className="w-full px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold text-lg flex items-center justify-center gap-2"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Agregar al Carrito
+              </button>
+            )}
           </div>
+        </div>
 
-          {/* Sidebar - Carrito */}
-          <div>
-            <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Mi Carrito</h3>
+        {/* Description Section Below */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8 mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Descripción del Producto</h2>
+          <p className="text-gray-700 mb-6 leading-relaxed">{cepa.descripcion}</p>
+          
+          <h3 className="text-lg font-bold text-gray-900 mb-3">Beneficios Principales</h3>
+          <ul className="space-y-2">
+            {cepa.beneficios.map((beneficio, idx) => (
+              <li key={idx} className="flex gap-3 text-gray-700">
+                <span className="text-green-600 font-bold text-xl">✓</span>
+                {beneficio}
+              </li>
+            ))}
+          </ul>
+        </div>
 
-              {cart.length === 0 ? (
-                <p className="text-gray-600 text-center py-8">Tu carrito está vacío</p>
-              ) : (
-                <>
-                  <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
-                    {cart.map((item) => (
-                      <div key={item.presentacionId} className="border border-gray-200 rounded-lg p-3">
-                        <p className="font-medium text-gray-900 text-sm mb-1">{item.cepaNombre}</p>
-                        <p className="text-xs text-gray-600 mb-2">{item.presentacionInfo}</p>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-1 bg-gray-100 rounded p-1">
-                            <button
-                              onClick={() => actualizarCantidad(item.presentacionId, item.cantidad - 1)}
-                              className="p-1 hover:bg-gray-200 rounded"
-                            >
-                              <Minus className="w-3 h-3" />
-                            </button>
-                            <span className="font-bold text-gray-900 min-w-5 text-center text-sm">{item.cantidad}</span>
-                            <button
-                              onClick={() => actualizarCantidad(item.presentacionId, item.cantidad + 1)}
-                              className="p-1 hover:bg-gray-200 rounded"
-                            >
-                              <Plus className="w-3 h-3" />
-                            </button>
-                          </div>
-                          <p className="font-bold text-green-600">S/ {(item.precio * item.cantidad).toFixed(2)}</p>
-                        </div>
-                        <button
-                          onClick={() => removerDelCarrito(item.presentacionId)}
-                          className="w-full text-xs text-red-600 hover:text-red-700 transition-colors py-1"
-                        >
-                          Remover
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+        {/* All Presentations Grid */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Todas las Presentaciones</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {cepa.presentaciones.map((pres) => {
+              const presLabel = pres.volumen
+                ? `${pres.tipo} ${pres.medio} ${pres.volumen}`
+                : `${pres.tipo} ${pres.medio}`
 
-                  <div className="border-t border-gray-200 pt-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="font-medium text-gray-900">Total:</span>
-                      <span className="text-2xl font-bold text-green-600">S/ {totalCarrito.toFixed(2)}</span>
-                    </div>
-                    <a
-                      href={`https://wa.me/51961996645?text=Quisiera%20hacer%20un%20pedido%20de%20${cepa.nombre}.%20Total%3A%20S/%20${totalCarrito.toFixed(2)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold text-sm"
-                    >
-                      <MessageSquare className="w-5 h-5" />
-                      Confirmar Pedido
-                    </a>
-                  </div>
-                </>
-              )}
-            </div>
+              return (
+                <div key={pres.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <p className="font-medium text-gray-900 text-sm mb-3">{presLabel}</p>
+                  <p className="text-2xl font-bold text-green-600 mb-4">S/ {pres.precio.toFixed(2)}</p>
+                  <button
+                    onClick={() => {
+                      setSelectedPresentacion(pres.id)
+                      agregarAlCarrito(pres.id)
+                    }}
+                    className="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
+                  >
+                    Agregar
+                  </button>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -518,10 +508,8 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
       {/* Contact Section */}
       <section className="bg-gradient-to-r from-green-50 to-emerald-50 py-12 border-t border-gray-200">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">¿Necesitas Asesoría?</h2>
-          <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-            Nuestros especialistas están disponibles para recomendarte la presentación más adecuada para tu cultivo
-          </p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">¿Necesitas Asesoría?</h2>
+          <p className="text-gray-700 mb-6">Nuestros especialistas están disponibles para ayudarte</p>
           <a
             href="https://wa.me/51961996645"
             target="_blank"
@@ -535,6 +523,30 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
       </section>
 
       <Footer />
+
+      {/* Floating Cart Button */}
+      {cantidadItems > 0 && (
+        <div className="fixed bottom-8 right-8 z-40">
+          <div className="bg-white rounded-full shadow-lg p-4 border border-gray-200">
+            <div className="text-center">
+              <div className="text-sm font-bold text-gray-900">Carrito</div>
+              <div className="text-2xl font-bold text-green-600">{cantidadItems}</div>
+              <div className="text-xs text-gray-600">S/ {totalCarrito.toFixed(2)}</div>
+              <button
+                onClick={() => {
+                  const whatsappMessage = `Quisiera hacer un pedido de cepas.\nTotal: S/ ${totalCarrito.toFixed(2)}\n\n${cart
+                    .map((item) => `${item.cepaNombre} - ${item.presentacionInfo} x${item.cantidad} = S/ ${(item.precio * item.cantidad).toFixed(2)}`)
+                    .join("\n")}`
+                  window.open(`https://wa.me/51961996645?text=${encodeURIComponent(whatsappMessage)}`, "_blank")
+                }}
+                className="mt-2 px-3 py-1 bg-green-600 text-white rounded text-xs font-bold hover:bg-green-700 whitespace-nowrap"
+              >
+                Pedir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
