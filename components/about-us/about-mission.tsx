@@ -4,12 +4,12 @@ import Image from "next/image"
 
 export default function AboutMission() {
   return (
-    <section id="mision" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="mision" className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left - Text Content */}
-          <div className="space-y-12">
-            <div className="space-y-8">
+          <div className="space-y-6">
+            <div className="space-y-4">
               <div className="inline-block">
                 <span className="text-xs font-semibold text-[#2e7d32] uppercase tracking-[0.2em] bg-[#e8f5e9] px-5 py-3 rounded-full border border-[#2e7d32]/20">
                   Nuestra Trayectoria
@@ -24,7 +24,7 @@ export default function AboutMission() {
               </p>
             </div>
 
-            <div className="pt-12 border-t-2 border-gray-200 space-y-10">
+            <div className="pt-6 border-t-2 border-gray-200 space-y-6">
               <div>
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-[#e8f5e9] rounded-full flex items-center justify-center">
@@ -54,7 +54,7 @@ export default function AboutMission() {
           </div>
 
           {/* Right - Image */}
-          <div className="relative h-full min-h-[600px] order-last">
+          <div className="relative h-full min-h-[500px] order-last">
             <img
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AGROINDUSTRIAL%20ANALISIS-ObbdnPOmz6huCECzNFRd8h6eOPR2nr.webp"
               alt="Investigadores de AS Laboratorios en acción"
