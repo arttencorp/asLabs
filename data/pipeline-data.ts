@@ -59,6 +59,26 @@ export const pipelineData = [
         title: "",
         projects: [
           {
+            name: "Capacidad Antagonista de Trichoderma contra Fusarium Oxysporum: Mecanismos Moleculares",
+            id: "CATFOM-001",
+            progress: 0.55,
+            location: "Laboratorio de Microbiología",
+            status: "Fase 2 - Análisis Molecular Avanzado",
+            researcher: "Antonio Victor Gabriel Guevara Escobar, Hellem Iveth Guevara Nuñez",
+            url: "/research/trichoderma-fusarium",
+            subtitle: "Raza 2 aislados de La Libertad, Perú"
+          },
+          {
+            name: "Diseño y Producción de Bioreactores para Suspensiones Bacterianas a Gran Escala",
+            id: "DPBSB-002",
+            progress: 0.45,
+            location: "Laboratorio de Bioreactores",
+            status: "Fase 2 - Escalamiento de Producción",
+            researcher: "Andy Hassan Espinales Gutiérrez, Luis Alonso Flores Ramírez",
+            url: "/research/bioreactores-bacterianos",
+            subtitle: "Producción optimizada de suspensiones microbianas"
+          },
+          {
             name: "Trichoderma Nativo",
             id: "TN-007",
             progress: 0.75,

@@ -85,6 +85,8 @@ export default function CategorySection({
   const getProjectLink = (project: Project) => {
     if (project.id === "SGF-015") return "/research/secuenciamiento-fusarium"
     if (project.id === "BB-001") return "/research/banano-baby"
+    if (project.id === "CATFOM-001") return "/research/trichoderma-fusarium"
+    if (project.id === "DPBSB-002") return "/research/bioreactores-bacterianos"
     if (project.name.includes("Fusarium")) return "/research/fusarium-genoma"
     return "#"
   }
@@ -169,7 +171,7 @@ export default function CategorySection({
                         {project.researcher && (
                           <div className="flex items-center space-x-2 md:col-span-2">
                             <User className="w-4 h-4" />
-                            
+                            <span>{project.researcher}</span>
                           </div>
                         )}
 
