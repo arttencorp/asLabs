@@ -35,7 +35,7 @@ const laboratories: Laboratory[] = [
       "Producción de plantas libres de patógenos",
       "Optimización de protocolos de regeneración",
     ],
-    images: ["/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg"],
+    images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BIOTECNOLOGIA%20VEG-GyhXkB27VJsVbo3cdugMjcKoWihfwr.webp"],
     status: "active",
   },
   {
@@ -54,7 +54,7 @@ const laboratories: Laboratory[] = [
       "Producción de bacterias entomopatógenas",
       "Formulación de biopreparados",
     ],
-    images: ["/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg"],
+    images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CONTROL%20BIOLOGICO-PBIfuHXR9abP20GJwXF3zEylDr3QKZ.webp"],
     status: "active",
   },
 
@@ -74,7 +74,7 @@ const laboratories: Laboratory[] = [
       "Análisis de aguas de riego",
       "Evaluación de calidad de productos agrícolas",
     ],
-    images: ["/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg"],
+    images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AGROINDUSTRIAL%20ANALISIS-ZHa0j4mU8ZtZY7Jn8PXyrP82dLfCwb.webp"],
     status: "active",
   },
   {
@@ -93,7 +93,7 @@ const laboratories: Laboratory[] = [
       "Escalado de procesos",
       "Optimización de cultivos (En desarrollo)",
     ],
-    images: ["/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg", "/team/default-profile.jpg"],
+    images: [],
     status: "construction",
   },
 ]
@@ -120,12 +120,23 @@ export default function LaboratoriesSection() {
               href={`/laboratorios/${lab.id}`}
               className="group border rounded-lg overflow-hidden hover:shadow-lg transition-all bg-white"
             >
-              {/* Banner Image */}
-              <div className={`${lab.bgColor} h-32 flex items-center justify-center relative overflow-hidden`}>
-                <div className={`${lab.color} text-4xl opacity-20 group-hover:opacity-30 transition-opacity`}>
-                  {lab.icon}
+              {/* Banner Image or Icon */}
+              {lab.images && lab.images.length > 0 ? (
+                <div className="relative h-40 overflow-hidden bg-gray-100">
+                  <img
+                    src={lab.images[0]}
+                    alt={lab.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 </div>
-              </div>
+              ) : (
+                <div className={`${lab.bgColor} h-40 flex items-center justify-center relative overflow-hidden`}>
+                  <div className={`${lab.color} text-6xl opacity-20 group-hover:opacity-30 transition-opacity`}>
+                    {lab.icon}
+                  </div>
+                </div>
+              )}
 
               {/* Content */}
               <div className="p-5">
