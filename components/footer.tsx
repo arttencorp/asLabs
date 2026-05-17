@@ -175,9 +175,21 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-gray-400 mb-4 md:mb-0">
-              © 2024 AS Laboratorios. Todos los derechos reservados.
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+              <div className="text-sm text-gray-400 mb-3 md:mb-0">
+                © 2024 AS Laboratorios. Todos los derechos reservados.
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-gray-500">Asociado</span>
+                <Image
+                  src="/logo-ccl-rojo.png"
+                  alt="CCL - Cámara de Comercio de Lima"
+                  width={40}
+                  height={40}
+                  className="h-auto w-auto"
+                />
+              </div>
             </div>
             <div className="flex space-x-6 text-sm">
               <Link href="/legal" className="text-gray-400 hover:text-white transition-colors">
