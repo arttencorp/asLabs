@@ -29,7 +29,7 @@ const teamData = [
     icon: <Beaker className="w-5 h-5" />,
     members: [
       { name: "Jurith Aguilar Pichen", role: "Jefa del Área Técnica", hasPhoto: true },
-      { name: "Madeleine Isuiza Flores", role: "Técnica de Laboratorio", hasPhoto: true },
+      { name: "Madeleine Isuiza Flores", role: "Técnica de Laboratorio", hasPhoto: true, photoUrl: "/team/madeleine.png" },
       { name: "Información Protegida", role: "Técnicos Secundarios (7 técnicos)", hasPhoto: false, isProtected: true },
     ],
   },
@@ -103,7 +103,7 @@ export default function AboutUsTeam() {
                       >
                         {member.hasPhoto ? (
                           <>
-                            <Image src="/professional-portrait.png" alt={member.name} fill className="object-cover" />
+                            <Image src={member.photoUrl || "/professional-portrait.png"} alt={member.name} fill className="object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                             <div className="absolute inset-0 flex flex-col justify-end p-3 text-white">
                               <h4 className="text-xs font-light mb-0.5 leading-tight line-clamp-2">{member.name}</h4>

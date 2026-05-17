@@ -166,7 +166,7 @@ export default function Navbar() {
       </div>
 
       {/* Main navigation */}
-      <nav className="bg-white border-b py-2 lg:py-4 relative z-20 font-serif">
+      <nav className="bg-white border-b py-1 lg:py-2 relative z-20 font-serif">
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center gap-4 lg:gap-8">
             <Link href="/" className="flex items-center">

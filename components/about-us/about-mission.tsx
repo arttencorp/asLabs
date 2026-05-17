@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export default function AboutMission() {
   return (
-    <section id="mision" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+    <section id="mision" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
       {/* Decorative background */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
 
