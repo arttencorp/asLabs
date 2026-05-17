@@ -265,6 +265,8 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
   const cepa = allCepas.find(c => c.id === cepaId)
   const [selectedPresentacion, setSelectedPresentacion] = useState<Presentacion | null>(cepa?.presentaciones[0] || null)
   const [cantidad, setCantidad] = useState(1)
+  const [customConcentration, setCustomConcentration] = useState("")
+  const [customCalvinput, setCustomCaldoInput] = useState("")
   const [cart, setCart] = useState<CartItem[]>([])
   const [showCart, setShowCart] = useState(false)
 
@@ -277,6 +279,37 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
   }
 
   const addToCart = () => {
+    // Si hay concentración personalizada
+    if (customConcentration) {
+      const newItem: CartItem = {
+        cepaId: cepa.id,
+        presentacionId: `custom-conc-${Date.now()}`,
+        cepaNombre: cepa.nombre,
+        presentacionInfo: `Concentración Personalizada - 2 x 10^${customConcentration} UFC/ml (A confirmar precio)`,
+        precio: 0, // A confirmar con cliente
+        cantidad: 1,
+      }
+      setCart(prev => [...prev, newItem])
+      setCustomConcentration("")
+      return
+    }
+
+    // Si hay caldo personalizado
+    if (customCalvinput) {
+      const newItem: CartItem = {
+        cepaId: cepa.id,
+        presentacionId: `custom-caldo-${Date.now()}`,
+        cepaNombre: cepa.nombre,
+        presentacionInfo: `Caldo Personalizado - ${customCalvinput} litros (A confirmar precio)`,
+        precio: 0, // A confirmar con cliente
+        cantidad: 1,
+      }
+      setCart(prev => [...prev, newItem])
+      setCustomCaldoInput("")
+      return
+    }
+
+    // Presentación estándar
     if (!selectedPresentacion) return
     
     const newItem: CartItem = {
@@ -328,6 +361,17 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
             <ArrowLeft className="w-4 h-4" />
             Volver al catálogo
           </Link>
+
+          {/* Información Importante */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-500 rounded-lg">
+            <div className="flex gap-4 items-start">
+              <div className="text-2xl">ℹ️</div>
+              <div className="text-sm">
+                <p className="font-black text-blue-900 mb-2">Política de Cultivo a Pedido</p>
+                <p className="text-blue-800 text-xs leading-relaxed">Todas nuestras cepas se cultivan a pedido con almacenamiento máximo de 2 días. Ideales para trabajos de investigación (tesistas) y solicitudes especializadas. Caldo: máximo 30 litros a concentración 2 x 10^7 UFC/ml. Tiempos de entrega sujetos a disponibilidad.</p>
+              </div>
+            </div>
+          </div>
 
           {/* Layout 2 columnas */}
           <div className="grid lg:grid-cols-3 gap-12 mb-16">
@@ -411,6 +455,52 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                       </div>
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Opciones Personalizadas */}
+              <div className="border-t pt-8">
+                <h3 className="text-xl font-black text-gray-900 mb-6">Opciones Personalizadas</h3>
+                
+                {/* Concentración Personalizada */}
+                <div className="mb-8 p-6 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h4 className="font-black text-blue-900 mb-3">Concentración Personalizada</h4>
+                  <p className="text-sm text-blue-800 mb-4">Solicita una concentración específica. Estándar: 2 x 10^7 UFC/ml. Máximo en caldo: 30 litros</p>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-gray-800">2 x 10</span>
+                    <sup className="text-lg font-bold text-gray-800">^</sup>
+                    <input
+                      type="number"
+                      value={customConcentration}
+                      onChange={(e) => setCustomConcentration(e.target.value)}
+                      placeholder="7"
+                      className="w-20 px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      min="1"
+                      max="10"
+                    />
+                    <span className="text-gray-600 text-sm">UFC/ml</span>
+                  </div>
+                  <p className="text-xs text-blue-700 mt-3">Se agregará a tu carrito como solicitud especial para confirmar precio</p>
+                </div>
+
+                {/* Caldo Personalizado */}
+                <div className="p-6 bg-purple-50 border border-purple-200 rounded-lg">
+                  <h4 className="font-black text-purple-900 mb-3">Caldo Personalizado</h4>
+                  <p className="text-sm text-purple-800 mb-4">Solicita un volumen personalizado (máximo 30 litros con concentración 2 x 10^7)</p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={customCalvinput}
+                      onChange={(e) => setCustomCaldoInput(e.target.value)}
+                      placeholder="10"
+                      className="flex-1 px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      min="0.1"
+                      max="30"
+                      step="0.1"
+                    />
+                    <span className="font-bold text-gray-800">litros</span>
+                  </div>
+                  <p className="text-xs text-purple-700 mt-3">Se agregará a tu carrito como solicitud especial para confirmar precio</p>
                 </div>
               </div>
 

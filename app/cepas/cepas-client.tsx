@@ -116,6 +116,15 @@ const cepas: Cepa[] = [
     beneficios: ["Tolerancia a sequía", "Desarrollo radicular mejorado"],
     imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20FIRMUS%20SP-3e7s9AEf9PCpSzCxfnIMQd0rcr7UDY.png",
   },
+  {
+    id: "contact",
+    nombre: "¿No encuentras tu cepa?",
+    cientifico: "Solicita nuevas especies",
+    categoria: "Contacto",
+    descripcion: "¿Necesitas una bacteria específica que no está en nuestro catálogo? Contáctanos para solicitar nuevas especies personalizadas",
+    beneficios: ["Asesoramiento personalizado", "Especies a medida"],
+    imagen: "",
+  },
 ]
 
 const categoryColors: { [key: string]: string } = {
@@ -216,6 +225,17 @@ export default function CepasClient() {
                 </button>
               ))}
             </div>
+
+            {/* Info Banner */}
+            <div className="mt-8 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-lg">
+              <div className="flex gap-4 items-start">
+                <div className="text-2xl">✓</div>
+                <div className="text-sm">
+                  <p className="font-black text-emerald-900 mb-1">Cultivo a Pedido - Máxima Viabilidad</p>
+                  <p className="text-emerald-800 text-xs">Almacenamiento ≤2 días • Perfecto para tesistas y investigadores • Máximo caldo: 30L • Disponemos de opciones personalizadas</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Results Count */}
@@ -227,55 +247,86 @@ export default function CepasClient() {
 
           {/* Cepas Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredCepas.map((cepa) => (
-              <Link
-                key={cepa.id}
-                href={`/cepas/${cepa.id}`}
-                className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col h-full"
-              >
-                {/* Imagen */}
-                <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex items-center justify-center relative">
-                  <img 
-                    src={cepa.imagen} 
-                    alt={cepa.nombre}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 right-3">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${categoryColors[cepa.categoria]}`}>
-                      {cepa.categoria}
-                    </span>
+            {filteredCepas.map((cepa) => {
+              // Contact Card especial
+              if (cepa.id === "contact") {
+                return (
+                  <div key={cepa.id} className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-dashed border-amber-400 overflow-hidden hover:shadow-xl hover:border-amber-500 transition-all duration-300 flex flex-col h-full p-8 items-center justify-center text-center">
+                    <div className="text-5xl mb-4">📞</div>
+                    <h3 className="font-black text-amber-900 text-lg mb-2">{cepa.nombre}</h3>
+                    <p className="text-amber-700 text-sm italic mb-4">{cepa.cientifico}</p>
+                    <p className="text-amber-800 text-sm mb-6 leading-relaxed">{cepa.descripcion}</p>
+                    <a
+                      href="mailto:info@aslabs.com?subject=Solicitud%20de%20Nueva%20Especie%20Bacteriana"
+                      className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-bold text-sm transition-all"
+                    >
+                      Contactar por Email
+                      <span className="text-lg">→</span>
+                    </a>
+                    <a
+                      href="https://wa.me/?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold text-sm transition-all mt-3"
+                    >
+                      WhatsApp
+                      <span className="text-lg">→</span>
+                    </a>
                   </div>
-                </div>
+                )
+              }
 
-                {/* Content */}
-                <div className="p-5 flex-1 flex flex-col">
-                  <div className="mb-3">
-                    <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-emerald-600 transition-colors">
-                      {cepa.nombre}
-                    </h3>
-                    <p className="text-xs text-slate-600 italic font-light">{cepa.cientifico}</p>
+              // Tarjeta de cepa normal
+              return (
+                <Link
+                  key={cepa.id}
+                  href={`/cepas/${cepa.id}`}
+                  className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col h-full"
+                >
+                  {/* Imagen */}
+                  <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex items-center justify-center relative">
+                    <img 
+                      src={cepa.imagen} 
+                      alt={cepa.nombre}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 right-3">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${categoryColors[cepa.categoria]}`}>
+                        {cepa.categoria}
+                      </span>
+                    </div>
                   </div>
 
-                  <p className="text-slate-600 text-sm mb-4 line-clamp-2 flex-1">{cepa.descripcion}</p>
+                  {/* Content */}
+                  <div className="p-5 flex-1 flex flex-col">
+                    <div className="mb-3">
+                      <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-emerald-600 transition-colors">
+                        {cepa.nombre}
+                      </h3>
+                      <p className="text-xs text-slate-600 italic font-light">{cepa.cientifico}</p>
+                    </div>
 
-                  {/* Beneficios */}
-                  <div className="space-y-2 mb-4 pt-3 border-t border-slate-100">
-                    {cepa.beneficios.slice(0, 2).map((beneficio, idx) => (
-                      <p key={idx} className="text-xs text-slate-600 flex gap-2">
-                        <span className="text-emerald-600 font-bold flex-shrink-0">✓</span>
-                        <span>{beneficio}</span>
-                      </p>
-                    ))}
-                  </div>
+                    <p className="text-slate-600 text-sm mb-4 line-clamp-2 flex-1">{cepa.descripcion}</p>
 
-                  {/* CTA */}
-                  <div className="inline-flex items-center gap-2 text-emerald-600 font-medium text-sm group-hover:gap-3 transition-all">
-                    Ver Producto
-                    <span className="text-lg">→</span>
+                    {/* Beneficios */}
+                    <div className="space-y-2 mb-4 pt-3 border-t border-slate-100">
+                      {cepa.beneficios.slice(0, 2).map((beneficio, idx) => (
+                        <p key={idx} className="text-xs text-slate-600 flex gap-2">
+                          <span className="text-emerald-600 font-bold flex-shrink-0">✓</span>
+                          <span>{beneficio}</span>
+                        </p>
+                      ))}
+                    </div>
+
+                    {/* CTA */}
+                    <div className="inline-flex items-center gap-2 text-emerald-600 font-medium text-sm group-hover:gap-3 transition-all">
+                      Ver Producto
+                      <span className="text-lg">→</span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              )
+            })}
           </div>
 
           {/* Empty State */}
