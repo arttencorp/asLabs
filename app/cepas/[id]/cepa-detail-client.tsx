@@ -173,31 +173,31 @@ const allCepas: Cepa[] = [
     nombre: "Escherichia coli",
     cientifico: "Escherichia coli (K-12)",
     categoria: "Investigación",
-    descripcion: "Bacteria modelo para investigación científica y producción de proteínas recombinantes. Cepa no patogénica certificada.",
-    beneficios: ["Desarrollo de bioingeniería", "Investigación genética", "Producción de proteínas", "Validada en laboratorio"],
+    descripcion: "Bacteria modelo para investigación científica y producción de proteínas recombinantes. Ampliamente utilizada en ingeniería genética.",
+    beneficios: ["Desarrollo de bioingeniería", "Investigación genética", "Producción de proteínas", "Estudios moleculares"],
     presentaciones: [
-      { id: "5-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 15.00 },
-      { id: "5-2", tipo: "Placa por Estriado", medio: "TSA", precio: 17.00 },
-      { id: "5-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 22.00 },
-      { id: "5-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 25.00 },
-      { id: "5-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 20.00 },
-      { id: "5-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 23.00 },
-      { id: "5-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 18.00 },
-      { id: "5-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 16.00 },
-      { id: "5-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 36.00 },
-      { id: "5-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 34.00 },
-      { id: "5-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 58.00 },
-      { id: "5-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 55.00 },
-      { id: "5-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 98.00 },
-      { id: "5-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 90.00 },
-      { id: "5-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 360.00 },
-      { id: "5-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 330.00 },
+      { id: "5-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 12.00 },
+      { id: "5-2", tipo: "Placa por Estriado", medio: "TSA", precio: 14.00 },
+      { id: "5-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 18.00 },
+      { id: "5-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 21.00 },
+      { id: "5-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 16.00 },
+      { id: "5-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 19.00 },
+      { id: "5-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 14.00 },
+      { id: "5-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 12.00 },
+      { id: "5-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 28.00 },
+      { id: "5-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 26.00 },
+      { id: "5-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 45.00 },
+      { id: "5-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 43.00 },
+      { id: "5-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 78.00 },
+      { id: "5-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 75.00 },
+      { id: "5-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 290.00 },
+      { id: "5-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 280.00 },
     ],
     viabilidad: "> 97%",
-    concentracion: "3 x 10^9 UFC/ml",
+    concentracion: "1 x 10^9 UFC/ml",
     almacenamiento: "2-8°C, 12 meses",
-    aplicacion: "Investigación, cultivo de proteínas",
-    compatibilidad: "Uso en laboratorio certificado",
+    aplicacion: "Investigación y clonación",
+    compatibilidad: "Estándar para laboratorios",
     imagen: "/bacteria/escherichia-coli.jpg",
   },
   {
@@ -205,31 +205,31 @@ const allCepas: Cepa[] = [
     nombre: "Bacillus cereus",
     cientifico: "Bacillus cereus",
     categoria: "Investigación",
-    descripcion: "Bacteria para estudios de control de plagas y patología. Ampliamente utilizada en investigación entomológica.",
-    beneficios: ["Modelos de investigación", "Entomología aplicada", "Estudios de patogenia", "Certificada para investigación"],
+    descripcion: "Bacteria para estudios de control de plagas y patología. Utilizada en investigación de virulencia bacteriana.",
+    beneficios: ["Modelos de investigación", "Entomología aplicada", "Estudios de virulencia", "Desarrollo de bioinsecticidas"],
     presentaciones: [
-      { id: "6-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 15.00 },
-      { id: "6-2", tipo: "Placa por Estriado", medio: "TSA", precio: 17.00 },
-      { id: "6-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 21.00 },
-      { id: "6-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 24.00 },
-      { id: "6-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 19.00 },
-      { id: "6-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 22.00 },
-      { id: "6-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 17.00 },
-      { id: "6-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 15.00 },
-      { id: "6-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 34.00 },
-      { id: "6-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 32.00 },
-      { id: "6-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 52.00 },
-      { id: "6-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 50.00 },
-      { id: "6-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 88.00 },
-      { id: "6-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 83.00 },
-      { id: "6-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 330.00 },
-      { id: "6-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 310.00 },
+      { id: "6-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 13.00 },
+      { id: "6-2", tipo: "Placa por Estriado", medio: "TSA", precio: 15.00 },
+      { id: "6-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 19.00 },
+      { id: "6-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 22.00 },
+      { id: "6-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 17.00 },
+      { id: "6-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 20.00 },
+      { id: "6-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 15.00 },
+      { id: "6-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 13.00 },
+      { id: "6-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 30.00 },
+      { id: "6-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 28.00 },
+      { id: "6-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 48.00 },
+      { id: "6-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 46.00 },
+      { id: "6-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 82.00 },
+      { id: "6-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 78.00 },
+      { id: "6-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 310.00 },
+      { id: "6-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 295.00 },
     ],
-    viabilidad: "> 95%",
+    viabilidad: "> 94%",
     concentracion: "1.5 x 10^9 UFC/ml",
-    almacenamiento: "2-8°C, 11 meses",
-    aplicacion: "Investigación, control de plagas",
-    compatibilidad: "Para uso en investigación",
+    almacenamiento: "2-8°C, 12 meses",
+    aplicacion: "Investigación entomológica",
+    compatibilidad: "Requiere precauciones de bioseguridad",
     imagen: "/bacteria/bacillus-cereus.jpg",
   },
   {
@@ -237,31 +237,31 @@ const allCepas: Cepa[] = [
     nombre: "Bacillus thuringiensis",
     cientifico: "Bacillus thuringiensis",
     categoria: "Control Biológico",
-    descripcion: "Bacteria natural para control biológico de insectos plaga. Totalmente compatible con agricultura orgánica.",
-    beneficios: ["Control de lepidópteros", "Compatible con agricultura orgánica", "Seguro para fauna benéfica", "Certificado orgánico"],
+    descripcion: "Bacteria natural para control biológico de insectos plaga. Segura para agricultura orgánica y fauna benéfica.",
+    beneficios: ["Control de lepidópteros", "Compatible con agricultura orgánica", "Seguro para insectos benéficos", "Sin resistencia cruzada"],
     presentaciones: [
-      { id: "7-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 16.00 },
-      { id: "7-2", tipo: "Placa por Estriado", medio: "TSA", precio: 18.00 },
-      { id: "7-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 24.00 },
-      { id: "7-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 27.00 },
-      { id: "7-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 22.00 },
-      { id: "7-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 25.00 },
-      { id: "7-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 19.00 },
-      { id: "7-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 17.00 },
-      { id: "7-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 37.00 },
-      { id: "7-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 34.00 },
-      { id: "7-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 58.00 },
-      { id: "7-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 53.00 },
-      { id: "7-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 98.00 },
-      { id: "7-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 88.00 },
-      { id: "7-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 370.00 },
-      { id: "7-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 340.00 },
+      { id: "7-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 14.00 },
+      { id: "7-2", tipo: "Placa por Estriado", medio: "TSA", precio: 16.00 },
+      { id: "7-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 20.00 },
+      { id: "7-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 23.00 },
+      { id: "7-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 18.00 },
+      { id: "7-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 21.00 },
+      { id: "7-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 16.00 },
+      { id: "7-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 14.00 },
+      { id: "7-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 32.00 },
+      { id: "7-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 30.00 },
+      { id: "7-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 50.00 },
+      { id: "7-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 48.00 },
+      { id: "7-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 85.00 },
+      { id: "7-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 80.00 },
+      { id: "7-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 320.00 },
+      { id: "7-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 300.00 },
     ],
     viabilidad: "> 95%",
-    concentracion: "1 x 10^8 esporas/ml",
-    almacenamiento: "4-10°C, 20 meses",
-    aplicacion: "Riego al suelo, aspersión foliar",
-    compatibilidad: "Compatible con biofertilizantes",
+    concentracion: "1 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 12 meses",
+    aplicacion: "Aspersión en cultivo",
+    compatibilidad: "Compatible con la mayoría de productos",
     imagen: "/bacteria/bacillus-thuringiensis.jpg",
   },
   {
@@ -269,31 +269,31 @@ const allCepas: Cepa[] = [
     nombre: "Pseudomonas aeruginosa",
     cientifico: "Pseudomonas aeruginosa",
     categoria: "Investigación",
-    descripcion: "Bacteria para investigación molecular y microbiología clínica. Modelo para estudios de patogénesis bacteriana.",
-    beneficios: ["Estudios de patogénesis", "Desarrollo de antibióticos", "Investigación molecular", "Investigación clínica"],
+    descripcion: "Bacteria para investigación molecular y microbiología clínica. Modelo para estudios de patogénesis y resistencia antimicrobiana.",
+    beneficios: ["Estudios de patogénesis", "Desarrollo de nuevos antibióticos", "Investigación de biopelículas", "Microbiología clínica"],
     presentaciones: [
-      { id: "8-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 17.00 },
-      { id: "8-2", tipo: "Placa por Estriado", medio: "TSA", precio: 19.00 },
-      { id: "8-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 25.00 },
-      { id: "8-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 28.00 },
-      { id: "8-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 23.00 },
-      { id: "8-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 26.00 },
-      { id: "8-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 19.00 },
-      { id: "8-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 17.00 },
-      { id: "8-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 38.00 },
-      { id: "8-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 35.00 },
-      { id: "8-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 60.00 },
-      { id: "8-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 55.00 },
-      { id: "8-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 100.00 },
-      { id: "8-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 90.00 },
-      { id: "8-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 380.00 },
-      { id: "8-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 350.00 },
+      { id: "8-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 15.00 },
+      { id: "8-2", tipo: "Placa por Estriado", medio: "TSA", precio: 17.00 },
+      { id: "8-3", tipo: "Frasco Inclinado", medio: "Agar Nutritivo", precio: 21.00 },
+      { id: "8-4", tipo: "Frasco Inclinado", medio: "TSA", precio: 24.00 },
+      { id: "8-5", tipo: "Frasco por Puntura", medio: "Agar Nutritivo", precio: 19.00 },
+      { id: "8-6", tipo: "Frasco por Puntura", medio: "TSA", precio: 22.00 },
+      { id: "8-7", tipo: "Caldo", medio: "CASO", volumen: "100ml", precio: 17.00 },
+      { id: "8-8", tipo: "Caldo", medio: "Nutritivo", volumen: "100ml", precio: 15.00 },
+      { id: "8-9", tipo: "Caldo", medio: "CASO", volumen: "300ml", precio: 34.00 },
+      { id: "8-10", tipo: "Caldo", medio: "Nutritivo", volumen: "300ml", precio: 32.00 },
+      { id: "8-11", tipo: "Caldo", medio: "CASO", volumen: "500ml", precio: 52.00 },
+      { id: "8-12", tipo: "Caldo", medio: "Nutritivo", volumen: "500ml", precio: 50.00 },
+      { id: "8-13", tipo: "Caldo", medio: "CASO", volumen: "1000ml", precio: 88.00 },
+      { id: "8-14", tipo: "Caldo", medio: "Nutritivo", volumen: "1000ml", precio: 83.00 },
+      { id: "8-15", tipo: "Caldo", medio: "CASO", volumen: "5L+", precio: 330.00 },
+      { id: "8-16", tipo: "Caldo", medio: "Nutritivo", volumen: "5L+", precio: 310.00 },
     ],
-    viabilidad: "> 94%",
-    concentracion: "1.2 x 10^9 UFC/ml",
-    almacenamiento: "2-8°C, 9 meses",
-    aplicacion: "Investigación, estudios clínicos",
-    compatibilidad: "Para laboratorio especializado",
+    viabilidad: "> 96%",
+    concentracion: "1.5 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 12 meses",
+    aplicacion: "Investigación molecular",
+    compatibilidad: "Requiere precauciones de bioseguridad",
     imagen: "/bacteria/pseudomonas-aeruginosa.jpg",
   },
   {
@@ -301,8 +301,8 @@ const allCepas: Cepa[] = [
     nombre: "Streptomyces lydicus",
     cientifico: "Streptomyces lydicus",
     categoria: "Control Biológico",
-    descripcion: "Actinobacteria productora de compuestos antimicrobianos naturales. Controla patógenos fúngicos y bacterianos del suelo.",
-    beneficios: ["Control de patógenos del suelo", "Producción de antibióticos", "Biocontrol natural", "Mejora salud del suelo"],
+    descripcion: "Actinobacteria productora de compuestos antimicrobianos naturales. Controla patógenos del suelo de forma sostenible.",
+    beneficios: ["Control de patógenos del suelo", "Producción de antibióticos", "Regeneración de suelo", "Compatible con cultivos orgánicos"],
     presentaciones: [
       { id: "9-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 15.00 },
       { id: "9-2", tipo: "Placa por Estriado", medio: "TSA", precio: 17.00 },
@@ -324,7 +324,7 @@ const allCepas: Cepa[] = [
     viabilidad: "> 94%",
     concentracion: "1 x 10^9 UFC/ml",
     almacenamiento: "2-8°C, 16 meses",
-    aplicacion: "Aspersión foliar, riego",
+    aplicacion: "Aspersión y riego",
     compatibilidad: "Compatible con biofertilizantes",
     imagen: "/bacteria/streptomyces-lydicus.jpg",
   },
@@ -333,8 +333,8 @@ const allCepas: Cepa[] = [
     nombre: "Bacillus firmus",
     cientifico: "Bacillus firmus GB-126",
     categoria: "Biofertilizante",
-    descripcion: "Bacteria activadora de crecimiento radicular y tolerante a estrés hídrico. Optimiza la absorción de nutrientes en condiciones adversas.",
-    beneficios: ["Tolerancia a sequía", "Desarrollo radicular mejorado", "Resistencia al estrés", "Optimiza nutrición vegetal"],
+    descripcion: "Bacteria activadora de crecimiento radicular y tolerante a estrés hídrico. Ideal para cultivos en condiciones de sequía.",
+    beneficios: ["Tolerancia a sequía", "Desarrollo radicular mejorado", "Resistencia a estrés", "Mejor aprovechamiento hídrico"],
     presentaciones: [
       { id: "10-1", tipo: "Placa por Estriado", medio: "Agar Nutritivo", precio: 14.00 },
       { id: "10-2", tipo: "Placa por Estriado", medio: "TSA", precio: 16.00 },
@@ -355,17 +355,17 @@ const allCepas: Cepa[] = [
     ],
     viabilidad: "> 95%",
     concentracion: "1.5 x 10^9 UFC/ml",
-    almacenamiento: "2-8°C, 15 meses",
-    aplicacion: "Riego, aspersión foliar",
-    compatibilidad: "Compatible con nutrientes y fungicidas",
+    almacenamiento: "2-8°C, 14 meses",
+    aplicacion: "Riego y tratamiento de semilla",
+    compatibilidad: "Compatible con la mayoría de productos",
     imagen: "/bacteria/bacillus-firmus.jpg",
   },
 ]
 
-const categoryColors: { [key: string]: string } = {
-  "Control Biológico": "bg-emerald-100 text-emerald-700 border-emerald-300",
-  "Biofertilizante": "bg-blue-100 text-blue-700 border-blue-300",
-  "Investigación": "bg-purple-100 text-purple-700 border-purple-300",
+const categoryColors: { [key: string]: { badge: string; bg: string } } = {
+  "Control Biológico": { badge: "border-emerald-500 text-emerald-700 bg-emerald-50", bg: "bg-emerald-50" },
+  "Biofertilizante": { badge: "border-blue-500 text-blue-700 bg-blue-50", bg: "bg-blue-50" },
+  "Investigación": { badge: "border-purple-500 text-purple-700 bg-purple-50", bg: "bg-purple-50" },
 }
 
 export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
@@ -439,23 +439,22 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
-      {/* Breadcrumb */}
-      <div className="bg-slate-50 border-b border-slate-200">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-2 text-sm">
-          <Link href="/cepas" className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
-            <ArrowLeft className="w-4 h-4" />
-            Volver al catálogo
-          </Link>
-        </div>
-      </div>
-
-      {/* Main Content */}
       <div className="flex-1">
+        {/* Breadcrumb */}
+        <div className="border-b border-slate-200">
+          <div className="container mx-auto px-4 py-3">
+            <Link href="/cepas" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 w-fit">
+              <ArrowLeft className="w-4 h-4" />
+              Volver al catálogo
+            </Link>
+          </div>
+        </div>
+
+        {/* Hero - Compact Image Left, Details Right */}
         <div className="container mx-auto px-4 py-12">
-          {/* Hero - Image Left, Info Right */}
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            {/* Left - Image */}
-            <div className="flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl p-8 h-96 lg:h-auto lg:min-h-[500px]">
+          <div className="grid lg:grid-cols-3 gap-12 mb-12">
+            {/* Left - Image Compact */}
+            <div className="flex items-center justify-center bg-slate-50 rounded-xl p-6 h-80 lg:h-auto">
               <img 
                 src={cepa.imagen} 
                 alt={cepa.nombre}
@@ -463,116 +462,121 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
               />
             </div>
 
-            {/* Right - Details */}
-            <div className="space-y-8">
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className={`px-4 py-1 rounded-full text-sm font-bold border ${categoryColors[cepa.categoria]}`}>
-                    {cepa.categoria}
-                  </span>
+            {/* Middle - Title & Specs */}
+            <div>
+              <div className="mb-4">
+                <span className={`inline-block px-4 py-2 rounded-lg border text-sm font-bold ${categoryColors[cepa.categoria]?.badge}`}>
+                  {cepa.categoria}
+                </span>
+              </div>
+              <h1 className="text-4xl font-black text-slate-900 mb-1 leading-tight">{cepa.nombre}</h1>
+              <p className="text-slate-500 italic font-normal mb-6">{cepa.cientifico}</p>
+
+              <div className="space-y-3 mb-8">
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Características Técnicas</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Viabilidad</span>
+                    <span className="font-bold text-slate-900">{cepa.viabilidad}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Concentración</span>
+                    <span className="font-bold text-slate-900">{cepa.concentracion}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Almacenamiento</span>
+                    <span className="font-bold text-slate-900">{cepa.almacenamiento}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Aplicación</span>
+                    <span className="font-bold text-slate-900 text-right">{cepa.aplicacion}</span>
+                  </div>
                 </div>
-                <h1 className="text-4xl font-bold text-slate-900 mb-2">{cepa.nombre}</h1>
-                <p className="text-lg text-slate-600 italic font-light">{cepa.cientifico}</p>
               </div>
 
-              <p className="text-slate-700 text-base leading-relaxed border-l-4 border-emerald-500 pl-4">
-                {cepa.descripcion}
-              </p>
+              <div className="bg-slate-100 rounded-lg p-4">
+                <p className="text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Compatibilidad</p>
+                <p className="text-sm text-slate-700">{cepa.compatibilidad}</p>
+              </div>
+            </div>
 
-              {/* Beneficios */}
-              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
-                <h3 className="font-bold text-slate-900 mb-4">Beneficios Principales</h3>
+            {/* Right - Beneficios & CTA */}
+            <div>
+              <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200 mb-6">
+                <h3 className="text-sm font-bold text-emerald-900 uppercase tracking-wide mb-4">Beneficios</h3>
                 <ul className="space-y-3">
                   {cepa.beneficios.map((beneficio, idx) => (
                     <li key={idx} className="flex gap-3 items-start">
                       <Check className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-slate-700">{beneficio}</span>
+                      <span className="text-sm text-slate-700">{beneficio}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Tech Specs */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-xs text-blue-600 font-bold uppercase mb-1">Viabilidad</p>
-                  <p className="text-xl font-bold text-blue-900">{cepa.viabilidad}</p>
-                </div>
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                  <p className="text-xs text-purple-600 font-bold uppercase mb-1">Concentración</p>
-                  <p className="text-lg font-bold text-purple-900">{cepa.concentracion}</p>
-                </div>
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                  <p className="text-xs text-orange-600 font-bold uppercase mb-1">Almacenamiento</p>
-                  <p className="text-sm font-bold text-orange-900">{cepa.almacenamiento}</p>
-                </div>
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <p className="text-xs text-green-600 font-bold uppercase mb-1">Aplicación</p>
-                  <p className="text-sm font-bold text-green-900">{cepa.aplicacion}</p>
-                </div>
-              </div>
-
-              {/* Compatibilidad */}
-              <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-lg p-6">
-                <p className="text-xs font-bold uppercase text-slate-300 mb-2">Compatibilidad</p>
-                <p className="text-base leading-relaxed">{cepa.compatibilidad}</p>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex gap-3">
+              <div className="bg-slate-900 rounded-xl p-6 text-white">
+                <p className="text-sm font-light mb-4">{cepa.descripcion}</p>
                 <a
-                  href={`https://wa.me/51961996645?text=Interesado%20en%20${cepa.nombre}`}
+                  href={`https://wa.me/51961996645?text=Tengo%20interés%20en%20${encodeURIComponent(cepa.nombre)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-bold"
+                  className="inline-flex items-center gap-2 px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-bold text-sm w-full justify-center"
                 >
-                  <MessageSquare className="w-5 h-5" />
-                  Contactar
+                  <MessageSquare className="w-4 h-4" />
+                  Consultar Disponibilidad
                 </a>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Presentaciones Section */}
-          <div className="border-t border-slate-200 pt-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Presentaciones Disponibles</h2>
-            <p className="text-slate-600 mb-8">Selecciona el tipo y cantidad que necesitas</p>
+        {/* Presentaciones Section */}
+        <div className="container mx-auto px-4 py-12 border-t border-slate-200">
+          <h2 className="text-3xl font-black text-slate-900 mb-8">Presentaciones Disponibles</h2>
 
-            {/* Tabs por Tipo */}
-            <div className="space-y-8">
-              {["Placa por Estriado", "Frasco Inclinado", "Frasco por Puntura", "Caldo"].map((tipo) => {
-                const presentacionesPorTipo = cepa.presentaciones.filter((p) => p.tipo === tipo)
-                return (
-                  <div key={tipo} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-                    <div className="bg-gradient-to-r from-slate-50 to-slate-100 px-6 py-4 border-b border-slate-200">
-                      <h3 className="font-bold text-slate-900">{tipo}</h3>
+          {["Placa por Estriado", "Frasco Inclinado", "Frasco por Puntura"].map((tipo) => {
+            const pres = cepa.presentaciones.filter((p) => p.tipo === tipo)
+            if (pres.length === 0) return null
+
+            return (
+              <div key={tipo} className="mb-12">
+                <h3 className="text-lg font-bold text-slate-700 mb-4 pb-3 border-b border-slate-200">{tipo}</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {pres.map((p) => (
+                    <div key={p.id} className="border border-slate-200 rounded-lg p-4 hover:border-emerald-400 hover:bg-emerald-50 transition-all">
+                      <p className="text-sm text-slate-600 mb-2">{p.medio}</p>
+                      <p className="text-xl font-bold text-emerald-600 mb-4">S/ {p.precio.toFixed(2)}</p>
+                      <button
+                        onClick={() => agregarAlCarrito(p.id)}
+                        className="w-full px-3 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors font-medium text-sm"
+                      >
+                        Agregar
+                      </button>
                     </div>
-                    <div className="p-6">
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {presentacionesPorTipo.map((pres) => (
-                          <div
-                            key={pres.id}
-                            className="flex items-center justify-between bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-emerald-300 rounded-lg p-4 transition-all cursor-pointer"
-                          >
-                            <div className="flex-1">
-                              <p className="font-medium text-slate-900 text-sm">
-                                {pres.medio} {pres.volumen && `- ${pres.volumen}`}
-                              </p>
-                              <p className="text-lg font-bold text-emerald-600">S/ {pres.precio.toFixed(2)}</p>
-                            </div>
-                            <button
-                              onClick={() => agregarAlCarrito(pres.id)}
-                              className="ml-4 p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
-                            >
-                              <Plus className="w-5 h-5" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+
+          {/* Caldos */}
+          <div>
+            <h3 className="text-lg font-bold text-slate-700 mb-4 pb-3 border-b border-slate-200">Caldos</h3>
+            <div className="space-y-3">
+              {cepa.presentaciones.filter((p) => p.tipo === "Caldo").map((p) => (
+                <div key={p.id} className="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:border-emerald-400 hover:bg-emerald-50 transition-all">
+                  <div>
+                    <p className="font-bold text-slate-900">{p.medio} - {p.volumen}</p>
+                    <p className="text-2xl font-bold text-emerald-600">S/ {p.precio.toFixed(2)}</p>
                   </div>
-                )
-              })}
+                  <button
+                    onClick={() => agregarAlCarrito(p.id)}
+                    className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-bold"
+                  >
+                    Agregar
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -582,76 +586,79 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
       {cantidadItems > 0 && (
         <div className="fixed bottom-8 right-8 z-40">
           <button
-            onClick={() => setShowCart(!showCart)}
-            className="relative flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-full shadow-2xl hover:shadow-emerald-500/50 hover:from-emerald-600 hover:to-emerald-700 transition-all hover:scale-110"
+            onClick={() => setShowCart(true)}
+            className="relative flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all"
           >
             <ShoppingCart className="w-6 h-6" />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-lg">
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center">
               {cantidadItems}
             </span>
           </button>
         </div>
       )}
 
-      {/* Cart Sidebar */}
-      {showCart && cantidadItems > 0 && (
+      {/* Cart Modal */}
+      {showCart && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50">
-          <div className="absolute inset-y-0 right-0 w-full max-w-md bg-white shadow-xl flex flex-col">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 p-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-slate-900">Mi Carrito</h2>
+          <div className="absolute inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div className="border-b border-slate-200 p-6 flex items-center justify-between">
+              <h2 className="text-2xl font-black text-slate-900">Carrito</h2>
               <button
                 onClick={() => setShowCart(false)}
-                className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Items */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {cart.map((item) => (
-                <div key={item.presentacionId} className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                  <h4 className="font-bold text-slate-900 text-sm mb-1">{item.cepaNombre}</h4>
-                  <p className="text-xs text-slate-600 mb-3">{item.presentacionInfo}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 bg-white border border-slate-300 rounded-lg p-1">
-                      <button
-                        onClick={() => actualizarCantidad(item.presentacionId, item.cantidad - 1)}
-                        className="p-1 hover:bg-slate-100 rounded transition-colors"
-                      >
-                        <Minus className="w-4 h-4 text-slate-600" />
-                      </button>
-                      <span className="font-bold text-slate-900 min-w-6 text-center">{item.cantidad}</span>
-                      <button
-                        onClick={() => actualizarCantidad(item.presentacionId, item.cantidad + 1)}
-                        className="p-1 hover:bg-slate-100 rounded transition-colors"
-                      >
-                        <Plus className="w-4 h-4 text-slate-600" />
-                      </button>
+              {cart.length === 0 ? (
+                <p className="text-slate-600 text-center py-8">Tu carrito está vacío</p>
+              ) : (
+                cart.map((item) => (
+                  <div key={item.presentacionId} className="border border-slate-200 rounded-lg p-4">
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">{item.cepaNombre}</h4>
+                    <p className="text-xs text-slate-600 mb-3">{item.presentacionInfo}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => actualizarCantidad(item.presentacionId, item.cantidad - 1)}
+                          className="p-1 hover:bg-slate-100 rounded transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="font-bold text-slate-900 min-w-6 text-center">{item.cantidad}</span>
+                        <button
+                          onClick={() => actualizarCantidad(item.presentacionId, item.cantidad + 1)}
+                          className="p-1 hover:bg-slate-100 rounded transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <p className="font-bold text-emerald-600">S/ {(item.precio * item.cantidad).toFixed(2)}</p>
                     </div>
-                    <p className="font-bold text-emerald-600">S/ {(item.precio * item.cantidad).toFixed(2)}</p>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
-            {/* Footer */}
-            <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-t border-slate-200 p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-300 pb-4">
-                <span className="font-bold text-slate-900">Total:</span>
-                <span className="text-3xl font-bold text-emerald-600">S/ {totalCarrito.toFixed(2)}</span>
+            {cart.length > 0 && (
+              <div className="border-t border-slate-200 p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-900">Total:</span>
+                  <span className="text-3xl font-black text-emerald-600">S/ {totalCarrito.toFixed(2)}</span>
+                </div>
+                <a
+                  href={`https://wa.me/51961996645?text=Quisiera%20hacer%20un%20pedido%20de%20${encodeURIComponent(cepa.nombre)}%20Total%3A%20S/%20${totalCarrito.toFixed(2)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-black text-base"
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  Completar Pedido
+                </a>
               </div>
-              <a
-                href={`https://wa.me/51961996645?text=Pedido:%0A${cart.map((item) => `${item.cantidad}x ${item.cepaNombre} (${item.presentacionInfo})`).join("%0A")}%0ATotal: S/ ${totalCarrito.toFixed(2)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-bold text-center"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Confirmar Pedido
-              </a>
-            </div>
+            )}
           </div>
         </div>
       )}
