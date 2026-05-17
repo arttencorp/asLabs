@@ -22,51 +22,49 @@ export default function BioreactoresBacterianoClient() {
   const advances = [
     {
       title: "Diseño Conceptual de Bioreactores",
-      date: "10 de Enero, 2024",
-      status: "completed",
+      date: "7 de Enero, 2027",
+      status: "pending",
       description:
         "Análisis de requisitos de diseño, selección de configuración (lote, lote alimentado, continuo) y cálculos de escalamiento.",
     },
     {
       title: "Selección de Materiales y Componentes",
-      date: "28 de Enero, 2024",
-      status: "completed",
+      date: "28 de Enero, 2027",
+      status: "pending",
       description:
         "Evaluación y especificación de sistemas de aireación, agitación, control de temperatura y monitoreo de parámetros.",
     },
     {
       title: "Construcción de Prototipo 10L",
-      date: "20 de Febrero, 2024",
-      status: "completed",
+      date: "20 de Febrero, 2027",
+      status: "pending",
       description:
         "Fabricación del primer bioreactor prototipo con capacidad de 10 litros y calibración de sistemas de control.",
     },
     {
       title: "Optimización de Parámetros de Fermentación",
-      date: "10 de Marzo, 2024",
-      status: "completed",
+      date: "10 de Marzo, 2027",
+      status: "pending",
       description:
         "Determinación experimental de condiciones óptimas: pH, temperatura, aireación y velocidad de agitación para diferentes cepas bacterianas.",
     },
     {
       title: "Evaluación de Viabilidad Bacteriana",
-      date: "5 de Abril, 2024",
-      status: "in-progress",
+      date: "5 de Abril, 2027",
+      status: "pending",
       description:
         "Desarrollo de protocolos de medición de viabilidad, recuento y determinación de tiempo de vida útil post-cosecha.",
-      progress: 70,
     },
     {
       title: "Construcción de Bioreactor 50L",
-      date: "20 de Mayo, 2024",
-      status: "in-progress",
+      date: "20 de Mayo, 2027",
+      status: "pending",
       description:
         "Escalamiento del bioreactor a 50 litros con validación de parámetros de fermentación a mayor escala.",
-      progress: 45,
     },
     {
       title: "Optimización de Costos de Producción",
-      date: "15 de Junio, 2024",
+      date: "15 de Junio, 2027",
       status: "pending",
       description:
         "Análisis económico comparativo y definición de estrategias de reducción de costos de producción.",
@@ -121,15 +119,15 @@ export default function BioreactoresBacterianoClient() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-4">
-                <div className="text-2xl font-bold text-cyan-300">Fase 2</div>
+                <div className="text-2xl font-bold text-cyan-300">Fase 1</div>
                 <div className="text-sm text-cyan-200">Estado Actual</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-4">
-                <div className="text-2xl font-bold text-cyan-300">45%</div>
+                <div className="text-2xl font-bold text-cyan-300">0%</div>
                 <div className="text-sm text-cyan-200">Progreso General</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-4">
-                <div className="text-2xl font-bold text-cyan-300">2024-2025</div>
+                <div className="text-2xl font-bold text-cyan-300">2027-2028</div>
                 <div className="text-sm text-cyan-200">Duración Estimada</div>
               </div>
             </div>
@@ -167,7 +165,7 @@ export default function BioreactoresBacterianoClient() {
                 <h3 className="text-xl font-bold text-cyan-900 mb-2">
                   Andy Hassan Espinales Gutiérrez
                 </h3>
-                <p className="text-cyan-700 mb-3">Coordinador de Proyecto</p>
+                <p className="text-cyan-700 mb-3">Investigador</p>
                 <p className="text-sm text-gray-600">
                   Jefe de Microbiología Agroindustrial con experiencia en fermentación y producción de microorganismos a escala comercial.
                 </p>
@@ -176,7 +174,7 @@ export default function BioreactoresBacterianoClient() {
                 <h3 className="text-xl font-bold text-cyan-900 mb-2">
                   Luis Alonso Flores Ramírez
                 </h3>
-                <p className="text-cyan-700 mb-3">Técnico Principal de Laboratorio</p>
+                <p className="text-cyan-700 mb-3">Investigador</p>
                 <p className="text-sm text-gray-600">
                   Especialista en operación de equipos de laboratorio y construcción de sistemas de fermentación a pequeña escala.
                 </p>

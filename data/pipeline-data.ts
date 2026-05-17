@@ -1,5 +1,63 @@
 export const pipelineData = [
   {
+    title: "Control Biológico",
+    subsections: [
+      {
+        title: "",
+        projects: [
+          {
+            name: "Capacidad Antagonista de Trichoderma contra Fusarium Oxysporum",
+            id: "CATFOM-001",
+            progress: 0.55,
+            location: "Laboratorio de Microbiología",
+            status: "Fase 2 - Análisis Molecular Avanzado",
+            researcher: "Antonio Victor Gabriel Guevara Escobar, Hellem Iveth Guevara Nuñez",
+            url: "/research/trichoderma-fusarium",
+            subtitle: "Raza 2 aislados de La Libertad, Perú"
+          },
+          {
+            name: "Diseño y Producción de Bioreactores para Suspensiones Bacterianas a Gran Escala",
+            id: "DPBSB-002",
+            progress: 0.45,
+            location: "Laboratorio de Bioreactores",
+            status: "Fase 2 - Escalamiento de Producción",
+            researcher: "Andy Hassan Espinales Gutiérrez, Luis Alonso Flores Ramírez",
+            url: "/research/bioreactores-bacterianos",
+            subtitle: "Producción optimizada de suspensiones microbianas"
+          },
+          {
+            name: "Trichoderma Nativo",
+            id: "TN-007",
+            progress: 0.75,
+            location: "Laboratorio de Microbiología",
+            status: "Fase 3 - Producción Piloto",
+          },
+          {
+            name: "Bacillus Biocontrolador",
+            id: "BB-008",
+            progress: 0.55,
+            location: "Laboratorio de Microbiología",
+            status: "Fase 3 - Evaluación de Eficacia",
+          },
+          {
+            name: "Consorcio Microbiano",
+            id: "CM-009",
+            progress: 0.3,
+            location: "Laboratorio de Microbiología",
+            status: "Fase 2 - Optimización",
+          },
+          {
+            name: "Hongos Entomopatógenos",
+            id: "HE-010",
+            progress: 0.2,
+            location: "Laboratorio Especializado",
+            status: "Fase 1 - Aislamiento y Caracterización",
+          },
+        ],
+      },
+    ],
+  },
+  {
     title: "Secuenciamiento",
     subsections: [
       {
@@ -47,64 +105,6 @@ export const pipelineData = [
             location: "Campo Experimental - La Libertad",
             subtitle: "Adaptado a cultivo orgánico",
             status: "Fase 1 - Selección de Parentales",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Control Biológico",
-    subsections: [
-      {
-        title: "",
-        projects: [
-          {
-            name: "Capacidad Antagonista de Trichoderma contra Fusarium Oxysporum: Mecanismos Moleculares",
-            id: "CATFOM-001",
-            progress: 0.55,
-            location: "Laboratorio de Microbiología",
-            status: "Fase 2 - Análisis Molecular Avanzado",
-            researcher: "Antonio Victor Gabriel Guevara Escobar, Hellem Iveth Guevara Nuñez",
-            url: "/research/trichoderma-fusarium",
-            subtitle: "Raza 2 aislados de La Libertad, Perú"
-          },
-          {
-            name: "Diseño y Producción de Bioreactores para Suspensiones Bacterianas a Gran Escala",
-            id: "DPBSB-002",
-            progress: 0.45,
-            location: "Laboratorio de Bioreactores",
-            status: "Fase 2 - Escalamiento de Producción",
-            researcher: "Andy Hassan Espinales Gutiérrez, Luis Alonso Flores Ramírez",
-            url: "/research/bioreactores-bacterianos",
-            subtitle: "Producción optimizada de suspensiones microbianas"
-          },
-          {
-            name: "Trichoderma Nativo",
-            id: "TN-007",
-            progress: 0.75,
-            location: "Laboratorio de Microbiología",
-            status: "Fase 3 - Producción Piloto",
-          },
-          {
-            name: "Bacillus Biocontrolador",
-            id: "BB-008",
-            progress: 0.55,
-            location: "Laboratorio de Microbiología",
-            status: "Fase 3 - Evaluación de Eficacia",
-          },
-          {
-            name: "Consorcio Microbiano",
-            id: "CM-009",
-            progress: 0.3,
-            location: "Laboratorio de Microbiología",
-            status: "Fase 2 - Optimización",
-          },
-          {
-            name: "Hongos Entomopatógenos",
-            id: "HE-010",
-            progress: 0.2,
-            location: "Laboratorio Especializado",
-            status: "Fase 1 - Aislamiento y Caracterización",
           },
         ],
       },

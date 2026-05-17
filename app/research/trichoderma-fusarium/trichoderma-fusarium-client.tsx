@@ -22,44 +22,42 @@ export default function TrichodermaFusariumClient() {
   const advances = [
     {
       title: "Aislamiento y Caracterización de Cepas",
-      date: "15 de Febrero, 2024",
-      status: "completed",
+      date: "15 de Febrero, 2027",
+      status: "pending",
       description:
         "Recolección de muestras de suelo de La Libertad y aislamiento de cepas de Trichoderma y Fusarium oxysporum Raza 2.",
     },
     {
       title: "Identificación Molecular de Aislados",
-      date: "28 de Febrero, 2024",
-      status: "completed",
+      date: "28 de Febrero, 2027",
+      status: "pending",
       description:
         "Análisis de secuencias de rDNA para identificación precisa de especies de Trichoderma y confirmación de Fusarium oxysporum Raza 2.",
     },
     {
       title: "Pruebas de Antagonismo in vitro",
-      date: "15 de Marzo, 2024",
-      status: "completed",
+      date: "15 de Marzo, 2027",
+      status: "pending",
       description:
         "Cultivos duales para evaluar la capacidad de inhibición de Trichoderma contra el crecimiento de Fusarium oxysporum.",
     },
     {
       title: "Evaluación Bioquímica de Metabolitos Secundarios",
-      date: "10 de Abril, 2024",
-      status: "in-progress",
+      date: "10 de Abril, 2027",
+      status: "pending",
       description:
         "Identificación y cuantificación de compuestos volátiles y no volátiles producidos por Trichoderma con actividad antifúngica.",
-      progress: 65,
     },
     {
       title: "Análisis de Expresión Génica",
-      date: "25 de Mayo, 2024",
-      status: "in-progress",
+      date: "25 de Mayo, 2027",
+      status: "pending",
       description:
         "Uso de qRT-PCR para evaluar genes involucrados en síntesis de antibióticos y degradación de pared celular fúngica.",
-      progress: 55,
     },
     {
       title: "Microscopía Electrónica de Interacciones",
-      date: "15 de Junio, 2024",
+      date: "15 de Junio, 2027",
       status: "pending",
       description:
         "Observación a nivel ultraestructural de los mecanismos de antagonismo en la interfaz Trichoderma-Fusarium.",
@@ -160,7 +158,7 @@ export default function TrichodermaFusariumClient() {
                 <h3 className="text-xl font-bold text-purple-900 mb-2">
                   Antonio Victor Gabriel Guevara Escobar
                 </h3>
-                <p className="text-purple-700 mb-3">Investigador Principal</p>
+                <p className="text-purple-700 mb-3">Investigador</p>
                 <p className="text-sm text-gray-600">
                   Especialista en análisis de datos, biotecnología y microbiología aplicada con experiencia en investigación molecular.
                 </p>
@@ -169,7 +167,7 @@ export default function TrichodermaFusariumClient() {
                 <h3 className="text-xl font-bold text-purple-900 mb-2">
                   Hellem Iveth Guevara Nuñez
                 </h3>
-                <p className="text-purple-700 mb-3">Co-Investigadora</p>
+                <p className="text-purple-700 mb-3">Investigadora</p>
                 <p className="text-sm text-gray-600">
                   Supervisora técnica de laboratorios con experiencia en cultivos microbianos y caracterización de patógenos.
                 </p>

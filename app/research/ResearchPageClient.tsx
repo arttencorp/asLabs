@@ -148,9 +148,9 @@ export default function ResearchPageClient() {
 
               {/* Quick overview of all categories */}
               <div className="space-y-8">
+                <CategorySection title="CONTROL BIOLÓGICO" subsections={controlBiologico} color="purple" />
                 <CategorySection title="SECUENCIAMIENTO" subsections={secuenciamiento} color="blue" />
                 <CategorySection title="MEJORAMIENTO GENÉTICO" subsections={ingenieriaGenetica} color="green" />
-                <CategorySection title="CONTROL BIOLÓGICO" subsections={controlBiologico} color="purple" />
                 <CategorySection
                   title="BIOTECNOLOGÍA MOLECULAR"
                   subsections={pipelineData.find((item) => item.title === "Biotecnología Molecular")?.subsections || []}
@@ -168,9 +168,9 @@ export default function ResearchPageClient() {
               </div>
 
               <div className="space-y-8">
+                <CategorySection title="CONTROL BIOLÓGICO" subsections={controlBiologico} color="purple" />
                 <CategorySection title="SECUENCIAMIENTO" subsections={secuenciamiento} color="blue" />
                 <CategorySection title="MEJORAMIENTO GENÉTICO" subsections={ingenieriaGenetica} color="green" />
-                <CategorySection title="CONTROL BIOLÓGICO" subsections={controlBiologico} color="purple" />
                 <CategorySection
                   title="BIOTECNOLOGÍA MOLECULAR"
                   subsections={pipelineData.find((item) => item.title === "Biotecnología Molecular")?.subsections || []}
