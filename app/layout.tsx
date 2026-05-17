@@ -1,6 +1,6 @@
 import type React from "react"
 import "./globals.css"
-import { Poppins } from "next/font/google"
+import { Playfair_Display } from "next/font/google"
 import type { Metadata, Viewport } from "next"
 import {
   OrganizationStructuredData,
@@ -8,11 +8,11 @@ import {
   WebsiteStructuredData,
 } from "@/components/structured-data"
 
-const poppins = Poppins({
-  weight: ["300", "400", "500", "600", "700"],
+const playfairDisplay = Playfair_Display({
+  weight: ["400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-poppins",
+  variable: "--font-playfair",
   preload: true,
 })
 
@@ -148,7 +148,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={`${poppins.variable}`}>
+    <html lang="es-PE" className={`${playfairDisplay.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
