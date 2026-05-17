@@ -138,6 +138,86 @@ export default function ResearchPageClient() {
       {/* Laboratories Section */}
       <LaboratoriesSection />
 
+      {/* SEO Section - Control Biológico Detailed */}
+      <section className="py-20 px-4 bg-slate-900/50 border-y border-slate-800">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Agentes de Control Biológico en Trujillo, La Libertad, Perú
+          </h2>
+          <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+            AS Laboratorios es un centro de investigación especializado en control biológico ubicado en Trujillo, La Libertad, Perú. Desarrollamos, producimos e investigamos los principales agentes biocontroladores para agricultura sostenible, reconocidos por SENASA como proveedores autorizados. Nuestras líneas de investigación incluyen Trichoderma, Trichogramma, Paratheresia claripalpis, Bacillus y consorcios microbianos para manejo integrado de plagas (MIP).
+          </p>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 hover:border-emerald-500/50 transition-colors">
+              <h3 className="text-xl font-bold text-emerald-300 mb-3">Trichoderma</h3>
+              <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                Hongo antagonista efectivo contra Fusarium oxysporum, Rhizoctonia y otros patógenos fúngicos del suelo. Producción de cepas nativas de Trichoderma aisladas de La Libertad.
+              </p>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• Control de enfermedades radicales</li>
+                <li>• Promotor de crecimiento vegetal</li>
+                <li>• Biodegradación de residuos</li>
+              </ul>
+            </div>
+            
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 hover:border-blue-500/50 transition-colors">
+              <h3 className="text-xl font-bold text-blue-300 mb-3">Trichogramma</h3>
+              <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                Parasitoide de huevos de lepidópteros. Ampliamente utilizado en manejo integrado de plagas (MIP) para control de polillas y mariposas plagas en cultivos.
+              </p>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• Control biológico de polillas</li>
+                <li>• Reducción de plaguicidas</li>
+                <li>• Producción en laboratorio</li>
+              </ul>
+            </div>
+            
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 hover:border-purple-500/50 transition-colors">
+              <h3 className="text-xl font-bold text-purple-300 mb-3">Paratheresia claripalpis</h3>
+              <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                Mosca parasitoide especializada en control de plagas de hemípteros y otros insectos. Producción especializada reconocida por SENASA para cultivos en La Libertad.
+              </p>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• Control de chinches</li>
+                <li>• Sostenibilidad agrícola</li>
+                <li>• Cultivos Sin Plaguicidas</li>
+              </ul>
+            </div>
+            
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 hover:border-cyan-500/50 transition-colors">
+              <h3 className="text-xl font-bold text-cyan-300 mb-3">Bacillus & Consorcios</h3>
+              <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                Bacterias entomopatógenas y bioprotectoras. Consorcios microbianos para múltiples plagas y enfermedades en plantas.
+              </p>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• Entomopatógenos naturales</li>
+                <li>• Bioprotección de cultivos</li>
+                <li>• Soluciones integradas</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 bg-gradient-to-r from-emerald-900/20 to-blue-900/20 rounded-xl p-8 border border-slate-700">
+            <h3 className="text-2xl font-bold text-white mb-4">¿Por qué elegir Control Biológico?</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-slate-300">
+              <div>
+                <h4 className="font-semibold text-emerald-300 mb-2">Sostenible</h4>
+                <p className="text-sm">Reduce dependencia de plaguicidas químicos. Control natural y ecológico de plagas sin contaminar el ambiente.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-blue-300 mb-2">Económico</h4>
+                <p className="text-sm">Reduce costos de producción a largo plazo. Agricultores reportan hasta 50% de reducción en gastos de agroquímicos.</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-purple-300 mb-2">Eficiente</h4>
+                <p className="text-sm">Resultados comprobados por SENASA. Casos de éxito en Proyecto Chavimochic y empresas agroindustriales peruanas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Research Areas Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">

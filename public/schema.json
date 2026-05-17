@@ -1,0 +1,83 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://aslaboratorios.com",
+      "name": "AS Laboratorios Control Biológico S.A.C.",
+      "url": "https://aslaboratorios.com",
+      "telephone": "+51-44-XXXXXXX",
+      "email": "ventas@aslaboratorios.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Trujillo",
+        "addressLocality": "Trujillo",
+        "addressRegion": "La Libertad",
+        "postalCode": "13000",
+        "addressCountry": "PE"
+      },
+      "description": "Centro de investigación especializado en control biológico, Trichoderma, Trichogramma, Paratheresia claripalpis y agentes biocontroladores en Trujillo, Perú",
+      "image": "https://aslaboratorios.com/logo.png",
+      "sameAs": [
+        "https://www.facebook.com/aslaboratorios",
+        "https://www.linkedin.com/company/aslaboratorios"
+      ]
+    },
+    {
+      "@type": "ResearchOrganization",
+      "@id": "https://aslaboratorios.com/research",
+      "name": "Investigación en Control Biológico",
+      "url": "https://aslaboratorios.com/research",
+      "description": "Investigación científica en Trichoderma, Trichogramma, Paratheresia claripalpis y otros agentes de control biológico",
+      "image": "https://aslaboratorios.com/research-preview.png",
+      "areaServed": "PE",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Research Inquiry",
+        "email": "ventas@aslaboratorios.com"
+      }
+    },
+    {
+      "@type": "Article",
+      "@id": "https://aslaboratorios.com/research/trichoderma-fusarium",
+      "headline": "Trichoderma vs Fusarium Oxysporum Raza 2 - Control Biológico en Trujillo",
+      "description": "Investigación sobre la capacidad antagonista de Trichoderma contra Fusarium Oxysporum Raza 2 aislados de La Libertad, Perú",
+      "author": [
+        {
+          "@type": "Person",
+          "name": "Antonio Victor Gabriel Guevara Escobar"
+        },
+        {
+          "@type": "Person",
+          "name": "Hellem Iveth Guevara Nuñez"
+        }
+      ],
+      "datePublished": "2027-02-15",
+      "image": "https://aslaboratorios.com/biological-control.png",
+      "isPartOf": {
+        "@id": "https://aslaboratorios.com/research"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://aslaboratorios.com",
+      "name": "AS Laboratorios",
+      "url": "https://aslaboratorios.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Trujillo",
+        "addressLocality": "Trujillo",
+        "addressRegion": "La Libertad",
+        "postalCode": "13000",
+        "addressCountry": "PE"
+      },
+      "description": "Centro de investigación en biotecnología y control biológico especializado en Trichoderma, Trichogramma y Paratheresia claripalpis",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-8.1116",
+        "longitude": "-79.0287"
+      },
+      "priceRange": "$$$"
+    }
+  ]
+}
