@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { Search, Filter } from "lucide-react"
 
 interface Cepa {
   id: string
@@ -110,9 +110,9 @@ const cepas: Cepa[] = [
 ]
 
 const categoryColors: { [key: string]: string } = {
-  "Control Biológico": "bg-emerald-100 text-emerald-700",
-  "Biofertilizante": "bg-blue-100 text-blue-700",
-  "Investigación": "bg-purple-100 text-purple-700",
+  "Control Biológico": "bg-emerald-100 text-emerald-700 border-emerald-300",
+  "Biofertilizante": "bg-blue-100 text-blue-700 border-blue-300",
+  "Investigación": "bg-purple-100 text-purple-700 border-purple-300",
 }
 
 export default function CepasClient() {
@@ -130,114 +130,153 @@ export default function CepasClient() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
       {/* Hero Section - Compacto */}
-      <section className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-8">
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-16 border-b border-slate-700">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-2">Cepas Biológicas</h1>
-          <p className="text-green-100 text-sm max-w-2xl">Soluciones biológicas certificadas para control de plagas y mejora de nutrición</p>
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-bold mb-3 tracking-tight">Cepas Bacterianas</h1>
+            <p className="text-slate-300 text-base font-light">
+              Cultivos microbiológicos certificados para agricultura, investigación y aplicaciones biológicas
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Filters */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-6 mb-8">
-          {/* Search */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-3">Buscar</label>
-            <input
-              type="text"
-              placeholder="Buscar por nombre o nombre científico..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-            />
-          </div>
-
-          {/* Category Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Categoría</label>
-            <select
-              value={selectedCategory || ""}
-              onChange={(e) => setSelectedCategory(e.target.value || null)}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-            >
-              <option value="">Todas las categorías</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Cepas Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredCepas.map((cepa) => (
-            <div
-              key={cepa.id}
-              className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group"
-            >
-              {/* Imagen */}
-              <div className="h-40 bg-gray-200 overflow-hidden flex items-center justify-center">
-                <img 
-                  src={cepa.imagen} 
-                  alt={cepa.nombre}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+      {/* Main Content */}
+      <div className="flex-1">
+        <div className="container mx-auto px-4 py-12">
+          {/* Search and Filter Bar */}
+          <div className="mb-12">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Search */}
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Buscar cepa por nombre..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white text-slate-900 placeholder-slate-500"
                 />
               </div>
 
-              {/* Header */}
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-lg mb-1">{cepa.nombre}</h3>
-                    <p className="text-xs text-gray-600 italic">{cepa.cientifico}</p>
-                  </div>
-                </div>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${categoryColors[cepa.categoria]}`}>
-                  {cepa.categoria}
-                </span>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <p className="text-gray-700 text-sm mb-4 line-clamp-2">{cepa.descripcion}</p>
-
-                {/* Beneficios Preview */}
-                <div className="mb-6">
-                  <h4 className="text-xs font-bold text-gray-800 mb-2">Beneficios principales:</h4>
-                  <ul className="space-y-1">
-                    {cepa.beneficios.map((beneficio, idx) => (
-                      <li key={idx} className="text-xs text-gray-600 flex gap-2">
-                        <span className="text-green-600 font-bold">✓</span>
-                        {beneficio}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* CTA Button */}
-                <Link
-                  href={`/cepas/${cepa.id}`}
-                  className="inline-flex items-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm w-full justify-center group"
+              {/* Category Filter */}
+              <div className="flex gap-2 items-center md:justify-end">
+                <Filter className="text-slate-400 w-5 h-5" />
+                <select
+                  value={selectedCategory || ""}
+                  onChange={(e) => setSelectedCategory(e.target.value || null)}
+                  className="px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white text-slate-900 font-medium"
                 >
-                  Ver Producto
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                  <option value="">Todas las cepas</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-          ))}
-        </div>
 
-        {filteredCepas.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-gray-600 text-lg">No se encontraron cepas que coincidan con tu búsqueda.</p>
+            {/* Category Pills */}
+            <div className="flex gap-2 mt-4 flex-wrap">
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  !selectedCategory
+                    ? "bg-emerald-600 text-white"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+              >
+                Ver todas
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    selectedCategory === cat
+                      ? `${categoryColors[cat]} border-2`
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
-        )}
+
+          {/* Results Count */}
+          <div className="mb-8">
+            <p className="text-slate-600 text-sm font-medium">
+              Mostrando <span className="text-emerald-600 font-bold">{filteredCepas.length}</span> de {cepas.length} cepas
+            </p>
+          </div>
+
+          {/* Cepas Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredCepas.map((cepa) => (
+              <Link
+                key={cepa.id}
+                href={`/cepas/${cepa.id}`}
+                className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col h-full"
+              >
+                {/* Imagen */}
+                <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex items-center justify-center relative">
+                  <img 
+                    src={cepa.imagen} 
+                    alt={cepa.nombre}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 right-3">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${categoryColors[cepa.categoria]}`}>
+                      {cepa.categoria}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-5 flex-1 flex flex-col">
+                  <div className="mb-3">
+                    <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-emerald-600 transition-colors">
+                      {cepa.nombre}
+                    </h3>
+                    <p className="text-xs text-slate-600 italic font-light">{cepa.cientifico}</p>
+                  </div>
+
+                  <p className="text-slate-600 text-sm mb-4 line-clamp-2 flex-1">{cepa.descripcion}</p>
+
+                  {/* Beneficios */}
+                  <div className="space-y-2 mb-4 pt-3 border-t border-slate-100">
+                    {cepa.beneficios.slice(0, 2).map((beneficio, idx) => (
+                      <p key={idx} className="text-xs text-slate-600 flex gap-2">
+                        <span className="text-emerald-600 font-bold flex-shrink-0">✓</span>
+                        <span>{beneficio}</span>
+                      </p>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <div className="inline-flex items-center gap-2 text-emerald-600 font-medium text-sm group-hover:gap-3 transition-all">
+                    Ver Producto
+                    <span className="text-lg">→</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Empty State */}
+          {filteredCepas.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-slate-600 text-lg mb-2">No se encontraron cepas</p>
+              <p className="text-slate-500 text-sm">Intenta con otros términos de búsqueda o categoría</p>
+            </div>
+          )}
+        </div>
       </div>
 
       <Footer />
