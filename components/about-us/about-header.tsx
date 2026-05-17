@@ -2,17 +2,28 @@
 
 export default function AboutHeader() {
   return (
-    <section className="w-full bg-gradient-to-br from-[#f8f6f1] to-[#f0ebe5] text-gray-900 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section 
+      className="w-full text-gray-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+      style={{
+        backgroundImage: 'url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/headernosotros-wl7NufwonCIqKItx5mWUFHFbDX5Snw.webp)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center right',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* Overlay para mejorar legibilidad */}
+      <div className="absolute inset-0 bg-black/40"></div>
+      
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="space-y-5 max-w-3xl">
           <div className="inline-block">
-            <span className="text-xs font-semibold text-[#2e7d32] uppercase tracking-[0.2em] bg-[#e8f5e9] px-5 py-2 rounded-full border border-[#2e7d32]/20">
+            <span className="text-xs font-semibold text-white uppercase tracking-[0.2em] bg-white/20 px-5 py-2 rounded-full border border-white/30 backdrop-blur-sm">
               Quiénes Somos
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-balance">Sobre Nosotros</h1>
-          <div className="w-20 h-1 bg-gradient-to-r from-[#2e7d32] to-[#e65100] rounded-full"></div>
-          <p className="text-lg text-gray-700 font-medium max-w-2xl leading-relaxed">Descubre la trayectoria, misión y el impacto de AS Laboratorios en la biotecnología agrícola, nutriendo la innovación y la sostenibilidad</p>
+          <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-balance text-white">Sobre Nosotros</h1>
+          <div className="w-20 h-1 bg-gradient-to-r from-white to-white/50 rounded-full"></div>
+          <p className="text-lg text-white/90 font-medium max-w-2xl leading-relaxed">Descubre la trayectoria, misión y el impacto de AS Laboratorios en la biotecnología agrícola, nutriendo la innovación y la sostenibilidad</p>
         </div>
       </div>
     </section>

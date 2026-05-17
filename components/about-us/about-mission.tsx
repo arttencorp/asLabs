@@ -22,13 +22,7 @@ export default function AboutMission() {
                 <h2 className="text-6xl md:text-7xl font-serif font-bold text-[#2e7d32] leading-tight">Historia</h2>
               </div>
               <p className="text-lg text-gray-700 leading-relaxed font-medium">
-                Fundada en 1997, AS Laboratorios nació como una visión de aplicar biotecnología avanzada 
-                al servicio de la agricultura peruana. Comenzamos como un pequeño laboratorio especializado 
-                en cultivo in vitro de plantas de banano.
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed font-medium">
-                Hoy somos una empresa integral con soluciones en biotecnología vegetal, control biológico 
-                sostenible, diagnóstico agrícola y educación científica de excelencia, transformando la agricultura en toda la región.
+                Fundada en 1997, AS Laboratorios nació como una visión de aplicar biotecnología avanzada al servicio de la agricultura peruana. Hoy somos una empresa integral con soluciones en biotecnología vegetal, control biológico sostenible y diagnóstico agrícola.
               </p>
             </div>
 
