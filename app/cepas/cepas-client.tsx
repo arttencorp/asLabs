@@ -148,24 +148,44 @@ export default function CepasClient() {
   })
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 flex flex-col">
       <Navbar />
 
-      {/* Hero Section - Compacto */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-16 border-b border-slate-700">
+      {/* Hero Section - Premium */}
+      <section className="bg-gradient-to-br from-emerald-700 via-teal-700 to-blue-800 text-white py-24 border-b-8 border-emerald-600">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold mb-3 tracking-tight">Cepas Bacterianas</h1>
-            <p className="text-slate-300 text-base font-light">
-              Cultivos microbiológicos certificados para agricultura, investigación y aplicaciones biológicas
+          <div className="max-w-4xl">
+            <h1 className="text-6xl font-black mb-4 tracking-tight text-balance">Catálogo de Cepas Bacterianas Premium</h1>
+            <p className="text-xl text-emerald-100 font-light leading-relaxed mb-6">
+              Cultivos microbiológicos certificados de alta viabilidad para agricultura, investigación y aplicaciones biológicas. Sembrados a pedido con máxima frescura garantizada.
             </p>
+            <div className="flex gap-6 flex-wrap">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">✓</span>
+                </div>
+                <span className="text-lg font-semibold">11+ Cepas Certificadas</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">🧫</span>
+                </div>
+                <span className="text-lg font-semibold">Cultivo a Pedido</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">⚡</span>
+                </div>
+                <span className="text-lg font-semibold">Entrega Rápida</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Main Content */}
       <div className="flex-1">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-16">
           {/* Search and Filter Bar */}
           <div className="mb-12">
             <div className="flex flex-col md:flex-row gap-4">
@@ -251,27 +271,29 @@ export default function CepasClient() {
               // Contact Card especial
               if (cepa.id === "contact") {
                 return (
-                  <div key={cepa.id} className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-dashed border-amber-400 overflow-hidden hover:shadow-xl hover:border-amber-500 transition-all duration-300 flex flex-col h-full p-8 items-center justify-center text-center">
-                    <div className="text-5xl mb-4">📞</div>
-                    <h3 className="font-black text-amber-900 text-lg mb-2">{cepa.nombre}</h3>
-                    <p className="text-amber-700 text-sm italic mb-4">{cepa.cientifico}</p>
-                    <p className="text-amber-800 text-sm mb-6 leading-relaxed">{cepa.descripcion}</p>
-                    <a
-                      href="mailto:info@aslabs.com?subject=Solicitud%20de%20Nueva%20Especie%20Bacteriana"
-                      className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg font-bold text-sm transition-all"
-                    >
-                      Contactar por Email
-                      <span className="text-lg">→</span>
-                    </a>
-                    <a
-                      href="https://wa.me/?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold text-sm transition-all mt-3"
-                    >
-                      WhatsApp
-                      <span className="text-lg">→</span>
-                    </a>
+                  <div key={cepa.id} className="group bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 rounded-2xl border-3 border-dashed border-amber-400 overflow-hidden hover:shadow-2xl hover:border-amber-600 transition-all duration-300 flex flex-col h-full p-8 items-center justify-center text-center hover:-translate-y-2">
+                    <div className="text-7xl mb-6 animate-bounce">📞</div>
+                    <h3 className="font-black text-amber-900 text-2xl mb-2">{cepa.nombre}</h3>
+                    <p className="text-amber-700 text-lg italic mb-5 font-semibold">{cepa.cientifico}</p>
+                    <p className="text-amber-800 text-base mb-8 leading-relaxed font-medium">{cepa.descripcion}</p>
+                    <div className="flex flex-col gap-3 w-full">
+                      <a
+                        href="mailto:info@aslabs.com?subject=Solicitud%20de%20Nueva%20Especie%20Bacteriana"
+                        className="inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-xl font-black text-base transition-all shadow-lg hover:shadow-xl"
+                      >
+                        ✉️ Email
+                        <span className="text-xl">→</span>
+                      </a>
+                      <a
+                        href="https://wa.me/?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-black text-base transition-all shadow-lg hover:shadow-xl"
+                      >
+                        💬 WhatsApp
+                        <span className="text-xl">→</span>
+                      </a>
+                    </div>
                   </div>
                 )
               }
@@ -281,45 +303,45 @@ export default function CepasClient() {
                 <Link
                   key={cepa.id}
                   href={`/cepas/${cepa.id}`}
-                  className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col h-full"
+                  className="group bg-white rounded-2xl border-2 border-slate-200 overflow-hidden hover:shadow-2xl hover:border-emerald-400 transition-all duration-300 flex flex-col h-full hover:-translate-y-2"
                 >
-                  {/* Imagen */}
-                  <div className="h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex items-center justify-center relative">
+                  {/* Imagen - Más grande */}
+                  <div className="h-64 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex items-center justify-center relative">
                     <img 
                       src={cepa.imagen} 
                       alt={cepa.nombre}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 right-3">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${categoryColors[cepa.categoria]}`}>
+                    <div className="absolute top-4 right-4">
+                      <span className={`inline-block px-4 py-2 rounded-full text-xs font-black border-2 ${categoryColors[cepa.categoria]} shadow-md`}>
                         {cepa.categoria}
                       </span>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="p-5 flex-1 flex flex-col">
-                    <div className="mb-3">
-                      <h3 className="font-bold text-slate-900 text-base mb-1 group-hover:text-emerald-600 transition-colors">
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="mb-4">
+                      <h3 className="font-black text-slate-900 text-lg mb-1 group-hover:text-emerald-600 transition-colors">
                         {cepa.nombre}
                       </h3>
                       <p className="text-xs text-slate-600 italic font-light">{cepa.cientifico}</p>
                     </div>
 
-                    <p className="text-slate-600 text-sm mb-4 line-clamp-2 flex-1">{cepa.descripcion}</p>
+                    <p className="text-slate-700 text-sm mb-5 flex-1 leading-relaxed">{cepa.descripcion}</p>
 
                     {/* Beneficios */}
-                    <div className="space-y-2 mb-4 pt-3 border-t border-slate-100">
+                    <div className="space-y-2 mb-5 pt-4 border-t-2 border-slate-100">
                       {cepa.beneficios.slice(0, 2).map((beneficio, idx) => (
-                        <p key={idx} className="text-xs text-slate-600 flex gap-2">
-                          <span className="text-emerald-600 font-bold flex-shrink-0">✓</span>
+                        <p key={idx} className="text-xs text-slate-700 flex gap-2 font-medium">
+                          <span className="text-emerald-600 font-black flex-shrink-0">✓</span>
                           <span>{beneficio}</span>
                         </p>
                       ))}
                     </div>
 
                     {/* CTA */}
-                    <div className="inline-flex items-center gap-2 text-emerald-600 font-medium text-sm group-hover:gap-3 transition-all">
+                    <div className="inline-flex items-center gap-2 text-emerald-600 font-black text-sm group-hover:gap-3 transition-all">
                       Ver Producto
                       <span className="text-lg">→</span>
                     </div>

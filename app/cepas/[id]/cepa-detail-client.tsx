@@ -699,75 +699,93 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
 
           {/* Modal Ficha Técnica */}
           {showFichaTecnica && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto shadow-2xl">
-                <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 flex items-center justify-between">
-                  <h2 className="text-2xl font-black">Ficha Técnica</h2>
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto shadow-2xl">
+                {/* Header */}
+                <div className="sticky top-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 text-white p-10 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-4xl font-black mb-1">Ficha Técnica</h2>
+                    <p className="text-emerald-100 text-lg">{cepa.nombre}</p>
+                  </div>
                   <button
                     onClick={() => setShowFichaTecnica(false)}
-                    className="text-white hover:text-blue-200 transition-colors"
+                    className="text-white hover:text-emerald-100 transition-colors p-2"
                   >
-                    <X className="w-6 h-6" />
+                    <X className="w-8 h-8" />
                   </button>
                 </div>
 
-                <div className="p-8 space-y-6">
-                  {/* Encabezado */}
-                  <div className="border-b pb-4">
-                    <h3 className="text-3xl font-black text-gray-900 mb-1">{cepa.nombre}</h3>
-                    <p className="text-lg text-gray-600 italic">{cepa.cientifico}</p>
+                <div className="p-12 space-y-10">
+                  {/* Encabezado Principal */}
+                  <div className="border-b-3 border-emerald-200 pb-8">
+                    <h3 className="text-6xl font-black text-gray-900 mb-3">{cepa.nombre}</h3>
+                    <p className="text-3xl text-gray-600 italic font-light mb-6">{cepa.cientifico}</p>
+                    <div className="flex flex-wrap gap-3">
+                      {cepa.beneficios.slice(0, 3).map((b, i) => (
+                        <span key={i} className="bg-emerald-100 text-emerald-800 px-5 py-3 rounded-full text-base font-bold">
+                          {b}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Descripción */}
                   <div>
-                    <h4 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 text-blue-600">Descripción</h4>
-                    <p className="text-gray-700 leading-relaxed">{cepa.descripcion}</p>
+                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Descripción General</h4>
+                    <p className="text-gray-700 leading-relaxed text-xl">{cepa.descripcion}</p>
                   </div>
 
                   {/* Grid de especificaciones */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                      <p className="text-xs font-black text-blue-600 mb-2 uppercase">Viabilidad</p>
-                      <p className="text-xl font-black text-blue-900">{cepa.viabilidad}</p>
-                    </div>
-                    <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-                      <p className="text-xs font-black text-purple-600 mb-2 uppercase">Concentración</p>
-                      <p className="text-xl font-black text-purple-900">{cepa.concentracion}</p>
-                    </div>
-                    <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
-                      <p className="text-xs font-black text-amber-600 mb-2 uppercase">Almacenamiento</p>
-                      <p className="text-xl font-black text-amber-900">{cepa.almacenamiento}</p>
-                    </div>
-                    <div className="bg-teal-50 rounded-lg p-4 border border-teal-200">
-                      <p className="text-xs font-black text-teal-600 mb-2 uppercase">Aplicación</p>
-                      <p className="text-xl font-black text-teal-900">{cepa.aplicacion}</p>
+                  <div>
+                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Especificaciones Técnicas</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 border-3 border-blue-300 shadow-lg">
+                        <p className="text-sm font-black text-blue-600 mb-4 uppercase tracking-widest">Viabilidad</p>
+                        <p className="text-4xl font-black text-blue-900">{cepa.viabilidad}</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-8 border-3 border-purple-300 shadow-lg">
+                        <p className="text-sm font-black text-purple-600 mb-4 uppercase tracking-widest">Concentración</p>
+                        <p className="text-4xl font-black text-purple-900">{cepa.concentracion}</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-8 border-3 border-amber-300 shadow-lg">
+                        <p className="text-sm font-black text-amber-600 mb-4 uppercase tracking-widest">Almacenamiento</p>
+                        <p className="text-4xl font-black text-amber-900">{cepa.almacenamiento}</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-8 border-3 border-teal-300 shadow-lg">
+                        <p className="text-sm font-black text-teal-600 mb-4 uppercase tracking-widest">Aplicación</p>
+                        <p className="text-4xl font-black text-teal-900">{cepa.aplicacion}</p>
+                      </div>
                     </div>
                   </div>
 
                   {/* Compatibilidad */}
-                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                    <p className="text-xs font-black text-gray-600 mb-2 uppercase">Compatibilidad</p>
-                    <p className="text-gray-900">{cepa.compatibilidad}</p>
-                  </div>
-
-                  {/* Beneficios */}
                   <div>
-                    <p className="text-xs font-black text-gray-600 mb-3 uppercase">Beneficios Principales</p>
-                    <ul className="space-y-2">
-                      {cepa.beneficios.map((beneficio, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-gray-700">
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
-                          <span>{beneficio}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Compatibilidad</h4>
+                    <div className="bg-gray-50 rounded-xl p-8 border-3 border-gray-300">
+                      <p className="text-gray-900 text-xl leading-relaxed font-medium">{cepa.compatibilidad}</p>
+                    </div>
                   </div>
 
-                  {/* Botón cerrar */}
-                  <div className="flex gap-3 pt-4 border-t">
+                  {/* Beneficios Principales */}
+                  <div>
+                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Beneficios Principales</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      {cepa.beneficios.map((beneficio, idx) => (
+                        <div key={idx} className="flex items-start gap-4 bg-emerald-50 p-6 rounded-lg border-l-4 border-emerald-600">
+                          <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex-shrink-0 text-lg">
+                            ✓
+                          </div>
+                          <p className="text-gray-900 font-semibold text-lg">{beneficio}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Botones de acción */}
+                  <div className="flex gap-4 pt-8 border-t-3 border-gray-200">
                     <button
                       onClick={() => setShowFichaTecnica(false)}
-                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 py-3 rounded-lg font-black transition-all"
+                      className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 py-5 rounded-lg font-black transition-all text-xl"
                     >
                       Cerrar
                     </button>
@@ -776,9 +794,9 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                         setShowFichaTecnica(false)
                         setShowCart(true)
                       }}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-black transition-all"
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-5 rounded-lg font-black transition-all text-xl"
                     >
-                      Hacer Pedido
+                      Hacer Pedido →
                     </button>
                   </div>
                 </div>
