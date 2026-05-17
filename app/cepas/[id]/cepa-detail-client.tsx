@@ -507,12 +507,6 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                   ))}
                 </div>
               </div>
-                        <p className="text-2xl font-black text-emerald-600">S/ {pres.precio.toFixed(2)}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               {/* Opciones Personalizadas */}
               <div className="border-t pt-8">
