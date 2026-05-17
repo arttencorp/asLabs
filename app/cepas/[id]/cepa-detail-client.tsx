@@ -492,7 +492,7 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                         <div>
                           <p className="font-black text-gray-900">{pres.tipo} {pres.medio ? `- ${pres.medio}` : ''} {pres.volumen ? `(${pres.volumen})` : ''}</p>
                         </div>
-                        <p className="text-2xl font-black text-emerald-600">${pres.precio.toFixed(2)}</p>
+                        <p className="text-2xl font-black text-emerald-600">S/ {pres.precio.toFixed(2)}</p>
                       </div>
                     </button>
                   ))}
