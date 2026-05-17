@@ -14,6 +14,17 @@ const config: Config = {
         sans: ["var(--font-playfair)", "system-ui", "serif"],
         serif: ["var(--font-playfair)", "system-ui", "serif"],
       },
+      fontWeight: {
+        thin: "100",
+        extralight: "200",
+        light: "300",
+        normal: "400",
+        medium: "500",
+        semibold: "600",
+        bold: "700",
+        extrabold: "800",
+        black: "900",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
