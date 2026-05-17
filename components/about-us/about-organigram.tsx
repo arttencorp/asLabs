@@ -64,6 +64,56 @@ function getAreaColor(area: string): string {
 function TeamCard({ member }: TeamCardProps) {
   const areaColor = getAreaColor(member.area)
   
+  // Check if member has no image (text-only card for support team)
+  if (!member.image) {
+    return (
+      <div className="group cursor-pointer">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg w-full h-full">
+          {/* Area Color Bar */}
+          <div className="h-1" style={{ backgroundColor: areaColor }}></div>
+          
+          {/* Text-only Container */}
+          <div className="p-4 bg-white flex flex-col justify-center flex-1">
+            <div className="space-y-2 text-center">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{member.area}</p>
+              <div>
+                <p className="text-sm font-semibold text-gray-900 leading-tight">{member.name}</p>
+                <p className="text-sm font-semibold text-gray-900 leading-tight">{member.lastName}</p>
+              </div>
+              <p className="text-xs text-gray-600">{member.role}</p>
+              <a 
+                href={`mailto:${member.email}`}
+                className="text-xs text-[#2e7d32] hover:text-[#1b5e20] break-all inline-block"
+              >
+                {member.email}
+              </a>
+            </div>
+
+            {/* Contact Icons */}
+            <div className="flex gap-1.5 pt-3 border-t border-gray-100 mt-3">
+              <a
+                href={`mailto:${member.email}`}
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+                title="Email"
+              >
+                <Mail size={12} className="text-gray-600" />
+              </a>
+              <a
+                href={member.linkedIn}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-[#0A66C2] hover:text-white rounded transition-colors"
+                title="LinkedIn"
+              >
+                <Linkedin size={12} className="text-gray-600 group-hover:text-white" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Link href={`/team/${member.id}`}>
       <div className="group cursor-pointer">
