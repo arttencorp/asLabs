@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { ShoppingCart, Filter, Search, Plus, Minus, X, MessageSquare } from "lucide-react"
+import { ShoppingCart, Filter, Search, Plus, Minus, X, MessageSquare, Heart, Eye } from "lucide-react"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 
 interface Cepa {
   id: string
@@ -14,6 +16,11 @@ interface Cepa {
   beneficios: string[]
   presentacion: string
   cantidad: number
+  viabilidad: string
+  concentracion: string
+  almacenamiento: string
+  aplicacion: string
+  compatibilidad: string
 }
 
 const cepas: Cepa[] = [
@@ -28,6 +35,11 @@ const cepas: Cepa[] = [
     beneficios: ["Control de pudriciones radiculares", "Mejora de absorción de nutrientes", "Estimulación de crecimiento"],
     presentacion: "250ml",
     cantidad: 0,
+    viabilidad: "> 95% (a 25°C)",
+    concentracion: "1 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 12 meses",
+    aplicacion: "Aspersión foliar, riego, sustrato",
+    compatibilidad: "Compatible con la mayoría de fungicidas",
   },
   {
     id: "2",
@@ -40,6 +52,11 @@ const cepas: Cepa[] = [
     beneficios: ["Control de insectos plaga", "Compatible con otras cepas", "Largo período de vida útil"],
     presentacion: "250ml",
     cantidad: 0,
+    viabilidad: "> 94%",
+    concentracion: "1 x 10^8 esporas/ml",
+    almacenamiento: "4-10°C, 18 meses",
+    aplicacion: "Aspersión en cultivo y suelo",
+    compatibilidad: "Compatible con abonos y nutrientes",
   },
   {
     id: "3",
@@ -52,6 +69,11 @@ const cepas: Cepa[] = [
     beneficios: ["Aumenta disponibilidad de nutrientes", "Mejora la salud del suelo", "Estimula el desarrollo radicular"],
     presentacion: "500ml",
     cantidad: 0,
+    viabilidad: "> 96%",
+    concentracion: "2 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 12 meses",
+    aplicacion: "Riego y aspersión foliar",
+    compatibilidad: "Compatible con fungicidas y bactericidas",
   },
   {
     id: "4",
@@ -64,6 +86,11 @@ const cepas: Cepa[] = [
     beneficios: ["Solubiliza fosfato inorgánico", "Produce fitohormonas", "Reduce patógenos del suelo"],
     presentacion: "500ml",
     cantidad: 0,
+    viabilidad: "> 95%",
+    concentracion: "1.5 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 10 meses",
+    aplicacion: "Riego, aspersión, tratamiento de semilla",
+    compatibilidad: "No compatible con antibióticos sistémicos",
   },
   {
     id: "5",
@@ -76,6 +103,11 @@ const cepas: Cepa[] = [
     beneficios: ["Fija nitrógeno del aire", "Reduce uso de fertilizantes", "Mejora estrés hídrico"],
     presentacion: "500ml",
     cantidad: 0,
+    viabilidad: "> 93%",
+    concentracion: "1 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 14 meses",
+    aplicacion: "Inoculación de semillas y riego",
+    compatibilidad: "Compatible con la mayoría de productos",
   },
   {
     id: "6",
@@ -88,6 +120,11 @@ const cepas: Cepa[] = [
     beneficios: ["Control de plagas subterráneas", "Acción sistémica", "Seguro para fauna benéfica"],
     presentacion: "250ml",
     cantidad: 0,
+    viabilidad: "> 95%",
+    concentracion: "1 x 10^8 esporas/ml",
+    almacenamiento: "4-10°C, 20 meses",
+    aplicacion: "Riego al suelo, aspersión foliar",
+    compatibilidad: "Compatible con biofertilizantes",
   },
   {
     id: "7",
@@ -100,6 +137,11 @@ const cepas: Cepa[] = [
     beneficios: ["Produce compuestos antimicrobianos", "Eficaz contra hongos y bacterias", "Estimula defensa vegetal"],
     presentacion: "500ml",
     cantidad: 0,
+    viabilidad: "> 94%",
+    concentracion: "1 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 16 meses",
+    aplicacion: "Aspersión foliar, riego",
+    compatibilidad: "Compatible con biofertilizantes",
   },
   {
     id: "8",
@@ -110,6 +152,13 @@ const cepas: Cepa[] = [
     imagen: "bg-cyan-100",
     descripcion: "Bacteria solubilizadora de potasio y fosfato para nutrición vegetal",
     beneficios: ["Solubiliza potasio y fosfato", "Mejora fertilidad del suelo", "Aumenta producción"],
+    presentacion: "500ml",
+    cantidad: 0,
+    viabilidad: "> 96%",
+    concentracion: "2 x 10^9 UFC/ml",
+    almacenamiento: "2-8°C, 13 meses",
+    aplicacion: "Riego, aspersión foliar",
+    compatibilidad: "Compatible con fungicidas sistémicos",
     presentacion: "500ml",
     cantidad: 0,
   },
@@ -160,18 +209,24 @@ export default function CepasClient() {
   const total = itemsEnCarrito.reduce((sum, p) => sum + p.precio * p.cantidad, 0)
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header fijo */}
-      <header className="sticky top-0 z-30 bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">AS Cepas</h1>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+
+      {/* Sticky Header */}
+      <header className="sticky top-[72px] z-30 bg-white border-b border-gray-200 shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Cepas Biológicas</h1>
+            <p className="text-xs text-gray-600">Soluciones certificadas para agricultura</p>
+          </div>
           <button
             onClick={() => setShowCart(!showCart)}
-            className="relative flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="relative flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
           >
             <ShoppingCart className="w-5 h-5" />
+            Carrito ({cartCount})
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center animate-pulse">
                 {cartCount}
               </span>
             )}
@@ -179,18 +234,18 @@ export default function CepasClient() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-16">
+      {/* Hero Section - Delgado */}
+      <section className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Cepas Biológicas de Calidad</h2>
-          <p className="text-xl text-green-100 max-w-2xl">
-            Soluciones biológicas certificadas para control de plagas, enfermedades y mejora de nutrición en tus cultivos
+          <h2 className="text-3xl md:text-4xl font-bold mb-2">Cepas Biológicas Certificadas</h2>
+          <p className="text-green-100 max-w-3xl">
+            Soluciones biológicas de alta calidad para control de plagas, enfermedades y mejora de nutrición en tus cultivos. Todas nuestras cepas son identificadas y validadas en laboratorio.
           </p>
         </div>
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="flex-1 container mx-auto px-4 py-8">
         <div className="grid grid-cols-4 gap-6">
           {/* Sidebar Filters */}
           <div className="hidden lg:block">
@@ -286,55 +341,79 @@ export default function CepasClient() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6">
-                    <h3 className="font-bold text-gray-900 text-lg mb-1">{cepa.nombre}</h3>
-                    <p className="text-sm text-gray-600 italic mb-3">{cepa.cientifico}</p>
-
-                    <div className="mb-3">
-                      <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+                  <div className="p-5">
+                    {/* Header */}
+                    <div className="mb-4">
+                      <h3 className="font-bold text-gray-900 text-lg mb-1">{cepa.nombre}</h3>
+                      <p className="text-xs text-gray-500 italic">{cepa.cientifico}</p>
+                      <span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">
                         {cepa.categoria}
                       </span>
                     </div>
 
-                    <p className="text-sm text-gray-700 mb-4">{cepa.descripcion}</p>
+                    <p className="text-sm text-gray-700 mb-3">{cepa.descripcion}</p>
 
                     {/* Beneficios */}
-                    <div className="mb-4">
-                      <h4 className="text-xs font-bold text-gray-800 mb-2">Beneficios:</h4>
-                      <ul className="text-xs text-gray-600 space-y-1">
+                    <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                      <h4 className="text-xs font-bold text-green-900 mb-2">Beneficios Principales:</h4>
+                      <ul className="text-xs text-green-800 space-y-1">
                         {cepa.beneficios.map((beneficio, idx) => (
                           <li key={idx} className="flex gap-2">
-                            <span className="text-green-600 font-bold">•</span>
+                            <span className="text-green-600 font-bold">✓</span>
                             {beneficio}
                           </li>
                         ))}
                       </ul>
                     </div>
 
+                    {/* Ficha Técnica */}
+                    <div className="mb-4 space-y-2 text-xs">
+                      <div className="flex justify-between py-1.5 border-b border-gray-200">
+                        <span className="text-gray-600 font-medium">Concentración:</span>
+                        <span className="text-gray-900 font-semibold">{cepa.concentracion}</span>
+                      </div>
+                      <div className="flex justify-between py-1.5 border-b border-gray-200">
+                        <span className="text-gray-600 font-medium">Viabilidad:</span>
+                        <span className="text-gray-900 font-semibold">{cepa.viabilidad}</span>
+                      </div>
+                      <div className="flex justify-between py-1.5 border-b border-gray-200">
+                        <span className="text-gray-600 font-medium">Almacenamiento:</span>
+                        <span className="text-gray-900 font-semibold text-right">{cepa.almacenamiento}</span>
+                      </div>
+                      <div className="flex justify-between py-1.5 border-b border-gray-200">
+                        <span className="text-gray-600 font-medium">Aplicación:</span>
+                        <span className="text-gray-900 font-semibold text-right">{cepa.aplicacion}</span>
+                      </div>
+                      <div className="flex justify-between py-1.5">
+                        <span className="text-gray-600 font-medium">Compatibilidad:</span>
+                        <span className="text-gray-900 font-semibold text-right">{cepa.compatibilidad}</span>
+                      </div>
+                    </div>
+
                     {/* Price and Cart */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <div className="pt-3 border-t border-gray-200 flex items-center justify-between">
                       <div>
-                        <p className="text-2xl font-bold text-gray-900">S/ {cepa.precio.toFixed(2)}</p>
+                        <p className="text-2xl font-bold text-green-600">S/ {cepa.precio.toFixed(2)}</p>
                         <p className="text-xs text-gray-500">{cepa.presentacion}</p>
                       </div>
 
                       {cepa.cantidad === 0 ? (
                         <button
                           onClick={() => agregarAlCarrito(cepa.id)}
-                          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                          className="flex items-center gap-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
                         >
-                          <Plus className="w-5 h-5" />
+                          <Plus className="w-4 h-4" />
                           Agregar
                         </button>
                       ) : (
-                        <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
+                        <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
                           <button
                             onClick={() => removerDelCarrito(cepa.id)}
                             className="p-1 hover:bg-gray-200 rounded transition-colors"
                           >
                             <Minus className="w-4 h-4" />
                           </button>
-                          <span className="font-bold text-gray-900 min-w-4 text-center">{cepa.cantidad}</span>
+                          <span className="font-bold text-gray-900 min-w-6 text-center text-sm">{cepa.cantidad}</span>
                           <button
                             onClick={() => agregarAlCarrito(cepa.id)}
                             className="p-1 hover:bg-gray-200 rounded transition-colors"
@@ -440,11 +519,11 @@ export default function CepasClient() {
       )}
 
       {/* Contact Section */}
-      <section className="bg-gradient-to-r from-green-50 to-emerald-50 py-16">
+      <section className="bg-gradient-to-r from-green-50 to-emerald-50 py-12">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Necesitas Asesoría?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">¿Necesitas Asesoría?</h2>
           <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-            Nuestros especialistas están disponibles para ayudarte a elegir la cepa más adecuada para tu cultivo
+            Nuestros especialistas están disponibles para recomendarte la cepa más adecuada para tu cultivo
           </p>
           <a
             href="https://wa.me/51961996645"
@@ -453,10 +532,15 @@ export default function CepasClient() {
             className="inline-flex items-center gap-2 px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-bold"
           >
             <MessageSquare className="w-5 h-5" />
-            Contactar Ahora
+            Contactar por WhatsApp
           </a>
         </div>
       </section>
+
+      {/* Footer */}
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   )
 }
