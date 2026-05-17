@@ -151,35 +151,13 @@ export default function CepasClient() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 flex flex-col">
       <Navbar />
 
-      {/* Hero Section - Premium */}
-      <section className="bg-gradient-to-br from-emerald-700 via-teal-700 to-blue-800 text-white py-24 border-b-8 border-emerald-600">
+      {/* Hero Section - Compacto */}
+      <section className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-10 border-b-4 border-emerald-700">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <h1 className="text-6xl font-black mb-4 tracking-tight text-balance">Catálogo de Cepas Bacterianas Premium</h1>
-            <p className="text-xl text-emerald-100 font-light leading-relaxed mb-6">
-              Cultivos microbiológicos certificados de alta viabilidad para agricultura, investigación y aplicaciones biológicas. Sembrados a pedido con máxima frescura garantizada.
-            </p>
-            <div className="flex gap-6 flex-wrap">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">✓</span>
-                </div>
-                <span className="text-lg font-semibold">11+ Cepas Certificadas</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">🧫</span>
-                </div>
-                <span className="text-lg font-semibold">Cultivo a Pedido</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">⚡</span>
-                </div>
-                <span className="text-lg font-semibold">Entrega Rápida</span>
-              </div>
-            </div>
-          </div>
+          <h1 className="text-4xl font-black mb-2">Catálogo de Cepas Bacterianas</h1>
+          <p className="text-emerald-50 text-base font-light max-w-2xl">
+            Cultivos certificados de alta viabilidad para agricultura e investigación
+          </p>
         </div>
       </section>
 

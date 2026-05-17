@@ -405,22 +405,22 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
           </Link>
 
           {/* Información Importante */}
-          <div className="mb-8 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-500 rounded-lg">
-            <div className="flex gap-4 items-start">
-              <div className="text-2xl">ℹ️</div>
-              <div className="text-sm">
-                <p className="font-black text-blue-900 mb-2">Política de Cultivo a Pedido</p>
-                <p className="text-blue-800 text-xs leading-relaxed">Todas nuestras cepas se cultivan a pedido con almacenamiento máximo de 2 días. Ideales para trabajos de investigación (tesistas) y solicitudes especializadas. Caldo: máximo 30 litros a concentración 2 x 10^7 UFC/ml. Tiempos de entrega sujetos a disponibilidad.</p>
+          <div className="mb-6 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-500 rounded-lg">
+            <div className="flex gap-3 items-start">
+              <div className="text-xl">ℹ️</div>
+              <div className="text-xs">
+                <p className="font-black text-blue-900 mb-1">Política de Cultivo a Pedido</p>
+                <p className="text-blue-800 leading-snug">Todas nuestras cepas se cultivan a pedido. Almacenamiento máximo 2 días. Ideales para tesistas e investigadores. Máximo caldo: 30 litros.</p>
               </div>
             </div>
           </div>
 
           {/* Layout 2 columnas */}
-          <div className="grid lg:grid-cols-3 gap-12 mb-16">
+          <div className="grid lg:grid-cols-3 gap-10 mb-12">
             {/* Imagen - Columna 1 */}
             <div className="lg:col-span-1">
-              <div className="sticky top-24 space-y-4">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 p-6 flex items-center justify-center min-h-[360px]">
+              <div className="sticky top-20 space-y-4">
+                <div className="bg-white rounded-lg overflow-hidden shadow-md border border-gray-100 p-4 flex items-center justify-center min-h-[320px]">
                   <img 
                     src={cepa.imagen} 
                     alt={cepa.nombre}
@@ -431,35 +431,35 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
             </div>
 
             {/* Detalles - Columna 2 */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Nombre y Categoría */}
-              <div className="bg-white rounded-xl p-8 shadow-md border border-gray-100">
-                <div className="flex items-start justify-between mb-4">
+            <div className="lg:col-span-2 space-y-6">
+              {/* Nombre y Categoría - Compacto */}
+              <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100">
+                <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <h1 className="text-4xl font-black text-gray-900 mb-2">{cepa.nombre}</h1>
-                    <p className="text-lg text-gray-600 italic">{cepa.cientifico}</p>
+                    <h1 className="text-3xl font-black text-gray-900">{cepa.nombre}</h1>
+                    <p className="text-sm text-gray-600 italic">{cepa.cientifico}</p>
                   </div>
                   <button
                     onClick={() => setShowFichaTecnica(true)}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-lg transition-all whitespace-nowrap ml-4"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-lg transition-all whitespace-nowrap text-sm"
                   >
-                    📄 Ficha Técnica
+                    📄 Ficha
                   </button>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{cepa.descripcion}</p>
+                <p className="text-gray-700 text-sm leading-relaxed">{cepa.descripcion}</p>
               </div>
 
               {/* Beneficios */}
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-8 border border-emerald-200 shadow-md">
-                <h3 className="text-xl font-black text-emerald-900 mb-4">Beneficios Principales</h3>
-                <ul className="space-y-3">
+              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg p-5 border border-emerald-200">
+                <h3 className="font-black text-gray-900 mb-3 text-sm uppercase tracking-wide text-emerald-700">Beneficios Principales</h3>
+                <div className="grid grid-cols-2 gap-2">
                   {cepa.beneficios.map((beneficio, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-emerald-800">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white font-bold text-sm flex-shrink-0 mt-0.5">✓</span>
-                      <span>{beneficio}</span>
-                    </li>
+                    <div key={idx} className="flex items-start gap-2">
+                      <span className="text-emerald-600 font-black flex-shrink-0">✓</span>
+                      <p className="text-sm text-gray-700 font-medium">{beneficio}</p>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
               {/* Especificaciones Técnicas */}
@@ -486,23 +486,27 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
               </div>
 
               {/* Presentaciones */}
-              <div>
-                <h3 className="text-xl font-black text-gray-900 mb-4">Presentaciones Disponibles</h3>
-                <div className="space-y-4">
+              <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100">
+                <h3 className="font-black text-gray-900 mb-3 text-sm uppercase tracking-wide">Presentaciones Disponibles</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {cepa.presentaciones.map((pres) => (
                     <button
                       key={pres.id}
                       onClick={() => setSelectedPresentacion(pres)}
-                      className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                      className={`p-3 rounded-lg border-2 transition-all text-center text-sm font-black ${
                         selectedPresentacion?.id === pres.id
-                          ? 'border-emerald-500 bg-emerald-50'
-                          : 'border-gray-200 bg-white hover:border-emerald-300'
+                          ? "border-emerald-600 bg-emerald-50 text-emerald-900"
+                          : "border-gray-200 bg-white text-gray-700 hover:border-emerald-300"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-black text-gray-900">{pres.tipo} {pres.medio ? `- ${pres.medio}` : ''} {pres.volumen ? `(${pres.volumen})` : ''}</p>
-                        </div>
+                      <div className="mb-1">{pres.tipo}</div>
+                      {pres.medio && <div className="text-xs font-medium">{pres.medio}</div>}
+                      {pres.volumen && <div className="text-xs font-medium">{pres.volumen}</div>}
+                      <div className="text-emerald-600 font-black mt-1">S/ {pres.precio}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
                         <p className="text-2xl font-black text-emerald-600">S/ {pres.precio.toFixed(2)}</p>
                       </div>
                     </button>
