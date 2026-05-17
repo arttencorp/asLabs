@@ -24,7 +24,7 @@ const cepas: Cepa[] = [
     categoria: "Biofertilizante",
     descripcion: "Bacteria promotora del crecimiento vegetal y fijadora de nitrógeno",
     beneficios: ["Aumenta disponibilidad de nutrientes", "Mejora la salud del suelo"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20SUBTILIS-lZIT8bmBiVCgmrPslx2UVDtUvih3Xm.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20SUBTILIS-13GZHbrjZbKtCqXbOaRCgI4Qc5IWJJ.webp",
   },
   {
     id: "2",
@@ -33,7 +33,7 @@ const cepas: Cepa[] = [
     categoria: "Biofertilizante",
     descripcion: "Bacteria solubilizadora de fosfato y productora de reguladores de crecimiento",
     beneficios: ["Solubiliza fosfato inorgánico", "Produce fitohormonas"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PSEUDOMONAS%20FLURECENS-3T3ftD4NIWWlTMp1gyfXp5mQpDiFwV.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PSEUDOMONAS%20FLURECENS-Dh3L006FYYg0R2hTQUytK5vzMWSlnU.webp",
   },
   {
     id: "3",
@@ -42,7 +42,7 @@ const cepas: Cepa[] = [
     categoria: "Biofertilizante",
     descripcion: "Bacteria fijadora de nitrógeno atmosférico para cultivos agrícolas",
     beneficios: ["Fija nitrógeno del aire", "Reduce uso de fertilizantes"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AZOSPIRILLUM%20SP-cfCWWbWFjaJjRmUmzlCzGVGC7IJQ0J.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AZOSPIRILLUM%20SP-Jonwk0fQXtggCkuluQMLt3K7BqhK9V.webp",
   },
   {
     id: "4",
@@ -51,7 +51,7 @@ const cepas: Cepa[] = [
     categoria: "Biofertilizante",
     descripcion: "Bacteria solubilizadora de potasio y fosfato para nutrición vegetal",
     beneficios: ["Solubiliza potasio y fosfato", "Mejora fertilidad del suelo"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20MEGATERIUM-ICuHwaE7UcN8DXXYZRqCkVG448FHFb.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20MEGATERIUM-3gHTO1C5zG8IUwHFHd4sjqhGVq4vUV.webp",
   },
   {
     id: "5",
@@ -60,7 +60,7 @@ const cepas: Cepa[] = [
     categoria: "Biofertilizante",
     descripcion: "Bacteria fijadora de nitrógeno en simbiosis con leguminosas",
     beneficios: ["Fija nitrógeno en simbiosis", "Enriquece suelo con nitrógeno"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RHIZOBIUM%20SP-9obUjUkrKY9hu85SUnccG0wmlNn2AS.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RHIZOBIUM%20SP-M0E2O1jOZbtDhljJxzBdr7v6I9io66.webp",
   },
   {
     id: "6",
@@ -69,7 +69,7 @@ const cepas: Cepa[] = [
     categoria: "Investigación",
     descripcion: "Bacteria modelo para investigación científica y producción de proteínas recombinantes",
     beneficios: ["Desarrollo de bioingeniería", "Investigación genética"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ESCHERICHIA%20COLI%20-lIupepy5OmLvg5QlzktwmP6HLi2Ua2.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ESCHERICHIA%20COLI%20-Jg2V6mCCTODCo7a07VMMetdrwyns3K.webp",
   },
   {
     id: "7",
@@ -78,7 +78,7 @@ const cepas: Cepa[] = [
     categoria: "Investigación",
     descripcion: "Bacteria para estudios de control de plagas y patología",
     beneficios: ["Modelos de investigación", "Entomología aplicada"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20CEREUS-mRkEvpBkbZTqRieLDfSFcqLNjwjGph.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20CEREUS-JWkhETxjt37ASZSNCuF0YESrUiBOSh.webp",
   },
   {
     id: "8",
@@ -87,7 +87,7 @@ const cepas: Cepa[] = [
     categoria: "Control Biológico",
     descripcion: "Bacteria natural para control biológico de insectos plaga",
     beneficios: ["Control de lepidópteros", "Compatible con agricultura orgánica"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20THURIGENSIS-WathDWWLzFWpDqIiLScgGmKElVphQj.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20THURIGENSIS-8HbhG7sSaEucoYAEwnR0T1m7hgDZOa.webp",
   },
   {
     id: "9",
@@ -96,7 +96,7 @@ const cepas: Cepa[] = [
     categoria: "Investigación",
     descripcion: "Bacteria para investigación molecular y microbiología clínica",
     beneficios: ["Estudios de patogénesis", "Desarrollo de nuevos antibióticos"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PSEUDOMINAS%20AUROGINOSA-2ij7shHccL5vWlnNbV3Y3kgP2eQYak.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PSEUDOMINAS%20AUROGINOSA-b24I6MT5Y2hxKIzqzp2yPCJkwFTfxP.webp",
   },
   {
     id: "10",
@@ -105,7 +105,7 @@ const cepas: Cepa[] = [
     categoria: "Control Biológico",
     descripcion: "Actinobacteria productora de compuestos antimicrobianos naturales",
     beneficios: ["Control de patógenos del suelo", "Producción de antibióticos"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/STREPTOMYCES-yfimx3fV6zPslQL6YRNeG2jpJ5AlPv.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/STREPTOMYCES-xLsxGnKJJrhw6j4ZUtdnfkac6X3fpW.webp",
   },
   {
     id: "11",
@@ -114,7 +114,7 @@ const cepas: Cepa[] = [
     categoria: "Biofertilizante",
     descripcion: "Bacteria activadora de crecimiento radicular y tolerante a estrés hídrico",
     beneficios: ["Tolerancia a sequía", "Desarrollo radicular mejorado"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20FIRMUS%20SP-3e7s9AEf9PCpSzCxfnIMQd0rcr7UDY.webp",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20FIRMUS%20SP-QT6IjEuUvX7qiXr0U99mW5MeyNsqva.webp",
   },
   {
     id: "contact",
