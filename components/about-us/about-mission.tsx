@@ -9,8 +9,6 @@ export default function AboutMission() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left - Text Content */}
           <div className="space-y-12">
-          {/* Left - Text Content */}
-          <div className="space-y-12">
             <div className="space-y-8">
               <div className="inline-block">
                 <span className="text-xs font-semibold text-[#2e7d32] uppercase tracking-[0.2em] bg-[#e8f5e9] px-5 py-3 rounded-full border border-[#2e7d32]/20">
@@ -56,7 +54,7 @@ export default function AboutMission() {
           </div>
 
           {/* Right - Image */}
-          <div className="relative h-full min-h-[600px]">
+          <div className="relative h-full min-h-[600px] order-last">
             <img
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AGROINDUSTRIAL%20ANALISIS-ObbdnPOmz6huCECzNFRd8h6eOPR2nr.webp"
               alt="Investigadores de AS Laboratorios en acción"
