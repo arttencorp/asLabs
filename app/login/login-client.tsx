@@ -13,6 +13,15 @@ export default function LoginClient() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
+  const features = [
+    { icon: MapPin, label: "Zonas Personalizadas", color: "bg-blue-500" },
+    { icon: Zap, label: "Tiempo Real", color: "bg-purple-500" },
+    { icon: TrendingUp, label: "Evolución", color: "bg-green-500" },
+    { icon: MessageSquare, label: "Solicitudes", color: "bg-amber-500" },
+    { icon: BarChart3, label: "IA 24/7", color: "bg-red-500" },
+    { icon: FileText, label: "Reportes", color: "bg-cyan-500" },
+  ]
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("El Panel de Control está en desarrollo. Pronto estará disponible.")
@@ -62,39 +71,39 @@ export default function LoginClient() {
         <p className="text-green-100 text-sm relative z-10">© 2026 AS Laboratorios. Innovación en Biotecnología.</p>
       </div>
 
-      {/* RIGHT SIDE - Login Form */}
-      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-8 lg:p-12">
+      {/* RIGHT SIDE - Login Form + Features Compact */}
+      <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center p-6 lg:p-10 overflow-y-auto max-h-screen">
         {/* Mobile back button */}
-        <Link href="/" className="lg:hidden mb-8 flex items-center gap-2 text-gray-700 hover:text-gray-900">
+        <Link href="/" className="lg:hidden mb-6 flex items-center gap-2 text-gray-700 hover:text-gray-900">
           <ArrowLeft className="w-5 h-5" />
           Volver
         </Link>
 
-        <div className="max-w-sm mx-auto w-full">
+        <div className="max-w-md mx-auto w-full">
           {/* Header */}
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Panel de Control</h2>
-            <p className="text-gray-600">Acceso restringido - Próximamente disponible</p>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">Panel de Control</h2>
+            <p className="text-gray-600 text-sm">Próximamente disponible</p>
           </div>
 
-          {/* Development Notice */}
-          <div className="mb-6 p-4 bg-amber-50 border-l-4 border-amber-500 rounded">
-            <p className="text-amber-700 text-sm font-bold">⚠️ Panel en Construcción</p>
-            <p className="text-amber-700 text-xs mt-1">Este servicio estará disponible muy pronto con funcionalidades innovadoras para tu negocio agrícola.</p>
+          {/* Development Notice - Compact */}
+          <div className="mb-4 p-3 bg-amber-50 border-l-4 border-amber-500 rounded">
+            <p className="text-amber-700 text-xs font-bold">⚠️ Panel en Construcción</p>
+            <p className="text-amber-700 text-xs mt-0.5">Disponible muy pronto con funcionalidades innovadoras</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
-              <p className="text-blue-700 text-sm font-medium">{error}</p>
+            <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded">
+              <p className="text-blue-700 text-xs font-medium">{error}</p>
             </div>
           )}
 
           {/* Form - Disabled */}
-          <form onSubmit={handleSubmit} className="space-y-6 opacity-50 pointer-events-none">
+          <form onSubmit={handleSubmit} className="space-y-4 opacity-50 pointer-events-none mb-6">
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-800 mb-2">
+              <label htmlFor="username" className="block text-xs font-semibold text-gray-800 mb-1">
                 Usuario
               </label>
               <input
@@ -103,7 +112,7 @@ export default function LoginClient() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="tu_usuario"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
                 disabled={true}
                 autoComplete="username"
               />
@@ -111,7 +120,7 @@ export default function LoginClient() {
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-800 mb-2">
+              <label htmlFor="password" className="block text-xs font-semibold text-gray-800 mb-1">
                 Contraseña
               </label>
               <div className="relative">
@@ -121,17 +130,17 @@ export default function LoginClient() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="•••••••••"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
                   disabled={true}
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition-colors"
+                  className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700 transition-colors"
                   disabled={true}
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -140,150 +149,51 @@ export default function LoginClient() {
             <button
               type="submit"
               disabled={true}
-              className="w-full bg-gray-400 text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-8"
+              className="w-full bg-gray-400 text-white text-sm font-semibold py-2.5 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Próximamente Disponible
             </button>
           </form>
 
-          {/* Demo Credentials - REMOVED */}
-          {/* Under Development Section - IMPROVED */}
-          <div className="mt-10 space-y-6">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 mb-3 px-4 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full border border-green-200">
-                <span className="text-green-600 font-bold">✨</span>
-                <span className="text-sm font-semibold text-green-700">Características Próximamente</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Tu Panel de Control Inteligente</h3>
-              <p className="text-gray-600 text-sm">Soluciones integradas para gestionar tu agricultura con datos precisos y en tiempo real</p>
-            </div>
-
-            {/* Features Grid - 2x5 Layout */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Feature 1 */}
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-white" />
+          {/* Features - Compact Grid */}
+          <div className="mb-4">
+            <p className="text-xs font-semibold text-gray-700 mb-3 text-center">Características Próximamente</p>
+            <div className="grid grid-cols-3 gap-2">
+              {features.map((feature, idx) => {
+                const IconComponent = feature.icon
+                return (
+                  <div key={idx} className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-center hover:bg-gray-100 transition-all">
+                    <div className={`${feature.color} w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-2`}>
+                      <IconComponent className="w-4 h-4 text-white" />
+                    </div>
+                    <p className="text-xs font-semibold text-gray-900">{feature.label}</p>
                   </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Zonas Personalizadas</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Define cultivos y ubicación geográfica precisa</p>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Tiempo Real</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Visualiza resultados mientras se procesan</p>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Evolución de Cultivos</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Gráficos e historial de tendencias</p>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
-                    <MessageSquare className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Solicitudes Virtuales</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Pide servicios sin salir de casa</p>
-              </div>
-
-              {/* Feature 5 */}
-              <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-                    <BarChart3 className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Asistente IA 24/7</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Chat especializado para clientes premium</p>
-              </div>
-
-              {/* Feature 6 */}
-              <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 border border-cyan-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Reportes Automáticos</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">PDFs detallados con análisis completos</p>
-              </div>
-
-              {/* Feature 7 */}
-              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Historial de Servicios</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Compara todos tus análisis anteriores</p>
-              </div>
-
-              {/* Feature 8 */}
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-300 rounded-xl p-4 hover:shadow-md transition-all">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                    <Bell className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Notificaciones Inteligentes</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Alertas sobre plagas y cambios climáticos</p>
-              </div>
-
-              {/* Feature 9 */}
-              <div className="bg-gradient-to-br from-pink-50 to-pink-100 border border-pink-300 rounded-xl p-4 hover:shadow-md transition-all col-span-2">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center">
-                    <Headphones className="w-5 h-5 text-white" />
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-sm">Consultoría Premium</h4>
-                </div>
-                <p className="text-xs text-gray-700 leading-tight">Videollamadas con nuestros agrónomos para asesoramiento personalizado</p>
-              </div>
-            </div>
-
-            {/* CTA Card */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-6 text-white text-center">
-              <p className="font-semibold mb-2">¿Deseas acceso prioritario?</p>
-              <p className="text-sm text-green-100 mb-4">Contáctanos y sé uno de los primeros en usar nuestro panel inteligente</p>
-              <a
-                href="https://wa.me/51961996645"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition-all text-sm"
-              >
-                Solicitar Acceso
-              </a>
+                )
+              })}
             </div>
           </div>
 
-          {/* Contact */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 text-sm mb-3">¿Problemas para acceder?</p>
+          {/* CTA Card - Compact */}
+          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-4 text-white text-center mb-4">
+            <p className="text-sm font-semibold mb-2">¿Acceso prioritario?</p>
             <a
               href="https://wa.me/51961996645"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-sm"
+              className="inline-flex items-center gap-2 bg-white text-green-600 px-4 py-2 rounded-md font-semibold hover:bg-green-50 transition-all text-xs"
+            >
+              Solicitar Acceso
+            </a>
+          </div>
+
+          {/* Contact */}
+          <div className="text-center">
+            <p className="text-gray-600 text-xs mb-2">¿Problemas para acceder?</p>
+            <a
+              href="https://wa.me/51961996645"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-xs"
             >
               Contacta por WhatsApp
             </a>
