@@ -13,86 +13,113 @@ interface Cepa {
   categoria: string
   descripcion: string
   beneficios: string[]
+  imagen: string
 }
 
 const cepas: Cepa[] = [
   {
     id: "1",
-    nombre: "Trichoderma harzianum",
-    cientifico: "Trichoderma harzianum",
-    categoria: "Control Biológico",
-    descripcion: "Hongo antagonista para control de enfermedades fúngicas del suelo",
-    beneficios: ["Control de pudriciones radiculares", "Mejora de absorción de nutrientes"],
-  },
-  {
-    id: "2",
-    nombre: "Beauveria bassiana",
-    cientifico: "Beauveria bassiana",
-    categoria: "Control de Plagas",
-    descripcion: "Hongo entomopatógeno para control biológico de plagas",
-    beneficios: ["Control de insectos plaga", "Compatible con otras cepas"],
-  },
-  {
-    id: "3",
     nombre: "Bacillus subtilis",
     cientifico: "Bacillus subtilis",
     categoria: "Biofertilizante",
     descripcion: "Bacteria promotora del crecimiento vegetal y fijadora de nitrógeno",
     beneficios: ["Aumenta disponibilidad de nutrientes", "Mejora la salud del suelo"],
+    imagen: "/bacteria/bacillus-subtilis.jpg",
   },
   {
-    id: "4",
+    id: "2",
     nombre: "Pseudomonas fluorescens",
     cientifico: "Pseudomonas fluorescens",
     categoria: "Biofertilizante",
     descripcion: "Bacteria solubilizadora de fosfato y productora de reguladores de crecimiento",
     beneficios: ["Solubiliza fosfato inorgánico", "Produce fitohormonas"],
+    imagen: "/bacteria/pseudomonas-fluorescens.jpg",
   },
   {
-    id: "5",
+    id: "3",
     nombre: "Azospirillum brasilense",
     cientifico: "Azospirillum brasilense",
     categoria: "Biofertilizante",
     descripcion: "Bacteria fijadora de nitrógeno atmosférico para cultivos agrícolas",
     beneficios: ["Fija nitrógeno del aire", "Reduce uso de fertilizantes"],
+    imagen: "/bacteria/azospirillum-brasilense.jpg",
   },
   {
-    id: "6",
-    nombre: "Metarhizium anisopliae",
-    cientifico: "Metarhizium anisopliae",
-    categoria: "Control de Plagas",
-    descripcion: "Hongo entomopatógeno para control de insectos del suelo",
-    beneficios: ["Control de plagas subterráneas", "Acción sistémica"],
-  },
-  {
-    id: "7",
-    nombre: "Streptomyces lydicus",
-    cientifico: "Streptomyces lydicus",
-    categoria: "Control Biológico",
-    descripcion: "Actinobacteria productora de antibióticos naturales para control de patógenos",
-    beneficios: ["Produce compuestos antimicrobianos", "Eficaz contra hongos y bacterias"],
-  },
-  {
-    id: "8",
+    id: "4",
     nombre: "Bacillus megaterium",
     cientifico: "Bacillus megaterium",
     categoria: "Biofertilizante",
     descripcion: "Bacteria solubilizadora de potasio y fosfato para nutrición vegetal",
     beneficios: ["Solubiliza potasio y fosfato", "Mejora fertilidad del suelo"],
+    imagen: "/bacteria/bacillus-megaterium.jpg",
+  },
+  {
+    id: "5",
+    nombre: "Escherichia coli",
+    cientifico: "Escherichia coli (K-12)",
+    categoria: "Investigación",
+    descripcion: "Bacteria modelo para investigación científica y producción de proteínas recombinantes",
+    beneficios: ["Desarrollo de bioingeniería", "Investigación genética"],
+    imagen: "/bacteria/escherichia-coli.jpg",
+  },
+  {
+    id: "6",
+    nombre: "Bacillus cereus",
+    cientifico: "Bacillus cereus",
+    categoria: "Investigación",
+    descripcion: "Bacteria para estudios de control de plagas y patología",
+    beneficios: ["Modelos de investigación", "Entomología aplicada"],
+    imagen: "/bacteria/bacillus-cereus.jpg",
+  },
+  {
+    id: "7",
+    nombre: "Bacillus thuringiensis",
+    cientifico: "Bacillus thuringiensis",
+    categoria: "Control Biológico",
+    descripcion: "Bacteria natural para control biológico de insectos plaga",
+    beneficios: ["Control de lepidópteros", "Compatible con agricultura orgánica"],
+    imagen: "/bacteria/bacillus-thuringiensis.jpg",
+  },
+  {
+    id: "8",
+    nombre: "Pseudomonas aeruginosa",
+    cientifico: "Pseudomonas aeruginosa",
+    categoria: "Investigación",
+    descripcion: "Bacteria para investigación molecular y microbiología clínica",
+    beneficios: ["Estudios de patogénesis", "Desarrollo de nuevos antibióticos"],
+    imagen: "/bacteria/pseudomonas-aeruginosa.jpg",
+  },
+  {
+    id: "9",
+    nombre: "Streptomyces lydicus",
+    cientifico: "Streptomyces lydicus",
+    categoria: "Control Biológico",
+    descripcion: "Actinobacteria productora de compuestos antimicrobianos naturales",
+    beneficios: ["Control de patógenos del suelo", "Producción de antibióticos"],
+    imagen: "/bacteria/streptomyces-lydicus.jpg",
+  },
+  {
+    id: "10",
+    nombre: "Bacillus firmus",
+    cientifico: "Bacillus firmus GB-126",
+    categoria: "Biofertilizante",
+    descripcion: "Bacteria activadora de crecimiento radicular y tolerante a estrés hídrico",
+    beneficios: ["Tolerancia a sequía", "Desarrollo radicular mejorado"],
+    imagen: "/bacteria/bacillus-firmus.jpg",
   },
 ]
 
 const categoryColors: { [key: string]: string } = {
   "Control Biológico": "bg-emerald-100 text-emerald-700",
-  "Control de Plagas": "bg-orange-100 text-orange-700",
   "Biofertilizante": "bg-blue-100 text-blue-700",
+  "Investigación": "bg-purple-100 text-purple-700",
 }
 
 export default function CepasClient() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  const categories = ["Control Biológico", "Control de Plagas", "Biofertilizante"]
+  const categories = ["Control Biológico", "Biofertilizante", "Investigación"]
 
   const filteredCepas = cepas.filter((cepa) => {
     const matchesSearch =
@@ -154,6 +181,15 @@ export default function CepasClient() {
               key={cepa.id}
               className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group"
             >
+              {/* Imagen */}
+              <div className="h-40 bg-gray-200 overflow-hidden flex items-center justify-center">
+                <img 
+                  src={cepa.imagen} 
+                  alt={cepa.nombre}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+
               {/* Header */}
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
                 <div className="flex items-start justify-between mb-3">

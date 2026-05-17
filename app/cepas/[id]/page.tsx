@@ -2,14 +2,16 @@ import type { Metadata } from "next"
 import CepaDetailClient from "./cepa-detail-client"
 
 const cepasData = [
-  { id: "1", nombre: "Trichoderma harzianum", descripcion: "Hongo antagonista para control de enfermedades fúngicas del suelo" },
-  { id: "2", nombre: "Beauveria bassiana", descripcion: "Hongo entomopatógeno para control biológico de plagas" },
-  { id: "3", nombre: "Bacillus subtilis", descripcion: "Bacteria promotora del crecimiento vegetal y fijadora de nitrógeno" },
-  { id: "4", nombre: "Pseudomonas fluorescens", descripcion: "Bacteria solubilizadora de fosfato y productora de reguladores de crecimiento" },
-  { id: "5", nombre: "Azospirillum brasilense", descripcion: "Bacteria fijadora de nitrógeno atmosférico para cultivos agrícolas" },
-  { id: "6", nombre: "Metarhizium anisopliae", descripcion: "Hongo entomopatógeno para control de insectos del suelo" },
-  { id: "7", nombre: "Streptomyces lydicus", descripcion: "Actinobacteria productora de antibióticos naturales para control de patógenos" },
-  { id: "8", nombre: "Bacillus megaterium", descripcion: "Bacteria solubilizadora de potasio y fosfato para nutrición vegetal" },
+  { id: "1", nombre: "Bacillus subtilis", descripcion: "Bacteria promotora del crecimiento vegetal y fijadora de nitrógeno" },
+  { id: "2", nombre: "Pseudomonas fluorescens", descripcion: "Bacteria solubilizadora de fosfato y productora de reguladores de crecimiento" },
+  { id: "3", nombre: "Azospirillum brasilense", descripcion: "Bacteria fijadora de nitrógeno atmosférico para cultivos agrícolas" },
+  { id: "4", nombre: "Bacillus megaterium", descripcion: "Bacteria solubilizadora de potasio y fosfato para nutrición vegetal" },
+  { id: "5", nombre: "Escherichia coli", descripcion: "Bacteria modelo para investigación científica y producción de proteínas recombinantes" },
+  { id: "6", nombre: "Bacillus cereus", descripcion: "Bacteria para estudios de control de plagas y patología" },
+  { id: "7", nombre: "Bacillus thuringiensis", descripcion: "Bacteria natural para control biológico de insectos plaga" },
+  { id: "8", nombre: "Pseudomonas aeruginosa", descripcion: "Bacteria para investigación molecular y microbiología clínica" },
+  { id: "9", nombre: "Streptomyces lydicus", descripcion: "Actinobacteria productora de compuestos antimicrobianos naturales" },
+  { id: "10", nombre: "Bacillus firmus", descripcion: "Bacteria activadora de crecimiento radicular y tolerante a estrés hídrico" },
 ]
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
