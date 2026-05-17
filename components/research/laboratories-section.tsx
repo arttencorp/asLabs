@@ -100,15 +100,15 @@ const laboratories: Laboratory[] = [
 
 export default function LaboratoriesSection() {
   return (
-    <section className="py-12 px-4 bg-white">
+    <section className="py-20 px-4 bg-gradient-to-b from-slate-900 to-slate-950 border-y border-slate-800">
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Nuestros Laboratorios
+        <div className="mb-16 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Nuestros Laboratorios de Investigación
           </h2>
-          <p className="text-gray-600 max-w-2xl">
-            Laboratorios especializados con tecnología moderna para investigación.
+          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+            Instalaciones especializadas con tecnología de punta para investigación científica de excelencia
           </p>
         </div>
 
@@ -118,36 +118,55 @@ export default function LaboratoriesSection() {
             <a
               key={lab.id}
               href={`/laboratorios/${lab.id}`}
-              className="group border rounded-lg overflow-hidden hover:shadow-lg transition-all"
+              className="group relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl overflow-hidden border border-slate-700 hover:border-slate-500 transition-all duration-300 hover:shadow-2xl hover:shadow-slate-950"
             >
-              {/* Banner Image */}
-              <div className={`${lab.bgColor} h-40 flex items-center justify-center relative overflow-hidden`}>
-                <div className={`${lab.color} text-5xl opacity-20`}>
+              {/* Gradient Background Overlay */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300" 
+                   style={{backgroundImage: `linear-gradient(135deg, var(--color-main) 0%, var(--color-accent) 100%)`}}>
+              </div>
+
+              {/* Banner with Icon */}
+              <div className="relative h-32 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center overflow-hidden border-b border-slate-700">
+                <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">
+                  {lab.icon}
+                </div>
+                <div className="relative z-10 text-6xl opacity-60 group-hover:opacity-100 transition-opacity">
                   {lab.icon}
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-5">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className={`${lab.color} p-2 rounded`}>
+              <div className="p-6 relative z-10">
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-slate-700/50 group-hover:bg-slate-600 transition-colors">
                     {lab.icon}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors">
+                    <h3 className="font-bold text-white group-hover:text-emerald-300 transition-colors text-lg">
                       {lab.name}
                     </h3>
                   </div>
                   {lab.status === "construction" && (
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">
-                      Por construir
+                    <span className="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-full whitespace-nowrap border border-amber-500/30">
+                      En construcción
                     </span>
                   )}
                 </div>
-                <p className="text-gray-600 text-sm line-clamp-2">{lab.description}</p>
-                <div className="mt-4 text-green-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
-                  Ver más
-                  <span>→</span>
+                <p className="text-slate-300 text-sm leading-relaxed mb-4">{lab.description}</p>
+                
+                {/* Capabilities Preview */}
+                <div className="space-y-2 mb-4">
+                  {lab.capabilities.slice(0, 2).map((cap, idx) => (
+                    <div key={idx} className="flex items-start gap-2 text-xs text-slate-400">
+                      <span className="text-emerald-400 mt-1">•</span>
+                      <span>{cap}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-emerald-400 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
+                  Ver detalles
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
             </a>
