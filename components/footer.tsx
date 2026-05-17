@@ -175,23 +175,25 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div>
-              <div className="text-sm text-gray-400 mb-3 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="w-full md:w-auto">
+              <div className="text-sm text-gray-400 mb-4">
                 © 2024 AS Laboratorios. Todos los derechos reservados.
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-gray-500">Asociado</span>
-                <Image
-                  src="/logo-ccl-rojo.png"
-                  alt="CCL - Cámara de Comercio de Lima"
-                  width={40}
-                  height={40}
-                  className="h-auto w-auto"
-                />
+              <div className="flex items-center gap-4 bg-gray-800 rounded-lg p-4 w-full md:w-auto">
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Afiliado a</p>
+                  <Image
+                    src="/camaracomercio.png"
+                    alt="Cámara de Comercio de La Libertad"
+                    width={180}
+                    height={60}
+                    className="h-auto w-auto max-h-14"
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex space-x-6 text-sm">
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm w-full md:w-auto justify-end">
               <Link href="/legal" className="text-gray-400 hover:text-white transition-colors">
                 Política de Privacidad
               </Link>
