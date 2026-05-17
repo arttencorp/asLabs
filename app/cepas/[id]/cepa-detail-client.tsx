@@ -275,6 +275,7 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
   const [isStudent, setIsStudent] = useState(false)
   const [studentDNI, setStudentDNI] = useState("")
   const [studentEmail, setStudentEmail] = useState("")
+  const [showFichaTecnica, setShowFichaTecnica] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -433,8 +434,18 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
             <div className="lg:col-span-2 space-y-8">
               {/* Nombre y Categoría */}
               <div className="bg-white rounded-xl p-8 shadow-md border border-gray-100">
-                <h1 className="text-4xl font-black text-gray-900 mb-2">{cepa.nombre}</h1>
-                <p className="text-lg text-gray-600 italic mb-4">{cepa.cientifico}</p>
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h1 className="text-4xl font-black text-gray-900 mb-2">{cepa.nombre}</h1>
+                    <p className="text-lg text-gray-600 italic">{cepa.cientifico}</p>
+                  </div>
+                  <button
+                    onClick={() => setShowFichaTecnica(true)}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-lg transition-all whitespace-nowrap ml-4"
+                  >
+                    📄 Ficha Técnica
+                  </button>
+                </div>
                 <p className="text-gray-700 leading-relaxed">{cepa.descripcion}</p>
               </div>
 
@@ -682,6 +693,95 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                   <MessageSquare className="w-5 h-5" />
                   Enviar por WhatsApp
                 </a>
+              </div>
+            </div>
+          )}
+
+          {/* Modal Ficha Técnica */}
+          {showFichaTecnica && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto shadow-2xl">
+                <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 flex items-center justify-between">
+                  <h2 className="text-2xl font-black">Ficha Técnica</h2>
+                  <button
+                    onClick={() => setShowFichaTecnica(false)}
+                    className="text-white hover:text-blue-200 transition-colors"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  {/* Encabezado */}
+                  <div className="border-b pb-4">
+                    <h3 className="text-3xl font-black text-gray-900 mb-1">{cepa.nombre}</h3>
+                    <p className="text-lg text-gray-600 italic">{cepa.cientifico}</p>
+                  </div>
+
+                  {/* Descripción */}
+                  <div>
+                    <h4 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-2 text-blue-600">Descripción</h4>
+                    <p className="text-gray-700 leading-relaxed">{cepa.descripcion}</p>
+                  </div>
+
+                  {/* Grid de especificaciones */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                      <p className="text-xs font-black text-blue-600 mb-2 uppercase">Viabilidad</p>
+                      <p className="text-xl font-black text-blue-900">{cepa.viabilidad}</p>
+                    </div>
+                    <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                      <p className="text-xs font-black text-purple-600 mb-2 uppercase">Concentración</p>
+                      <p className="text-xl font-black text-purple-900">{cepa.concentracion}</p>
+                    </div>
+                    <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                      <p className="text-xs font-black text-amber-600 mb-2 uppercase">Almacenamiento</p>
+                      <p className="text-xl font-black text-amber-900">{cepa.almacenamiento}</p>
+                    </div>
+                    <div className="bg-teal-50 rounded-lg p-4 border border-teal-200">
+                      <p className="text-xs font-black text-teal-600 mb-2 uppercase">Aplicación</p>
+                      <p className="text-xl font-black text-teal-900">{cepa.aplicacion}</p>
+                    </div>
+                  </div>
+
+                  {/* Compatibilidad */}
+                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <p className="text-xs font-black text-gray-600 mb-2 uppercase">Compatibilidad</p>
+                    <p className="text-gray-900">{cepa.compatibilidad}</p>
+                  </div>
+
+                  {/* Beneficios */}
+                  <div>
+                    <p className="text-xs font-black text-gray-600 mb-3 uppercase">Beneficios Principales</p>
+                    <ul className="space-y-2">
+                      {cepa.beneficios.map((beneficio, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-gray-700">
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 text-white font-bold text-xs flex-shrink-0 mt-0.5">✓</span>
+                          <span>{beneficio}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Botón cerrar */}
+                  <div className="flex gap-3 pt-4 border-t">
+                    <button
+                      onClick={() => setShowFichaTecnica(false)}
+                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 py-3 rounded-lg font-black transition-all"
+                    >
+                      Cerrar
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowFichaTecnica(false)
+                        setShowCart(true)
+                      }}
+                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-black transition-all"
+                    >
+                      Hacer Pedido
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
