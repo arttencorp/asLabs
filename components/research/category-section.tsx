@@ -39,40 +39,40 @@ interface CategorySectionProps {
 
 const colorClasses = {
   blue: {
-    bg: "from-blue-900/30 to-blue-900/10",
-    border: "border-blue-500/20",
-    text: "text-white",
-    label: "text-blue-300",
-    accent: "text-blue-400",
+    bg: "bg-blue-50",
+    border: "border-blue-200",
+    text: "text-gray-900",
+    label: "text-blue-700",
+    accent: "text-blue-600",
     progress: "bg-blue-500",
-    hoverBorder: "hover:border-blue-500/60",
+    hoverBorder: "hover:border-blue-400",
   },
   green: {
-    bg: "from-green-900/30 to-green-900/10",
-    border: "border-green-500/20",
-    text: "text-white",
-    label: "text-green-300",
-    accent: "text-green-400",
+    bg: "bg-green-50",
+    border: "border-green-200",
+    text: "text-gray-900",
+    label: "text-green-700",
+    accent: "text-green-600",
     progress: "bg-green-500",
-    hoverBorder: "hover:border-green-500/60",
+    hoverBorder: "hover:border-green-400",
   },
   purple: {
-    bg: "from-purple-900/30 to-purple-900/10",
-    border: "border-purple-500/20",
-    text: "text-white",
-    label: "text-purple-300",
-    accent: "text-purple-400",
+    bg: "bg-purple-50",
+    border: "border-purple-200",
+    text: "text-gray-900",
+    label: "text-purple-700",
+    accent: "text-purple-600",
     progress: "bg-purple-500",
-    hoverBorder: "hover:border-purple-500/60",
+    hoverBorder: "hover:border-purple-400",
   },
   orange: {
-    bg: "from-orange-900/30 to-orange-900/10",
-    border: "border-orange-500/20",
-    text: "text-white",
-    label: "text-orange-300",
-    accent: "text-orange-400",
+    bg: "bg-orange-50",
+    border: "border-orange-200",
+    text: "text-gray-900",
+    label: "text-orange-700",
+    accent: "text-orange-600",
     progress: "bg-orange-500",
-    hoverBorder: "hover:border-orange-500/60",
+    hoverBorder: "hover:border-orange-400",
   },
 }
 
@@ -100,32 +100,32 @@ export default function CategorySection({
   }
 
   return (
-    <div className={`bg-gradient-to-br ${colors.bg} rounded-2xl p-8 border ${colors.border} backdrop-blur-sm ${colors.hoverBorder} transition-all`}>
-      <div className="mb-8">
+    <div className={`${colors.bg} rounded-lg p-6 ${colors.border} border`}>
+      <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
-          {Icon && <Icon className={`w-7 h-7 ${colors.accent}`} />}
-          <h3 className={`text-3xl font-bold ${colors.text}`}>{title}</h3>
+          {Icon && <Icon className={`w-6 h-6 ${colors.accent}`} />}
+          <h3 className={`text-2xl font-bold ${colors.text}`}>{title}</h3>
         </div>
-        {description && <p className={`${colors.label} opacity-90 mt-2`}>{description}</p>}
+        {description && <p className={`${colors.label} opacity-80`}>{description}</p>}
       </div>
 
       <div className="space-y-6">
         {subsections.map((subsection, subsectionIndex) => (
           <div key={subsectionIndex}>
-            {subsection.title && <h4 className={`text-lg font-semibold ${colors.label} mb-4 uppercase tracking-wide text-sm`}>{subsection.title}</h4>}
+            {subsection.title && <h4 className={`text-lg font-semibold ${colors.label} mb-4`}>{subsection.title}</h4>}
 
             <div className="grid gap-4">
               {subsection.projects.map((project, projectIndex) => (
-                <Card key={projectIndex} className="bg-slate-800/50 border-slate-700 hover:border-slate-600 hover:bg-slate-800 transition-all group">
+                <Card key={projectIndex} className="hover:shadow-md transition-shadow bg-white">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <Badge variant="outline" className={`text-xs ${colors.label} border-slate-600`}>
+                          <Badge variant="outline" className="text-xs">
                             {project.id}
                           </Badge>
                           {isCompleted && (
-                            <Badge className={`${colors.progress} text-white text-xs`}>
+                            <Badge className="bg-green-500 text-white text-xs">
                               <CheckCircle className="w-3 h-3 mr-1" />
                               Completado
                             </Badge>
@@ -133,26 +133,26 @@ export default function CategorySection({
                         </div>
                         <CardTitle className={`text-lg leading-tight ${colors.text}`}>
                           {getProjectLink(project) !== "#" ? (
-                            <Link href={getProjectLink(project)} className={`${colors.accent} hover:brightness-110 transition-colors`}>
+                            <Link href={getProjectLink(project)} className={`${colors.accent} hover:underline transition-colors`}>
                               {project.name}
                             </Link>
                           ) : (
                             project.name
                           )}
                         </CardTitle>
-                        {project.subtitle && <CardDescription className="mt-1 text-slate-400">{project.subtitle}</CardDescription>}
+                        {project.subtitle && <CardDescription className="mt-1 text-gray-600">{project.subtitle}</CardDescription>}
                       </div>
 
                       <div className="text-right ml-4">
                         {isCompleted ? (
-                          <div className={`flex items-center space-x-1 ${colors.accent}`}>
+                          <div className="flex items-center space-x-1 text-green-600">
                             <Award className="w-4 h-4" />
                             <span className="text-sm font-semibold">100%</span>
                           </div>
                         ) : (
-                          <div className={`flex items-center space-x-1 ${colors.accent}`}>
-                            <Clock className="w-4 h-4" />
-                            <span className="text-sm font-semibold">
+                          <div className="flex items-center space-x-1">
+                            <Clock className={`w-4 h-4 ${colors.accent}`} />
+                            <span className={`text-sm font-semibold ${colors.accent}`}>
                               {Math.round(project.progress * 100)}%
                             </span>
                           </div>
@@ -165,34 +165,34 @@ export default function CategorySection({
                     <div className="space-y-3">
                       <Progress value={project.progress * 100} className="h-2" />
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-400">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
                         <div className="flex items-center space-x-2">
-                          <MapPin className="w-4 h-4 text-slate-500" />
+                          <MapPin className="w-4 h-4" />
                           <span>{project.location}</span>
                         </div>
 
                         <div className="flex items-center space-x-2">
-                          <TrendingUp className="w-4 h-4 text-slate-500" />
+                          <TrendingUp className="w-4 h-4" />
                           <span>{project.status}</span>
                         </div>
 
                         {project.researcher && (
                           <div className="flex items-center space-x-2 md:col-span-2">
-                            <User className="w-4 h-4 text-slate-500" />
-                            <span className="text-slate-300">{project.researcher}</span>
+                            <User className="w-4 h-4" />
+                            <span className="text-gray-700">{project.researcher}</span>
                           </div>
                         )}
 
                         {project.completedDate && (
                           <div className="flex items-center space-x-2">
-                            <Calendar className="w-4 h-4 text-slate-500" />
+                            <Calendar className="w-4 h-4" />
                             <span>Completado: {project.completedDate}</span>
                           </div>
                         )}
 
                         {project.plantsProduced && (
                           <div className="flex items-center space-x-2">
-                            <Award className="w-4 h-4 text-slate-500" />
+                            <Award className="w-4 h-4" />
                             <span>Plantas: {project.plantsProduced}</span>
                           </div>
                         )}
@@ -202,7 +202,7 @@ export default function CategorySection({
                         <div className="pt-2">
                           <Link
                             href={getProjectLink(project)}
-                            className={`inline-flex items-center text-sm ${colors.accent} hover:brightness-110 transition-all`}
+                            className={`inline-flex items-center text-sm ${colors.accent} hover:underline`}
                           >
                             Ver detalles del proyecto
                             <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
