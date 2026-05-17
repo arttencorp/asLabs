@@ -4,12 +4,11 @@ import Image from "next/image"
 
 export default function AboutMission() {
   return (
-    <section id="mision" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-24 items-start">
+    <section id="mision" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left - Text Content */}
+          <div className="space-y-12">
           {/* Left - Text Content */}
           <div className="space-y-12">
             <div className="space-y-8">
@@ -62,49 +61,13 @@ export default function AboutMission() {
             </div>
           </div>
 
-          {/* Right - Stats */}
-          <div className="space-y-8 lg:pt-6">
-            <div className="bg-gradient-to-br from-[#f8f6f1] to-[#f0ebe5] rounded-3xl p-12 shadow-xl border border-gray-200/50">
-              <div className="space-y-12">
-                <div className="flex items-start gap-6">
-                  <div className="text-5xl font-serif font-bold text-[#2e7d32] leading-none">27</div>
-                  <div>
-                    <p className="font-bold text-gray-900">Años</p>
-                    <p className="text-gray-600 text-sm mt-1">De trayectoria en biotecnología</p>
-                  </div>
-                </div>
-
-                <div className="h-px bg-gradient-to-r from-gray-300 to-transparent"></div>
-
-                <div className="flex items-start gap-6">
-                  <div className="text-5xl font-serif font-bold text-[#e65100] leading-none">4</div>
-                  <div>
-                    <p className="font-bold text-gray-900">Áreas</p>
-                    <p className="text-gray-600 text-sm mt-1">De especialización técnica</p>
-                  </div>
-                </div>
-
-                <div className="h-px bg-gradient-to-r from-gray-300 to-transparent"></div>
-
-                <div className="flex items-start gap-6">
-                  <div className="text-5xl font-serif font-bold text-purple-600 leading-none">30+</div>
-                  <div>
-                    <p className="font-bold text-gray-900">Profesionales</p>
-                    <p className="text-gray-600 text-sm mt-1">Equipo dedicado a la excelencia</p>
-                  </div>
-                </div>
-
-                <div className="h-px bg-gradient-to-r from-gray-300 to-transparent"></div>
-
-                <div className="flex items-start gap-6">
-                  <div className="text-5xl font-serif font-bold text-blue-600 leading-none">100%</div>
-                  <div>
-                    <p className="font-bold text-gray-900">Sostenible</p>
-                    <p className="text-gray-600 text-sm mt-1">Compromiso con el ambiente</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Right - Image */}
+          <div className="relative h-full min-h-[600px]">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AGROINDUSTRIAL%20ANALISIS-ObbdnPOmz6huCECzNFRd8h6eOPR2nr.webp"
+              alt="Investigadores de AS Laboratorios en acción"
+              className="w-full h-full object-cover rounded-2xl shadow-2xl"
+            />
           </div>
         </div>
       </div>
