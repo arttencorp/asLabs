@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
-import { Plus, Minus, X, MessageSquare, ArrowLeft, ShoppingCart } from "lucide-react"
+import { Plus, Minus, X, MessageSquare, ArrowLeft, ShoppingCart, ChevronDown } from "lucide-react"
 
 interface Presentacion {
   id: string
@@ -276,6 +276,7 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
   const [studentDNI, setStudentDNI] = useState("")
   const [studentEmail, setStudentEmail] = useState("")
   const [showFichaTecnica, setShowFichaTecnica] = useState(false)
+  const [expandedCustom, setExpandedCustom] = useState<string | null>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -508,49 +509,75 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                 </div>
               </div>
 
-              {/* Opciones Personalizadas */}
+              {/* Opciones Personalizadas - ACCORDION */}
               <div className="border-t pt-8">
-                <h3 className="text-xl font-black text-gray-900 mb-6">Opciones Personalizadas</h3>
+                <h3 className="text-xl font-black text-gray-900 mb-4">Opciones Personalizadas</h3>
                 
-                {/* Concentración Personalizada */}
-                <div className="mb-8 p-6 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-black text-blue-900 mb-3">Concentración Personalizada</h4>
-                  <p className="text-sm text-blue-800 mb-4">Solicita una concentración específica. Estándar: 2 x 10^7 UFC/ml. Máximo en caldo: 30 litros</p>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-gray-800">2 x 10</span>
-                    <sup className="text-lg font-bold text-gray-800">^</sup>
-                    <input
-                      type="number"
-                      value={customConcentration}
-                      onChange={(e) => setCustomConcentration(e.target.value)}
-                      placeholder="7"
-                      className="w-20 px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min="1"
-                      max="10"
+                {/* Concentración Personalizada - Accordion Item 1 */}
+                <div className="mb-3 border border-blue-200 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setExpandedCustom(expandedCustom === "concentration" ? null : "concentration")}
+                    className="w-full flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 transition-all"
+                  >
+                    <span className="font-black text-blue-900">Concentración Personalizada</span>
+                    <ChevronDown 
+                      className={`w-5 h-5 text-blue-600 transition-transform ${expandedCustom === "concentration" ? "rotate-180" : ""}`}
                     />
-                    <span className="text-gray-600 text-sm">UFC/ml</span>
-                  </div>
-                  <p className="text-xs text-blue-700 mt-3">Se agregará a tu carrito como solicitud especial para confirmar precio</p>
+                  </button>
+                  
+                  {expandedCustom === "concentration" && (
+                    <div className="p-4 bg-white border-t border-blue-200 space-y-3">
+                      <p className="text-sm text-gray-700">Solicita una concentración específica. Estándar: 2 x 10^7 UFC/ml. Máximo en caldo: 30 litros</p>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-gray-800 text-sm">2 x 10</span>
+                        <sup className="font-bold text-gray-800">^</sup>
+                        <input
+                          type="number"
+                          value={customConcentration}
+                          onChange={(e) => setCustomConcentration(e.target.value)}
+                          placeholder="7"
+                          className="w-20 px-3 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          min="1"
+                          max="10"
+                        />
+                        <span className="text-gray-600 text-sm">UFC/ml</span>
+                      </div>
+                      <p className="text-xs text-blue-700">Se agregará a tu carrito como solicitud especial para confirmar precio</p>
+                    </div>
+                  )}
                 </div>
 
-                {/* Caldo Personalizado */}
-                <div className="p-6 bg-purple-50 border border-purple-200 rounded-lg">
-                  <h4 className="font-black text-purple-900 mb-3">Caldo Personalizado</h4>
-                  <p className="text-sm text-purple-800 mb-4">Solicita un volumen personalizado (máximo 30 litros con concentración 2 x 10^7)</p>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={customCalvinput}
-                      onChange={(e) => setCustomCaldoInput(e.target.value)}
-                      placeholder="10"
-                      className="flex-1 px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      min="0.1"
-                      max="30"
-                      step="0.1"
+                {/* Caldo Personalizado - Accordion Item 2 */}
+                <div className="border border-purple-200 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setExpandedCustom(expandedCustom === "caldo" ? null : "caldo")}
+                    className="w-full flex items-center justify-between p-4 bg-purple-50 hover:bg-purple-100 transition-all"
+                  >
+                    <span className="font-black text-purple-900">Caldo Personalizado</span>
+                    <ChevronDown 
+                      className={`w-5 h-5 text-purple-600 transition-transform ${expandedCustom === "caldo" ? "rotate-180" : ""}`}
                     />
-                    <span className="font-bold text-gray-800">litros</span>
-                  </div>
-                  <p className="text-xs text-purple-700 mt-3">Se agregará a tu carrito como solicitud especial para confirmar precio</p>
+                  </button>
+                  
+                  {expandedCustom === "caldo" && (
+                    <div className="p-4 bg-white border-t border-purple-200 space-y-3">
+                      <p className="text-sm text-gray-700">Solicita un volumen personalizado (máximo 30 litros con concentración 2 x 10^7)</p>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          value={customCalvinput}
+                          onChange={(e) => setCustomCaldoInput(e.target.value)}
+                          placeholder="10"
+                          className="flex-1 px-3 py-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                          min="0.1"
+                          max="30"
+                          step="0.1"
+                        />
+                        <span className="font-bold text-gray-800 text-sm">litros</span>
+                      </div>
+                      <p className="text-xs text-purple-700">Se agregará a tu carrito como solicitud especial para confirmar precio</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -700,27 +727,27 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
             <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto shadow-2xl">
                 {/* Header */}
-                <div className="sticky top-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 text-white p-10 flex items-center justify-between">
+                <div className="sticky top-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 text-white p-6 flex items-center justify-between">
                   <div>
-                    <h2 className="text-4xl font-black mb-1">Ficha Técnica</h2>
-                    <p className="text-emerald-100 text-lg">{cepa.nombre}</p>
+                    <h2 className="text-2xl font-black mb-1">Ficha Técnica</h2>
+                    <p className="text-emerald-100 text-sm">{cepa.nombre}</p>
                   </div>
                   <button
                     onClick={() => setShowFichaTecnica(false)}
                     className="text-white hover:text-emerald-100 transition-colors p-2"
                   >
-                    <X className="w-8 h-8" />
+                    <X className="w-6 h-6" />
                   </button>
                 </div>
 
-                <div className="p-12 space-y-10">
+                <div className="p-6 space-y-6">
                   {/* Encabezado Principal */}
-                  <div className="border-b-3 border-emerald-200 pb-8">
-                    <h3 className="text-6xl font-black text-gray-900 mb-3">{cepa.nombre}</h3>
-                    <p className="text-3xl text-gray-600 italic font-light mb-6">{cepa.cientifico}</p>
-                    <div className="flex flex-wrap gap-3">
+                  <div className="border-b-2 border-emerald-200 pb-4">
+                    <h3 className="text-2xl font-black text-gray-900 mb-2">{cepa.nombre}</h3>
+                    <p className="text-sm text-gray-600 italic font-light mb-4">{cepa.cientifico}</p>
+                    <div className="flex flex-wrap gap-2">
                       {cepa.beneficios.slice(0, 3).map((b, i) => (
-                        <span key={i} className="bg-emerald-100 text-emerald-800 px-5 py-3 rounded-full text-base font-bold">
+                        <span key={i} className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold">
                           {b}
                         </span>
                       ))}
@@ -729,61 +756,61 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
 
                   {/* Descripción */}
                   <div>
-                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Descripción General</h4>
-                    <p className="text-gray-700 leading-relaxed text-xl">{cepa.descripcion}</p>
+                    <h4 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-3 text-emerald-600 border-b-2 border-emerald-200 pb-2">Descripción General</h4>
+                    <p className="text-gray-700 leading-relaxed text-sm">{cepa.descripcion}</p>
                   </div>
 
                   {/* Grid de especificaciones */}
                   <div>
-                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Especificaciones Técnicas</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-8 border-3 border-blue-300 shadow-lg">
-                        <p className="text-sm font-black text-blue-600 mb-4 uppercase tracking-widest">Viabilidad</p>
-                        <p className="text-4xl font-black text-blue-900">{cepa.viabilidad}</p>
+                    <h4 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-3 text-emerald-600 border-b-2 border-emerald-200 pb-2">Especificaciones Técnicas</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border-2 border-blue-300">
+                        <p className="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">Viabilidad</p>
+                        <p className="text-lg font-black text-blue-900">{cepa.viabilidad}</p>
                       </div>
-                      <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-8 border-3 border-purple-300 shadow-lg">
-                        <p className="text-sm font-black text-purple-600 mb-4 uppercase tracking-widest">Concentración</p>
-                        <p className="text-4xl font-black text-purple-900">{cepa.concentracion}</p>
+                      <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border-2 border-purple-300">
+                        <p className="text-xs font-black text-purple-600 mb-2 uppercase tracking-wide">Concentración</p>
+                        <p className="text-lg font-black text-purple-900">{cepa.concentracion}</p>
                       </div>
-                      <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-8 border-3 border-amber-300 shadow-lg">
-                        <p className="text-sm font-black text-amber-600 mb-4 uppercase tracking-widest">Almacenamiento</p>
-                        <p className="text-4xl font-black text-amber-900">{cepa.almacenamiento}</p>
+                      <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-4 border-2 border-amber-300">
+                        <p className="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">Almacenamiento</p>
+                        <p className="text-lg font-black text-amber-900">{cepa.almacenamiento}</p>
                       </div>
-                      <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-8 border-3 border-teal-300 shadow-lg">
-                        <p className="text-sm font-black text-teal-600 mb-4 uppercase tracking-widest">Aplicación</p>
-                        <p className="text-4xl font-black text-teal-900">{cepa.aplicacion}</p>
+                      <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg p-4 border-2 border-teal-300">
+                        <p className="text-xs font-black text-teal-600 mb-2 uppercase tracking-wide">Aplicación</p>
+                        <p className="text-lg font-black text-teal-900">{cepa.aplicacion}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Compatibilidad */}
                   <div>
-                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Compatibilidad</h4>
-                    <div className="bg-gray-50 rounded-xl p-8 border-3 border-gray-300">
-                      <p className="text-gray-900 text-xl leading-relaxed font-medium">{cepa.compatibilidad}</p>
+                    <h4 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-3 text-emerald-600 border-b-2 border-emerald-200 pb-2">Compatibilidad</h4>
+                    <div className="bg-gray-50 rounded-lg p-4 border-2 border-gray-300">
+                      <p className="text-gray-900 text-sm leading-relaxed font-medium">{cepa.compatibilidad}</p>
                     </div>
                   </div>
 
                   {/* Beneficios Principales */}
                   <div>
-                    <h4 className="font-black text-gray-900 text-2xl uppercase tracking-widest mb-6 text-emerald-600 border-b-3 border-emerald-200 pb-3">Beneficios Principales</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <h4 className="font-black text-gray-900 text-sm uppercase tracking-wide mb-3 text-emerald-600 border-b-2 border-emerald-200 pb-2">Beneficios Principales</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {cepa.beneficios.map((beneficio, idx) => (
-                        <div key={idx} className="flex items-start gap-4 bg-emerald-50 p-6 rounded-lg border-l-4 border-emerald-600">
-                          <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex-shrink-0 text-lg">
+                        <div key={idx} className="flex items-start gap-3 bg-emerald-50 p-3 rounded-lg border-l-3 border-emerald-600">
+                          <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex-shrink-0 text-sm">
                             ✓
                           </div>
-                          <p className="text-gray-900 font-semibold text-lg">{beneficio}</p>
+                          <p className="text-gray-900 font-semibold text-sm">{beneficio}</p>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Botones de acción */}
-                  <div className="flex gap-4 pt-8 border-t-3 border-gray-200">
+                  <div className="flex gap-4 pt-4 border-t-2 border-gray-200">
                     <button
                       onClick={() => setShowFichaTecnica(false)}
-                      className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 py-5 rounded-lg font-black transition-all text-xl"
+                      className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 py-3 rounded-lg font-black transition-all text-sm"
                     >
                       Cerrar
                     </button>
@@ -792,7 +819,7 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                         setShowFichaTecnica(false)
                         setShowCart(true)
                       }}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-5 rounded-lg font-black transition-all text-xl"
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-3 rounded-lg font-black transition-all text-sm"
                     >
                       Hacer Pedido →
                     </button>
