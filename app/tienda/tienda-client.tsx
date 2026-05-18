@@ -26,6 +26,8 @@ import {
   Beaker,
   Search,
   Filter,
+  AlertCircle,
+  CheckCircle,
 } from "lucide-react"
 import Navbar from "@/components/navbar"
 
@@ -171,6 +173,12 @@ export default function TiendaClient() {
   const [selectedCategory, setSelectedCategory] = useState("todos")
   const [searchTerm, setSearchTerm] = useState("")
   const [loaded, setLoaded] = useState(false)
+  
+  // Student verification state
+  const [showStudentForm, setShowStudentForm] = useState(false)
+  const [studentData, setStudentData] = useState({ dni: "", email: "" })
+  const [isStudent, setIsStudent] = useState<boolean | null>(null)
+  const [discountApplied, setDiscountApplied] = useState(false)
 
   /* efecto de entrada */
   useEffect(() => setLoaded(true), [])
@@ -187,79 +195,133 @@ export default function TiendaClient() {
   /* helpers */
   const openProductDialog = (id: string) => setOpenDialog(id)
   const closeDialog = () => setOpenDialog(null)
+  
+  // Validate student - simple validation (in real app, would check against UNT database)
+  const validateStudent = () => {
+    if (!studentData.dni || !studentData.email) {
+      alert("Por favor completa todos los campos")
+      return
+    }
+    // Simulate student validation - emails ending in @gmail.com or @hotmail.com could be students
+    const isValidStudent = studentData.email.includes("@") && studentData.dni.length === 8
+    setIsStudent(isValidStudent)
+    if (isValidStudent) {
+      setDiscountApplied(true)
+    }
+  }
+  
   const sendWhatsApp = (prod: string, price: string) => {
-    const msg = encodeURIComponent(`Hola, estoy interesado en: ${prod} (${price}). ¿Podrían brindarme más información?`)
-    window.open(`https://walink.co/0441cf?text=${msg}`, "_blank")
+    let msg = `Hola, estoy interesado en: ${prod} (${price}).`
+    
+    // Add student info if verified
+    if (isStudent && discountApplied) {
+      msg += ` \n\nDatos de estudiante:\nDNI: ${studentData.dni}\nCorreo: ${studentData.email}\n\n✓ Descuento de 20% aplicado`
+    }
+    
+    msg += ` ¿Podrían brindarme más información?`
+    
+    const encoded = encodeURIComponent(msg)
+    window.open(`https://walink.co/0441cf?text=${encoded}`, "_blank")
   }
 
   /* ---------- Render Card ------------- */
-  const ProductCard = ({ product }: { product: (typeof allProducts)[0] }) => (
-    <Card
-      key={product.id}
-      className={`overflow-hidden border-t-4 border-t-[#2e7d32]/80 transition-all duration-500 hover:shadow-lg ${
-        loaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-      }`}
-    >
-      <CardHeader className="p-5 bg-gradient-to-b from-gray-50 to-white">
-        <CardTitle className="text-lg font-semibold text-gray-800">{product.name}</CardTitle>
-        <CardDescription className="text-gray-500">
-          {product.desc || `${product.categoryName} - Producto de laboratorio`}
-        </CardDescription>
-      </CardHeader>
-      <CardFooter className="p-5 pt-0 flex justify-between items-center">
-        <p className="text-xl font-bold text-[#2e7d32]">{product.price}</p>
-        {/* diálogo */}
-        <Dialog open={openDialog === product.id} onOpenChange={(o) => !o && closeDialog()}>
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              className="border-[#2e7d32] text-[#2e7d32] hover:bg-[#2e7d32] hover:text-white"
-              onClick={() => openProductDialog(product.id)}
-            >
-              Ver detalles
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-2xl">{product.name}</DialogTitle>
-              <DialogDescription>{product.categoryName}</DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4">
-              <p className="text-sm text-gray-600">
-                {product.desc ? (
-                  <>
-                    Descripción: <strong>{product.desc}</strong>
-                  </>
-                ) : (
-                  <>
-                    Descripción breve de <strong>{product.name}</strong>. Ideal para prácticas académicas.
-                  </>
-                )}
-              </p>
-              <div className="flex justify-between bg-gray-50 p-3 rounded-lg">
-                <span className="font-bold text-2xl text-[#2e7d32]">{product.price}</span>
-                <span className="text-sm text-gray-500">Precio unitario</span>
-              </div>
+  const ProductCard = ({ product }: { product: (typeof allProducts)[0] }) => {
+    // Calculate price with discount if student
+    const basePrice = parseFloat(product.price.replace("S/. ", ""))
+    const finalPrice = discountApplied ? (basePrice * 0.8).toFixed(2) : basePrice.toFixed(2)
+    const displayPrice = `S/. ${finalPrice}`
+    
+    return (
+      <Card
+        key={product.id}
+        className={`overflow-hidden border-t-4 border-t-[#2e7d32]/80 transition-all duration-500 hover:shadow-lg ${
+          loaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+        }`}
+      >
+        <CardHeader className="p-5 bg-gradient-to-b from-gray-50 to-white">
+          <div className="flex justify-between items-start gap-2">
+            <div>
+              <CardTitle className="text-lg font-semibold text-gray-800">{product.name}</CardTitle>
+              <CardDescription className="text-gray-500">
+                {product.desc || `${product.categoryName} - Producto de laboratorio`}
+              </CardDescription>
             </div>
-
-            <DialogFooter className="sm:justify-between">
-              <DialogClose asChild>
-                <Button variant="outline">Cerrar</Button>
-              </DialogClose>
+            {discountApplied && (
+              <span className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">-20%</span>
+            )}
+          </div>
+        </CardHeader>
+        <CardFooter className="p-5 pt-0 flex justify-between items-center">
+          <div>
+            <p className="text-xl font-bold text-[#2e7d32]">{displayPrice}</p>
+            {discountApplied && (
+              <p className="text-xs text-gray-500 line-through">{product.price}</p>
+            )}
+          </div>
+          {/* diálogo */}
+          <Dialog open={openDialog === product.id} onOpenChange={(o) => !o && closeDialog()}>
+            <DialogTrigger asChild>
               <Button
-                className="bg-[#25D366] hover:bg-[#128C7E]"
-                onClick={() => sendWhatsApp(product.name, product.price)}
+                variant="outline"
+                className="border-[#2e7d32] text-[#2e7d32] hover:bg-[#2e7d32] hover:text-white"
+                onClick={() => openProductDialog(product.id)}
               >
-                WhatsApp
+                Ver detalles
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </CardFooter>
-    </Card>
-  )
+            </DialogTrigger>
+
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-2xl">{product.name}</DialogTitle>
+                <DialogDescription>{product.categoryName}</DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  {product.desc ? (
+                    <>
+                      Descripción: <strong>{product.desc}</strong>
+                    </>
+                  ) : (
+                    <>
+                      Descripción breve de <strong>{product.name}</strong>. Ideal para prácticas académicas.
+                    </>
+                  )}
+                </p>
+                <div className="flex justify-between bg-gray-50 p-3 rounded-lg">
+                  <div>
+                    <p className="text-xs text-gray-500">Precio</p>
+                    <span className="font-bold text-2xl text-[#2e7d32]">{displayPrice}</span>
+                    {discountApplied && (
+                      <p className="text-xs text-gray-500 line-through">{product.price}</p>
+                    )}
+                  </div>
+                  {discountApplied && (
+                    <div className="text-right">
+                      <p className="text-xs text-red-600 font-bold">DESCUENTO</p>
+                      <p className="text-2xl font-bold text-red-600">-20%</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <DialogFooter className="sm:justify-between">
+                <DialogClose asChild>
+                  <Button variant="outline">Cerrar</Button>
+                </DialogClose>
+                <Button
+                  className="bg-[#25D366] hover:bg-[#128C7E]"
+                  onClick={() => sendWhatsApp(product.name, displayPrice)}
+                >
+                  WhatsApp
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </CardFooter>
+      </Card>
+    )
+  }
 
   /* ---------- JSX ------------- */
   return (
@@ -296,6 +358,86 @@ export default function TiendaClient() {
 
       {/* CONTENIDO PRINCIPAL */}
       <div className="container mx-auto px-4 py-16">
+        {/* Student Verification Banner */}
+        {showStudentForm && (
+          <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-300 rounded-lg">
+            <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
+              <AlertCircle className="h-6 w-6" />
+              Verificación de Estudiante - Obtén 20% de Descuento
+            </h3>
+            
+            <div className="grid md:grid-cols-3 gap-4 items-end">
+              <div>
+                <label className="block text-sm font-semibold text-blue-900 mb-2">DNI</label>
+                <Input
+                  type="text"
+                  placeholder="12345678"
+                  maxLength={8}
+                  value={studentData.dni}
+                  onChange={(e) => setStudentData({...studentData, dni: e.target.value.replace(/\D/g, '')})}
+                  className="border-blue-300 focus:border-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-blue-900 mb-2">Correo Institucional</label>
+                <Input
+                  type="email"
+                  placeholder="ejemplo@unt.edu.pe"
+                  value={studentData.email}
+                  onChange={(e) => setStudentData({...studentData, email: e.target.value})}
+                  className="border-blue-300 focus:border-blue-500"
+                />
+              </div>
+              
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={validateStudent}
+                disabled={isStudent !== null}
+              >
+                {isStudent === null ? "Verificar Estudiante" : isStudent ? "✓ Estudiante Verificado" : "✗ No Verificado"}
+              </Button>
+            </div>
+            
+            {isStudent === false && (
+              <div className="mt-4 p-3 bg-red-100 border border-red-400 rounded text-red-700">
+                No pudimos verificar tu estudiante. Contáctanos directamente por WhatsApp.
+              </div>
+            )}
+            
+            {discountApplied && (
+              <div className="mt-4 p-3 bg-green-100 border border-green-400 rounded text-green-700 flex items-center gap-2">
+                <CheckCircle className="h-5 w-5" />
+                ¡Descuento del 20% activado! {studentData.dni && `DNI: ${studentData.dni}`}
+              </div>
+            )}
+            
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => {
+                setShowStudentForm(false)
+                setIsStudent(null)
+                setDiscountApplied(false)
+              }}
+            >
+              Cerrar Verificación
+            </Button>
+          </div>
+        )}
+        
+        {!showStudentForm && !discountApplied && (
+          <div className="mb-8 p-4 bg-amber-50 border-2 border-amber-300 rounded-lg text-center">
+            <p className="text-amber-900 font-semibold mb-2">¿Eres estudiante universitario?</p>
+            <Button
+              className="bg-amber-500 hover:bg-amber-600 text-white"
+              onClick={() => setShowStudentForm(true)}
+            >
+              Verificar y obtener 20% de descuento
+            </Button>
+          </div>
+        )}
+        
         <div className="flex flex-col lg:flex-row gap-8">
           {/* BARRA LATERAL DE FILTROS */}
           <div className="lg:w-1/4">
