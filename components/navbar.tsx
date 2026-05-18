@@ -15,6 +15,7 @@ import {
   Microscope,
   Bug,
   BookOpenCheck,
+  LogIn
 } from "lucide-react"
 
 interface NavItem {
@@ -103,6 +104,12 @@ export default function Navbar() {
       description:
         "Explora nuestra variedad de plantines in vitro de alta calidad genética y fitosanitaria para diferentes cultivos.",
     },
+    cepas: {
+      title: "Cepas",
+      href: "/cepas",
+      description:
+        "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
+    },
     research: {
       title: "Investigación",
       href: "/research",
@@ -126,9 +133,6 @@ export default function Navbar() {
       {/* Top navigation bar - Hidden on mobile */}
       <div className="bg-[#2e7d32] text-white text-xs hidden lg:block">
         <div className="container mx-auto flex justify-end items-center gap-4 py-1 px-4">
-          {/* <Link href="#" className="hover:underline">
-            Carreras
-          </Link>*/}
           <Link href="/legal" className="hover:underline">
             Legal
           </Link>
@@ -140,32 +144,10 @@ export default function Navbar() {
           </Link>
           <Link href="/control-biologico" className="hover:underline font-medium">
             Control Biológico
-          </Link>
-          {/* 
-          <Link href="#" className="hover:underline">
-            Blog
-          </Link>*/}
+          </Link> 
           <Link href="/tienda" className="hover:underline font-medium">
             Tienda Online
-          </Link> {/* 
-          <div className="flex items-center gap-1">
-            <Link href="#" className="hover:underline">
-              Health Care Professionals
-            </Link>
-            <ExternalLink className="h-3 w-3" />
-          </div>
-          <div className="flex items-center gap-1">
-            <Link href="#" className="hover:underline">
-              Investors
-            </Link>
-            <ExternalLink className="h-3 w-3" />
-          </div>
-          <div className="flex items-center gap-1">
-            <Link href="#" className="hover:underline">
-              Clinical Trials
-            </Link>
-            <ExternalLink className="h-3 w-3" />
-          </div>*/}
+          </Link>
         </div>
       </div>
 
@@ -323,7 +305,15 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Right Side */}
-          <div className="hidden lg:flex items-center h-full">
+          <div className="hidden lg:flex items-center h-full gap-3">
+            <Link
+              href="/login"
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-serif text-gray-700"
+            >
+              <LogIn className="w-4 h-4" />
+              Ingresar
+            </Link>
+
             <div className="flex items-center gap-3 h-full">
               <a
                 href="https://wa.me/51961996645"
@@ -356,6 +346,13 @@ export default function Navbar() {
 
           {/* Mobile Right Side */}
           <div className="flex lg:hidden items-center gap-2 h-full">
+            <Link
+              href="/login"
+              className="flex items-center justify-center border border-gray-300  hover:bg-gray-50 p-2 rounded-full transition-colors duration-300 font-serif text-gray-700 min-w-[40px] min-h-[40px]"
+            >
+              <LogIn className="w-4 h-4" />
+            </Link>
+
             <a
               href="https://wa.me/51961996645"
               target="_blank"
