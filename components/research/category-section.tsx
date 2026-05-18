@@ -41,30 +41,38 @@ const colorClasses = {
   blue: {
     bg: "bg-blue-50",
     border: "border-blue-200",
-    text: "text-blue-800",
+    text: "text-gray-900",
+    label: "text-blue-700",
     accent: "text-blue-600",
     progress: "bg-blue-500",
+    hoverBorder: "hover:border-blue-400",
   },
   green: {
     bg: "bg-green-50",
     border: "border-green-200",
-    text: "text-green-800",
+    text: "text-gray-900",
+    label: "text-green-700",
     accent: "text-green-600",
     progress: "bg-green-500",
+    hoverBorder: "hover:border-green-400",
   },
   purple: {
     bg: "bg-purple-50",
     border: "border-purple-200",
-    text: "text-purple-800",
+    text: "text-gray-900",
+    label: "text-purple-700",
     accent: "text-purple-600",
     progress: "bg-purple-500",
+    hoverBorder: "hover:border-purple-400",
   },
   orange: {
     bg: "bg-orange-50",
     border: "border-orange-200",
-    text: "text-orange-800",
+    text: "text-gray-900",
+    label: "text-orange-700",
     accent: "text-orange-600",
     progress: "bg-orange-500",
+    hoverBorder: "hover:border-orange-400",
   },
 }
 
@@ -85,28 +93,30 @@ export default function CategorySection({
   const getProjectLink = (project: Project) => {
     if (project.id === "SGF-015") return "/research/secuenciamiento-fusarium"
     if (project.id === "BB-001") return "/research/banano-baby"
+    if (project.id === "CATFOM-001") return "/research/trichoderma-fusarium"
+    if (project.id === "DPBSB-002") return "/research/bioreactores-bacterianos"
     if (project.name.includes("Fusarium")) return "/research/fusarium-genoma"
     return "#"
   }
 
   return (
-    <div className={`rounded-lg p-6 ${colors.bg} ${colors.border} border`}>
+    <div className={`${colors.bg} rounded-lg p-6 ${colors.border} border`}>
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
           {Icon && <Icon className={`w-6 h-6 ${colors.accent}`} />}
           <h3 className={`text-2xl font-bold ${colors.text}`}>{title}</h3>
         </div>
-        {description && <p className={`${colors.text} opacity-80`}>{description}</p>}
+        {description && <p className={`${colors.label} opacity-80`}>{description}</p>}
       </div>
 
       <div className="space-y-6">
         {subsections.map((subsection, subsectionIndex) => (
           <div key={subsectionIndex}>
-            {subsection.title && <h4 className={`text-lg font-semibold ${colors.text} mb-4`}>{subsection.title}</h4>}
+            {subsection.title && <h4 className={`text-lg font-semibold ${colors.label} mb-4`}>{subsection.title}</h4>}
 
             <div className="grid gap-4">
               {subsection.projects.map((project, projectIndex) => (
-                <Card key={projectIndex} className="hover:shadow-md transition-shadow">
+                <Card key={projectIndex} className="hover:shadow-md transition-shadow bg-white">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -121,16 +131,16 @@ export default function CategorySection({
                             </Badge>
                           )}
                         </div>
-                        <CardTitle className="text-lg leading-tight">
+                        <CardTitle className={`text-lg leading-tight ${colors.text}`}>
                           {getProjectLink(project) !== "#" ? (
-                            <Link href={getProjectLink(project)} className={`hover:${colors.accent} transition-colors`}>
+                            <Link href={getProjectLink(project)} className={`${colors.accent} hover:underline transition-colors`}>
                               {project.name}
                             </Link>
                           ) : (
                             project.name
                           )}
                         </CardTitle>
-                        {project.subtitle && <CardDescription className="mt-1">{project.subtitle}</CardDescription>}
+                        {project.subtitle && <CardDescription className="mt-1 text-gray-600">{project.subtitle}</CardDescription>}
                       </div>
 
                       <div className="text-right ml-4">
@@ -169,7 +179,7 @@ export default function CategorySection({
                         {project.researcher && (
                           <div className="flex items-center space-x-2 md:col-span-2">
                             <User className="w-4 h-4" />
-                            
+                            <span className="text-gray-700">{project.researcher}</span>
                           </div>
                         )}
 

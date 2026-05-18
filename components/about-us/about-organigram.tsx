@@ -1,97 +1,177 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Linkedin, Mail } from "lucide-react"
+'use client'
 
-import BlackProfilePlaceholder from "@/components/about-us/black-profile-placeholder"
-import { teamMembers } from "@/data/team-members"
+import Image from 'next/image'
+import Link from 'next/link'
+import { Mail, Linkedin } from 'lucide-react'
+import { teamData } from '@/lib/team-data'
 
 export default function AboutOrganigram() {
+  // Get all members maintaining section order (which reflects hierarchy)
+  const allMembers = teamData.flatMap(section => section.members)
+
   return (
-    <section
-      id="equipo"
-      className="relative w-full overflow-hidden bg-gradient-to-r from-[#f5f6f7] via-[#f5f5f4] to-[#bcd5bc] px-4 py-20 sm:px-6 lg:px-8"
-    >
-      <div
-        className="pointer-events-none absolute inset-y-0 right-[-12%] w-[46%] bg-[radial-gradient(circle_at_center,rgba(76,145,93,0.4)_0%,rgba(76,145,93,0.18)_35%,rgba(76,145,93,0)_75%)]"
-        aria-hidden="true"
-      />
+    <section id="organigrama" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative">
+      {/* Decorative background - allow overflow */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
-      <div className="relative mx-auto max-w-7xl">
-        <span className="inline-flex items-center rounded-full border border-[#bad4bd] bg-[#dfeadf]/95 px-8 py-3 text-xs font-bold uppercase tracking-[0.28em] text-[#1e7b2f]">
-          Nuestro Equipo
-        </span>
-        <h2 className="mt-8 text-[clamp(2.2rem,5.3vw,4.4rem)] font-sans font-extrabold leading-[0.95] tracking-tight text-[#071a40]">
-          <span className="block">Equipo AS</span>
-          <span className="block">Laboratorios</span>
-        </h2>
-        <p className="mt-7 max-w-3xl text-[clamp(1rem,1.4vw,1.32rem)] font-sans leading-relaxed text-[#1f3658]">
-          Conoce a los profesionales que hacen posible nuestra misión de excelencia
-        </p>
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header */}
+        <div className="text-left mb-24 max-w-2xl">
+          <div className="inline-block mb-6">
+            <span className="text-xs font-semibold text-[#2e7d32] uppercase tracking-[0.2em] bg-[#e8f5e9] px-5 py-3 rounded-full border border-[#2e7d32]/20">
+              Nuestro Equipo
+            </span>
+          </div>
+          <h2 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 mb-8">Equipo AS Laboratorios</h2>
+          <p className="text-xl text-gray-700 font-medium">
+            Conoce a los profesionales que hacen posible nuestra misión de excelencia
+          </p>
+        </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-          {teamMembers.map((member) => (
-            <article
-              key={member.slug}
-              className="flex h-full flex-col overflow-hidden rounded-[1.05rem] border border-[#d8dde3] bg-[#f7f8fa] shadow-[0_6px_14px_-12px_rgba(24,39,59,0.35)] transition-[border-color,box-shadow] duration-200 hover:border-[#98aabd] hover:shadow-[0_10px_20px_-14px_rgba(24,39,59,0.45)]"
-              style={{ borderTopColor: member.accent, borderTopWidth: "3px" }}
-            >
-              <Link href={`/sobre-nosotros/equipo/${member.slug}`} className="block flex-1">
-                {member.imagePath ? (
-                  <div className="relative h-[15rem] w-full overflow-hidden bg-white">
-                    <Image
-                      src={member.imagePath}
-                      alt={member.name}
-                      fill
-                      sizes="(min-width: 768px) 20vw, (min-width: 640px) 33vw, 50vw"
-                      className="object-cover object-center"
-                    />
-                  </div>
-                ) : (
-                  <BlackProfilePlaceholder className="h-[15rem] w-full" />
-                )}
-
-                <div className="space-y-0.5 border-t border-[#e4e8ed] px-3.5 pb-2 pt-2">
-                  <p className="text-[0.74rem] font-semibold uppercase tracking-[0.14em] text-[#5c6e86]">{member.area}</p>
-                  <h3 className="max-w-[11rem] break-words text-[0.95rem] font-sans font-bold leading-[1.15] text-[#071a40]">
-                    {member.name}
-                  </h3>
-                  <p className="text-[0.86rem] font-sans leading-snug text-[#314c70]">{member.role}</p>
-                  <p className="break-words text-[0.86rem] font-sans leading-snug text-[#1b7d2d]">{member.email}</p>
-                </div>
-              </Link>
-
-              <div className="grid grid-cols-2 gap-1.5 border-t border-[#e3e8ed] px-2.5 pb-2.5 pt-2">
-                <a
-                  href={`mailto:${member.email}`}
-                  className="inline-flex items-center justify-center rounded-md bg-[#eceff3] py-0.5 text-[#66738b] transition-colors hover:bg-[#dfe5eb]"
-                  aria-label={`Enviar correo a ${member.name}`}
-                >
-                  <Mail className="h-4 w-4" />
-                </a>
-                {member.linkedin ? (
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-md bg-[#eceff3] py-0.5 text-[#66738b] transition-colors hover:bg-[#dfe5eb]"
-                    aria-label={`Ver LinkedIn de ${member.name}`}
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </a>
-                ) : (
-                  <Link
-                    href={`/sobre-nosotros/equipo/${member.slug}`}
-                    className="inline-flex items-center justify-center rounded-md bg-[#eceff3] py-0.5 text-[#66738b] transition-colors hover:bg-[#dfe5eb]"
-                    aria-label={`Ver biografía de ${member.name}`}
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </Link>
-                )}
-              </div>
-            </article>
+        {/* Team Organigram - No Titles, 5 per line */}
+        <div className="grid grid-cols-5 gap-4">
+          {allMembers.map((member) => (
+            <TeamCard key={member.id} member={member} />
           ))}
         </div>
       </div>
     </section>
+  )
+}
+
+interface TeamCardProps {
+  member: (typeof teamData)[0]['members'][0]
+}
+
+function getAreaColor(area: string): string {
+  const colors: Record<string, string> = {
+    'Dirección': '#2e7d32',
+    'Administración': '#e65100',
+    'Gerencia': '#01283c',
+    'Técnica': '#7b1fa2',
+    'Contabilidad': '#f9a825',
+    'Recursos Humanos': '#d32f2f',
+    'Control Biológico': '#1976d2',
+    'Microbiología': '#388e3c',
+    'Laboratorio': '#00897b',
+    'Prácticas': '#5e35b1',
+    'Innovación': '#f57c00',
+    'Marketing': '#c2185b',
+  }
+  return colors[area] || '#666666'
+}
+
+function TeamCard({ member }: TeamCardProps) {
+  const areaColor = getAreaColor(member.area)
+  
+  // Check if member has no image (text-only card for support team)
+  if (!member.image) {
+    return (
+      <div className="group cursor-pointer">
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg w-full h-full">
+          {/* Area Color Bar */}
+          <div className="h-1" style={{ backgroundColor: areaColor }}></div>
+          
+          {/* Text-only Container */}
+          <div className="p-4 bg-white flex flex-col justify-center flex-1">
+            <div className="space-y-2 text-center">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{member.area}</p>
+              <div>
+                <p className="text-sm font-semibold text-gray-900 leading-tight">{member.name}</p>
+                <p className="text-sm font-semibold text-gray-900 leading-tight">{member.lastName}</p>
+              </div>
+              <p className="text-xs text-gray-600">{member.role}</p>
+              <a 
+                href={`mailto:${member.email}`}
+                className="text-xs text-[#2e7d32] hover:text-[#1b5e20] break-all inline-block"
+              >
+                {member.email}
+              </a>
+            </div>
+
+            {/* Contact Icons */}
+            <div className="flex gap-1.5 pt-3 border-t border-gray-100 mt-3">
+              <a
+                href={`mailto:${member.email}`}
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+                title="Email"
+              >
+                <Mail size={12} className="text-gray-600" />
+              </a>
+              <a
+                href={member.linkedIn}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-[#0A66C2] hover:text-white hover:[&>*]:text-white rounded transition-colors"
+                title="LinkedIn"
+              >
+                <Linkedin size={12} className="text-gray-600" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <Link href={`/about-us/${member.id}`}>
+      <div className="group cursor-pointer">
+        <div className="relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 hover:shadow-lg transition-all duration-300 flex flex-col shadow-sm hover:shadow-lg w-full">
+          {/* Area Color Bar */}
+          <div className="h-1" style={{ backgroundColor: areaColor }}></div>
+          {/* Image Container - Vertical Format */}
+          <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden">
+            <Image
+              src={member.image}
+              alt={`${member.name} ${member.lastName}`}
+              fill
+              className="object-cover group-hover:opacity-85 transition-opacity duration-300"
+            />
+          </div>
+
+          {/* Info Container */}
+          <div className="p-2.5 bg-white flex flex-col justify-between flex-1">
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{member.area}</p>
+              <div>
+                <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-1">{member.name}</p>
+                <p className="text-xs font-semibold text-gray-900 leading-tight line-clamp-1">{member.lastName}</p>
+              </div>
+              <p className="text-xs text-gray-600 line-clamp-2">{member.role}</p>
+              <a 
+                href={`mailto:${member.email}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-xs text-[#2e7d32] hover:text-[#1b5e20] break-all"
+              >
+                {member.email}
+              </a>
+            </div>
+
+            {/* Contact Icons */}
+            <div className="flex gap-1.5 pt-2 border-t border-gray-100 mt-2">
+              <a
+                href={`mailto:${member.email}`}
+                onClick={(e) => e.stopPropagation()}
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+                title="Email"
+              >
+                <Mail size={12} className="text-gray-600" />
+              </a>
+              <a
+                href={member.linkedIn}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex-1 inline-flex items-center justify-center p-1 bg-gray-100 hover:bg-[#0A66C2] hover:text-white hover:[&>*]:text-white rounded transition-colors"
+                title="LinkedIn"
+              >
+                <Linkedin size={12} className="text-gray-600" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
   )
 }

@@ -1,5 +1,8 @@
 import type { Metadata } from "next"
 
+const baseUrl = "https://aslaboratorios.com"
+
+
 type MetadataProps = {
   title?: string
   description?: string
@@ -63,7 +66,7 @@ export function constructMetadata({
     title: metaTitle,
     description,
     keywords: keywords.join(", "),
-    authors: [{ name: "AS Laboratorios", url: "https://aslaboratorios.com" }],
+    authors: [{ name: "AS Laboratorios", url: baseUrl }],
     creator: "AS Laboratorios",
     publisher: "AS Laboratorios",
     formatDetection: {

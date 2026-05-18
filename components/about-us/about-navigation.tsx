@@ -1,14 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { BookOpen, ChartNoAxesColumn, Star, Users } from 'lucide-react'
-
-const sections = [
-  { id: 'mision', label: 'Nuestra Historia', icon: BookOpen, iconColor: 'text-[#4e76d5]' },
-  { id: 'equipo', label: 'Equipo', icon: Users, iconColor: 'text-[#6f3caf]' },
-  { id: 'valores', label: 'Valores', icon: Star, iconColor: 'text-[#d6a51f]' },
-  { id: 'impacto', label: 'Impacto', icon: ChartNoAxesColumn, iconColor: 'text-[#4f79df]' },
-]
 
 export default function AboutNavigation() {
   const [activeSection, setActiveSection] = useState('mision')
@@ -16,55 +8,59 @@ export default function AboutNavigation() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      const y = element.getBoundingClientRect().top + window.scrollY - 96
-      window.scrollTo({ top: y, behavior: 'smooth' })
+      element.scrollIntoView({ behavior: 'smooth' })
     }
     setActiveSection(id)
   }
 
   useEffect(() => {
     const handleScroll = () => {
-      const checkpoint = window.scrollY + window.innerHeight * 0.35
-      let currentSection = sections[0].id
-
-      for (const section of sections) {
-        const element = document.getElementById(section.id)
+      const sections = ['mision', 'valores', 'organigrama', 'impacto']
+      for (const id of sections) {
+        const element = document.getElementById(id)
         if (element) {
-          const top = element.offsetTop
-          if (checkpoint >= top) {
-            currentSection = section.id
+          const rect = element.getBoundingClientRect()
+          if (rect.top < window.innerHeight / 2) {
+            setActiveSection(id)
           }
         }
       }
-
-      setActiveSection(currentSection)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-
+    window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const sections = [
+    { id: 'mision', label: 'Nuestra Historia', icon: '📖' },
+    { id: 'valores', label: 'Valores', icon: '⭐' },
+    { id: 'organigrama', label: 'Organigrama', icon: '👥' },
+    { id: 'impacto', label: 'Impacto', icon: '📈' },
+  ]
+
   return (
-    <div className="fixed right-0 top-1/2 z-40 hidden -translate-y-1/2 lg:flex">
-      <div className="overflow-hidden rounded-l-2xl border border-r-0 border-[#d5dedd] bg-white/95 shadow-[0_18px_38px_-18px_rgba(17,34,51,0.45)] backdrop-blur-sm">
-        <div className="flex flex-col">
+    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40 hidden lg:flex">
+      <div className="bg-white rounded-l-2xl shadow-2xl overflow-hidden">
+        <div className="flex flex-col gap-0">
           {sections.map((section, index) => (
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              aria-label={section.label}
-              className={`relative flex h-16 w-16 items-center justify-center transition-colors ${
-                index < sections.length - 1 ? 'border-b border-[#e0e6ea]' : ''
-              } ${
+              className={`flex items-center justify-center w-16 h-16 transition-all duration-300 group relative ${
                 activeSection === section.id
-                  ? 'bg-[#1f7a31]'
-                  : 'bg-white text-[#3a4b5f] hover:bg-[#f4f7f6]'
-              }`}
+                  ? 'bg-gradient-to-r from-[#2e7d32] to-[#1b5e20]'
+                  : 'bg-white hover:bg-gray-50'
+              } ${index !== sections.length - 1 ? 'border-b border-gray-200' : ''}`}
               title={section.label}
             >
-              <section.icon className={`h-6 w-6 ${activeSection === section.id ? 'text-white' : section.iconColor}`} />
+              <div className={`text-2xl transition-all ${activeSection === section.id ? 'scale-125' : 'scale-100'}`}>
+                {section.icon}
+              </div>
+
+              {/* Tooltip */}
+              <div className="absolute right-full mr-4 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                {section.label}
+              </div>
             </button>
           ))}
         </div>
