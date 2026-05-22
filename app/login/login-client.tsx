@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Eye, EyeOff, ArrowLeft, MapPin, Zap, TrendingUp, MessageSquare, FileText, Bell, BarChart3, Headphones, Clock } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft, MapPin, Zap, TrendingUp, MessageSquare, FileText, Bell, BarChart3, Headphones, Clock, Loader2 } from "lucide-react"
 
 export default function LoginClient() {
   const router = useRouter()
@@ -24,8 +24,24 @@ export default function LoginClient() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("El Panel de Control está en desarrollo. Pronto estará disponible.")
-    return
+    setError("")
+    setLoading(true)
+    
+    // Demo credentials check
+    if (username === "admin" && password === "admin123") {
+      // Store session in localStorage for demo
+      localStorage.setItem("as_lab_session", JSON.stringify({
+        user: "admin",
+        name: "Administrador Demo",
+        role: "admin",
+        loginTime: new Date().toISOString()
+      }))
+      router.push("/cliente")
+      return
+    }
+    
+    setLoading(false)
+    setError("Credenciales incorrectas. Usa: admin / admin123")
   }
 
   return (
@@ -87,20 +103,20 @@ export default function LoginClient() {
           </div>
 
           {/* Development Notice - Compact */}
-          <div className="mb-4 p-3 bg-amber-50 border-l-4 border-amber-500 rounded">
-            <p className="text-amber-700 text-xs font-bold">⚠️ Panel en Construcción</p>
-            <p className="text-amber-700 text-xs mt-0.5">Disponible muy pronto con funcionalidades innovadoras</p>
+          <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded">
+            <p className="text-green-700 text-xs font-bold">Demo disponible</p>
+            <p className="text-green-700 text-xs mt-0.5">Usuario: <strong>admin</strong> | Contrasena: <strong>admin123</strong></p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded">
-              <p className="text-blue-700 text-xs font-medium">{error}</p>
+            <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded">
+              <p className="text-red-700 text-xs font-medium">{error}</p>
             </div>
           )}
 
-          {/* Form - Disabled */}
-          <form onSubmit={handleSubmit} className="space-y-4 opacity-50 pointer-events-none mb-6">
+          {/* Form - Active */}
+          <form onSubmit={handleSubmit} className="space-y-4 mb-6">
             {/* Username */}
             <div>
               <label htmlFor="username" className="block text-xs font-semibold text-gray-800 mb-1">
@@ -113,7 +129,6 @@ export default function LoginClient() {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="tu_usuario"
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
-                disabled={true}
                 autoComplete="username"
               />
             </div>
@@ -121,7 +136,7 @@ export default function LoginClient() {
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-xs font-semibold text-gray-800 mb-1">
-                Contraseña
+                Contrasena
               </label>
               <div className="relative">
                 <input
@@ -129,16 +144,14 @@ export default function LoginClient() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="•••••••••"
+                  placeholder="*********"
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
-                  disabled={true}
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700 transition-colors"
-                  disabled={true}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -148,10 +161,17 @@ export default function LoginClient() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={true}
-              className="w-full bg-gray-400 text-white text-sm font-semibold py-2.5 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2.5 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Próximamente Disponible
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Ingresando...
+                </>
+              ) : (
+                "Ingresar al Panel"
+              )}
             </button>
           </form>
 
