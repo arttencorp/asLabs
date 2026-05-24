@@ -9,6 +9,7 @@ import AboutNavigation from "@/components/about-us/about-navigation"
 import AboutMission from "@/components/about-us/about-mission"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
+import AboutISO from "@/components/about-us/about-iso"
 import AboutImpact from "@/components/about-us/about-impact"
 import AboutCTA from "@/components/about-us/about-cta"
 import { useState } from "react"
@@ -32,6 +33,7 @@ function SobreNosotrosContent() {
       <AboutNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutMission />
       <AboutOrganigram />
+      <AboutISO />
       <AboutValues />
       <AboutImpact />
       <AboutCTA />
