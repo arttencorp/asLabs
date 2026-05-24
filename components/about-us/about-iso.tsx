@@ -1,186 +1,121 @@
 'use client'
 
-import { CheckCircle2, Award, BarChart3, Microscope, Shield, Zap, Leaf, Users, TrendingUp, Lock, Infinity } from 'lucide-react'
+import { CheckCircle2, Award, BarChart3, Microscope, Shield, Lock, Leaf, Users, TrendingUp } from 'lucide-react'
 
 export default function AboutISO() {
-  const certifications = [
+  const standards = [
     {
       code: "ISO 17025",
       title: "Competencia de Laboratorios",
-      description: "Cumplimos con el estándar internacional para la competencia técnica de laboratorios de ensayo y calibración",
-      icon: Microscope,
-      color: "from-blue-600 via-blue-500 to-cyan-600",
-      badge: "Acreditación Técnica",
-      features: ["Métodos validados", "Equipos calibrados", "Trazabilidad de resultados", "Incertidumbre de medición"]
+      description: "Cumplimos con los requisitos internacionales para laboratorios de ensayo y calibración",
+      logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-YCba0MyktuTUp6gwsWXXaRnnNyODEt.png",
+      features: ["Métodos validados", "Equipos calibrados", "Trazabilidad total", "Incertidumbre documentada"]
     },
     {
       code: "ISO 9001",
       title: "Gestión de Calidad",
-      description: "Cumplimos con el sistema de gestión de calidad que asegura excelencia operativa y satisfacción del cliente",
-      icon: CheckCircle2,
-      color: "from-green-600 via-emerald-500 to-teal-600",
-      badge: "Sistema Integral",
-      features: ["Procesos documentados", "Control de calidad", "Auditorías continuas", "Mejora permanente"]
+      description: "Cumplimos con el sistema integral para garantizar excelencia operativa y satisfacción",
+      logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mma4x2E80gLnLGbvIOK7f35xiE08tJ.png",
+      features: ["Procesos documentados", "Control continuo", "Auditorías sistemáticas", "Mejora permanente"]
     },
     {
       code: "B Corp",
       title: "Certificado B Corporativo",
-      description: "Cumplimos con los estándares de desempeño social y ambiental para empresas comprometidas con el impacto positivo",
-      icon: Leaf,
-      color: "from-amber-600 via-orange-500 to-red-600",
-      badge: "Impacto Social",
-      features: ["Sostenibilidad ambiental", "Responsabilidad social", "Ética empresarial", "Transparencia corporativa"]
+      description: "Cumplimos con estándares de desempeño social y ambiental para impacto positivo",
+      logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ghcauR6JAQ8vD7Kq0sNVviX8xKRV42.png",
+      features: ["Sostenibilidad comprobada", "Responsabilidad social", "Ética empresarial", "Transparencia operativa"]
     },
   ]
 
-  const complianceElements = [
-    {
-      icon: BarChart3,
-      title: "Trazabilidad Total",
-      description: "Cada muestra tiene código único y es rastreada desde toma hasta reporte final",
-      color: "from-purple-50 to-purple-100",
-      borderColor: "border-purple-300",
-      textColor: "text-purple-700"
-    },
-    {
-      icon: Users,
-      title: "Responsabilidad",
-      description: "Personal técnico capacitado identificado en cada fase con supervisión documentada",
-      color: "from-blue-50 to-blue-100",
-      borderColor: "border-blue-300",
-      textColor: "text-blue-700"
-    },
-    {
-      icon: Microscope,
-      title: "Métodos Validados",
-      description: "Protocolos analíticos ISO con validación estadística y estándares reconocidos",
-      color: "from-green-50 to-green-100",
-      borderColor: "border-green-300",
-      textColor: "text-green-700"
-    },
-    {
-      icon: Infinity,
-      title: "Incertidumbre",
-      description: "Todos los resultados incluyen rangos de incertidumbre según normas internacionales",
-      color: "from-amber-50 to-amber-100",
-      borderColor: "border-amber-300",
-      textColor: "text-amber-700"
-    },
-    {
-      icon: Lock,
-      title: "Confidencialidad",
-      description: "Protección de datos de cliente con acceso restringido a información sensible",
-      color: "from-red-50 to-red-100",
-      borderColor: "border-red-300",
-      textColor: "text-red-700"
-    },
-    {
-      icon: TrendingUp,
-      title: "Mejora Continua",
-      description: "Auditorías periódicas y retroalimentación cliente para optimizar procesos constantemente",
-      color: "from-indigo-50 to-indigo-100",
-      borderColor: "border-indigo-300",
-      textColor: "text-indigo-700"
-    },
+  const principles = [
+    { icon: BarChart3, title: "Trazabilidad", description: "Código único para cada muestra desde recepción hasta reporte final" },
+    { icon: Users, title: "Responsabilidad", description: "Personal capacitado identificado en cada fase del análisis" },
+    { icon: Microscope, title: "Métodos Validados", description: "Protocolos ISO reconocidos con validación estadística rigurosa" },
+    { icon: Shield, title: "Incertidumbre", description: "Todos los resultados con rangos de incertidumbre documentados" },
+    { icon: Lock, title: "Confidencialidad", description: "Protección de datos cliente con acceso restringido garantizado" },
+    { icon: TrendingUp, title: "Mejora Continua", description: "Auditorías periódicas para optimización constante de procesos" },
   ]
 
   return (
-    <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-gray-50 to-white">
+    <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 mb-4 px-5 py-3 bg-gradient-to-r from-blue-100 to-emerald-100 rounded-full border-2 border-blue-200 shadow-sm">
-            <Award className="w-5 h-5 text-blue-600" />
-            <span className="text-sm font-black text-blue-700 uppercase tracking-widest">Estándares Internacionales</span>
-          </div>
-          <h2 className="text-5xl md:text-6xl font-serif font-black text-gray-900 mb-6 text-balance">
-            Cumplimiento de Normas Internacionales
+        <div className="text-center mb-16">
+          <span className="inline-block text-xs font-black text-gray-500 uppercase tracking-widest mb-3 bg-gray-100 px-4 py-2 rounded-full">
+            Cumplimiento de Estándares Internacionales
+          </span>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 text-balance">
+            Rigor Científico y Responsabilidad
           </h2>
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed font-medium">
-            AS Laboratorios cumple con los estándares internacionales más rigurosos, garantizando confiabilidad, trazabilidad científica y compromiso con el impacto social en cada análisis que realizamos
+          <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+            AS Laboratorios cumple integralmente con las normas ISO 17025, ISO 9001 y B Corp Certificate, garantizando precisión, confiabilidad y compromiso social en cada análisis
           </p>
         </div>
 
-        {/* Certifications Grid - 3 Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
-          {certifications.map((cert, idx) => {
-            const IconComponent = cert.icon
-            return (
-              <div
-                key={idx}
-                className="group relative bg-white border-2 border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
-              >
-                {/* Gradient Background On Hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${cert.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-all duration-500`}></div>
-
-                {/* Badge */}
-                <div className="inline-block mb-6">
-                  <span className={`bg-gradient-to-r ${cert.color} text-white px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider`}>
-                    {cert.badge}
-                  </span>
-                </div>
-
-                {/* Icon */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${cert.color} flex items-center justify-center mb-6 shadow-lg`}>
-                  <IconComponent className="w-8 h-8 text-white" />
-                </div>
-
-                {/* Code */}
-                <p className={`text-xs font-black uppercase tracking-widest mb-3 bg-gradient-to-r ${cert.color} bg-clip-text text-transparent`}>
-                  {cert.code}
-                </p>
-
-                {/* Title */}
-                <h3 className="text-2xl font-black text-gray-900 mb-3">{cert.title}</h3>
-
-                {/* Description */}
-                <p className="text-gray-700 mb-6 leading-relaxed font-medium text-sm">
-                  {cert.description}
-                </p>
-
-                {/* Features */}
-                <div className="space-y-3 pt-6 border-t-2 border-gray-200">
-                  {cert.features.map((feature, fidx) => (
-                    <div key={fidx} className="flex items-start gap-3">
-                      <div className={`flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br ${cert.color} flex items-center justify-center mt-0.5`}>
-                        <CheckCircle2 className="w-4 h-4 text-white" />
-                      </div>
-                      <span className="text-gray-700 font-semibold text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
+        {/* Standards Grid - 3 Cards with Logos */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {standards.map((std, idx) => (
+            <div
+              key={idx}
+              className="bg-gray-50 border-2 border-gray-200 rounded-xl p-8 hover:border-gray-300 hover:shadow-lg transition-all duration-300 group"
+            >
+              {/* Logo */}
+              <div className="mb-6 h-24 flex items-center justify-center">
+                <img 
+                  src={std.logo} 
+                  alt={std.code}
+                  className="h-full object-contain max-w-full"
+                />
               </div>
-            )
-          })}
+
+              {/* Title & Description */}
+              <h3 className="text-lg font-black text-gray-900 mb-2">{std.title}</h3>
+              <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                {std.description}
+              </p>
+
+              {/* Features */}
+              <div className="space-y-3 pt-6 border-t border-gray-300">
+                {std.features.map((feature, fidx) => (
+                  <div key={fidx} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gray-900 flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <CheckCircle2 className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-gray-700 font-medium">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Divider */}
-        <div className="h-1 bg-gradient-to-r from-transparent via-blue-300 to-transparent my-20 rounded-full"></div>
+        <div className="h-px bg-gray-300 my-16"></div>
 
-        {/* Compliance Elements */}
-        <div className="mb-20">
-          <div className="text-center mb-14">
-            <h3 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">Principios de Cumplimiento</h3>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto font-medium">
-              Elementos fundamentales que garantizan la integridad de cada análisis
+        {/* Principles Section */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-black text-gray-900 mb-3">Pilares del Cumplimiento</h3>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Seis elementos fundamentales que garantizan integridad en cada análisis
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {complianceElements.map((element, idx) => {
-              const IconComponent = element.icon
+            {principles.map((principle, idx) => {
+              const IconComponent = principle.icon
               return (
                 <div
                   key={idx}
-                  className={`bg-gradient-to-br ${element.color} border-2 ${element.borderColor} rounded-2xl p-7 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group`}
+                  className="bg-white border-2 border-gray-200 rounded-lg p-6 hover:border-gray-900 hover:shadow-md transition-all duration-300"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 bg-white rounded-xl flex-shrink-0 shadow-md group-hover:shadow-lg transition-all`}>
-                      <IconComponent className={`w-6 h-6 ${element.textColor}`} />
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center flex-shrink-0">
+                      <IconComponent className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h4 className={`font-black text-lg mb-2 ${element.textColor}`}>{element.title}</h4>
-                      <p className={`text-sm leading-relaxed font-medium opacity-80`}>{element.description}</p>
+                      <h4 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wide">{principle.title}</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed">{principle.description}</p>
                     </div>
                   </div>
                 </div>
@@ -189,76 +124,50 @@ export default function AboutISO() {
           </div>
         </div>
 
-        {/* Process Flow - Enhanced */}
-        <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border-3 border-blue-200 rounded-3xl p-10 shadow-lg">
-          <h3 className="text-3xl font-black text-gray-900 mb-12 text-center">
-            Flujo de Control en Cada Análisis
+        {/* Process Flow */}
+        <div className="bg-gray-50 border-2 border-gray-300 rounded-xl p-10 mb-12">
+          <h3 className="text-2xl font-black text-gray-900 mb-10 text-center">
+            Flujo de Control de Calidad
           </h3>
 
-          <div className="relative">
-            {/* Desktop Flow */}
-            <div className="hidden md:grid md:grid-cols-5 gap-6">
-              {[
-                { step: "1", name: "Recepción", desc: "Código único", icon: "📥" },
-                { step: "2", name: "Preparación", desc: "Responsable documentado", icon: "⚙️" },
-                { step: "3", name: "Análisis", desc: "Método validado", icon: "🔬" },
-                { step: "4", name: "Control QA", desc: "Verificación", icon: "✓" },
-                { step: "5", name: "Reporte", desc: "Informe autorizado", icon: "📋" },
-              ].map((item, idx) => (
-                <div key={idx} className="relative">
-                  {/* Step Circle */}
-                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-full w-14 h-14 flex items-center justify-center font-black text-lg mx-auto mb-4 shadow-lg">
-                    {item.step}
+          <div className="grid md:grid-cols-5 gap-4 md:gap-2">
+            {[
+              { num: "1", name: "Recepción", desc: "Código único" },
+              { num: "2", name: "Preparación", desc: "Responsable" },
+              { num: "3", name: "Análisis", desc: "Método validado" },
+              { num: "4", name: "Control QA", desc: "Verificación" },
+              { num: "5", name: "Reporte", desc: "Autorizado" },
+            ].map((step, idx) => (
+              <div key={idx} className="relative">
+                <div className="flex flex-col items-center">
+                  {/* Circle */}
+                  <div className="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center font-black text-sm mb-3 shadow-md">
+                    {step.num}
                   </div>
 
-                  {/* Icon */}
-                  <div className="text-center text-3xl mb-3">{item.icon}</div>
-
-                  {/* Content */}
-                  <div className="bg-white rounded-xl p-5 text-center border-2 border-blue-200 shadow-md">
-                    <p className="font-black text-gray-900 mb-2">{item.name}</p>
-                    <p className="text-xs text-gray-600 leading-tight font-semibold">{item.desc}</p>
-                  </div>
-
-                  {/* Arrow */}
-                  {idx < 4 && (
-                    <div className="absolute top-7 -right-4 w-8 h-1 bg-gradient-to-r from-blue-400 to-transparent"></div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile Flow */}
-            <div className="md:hidden space-y-4">
-              {[
-                { step: "1", name: "Recepción", desc: "Código único asignado" },
-                { step: "2", name: "Preparación", desc: "Responsable documentado" },
-                { step: "3", name: "Análisis", desc: "Método validado" },
-                { step: "4", name: "Control QA", desc: "Verificación de calidad" },
-                { step: "5", name: "Reporte", desc: "Informe autorizado" },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-4">
-                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-full w-12 h-12 flex items-center justify-center font-black flex-shrink-0 shadow-md">
-                    {item.step}
-                  </div>
-                  <div className="bg-white rounded-lg p-4 flex-1 border-2 border-blue-200">
-                    <p className="font-bold text-gray-900 text-sm">{item.name}</p>
-                    <p className="text-xs text-gray-600">{item.desc}</p>
+                  {/* Box */}
+                  <div className="bg-white border-2 border-gray-300 rounded-lg px-4 py-3 text-center w-full">
+                    <p className="font-bold text-gray-900 text-xs uppercase tracking-wide">{step.name}</p>
+                    <p className="text-gray-600 text-xs mt-1">{step.desc}</p>
                   </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Arrow */}
+                {idx < 4 && (
+                  <div className="hidden md:flex absolute top-6 -right-2 w-4 h-0.5 bg-gray-400 z-10"></div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Final Commitment */}
-        <div className="mt-20 text-center">
-          <div className="inline-block bg-gradient-to-r from-blue-600 via-emerald-600 to-teal-600 text-white px-10 py-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all">
-            <p className="font-black text-lg mb-3">Nuestro Compromiso Irrevocable</p>
-            <p className="text-base leading-relaxed font-semibold max-w-2xl">
-              Cada resultado que entregamos cumple íntegramente con ISO 17025, ISO 9001 y B Corp, garantizando precisión científica, responsabilidad social y transparencia total en nuestras operaciones
-            </p>
-          </div>
+        {/* Final Statement */}
+        <div className="text-center bg-gray-900 text-white rounded-xl p-10">
+          <Award className="w-8 h-8 mx-auto mb-4" />
+          <p className="font-black text-lg mb-3">Nuestro Compromiso</p>
+          <p className="text-base leading-relaxed max-w-2xl mx-auto text-gray-100">
+            Cada resultado entregado cumple íntegramente con ISO 17025, ISO 9001 y B Corp Certificate, asegurando máxima precisión científica, responsabilidad operativa y transparencia total
+          </p>
         </div>
       </div>
     </section>
