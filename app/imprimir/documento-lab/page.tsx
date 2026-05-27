@@ -216,6 +216,11 @@ function TablaResultados({
     return muestra?.codigo || '-'
   }
 
+  const formatMetodoLabel = (value?: string | null) => {
+    if (!value) return '-'
+    return value.replace(/_/g, ' ').replace(/\s+/g, ' ').trim()
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-xs border-collapse">
@@ -240,7 +245,9 @@ function TablaResultados({
                 {resultado.resultado}
               </td>
               <td className="border border-gray-300 px-2 py-1.5 text-center">{resultado.unidad}</td>
-              <td className="border border-gray-300 px-2 py-1.5">{resultado.metodo}</td>
+              <td className="border border-gray-300 px-2 py-1.5">
+                {formatMetodoLabel(resultado.metodo)}
+              </td>
               <td className="border border-gray-300 px-2 py-1.5 text-center text-gray-600">
                 {resultado.rangoReferencial || '-'}
               </td>

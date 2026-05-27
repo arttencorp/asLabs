@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { toast } from 'sonner'
 import { 
   useDocumentoLab,
   InformacionDocumento,
@@ -154,9 +155,18 @@ export default function DocumentoLabPage() {
   }
 
   const handleDescargar = async () => {
+    if (!documento.id || documento.id.startsWith('temp_')) {
+      toast.error('El documento aun no esta listo para descargar')
+      return
+    }
+
     setDescargando(true)
     try {
       await generarPdfDocumentoLab(documento)
+      toast.success('PDF generado correctamente')
+    } catch (error) {
+      console.error('Error al generar PDF de documento de laboratorio:', error)
+      toast.error('No se pudo generar el PDF. Intenta nuevamente.')
     } finally {
       setDescargando(false)
     }
