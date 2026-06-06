@@ -7,6 +7,7 @@ export interface JobApplicationFormData {
   universidadInstituto: string
   ciclo: string
   carrera: string
+  carreraPersonalizada?: string
   puestoActual: string
   areasPreferidas: string[]
   financiamientoTesis: "si" | "no" | "tal_vez"
