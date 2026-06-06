@@ -45,7 +45,7 @@ export const teamData: TeamSection[] = [
         id: 'antonio-guevara',
         name: 'Antonio',
         lastName: 'Guevara E.',
-        role: 'Gerente de Gestión',
+        role: 'Business Specialist - The Wharton School',
         area: 'Gerencia',
         image: '/team/antonio.webp',
         email: 'avguevaraes@aslaboratorios.com',
