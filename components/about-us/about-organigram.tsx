@@ -42,6 +42,8 @@ export default function AboutOrganigram() {
       </div>
     </section>
   )
+}
+
 /* ========== DIRECTORIO CARD (grande, destacado) ========== */
 interface CardProps {
   member: (typeof teamData)[0]['members'][0]
@@ -124,5 +126,3 @@ function DirectorioCard({ member }: CardProps) {
     </Link>
   )
 }
-
-export { DirectorioCard }
