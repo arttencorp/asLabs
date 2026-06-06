@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
-import { Search, Filter, Globe } from "lucide-react"
+import { Search, Filter } from "lucide-react"
 
 interface Cepa {
   id: string
@@ -133,75 +133,13 @@ const categoryColors: { [key: string]: string } = {
   "Investigación": "bg-purple-100 text-purple-700 border-purple-300",
 }
 
-// Cepas ATCC importadas
-const cepasATCC: Cepa[] = [
-  {
-    id: "atcc-1",
-    nombre: "Salmonella typhimurium",
-    cientifico: "Salmonella enterica subsp. enterica serovar Typhimurium",
-    categoria: "Investigación",
-    descripcion: "Cepa referencia ATCC para investigación microbiológica y pruebas de antibiogramas",
-    beneficios: ["Control de calidad", "Validación de métodos analíticos"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20SUBTILIS-13GZHbrjZbKtCqXbOaRCgI4Qc5IWJJ.webp",
-  },
-  {
-    id: "atcc-2",
-    nombre: "Listeria monocytogenes",
-    cientifico: "Listeria monocytogenes",
-    categoria: "Investigación",
-    descripcion: "Cepa ATCC para estudios de patogénesis y control de patógenos en alimentos",
-    beneficios: ["Inocuo de control", "Validación de sistemas de detección"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PSEUDOMONAS%20FLURECENS-Dh3L006FYYg0R2hTQUytK5vzMWSlnU.webp",
-  },
-  {
-    id: "atcc-3",
-    nombre: "Escherichia coli O157:H7",
-    cientifico: "Escherichia coli O157:H7",
-    categoria: "Investigación",
-    descripcion: "Serotipo enterohemorrágico ATCC para estudios de virulencia y epidemiología",
-    beneficios: ["Referencia internacional", "Investigación de factores de virulencia"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AZOSPIRILLUM%20SP-Jonwk0fQXtggCkuluQMLt3K7BqhK9V.webp",
-  },
-  {
-    id: "atcc-4",
-    nombre: "Vibrio cholerae",
-    cientifico: "Vibrio cholerae",
-    categoria: "Investigación",
-    descripcion: "Cepa ATCC para investigación de enfermedades infecciosas y desarrollo de vacunas",
-    beneficios: ["Estándar internacional", "Modelos de virulencia"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BACILLUS%20MEGATERIUM-3gHTO1C5zG8IUwHFHd4sjqhGVq4vUV.webp",
-  },
-  {
-    id: "atcc-5",
-    nombre: "Staphylococcus aureus",
-    cientifico: "Staphylococcus aureus (MRSA)",
-    categoria: "Investigación",
-    descripcion: "Cepa resistente ATCC para investigación de antibióticos y control microbiano",
-    beneficios: ["Control de resistencia", "Desarrollo farmacéutico"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RHIZOBIUM%20SP-M0E2O1jOZbtDhljJxzBdr7v6I9io66.webp",
-  },
-  {
-    id: "atcc-6",
-    nombre: "Candida albicans",
-    cientifico: "Candida albicans",
-    categoria: "Investigación",
-    descripcion: "Levadura ATCC para estudios de patógenos oportunistas y desarrollo antifúngico",
-    beneficios: ["Patógeno modelo", "Validación de antifúngicos"],
-    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ESCHERICHIA%20COLI%20-Jg2V6mCCTODCo7a07VMMetdrwyns3K.webp",
-  },
-]
-
 export default function CepasClient() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<"aslab" | "atcc">("aslab")
 
   const categories = ["Control Biológico", "Biofertilizante", "Investigación"]
 
-  // Seleccionar cepas según tab activo
-  const cepasActuales = activeTab === "aslab" ? cepas : cepasATCC
-
-  const filteredCepas = cepasActuales.filter((cepa) => {
+  const filteredCepas = cepas.filter((cepa) => {
     const matchesSearch =
       cepa.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cepa.cientifico.toLowerCase().includes(searchTerm.toLowerCase())
@@ -213,144 +151,92 @@ export default function CepasClient() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 flex flex-col">
       <Navbar />
 
-      {/* Hero Section - Compacto */}
-      <section className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-10 border-b-4 border-emerald-700">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-black mb-2">Catálogo de Cepas Bacterianas</h1>
-          <p className="text-emerald-50 text-base font-light max-w-2xl">
-            Cultivos certificados de alta viabilidad para agricultura e investigación
-          </p>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 text-white py-16 border-b-4 border-emerald-700 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2"></div>
         </div>
-      </section>
-
-      {/* Tabs Navigation */}
-      <section className="bg-white border-b-2 border-slate-200 sticky top-[80px] z-40">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-0">
-            <button
-              onClick={() => {
-                setActiveTab("aslab")
-                setSelectedCategory(null)
-                setSearchTerm("")
-              }}
-              className={`flex-1 md:flex-none px-8 py-4 font-black text-base transition-all border-b-4 ${
-                activeTab === "aslab"
-                  ? "border-emerald-600 text-emerald-600 bg-emerald-50"
-                  : "border-transparent text-slate-600 hover:bg-slate-50"
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <span>AS Laboratorios</span>
-                <span className="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded-full">
-                  {cepas.length - 1}
-                </span>
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                setActiveTab("atcc")
-                setSelectedCategory(null)
-                setSearchTerm("")
-              }}
-              className={`flex-1 md:flex-none px-8 py-4 font-black text-base transition-all border-b-4 flex items-center justify-center gap-2 ${
-                activeTab === "atcc"
-                  ? "border-blue-600 text-blue-600 bg-blue-50"
-                  : "border-transparent text-slate-600 hover:bg-slate-50"
-              }`}
-            >
-              <Globe className="w-4 h-4" />
-              <span>ATCC (Importación)</span>
-              <span className="text-xs bg-blue-200 text-blue-700 px-2 py-1 rounded-full">
-                {cepasATCC.length}
-              </span>
-            </button>
-          </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <h1 className="text-5xl font-black mb-3">Cepas Identificadas</h1>
+          <p className="text-emerald-50 text-lg font-light max-w-3xl">
+            Cultivos bacterianos locales certificados de máxima viabilidad. Desarrollados con rigor científico bajo normas ISO para agricultura sostenible e investigación de calidad.
+          </p>
         </div>
       </section>
 
       {/* Main Content */}
       <div className="flex-1">
         <div className="container mx-auto px-4 py-16">
-          {/* Search and Filter Bar */}
+          {/* Search and Filter Bar - Mejorado */}
           <div className="mb-12">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Buscar cepa por nombre..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white text-slate-900 placeholder-slate-500"
-                />
+            <div className="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-emerald-500">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Search */}
+                <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-emerald-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Buscar cepa por nombre científico..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-white text-gray-900 placeholder-gray-500 font-medium transition-all"
+                  />
+                </div>
+
+                {/* Category Filter */}
+                <div className="flex gap-2 items-center md:justify-end">
+                  <Filter className="text-emerald-400 w-5 h-5" />
+                  <select
+                    value={selectedCategory || ""}
+                    onChange={(e) => setSelectedCategory(e.target.value || null)}
+                    className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-white text-gray-900 font-bold transition-all"
+                  >
+                    <option value="">Todas las cepas</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              {/* Category Filter */}
-              <div className="flex gap-2 items-center md:justify-end">
-                <Filter className="text-slate-400 w-5 h-5" />
-                <select
-                  value={selectedCategory || ""}
-                  onChange={(e) => setSelectedCategory(e.target.value || null)}
-                  className="px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white text-slate-900 font-medium"
-                >
-                  <option value="">Todas las cepas</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Category Pills */}
-            <div className="flex gap-2 mt-4 flex-wrap">
-              <button
-                onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  !selectedCategory
-                    ? "bg-emerald-600 text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                Ver todas
-              </button>
-              {categories.map((cat) => (
+              {/* Category Pills */}
+              <div className="flex gap-2 mt-5 flex-wrap">
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategory === cat
-                      ? `${categoryColors[cat]} border-2`
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  onClick={() => setSelectedCategory(null)}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                    !selectedCategory
+                      ? "bg-emerald-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
-                  {cat}
+                  Ver todas
                 </button>
-              ))}
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                      selectedCategory === cat
+                        ? `${categoryColors[cat]} border-2 shadow-md`
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Info Banner */}
-            <div className={`mt-8 p-4 border-l-4 rounded-lg ${
-              activeTab === "aslab"
-                ? "bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-500"
-                : "bg-gradient-to-r from-blue-50 to-blue-100 border-blue-500"
-            }`}>
+            <div className="mt-6 p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-xl shadow-sm">
               <div className="flex gap-4 items-start">
-                <div className="text-2xl">{activeTab === "aslab" ? "✓" : "🌍"}</div>
+                <div className="text-3xl">✓</div>
                 <div className="text-sm">
-                  <p className={`font-black mb-1 ${activeTab === "aslab" ? "text-emerald-900" : "text-blue-900"}`}>
-                    {activeTab === "aslab" 
-                      ? "Cultivo a Pedido - Máxima Viabilidad"
-                      : "Cepas Referencia Internacional ATCC"}
-                  </p>
-                  <p className={`text-xs ${activeTab === "aslab" ? "text-emerald-800" : "text-blue-800"}`}>
-                    {activeTab === "aslab"
-                      ? "Almacenamiento ≤2 días • Perfecto para tesistas y investigadores • Máximo caldo: 30L • Opciones personalizadas"
-                      : "Certificadas internacionalmente • Garantía de identidad y viabilidad • Envío desde USA • Documentación ATCC incluida"}
-                  </p>
+                  <p className="font-black text-emerald-900 mb-1">Cultivo a Pedido - Máxima Viabilidad</p>
+                  <p className="text-emerald-800 font-medium">Almacenamiento ≤2 días • Perfecto para tesistas e investigadores • Máximo caldo: 30L • Disponemos de opciones personalizadas</p>
                 </div>
               </div>
             </div>
@@ -359,15 +245,15 @@ export default function CepasClient() {
           {/* Results Count */}
           <div className="mb-8">
             <p className="text-slate-600 text-sm font-medium">
-              Mostrando <span className={`font-bold ${activeTab === "aslab" ? "text-emerald-600" : "text-blue-600"}`}>{filteredCepas.length}</span> de {cepasActuales.length} cepas
+              Mostrando <span className="text-emerald-600 font-bold">{filteredCepas.length}</span> de {cepas.length - 1} cepas
             </p>
           </div>
 
           {/* Cepas Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCepas.map((cepa) => {
-              // Contact Card especial (solo en tab AS Labs)
-              if (cepa.id === "contact" && activeTab === "aslab") {
+              // Contact Card especial
+              if (cepa.id === "contact") {
                 return (
                   <div key={cepa.id} className="group bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 rounded-2xl border-3 border-dashed border-amber-400 overflow-hidden hover:shadow-2xl hover:border-amber-600 transition-all duration-300 flex flex-col h-full p-8 items-center justify-center text-center hover:-translate-y-2">
                     <div className="text-7xl mb-6 animate-bounce">📞</div>

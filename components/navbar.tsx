@@ -94,9 +94,20 @@ export default function Navbar() {
     },
     cepas: {
       title: "Cepas",
-      href: "/cepas",
       description:
         "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
+      children: [
+        {
+          title: "Cepas Identificadas",
+          href: "/cepas/identificadas",
+          description: "Cultivos locales certificados de máxima viabilidad",
+        },
+        {
+          title: "Cepas ATCC",
+          href: "/cepas/atcc",
+          description: "Cepas referencia internacional - Importación desde USA",
+        },
+      ],
     },
     research: {
       title: "Investigación",
