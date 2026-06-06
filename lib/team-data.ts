@@ -22,9 +22,9 @@ export const teamData: TeamSection[] = [
     members: [
       {
         id: 'natasha-escobar',
-        name: 'Natasha',
-        lastName: 'Escobar Arana',
-        role: 'Blga. - Gerente General',
+        name: 'Natasha Escobar',
+        lastName: 'Arana',
+        role: 'CEO',
         area: 'Gerencia',
         image: '/team/natasha-escobar.webp',
         email: 'ventas@aslaboratorios.com',
@@ -43,14 +43,14 @@ export const teamData: TeamSection[] = [
     members: [
       {
         id: 'antonio-guevara',
-        name: 'Antonio',
-        lastName: 'Guevara E.',
-        role: 'Business Specialist - The Wharton School',
+        name: 'Antonio Víctor Gabriel',
+        lastName: 'Guevara Escobar',
+        role: 'COO',
         area: 'Gerencia',
         image: '/team/antonio.webp',
         email: 'avguevaraes@aslaboratorios.com',
         linkedIn: '#',
-        bio: 'Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.',
+        bio: 'Antonio Víctor Gabriel Guevara Escobar es COO en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. Business Specialist por The Wharton School, posee especialización en Administración y Gestión de Empresas. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.',
         education: [
           'Especialización en Administración y Gestión de Empresas - The Wharton School',
           'Microbiología y Parasitología - Universidad Nacional de Trujillo',
