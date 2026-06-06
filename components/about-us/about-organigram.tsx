@@ -12,11 +12,6 @@ export default function AboutOrganigram() {
   const directorio = allMembers.filter(m => 
     m.id === 'natasha-escobar' || m.id === 'antonio-guevara'
   )
-  
-  // Rest of the team
-  const restOfTeam = allMembers.filter(m => 
-    m.id !== 'natasha-escobar' && m.id !== 'antonio-guevara'
-  )
 
   return (
     <section id="organigrama" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative">
@@ -30,44 +25,23 @@ export default function AboutOrganigram() {
               Nuestro Equipo
             </span>
           </div>
-          <h2 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 mb-8">Equipo AS Laboratorios</h2>
+          <h2 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 mb-8">Directorio</h2>
           <p className="text-xl text-gray-700 font-medium">
-            Conoce a los profesionales que hacen posible nuestra mision de excelencia
+            Liderazgo comprometido con la excelencia en biotecnología agrícola
           </p>
         </div>
 
         {/* ===== DIRECTORIO ===== */}
-        <div className="mb-16">
-          <div className="mb-8">
-            <h3 className="text-2xl font-serif font-bold text-gray-900">Directorio</h3>
-            <div className="w-16 h-1 bg-[#2e7d32] rounded-full mt-2"></div>
-          </div>
-
+        <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {directorio.map((member) => (
               <DirectorioCard key={member.id} member={member} />
             ))}
           </div>
         </div>
-
-        {/* ===== RESTO DEL EQUIPO ===== */}
-        <div>
-          <div className="mb-8">
-            <h3 className="text-lg font-serif font-bold text-gray-900">Equipo Profesional</h3>
-            <div className="w-12 h-0.5 bg-gray-400 rounded-full mt-2"></div>
-          </div>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {restOfTeam.map((member) => (
-              <SmallTeamCard key={member.id} member={member} />
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )
-}
-
 /* ========== DIRECTORIO CARD (grande, destacado) ========== */
 interface CardProps {
   member: (typeof teamData)[0]['members'][0]
@@ -151,46 +125,4 @@ function DirectorioCard({ member }: CardProps) {
   )
 }
 
-/* ========== SMALL TEAM CARD (compacto, simple) ========== */
-function SmallTeamCard({ member }: CardProps) {
-  const areaColor = getAreaColor(member.area)
-  
-  if (!member.image) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all duration-300">
-        <div className="h-0.5" style={{ backgroundColor: areaColor }}></div>
-        <div className="p-3 text-center">
-          <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2">
-            <span className="text-sm font-bold text-gray-400">
-              {member.name[0]}{member.lastName[0]}
-            </span>
-          </div>
-          <p className="text-xs font-semibold text-gray-900 leading-tight truncate">{member.name}</p>
-          <p className="text-xs font-semibold text-gray-900 leading-tight truncate">{member.lastName}</p>
-          <p className="text-[10px] text-gray-500 mt-1 truncate">{member.role}</p>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <Link href={`/team/${member.id}`}>
-      <div className="group bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer">
-        <div className="h-0.5" style={{ backgroundColor: areaColor }}></div>
-        <div className="relative w-full aspect-square bg-gray-100 overflow-hidden">
-          <Image
-            src={member.image}
-            alt={`${member.name} ${member.lastName}`}
-            fill
-            className="object-cover group-hover:opacity-90 transition-opacity duration-300"
-          />
-        </div>
-        <div className="p-2.5 text-center">
-          <p className="text-xs font-semibold text-gray-900 leading-tight truncate">{member.name}</p>
-          <p className="text-xs font-semibold text-gray-900 leading-tight truncate">{member.lastName}</p>
-          <p className="text-[10px] text-gray-500 mt-0.5 truncate">{member.role}</p>
-        </div>
-      </div>
-    </Link>
-  )
-}
+export { DirectorioCard }
