@@ -25,12 +25,8 @@ export default function AboutValues() {
   ]
 
   return (
-    <section id="valores" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-[#2e7d32] opacity-5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#e65100] opacity-4 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section id="valores" className="w-full py-40 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1]">
+      <div className="max-w-7xl mx-auto">
         <div className="text-left mb-24 max-w-2xl">
           <div className="inline-block mb-6">
             <span className="text-xs font-semibold text-[#e65100] uppercase tracking-[0.2em] bg-orange-50 px-5 py-3 rounded-full border border-[#e65100]/20">

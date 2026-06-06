@@ -14,10 +14,8 @@ export default function AboutOrganigram() {
   )
 
   return (
-    <section id="organigrama" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1] relative">
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-[#2e7d32] opacity-4 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section id="organigrama" className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-[#f8f6f1]">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-left mb-16 max-w-2xl">
           <div className="inline-block mb-6">
