@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Search, Download, Lock, X, ShoppingCart, Trash2, MessageCircle } from "lucide-react"
+import Link from "next/link"
 
 const ENVIO_PERU = 155.00
 
@@ -670,10 +671,16 @@ export default function ATCCClient() {
                         <div className="flex items-start gap-3 mb-3">
                           <span className="text-xl">🧬</span>
                           <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-emerald-900">{cepa.nombre}</h3>
+                            <Link
+                              href={`/cepas/atcc/${cepa.id}`}
+                              className="text-lg font-semibold text-emerald-900 hover:text-emerald-700 hover:underline transition-colors"
+                            >
+                              {cepa.nombre}
+                            </Link>
                             <p className="text-emerald-700 text-sm">{cepa.codigo}</p>
                             <p className="text-emerald-600 text-xs font-light italic mt-1">{cepa.cientifico}</p>
                           </div>
+                        </div>
                         </div>
 
                         <div className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded text-xs font-semibold mb-4">
