@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Search, Download, Lock, X, ShoppingCart } from "lucide-react"
+import { Search, Download, Lock, X, ShoppingCart, Trash2, MessageCircle } from "lucide-react"
 
 const ENVIO_PERU = 155.00
 
@@ -453,6 +453,7 @@ export default function ATCCClient() {
   const [showCartModal, setShowCartModal] = useState(false)
   const [selectedCepaForCart, setSelectedCepaForCart] = useState<typeof cepasATCC[0] | null>(null)
   const [cantidadCarrito, setCantidadCarrito] = useState(1)
+  const [showCarrito, setShowCarrito] = useState(false)
 
   const filteredCepas = cepasATCC.filter((cepa) => {
     const matchesSearch =
@@ -509,17 +510,45 @@ export default function ATCCClient() {
     setLista(lista.filter((item) => item.id !== id))
   }
 
+  const generarMensajeWhatsApp = () => {
+    const totalBase = carrito.reduce((sum, item) => sum + item.cepa.precio * item.cantidad, 0)
+    const mensaje = `*PEDIDO CEPAS ATCC - AS LABORATORIOS*\n\n` +
+      `${carrito.map((item) => `• ${item.cepa.nombre} (${item.cepa.codigo})\n   Cantidad: ${item.cantidad}\n   Precio unitario: S/ ${(item.cepa.precio - ENVIO_PERU).toFixed(2)}\n   Subtotal: S/ ${((item.cepa.precio - ENVIO_PERU) * item.cantidad).toFixed(2)}`).join("\n\n")}\n\n` +
+      `---\n*RESUMEN DEL PEDIDO*\n` +
+      `Subtotal: S/ ${carrito.reduce((sum, item) => sum + (item.cepa.precio - ENVIO_PERU) * item.cantidad, 0).toFixed(2)}\n` +
+      `Envío a Trujillo: S/ ${ENVIO_PERU.toFixed(2)}\n` +
+      `*TOTAL: S/ ${totalBase.toFixed(2)}*\n\n` +
+      `Por favor confirmar disponibilidad y detalles de entrega.`
+    
+    const numeroWhatsApp = "51987654321" // Cambia con tu número real
+    const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`
+    window.open(enlaceWhatsApp, "_blank")
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="bg-white border-b pt-12 pb-8">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-serif font-bold text-emerald-900 mb-2">Cepas ATCC</h1>
-          <p className="text-emerald-700 font-light max-w-2xl">
-            Cepas referencia internacional certificadas del American Type Culture Collection (ATCC).   
-          </p>
+      {/* Hero Section con Carrito Flotante */}
+      <section className="bg-white border-b pt-12 pb-8 relative">
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-serif font-bold text-emerald-900 mb-2">Cepas ATCC</h1>
+            <p className="text-emerald-700 font-light max-w-2xl">
+              Cepas referencia internacional certificadas BSL-1. Importación desde USA con garantía de identidad, viabilidad y trazabilidad bajo normas ISO.
+            </p>
+          </div>
+          {carrito.length > 0 && (
+            <button
+              onClick={() => setShowCarrito(true)}
+              className="fixed bottom-8 right-8 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 z-40"
+            >
+              <ShoppingCart className="w-6 h-6" />
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                {carrito.length}
+              </span>
+            </button>
+          )}
         </div>
       </section>
 
@@ -730,72 +759,163 @@ export default function ATCCClient() {
         </div>
       </div>
 
-      {/* Modal de Carrito */}
+      {/* Modal de Carrito - Agregar Producto */}
       {showCartModal && selectedCepaForCart && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-emerald-900">Agregar al carrito</h2>
+          <div className="bg-white rounded-lg max-w-2xl w-full shadow-xl">
+            <div className="flex items-center justify-between p-6 border-b border-emerald-200">
+              <h2 className="text-2xl font-bold text-emerald-900">Agregar al carrito</h2>
               <button
                 onClick={() => setShowCartModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-emerald-600 hover:text-emerald-800 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="mb-4 pb-4 border-b border-emerald-200">
-              <p className="font-semibold text-emerald-900">{selectedCepaForCart.nombre}</p>
-              <p className="text-sm text-emerald-600">{selectedCepaForCart.codigo}</p>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+              {/* Información del Producto */}
+              <div className="space-y-4">
+                <div className="bg-emerald-50 p-4 rounded-lg">
+                  <p className="text-sm text-emerald-600 font-semibold mb-1">CEPA ATCC</p>
+                  <h3 className="text-xl font-bold text-emerald-900 mb-2">{selectedCepaForCart.nombre}</h3>
+                  <p className="text-sm text-emerald-700 mb-3">{selectedCepaForCart.codigo}</p>
+                  <p className="text-xs text-emerald-600 italic">{selectedCepaForCart.cientifico}</p>
+                </div>
 
-            <div className="bg-emerald-50 rounded p-4 mb-4">
-              <p className="text-sm text-emerald-700 mb-1">Precio por unidad:</p>
-              <p className="text-2xl font-bold text-emerald-900 mb-3">S/ {(selectedCepaForCart.precio - ENVIO_PERU).toFixed(2)}</p>
-
-              <div className="border-t border-emerald-200 pt-3 mt-3">
-                <p className="text-sm text-emerald-700 mb-1">Envío a Trujillo, Perú:</p>
-                <p className="text-lg font-bold text-emerald-900">S/ {ENVIO_PERU.toFixed(2)}</p>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Detalles:</p>
+                  <ul className="space-y-1 text-xs text-gray-600">
+                    <li><strong>Formato:</strong> {selectedCepaForCart.productFormat || "—"}</li>
+                    <li><strong>Designación:</strong> {selectedCepaForCart.strainDesignation || "—"}</li>
+                    <li><strong>Cepa tipo:</strong> {selectedCepaForCart.typeStrain || "—"}</li>
+                    <li><strong>Cantidad:</strong> {selectedCepaForCart.cantidad}</li>
+                  </ul>
+                </div>
               </div>
 
-              <div className="border-t border-emerald-300 pt-3 mt-3 bg-white rounded p-2">
-                <p className="text-sm text-emerald-700">Total por unidad:</p>
-                <p className="text-2xl font-bold text-emerald-900">S/ {selectedCepaForCart.precio.toFixed(2)}</p>
+              {/* Precios y Cantidad */}
+              <div className="space-y-4">
+                <div className="bg-emerald-600 text-white p-6 rounded-lg">
+                  <p className="text-sm text-emerald-100 mb-1">Precio por unidad (sin envío)</p>
+                  <p className="text-4xl font-bold mb-4">S/ {(selectedCepaForCart.precio - ENVIO_PERU).toFixed(2)}</p>
+
+                  <div className="bg-emerald-700 rounded p-3 mb-4 text-sm">
+                    <p className="text-emerald-50 mb-1">+ Envío a Trujillo:</p>
+                    <p className="text-2xl font-bold text-white">S/ {ENVIO_PERU.toFixed(2)}</p>
+                  </div>
+
+                  <p className="text-sm text-emerald-100 mb-2">Total por unidad</p>
+                  <p className="text-3xl font-bold text-emerald-50">${selectedCepaForCart.precio.toFixed(2)}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-semibold text-emerald-900 mb-2">Cantidad:</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={cantidadCarrito}
+                      onChange={(e) => setCantidadCarrito(Math.max(1, parseInt(e.target.value) || 1))}
+                      className="w-full px-4 py-3 border-2 border-emerald-300 rounded-lg focus:outline-none focus:border-emerald-600 font-semibold text-lg"
+                    />
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-xs text-blue-700">
+                      <strong>Nota:</strong> El envío mostrado es una estimación. El costo final dependerá del peso total del pedido.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-emerald-900 mb-2">Cantidad</label>
-              <input
-                type="number"
-                min="1"
-                value={cantidadCarrito}
-                onChange={(e) => setCantidadCarrito(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full px-3 py-2 border border-emerald-300 rounded focus:outline-none focus:border-emerald-500"
-              />
-            </div>
-
-            <div className="bg-blue-50 rounded p-3 mb-4">
-              <p className="text-xs text-blue-700">
-                <strong>Nota:</strong> El envío incluido en tu carrito es una estimación. El costo final dependerá de la cantidad y peso total del pedido.
-              </p>
-            </div>
-
-            <div className="flex gap-2">
+            <div className="flex gap-3 p-6 bg-gray-50 border-t border-emerald-200 rounded-b-lg">
               <button
                 onClick={() => setShowCartModal(false)}
-                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 rounded transition-colors"
+                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-lg transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={confirmAgregar}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
-                <ShoppingCart className="w-4 h-4" />
-                Confirmar
+                <ShoppingCart className="w-5 h-5" />
+                Agregar al carrito
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Ver Carrito */}
+      {showCarrito && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
+            <div className="flex items-center justify-between p-6 border-b border-emerald-200 sticky top-0 bg-white">
+              <h2 className="text-2xl font-bold text-emerald-900">Mi Carrito ({carrito.length})</h2>
+              <button
+                onClick={() => setShowCarrito(false)}
+                className="text-emerald-600 hover:text-emerald-800 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {carrito.length === 0 ? (
+              <div className="p-12 text-center">
+                <ShoppingCart className="w-16 h-16 text-emerald-300 mx-auto mb-4" />
+                <p className="text-lg text-emerald-700">Tu carrito está vacío</p>
+              </div>
+            ) : (
+              <>
+                <div className="p-6 space-y-4">
+                  {carrito.map((item) => (
+                    <div key={item.cepa.id} className="bg-emerald-50 rounded-lg p-4 flex items-center justify-between border border-emerald-200 hover:border-emerald-400 transition-colors">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-emerald-900">{item.cepa.nombre}</h3>
+                        <p className="text-sm text-emerald-600">{item.cepa.codigo}</p>
+                        <p className="text-sm text-emerald-700 mt-2">
+                          Cantidad: <span className="font-bold">{item.cantidad}</span> × S/ {(item.cepa.precio - ENVIO_PERU).toFixed(2)} = <span className="font-bold">S/ {((item.cepa.precio - ENVIO_PERU) * item.cantidad).toFixed(2)}</span>
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removerDelCarrito(item.cepa.id)}
+                        className="ml-4 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-emerald-50 border-t border-emerald-200 p-6">
+                  <div className="space-y-2 mb-6">
+                    <div className="flex justify-between text-emerald-700">
+                      <span>Subtotal:</span>
+                      <span className="font-bold">S/ {carrito.reduce((sum, item) => sum + (item.cepa.precio - ENVIO_PERU) * item.cantidad, 0).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-emerald-700">
+                      <span>Envío a Trujillo:</span>
+                      <span className="font-bold">S/ {ENVIO_PERU.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xl font-bold text-emerald-900 bg-white p-3 rounded-lg mt-4">
+                      <span>TOTAL:</span>
+                      <span>S/ {carrito.reduce((sum, item) => sum + item.cepa.precio * item.cantidad, 0).toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={generarMensajeWhatsApp}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-lg transition-colors flex items-center justify-center gap-3 text-lg"
+                  >
+                    <MessageCircle className="w-6 h-6" />
+                    Comprar por WhatsApp
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
