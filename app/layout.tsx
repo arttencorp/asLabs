@@ -9,7 +9,7 @@ import {
 } from "@/components/structured-data"
 
 const dmSerifText = DM_Serif_Text({
-  weight: ["400", "500", "700"],
+  weight: ["400"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-dm-serif",
