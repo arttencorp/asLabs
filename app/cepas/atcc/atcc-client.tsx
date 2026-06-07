@@ -7,12 +7,7 @@ import { Search, Download, Lock, X, ShoppingCart } from "lucide-react"
 
 const ENVIO_PERU = 155.00
 
-interface CartItem {
-  cepa: typeof cepasATCC[0]
-  cantidad: number
-}
-
-// Datos de Cepas ATCC desde catálogo - Solo BSL-1 (con envío incluido)
+// Datos de Cepas ATCC desde catálogo - Solo BSL-1
 const cepasATCC = [
   {
     id: "atcc-1",
@@ -442,6 +437,11 @@ const categorias = [
   "Alimentos & Fermentación",
   "Biotecnología & Agricultura",
 ]
+
+interface CartItem {
+  cepa: (typeof cepasATCC)[0]
+  cantidad: number
+}
 
 export default function ATCCClient() {
   const [searchTerm, setSearchTerm] = useState("")
