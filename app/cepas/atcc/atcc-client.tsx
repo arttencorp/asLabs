@@ -3,7 +3,9 @@
 import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Search, Download, Lock } from "lucide-react"
+import { Search, Download, Lock, X, ShoppingCart } from "lucide-react"
+
+const ENVIO_PERU = 155.00
 
 // Datos de Cepas ATCC desde catálogo - Solo BSL-1 (con envío incluido)
 const cepasATCC = [
@@ -13,12 +15,13 @@ const cepasATCC = [
     codigo: "ATCC 14580",
     cientifico: "Bacillus licheniformis (Weigmann) Chester",
     bsl: "BSL-1",
-    categoria: "Bacilo ambiental / enzimas",
+    categoria: "Bacilos & Esporulados",
     productFormat: "Freeze-dried",
     strainDesignation: "[46, NCIB 9375, NCTC 10341, NRS 1264]",
     depositedAs: "Bacillus licheniformis",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-14580",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Bacillus%20licheniformis%20ATCC%2014580",
@@ -30,12 +33,13 @@ const cepasATCC = [
     codigo: "ATCC 6051",
     cientifico: "Bacillus subtilis (Ehrenberg) Cohn",
     bsl: "BSL-1",
-    categoria: "Bacilo modelo",
+    categoria: "Bacilos & Esporulados",
     productFormat: "Freeze-dried",
     strainDesignation: "Marburg strain [ATCC 6051-U, DSM 10, NCIB 3610, NCTC 3610]",
     depositedAs: "Bacillus subtilis",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-6051",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Bacillus%20subtilis%20ATCC%206051",
@@ -47,12 +51,13 @@ const cepasATCC = [
     codigo: "ATCC 25922-MINI-PACK",
     cientifico: "Escherichia coli",
     bsl: "BSL-1",
-    categoria: "Control de calidad",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Frozen glycerol stock",
     strainDesignation: "FDA strain Seattle 1946",
     depositedAs: "Escherichia coli",
     typeStrain: "No",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "6 viales de 200 µL",
     referencia: "ATCC-25922",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Escherichia%20coli%20ATCC%2025922",
@@ -64,12 +69,13 @@ const cepasATCC = [
     codigo: "ATCC 7953",
     cientifico: "Geobacillus stearothermophilus",
     bsl: "BSL-1",
-    categoria: "Control de esterilización",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Freeze-dried",
     strainDesignation: "",
     depositedAs: "Geobacillus stearothermophilus",
     typeStrain: "No",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-7953",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Geobacillus%20stearothermophilus%20ATCC%207953",
@@ -81,12 +87,13 @@ const cepasATCC = [
     codigo: "ATCC 12980",
     cientifico: "Geobacillus stearothermophilus",
     bsl: "BSL-1",
-    categoria: "Control de esterilización",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Freeze-dried",
     strainDesignation: "NCA 26",
     depositedAs: "Geobacillus stearothermophilus",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-12980",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Geobacillus%20stearothermophilus%20ATCC%2012980",
@@ -98,12 +105,13 @@ const cepasATCC = [
     codigo: "ATCC 10149",
     cientifico: "Geobacillus stearothermophilus",
     bsl: "BSL-1",
-    categoria: "Alimentos / termófilo",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "NRS T15 [JCM 11297]",
     depositedAs: "Geobacillus stearothermophilus",
     typeStrain: "No",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-10149",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Geobacillus%20stearothermophilus%20ATCC%2010149",
@@ -115,12 +123,13 @@ const cepasATCC = [
     codigo: "ATCC 7050",
     cientifico: "Heyndrickxia coagulans (Hammer) Narsing Rao et al.",
     bsl: "BSL-1",
-    categoria: "Alimentos / probiótico esporulado",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "NRS 609 [NCIB 9365, NCTC 10334]",
     depositedAs: "Antes: Weizmannia coagulans / Bacillus coagulans",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-7050",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Bacillus%20coagulans%20ATCC%207050",
@@ -132,12 +141,13 @@ const cepasATCC = [
     codigo: "ATCC 393",
     cientifico: "Lacticaseibacillus casei (Orla-Jensen) Zheng et al.",
     bsl: "BSL-1",
-    categoria: "Alimentos / fermentación",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "03 [7, IAM 12473, Orland L-323, R.P. Tittsler 303]",
     depositedAs: "Antes: Lactobacillus casei",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-393",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Lacticaseibacillus%20casei%20ATCC%20393",
@@ -149,12 +159,13 @@ const cepasATCC = [
     codigo: "ATCC 4356",
     cientifico: "Lactobacillus acidophilus (Moro) Hansen and Mocquot",
     bsl: "BSL-1",
-    categoria: "Alimentos / probiótico",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "Scav [IFO 13951, M. Rogosa 210X, NCIB 8690, P.A. Hansen L 917]",
     depositedAs: "Lactobacillus acidophilus",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-4356",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Lactobacillus%20acidophilus%20ATCC%204356",
@@ -166,12 +177,13 @@ const cepasATCC = [
     codigo: "ATCC 842",
     cientifico: "Paenibacillus polymyxa",
     bsl: "BSL-1",
-    categoria: "Biotecnología / agricultura",
+    categoria: "Biotecnología & Agricultura",
     productFormat: "Freeze-dried",
     strainDesignation: "BUCSAV 162 / CCM 1459 / NCIB 8158 / NCTC 10343",
     depositedAs: "Paenibacillus polymyxa",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-842",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Paenibacillus%20polymyxa%20ATCC%20842",
@@ -183,12 +195,13 @@ const cepasATCC = [
     codigo: "ATCC 12633",
     cientifico: "Pseudomonas putida",
     bsl: "BSL-1",
-    categoria: "Ambiental / bioquímica",
+    categoria: "Biotecnología & Agricultura",
     productFormat: "",
     strainDesignation: "ATCC 12633 / IFO 14164",
     depositedAs: "Pseudomonas putida",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-12633",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Pseudomonas%20putida%20ATCC%2012633",
@@ -200,12 +213,13 @@ const cepasATCC = [
     codigo: "ATCC 13880",
     cientifico: "Serratia marcescens subsp. marcescens",
     bsl: "BSL-1",
-    categoria: "Referencia general / pigmentada",
+    categoria: "Bacilos & Esporulados",
     productFormat: "Freeze-dried",
     strainDesignation: "BS 303 [CDC 813-60, NCIB 9155, NCTC 10211]",
     depositedAs: "Serratia marcescens subsp. marcescens",
     typeStrain: "Sí",
     precio: 771.47,
+    precioSinEnvio: 616.47,
     cantidad: "1 unidad",
     referencia: "ATCC-13880",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Serratia%20marcescens%20ATCC%2013880",
@@ -217,7 +231,7 @@ const cepasATCC = [
     codigo: "ATCC 14581-MINI-PACK",
     cientifico: "Priestia megaterium",
     bsl: "BSL-1",
-    categoria: "Bacilo ambiental / docencia",
+    categoria: "Bacilos & Esporulados",
     productFormat: "Frozen glycerol stock",
     strainDesignation: "BCRC 10608 / DSM 32 / NCTC 10342",
     depositedAs: "Antes: Bacillus megaterium",
@@ -234,7 +248,7 @@ const cepasATCC = [
     codigo: "ATCC 6633-MINI-PACK",
     cientifico: "Bacillus spizizenii (Nakamura et al.) Dunlap et al.",
     bsl: "BSL-1",
-    categoria: "Control microbiológico / Bacillus",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Frozen",
     strainDesignation: "NRS 231",
     depositedAs: "Antes: Bacillus subtilis subsp. spizizenii",
@@ -251,7 +265,7 @@ const cepasATCC = [
     codigo: "ATCC 9372",
     cientifico: "Bacillus atrophaeus Nakamura",
     bsl: "BSL-1",
-    categoria: "Control de esterilización",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Freeze-dried",
     strainDesignation: "NRS 1221A",
     depositedAs: "Bacillus atrophaeus",
@@ -268,7 +282,7 @@ const cepasATCC = [
     codigo: "ATCC 4698",
     cientifico: "Micrococcus luteus",
     bsl: "BSL-1",
-    categoria: "Control de calidad",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Freeze-dried",
     strainDesignation: "",
     depositedAs: "Micrococcus luteus",
@@ -285,7 +299,7 @@ const cepasATCC = [
     codigo: "ATCC 23350",
     cientifico: "Bacillus amyloliquefaciens (Fukumoto) Priest et al.",
     bsl: "BSL-1",
-    categoria: "Enzimas / biotecnología",
+    categoria: "Biotecnología & Agricultura",
     productFormat: "Freeze-dried",
     strainDesignation: "F [IFO 15535]",
     depositedAs: "Bacillus amyloliquefaciens",
@@ -302,7 +316,7 @@ const cepasATCC = [
     codigo: "ATCC 14884",
     cientifico: "Bacillus sp.",
     bsl: "BSL-1",
-    categoria: "Bacilo esporulado",
+    categoria: "Bacilos & Esporulados",
     productFormat: "Freeze-dried",
     strainDesignation: "NCTC 8241 [CCM 2218, DSM 361, NCIB 8982]",
     depositedAs: "Bacillus sp.",
@@ -319,7 +333,7 @@ const cepasATCC = [
     codigo: "ATCC 10792",
     cientifico: "Bacillus thuringiensis Berliner",
     bsl: "BSL-1",
-    categoria: "Biocontrol",
+    categoria: "Biotecnología & Agricultura",
     productFormat: "Freeze-dried",
     strainDesignation: "CCUG 7429 / CIP 53.137 / DSM 2046 / HAMBI 478 / LMG 7138 / NRRL HD-735",
     depositedAs: "Bacillus thuringiensis",
@@ -336,7 +350,7 @@ const cepasATCC = [
     codigo: "ATCC 14917",
     cientifico: "Lactiplantibacillus plantarum",
     bsl: "BSL-1",
-    categoria: "Alimentos / fermentación",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "Lp 39 [IAM 12477]",
     depositedAs: "Antes: Lactobacillus plantarum subsp. plantarum",
@@ -353,7 +367,7 @@ const cepasATCC = [
     codigo: "ATCC 19435",
     cientifico: "Lactococcus lactis subsp. lactis",
     bsl: "BSL-1",
-    categoria: "Alimentos / fermentación láctica",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "NCTC 6681 [DSM 20481, NCDO 604, NCIB 6681, OJ]",
     depositedAs: "Lactococcus lactis subsp. lactis",
@@ -370,7 +384,7 @@ const cepasATCC = [
     codigo: "ATCC 19258",
     cientifico: "Streptococcus thermophilus Orla-Jensen",
     bsl: "BSL-1",
-    categoria: "Yogur / alimentos",
+    categoria: "Alimentos & Fermentación",
     productFormat: "Freeze-dried",
     strainDesignation: "NCDO 573 [NCIMB 8510, CNCTC 28/89, DSM 20617, CCUG 21957, CIP 102303, LMG 6896]",
     depositedAs: "Streptococcus thermophilus",
@@ -387,7 +401,7 @@ const cepasATCC = [
     codigo: "ATCC 12837",
     cientifico: "Azotobacter vinelandii Lipman",
     bsl: "BSL-1",
-    categoria: "Fijación de nitrógeno",
+    categoria: "Biotecnología & Agricultura",
     productFormat: "Freeze-dried",
     strainDesignation: "3a",
     depositedAs: "Azotobacter vinelandii",
@@ -404,7 +418,7 @@ const cepasATCC = [
     codigo: "ATCC 49822",
     cientifico: "Bacillus subtilis",
     bsl: "BSL-1",
-    categoria: "Control de calidad / Bacillus",
+    categoria: "Control de Calidad & Esterilización",
     productFormat: "Freeze-dried",
     strainDesignation: "",
     depositedAs: "Bacillus subtilis subsp. subtilis",
@@ -418,25 +432,10 @@ const cepasATCC = [
 ]
 
 const categorias = [
-  "Bacilo ambiental / enzimas",
-  "Bacilo modelo",
-  "Control de calidad",
-  "Control de esterilización",
-  "Alimentos / termófilo",
-  "Alimentos / probiótico esporulado",
-  "Alimentos / fermentación",
-  "Alimentos / probiótico",
-  "Biotecnología / agricultura",
-  "Ambiental / bioquímica",
-  "Referencia general / pigmentada",
-  "Bacilo ambiental / docencia",
-  "Control microbiológico / Bacillus",
-  "Enzimas / biotecnología",
-  "Bacilo esporulado",
-  "Biocontrol",
-  "Alimentos / fermentación láctica",
-  "Yogur / alimentos",
-  "Fijación de nitrógeno",
+  "Bacilos & Esporulados",
+  "Control de Calidad & Esterilización",
+  "Alimentos & Fermentación",
+  "Biotecnología & Agricultura",
 ]
 
 export default function ATCCClient() {
@@ -460,6 +459,45 @@ export default function ATCCClient() {
     if (sortBy === "name") return a.nombre.localeCompare(b.nombre)
     return 0
   })
+
+  const handleAgregarAlCarrito = (cepa: typeof cepasATCC[0]) => {
+    setSelectedCepaForCart(cepa)
+    setCantidadCarrito(1)
+    setShowCartModal(true)
+  }
+
+  const confirmAgregar = () => {
+    if (selectedCepaForCart) {
+      const existente = carrito.find((item) => item.cepa.id === selectedCepaForCart.id)
+      if (existente) {
+        setCarrito(
+          carrito.map((item) =>
+            item.cepa.id === selectedCepaForCart.id
+              ? { ...item, cantidad: item.cantidad + cantidadCarrito }
+              : item
+          )
+        )
+      } else {
+        setCarrito([...carrito, { cepa: selectedCepaForCart, cantidad: cantidadCarrito }])
+      }
+      setShowCartModal(false)
+    }
+  }
+
+  const handleAgregarALista = (cepa: typeof cepasATCC[0]) => {
+    const existe = lista.find((item) => item.id === cepa.id)
+    if (!existe) {
+      setLista([...lista, cepa])
+    }
+  }
+
+  const removerDelCarrito = (id: string) => {
+    setCarrito(carrito.filter((item) => item.cepa.id !== id))
+  }
+
+  const removerDeLista = (id: string) => {
+    setLista(lista.filter((item) => item.id !== id))
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -641,9 +679,9 @@ export default function ATCCClient() {
                       {/* Right: Price and Actions */}
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
-                          <p className="text-sm font-semibold text-emerald-700 mb-1">Precio total (incluido envío a Perú):</p>
-                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {cepa.precio.toFixed(2)}</p>
-                          <p className="text-sm text-emerald-600 mb-4">{cepa.referencia}</p>
+                          <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
+                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
+                          <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
                           <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
 
                           {cepa.disponibilidad ? (
@@ -652,10 +690,16 @@ export default function ATCCClient() {
                                 <span className="text-sm text-emerald-700">Cantidad</span>
                                 <input type="number" min="1" defaultValue="1" className="w-16 px-2 py-1 border border-emerald-300 rounded text-sm" />
                               </div>
-                              <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded mb-2 transition-colors flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleAgregarAlCarrito(cepa)}
+                                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded mb-2 transition-colors flex items-center justify-center gap-2"
+                              >
                                 🛒 Agregar al carrito
                               </button>
-                              <button className="w-full bg-white border-2 border-emerald-300 text-emerald-700 font-semibold py-2 rounded hover:bg-emerald-50 transition-colors text-sm">
+                              <button
+                                onClick={() => handleAgregarALista(cepa)}
+                                className="w-full bg-white border-2 border-emerald-300 text-emerald-700 font-semibold py-2 rounded hover:bg-emerald-50 transition-colors text-sm"
+                              >
                                 ♡ Agregar a lista
                               </button>
                             </>
@@ -675,6 +719,76 @@ export default function ATCCClient() {
           </div>
         </div>
       </div>
+
+      {/* Modal de Carrito */}
+      {showCartModal && selectedCepaForCart && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-emerald-900">Agregar al carrito</h2>
+              <button
+                onClick={() => setShowCartModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="mb-4 pb-4 border-b border-emerald-200">
+              <p className="font-semibold text-emerald-900">{selectedCepaForCart.nombre}</p>
+              <p className="text-sm text-emerald-600">{selectedCepaForCart.codigo}</p>
+            </div>
+
+            <div className="bg-emerald-50 rounded p-4 mb-4">
+              <p className="text-sm text-emerald-700 mb-1">Precio por unidad:</p>
+              <p className="text-2xl font-bold text-emerald-900 mb-3">S/ {selectedCepaForCart.precioSinEnvio.toFixed(2)}</p>
+              
+              <div className="border-t border-emerald-200 pt-3 mt-3">
+                <p className="text-sm text-emerald-700 mb-1">Envío a Trujillo, Perú:</p>
+                <p className="text-lg font-bold text-emerald-900">S/ {ENVIO_PERU.toFixed(2)}</p>
+              </div>
+
+              <div className="border-t border-emerald-300 pt-3 mt-3 bg-white rounded p-2">
+                <p className="text-sm text-emerald-700">Total por unidad:</p>
+                <p className="text-2xl font-bold text-emerald-900">S/ {(selectedCepaForCart.precioSinEnvio + ENVIO_PERU).toFixed(2)}</p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-emerald-900 mb-2">Cantidad</label>
+              <input
+                type="number"
+                min="1"
+                value={cantidadCarrito}
+                onChange={(e) => setCantidadCarrito(Math.max(1, parseInt(e.target.value) || 1))}
+                className="w-full px-3 py-2 border border-emerald-300 rounded focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+
+            <div className="bg-blue-50 rounded p-3 mb-4">
+              <p className="text-xs text-blue-700">
+                <strong>Nota:</strong> El envío incluido en tu carrito es una estimación. El costo final dependerá de la cantidad y peso total del pedido.
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowCartModal(false)}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 rounded transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmAgregar}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded transition-colors flex items-center justify-center gap-2"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
