@@ -690,7 +690,7 @@ export default function ATCCClient() {
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
-                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
+                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
                           <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
                           <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
 
@@ -751,8 +751,8 @@ export default function ATCCClient() {
 
             <div className="bg-emerald-50 rounded p-4 mb-4">
               <p className="text-sm text-emerald-700 mb-1">Precio por unidad:</p>
-              <p className="text-2xl font-bold text-emerald-900 mb-3">S/ {selectedCepaForCart.precioSinEnvio.toFixed(2)}</p>
-              
+              <p className="text-2xl font-bold text-emerald-900 mb-3">S/ {(selectedCepaForCart.precio - ENVIO_PERU).toFixed(2)}</p>
+
               <div className="border-t border-emerald-200 pt-3 mt-3">
                 <p className="text-sm text-emerald-700 mb-1">Envío a Trujillo, Perú:</p>
                 <p className="text-lg font-bold text-emerald-900">S/ {ENVIO_PERU.toFixed(2)}</p>
@@ -760,7 +760,7 @@ export default function ATCCClient() {
 
               <div className="border-t border-emerald-300 pt-3 mt-3 bg-white rounded p-2">
                 <p className="text-sm text-emerald-700">Total por unidad:</p>
-                <p className="text-2xl font-bold text-emerald-900">S/ {(selectedCepaForCart.precioSinEnvio + ENVIO_PERU).toFixed(2)}</p>
+                <p className="text-2xl font-bold text-emerald-900">S/ {selectedCepaForCart.precio.toFixed(2)}</p>
               </div>
             </div>
 
