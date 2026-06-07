@@ -518,7 +518,7 @@ export default function ATCCClient() {
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-serif font-bold text-emerald-900 mb-2">Cepas ATCC</h1>
           <p className="text-emerald-700 font-light max-w-2xl">
-            Cepas referencia internacional certificadas BSL-1. Importación desde USA con garantía de identidad, viabilidad y trazabilidad bajo normas ISO.
+            Cepas referencia internacional certificadas del American Type Culture Collection (ATCC).   
           </p>
         </div>
       </section>
