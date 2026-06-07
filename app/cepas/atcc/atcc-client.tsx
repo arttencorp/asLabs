@@ -7,6 +7,11 @@ import { Search, Download, Lock, X, ShoppingCart } from "lucide-react"
 
 const ENVIO_PERU = 155.00
 
+interface CartItem {
+  cepa: typeof cepasATCC[0]
+  cantidad: number
+}
+
 // Datos de Cepas ATCC desde catálogo - Solo BSL-1 (con envío incluido)
 const cepasATCC = [
   {
@@ -443,6 +448,11 @@ export default function ATCCClient() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState("relevance")
   const [itemsPerPage, setItemsPerPage] = useState(24)
+  const [carrito, setCarrito] = useState<CartItem[]>([])
+  const [lista, setLista] = useState<typeof cepasATCC>([])
+  const [showCartModal, setShowCartModal] = useState(false)
+  const [selectedCepaForCart, setSelectedCepaForCart] = useState<typeof cepasATCC[0] | null>(null)
+  const [cantidadCarrito, setCantidadCarrito] = useState(1)
 
   const filteredCepas = cepasATCC.filter((cepa) => {
     const matchesSearch =
