@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -31,8 +33,6 @@ export function generateMetadata({ params }: TeamMemberPageProps) {
     description: `${member.role} en ${member.area}`,
   }
 }
-
-'use client'
 
 export default function TeamMemberPage({ params }: TeamMemberPageProps) {
   const member = getTeamMemberById(params.id)
