@@ -513,16 +513,28 @@ export default function ATCCClient() {
 
   const generarMensajeWhatsApp = () => {
     const totalBase = carrito.reduce((sum, item) => sum + item.cepa.precio * item.cantidad, 0)
-    const mensaje = `*PEDIDO CEPAS ATCC - AS LABORATORIOS*\n\n` +
-      `${carrito.map((item) => `• ${item.cepa.nombre} (${item.cepa.codigo})\n   Cantidad: ${item.cantidad}\n   Precio unitario: S/ ${(item.cepa.precio - ENVIO_PERU).toFixed(2)}\n   Subtotal: S/ ${((item.cepa.precio - ENVIO_PERU) * item.cantidad).toFixed(2)}`).join("\n\n")}\n\n` +
-      `---\n*RESUMEN DEL PEDIDO*\n` +
-      `Subtotal: S/ ${carrito.reduce((sum, item) => sum + (item.cepa.precio - ENVIO_PERU) * item.cantidad, 0).toFixed(2)}\n` +
-      `Envío a Trujillo: S/ ${ENVIO_PERU.toFixed(2)}\n` +
-      `*TOTAL: S/ ${totalBase.toFixed(2)}*\n\n` +
-      `Por favor confirmar disponibilidad y detalles de entrega.`
-    
-    const numeroWhatsApp = "51987654321" // Cambia con tu número real
-    const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`
+    const subtotalBase = carrito.reduce((sum, item) => sum + (item.cepa.precio - ENVIO_PERU) * item.cantidad, 0)
+
+    const lineasProductos = carrito.map((item) => {
+      const precioUnit = (item.cepa.precio - ENVIO_PERU).toFixed(2)
+      const subtotal = ((item.cepa.precio - ENVIO_PERU) * item.cantidad).toFixed(2)
+      return "• " + item.cepa.nombre + " (" + item.cepa.codigo + ")\n" +
+        "   Cantidad: " + item.cantidad + "\n" +
+        "   Precio unitario: S/ " + precioUnit + "\n" +
+        "   Subtotal: S/ " + subtotal
+    }).join("\n\n")
+
+    const mensaje =
+      "*PEDIDO CEPAS ATCC - AS LABORATORIOS*\n\n" +
+      lineasProductos + "\n\n" +
+      "---\n*RESUMEN DEL PEDIDO*\n" +
+      "Subtotal: S/ " + subtotalBase.toFixed(2) + "\n" +
+      "Envio a Trujillo: S/ " + ENVIO_PERU.toFixed(2) + "\n" +
+      "*TOTAL: S/ " + totalBase.toFixed(2) + "*\n\n" +
+      "Por favor confirmar disponibilidad y detalles de entrega."
+
+    const numeroWhatsApp = "51987654321"
+    const enlaceWhatsApp = "https://wa.me/" + numeroWhatsApp + "?text=" + encodeURIComponent(mensaje)
     window.open(enlaceWhatsApp, "_blank")
   }
 
