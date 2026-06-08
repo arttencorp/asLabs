@@ -813,7 +813,7 @@ export default function ATCCClient() {
                   </div>
 
                   <p className="text-sm text-emerald-100 mb-2">Total por unidad</p>
-                  <p className="text-3xl font-bold text-emerald-50">${selectedCepaForCart.precio.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-emerald-50">S/ {selectedCepaForCart.precio.toFixed(2)}</p>
                 </div>
 
                 <div className="space-y-3">
