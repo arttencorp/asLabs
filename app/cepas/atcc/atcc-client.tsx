@@ -693,7 +693,6 @@ export default function ATCCClient() {
                             <p className="text-emerald-600 text-xs font-light italic mt-1">{cepa.cientifico}</p>
                           </div>
                         </div>
-                        </div>
 
                         <div className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded text-xs font-semibold mb-4">
                           {cepa.bsl}
