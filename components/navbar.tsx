@@ -98,6 +98,11 @@ export default function Navbar() {
         "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
       children: [
         {
+          title: "Biofertilizantes",
+          href: "/biofertilizantes",
+          description: "Microorganismos benéficos para nutrición y salud del suelo",
+        },
+        {
           title: "Cepas Identificadas",
           href: "/cepas/identificadas",
           description: "Cultivos locales certificados de máxima viabilidad",
