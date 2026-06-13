@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import CepasClient from "../cepas-client"
+import IdentificadasClient from "./identificadas-client"
 
 export const metadata: Metadata = {
   title: "Cepas Identificadas | AS Laboratorios",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function CepasIdentificadasPage() {
-  return <CepasClient />
+  return <IdentificadasClient />
 }
