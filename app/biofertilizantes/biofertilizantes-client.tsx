@@ -19,95 +19,159 @@ const biofertilizantes = [
     id: "bf-1",
     nombre: "Bacillus subtilis",
     codigo: "AS-BS-001",
-    cientifico: "Bacillus subtilis (Ehrenberg) Cohn",
-    bsl: "BSL-1",
+    cientifico: "Bacillus subtilis",
     categoria: "Biofertilizantes",
-    productFormat: "Líquido concentrado",
-    strainDesignation: "Cepa identificada y caracterizada en AS Labs",
-    depositedAs: "Bacillus subtilis",
-    typeStrain: "No",
-    precio: 450.00,
-    cantidad: "500 mL",
-    referencia: "AS-BS-001",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 38.00,
+    imagen: "/placeholder.svg?height=300&width=300",
     disponibilidad: true,
+    aplicaciones: "Banano, arroz, maíz, hortalizas, papa, tomate, frutales",
   },
   {
     id: "bf-2",
-    nombre: "Pseudomonas fluorescens",
-    codigo: "AS-PF-001",
-    cientifico: "Pseudomonas fluorescens Migula",
-    bsl: "BSL-1",
+    nombre: "Bacillus velezensis",
+    codigo: "AS-BV-001",
+    cientifico: "Bacillus velezensis",
     categoria: "Biofertilizantes",
-    productFormat: "Líquido concentrado",
-    strainDesignation: "Aislada de suelo rizosférico",
-    depositedAs: "Pseudomonas fluorescens",
-    typeStrain: "No",
-    precio: 450.00,
-    cantidad: "500 mL",
-    referencia: "AS-PF-001",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 45.00,
+    imagen: "/placeholder.svg?height=300&width=300",
     disponibilidad: true,
+    aplicaciones: "Banano, cacao, palto, tomate, pimiento, papa, vid",
   },
   {
     id: "bf-3",
-    nombre: "Azospirillum brasilense",
-    codigo: "AS-AB-001",
-    cientifico: "Azospirillum brasilense",
-    bsl: "BSL-1",
-    categoria: "Fijación de Nitrógeno",
-    productFormat: "Polvo seco",
-    strainDesignation: "Cepa nativa de suelos peruanos",
-    depositedAs: "Azospirillum brasilense",
-    typeStrain: "No",
-    precio: 520.00,
-    cantidad: "100 g",
-    referencia: "AS-AB-001",
+    nombre: "Bacillus amyloliquefaciens",
+    codigo: "AS-BA-001",
+    cientifico: "Bacillus amyloliquefaciens",
+    categoria: "Biofertilizantes",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 48.00,
+    imagen: "/placeholder.svg?height=300&width=300",
     disponibilidad: true,
+    aplicaciones: "Hortalizas, frutales, banano, papa, tomate, arroz, maíz",
   },
   {
     id: "bf-4",
     nombre: "Bacillus megaterium",
     codigo: "AS-BM-001",
     cientifico: "Bacillus megaterium",
-    bsl: "BSL-1",
-    categoria: "Biocontrol",
-    productFormat: "Líquido concentrado",
-    strainDesignation: "Aislada de compost",
-    depositedAs: "Bacillus megaterium",
-    typeStrain: "No",
-    precio: 480.00,
-    cantidad: "500 mL",
-    referencia: "AS-BM-001",
+    categoria: "Biofertilizantes",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 40.00,
+    imagen: "/placeholder.svg?height=300&width=300",
     disponibilidad: true,
+    aplicaciones: "Maíz, arroz, papa, leguminosas, hortalizas, frutales",
   },
   {
     id: "bf-5",
-    nombre: "Trichoderma reesei",
-    codigo: "AS-TR-001",
-    cientifico: "Trichoderma reesei",
-    bsl: "BSL-1",
-    categoria: "Biocontrol",
-    productFormat: "Polvo seco",
-    strainDesignation: "Cepa antagonista de hongos",
-    depositedAs: "Trichoderma reesei",
-    typeStrain: "No",
-    precio: 550.00,
-    cantidad: "50 g",
-    referencia: "AS-TR-001",
+    nombre: "Bacillus licheniformis",
+    codigo: "AS-BL-001",
+    cientifico: "Bacillus licheniformis",
+    categoria: "Biofertilizantes",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 36.00,
+    imagen: "/placeholder.svg?height=300&width=300",
     disponibilidad: true,
+    aplicaciones: "Caña de azúcar, arroz, maíz, hortalizas, compost, frutales",
   },
   {
     id: "bf-6",
-    nombre: "Streptomyces sp.",
-    codigo: "AS-ST-001",
-    cientifico: "Streptomyces sp.",
-    bsl: "BSL-1",
-    categoria: "Investigación",
-    productFormat: "Cultivo en agar",
-    strainDesignation: "Productora de antibióticos",
-    depositedAs: "Streptomyces sp.",
-    typeStrain: "No",
-    precio: 580.00,
-    cantidad: "Placa petri",
+    nombre: "Bacillus pumilus",
+    codigo: "AS-BP-001",
+    cientifico: "Bacillus pumilus",
+    categoria: "Biofertilizantes",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 42.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Vid, tomate, pimiento, cucurbitáceas, frutales, hortalizas",
+  },
+  {
+    id: "bf-7",
+    nombre: "Paenibacillus polymyxa",
+    codigo: "AS-PP-001",
+    cientifico: "Paenibacillus polymyxa",
+    categoria: "Fijación de Nitrógeno",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 44.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Arroz, maíz, trigo, papa, hortalizas, leguminosas",
+  },
+  {
+    id: "bf-8",
+    nombre: "Azospirillum brasilense",
+    codigo: "AS-AB-001",
+    cientifico: "Azospirillum brasilense",
+    categoria: "Fijación de Nitrógeno",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 35.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Maíz, arroz, trigo, caña de azúcar, pastos, hortalizas",
+  },
+  {
+    id: "bf-9",
+    nombre: "Azotobacter chroococcum",
+    codigo: "AS-AC-001",
+    cientifico: "Azotobacter chroococcum",
+    categoria: "Fijación de Nitrógeno",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 35.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Hortalizas, maíz, arroz, frutales, papa, algodón",
+  },
+  {
+    id: "bf-10",
+    nombre: "Pseudomonas fluorescens",
+    codigo: "AS-PF-001",
+    cientifico: "Pseudomonas fluorescens",
+    categoria: "Biocontrol",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 39.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Papa, tomate, hortalizas, arroz, banano, frutales",
+  },
+  {
+    id: "bf-11",
+    nombre: "Pseudomonas putida",
+    codigo: "AS-PP-001",
+    cientifico: "Pseudomonas putida",
+    categoria: "Biocontrol",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 37.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Hortalizas, papa, tomate, maíz, arroz, frutales",
+  },
+  {
+    id: "bf-12",
+    nombre: "Rhizobium spp.",
+    codigo: "AS-RH-001",
+    cientifico: "Rhizobium spp.",
+    categoria: "Fijación de Nitrógeno",
+    productFormat: "Líquido Concentrado",
+    cantidad: "1 L",
+    precio: 33.00,
+    imagen: "/placeholder.svg?height=300&width=300",
+    disponibilidad: true,
+    aplicaciones: "Frijol, arveja, alfalfa, trébol, lenteja, otras leguminosas",
+  },
+]
     referencia: "AS-ST-001",
     disponibilidad: true,
   },
@@ -359,8 +423,15 @@ export default function BiofertilizantesClient() {
                     className="border-b border-emerald-100 py-6 hover:bg-emerald-50 px-4 transition-colors"
                   >
                     <div className="flex flex-col lg:flex-row lg:gap-12 lg:justify-between">
-                      {/* Left: Info */}
+                      {/* Left: Image and Info */}
                       <div className="flex-1 mb-6 lg:mb-0">
+                        <div className="mb-4 bg-gray-100 rounded-lg overflow-hidden h-64 lg:h-80 flex items-center justify-center">
+                          <img
+                            src={producto.imagen}
+                            alt={producto.nombre}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
                         <div className="flex items-start gap-3 mb-3">
                           <span className="text-xl">🌱</span>
                           <div className="flex-1">
@@ -386,11 +457,9 @@ export default function BiofertilizantesClient() {
                           <p>
                             <span className="font-semibold text-emerald-900">Cantidad:</span> {producto.cantidad}
                           </p>
-                          {producto.strainDesignation && (
-                            <p>
-                              <span className="font-semibold text-emerald-900">Nota:</span> {producto.strainDesignation}
-                            </p>
-                          )}
+                          <p>
+                            <span className="font-semibold text-emerald-900">Cultivos:</span> {producto.aplicaciones}
+                          </p>
                         </div>
                       </div>
 
@@ -453,58 +522,66 @@ export default function BiofertilizantesClient() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+              {/* Imagen del Producto */}
+              <div className="flex justify-center">
+                <img
+                  src={selectedProductoForCart.imagen}
+                  alt={selectedProductoForCart.nombre}
+                  className="w-full max-w-xs h-auto rounded-lg shadow-md"
+                />
+              </div>
+
               {/* Información del Producto */}
               <div className="space-y-4">
                 <div className="bg-emerald-50 p-4 rounded-lg">
                   <p className="text-sm text-emerald-600 font-semibold mb-1">BIOFERTILIZANTE</p>
-                  <h3 className="text-xl font-bold text-emerald-900 mb-2">{selectedCepaForCart.nombre}</h3>
-                  <p className="text-sm text-emerald-700 mb-3">{selectedCepaForCart.codigo}</p>
-                  <p className="text-xs text-emerald-600 italic">{selectedCepaForCart.cientifico}</p>
+                  <h3 className="text-xl font-bold text-emerald-900 mb-2">{selectedProductoForCart.nombre}</h3>
+                  <p className="text-sm text-emerald-700 mb-3">{selectedProductoForCart.codigo}</p>
+                  <p className="text-xs text-emerald-600 italic">{selectedProductoForCart.cientifico}</p>
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Detalles:</p>
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Información:</p>
                   <ul className="space-y-1 text-xs text-gray-600">
-                    <li><strong>Formato:</strong> {selectedProductoForCart.productFormat || "—"}</li>
-                    <li><strong>Designación:</strong> {selectedProductoForCart.strainDesignation || "—"}</li>
-                    <li><strong>Cepa tipo:</strong> {selectedProductoForCart.typeStrain || "—"}</li>
+                    <li><strong>Formato:</strong> {selectedProductoForCart.productFormat}</li>
                     <li><strong>Cantidad:</strong> {selectedProductoForCart.cantidad}</li>
+                    <li><strong>Cultivos:</strong> {selectedProductoForCart.aplicaciones}</li>
                   </ul>
                 </div>
               </div>
+            </div>
 
-              {/* Precios y Cantidad */}
-              <div className="space-y-4">
-                <div className="bg-emerald-600 text-white p-6 rounded-lg">
-                  <p className="text-sm text-emerald-100 mb-1">Precio por unidad (sin envío)</p>
-                  <p className="text-4xl font-bold mb-4">S/ {(selectedProductoForCart.precio - ENVIO_PERU).toFixed(2)}</p>
+            {/* Precios y Cantidad */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+              <div className="bg-emerald-600 text-white p-6 rounded-lg">
+                <p className="text-sm text-emerald-100 mb-1">Precio por unidad (sin envío)</p>
+                <p className="text-4xl font-bold mb-4">S/ {(selectedProductoForCart.precio - ENVIO_PERU).toFixed(2)}</p>
 
-                  <div className="bg-emerald-700 rounded p-3 mb-4 text-sm">
-                    <p className="text-emerald-50 mb-1">+ Envío a Trujillo:</p>
-                    <p className="text-2xl font-bold text-white">S/ {ENVIO_PERU.toFixed(2)}</p>
-                  </div>
-
-                  <p className="text-sm text-emerald-100 mb-2">Total por unidad</p>
-                  <p className="text-3xl font-bold text-emerald-50">S/ {selectedProductoForCart.precio.toFixed(2)}</p>
+                <div className="bg-emerald-700 rounded p-3 mb-4 text-sm">
+                  <p className="text-emerald-50 mb-1">+ Envío a Trujillo:</p>
+                  <p className="text-2xl font-bold text-white">S/ {ENVIO_PERU.toFixed(2)}</p>
                 </div>
 
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-semibold text-emerald-900 mb-2">Cantidad:</label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={cantidadCarrito}
-                      onChange={(e) => setCantidadCarrito(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-full px-4 py-3 border-2 border-emerald-300 rounded-lg focus:outline-none focus:border-emerald-600 font-semibold text-lg"
-                    />
-                  </div>
+                <p className="text-sm text-emerald-100 mb-2">Total por unidad</p>
+                <p className="text-3xl font-bold text-emerald-50">S/ {selectedProductoForCart.precio.toFixed(2)}</p>
+              </div>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-xs text-blue-700">
-                      <strong>Nota:</strong> El envío mostrado es una estimación. El costo final dependerá del peso total del pedido.
-                    </p>
-                  </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-semibold text-emerald-900 mb-2">Cantidad:</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={cantidadCarrito}
+                    onChange={(e) => setCantidadCarrito(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-full px-4 py-3 border-2 border-emerald-300 rounded-lg focus:outline-none focus:border-emerald-600 font-semibold text-lg"
+                  />
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-700">
+                    <strong>Nota:</strong> El envío mostrado es una estimación. El costo final dependerá del peso total del pedido.
+                  </p>
                 </div>
               </div>
             </div>
