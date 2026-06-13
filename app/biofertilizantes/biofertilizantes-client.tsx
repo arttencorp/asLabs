@@ -9,7 +9,7 @@ import Link from "next/link"
 const ENVIO_PERU = 155.00
 
 interface CartItem {
-  cepa: (typeof biofertilizantes)[0]
+  producto: (typeof biofertilizantes)[0]
   cantidad: number
 }
 
@@ -128,43 +128,43 @@ export default function BiofertilizantesClient() {
   const [carrito, setCarrito] = useState<CartItem[]>([])
   const [lista, setLista] = useState<typeof biofertilizantes>([])
   const [showCartModal, setShowCartModal] = useState(false)
-  const [selectedCepaForCart, setSelectedCepaForCart] = useState<typeof biofertilizantes[0] | null>(null)
+  const [selectedProductoForCart, setSelectedProductoForCart] = useState<typeof biofertilizantes[0] | null>(null)
   const [cantidadCarrito, setCantidadCarrito] = useState(1)
   const [showCarrito, setShowCarrito] = useState(false)
 
-  const handleAgregarAlCarrito = (cepa: typeof biofertilizantes[0]) => {
-    setSelectedCepaForCart(cepa)
+  const handleAgregarAlCarrito = (producto: typeof biofertilizantes[0]) => {
+    setSelectedProductoForCart(producto)
     setCantidadCarrito(1)
     setShowCartModal(true)
   }
 
   const confirmAgregar = () => {
-    if (selectedCepaForCart) {
-      const existente = carrito.find((item) => item.cepa.id === selectedCepaForCart.id)
+    if (selectedProductoForCart) {
+      const existente = carrito.find((item) => item.producto.id === selectedProductoForCart.id)
       if (existente) {
         setCarrito(
           carrito.map((item) =>
-            item.cepa.id === selectedCepaForCart.id
+            item.producto.id === selectedProductoForCart.id
               ? { ...item, cantidad: item.cantidad + cantidadCarrito }
               : item
           )
         )
       } else {
-        setCarrito([...carrito, { cepa: selectedCepaForCart, cantidad: cantidadCarrito }])
+        setCarrito([...carrito, { producto: selectedProductoForCart, cantidad: cantidadCarrito }])
       }
       setShowCartModal(false)
     }
   }
 
-  const handleAgregarALista = (cepa: typeof biofertilizantes[0]) => {
-    const existe = lista.find((item) => item.id === cepa.id)
+  const handleAgregarALista = (producto: typeof biofertilizantes[0]) => {
+    const existe = lista.find((item) => item.id === producto.id)
     if (!existe) {
-      setLista([...lista, cepa])
+      setLista([...lista, producto])
     }
   }
 
   const removerDelCarrito = (id: string) => {
-    setCarrito(carrito.filter((item) => item.cepa.id !== id))
+    setCarrito(carrito.filter((item) => item.producto.id !== id))
   }
 
   const removerDeLista = (id: string) => {
@@ -172,13 +172,13 @@ export default function BiofertilizantesClient() {
   }
 
   const generarMensajeWhatsApp = () => {
-    const totalBase = carrito.reduce((sum, item) => sum + item.cepa.precio * item.cantidad, 0)
-    const subtotalBase = carrito.reduce((sum, item) => sum + (item.cepa.precio - ENVIO_PERU) * item.cantidad, 0)
+    const totalBase = carrito.reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0)
+    const subtotalBase = carrito.reduce((sum, item) => sum + (item.producto.precio - ENVIO_PERU) * item.cantidad, 0)
 
     const lineasProductos = carrito.map((item) => {
-      const precioUnit = (item.cepa.precio - ENVIO_PERU).toFixed(2)
-      const subtotal = ((item.cepa.precio - ENVIO_PERU) * item.cantidad).toFixed(2)
-      return "• " + item.cepa.nombre + " (" + item.cepa.codigo + ")\n" +
+      const precioUnit = (item.producto.precio - ENVIO_PERU).toFixed(2)
+      const subtotal = ((item.producto.precio - ENVIO_PERU) * item.cantidad).toFixed(2)
+      return "• " + item.producto.nombre + " (" + item.producto.codigo + ")\n" +
         "   Cantidad: " + item.cantidad + "\n" +
         "   Precio unitario: S/ " + precioUnit + "\n" +
         "   Subtotal: S/ " + subtotal
@@ -198,11 +198,11 @@ export default function BiofertilizantesClient() {
     window.open(enlaceWhatsApp, "_blank")
   }
 
-  const filteredCepas = biofertilizantes.filter((cepa) => {
+  const filteredCepas = biofertilizantes.filter((producto) => {
     const matchesSearch =
-      cepa.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cepa.codigo.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = !selectedCategory || cepa.categoria === selectedCategory
+      producto.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      producto.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = !selectedCategory || producto.categoria === selectedCategory
     return matchesSearch && matchesCategory
   })
 
@@ -353,9 +353,9 @@ export default function BiofertilizantesClient() {
                   <p className="text-emerald-600 text-lg">Sin resultados</p>
                 </div>
               ) : (
-                sortedCepas.slice(0, itemsPerPage).map((cepa) => (
+                sortedCepas.slice(0, itemsPerPage).map((producto) => (
                   <div
-                    key={cepa.id}
+                    key={producto.id}
                     className="border-b border-emerald-100 py-6 hover:bg-emerald-50 px-4 transition-colors"
                   >
                     <div className="flex flex-col lg:flex-row lg:gap-12 lg:justify-between">
@@ -365,30 +365,30 @@ export default function BiofertilizantesClient() {
                           <span className="text-xl">🌱</span>
                           <div className="flex-1">
                             <Link
-                              href={`/biofertilizantes/${cepa.id}`}
+                              href={`/biofertilizantes/${producto.id}`}
                               className="text-lg font-semibold text-emerald-900 hover:text-emerald-700 hover:underline transition-colors"
                             >
-                              {cepa.nombre}
+                              {producto.nombre}
                             </Link>
-                            <p className="text-emerald-700 text-sm">{cepa.codigo}</p>
-                            <p className="text-emerald-600 text-xs font-light italic mt-1">{cepa.cientifico}</p>
+                            <p className="text-emerald-700 text-sm">{producto.codigo}</p>
+                            <p className="text-emerald-600 text-xs font-light italic mt-1">{producto.cientifico}</p>
                           </div>
                         </div>
 
                         <div className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded text-xs font-semibold mb-4">
-                          {cepa.categoria}
+                          {producto.categoria}
                         </div>
 
                         <div className="space-y-2 text-sm text-emerald-700">
                           <p>
-                            <span className="font-semibold text-emerald-900">Formato:</span> {cepa.productFormat}
+                            <span className="font-semibold text-emerald-900">Formato:</span> {producto.productFormat}
                           </p>
                           <p>
-                            <span className="font-semibold text-emerald-900">Cantidad:</span> {cepa.cantidad}
+                            <span className="font-semibold text-emerald-900">Cantidad:</span> {producto.cantidad}
                           </p>
-                          {cepa.strainDesignation && (
+                          {producto.strainDesignation && (
                             <p>
-                              <span className="font-semibold text-emerald-900">Nota:</span> {cepa.strainDesignation}
+                              <span className="font-semibold text-emerald-900">Nota:</span> {producto.strainDesignation}
                             </p>
                           )}
                         </div>
@@ -398,24 +398,24 @@ export default function BiofertilizantesClient() {
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
-                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
+                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(producto.precio - ENVIO_PERU).toFixed(2)}</p>
                           <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
-                          <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
+                          <p className="text-xs text-emerald-500 mb-4">{producto.cantidad}</p>
 
-                          {cepa.disponibilidad ? (
+                          {producto.disponibilidad ? (
                             <>
                               <div className="flex items-center gap-2 mb-3">
                                 <span className="text-sm text-emerald-700">Cantidad</span>
                                 <input type="number" min="1" defaultValue="1" className="w-16 px-2 py-1 border border-emerald-300 rounded text-sm" />
                               </div>
                               <button
-                                onClick={() => handleAgregarAlCarrito(cepa)}
+                                onClick={() => handleAgregarAlCarrito(producto)}
                                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded mb-2 transition-colors flex items-center justify-center gap-2"
                               >
                                 🛒 Agregar al carrito
                               </button>
                               <button
-                                onClick={() => handleAgregarALista(cepa)}
+                                onClick={() => handleAgregarALista(producto)}
                                 className="w-full bg-white border-2 border-emerald-300 text-emerald-700 font-semibold py-2 rounded hover:bg-emerald-50 transition-colors text-sm"
                               >
                                 ♡ Agregar a lista
@@ -439,7 +439,7 @@ export default function BiofertilizantesClient() {
       </div>
 
       {/* Modal de Carrito - Agregar Producto */}
-      {showCartModal && selectedCepaForCart && (
+      {showCartModal && selectedProductoForCart && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full shadow-xl">
             <div className="flex items-center justify-between p-6 border-b border-emerald-200">
@@ -465,10 +465,10 @@ export default function BiofertilizantesClient() {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm font-semibold text-gray-700 mb-2">Detalles:</p>
                   <ul className="space-y-1 text-xs text-gray-600">
-                    <li><strong>Formato:</strong> {selectedCepaForCart.productFormat || "—"}</li>
-                    <li><strong>Designación:</strong> {selectedCepaForCart.strainDesignation || "—"}</li>
-                    <li><strong>Tipo de cepa:</strong> {selectedCepaForCart.typeStrain || "—"}</li>
-                    <li><strong>Cantidad:</strong> {selectedCepaForCart.cantidad}</li>
+                    <li><strong>Formato:</strong> {selectedProductoForCart.productFormat || "—"}</li>
+                    <li><strong>Designación:</strong> {selectedProductoForCart.strainDesignation || "—"}</li>
+                    <li><strong>Cepa tipo:</strong> {selectedProductoForCart.typeStrain || "—"}</li>
+                    <li><strong>Cantidad:</strong> {selectedProductoForCart.cantidad}</li>
                   </ul>
                 </div>
               </div>
@@ -477,7 +477,7 @@ export default function BiofertilizantesClient() {
               <div className="space-y-4">
                 <div className="bg-emerald-600 text-white p-6 rounded-lg">
                   <p className="text-sm text-emerald-100 mb-1">Precio por unidad (sin envío)</p>
-                  <p className="text-4xl font-bold mb-4">S/ {(selectedCepaForCart.precio - ENVIO_PERU).toFixed(2)}</p>
+                  <p className="text-4xl font-bold mb-4">S/ {(selectedProductoForCart.precio - ENVIO_PERU).toFixed(2)}</p>
 
                   <div className="bg-emerald-700 rounded p-3 mb-4 text-sm">
                     <p className="text-emerald-50 mb-1">+ Envío a Trujillo:</p>
@@ -485,7 +485,7 @@ export default function BiofertilizantesClient() {
                   </div>
 
                   <p className="text-sm text-emerald-100 mb-2">Total por unidad</p>
-                  <p className="text-3xl font-bold text-emerald-50">S/ {selectedCepaForCart.precio.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-emerald-50">S/ {selectedProductoForCart.precio.toFixed(2)}</p>
                 </div>
 
                 <div className="space-y-3">
@@ -551,16 +551,16 @@ export default function BiofertilizantesClient() {
               <>
                 <div className="p-6 space-y-4">
                   {carrito.map((item) => (
-                    <div key={item.cepa.id} className="bg-emerald-50 rounded-lg p-4 flex items-center justify-between border border-emerald-200 hover:border-emerald-400 transition-colors">
+                    <div key={item.producto.id} className="bg-emerald-50 rounded-lg p-4 flex items-center justify-between border border-emerald-200 hover:border-emerald-400 transition-colors">
                       <div className="flex-1">
-                        <h3 className="font-bold text-emerald-900">{item.cepa.nombre}</h3>
-                        <p className="text-sm text-emerald-600">{item.cepa.codigo}</p>
+                        <h3 className="font-bold text-emerald-900">{item.producto.nombre}</h3>
+                        <p className="text-sm text-emerald-600">{item.producto.codigo}</p>
                         <p className="text-sm text-emerald-700 mt-2">
-                          Cantidad: <span className="font-bold">{item.cantidad}</span> × S/ {(item.cepa.precio - ENVIO_PERU).toFixed(2)} = <span className="font-bold">S/ {((item.cepa.precio - ENVIO_PERU) * item.cantidad).toFixed(2)}</span>
+                          Cantidad: <span className="font-bold">{item.cantidad}</span> × S/ {(item.producto.precio - ENVIO_PERU).toFixed(2)} = <span className="font-bold">S/ {((item.producto.precio - ENVIO_PERU) * item.cantidad).toFixed(2)}</span>
                         </p>
                       </div>
                       <button
-                        onClick={() => removerDelCarrito(item.cepa.id)}
+                        onClick={() => removerDelCarrito(item.producto.id)}
                         className="ml-4 p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-5 h-5" />
@@ -573,7 +573,7 @@ export default function BiofertilizantesClient() {
                   <div className="space-y-2 mb-6">
                     <div className="flex justify-between text-emerald-700">
                       <span>Subtotal:</span>
-                      <span className="font-bold">S/ {carrito.reduce((sum, item) => sum + (item.cepa.precio - ENVIO_PERU) * item.cantidad, 0).toFixed(2)}</span>
+                      <span className="font-bold">S/ {carrito.reduce((sum, item) => sum + (item.producto.precio - ENVIO_PERU) * item.cantidad, 0).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-emerald-700">
                       <span>Envío a Trujillo:</span>
@@ -581,7 +581,7 @@ export default function BiofertilizantesClient() {
                     </div>
                     <div className="flex justify-between text-xl font-bold text-emerald-900 bg-white p-3 rounded-lg mt-4">
                       <span>TOTAL:</span>
-                      <span>S/ {carrito.reduce((sum, item) => sum + item.cepa.precio * item.cantidad, 0).toFixed(2)}</span>
+                      <span>S/ {carrito.reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0).toFixed(2)}</span>
                     </div>
                   </div>
 
