@@ -49,65 +49,65 @@ const cepasIdentificadas = [
   },
   {
     id: "id-3",
-    nombre: "Azospirillum sp.",
-    codigo: "AS-AZ-001",
+    nombre: "Azospirillum brasilense",
+    codigo: "AS-AB-001",
     cientifico: "Azospirillum brasilense",
     bsl: "BSL-1",
     categoria: "Fijación de Nitrógeno",
-    productFormat: "Líquido concentrado",
-    strainDesignation: "Fijadora de nitrógeno atmosférico",
+    productFormat: "Polvo seco",
+    strainDesignation: "Cepa nativa de suelos peruanos",
     depositedAs: "Azospirillum brasilense",
     typeStrain: "No",
-    precio: 500.00,
-    cantidad: "500 mL",
-    referencia: "AS-AZ-001",
+    precio: 520.00,
+    cantidad: "100 g",
+    referencia: "AS-AB-001",
     disponibilidad: true,
   },
   {
     id: "id-4",
     nombre: "Bacillus megaterium",
     codigo: "AS-BM-001",
-    cientifico: "Bacillus megaterium de Bary",
+    cientifico: "Bacillus megaterium",
     bsl: "BSL-1",
-    categoria: "Biofertilizantes",
+    categoria: "Biocontrol",
     productFormat: "Líquido concentrado",
-    strainDesignation: "Solubilizadora de fosfato y potasio",
+    strainDesignation: "Aislada de compost",
     depositedAs: "Bacillus megaterium",
     typeStrain: "No",
-    precio: 450.00,
+    precio: 480.00,
     cantidad: "500 mL",
     referencia: "AS-BM-001",
     disponibilidad: true,
   },
   {
     id: "id-5",
-    nombre: "Rhizobium sp.",
-    codigo: "AS-RB-001",
-    cientifico: "Rhizobium leguminosarum",
+    nombre: "Trichoderma reesei",
+    codigo: "AS-TR-001",
+    cientifico: "Trichoderma reesei",
     bsl: "BSL-1",
-    categoria: "Fijación de Nitrógeno",
-    productFormat: "Líquido concentrado",
-    strainDesignation: "Simbionte de leguminosas",
-    depositedAs: "Rhizobium leguminosarum",
+    categoria: "Biocontrol",
+    productFormat: "Polvo seco",
+    strainDesignation: "Cepa antagonista de hongos",
+    depositedAs: "Trichoderma reesei",
     typeStrain: "No",
-    precio: 500.00,
-    cantidad: "500 mL",
-    referencia: "AS-RB-001",
+    precio: 550.00,
+    cantidad: "50 g",
+    referencia: "AS-TR-001",
     disponibilidad: true,
   },
   {
     id: "id-6",
     nombre: "Streptomyces sp.",
     codigo: "AS-ST-001",
-    cientifico: "Streptomyces griseus",
+    cientifico: "Streptomyces sp.",
     bsl: "BSL-1",
-    categoria: "Biocontrol",
-    productFormat: "Líquido concentrado",
+    categoria: "Investigación",
+    productFormat: "Cultivo en agar",
     strainDesignation: "Productora de antibióticos",
-    depositedAs: "Streptomyces griseus",
+    depositedAs: "Streptomyces sp.",
     typeStrain: "No",
-    precio: 550.00,
-    cantidad: "500 mL",
+    precio: 580.00,
+    cantidad: "Placa petri",
     referencia: "AS-ST-001",
     disponibilidad: true,
   },
@@ -131,22 +131,6 @@ export default function IdentificadasClient() {
   const [selectedCepaForCart, setSelectedCepaForCart] = useState<typeof cepasIdentificadas[0] | null>(null)
   const [cantidadCarrito, setCantidadCarrito] = useState(1)
   const [showCarrito, setShowCarrito] = useState(false)
-
-  const filteredCepas = cepasIdentificadas.filter((cepa) => {
-    const matchesSearch =
-      cepa.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cepa.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cepa.cientifico.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = !selectedCategory || cepa.categoria === selectedCategory
-    return matchesSearch && matchesCategory
-  })
-
-  const sortedCepas = filteredCepas.sort((a, b) => {
-    if (sortBy === "price-low") return (a.precio - ENVIO_PERU) - (b.precio - ENVIO_PERU)
-    if (sortBy === "price-high") return (b.precio - ENVIO_PERU) - (a.precio - ENVIO_PERU)
-    if (sortBy === "name") return a.nombre.localeCompare(b.nombre)
-    return 0
-  })
 
   const handleAgregarAlCarrito = (cepa: typeof cepasIdentificadas[0]) => {
     setSelectedCepaForCart(cepa)
@@ -214,8 +198,29 @@ export default function IdentificadasClient() {
     window.open(enlaceWhatsApp, "_blank")
   }
 
+  const filteredCepas = cepasIdentificadas.filter((cepa) => {
+    const matchesSearch =
+      cepa.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      cepa.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = !selectedCategory || cepa.categoria === selectedCategory
+    return matchesSearch && matchesCategory
+  })
+
+  const sortedCepas = [...filteredCepas].sort((a, b) => {
+    switch (sortBy) {
+      case "price-low":
+        return a.precio - b.precio
+      case "price-high":
+        return b.precio - a.precio
+      case "name":
+        return a.nombre.localeCompare(b.nombre)
+      default:
+        return 0
+    }
+  })
+
   return (
-    <>
+    <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
       {/* Hero Section con Carrito Flotante */}
@@ -224,7 +229,7 @@ export default function IdentificadasClient() {
           <div>
             <h1 className="text-4xl font-serif font-bold text-emerald-900 mb-2">Cepas Identificadas</h1>
             <p className="text-emerald-700 font-light max-w-2xl">
-              Cepas bacterianas identificadas y caracterizadas cultivadas en AS Laboratorios. Certificadas BSL-1 con garantía de viabilidad y trazabilidad.
+              Cepas bacterianas identificadas y caracterizadas en AS Laboratorios. Bacterias benéficas para agricultura, biocontrol e investigación.
             </p>
           </div>
           {carrito.length > 0 && (
@@ -241,141 +246,197 @@ export default function IdentificadasClient() {
         </div>
       </section>
 
-      {/* Filters and Search */}
-      <section className="bg-emerald-50 border-b py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-emerald-600" />
-              <input
-                type="text"
-                placeholder="Buscar cepa por nombre o código..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-emerald-300 rounded-lg focus:outline-none focus:border-emerald-600"
-              />
+      {/* Main Content */}
+      <div className="flex-1">
+        <div className="container mx-auto px-4 py-8">
+          {/* Top Controls */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+            <div className="text-sm text-emerald-700">
+              <p className="font-semibold">Resultados <span className="font-bold text-emerald-900">{filteredCepas.length}-{Math.min(itemsPerPage, filteredCepas.length)}</span> de <span className="font-bold text-emerald-900">{filteredCepas.length}</span></p>
+            </div>
+
+            <div className="flex gap-6 items-center flex-wrap">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-emerald-800">Ordenar por</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-4 py-2 border border-emerald-200 rounded focus:outline-none focus:border-emerald-500 bg-white text-emerald-900 font-medium text-sm"
+                >
+                  <option value="relevance">Relevancia</option>
+                  <option value="price-low">Precio: Menor a Mayor</option>
+                  <option value="price-high">Precio: Mayor a Menor</option>
+                  <option value="name">Nombre (A-Z)</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-emerald-800">Mostrar por página</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="px-4 py-2 border border-emerald-200 rounded focus:outline-none focus:border-emerald-500 bg-white text-emerald-900 font-medium text-sm"
+                >
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div className="flex gap-4 mb-6 overflow-x-auto pb-2">
-            <button
-              onClick={() => setSelectedCategory(null)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap font-semibold transition-colors ${
-                selectedCategory === null
-                  ? "bg-emerald-600 text-white"
-                  : "bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50"
-              }`}
-            >
-              Todas
-            </button>
-            {categorias.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full whitespace-nowrap font-semibold transition-colors ${
-                  selectedCategory === cat
-                    ? "bg-emerald-600 text-white"
-                    : "bg-white border border-emerald-300 text-emerald-700 hover:bg-emerald-50"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+          <div className="flex gap-12">
+            {/* Sidebar Filters */}
+            <div className="w-72 flex-shrink-0">
+              <div className="sticky top-24">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-emerald-900">Refinar búsqueda</h3>
+                  <button
+                    onClick={() => {
+                      setSearchTerm("")
+                      setSelectedCategory(null)
+                    }}
+                    className="text-emerald-600 hover:text-emerald-700 text-sm font-semibold transition-colors"
+                  >
+                    Limpiar búsqueda
+                  </button>
+                </div>
 
-          <div className="flex justify-between items-center">
-            <p className="text-emerald-700 font-semibold">
-              Mostrando {sortedCepas.length} de {cepasIdentificadas.length} cepas
-            </p>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 border border-emerald-300 rounded-lg focus:outline-none focus:border-emerald-600"
-            >
-              <option value="relevance">Relevancia</option>
-              <option value="name">Nombre (A-Z)</option>
-              <option value="price-low">Precio (Menor)</option>
-              <option value="price-high">Precio (Mayor)</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      {/* Products Grid */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {sortedCepas.map((cepa) => (
-              <div key={cepa.id} className="bg-white border border-emerald-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="p-6 space-y-4">
-                  {/* Product Header */}
-                  <div className="flex-1 mb-6 lg:mb-0">
-                    <div className="flex items-start gap-3 mb-3">
-                      <span className="text-xl">🧬</span>
-                      <div className="flex-1">
-                        <Link
-                          href={`/cepas/identificadas/${cepa.id}`}
-                          className="text-lg font-semibold text-emerald-900 hover:text-emerald-700 hover:underline transition-colors"
-                        >
-                          {cepa.nombre}
-                        </Link>
-                        <p className="text-emerald-700 text-sm">{cepa.codigo}</p>
-                        <p className="text-emerald-600 text-xs font-light italic mt-1">{cepa.cientifico}</p>
-                      </div>
-                    </div>
-
-                    <div className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded text-xs font-semibold mb-4">
-                      {cepa.categoria}
-                    </div>
-
-                    <div className="space-y-2 text-sm text-emerald-700 mb-4">
-                      <p><strong>Formato:</strong> {cepa.productFormat}</p>
-                      <p><strong>Cantidad:</strong> {cepa.cantidad}</p>
-                      {cepa.strainDesignation && <p><strong>Observaciones:</strong> {cepa.strainDesignation}</p>}
-                    </div>
+                {/* Search */}
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-emerald-900 mb-2">Buscar</label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-emerald-400" />
+                    <input
+                      type="text"
+                      placeholder="Buscar por código, nombre..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-3 py-2 border border-emerald-200 rounded focus:outline-none focus:border-emerald-500 text-sm"
+                    />
                   </div>
+                </div>
 
-                  {/* Right: Price and Actions */}
-                  <div className="lg:w-72 flex-shrink-0 lg:text-right">
-                    <div className="bg-emerald-50 rounded p-6 lg:p-4">
-                      <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
-                      <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
-                      <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
-                      <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
-
-                      {cepa.disponibilidad ? (
-                        <>
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className="text-sm text-emerald-700">Cantidad</span>
-                            <input type="number" min="1" defaultValue="1" className="w-16 px-2 py-1 border border-emerald-300 rounded text-sm" />
-                          </div>
-                          <button
-                            onClick={() => handleAgregarAlCarrito(cepa)}
-                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded mb-2 transition-colors flex items-center justify-center gap-2"
-                          >
-                            🛒 Agregar al carrito
-                          </button>
-                          <button
-                            onClick={() => handleAgregarALista(cepa)}
-                            className="w-full bg-white border-2 border-emerald-300 text-emerald-700 font-semibold py-2 rounded hover:bg-emerald-50 transition-colors text-sm"
-                          >
-                            ♡ Agregar a lista
-                          </button>
-                        </>
-                      ) : (
-                        <button className="w-full bg-emerald-300 text-emerald-800 font-bold py-3 rounded flex items-center justify-center gap-2 cursor-not-allowed">
-                          <Lock className="w-4 h-4" />
-                          Verificar disponibilidad
-                        </button>
-                      )}
-                    </div>
+                {/* Categories */}
+                <div>
+                  <label className="block text-sm font-semibold text-emerald-900 mb-3">Categoría</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!selectedCategory}
+                        onChange={() => setSelectedCategory(null)}
+                        className="w-4 h-4 rounded border-emerald-300"
+                      />
+                      <span className="text-sm text-emerald-700">Todas</span>
+                    </label>
+                    {categorias.map((cat) => (
+                      <label key={cat} className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategory === cat}
+                          onChange={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
+                          className="w-4 h-4 rounded border-emerald-300"
+                        />
+                        <span className="text-sm text-emerald-700">{cat}</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Results List */}
+            <div className="flex-1 space-y-1">
+              {sortedCepas.length === 0 ? (
+                <div className="text-center py-16">
+                  <p className="text-emerald-600 text-lg">Sin resultados</p>
+                </div>
+              ) : (
+                sortedCepas.slice(0, itemsPerPage).map((cepa) => (
+                  <div
+                    key={cepa.id}
+                    className="border-b border-emerald-100 py-6 hover:bg-emerald-50 px-4 transition-colors"
+                  >
+                    <div className="flex flex-col lg:flex-row lg:gap-12 lg:justify-between">
+                      {/* Left: Info */}
+                      <div className="flex-1 mb-6 lg:mb-0">
+                        <div className="flex items-start gap-3 mb-3">
+                          <span className="text-xl">🧪</span>
+                          <div className="flex-1">
+                            <Link
+                              href={`/cepas/identificadas/${cepa.id}`}
+                              className="text-lg font-semibold text-emerald-900 hover:text-emerald-700 hover:underline transition-colors"
+                            >
+                              {cepa.nombre}
+                            </Link>
+                            <p className="text-emerald-700 text-sm">{cepa.codigo}</p>
+                            <p className="text-emerald-600 text-xs font-light italic mt-1">{cepa.cientifico}</p>
+                          </div>
+                        </div>
+
+                        <div className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded text-xs font-semibold mb-4">
+                          {cepa.categoria}
+                        </div>
+
+                        <div className="space-y-2 text-sm text-emerald-700">
+                          <p>
+                            <span className="font-semibold text-emerald-900">Formato:</span> {cepa.productFormat}
+                          </p>
+                          <p>
+                            <span className="font-semibold text-emerald-900">Cantidad:</span> {cepa.cantidad}
+                          </p>
+                          {cepa.strainDesignation && (
+                            <p>
+                              <span className="font-semibold text-emerald-900">Nota:</span> {cepa.strainDesignation}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Right: Price and Actions */}
+                      <div className="lg:w-72 flex-shrink-0 lg:text-right">
+                        <div className="bg-emerald-50 rounded p-6 lg:p-4">
+                          <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
+                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
+                          <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
+                          <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
+
+                          {cepa.disponibilidad ? (
+                            <>
+                              <div className="flex items-center gap-2 mb-3">
+                                <span className="text-sm text-emerald-700">Cantidad</span>
+                                <input type="number" min="1" defaultValue="1" className="w-16 px-2 py-1 border border-emerald-300 rounded text-sm" />
+                              </div>
+                              <button
+                                onClick={() => handleAgregarAlCarrito(cepa)}
+                                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded mb-2 transition-colors flex items-center justify-center gap-2"
+                              >
+                                🛒 Agregar al carrito
+                              </button>
+                              <button
+                                onClick={() => handleAgregarALista(cepa)}
+                                className="w-full bg-white border-2 border-emerald-300 text-emerald-700 font-semibold py-2 rounded hover:bg-emerald-50 transition-colors text-sm"
+                              >
+                                ♡ Agregar a lista
+                              </button>
+                            </>
+                          ) : (
+                            <button className="w-full bg-emerald-300 text-emerald-800 font-bold py-3 rounded flex items-center justify-center gap-2 cursor-not-allowed">
+                              <Lock className="w-4 h-4" />
+                              Verificar disponibilidad
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Modal de Carrito - Agregar Producto */}
       {showCartModal && selectedCepaForCart && (
@@ -538,6 +599,6 @@ export default function IdentificadasClient() {
       )}
 
       <Footer />
-    </>
+    </div>
   )
 }
