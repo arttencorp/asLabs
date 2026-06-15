@@ -43,6 +43,11 @@ export default function Navbar() {
         },
       ],
     },
+    biofertilizantes: {
+      title: "Biofertilizantes",
+      href: "/biofertilizantes",
+      description: "Microorganismos benéficos para nutrición y salud del suelo",
+    },
     servicios: {
       title: "Servicios",
       href: "/servicios",
@@ -97,11 +102,6 @@ export default function Navbar() {
       description:
         "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
       children: [
-        {
-          title: "Biofertilizantes",
-          href: "/biofertilizantes",
-          description: "Microorganismos benéficos para nutrición y salud del suelo",
-        },
         {
           title: "Cepas Identificadas",
           href: "/cepas/identificadas",

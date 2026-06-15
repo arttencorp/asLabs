@@ -8,11 +8,6 @@ import Link from "next/link"
 
 const ENVIO_PERU = 155.00
 
-interface CartItem {
-  producto: (typeof biofertilizantes)[0]
-  cantidad: number
-}
-
 // Datos de Biofertilizantes
 const biofertilizantes = [
   {
@@ -176,6 +171,11 @@ const biofertilizantes = [
     disponibilidad: true,
   },
 ]
+
+interface CartItem {
+  producto: (typeof biofertilizantes)[0]
+  cantidad: number
+}
 
 const categorias = [
   "Biofertilizantes",
