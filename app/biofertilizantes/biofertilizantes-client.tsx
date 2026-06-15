@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Search, Download, Lock, X, ShoppingCart, Trash2, MessageCircle } from "lucide-react"
 import Link from "next/link"
 
-const ENVIO_PERU = 155.00
+const ENVIO_PERU = 0
 
 // Datos de Biofertilizantes
 const biofertilizantes = [
@@ -233,11 +233,10 @@ export default function BiofertilizantesClient() {
 
   const generarMensajeWhatsApp = () => {
     const totalBase = carrito.reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0)
-    const subtotalBase = carrito.reduce((sum, item) => sum + (item.producto.precio - ENVIO_PERU) * item.cantidad, 0)
 
     const lineasProductos = carrito.map((item) => {
-      const precioUnit = (item.producto.precio - ENVIO_PERU).toFixed(2)
-      const subtotal = ((item.producto.precio - ENVIO_PERU) * item.cantidad).toFixed(2)
+      const precioUnit = item.producto.precio.toFixed(2)
+      const subtotal = (item.producto.precio * item.cantidad).toFixed(2)
       return "• " + item.producto.nombre + " (" + item.producto.codigo + ")\n" +
         "   Cantidad: " + item.cantidad + "\n" +
         "   Precio unitario: S/ " + precioUnit + "\n" +
@@ -248,8 +247,6 @@ export default function BiofertilizantesClient() {
       "*PEDIDO BIOFERTILIZANTES - AS LABORATORIOS*\n\n" +
       lineasProductos + "\n\n" +
       "---\n*RESUMEN DEL PEDIDO*\n" +
-      "Subtotal: S/ " + subtotalBase.toFixed(2) + "\n" +
-      "Envio a Trujillo: S/ " + ENVIO_PERU.toFixed(2) + "\n" +
       "*TOTAL: S/ " + totalBase.toFixed(2) + "*\n\n" +
       "Por favor confirmar disponibilidad y detalles de entrega."
 
@@ -462,10 +459,9 @@ export default function BiofertilizantesClient() {
                       {/* Right: Price and Actions */}
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
-                          <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
-                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(producto.precio - ENVIO_PERU).toFixed(2)}</p>
-                          <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
-                          <p className="text-xs text-emerald-500 mb-4">{producto.cantidad}</p>
+                          <p className="text-sm font-semibold text-emerald-700 mb-1">Precio:</p>
+                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {producto.precio.toFixed(2)}</p>
+                          <p className="text-xs text-emerald-500 mb-4">Incluye envío a Trujillo</p>
 
                           {producto.disponibilidad ? (
                             <>
@@ -550,16 +546,14 @@ export default function BiofertilizantesClient() {
             {/* Precios y Cantidad */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
               <div className="bg-emerald-600 text-white p-6 rounded-lg">
-                <p className="text-sm text-emerald-100 mb-1">Precio por unidad (sin envío)</p>
-                <p className="text-4xl font-bold mb-4">S/ {(selectedProductoForCart.precio - ENVIO_PERU).toFixed(2)}</p>
+                <p className="text-sm text-emerald-100 mb-1">Precio por unidad</p>
+                <p className="text-4xl font-bold mb-4">S/ {selectedProductoForCart.precio.toFixed(2)}</p>
 
-                <div className="bg-emerald-700 rounded p-3 mb-4 text-sm">
-                  <p className="text-emerald-50 mb-1">+ Envío a Trujillo:</p>
-                  <p className="text-2xl font-bold text-white">S/ {ENVIO_PERU.toFixed(2)}</p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-700">
+                    <strong>Nota:</strong> El precio mostrado incluye envío a Trujillo, Perú.
+                  </p>
                 </div>
-
-                <p className="text-sm text-emerald-100 mb-2">Total por unidad</p>
-                <p className="text-3xl font-bold text-emerald-50">S/ {selectedProductoForCart.precio.toFixed(2)}</p>
               </div>
 
               <div className="space-y-3">
@@ -629,7 +623,7 @@ export default function BiofertilizantesClient() {
                         <h3 className="font-bold text-emerald-900">{item.producto.nombre}</h3>
                         <p className="text-sm text-emerald-600">{item.producto.codigo}</p>
                         <p className="text-sm text-emerald-700 mt-2">
-                          Cantidad: <span className="font-bold">{item.cantidad}</span> × S/ {(item.producto.precio - ENVIO_PERU).toFixed(2)} = <span className="font-bold">S/ {((item.producto.precio - ENVIO_PERU) * item.cantidad).toFixed(2)}</span>
+                          Cantidad: <span className="font-bold">{item.cantidad}</span> × S/ {item.producto.precio.toFixed(2)} = <span className="font-bold">S/ {(item.producto.precio * item.cantidad).toFixed(2)}</span>
                         </p>
                       </div>
                       <button
@@ -644,15 +638,7 @@ export default function BiofertilizantesClient() {
 
                 <div className="bg-emerald-50 border-t border-emerald-200 p-6">
                   <div className="space-y-2 mb-6">
-                    <div className="flex justify-between text-emerald-700">
-                      <span>Subtotal:</span>
-                      <span className="font-bold">S/ {carrito.reduce((sum, item) => sum + (item.producto.precio - ENVIO_PERU) * item.cantidad, 0).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-emerald-700">
-                      <span>Envío a Trujillo:</span>
-                      <span className="font-bold">S/ {ENVIO_PERU.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-xl font-bold text-emerald-900 bg-white p-3 rounded-lg mt-4">
+                    <div className="flex justify-between text-xl font-bold text-emerald-900 bg-white p-3 rounded-lg">
                       <span>TOTAL:</span>
                       <span>S/ {carrito.reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0).toFixed(2)}</span>
                     </div>

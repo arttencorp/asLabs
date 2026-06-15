@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Download, Lock, X, ShoppingCart, ArrowLeft, MessageCircle } from "lucide-react"
 import Link from "next/link"
 
-const ENVIO_PERU = 155.00
+const ENVIO_PERU = 0
 
 // Datos de Biofertilizantes (mismo que en biofertilizantes-client.tsx)
 const biofertilizantes = [
@@ -197,9 +197,8 @@ export default function BiofertilizantesDetailClient({ cepaId }: { cepaId: strin
       `Interesado en: ${cepa.nombre}\n` +
       `Código: ${cepa.codigo}\n` +
       `Cantidad: ${cantidadCarrito}\n` +
-      `Precio unitario: S/ ${(cepa.precio - ENVIO_PERU).toFixed(2)}\n` +
-      `Subtotal: S/ ${((cepa.precio - ENVIO_PERU) * cantidadCarrito).toFixed(2)}\n` +
-      `Envío a Trujillo: S/ ${ENVIO_PERU.toFixed(2)}\n` +
+      `Precio unitario: S/ ${cepa.precio.toFixed(2)}\n` +
+      `Subtotal: S/ ${(cepa.precio * cantidadCarrito).toFixed(2)}\n` +
       `*TOTAL: S/ ${(cepa.precio * cantidadCarrito).toFixed(2)}*`
 
     const numeroWhatsApp = "51987654321"
@@ -306,8 +305,8 @@ export default function BiofertilizantesDetailClient({ cepaId }: { cepaId: strin
 
                 <div className="bg-white p-4 rounded border border-emerald-200">
                   <p className="text-sm text-emerald-600 mb-1">Precio por unidad</p>
-                  <p className="text-3xl font-bold text-emerald-900">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
-                  <p className="text-xs text-emerald-500 mt-2">+ S/ {ENVIO_PERU.toFixed(2)} envío a Trujillo</p>
+                  <p className="text-3xl font-bold text-emerald-900">S/ {cepa.precio.toFixed(2)}</p>
+                  <p className="text-xs text-emerald-500 mt-2">Incluye envío a Trujillo, Perú</p>
                 </div>
 
                 <div>

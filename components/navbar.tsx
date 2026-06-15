@@ -130,11 +130,6 @@ export default function Navbar() {
       href: "/seguimiento",
       description: "Rastrea el estado de tu pedido ingresando tu número de seguimiento.",
     },
-    dashboard: {
-      title: "Dashboard",
-      href: "/dashboard",
-      description: "Emitir certificados e informes de análisis",
-    },
   }
 
   return (
