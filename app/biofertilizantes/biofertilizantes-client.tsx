@@ -167,10 +167,6 @@ const biofertilizantes = [
     aplicaciones: "Frijol, arveja, alfalfa, trébol, lenteja, otras leguminosas",
   },
 ]
-    referencia: "AS-ST-001",
-    disponibilidad: true,
-  },
-]
 
 interface CartItem {
   producto: (typeof biofertilizantes)[0]
