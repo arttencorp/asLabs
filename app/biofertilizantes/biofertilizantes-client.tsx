@@ -19,7 +19,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 38.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bacilus%20subtilis-vXU5FgILJlpTYzQEqcH8ooi0qEgOey.png",
     disponibilidad: true,
     aplicaciones: "Banano, arroz, maíz, hortalizas, papa, tomate, frutales",
   },
@@ -32,7 +32,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 45.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bacilus%20velenzis-uKcA3n1bpWkFIcKhbVT6XEA0h05YyB.png",
     disponibilidad: true,
     aplicaciones: "Banano, cacao, palto, tomate, pimiento, papa, vid",
   },
@@ -45,7 +45,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 48.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bacilus%20amyloliquifacens-8ljgPRLgVYhZwesYJisuPE9x90z0nJ.png",
     disponibilidad: true,
     aplicaciones: "Hortalizas, frutales, banano, papa, tomate, arroz, maíz",
   },
@@ -58,7 +58,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 40.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bacillus%20megaterium%2C-wPRQtLGzRFEmiN3sFCJkQdpvij7rhN.png",
     disponibilidad: true,
     aplicaciones: "Maíz, arroz, papa, leguminosas, hortalizas, frutales",
   },
@@ -71,7 +71,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 36.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bacillus%20licheniformes-inZrYCxf3eWMxyt8UAL4ZFR6K5qoYA.png",
     disponibilidad: true,
     aplicaciones: "Caña de azúcar, arroz, maíz, hortalizas, compost, frutales",
   },
@@ -84,7 +84,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 42.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bacilus%20pumilus-KA5F0OUFV4lXAKJ5PqPY6t5yvjpetd.png",
     disponibilidad: true,
     aplicaciones: "Vid, tomate, pimiento, cucurbitáceas, frutales, hortalizas",
   },
@@ -97,7 +97,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 44.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "/placeholder.svg?height=400&width=250",
     disponibilidad: true,
     aplicaciones: "Arroz, maíz, trigo, papa, hortalizas, leguminosas",
   },
@@ -110,7 +110,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 35.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/azospirilum-xLiWjpxH3pvFdjQTHq6Xv1DiJu56ZQ.png",
     disponibilidad: true,
     aplicaciones: "Maíz, arroz, trigo, caña de azúcar, pastos, hortalizas",
   },
@@ -123,7 +123,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 35.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/azotobacter-bH3Ztkgh2JmKtZCT13EdLlHdQzfI1E.png",
     disponibilidad: true,
     aplicaciones: "Hortalizas, maíz, arroz, frutales, papa, algodón",
   },
@@ -136,7 +136,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 39.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/pseudomonas%20fluorescens-vywqLeIqDUjNo6A91o8FGjhRHSFy8l.png",
     disponibilidad: true,
     aplicaciones: "Papa, tomate, hortalizas, arroz, banano, frutales",
   },
@@ -149,7 +149,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 37.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "/placeholder.svg?height=400&width=250",
     disponibilidad: true,
     aplicaciones: "Hortalizas, papa, tomate, maíz, arroz, frutales",
   },
@@ -162,7 +162,7 @@ const biofertilizantes = [
     productFormat: "Líquido Concentrado",
     cantidad: "1 L",
     precio: 33.00,
-    imagen: "/placeholder.svg?height=300&width=300",
+    imagen: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Rhizobium-9vXOS8DOFqVRkq7I5b9x9jmolQR4Sg.png",
     disponibilidad: true,
     aplicaciones: "Frijol, arveja, alfalfa, trébol, lenteja, otras leguminosas",
   },
@@ -418,11 +418,11 @@ export default function BiofertilizantesClient() {
                     <div className="flex flex-col lg:flex-row lg:gap-12 lg:justify-between">
                       {/* Left: Image and Info */}
                       <div className="flex-1 mb-6 lg:mb-0">
-                        <div className="mb-4 bg-gray-100 rounded-lg overflow-hidden h-64 lg:h-80 flex items-center justify-center">
+                        <div className="mb-4 bg-gray-100 rounded-lg overflow-hidden h-96 w-64 flex items-center justify-center mx-auto">
                           <img
                             src={producto.imagen}
                             alt={producto.nombre}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="flex items-start gap-3 mb-3">
@@ -519,7 +519,7 @@ export default function BiofertilizantesClient() {
                 <img
                   src={selectedProductoForCart.imagen}
                   alt={selectedProductoForCart.nombre}
-                  className="w-full max-w-xs h-auto rounded-lg shadow-md"
+                  className="w-56 h-auto rounded-lg shadow-md"
                 />
               </div>
 
