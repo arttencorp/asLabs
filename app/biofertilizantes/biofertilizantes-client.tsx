@@ -415,16 +415,20 @@ export default function BiofertilizantesClient() {
                     key={producto.id}
                     className="border-b border-emerald-100 py-6 hover:bg-emerald-50 px-4 transition-colors"
                   >
-                    <div className="flex flex-col lg:flex-row lg:gap-12 lg:justify-between">
-                      {/* Left: Image and Info */}
-                      <div className="flex-1 mb-6 lg:mb-0">
-                        <div className="mb-4 bg-gray-100 rounded-lg overflow-hidden h-96 w-64 flex items-center justify-center mx-auto">
+                    <div className="flex flex-col lg:flex-row lg:gap-8 lg:justify-between lg:items-start">
+                      {/* Left: Image */}
+                      <div className="flex-shrink-0 mb-6 lg:mb-0">
+                        <div className="bg-gray-100 rounded-lg overflow-hidden h-96 w-56 flex items-center justify-center">
                           <img
                             src={producto.imagen}
                             alt={producto.nombre}
                             className="w-full h-full object-contain"
                           />
                         </div>
+                      </div>
+
+                      {/* Center: Info */}
+                      <div className="flex-1">
                         <div className="flex items-start gap-3 mb-3">
                           <span className="text-xl">🌱</span>
                           <div className="flex-1">
@@ -457,7 +461,7 @@ export default function BiofertilizantesClient() {
                       </div>
 
                       {/* Right: Price and Actions */}
-                      <div className="lg:w-72 flex-shrink-0 lg:text-right">
+                      <div className="lg:w-64 flex-shrink-0 lg:text-right">
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio:</p>
                           <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {producto.precio.toFixed(2)}</p>
