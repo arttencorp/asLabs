@@ -71,6 +71,7 @@ export interface ResultadoUI {
   observaciones?: string
   muestraId?: string
   dataExtra?: Record<string, any>
+  orden?: number
 }
 
 // Agente identificado para UI
@@ -92,6 +93,7 @@ export interface NotaUI {
   id: string
   contenido: string
   resultadoId: string  // FK a ResultadoUI — siempre vinculada
+  orden?: number
 }
 
 // Anexo para UI
@@ -175,6 +177,7 @@ export interface ResultadosSectionProps {
   onAgregarResultado: (muestraId?: string) => void
   onActualizarResultado: (resultadoId: string, campo: keyof ResultadoUI, valor: any) => void
   onEliminarResultado: (resultadoId: string) => void
+  onReordenarResultado?: (resultadoId: string, direccion: 'up' | 'down') => void
   disabled?: boolean
 }
 
@@ -185,6 +188,7 @@ export interface NotasSectionProps {
   onAgregarNota: (resultadoId?: string) => void
   onActualizarNota: (notaId: string, campo: keyof NotaUI, valor: any) => void
   onEliminarNota: (notaId: string) => void
+  onReordenarNota?: (notaId: string, direccion: 'up' | 'down') => void
   disabled?: boolean
 }
 

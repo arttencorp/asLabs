@@ -666,11 +666,12 @@ export async function generarPdfDocumentoLab(
     if (documento.resultados && documento.resultados.length > 0) {
         // ── Tabla de resultados con soporte para gráfico referencial ──
         const baseCols: TableCol[] = [
-            { header: "Parámetro", width: 38 },
-            { header: "Resultado", width: 36.5, align: "center" },
-            { header: "Unidad", width: 16, align: "center" },
-            { header: "Min", width: 14, align: "center" },
-            { header: "Max", width: 14, align: "center" },
+            { header: "Cód. Muestra", width: 22 },
+            { header: "Parámetro", width: 32 },
+            { header: "Resultado", width: 26, align: "center" },
+            { header: "Unidad", width: 14, align: "center" },
+            { header: "Min", width: 12, align: "center" },
+            { header: "Max", width: 12.5, align: "center" },
         ];
 
         pdf.setFont("helvetica", "normal");
@@ -724,12 +725,13 @@ export async function generarPdfDocumentoLab(
             const r = documento.resultados[i];
 
             const textCells = [
-                { idx: 0, text: r.parametro },
-                { idx: 1, text: r.resultado },
-                { idx: 2, text: r.unidad },
-                { idx: 3, text: r.valorMin != null ? String(r.valorMin) : "-" },
-                { idx: 4, text: r.valorMax != null ? String(r.valorMax) : "-" },
-                { idx: 6, text: formatMetodoLabel(r.metodo) },
+                { idx: 0, text: getMuestraCodigoForAgente(documento.muestras, r.muestraId) },
+                { idx: 1, text: r.parametro },
+                { idx: 2, text: r.resultado },
+                { idx: 3, text: r.unidad },
+                { idx: 4, text: r.valorMin != null ? String(r.valorMin) : "-" },
+                { idx: 5, text: r.valorMax != null ? String(r.valorMax) : "-" },
+                { idx: 7, text: formatMetodoLabel(r.metodo) },
             ];
 
             const textLines = textCells.map((cell) => {
@@ -739,7 +741,7 @@ export async function generarPdfDocumentoLab(
 
             const refText = r.rangoReferencial
                 || (r.valorMin != null && r.valorMax != null ? `${r.valorMin} – ${r.valorMax}` : "-");
-            const refLines = pdf.splitTextToSize(refText, resCols[5].width - cellPadX * 2);
+            const refLines = pdf.splitTextToSize(refText, resCols[6].width - cellPadX * 2);
 
             const maxLines = Math.max(
                 1,
@@ -792,10 +794,10 @@ export async function generarPdfDocumentoLab(
                 }
             }
 
-            // Columna 5 = Valor Referencial (con gráfico opcional)
-            const refCol = resCols[5];
+            // Columna 6 = Valor Referencial (con gráfico opcional)
+            const refCol = resCols[6];
             let refX = M;
-            for (let k = 0; k < 5; k++) refX += resCols[k].width;
+            for (let k = 0; k < 6; k++) refX += resCols[k].width;
 
             const resNum = parseFloat(r.resultado);
             const hasChart = r.mostrarGrafico && r.valorMin != null && r.valorMax != null;
@@ -849,8 +851,15 @@ export async function generarPdfDocumentoLab(
 
             // Construir columnas: Parámetro + un col por campo extra
             const campos = extraConfig.campos;
-            const paramW = 35;
-            const remainW = 145;
+            
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(6.5);
+            const maxParamTextW = Math.max(
+                pdf.getTextWidth("Parámetro"),
+                ...rowsWithExtra.map((r) => pdf.getTextWidth(r.parametro || "-"))
+            );
+            const paramW = Math.max(35, Math.min(maxParamTextW + 6, 80));
+            const remainW = CW - paramW;
             const colW = Math.min(Math.floor(remainW / campos.length), 50);
 
             const extraCols: TableCol[] = [
@@ -1127,7 +1136,7 @@ export async function generarPdfDocumentoLab(
                     const imgH = img.h * ratio;
                     const imgX = x + (imgFullW - imgW) / 2; // centrar
                     pdf.addImage(img.data, imgX, y, imgW, imgH);
-                    y += imgH + 2;
+                    y += imgH + 5; // Salto adicional sugerido
                 } else {
                     y += 15;
                 }

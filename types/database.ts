@@ -378,6 +378,7 @@ export interface MuestraDatabase {
 // Resultado de Ensayo
 export interface ResultadoEnsayoDatabase {
   res_ens_id_int: string
+  res_ens_ordn_int?: number | null // Orden
   res_ens_param_vac: string | null // Parámetro analizado
   res_ens_result_vac: string | null // Resultado
   res_ens_und_vac: string | null // Unidad
@@ -398,6 +399,7 @@ export interface ResultadoEnsayoDatabase {
 // Notas de Resultado
 export interface ResultadoNotaDatabase {
   resul_not_id_int: string
+  resul_not_ordn_int?: number | null // Orden
   resul_not_cont_vac: string | null // Contenido de la nota
   resul_not_updt_dt: string | null
   resul_not_created_dt: string
@@ -493,6 +495,7 @@ export interface MuestraForm {
 }
 
 export interface ResultadoEnsayoForm {
+  res_ens_ordn_int?: number
   res_ens_param_vac: string
   res_ens_result_vac: string
   res_ens_und_vac?: string

@@ -427,8 +427,8 @@ function DocumentosSection() {
     seleccionarCliente, seleccionarArea, seleccionarServicio,
     seleccionarTipoDocumento, seleccionarEstado,
     agregarMuestra, actualizarMuestra, eliminarMuestra,
-    agregarResultado, actualizarResultado, eliminarResultado,
-    agregarNota, actualizarNota, eliminarNota,
+    agregarResultado, actualizarResultado, eliminarResultado, reordenarResultado,
+    agregarNota, actualizarNota, eliminarNota, reordenarNota,
     agregarAgente, actualizarAgente, eliminarAgente,
     agregarAnexo, actualizarAnexo, eliminarAnexo,
     configCampos, configAnexos,
@@ -546,13 +546,13 @@ function DocumentosSection() {
                 resultados={documento.resultados} muestras={documento.muestras}
                 servicioConfExtra={documento.servicioConfExtra}
                 onAgregarResultado={agregarResultado} onActualizarResultado={actualizarResultado}
-                onEliminarResultado={eliminarResultado}
+                onEliminarResultado={eliminarResultado} onReordenarResultado={reordenarResultado}
               />
               <div className="mt-6">
                 <NotasResultadoSection
                   notas={documento.notas} resultados={documento.resultados}
                   onAgregarNota={agregarNota} onActualizarNota={actualizarNota}
-                  onEliminarNota={eliminarNota}
+                  onEliminarNota={eliminarNota} onReordenarNota={reordenarNota}
                 />
               </div>
             </TabsContent>

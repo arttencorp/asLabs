@@ -34,6 +34,7 @@ export function ResultadosSection({
   onAgregarResultado,
   onActualizarResultado,
   onEliminarResultado,
+  onReordenarResultado,
   disabled = false
 }: ResultadosSectionProps) {
   const [muestraSeleccionada, setMuestraSeleccionada] = useState('')
@@ -115,6 +116,7 @@ export function ResultadosSection({
                   <TableHead className="w-[80px]">Max</TableHead>
                   <TableHead className="w-[80px] text-center">Gráfico</TableHead>
                   {extraConfig && <TableHead className="w-[50px] text-center">Extra</TableHead>}
+                  <TableHead className="w-[60px] text-center">Orden</TableHead>
                   <TableHead className="w-[60px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -233,6 +235,26 @@ export function ResultadosSection({
                         />
                       </TableCell>
                     )}
+                    <TableCell>
+                      <div className="flex flex-col items-center space-y-1">
+                        <button
+                          type="button"
+                          className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                          onClick={() => onReordenarResultado?.(resultado.id, 'up')}
+                          disabled={disabled}
+                        >
+                          <span className="text-xs">▲</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="text-muted-foreground hover:text-foreground disabled:opacity-30"
+                          onClick={() => onReordenarResultado?.(resultado.id, 'down')}
+                          disabled={disabled}
+                        >
+                          <span className="text-xs">▼</span>
+                        </button>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant="ghost"
