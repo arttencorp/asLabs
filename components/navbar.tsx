@@ -215,7 +215,7 @@ export default function Navbar() {
                       )}
                       <ChevronDown className="h-4 w-4" />
                       <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
+                        className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300 shadow-sm ${
                           activeItem === key ? "w-full" : "w-0"
                         }`}
                       ></span>
@@ -229,7 +229,7 @@ export default function Navbar() {
                     >
                       {item.title}
                       <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${
+                        className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300 shadow-sm ${
                           activeItem === key ? "w-full" : "w-0"
                         }`}
                       ></span>
