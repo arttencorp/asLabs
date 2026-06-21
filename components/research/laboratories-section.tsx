@@ -112,85 +112,129 @@ const laboratories: Laboratory[] = [
 
 export default function LaboratoriesSection() {
   return (
-    <section className="py-12 px-4 bg-white border-t border-b border-gray-200">
-      <div className="container mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Nuestros Laboratorios
+    <section className="py-20 md:py-24 px-4 bg-gradient-to-b from-white via-gray-50/30 to-white relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-100/20 rounded-full blur-3xl -mr-48"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-100/20 rounded-full blur-3xl -ml-40"></div>
+
+      <div className="container mx-auto max-w-6xl relative z-10">
+        {/* Premium Header */}
+        <div className="mb-16 md:mb-20">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <span className="h-px w-8 bg-emerald-500"></span>
+            <span className="text-xs md:text-sm font-bold text-emerald-600 uppercase tracking-widest">Infraestructura Especializada</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight">
+            Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">Laboratorios</span>
           </h2>
-          <p className="text-gray-600 max-w-2xl">
-            Laboratorios especializados con tecnología moderna para investigación.
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl leading-relaxed">
+            Laboratorios de investigación de clase mundial equipados con tecnología de punta y liderados por expertos en biotecnología
           </p>
-          <div className="mt-3 pt-3 border-t border-gray-300">
-            <p className="text-xs text-gray-500">
-              <span className="font-medium">Administrador:</span> Guevara Escobar Antonio
+          
+          {/* Admin Info */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <p className="text-sm text-gray-700">
+              <span className="font-bold text-gray-900">Dirección General:</span> 
+              <span className="text-emerald-600 font-semibold ml-2">Guevara Escobar Antonio</span>
             </p>
           </div>
         </div>
 
-        {/* Laboratories Grid 2x2 */}
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Laboratories Grid */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
           {laboratories.map((lab) => (
             <a
               key={lab.id}
               href={`/laboratorios/${lab.id}`}
-              className="group border rounded-lg overflow-hidden hover:shadow-lg transition-all bg-white"
+              className="group relative h-full"
             >
-              {/* Banner Image or Icon */}
-              {lab.images && lab.images.length > 0 ? (
-                <div className="relative h-40 overflow-hidden bg-gray-100">
-                  <img
-                    src={lab.images[0]}
-                    alt={lab.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                </div>
-              ) : (
-                <div className={`${lab.bgColor} h-40 flex items-center justify-center relative overflow-hidden`}>
-                  <div className={`${lab.color} text-6xl opacity-20 group-hover:opacity-30 transition-opacity`}>
-                    {lab.icon}
-                  </div>
-                </div>
-              )}
+              {/* Gradient background effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-50/50 rounded-2xl border border-gray-200 group-hover:border-emerald-300 transition-all duration-300 group-hover:shadow-2xl"></div>
 
-              {/* Content */}
-              <div className="p-5">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className={`${lab.color} p-2 rounded bg-gray-100`}>
-                    {lab.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors">
-                      {lab.name}
-                    </h3>
-                  </div>
-                  {lab.status === "construction" && (
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">
-                      Por construir
-                    </span>
-                  )}
-                </div>
-                <p className="text-gray-600 text-sm line-clamp-2">{lab.description}</p>
-                
-                {/* Director and Staff */}
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="text-xs text-gray-600 mb-2">
-                    <span className="font-semibold text-gray-900">A Cargo:</span> {lab.director}
-                  </p>
-                  {lab.staff && lab.staff.length > 0 && (
-                    <div className="text-xs text-gray-600 space-y-1">
-                      {lab.staff.map((member, idx) => (
-                        <p key={idx}>{member}</p>
-                      ))}
+              <div className="relative flex flex-col h-full overflow-hidden rounded-2xl border border-gray-200 group-hover:border-emerald-300 transition-all duration-300 group-hover:shadow-2xl bg-white">
+                {/* Image or Icon Banner */}
+                <div className="relative h-56 overflow-hidden bg-gradient-to-br group-hover:shadow-inner transition-all">
+                  {lab.images && lab.images.length > 0 ? (
+                    <>
+                      <img
+                        src={lab.images[0]}
+                        alt={lab.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent group-hover:from-black/40 transition-all duration-300"></div>
+                    </>
+                  ) : (
+                    <div className={`w-full h-full bg-gradient-to-br ${lab.darkColor} flex items-center justify-center relative overflow-hidden`}>
+                      <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity">{lab.icon}</div>
+                      <div className={`text-7xl ${lab.color} opacity-30 group-hover:opacity-50 transition-all duration-300 group-hover:scale-110`}>
+                        {lab.icon}
+                      </div>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-4 text-green-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
-                  Ver más
-                  <span>→</span>
+                {/* Content */}
+                <div className="flex-1 flex flex-col p-7 md:p-8">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className={`w-12 h-12 ${lab.bgColor} rounded-xl flex items-center justify-center border border-gray-200 group-hover:border-emerald-300 transition-all`}>
+                        <div className={lab.color}>{lab.icon}</div>
+                      </div>
+                      <div>
+                        <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors leading-snug">
+                          {lab.name}
+                        </h3>
+                      </div>
+                    </div>
+                    {lab.status === "construction" && (
+                      <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded-full whitespace-nowrap ml-2">
+                        En construcción
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6 line-clamp-3 flex-grow">
+                    {lab.description}
+                  </p>
+
+                  {/* Capabilities Tags */}
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {lab.capabilities.slice(0, 2).map((capability, idx) => (
+                      <span key={idx} className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
+                        {capability}
+                      </span>
+                    ))}
+                    {lab.capabilities.length > 2 && (
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
+                        +{lab.capabilities.length - 2} más
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Director Info */}
+                  <div className="pt-6 border-t border-gray-200 space-y-3">
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Director/a</p>
+                      <p className="text-sm font-semibold text-gray-900">{lab.director}</p>
+                    </div>
+                    {lab.staff && lab.staff.length > 0 && (
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Equipo</p>
+                        <div className="space-y-1">
+                          {lab.staff.map((member, idx) => (
+                            <p key={idx} className="text-xs text-gray-600">{member}</p>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* CTA */}
+                  <div className="mt-6 pt-6 border-t border-gray-200 flex items-center gap-2 text-emerald-600 font-bold group-hover:gap-4 transition-all">
+                    <span>Explorar laboratorio</span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300 text-lg">→</span>
+                  </div>
                 </div>
               </div>
             </a>
