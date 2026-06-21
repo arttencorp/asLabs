@@ -122,9 +122,9 @@ export default function LaboratoriesSection() {
           <p className="text-gray-600 max-w-2xl">
             Laboratorios especializados con tecnología moderna para investigación.
           </p>
-          <div className="mt-4 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
-            <p className="text-sm text-emerald-900">
-              <span className="font-semibold">Dirección General:</span> Guevara Escobar Antonio
+          <div className="mt-3 pt-3 border-t border-gray-300">
+            <p className="text-xs text-gray-500">
+              <span className="font-medium">Administrador:</span> Guevara Escobar Antonio
             </p>
           </div>
         </div>

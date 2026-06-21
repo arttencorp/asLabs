@@ -2,14 +2,14 @@ import type { Metadata } from "next"
 import LaboratoryDetailClient from "@/components/research/laboratory-detail-client"
 
 export const metadata: Metadata = {
-  title: "Laboratorio de Análisis Agroindustriales | AS Laboratorios Trujillo",
-  description: "Laboratorio especializado en análisis físico-químicos de productos agroindustriales. Análisis de suelos, aguas, fertilizantes y productos agrícolas en Trujillo, Perú.",
-}
+      title: "Laboratorio de Análisis Industriales | AS Laboratorios Trujillo",
+      description: "Laboratorio especializado en análisis físico-químicos de productos agroindustriales. Análisis de suelos, aguas, fertilizantes y productos agrícolas en Trujillo, Perú.",
+    }
 
-export default function AnalisisAgroindustrialesPage() {
+export default function AnalisisIndustrialesPage() {
   const labData = {
-    id: "analisis-agroindustriales",
-    name: "Laboratorio de Análisis Agroindustriales",
+    id: "analisis-industriales",
+    name: "Laboratorio de Análisis Industriales",
     color: "text-purple-600",
     bgColor: "bg-purple-50",
     description: "Laboratorio especializado en análisis físico-químicos de productos agroindustriales. Realiza caracterización de suelos, aguas, fertilizantes y productos finales con estándares internacionales.",
@@ -46,6 +46,8 @@ export default function AnalisisAgroindustrialesPage() {
       "Evaluación de aguas de riego",
       "Asesoramiento en fertilización",
     ],
+    director: "Ing. Agroind. Renzo Tarrillo",
+    staff: ["Mblga. Rosa Nancy Mejia"],
   }
 
   return (

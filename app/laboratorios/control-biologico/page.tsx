@@ -45,6 +45,7 @@ export default function ControlBiologicoPage() {
       "Ensayos de eficacia de agentes biológicos",
       "Capacitación en manejo de biocontroles",
     ],
+    director: "Blga. Natasha Escobar Arana",
   }
 
   return (

@@ -45,6 +45,7 @@ export default function BiotecnologiaVegetalPage() {
       "Asesoramiento técnico en biotecnología vegetal",
       "Capacitación en técnicas de cultivo in vitro",
     ],
+    director: "Mblga. Melissa Torres Medina",
   }
 
   return (
