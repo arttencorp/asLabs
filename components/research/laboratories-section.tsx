@@ -16,6 +16,8 @@ interface Laboratory {
   capabilities: string[]
   images: string[]
   status: "active" | "construction"
+  director: string
+  staff?: string[]
 }
 
 const laboratories: Laboratory[] = [
@@ -37,6 +39,7 @@ const laboratories: Laboratory[] = [
     ],
     images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BIOTECNOLOGIA%20VEG-GyhXkB27VJsVbo3cdugMjcKoWihfwr.webp"],
     status: "active",
+    director: "Mblga. Melissa Torres Medina",
   },
   {
     id: "control-biologico",
@@ -56,11 +59,12 @@ const laboratories: Laboratory[] = [
     ],
     images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CONTROL%20BIOLOGICO-PBIfuHXR9abP20GJwXF3zEylDr3QKZ.webp"],
     status: "active",
+    director: "Blga. Natasha Escobar Arana",
   },
 
   {
     id: "analisis-agroindustriales",
-    name: "Laboratorio de Análisis Agroindustriales",
+    name: "Laboratorio de Análisis Industriales",
     icon: <Beaker className="w-8 h-8" />,
     color: "text-purple-600",
     bgColor: "bg-purple-50",
@@ -76,25 +80,33 @@ const laboratories: Laboratory[] = [
     ],
     images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AGROINDUSTRIAL%20ANALISIS-ZHa0j4mU8ZtZY7Jn8PXyrP82dLfCwb.webp"],
     status: "active",
+    director: "Ing. Agroind. Renzo Tarrillo",
+    staff: ["Mblga. Rosa Nancy Mejia"],
   },
   {
-    id: "bioreactores",
-    name: "Laboratorio de Diseño y Modelado de Bioreactores",
+    id: "bioprocesos-industriales",
+    name: "Laboratorio de Bioprocesos Industriales",
     icon: <Settings className="w-8 h-8" />,
     color: "text-red-600",
     bgColor: "bg-red-50",
     darkColor: "from-red-600 to-red-700",
     borderColor: "border-red-200",
     description:
-      "Unidad en construcción dedicada al diseño, modelado y escalado de bioreactores. Optimizaremos procesos fermentativos y producción de metabolitos de interés industrial.",
+      "Laboratorio dedicado a la formulación de bacterias, cianobacterias y microorganismos para aplicaciones industriales y agroindustriales. Desarrollamos bioprocesos innovadores para soluciones sostenibles.",
     capabilities: [
-      "Modelado de bioreactores",
-      "Diseño de sistemas de fermentación",
-      "Escalado de procesos",
-      "Optimización de cultivos (En desarrollo)",
+      "Formulación de bacterias benéficas",
+      "Cultivo de cianobacterias",
+      "Desarrollo de bioprocesos",
+      "Aplicaciones industriales y agroindustriales",
     ],
     images: [],
-    status: "construction",
+    status: "active",
+    director: "Mblga Rosa Nancy Mejia Malabrigo",
+    staff: [
+      "Practicante: Helem Iveth Guevara Nuñez",
+      "Practicante: Andy Hassan Espinales Gutierrez",
+      "Practicante: Luis Alonso Flores Ramirez",
+    ],
   },
 ]
 
@@ -110,6 +122,11 @@ export default function LaboratoriesSection() {
           <p className="text-gray-600 max-w-2xl">
             Laboratorios especializados con tecnología moderna para investigación.
           </p>
+          <div className="mt-4 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+            <p className="text-sm text-emerald-900">
+              <span className="font-semibold">Dirección General:</span> Guevara Escobar Antonio
+            </p>
+          </div>
         </div>
 
         {/* Laboratories Grid 2x2 */}
@@ -156,6 +173,21 @@ export default function LaboratoriesSection() {
                   )}
                 </div>
                 <p className="text-gray-600 text-sm line-clamp-2">{lab.description}</p>
+                
+                {/* Director and Staff */}
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <p className="text-xs text-gray-600 mb-2">
+                    <span className="font-semibold text-gray-900">A Cargo:</span> {lab.director}
+                  </p>
+                  {lab.staff && lab.staff.length > 0 && (
+                    <div className="text-xs text-gray-600 space-y-1">
+                      {lab.staff.map((member, idx) => (
+                        <p key={idx}>{member}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="mt-4 text-green-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
                   Ver más
                   <span>→</span>
