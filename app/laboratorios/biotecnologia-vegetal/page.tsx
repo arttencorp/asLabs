@@ -46,6 +46,20 @@ export default function BiotecnologiaVegetalPage() {
       "Capacitación en técnicas de cultivo in vitro",
     ],
     director: "Mblga. Melissa Torres Medina",
+    objectives: [
+      "Desarrollar protocolos de regeneración in vitro para diferentes especies vegetales",
+      "Producir plantas de alta calidad genética y sanitaria",
+      "Ofrecer alternativas sostenibles para la propagación vegetal",
+      "Contribuir al mejoramiento genético de cultivos importantes",
+      "Capacitar profesionales en biotecnología vegetal",
+    ],
+    applications: [
+      "Frutales (manzana, pera, melocotón, frambuesa)",
+      "Ornamentales (orquídeas, lirios, helechos)",
+      "Hortalizas (tomate, pimiento, berenjena)",
+      "Café, cacao y plantas aromáticas",
+      "Especies en peligro de extinción",
+    ],
   }
 
   return (

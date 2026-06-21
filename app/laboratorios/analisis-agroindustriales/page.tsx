@@ -48,6 +48,21 @@ export default function AnalisisIndustrialesPage() {
     ],
     director: "Ing. Agroind. Renzo Tarrillo",
     staff: ["Mblga. Rosa Nancy Mejia"],
+    objectives: [
+      "Realizar análisis precisos de suelos, plantas y aguas con estándares internacionales",
+      "Garantizar la calidad de productos agroindustriales",
+      "Proporcionar recomendaciones de fertilización basadas en datos",
+      "Identificar deficiencias de nutrientes y contaminantes",
+      "Apoyar la toma de decisiones en manejo agrícola",
+    ],
+    applications: [
+      "Análisis de macronutrientes (N, P, K, Ca, Mg, S)",
+      "Determinación de micronutrientes (Fe, Zn, Cu, Mn, B)",
+      "PH y conductividad eléctrica",
+      "Materia orgánica y textura del suelo",
+      "Análisis de residuos de plaguicidas",
+      "Certificaciones de productos orgánicos",
+    ],
   }
 
   return (

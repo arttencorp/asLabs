@@ -46,6 +46,20 @@ export default function ControlBiologicoPage() {
       "Capacitación en manejo de biocontroles",
     ],
     director: "Blga. Natasha Escobar Arana",
+    objectives: [
+      "Producir agentes de control biológico de alta calidad y viabilidad",
+      "Reducir el uso de plaguicidas químicos en la agricultura",
+      "Desarrollar estrategias de manejo integrado de plagas",
+      "Investigar nuevos patógenos para control biológico",
+      "Promover la agricultura sostenible y orgánica",
+    ],
+    applications: [
+      "Control de ácaros (araña roja, ácaro blanco)",
+      "Control de insectos plagas (mosca blanca, pulgones, thrips)",
+      "Hongos fitopatógenos (mildiu, botritis, antracnosis)",
+      "Plagas de almacén y postcosecha",
+      "Agricultura orgánica certificada",
+    ],
   }
 
   return (

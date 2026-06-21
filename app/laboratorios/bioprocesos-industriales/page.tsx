@@ -52,6 +52,21 @@ export default function BioprocesoIndustrialPage() {
       "Practicante: Andy Hassan Espinales Gutierrez",
       "Practicante: Luis Alonso Flores Ramirez",
     ],
+    objectives: [
+      "Formular productos biológicos de alta calidad para industria y agroindustria",
+      "Desarrollar cepas de cianobacterias productivas",
+      "Optimizar procesos de fermentación a escala industrial",
+      "Crear soluciones sostenibles para la industria agrícola",
+      "Investigar nuevas aplicaciones de microorganismos benéficos",
+    ],
+    applications: [
+      "Biofertilizantes con bacterias fijadoras de nitrógeno",
+      "Formulaciones con cianobacterias para cultivos",
+      "Productos de biocontrol a escala industrial",
+      "Inoculantes microbianos especializados",
+      "Aditivos biológicos para la agroindustria",
+      "Procesos de fermentación escalables",
+    ],
   }
 
   return (
