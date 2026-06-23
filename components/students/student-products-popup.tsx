@@ -15,8 +15,15 @@ interface Product {
   image: string
 }
 
-export default function StudentProductsPopup() {
+interface Props {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export default function StudentProductsPopup({ isOpen, onClose }: Props) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+
+  if (isOpen === false) return null;
 
   const products: Product[] = [
     {
@@ -124,9 +131,14 @@ export default function StudentProductsPopup() {
   ]
 
   return (
-    <div className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+    <div className={`py-16 bg-gray-50 ${isOpen !== undefined ? 'fixed inset-0 z-50 overflow-y-auto' : ''}`}>
+      <div className="container mx-auto px-4 relative">
+        <div className="text-center mb-12 relative">
+          {onClose && (
+            <button onClick={onClose} className="absolute right-0 top-0 text-gray-500 hover:text-gray-700">
+              <X className="w-6 h-6" />
+            </button>
+          )}
           <h2 className="text-3xl font-bold text-[#01283c] mb-4">Nuestros servicios para estudiantes</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Diseñados específicamente para apoyarte en tu formación académica y desarrollo profesional en las áreas de

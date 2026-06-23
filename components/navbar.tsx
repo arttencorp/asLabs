@@ -31,6 +31,7 @@ export { Navbar }
 export default function Navbar() {
   const [activeItem, setActiveItem] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null)
 
   const navItems: Record<string, NavItem> = {
     "sobre-nosotros": {
@@ -54,6 +55,11 @@ export default function Navbar() {
           description: "Explora la genética molecular: inserción de genes, plásmidos, PCR y más",
         },
       ],
+    },
+    biofertilizantes: {
+      title: "Biofertilizantes",
+      href: "/biofertilizantes",
+      description: "Microorganismos benéficos para nutrición y salud del suelo",
     },
     servicios: {
       title: "Servicios",
@@ -93,7 +99,7 @@ export default function Navbar() {
         {
           title: "Apoyo a la Investigación",
           href: "/servicios/apoyo-investigacion",
-          description: "Tesis, 16S y bioinformática",
+          description: "Identificación molecular y protocolos",
           icon: <BookOpenCheck className="h-4 w-4" />,
         },
       ],
@@ -106,9 +112,22 @@ export default function Navbar() {
     },
     cepas: {
       title: "Cepas",
-      href: "/cepas",
       description:
         "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
+      children: [
+        {
+          title: "Cepas Identificadas",
+          href: "/cepas/identificadas",
+          description: "Cultivos locales certificados de máxima viabilidad",
+          icon: <Microscope className="h-4 w-4" />,
+        },
+        {
+          title: "Cepas ATCC",
+          href: "/cepas/atcc",
+          description: "Cepas referencia internacional - Importación desde USA",
+          icon: <FlaskConical className="h-4 w-4" />,
+        },
+      ],
     },
     research: {
       title: "Investigación",
@@ -152,22 +171,22 @@ export default function Navbar() {
       </div>
 
       {/* Main navigation */}
-      <nav className="bg-white border-b py-1.5 lg:py-2 relative z-20 font-serif">
-        <div className="container mx-auto flex items-center justify-between px-4 min-h-[60px] lg:min-h-[70px]">
-          <div className="flex items-center gap-2 lg:gap-4 h-full">
-            <Link href="/" className="flex items-center">
+      <nav className="bg-white border-b py-1.5 2xl:py-2 relative z-20 font-serif">
+        <div className="container mx-auto flex items-center justify-between px-4 min-h-[60px] 2xl:min-h-[70px] max-w-[1600px]">
+          <div className="flex items-center gap-2 2xl:gap-6 h-full">
+            <Link href="/" className="flex items-center flex-shrink-0">
               <Image
                 src="/Frame23.png"
                 alt="AS Labs Logo"
                 width={150}
                 height={60}
                 priority
-                className="h-auto w-auto max-h-12 lg:max-h-16"
+                className="h-auto w-auto max-h-12 2xl:max-h-16"
               />
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-6 text-sm font-serif">
+            <div className="hidden 2xl:flex items-center gap-4 text-sm font-serif">
               {Object.entries(navItems).map(([key, item]) => (
                 <div
                   key={key}
@@ -213,13 +232,13 @@ export default function Navbar() {
 
                   {activeItem === key && item.children && (
                     <div
-                      className={`absolute left-0 top-full mt-1 ${key === "servicios" ? "w-[320px]" : "w-[600px]"} bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn`}
+                      className={`absolute left-0 top-full mt-1 ${key === "servicios" || key === "cepas" ? "w-[320px]" : "w-[600px]"} bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn`}
                       style={{
                         animation: "fadeIn 0.3s ease-in-out",
                         transformOrigin: "top center",
                       }}
                     >
-                      {key === "servicios" ? (
+                      {key === "servicios" || key === "cepas" ? (
                         <div className="p-3">
                           <div className="space-y-1">
                             {item.children.map((child, index) => (
@@ -238,28 +257,30 @@ export default function Navbar() {
                               </Link>
                             ))}
                           </div>
-                          <div className="mt-3 pt-3 border-t border-gray-100">
-                            <Link
-                              href="/servicios"
-                              className="flex items-center justify-center gap-2 w-full py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
-                            >
-                              Ver todos los servicios
-                              <svg
-                                className="w-4 h-4"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
+                          {key === "servicios" && (
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                              <Link
+                                href="/servicios"
+                                className="flex items-center justify-center gap-2 w-full py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
                               >
-                                <path
-                                  d="M5 12h14M12 5l7 7-7 7"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </Link>
-                          </div>
+                                Ver todos los servicios
+                                <svg
+                                  className="w-4 h-4"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M5 12h14M12 5l7 7-7 7"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </Link>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <div className="flex">
@@ -305,7 +326,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Right Side */}
-          <div className="hidden lg:flex items-center h-full gap-3">
+          <div className="hidden 2xl:flex items-center h-full gap-3">
             <Link
               href="/login"
               className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-serif text-gray-700"
@@ -345,7 +366,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Right Side */}
-          <div className="flex lg:hidden items-center gap-2 h-full">
+          <div className="flex 2xl:hidden items-center gap-2 h-full">
             <Link
               href="/login"
               className="flex items-center justify-center border border-gray-300  hover:bg-gray-50 p-2 rounded-full transition-colors duration-300 font-serif text-gray-700 min-w-[40px] min-h-[40px]"
@@ -383,33 +404,43 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-b shadow-lg z-30">
+          <div className="2xl:hidden absolute top-full left-0 right-0 bg-white border-b shadow-lg z-30 max-h-[80vh] overflow-y-auto">
             <div className="container mx-auto px-4 py-4">
               <div className="space-y-4">
                 {Object.entries(navItems).map(([key, item]) => (
                   <div key={key}>
                     {item.children ? (
                       <div className="space-y-2">
-                        <div className="font-medium text-gray-900 py-2 border-b border-gray-100 font-serif flex items-center gap-2">
-                          {item.href ? (
-                            <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)} className="flex-1">
-                              {item.title}
-                            </Link>
-                          ) : (
-                            item.title
-                          )}
+                        <div 
+                          className="font-medium text-gray-900 py-2 border-b border-gray-100 font-serif flex items-center justify-between cursor-pointer"
+                          onClick={() => setExpandedMobileMenu(expandedMobileMenu === key ? null : key)}
+                        >
+                          <div className="flex items-center gap-2 flex-1">
+                            {item.href ? (
+                              <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
+                                {item.title}
+                              </Link>
+                            ) : (
+                              item.title
+                            )}
+                          </div>
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${expandedMobileMenu === key ? "rotate-180" : ""}`} />
                         </div>
-                        {item.children.map((child, index) => (
-                          <Link
-                            key={index}
-                            href={child.href || "#"}
-                            className="flex items-center gap-2 py-2 pl-4 text-gray-700 hover:text-[#2e7d32] font-serif"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            {child.icon && <span className="text-[#2e7d32]">{child.icon}</span>}
-                            {child.title}
-                          </Link>
-                        ))}
+                        {expandedMobileMenu === key && (
+                          <div className="pl-4 py-2 space-y-3 bg-gray-50 rounded-lg">
+                            {item.children.map((child, index) => (
+                              <Link
+                                key={index}
+                                href={child.href || "#"}
+                                className="flex items-center gap-2 text-gray-700 hover:text-[#2e7d32] font-serif"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                {child.icon && <span className="text-[#2e7d32]">{child.icon}</span>}
+                                {child.title}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <Link

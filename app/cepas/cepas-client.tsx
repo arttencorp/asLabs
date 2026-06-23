@@ -151,12 +151,16 @@ export default function CepasClient() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 flex flex-col">
       <Navbar />
 
-      {/* Hero Section - Compacto */}
-      <section className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-10 border-b-4 border-emerald-700">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-black mb-2">Catálogo de Cepas Bacterianas</h1>
-          <p className="text-emerald-50 text-base font-light max-w-2xl">
-            Cultivos certificados de alta viabilidad para agricultura e investigación
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 text-white py-16 border-b-4 border-emerald-700 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <h1 className="text-5xl font-black mb-3">Cepas Identificadas</h1>
+          <p className="text-emerald-50 text-lg font-light max-w-3xl">
+            Cultivos bacterianos locales certificados de máxima viabilidad. Desarrollados con rigor científico bajo normas ISO para agricultura sostenible e investigación de calidad.
           </p>
         </div>
       </section>
@@ -164,73 +168,75 @@ export default function CepasClient() {
       {/* Main Content */}
       <div className="flex-1">
         <div className="container mx-auto px-4 py-16">
-          {/* Search and Filter Bar */}
+          {/* Search and Filter Bar - Mejorado */}
           <div className="mb-12">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Buscar cepa por nombre..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white text-slate-900 placeholder-slate-500"
-                />
+            <div className="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-emerald-500">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Search */}
+                <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-emerald-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Buscar cepa por nombre científico..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-white text-gray-900 placeholder-gray-500 font-medium transition-all"
+                  />
+                </div>
+
+                {/* Category Filter */}
+                <div className="flex gap-2 items-center md:justify-end">
+                  <Filter className="text-emerald-400 w-5 h-5" />
+                  <select
+                    value={selectedCategory || ""}
+                    onChange={(e) => setSelectedCategory(e.target.value || null)}
+                    className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-white text-gray-900 font-bold transition-all"
+                  >
+                    <option value="">Todas las cepas</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              {/* Category Filter */}
-              <div className="flex gap-2 items-center md:justify-end">
-                <Filter className="text-slate-400 w-5 h-5" />
-                <select
-                  value={selectedCategory || ""}
-                  onChange={(e) => setSelectedCategory(e.target.value || null)}
-                  className="px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white text-slate-900 font-medium"
-                >
-                  <option value="">Todas las cepas</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Category Pills */}
-            <div className="flex gap-2 mt-4 flex-wrap">
-              <button
-                onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  !selectedCategory
-                    ? "bg-emerald-600 text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                Ver todas
-              </button>
-              {categories.map((cat) => (
+              {/* Category Pills */}
+              <div className="flex gap-2 mt-5 flex-wrap">
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategory === cat
-                      ? `${categoryColors[cat]} border-2`
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  onClick={() => setSelectedCategory(null)}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                    !selectedCategory
+                      ? "bg-emerald-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
-                  {cat}
+                  Ver todas
                 </button>
-              ))}
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                      selectedCategory === cat
+                        ? `${categoryColors[cat]} border-2 shadow-md`
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Info Banner */}
-            <div className="mt-8 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-lg">
+            <div className="mt-6 p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-xl shadow-sm">
               <div className="flex gap-4 items-start">
-                <div className="text-2xl">✓</div>
+                <div className="text-3xl">✓</div>
                 <div className="text-sm">
                   <p className="font-black text-emerald-900 mb-1">Cultivo a Pedido - Máxima Viabilidad</p>
-                  <p className="text-emerald-800 text-xs">Almacenamiento ≤2 días • Perfecto para tesistas y investigadores • Máximo caldo: 30L • Disponemos de opciones personalizadas</p>
+                  <p className="text-emerald-800 font-medium">Almacenamiento ≤2 días • Perfecto para tesistas e investigadores • Máximo caldo: 30L • Disponemos de opciones personalizadas</p>
                 </div>
               </div>
             </div>
@@ -239,7 +245,7 @@ export default function CepasClient() {
           {/* Results Count */}
           <div className="mb-8">
             <p className="text-slate-600 text-sm font-medium">
-              Mostrando <span className="text-emerald-600 font-bold">{filteredCepas.length}</span> de {cepas.length} cepas
+              Mostrando <span className="text-emerald-600 font-bold">{filteredCepas.length}</span> de {cepas.length - 1} cepas
             </p>
           </div>
 

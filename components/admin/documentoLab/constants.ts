@@ -118,8 +118,8 @@ export const INFO_EMPRESA = {
   ciudad: 'Trujillo',
   departamento: 'La Libertad',
   pais: 'Perú',
-  telefono: '044-123456',
-  email: 'contacto@aslaboratorios.com',
+  telefono: '+51 961 996 645',
+  email: 'ventas@aslaboratorios.com',
   web: 'www.aslaboratorios.com',
 }
 

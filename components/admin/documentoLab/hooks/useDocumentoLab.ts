@@ -625,11 +625,30 @@ export function useDocumentoLab() {
   const guardarDocumento = useCallback(async (): Promise<boolean> => {
     setGuardando(true)
     try {
-      const { valido, errores } = validarDocumentoParaEmision(documento)
+      // 1. Limpieza de filas vacías (parámetro y resultado vacíos)
+      const resultadosVacios = documento.resultados.filter(r => !r.parametro.trim() && !r.resultado.trim())
+      const resultadosValidos = documento.resultados.filter(r => r.parametro.trim() || r.resultado.trim())
+      
+      // Si hay resultados vacíos que ya estaban en BD, marcarlos para eliminación
+      const currentResultadosEliminados = [...resultadosEliminados]
+      let needsUpdateEliminados = false
+      resultadosVacios.forEach(r => {
+        if (!r.id.startsWith('temp_') && !currentResultadosEliminados.includes(r.id)) {
+          currentResultadosEliminados.push(r.id)
+          needsUpdateEliminados = true
+        }
+      })
+      if (needsUpdateEliminados) {
+        setResultadosEliminados(currentResultadosEliminados)
+      }
+
+      // Validar documento usando resultados válidos
+      const docValidado = { ...documento, resultados: resultadosValidos }
+      const { valido, errores } = validarDocumentoParaEmision(docValidado)
       
       if (!valido) {
         console.error('Errores de validación:', errores)
-        // Aquí podrías mostrar un toast con los errores
+        setGuardando(false)
         return false
       }
       
@@ -661,7 +680,7 @@ export function useDocumentoLab() {
           mue_recomend_vac: m.recomendaciones || undefined
         }))
 
-        const resultadosForm = documento.resultados.map(r => ({
+        const resultadosForm = docValidado.resultados.map(r => ({
           res_ens_param_vac: r.parametro,
           res_ens_result_vac: r.resultado,
           res_ens_und_vac: r.unidad || undefined,
@@ -768,7 +787,7 @@ export function useDocumentoLab() {
         }
         
         // Guardar resultados (usando el mapa de IDs)
-        for (const resultado of documento.resultados) {
+        for (const resultado of docValidado.resultados) {
           // Traducir el muestraId temporal a ID real si existe
           const muestraIdReal = resultado.muestraId 
             ? (muestraIdMap[resultado.muestraId] || resultado.muestraId)
