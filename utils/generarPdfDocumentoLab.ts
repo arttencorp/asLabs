@@ -98,6 +98,20 @@ function getDeclaracion(area?: string): string {
     return DECLARACIONES_AREA[key] || DECLARACIONES_AREA.default;
 }
 
+function getMuestraCodigoForAgente(
+    muestras: DocumentoLabUI['muestras'],
+    muestraId?: string | null,
+): string {
+    if (!muestraId) return "-";
+    const muestra = muestras.find((m) => m.id === muestraId);
+    return muestra?.codigo || "-";
+}
+
+function formatMetodoLabel(value?: string | null): string {
+    if (!value) return "-";
+    return value.replace(/_/g, " ").replace(/\s+/g, " ").trim();
+}
+
 // ─── Gráfico de barra referencial (mini bar chart) ──────────────
 function drawReferentialBar(
     pdf: jsPDF,
@@ -110,14 +124,31 @@ function drawReferentialBar(
     max: number,
     unidad: string,
 ): void {
-    const barW = Math.min(cellW * 0.55, 22); // ancho de la barra
+    if (!Number.isFinite(cellW) || !Number.isFinite(cellH) || cellW <= 0 || cellH <= 0) {
+        return;
+    }
+
+    const minVal = Number(min);
+    const maxVal = Number(max);
+    if (!Number.isFinite(minVal) || !Number.isFinite(maxVal)) {
+        return;
+    }
+
+    const safeMin = Math.min(minVal, maxVal);
+    const safeMax = Math.max(minVal, maxVal);
+
+    const barW = Math.min(cellW * 0.55, 18); // ancho de la barra
     const barH = 3; // alto de la barra
     const barX = x + 1.5;
     const barY = y + (cellH - barH) / 2;
 
-    const escala = max * 2;
-    const posMin = (min / escala) * 100;
-    const posMax = (max / escala) * 100;
+    const escala = safeMax * 2;
+    if (!Number.isFinite(escala) || escala <= 0) {
+        return;
+    }
+
+    const posMin = (safeMin / escala) * 100;
+    const posMax = (safeMax / escala) * 100;
 
     // Fondo gris claro de la barra
     pdf.setFillColor(224, 224, 224);
@@ -127,7 +158,9 @@ function drawReferentialBar(
     const rangeX = barX + (posMin / 100) * barW;
     const rangeW = ((posMax - posMin) / 100) * barW;
     pdf.setFillColor(190, 190, 190);
-    pdf.rect(rangeX, barY, rangeW, barH, "F");
+    if (Number.isFinite(rangeX) && Number.isFinite(rangeW) && rangeW > 0) {
+        pdf.rect(rangeX, barY, rangeW, barH, "F");
+    }
 
     // Borde de la barra
     pdf.setDrawColor(160, 160, 160);
@@ -144,14 +177,22 @@ function drawReferentialBar(
     }
 
     // Texto a la derecha: "resultado unidad" o "min – max"
-    const txtX = barX + barW + 1.5;
+    const labelRightX = barX + barW + 1.5;
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(5.5);
     pdf.setTextColor(80, 80, 80);
     const label = resultado !== null && !isNaN(resultado)
         ? `${resultado} ${unidad}`
-        : `${min} – ${max}`;
-    pdf.text(label, txtX, barY + barH / 2 + 1);
+        : `${safeMin} – ${safeMax}`;
+    const maxRightW = Math.max(6, x + cellW - 1.5 - labelRightX);
+    const labelW = pdf.getTextWidth(label);
+    if (labelW <= maxRightW) {
+        pdf.text(label, labelRightX, barY + barH / 2 + 1);
+    } else {
+        // If it doesn't fit on the right, place it over the bar, centered.
+        const labelCenterX = barX + barW / 2;
+        pdf.text(label, labelCenterX, barY - 0.2, { align: "center" });
+    }
 }
 
 // ─── Banner de sección ──────────────────────────────────────────
@@ -624,14 +665,29 @@ export async function generarPdfDocumentoLab(
 
     if (documento.resultados && documento.resultados.length > 0) {
         // ── Tabla de resultados con soporte para gráfico referencial ──
+        const baseCols: TableCol[] = [
+            { header: "Cód. Muestra", width: 22 },
+            { header: "Parámetro", width: 32 },
+            { header: "Resultado", width: 26, align: "center" },
+            { header: "Unidad", width: 14, align: "center" },
+            { header: "Min", width: 12, align: "center" },
+            { header: "Max", width: 12.5, align: "center" },
+        ];
+
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(6.5);
+        const metodoMax = Math.max(
+            0,
+            ...documento.resultados.map((r) => pdf.getTextWidth(r.metodo || "")),
+        );
+        const metodoW = Math.max(16, Math.min(30, Math.ceil(metodoMax + 6)));
+        const fixedW = baseCols.reduce((s, c) => s + c.width, 0) + metodoW;
+        const valorRefW = Math.max(22, CW - fixedW);
+
         const resCols: TableCol[] = [
-            { header: "Parámetro", width: 35 },
-            { header: "Resultado", width: 42.5, align: "center" },
-            { header: "Unidad", width: 16, align: "center" },
-            { header: "Min", width: 14, align: "center" },
-            { header: "Max", width: 14, align: "center" },
-            { header: "Valor Referencial", width: 22.5, align: "center" },
-            { header: "Método", width: 36 },
+            ...baseCols,
+            { header: "Valor Referencial", width: valorRefW, align: "center" },
+            { header: "Método", width: metodoW },
         ];
         const hdrH = 6.5;
         const baseRowH = 6;
@@ -669,12 +725,13 @@ export async function generarPdfDocumentoLab(
             const r = documento.resultados[i];
 
             const textCells = [
-                { idx: 0, text: r.parametro },
-                { idx: 1, text: r.resultado },
-                { idx: 2, text: r.unidad },
-                { idx: 3, text: r.valorMin != null ? String(r.valorMin) : "-" },
-                { idx: 4, text: r.valorMax != null ? String(r.valorMax) : "-" },
-                { idx: 6, text: r.metodo },
+                { idx: 0, text: getMuestraCodigoForAgente(documento.muestras, r.muestraId) },
+                { idx: 1, text: r.parametro },
+                { idx: 2, text: r.resultado },
+                { idx: 3, text: r.unidad },
+                { idx: 4, text: r.valorMin != null ? String(r.valorMin) : "-" },
+                { idx: 5, text: r.valorMax != null ? String(r.valorMax) : "-" },
+                { idx: 7, text: formatMetodoLabel(r.metodo) },
             ];
 
             const textLines = textCells.map((cell) => {
@@ -684,7 +741,7 @@ export async function generarPdfDocumentoLab(
 
             const refText = r.rangoReferencial
                 || (r.valorMin != null && r.valorMax != null ? `${r.valorMin} – ${r.valorMax}` : "-");
-            const refLines = pdf.splitTextToSize(refText, resCols[5].width - cellPadX * 2);
+            const refLines = pdf.splitTextToSize(refText, resCols[6].width - cellPadX * 2);
 
             const maxLines = Math.max(
                 1,
@@ -737,10 +794,10 @@ export async function generarPdfDocumentoLab(
                 }
             }
 
-            // Columna 5 = Valor Referencial (con gráfico opcional)
-            const refCol = resCols[5];
+            // Columna 6 = Valor Referencial (con gráfico opcional)
+            const refCol = resCols[6];
             let refX = M;
-            for (let k = 0; k < 5; k++) refX += resCols[k].width;
+            for (let k = 0; k < 6; k++) refX += resCols[k].width;
 
             const resNum = parseFloat(r.resultado);
             const hasChart = r.mostrarGrafico && r.valorMin != null && r.valorMax != null;
@@ -794,8 +851,15 @@ export async function generarPdfDocumentoLab(
 
             // Construir columnas: Parámetro + un col por campo extra
             const campos = extraConfig.campos;
-            const paramW = 35;
-            const remainW = 145;
+            
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(6.5);
+            const maxParamTextW = Math.max(
+                pdf.getTextWidth("Parámetro"),
+                ...rowsWithExtra.map((r) => pdf.getTextWidth(r.parametro || "-"))
+            );
+            const paramW = Math.max(35, Math.min(maxParamTextW + 6, 80));
+            const remainW = CW - paramW;
             const colW = Math.min(Math.floor(remainW / campos.length), 50);
 
             const extraCols: TableCol[] = [
@@ -862,6 +926,7 @@ export async function generarPdfDocumentoLab(
         y = drawBanner(pdf, y, "Agente Identificado");
 
         for (const a of documento.agentes) {
+            const muestraCodigo = getMuestraCodigoForAgente(documento.muestras, a.muestraId);
             // Altura estimada del cuadro: 4 filas × 6 + paddings ≈ 32mm
             y = checkPage(pdf, y, 32);
 
@@ -919,6 +984,7 @@ export async function generarPdfDocumentoLab(
 
             // --- FILA 4 ---
             const line4Parts = [
+                `Muestra: ${muestraCodigo}`,
                 `Código de aislado: ${a.codigoAislado || "-"}`,
             ];
             currentY += 4;
@@ -1070,7 +1136,7 @@ export async function generarPdfDocumentoLab(
                     const imgH = img.h * ratio;
                     const imgX = x + (imgFullW - imgW) / 2; // centrar
                     pdf.addImage(img.data, imgX, y, imgW, imgH);
-                    y += imgH + 2;
+                    y += imgH + 5; // Salto adicional sugerido
                 } else {
                     y += 15;
                 }
@@ -1239,5 +1305,19 @@ export async function generarPdfDocumentoLab(
             /[^a-zA-Z0-9_\-.]/g,
             "_",
         );
-    pdf.save(`${nombre}.pdf`);
+    const fileName = `${nombre}.pdf`;
+    const blob = pdf.output("blob");
+    const blobUrl = URL.createObjectURL(blob);
+
+    try {
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = fileName;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } finally {
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    }
 }

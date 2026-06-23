@@ -946,14 +946,16 @@ export async function eliminarResultado(resultadoId: string): Promise<void> {
 
 export async function agregarNotaResultado(
   resultadoId: string,
-  contenido: string
+  contenido: string,
+  orden?: number
 ): Promise<ResultadoNotaDatabase> {
   try {
     const { data, error } = await supabase
       .from('Resultado_Nota')
       .insert({
         resul_not_cont_vac: contenido,
-        res_ens_id_int: resultadoId
+        res_ens_id_int: resultadoId,
+        resul_not_ordn_int: orden
       })
       .select()
       .single()
@@ -968,7 +970,7 @@ export async function agregarNotaResultado(
 
 export async function actualizarNotaResultado(
   notaId: string,
-  datos: { resul_not_cont_vac?: string; res_ens_id_int?: string }
+  datos: { resul_not_cont_vac?: string; res_ens_id_int?: string; resul_not_ordn_int?: number }
 ): Promise<ResultadoNotaDatabase> {
   try {
     const { data, error } = await supabase

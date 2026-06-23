@@ -191,7 +191,7 @@ function TablaResultados({
       <table className="w-full text-xs border-collapse">
         <thead>
           <tr className="bg-[#5D9848] text-white">
-            <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Muestra</th>
+            <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Cód. Muestra</th>
             <th className="border border-gray-300 px-2 py-1.5 text-left font-semibold">Parámetro</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">Resultado</th>
             <th className="border border-gray-300 px-2 py-1.5 text-center font-semibold">Unidad</th>

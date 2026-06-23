@@ -102,6 +102,11 @@ export function formatApplicationEmail(data: JobApplicationFormData): string {
     opt => opt.value === data.financiamientoTesis
   )?.label || "No especificado"
 
+  // Determinar el nombre de la carrera a mostrar
+  const carreraLabel = data.carrera === "otro" 
+    ? data.carreraPersonalizada 
+    : carreraOptions.find(opt => opt.value === data.carrera)?.label || data.carrera
+
   return `
 NUEVA POSTULACIÓN - Prácticas Pre-Profesionales
 ================================================
@@ -115,7 +120,7 @@ INFORMACIÓN ACADÉMICA
 ---------------------
 Universidad/Instituto: ${data.universidadInstituto}
 Ciclo: ${data.ciclo}
-Carrera: ${data.carrera}
+Carrera: ${carreraLabel}
 Puesto actual en centro de estudios: ${data.puestoActual || "No especificado"}
 
 PREFERENCIAS

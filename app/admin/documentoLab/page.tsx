@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { toast } from 'sonner'
 import { 
   useDocumentoLab,
   InformacionDocumento,
@@ -81,11 +82,13 @@ export default function DocumentoLabPage() {
     agregarResultado,
     actualizarResultado,
     eliminarResultado,
+    reordenarResultado,
     
     // Gestión de notas
     agregarNota,
     actualizarNota,
     eliminarNota,
+    reordenarNota,
     
     // Gestión de agentes
     agregarAgente,
@@ -154,9 +157,18 @@ export default function DocumentoLabPage() {
   }
 
   const handleDescargar = async () => {
+    if (!documento.id || documento.id.startsWith('temp_')) {
+      toast.error('El documento aun no esta listo para descargar')
+      return
+    }
+
     setDescargando(true)
     try {
       await generarPdfDocumentoLab(documento)
+      toast.success('PDF generado correctamente')
+    } catch (error) {
+      console.error('Error al generar PDF de documento de laboratorio:', error)
+      toast.error('No se pudo generar el PDF. Intenta nuevamente.')
     } finally {
       setDescargando(false)
     }
@@ -348,6 +360,7 @@ export default function DocumentoLabPage() {
                   onAgregarResultado={agregarResultado}
                   onActualizarResultado={actualizarResultado}
                   onEliminarResultado={eliminarResultado}
+                  onReordenarResultado={reordenarResultado}
                 />
                 {/* Sub-sección de Notas */}
                 <div className="mt-6">
@@ -357,6 +370,7 @@ export default function DocumentoLabPage() {
                     onAgregarNota={agregarNota}
                     onActualizarNota={actualizarNota}
                     onEliminarNota={eliminarNota}
+                    onReordenarNota={reordenarNota}
                   />
                 </div>
               </TabsContent>

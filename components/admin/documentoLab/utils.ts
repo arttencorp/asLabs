@@ -159,7 +159,8 @@ export function resultadoDBToUI(resultado: ResultadoEnsayoDatabase): ResultadoUI
     mostrarGrafico: resultado.res_ens_graf_bol || false,
     rangoReferencial: resultado.res_ens_rang_ref_vac || undefined,
     muestraId: resultado.mue_id_int || undefined,
-    dataExtra: resultado.res_ens_data_extra_json || undefined
+    dataExtra: resultado.res_ens_data_extra_json || undefined,
+    orden: resultado.res_ens_ordn_int ?? undefined
   }
 }
 
@@ -219,7 +220,8 @@ export function notaDBToUI(nota: ResultadoNotaDatabase): NotaUI {
   return {
     id: nota.resul_not_id_int,
     contenido: nota.resul_not_cont_vac || '',
-    resultadoId: nota.res_ens_id_int
+    resultadoId: nota.res_ens_id_int,
+    orden: nota.resul_not_ordn_int ?? undefined
   }
 }
 
@@ -275,8 +277,12 @@ export function documentoDBToUI(doc: DocumentoLabDatabase): DocumentoLabUI {
     fechaEmision: doc.doc_lab_emision_dt?.split('T')[0] || '',
     cliente: personaToClienteUI(persona),
     muestras: (doc.muestras || []).map(muestraDBToUI),
-    resultados: (doc.resultados || []).map(resultadoDBToUI),
-    notas: notasDB.map(notaDBToUI),
+    resultados: (doc.resultados || [])
+      .map(resultadoDBToUI)
+      .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0)),
+    notas: notasDB
+      .map(notaDBToUI)
+      .sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0)),
     agentes: (doc.agentes || []).map(agenteDBToUI),
     anexos: (doc.anexos || []).map(anexoDBToUI),
     firmas: [],

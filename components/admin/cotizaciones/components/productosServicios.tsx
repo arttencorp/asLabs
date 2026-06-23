@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import { productosPreexistentes } from '../constants'
 import type { ProductosServiciosProps } from '../types'
@@ -43,8 +47,8 @@ function ProductCombobox({ value, onChange, productos, loading, disabled }: Prod
   })
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
@@ -52,35 +56,44 @@ function ProductCombobox({ value, onChange, productos, loading, disabled }: Prod
           disabled={disabled || loading}
           className="w-full justify-between font-normal h-auto min-h-10 whitespace-normal text-left"
         >
-          <span className="truncate">
+          <span className="text-sm leading-snug break-words">
             {loading ? "Cargando productos..." :
               selectedProduct ? selectedProduct.pro_nomb_vac :
                 "Seleccionar producto..."}
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] sm:w-[300px] md:w-[400px] p-0" align="start" side="bottom">
-        <Command shouldFilter={false}>
-          <div className="flex items-center border-b px-3">
-            <CommandInput
-              placeholder="Buscar producto..."
-              value={searchValue}
-              onValueChange={setSearchValue}
-              className="border-0 focus:ring-0"
-            />
-          </div>
-          <CommandList>
-            <CommandEmpty>
-              <div className="py-6 text-center text-sm text-muted-foreground">
-                No se encontraron productos
-              </div>
-            </CommandEmpty>
-            <CommandGroup>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[700px] max-h-[85vh] flex flex-col p-6">
+        <DialogHeader className="mb-4">
+          <DialogTitle className="text-xl">Seleccionar Producto o Servicio</DialogTitle>
+        </DialogHeader>
+        
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Input
+            placeholder="Buscar por nombre..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="pl-10 h-12 text-md"
+            autoFocus
+          />
+        </div>
+
+        <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+          {filteredProducts.length === 0 ? (
+            <div className="py-12 text-center text-muted-foreground">
+              No se encontraron productos
+            </div>
+          ) : (
+            <>
               {/* Opción por defecto */}
-              <CommandItem
-                value="seleccionar"
-                onSelect={() => {
+              <div
+                className={cn(
+                  "flex items-center p-3 rounded-lg border cursor-pointer hover:bg-emerald-50 hover:border-emerald-200 transition-colors",
+                  value === "seleccionar" ? "border-emerald-500 bg-emerald-50" : "bg-white"
+                )}
+                onClick={() => {
                   onChange("seleccionar")
                   setOpen(false)
                   setSearchValue("")
@@ -88,38 +101,45 @@ function ProductCombobox({ value, onChange, productos, loading, disabled }: Prod
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
-                    value === "seleccionar" ? "opacity-100" : "opacity-0"
+                    "mr-3 h-5 w-5 shrink-0",
+                    value === "seleccionar" ? "opacity-100 text-emerald-600" : "opacity-0"
                   )}
                 />
-                Seleccionar
-              </CommandItem>
+                <span className="font-medium text-gray-700">Sin seleccionar (Borrar)</span>
+              </div>
 
               {/* Lista de productos filtrados */}
               {filteredProducts.map((producto) => (
-                <CommandItem
+                <div
                   key={producto.pro_id_int}
-                  value={producto.pro_id_int}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue)
+                  className={cn(
+                    "flex items-start p-4 rounded-lg border cursor-pointer hover:bg-emerald-50 hover:border-emerald-200 transition-colors",
+                    value === producto.pro_id_int ? "border-emerald-500 bg-emerald-50" : "bg-white"
+                  )}
+                  onClick={() => {
+                    onChange(producto.pro_id_int)
                     setOpen(false)
                     setSearchValue("")
                   }}
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
-                      value === producto.pro_id_int ? "opacity-100" : "opacity-0"
+                      "mt-0.5 mr-3 h-5 w-5 shrink-0",
+                      value === producto.pro_id_int ? "opacity-100 text-emerald-600" : "opacity-0"
                     )}
                   />
-                  <span className="truncate">{producto.pro_nomb_vac || 'Sin nombre'}</span>
-                </CommandItem>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-medium leading-relaxed text-gray-800">
+                      {producto.pro_nomb_vac || 'Sin nombre'}
+                    </span>
+                  </div>
+                </div>
               ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover >
+            </>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

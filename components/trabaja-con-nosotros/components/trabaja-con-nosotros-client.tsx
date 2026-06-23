@@ -73,6 +73,7 @@ export default function TrabajaConNosotrosClient() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [selectedAreas, setSelectedAreas] = useState<string[]>([])
+  const [selectedCarrera, setSelectedCarrera] = useState<string>("")
 
   // Estado para consulta de postulación
   const [consultaDoc, setConsultaDoc] = useState("")
@@ -108,6 +109,7 @@ export default function TrabajaConNosotrosClient() {
     formState: { errors, isSubmitting },
     setValue,
     reset,
+    watch,
   } = useForm<JobApplicationFormData>({
     defaultValues: {
       nombresApellidos: "",
@@ -116,6 +118,7 @@ export default function TrabajaConNosotrosClient() {
       universidadInstituto: "",
       ciclo: "",
       carrera: "",
+      carreraPersonalizada: "",
       puestoActual: "",
       areasPreferidas: [],
       financiamientoTesis: "tal_vez",
@@ -123,6 +126,8 @@ export default function TrabajaConNosotrosClient() {
       sobreUsted: "",
     },
   })
+
+  const carreraWatch = watch("carrera")
 
   const handleAreaChange = (areaValue: string, checked: boolean) => {
     const newAreas = checked
@@ -146,6 +151,7 @@ export default function TrabajaConNosotrosClient() {
     setSubmitStatus("idle")
     reset()
     setSelectedAreas([])
+    setSelectedCarrera("")
   }
 
   const handleConsultarEstado = async () => {
@@ -168,12 +174,15 @@ export default function TrabajaConNosotrosClient() {
     setSubmitStatus("loading")
 
     try {
+      // Usar la carrera personalizada si se seleccionó "otro", de lo contrario usar la carrera seleccionada
+      const carreraFinal = data.carrera === "otro" ? data.carreraPersonalizada : data.carrera
+      
       await crearPostulante({
         post_nom_vac: data.nombresApellidos,
         post_nrodoc_vac: data.dni,
         post_institucion_vac: data.universidadInstituto,
         post_ciclo_int: data.ciclo ? parseInt(data.ciclo) || null : null,
-        post_carrera_vac: data.carrera,
+        post_carrera_vac: carreraFinal || "",
         post_cv_vac: data.linkCurriculum || null,
         post_presentac_vac: data.sobreUsted || '',
         post_financiam_vac: data.financiamientoTesis,
@@ -692,7 +701,13 @@ export default function TrabajaConNosotrosClient() {
                       <Label htmlFor="carrera">
                         Carrera <span className="text-red-500">*</span>
                       </Label>
-                      <Select onValueChange={(value) => setValue("carrera", value)}>
+                      <Select onValueChange={(value) => {
+                        setValue("carrera", value)
+                        setSelectedCarrera(value)
+                        if (value !== "otro") {
+                          setValue("carreraPersonalizada", "")
+                        }
+                      }}>
                         <SelectTrigger className={errors.carrera ? "border-red-500" : ""}>
                           <SelectValue placeholder="Selecciona tu carrera" />
                         </SelectTrigger>
@@ -719,16 +734,36 @@ export default function TrabajaConNosotrosClient() {
                       <p className="text-xs text-gray-500">Opcional</p>
                     </div>
                   </div>
+                  
+                  {carreraWatch === "otro" && (
+                    <div className="space-y-2">
+                      <Label htmlFor="carreraPersonalizada">
+                        Especifica tu carrera <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="carreraPersonalizada"
+                        placeholder="Ingresa el nombre de tu carrera"
+                        {...register("carreraPersonalizada", {
+                          required: "Por favor, especifica tu carrera",
+                          minLength: { value: 3, message: "Ingresa un nombre válido de carrera" },
+                        })}
+                        className={errors.carreraPersonalizada ? "border-red-500" : ""}
+                      />
+                      {errors.carreraPersonalizada && (
+                        <p className="text-sm text-red-500">{errors.carreraPersonalizada.message}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Preferencias */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 border-b pb-2">
                     <BookOpen className="w-5 h-5 text-purple-600" />
-                    Preferencias
+                    Preferencias (Opcional)
                   </h3>
                   <div className="space-y-3">
-                    <Label>Áreas de Interés <span className="text-red-500">*</span></Label>
+                    <Label>Áreas de Interés</Label>
                     <p className="text-sm text-gray-500 mb-2">
                       Selecciona una o más áreas en las que te gustaría trabajar
                     </p>
@@ -751,16 +786,14 @@ export default function TrabajaConNosotrosClient() {
                         </div>
                       ))}
                     </div>
-                    {selectedAreas.length === 0 && (
-                      <p className="text-xs text-amber-600">Selecciona al menos un área de interés</p>
-                    )}
+
                   </div>
                   <div className="space-y-3">
                     <Label>
-                      ¿Te interesa el financiamiento para tu tesis? <span className="text-red-500">*</span>
+                      ¿Te interesa el financiamiento para tu tesis? (Solo afines a Ciencias Biológicas)
                     </Label>
                     <RadioGroup
-                      defaultValue="tal_vez"
+                      defaultValue="no"
                       onValueChange={(value) =>
                         setValue("financiamientoTesis", value as "si" | "no" | "tal_vez")
                       }
@@ -809,7 +842,7 @@ export default function TrabajaConNosotrosClient() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 border-b pb-2">
                     <Sparkles className="w-5 h-5 text-pink-600" />
-                    Cuéntanos más
+                    Cuéntanos más (Opcional)
                   </h3>
                   <div className="space-y-2">
                     <Label htmlFor="sobreUsted">
@@ -831,7 +864,7 @@ export default function TrabajaConNosotrosClient() {
                     type="submit"
                     size="lg"
                     className="w-full bg-green-600 hover:bg-green-700 text-white h-12 text-base font-semibold"
-                    disabled={isSubmitting || submitStatus === "loading" || selectedAreas.length === 0}
+                    disabled={isSubmitting || submitStatus === "loading"}
                   >
                     {submitStatus === "loading" ? (
                       <>

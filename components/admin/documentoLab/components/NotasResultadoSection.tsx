@@ -18,6 +18,7 @@ export function NotasResultadoSection({
   onAgregarNota,
   onActualizarNota,
   onEliminarNota,
+  onReordenarNota,
   disabled = false,
 }: NotasSectionProps) {
   // Agrupar notas por resultado
@@ -83,7 +84,7 @@ export function NotasResultadoSection({
                       value={nota.contenido}
                       onChange={(e) => onActualizarNota(nota.id, 'contenido', e.target.value)}
                       placeholder="Escribir nota..."
-                      className="min-h-[60px] text-sm resize-none"
+                      className="min-h-[60px] text-sm resize-y"
                       disabled={disabled}
                     />
 
@@ -111,16 +112,36 @@ export function NotasResultadoSection({
                     </div>
                   </div>
 
-                  {/* Delete */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 text-destructive hover:text-destructive shrink-0"
-                    onClick={() => onEliminarNota(nota.id)}
-                    disabled={disabled}
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                  {/* Reorder and Delete */}
+                  <div className="flex flex-col gap-1 items-center">
+                    <div className="flex gap-1">
+                      <button
+                        type="button"
+                        className="h-6 w-6 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-30"
+                        onClick={() => onReordenarNota?.(nota.id, 'up')}
+                        disabled={disabled}
+                      >
+                        <span className="text-[10px]">▲</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="h-6 w-6 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-30"
+                        onClick={() => onReordenarNota?.(nota.id, 'down')}
+                        disabled={disabled}
+                      >
+                        <span className="text-[10px]">▼</span>
+                      </button>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 text-destructive hover:text-destructive shrink-0"
+                      onClick={() => onEliminarNota(nota.id)}
+                      disabled={disabled}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Badge de vínculo */}
