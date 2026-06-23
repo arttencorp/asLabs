@@ -350,6 +350,7 @@ export default function ATCCDetailClient({ cepaId }: { cepaId: string }) {
                 <p className="text-emerald-100 text-sm mb-2">Precio final (con envío a Trujillo)</p>
                 <p className="text-5xl font-bold mb-2">S/ {cepa.precio.toFixed(2)}</p>
                 <p className="text-emerald-100 text-xs mb-4">Incluye S/ {ENVIO_PERU.toFixed(2)} de envío</p>
+                <p className="text-emerald-200 text-xs italic">* Precio referencial. Puede variar según tipo de cambio</p>
 
                 {cepa.disponibilidad ? (
                   <>

@@ -750,7 +750,8 @@ export default function ATCCClient() {
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
                           <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
-                          <p className="text-xs text-emerald-500 mb-4">+ S/ 4,500 envío desde ATCC a Perú</p>
+                          <p className="text-xs text-emerald-500 mb-2">+ S/ 4,500 envío desde ATCC a Perú</p>
+                          <p className="text-xs text-gray-500 italic mb-4">* Referencial. Varía por tipo de cambio</p>
                           <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
 
                           {cepa.disponibilidad ? (
