@@ -27,6 +27,7 @@ const cepasIdentificadas = [
     depositedAs: "Bacillus subtilis",
     typeStrain: "No",
     precio: 450.00,
+    precioSinEnvio: 450.00,
     cantidad: "500 mL",
     referencia: "AS-BS-001",
     disponibilidad: true,
@@ -43,6 +44,7 @@ const cepasIdentificadas = [
     depositedAs: "Pseudomonas fluorescens",
     typeStrain: "No",
     precio: 450.00,
+    precioSinEnvio: 450.00,
     cantidad: "500 mL",
     referencia: "AS-PF-001",
     disponibilidad: true,
@@ -59,6 +61,7 @@ const cepasIdentificadas = [
     depositedAs: "Azospirillum brasilense",
     typeStrain: "No",
     precio: 520.00,
+    precioSinEnvio: 520.00,
     cantidad: "100 g",
     referencia: "AS-AB-001",
     disponibilidad: true,
@@ -75,6 +78,7 @@ const cepasIdentificadas = [
     depositedAs: "Bacillus megaterium",
     typeStrain: "No",
     precio: 480.00,
+    precioSinEnvio: 480.00,
     cantidad: "500 mL",
     referencia: "AS-BM-001",
     disponibilidad: true,
@@ -91,6 +95,7 @@ const cepasIdentificadas = [
     depositedAs: "Trichoderma reesei",
     typeStrain: "No",
     precio: 550.00,
+    precioSinEnvio: 550.00,
     cantidad: "50 g",
     referencia: "AS-TR-001",
     disponibilidad: true,
@@ -107,6 +112,7 @@ const cepasIdentificadas = [
     depositedAs: "Streptomyces sp.",
     typeStrain: "No",
     precio: 580.00,
+    precioSinEnvio: 580.00,
     cantidad: "Placa petri",
     referencia: "AS-ST-001",
     disponibilidad: true,
@@ -399,7 +405,8 @@ export default function IdentificadasClient() {
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
                           <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
-                          <p className="text-xs text-emerald-500 mb-4">+ S/ 4,500 envío desde ATCC a Perú</p>
+                          <p className="text-xs text-emerald-500 mb-2">+ S/ 4,500 envío desde ATCC a Perú</p>
+                          <p className="text-xs text-gray-500 italic mb-4">* Referencial. Varía por tipo de cambio</p>
                           <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
 
                           {cepa.disponibilidad ? (
