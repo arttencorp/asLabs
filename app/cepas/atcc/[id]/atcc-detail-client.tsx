@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import Link from "next/link"
 import { ArrowLeft, Download, ShoppingCart, Heart, MessageCircle, X, Lock, Trash2 } from "lucide-react"
 
-const ENVIO_PERU = 155.00
+const ENVIO_PERU = 4500.00
 
 // Datos de Cepas ATCC desde catálogo
 const cepasATCC = [
@@ -22,7 +22,7 @@ const cepasATCC = [
     depositedAs: "Bacillus licheniformis",
     typeStrain: "Sí",
     precioSinEnvio: 616.47,
-    precio: 771.47,
+    precio: 5116.47,
     cantidad: "1 unidad",
     referencia: "ATCC-14580",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Bacillus%20licheniformis%20ATCC%2014580",
@@ -56,7 +56,7 @@ const cepasATCC = [
     depositedAs: "Bacillus subtilis",
     typeStrain: "Sí",
     precioSinEnvio: 616.47,
-    precio: 771.47,
+    precio: 5116.47,
     cantidad: "1 unidad",
     referencia: "ATCC-6051",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Bacillus%20subtilis%20ATCC%206051",
@@ -90,7 +90,7 @@ const cepasATCC = [
     depositedAs: "Escherichia coli",
     typeStrain: "No",
     precioSinEnvio: 616.47,
-    precio: 771.47,
+    precio: 5116.47,
     cantidad: "6 viales de 200 µL",
     referencia: "ATCC-25922",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Escherichia%20coli%20ATCC%2025922",
@@ -124,7 +124,7 @@ const cepasATCC = [
     depositedAs: "Bacillus subtilis subsp. subtilis",
     typeStrain: "No",
     precioSinEnvio: 3589.82,
-    precio: 3744.82,
+    precio: 8089.82,
     cantidad: "1 unidad",
     referencia: "ATCC-49822",
     link: "https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=Bacillus%20subtilis%20ATCC%2049822",
