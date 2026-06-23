@@ -6,7 +6,7 @@ import { Footer } from "@/components/footer"
 import { Search, Download, Lock, X, ShoppingCart, Trash2, MessageCircle } from "lucide-react"
 import Link from "next/link"
 
-const ENVIO_PERU = 155.00
+const ENVIO_PERU = 4500.00
 
 interface CartItem {
   cepa: (typeof cepasIdentificadas)[0]
@@ -399,7 +399,7 @@ export default function IdentificadasClient() {
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
                           <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
-                          <p className="text-xs text-emerald-500 mb-4">+ S/ 155 envío a Trujillo, Perú</p>
+                          <p className="text-xs text-emerald-500 mb-4">+ S/ 4,500 envío desde ATCC a Perú</p>
                           <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
 
                           {cepa.disponibilidad ? (
