@@ -398,7 +398,7 @@ export default function IdentificadasClient() {
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-emerald-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-emerald-700 mb-1">Precio base:</p>
-                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
+                          <p className="text-3xl font-bold text-emerald-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
                           <p className="text-xs text-emerald-500 mb-4">+ S/ 4,500 envío desde ATCC a Perú</p>
                           <p className="text-xs text-emerald-500 mb-4">{cepa.cantidad}</p>
 
