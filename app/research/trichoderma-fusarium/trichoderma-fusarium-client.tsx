@@ -19,12 +19,11 @@ import Footer from "@/components/footer"
 export default function TrichodermaFusariumClient() {
   const [showAdvances, setShowAdvances] = useState(false)
 
-  const advances = [
+  const advances: { title: string; date: string; status: string; description: string; progress?: number }[] = [
     {
       title: "Aislamiento y Caracterización de Cepas",
       date: "15 de Febrero, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Recolección de muestras de suelo de La Libertad y aislamiento de cepas de Trichoderma y Fusarium oxysporum Raza 2.",
     },
@@ -32,7 +31,6 @@ export default function TrichodermaFusariumClient() {
       title: "Identificación Molecular de Aislados",
       date: "28 de Febrero, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Análisis de secuencias de rDNA para identificación precisa de especies de Trichoderma y confirmación de Fusarium oxysporum Raza 2.",
     },
@@ -40,7 +38,6 @@ export default function TrichodermaFusariumClient() {
       title: "Pruebas de Antagonismo in vitro",
       date: "15 de Marzo, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Cultivos duales para evaluar la capacidad de inhibición de Trichoderma contra el crecimiento de Fusarium oxysporum.",
     },
@@ -48,7 +45,6 @@ export default function TrichodermaFusariumClient() {
       title: "Evaluación Bioquímica de Metabolitos Secundarios",
       date: "10 de Abril, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Identificación y cuantificación de compuestos volátiles y no volátiles producidos por Trichoderma con actividad antifúngica.",
     },
@@ -56,7 +52,6 @@ export default function TrichodermaFusariumClient() {
       title: "Análisis de Expresión Génica",
       date: "25 de Mayo, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Uso de qRT-PCR para evaluar genes involucrados en síntesis de antibióticos y degradación de pared celular fúngica.",
     },
@@ -64,7 +59,6 @@ export default function TrichodermaFusariumClient() {
       title: "Microscopía Electrónica de Interacciones",
       date: "15 de Junio, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Observación a nivel ultraestructural de los mecanismos de antagonismo en la interfaz Trichoderma-Fusarium.",
     },

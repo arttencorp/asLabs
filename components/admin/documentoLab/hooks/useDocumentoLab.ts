@@ -405,23 +405,20 @@ export function useDocumentoLab() {
 
   // === Gestión de Resultados ===
   const agregarResultadoUI = useCallback((muestraId?: string) => {
-    setDocumento(prev => {
-      const nuevoResultado: ResultadoUI = {
-        id: generarIdTemporal(),
-        parametro: '',
-        resultado: '',
-        unidad: '',
-        metodo: '',
-        mostrarGrafico: false,
-        muestraId,
-        orden: prev.resultados.length
-      }
-      
-      return {
-        ...prev,
-        resultados: [...prev.resultados, nuevoResultado]
-      }
-    })
+    const nuevoResultado: ResultadoUI = {
+      id: generarIdTemporal(),
+      parametro: '',
+      resultado: '',
+      unidad: '',
+      metodo: '',
+      mostrarGrafico: false,
+      muestraId
+    }
+    
+    setDocumento(prev => ({
+      ...prev,
+      resultados: [...prev.resultados, nuevoResultado]
+    }))
   }, [])
 
   const actualizarResultadoUI = useCallback((resultadoId: string, campo: keyof ResultadoUI, valor: any) => {
@@ -444,44 +441,17 @@ export function useDocumentoLab() {
     }))
   }, [])
 
-  const reordenarResultadoUI = useCallback((resultadoId: string, direccion: 'up' | 'down') => {
-    setDocumento(prev => {
-      const index = prev.resultados.findIndex(r => r.id === resultadoId)
-      if (index === -1) return prev
-      if (direccion === 'up' && index === 0) return prev
-      if (direccion === 'down' && index === prev.resultados.length - 1) return prev
-
-      const newIndex = direccion === 'up' ? index - 1 : index + 1
-      const newResultados = [...prev.resultados]
-      const temp = newResultados[index]
-      newResultados[index] = newResultados[newIndex]
-      newResultados[newIndex] = temp
-      
-      newResultados.forEach((r, i) => {
-        r.orden = i
-      })
-
-      return {
-        ...prev,
-        resultados: newResultados
-      }
-    })
-  }, [])
-
   // === Gestión de Notas ===
   const agregarNotaUI = useCallback((resultadoId?: string) => {
-    setDocumento(prev => {
-      const nuevaNota: NotaUI = {
-        id: generarIdTemporal(),
-        contenido: '',
-        resultadoId: resultadoId || '',
-        orden: prev.notas.length
-      }
-      return {
-        ...prev,
-        notas: [...prev.notas, nuevaNota]
-      }
-    })
+    const nuevaNota: NotaUI = {
+      id: generarIdTemporal(),
+      contenido: '',
+      resultadoId: resultadoId || '',
+    }
+    setDocumento(prev => ({
+      ...prev,
+      notas: [...prev.notas, nuevaNota]
+    }))
   }, [])
 
   const actualizarNotaUI = useCallback((notaId: string, campo: keyof NotaUI, valor: any) => {
@@ -501,30 +471,6 @@ export function useDocumentoLab() {
       ...prev,
       notas: prev.notas.filter(n => n.id !== notaId)
     }))
-  }, [])
-
-  const reordenarNotaUI = useCallback((notaId: string, direccion: 'up' | 'down') => {
-    setDocumento(prev => {
-      const index = prev.notas.findIndex(n => n.id === notaId)
-      if (index === -1) return prev
-      if (direccion === 'up' && index === 0) return prev
-      if (direccion === 'down' && index === prev.notas.length - 1) return prev
-
-      const newIndex = direccion === 'up' ? index - 1 : index + 1
-      const newNotas = [...prev.notas]
-      const temp = newNotas[index]
-      newNotas[index] = newNotas[newIndex]
-      newNotas[newIndex] = temp
-      
-      newNotas.forEach((n, i) => {
-        n.orden = i
-      })
-
-      return {
-        ...prev,
-        notas: newNotas
-      }
-    })
   }, [])
 
   // === Gestión de Agentes ===
@@ -679,11 +625,30 @@ export function useDocumentoLab() {
   const guardarDocumento = useCallback(async (): Promise<boolean> => {
     setGuardando(true)
     try {
-      const { valido, errores } = validarDocumentoParaEmision(documento)
+      // 1. Limpieza de filas vacías (parámetro y resultado vacíos)
+      const resultadosVacios = documento.resultados.filter(r => !r.parametro.trim() && !r.resultado.trim())
+      const resultadosValidos = documento.resultados.filter(r => r.parametro.trim() || r.resultado.trim())
+      
+      // Si hay resultados vacíos que ya estaban en BD, marcarlos para eliminación
+      const currentResultadosEliminados = [...resultadosEliminados]
+      let needsUpdateEliminados = false
+      resultadosVacios.forEach(r => {
+        if (!r.id.startsWith('temp_') && !currentResultadosEliminados.includes(r.id)) {
+          currentResultadosEliminados.push(r.id)
+          needsUpdateEliminados = true
+        }
+      })
+      if (needsUpdateEliminados) {
+        setResultadosEliminados(currentResultadosEliminados)
+      }
+
+      // Validar documento usando resultados válidos
+      const docValidado = { ...documento, resultados: resultadosValidos }
+      const { valido, errores } = validarDocumentoParaEmision(docValidado)
       
       if (!valido) {
         console.error('Errores de validación:', errores)
-        // Aquí podrías mostrar un toast con los errores
+        setGuardando(false)
         return false
       }
       
@@ -715,8 +680,7 @@ export function useDocumentoLab() {
           mue_recomend_vac: m.recomendaciones || undefined
         }))
 
-        const resultadosForm = documento.resultados.map(r => ({
-          res_ens_ordn_int: r.orden,
+        const resultadosForm = docValidado.resultados.map(r => ({
           res_ens_param_vac: r.parametro,
           res_ens_result_vac: r.resultado,
           res_ens_und_vac: r.unidad || undefined,
@@ -822,22 +786,14 @@ export function useDocumentoLab() {
           }
         }
         
-        // Mapa para traducir IDs temporales a IDs reales de resultados
-        const resultadoIdMap: Record<string, string> = {}
-        
         // Guardar resultados (usando el mapa de IDs)
-        for (let index = 0; index < documento.resultados.length; index++) {
-          const resultado = documento.resultados[index]
-          // Garantizamos el orden visual asignando index + 1
-          const ordenGarantizado = resultado.orden ?? (index + 1)
-          
+        for (const resultado of docValidado.resultados) {
           // Traducir el muestraId temporal a ID real si existe
           const muestraIdReal = resultado.muestraId 
             ? (muestraIdMap[resultado.muestraId] || resultado.muestraId)
             : undefined
           
           const datosResultado = {
-            res_ens_ordn_int: ordenGarantizado,
             res_ens_param_vac: resultado.parametro,
             res_ens_result_vac: resultado.resultado,
             res_ens_und_vac: resultado.unidad || undefined,
@@ -851,12 +807,8 @@ export function useDocumentoLab() {
           }
           
           if (resultado.id.startsWith('temp_')) {
-            const resGuardado = await agregarResultado(docId, datosResultado)
-            if (resGuardado?.res_ens_id_int) {
-              resultadoIdMap[resultado.id] = resGuardado.res_ens_id_int
-            }
+            await agregarResultado(docId, datosResultado)
           } else {
-            resultadoIdMap[resultado.id] = resultado.id
             await actualizarResultado(resultado.id, datosResultado)
           }
         }
@@ -924,24 +876,17 @@ export function useDocumentoLab() {
         }
         
         // Guardar notas
-        for (let index = 0; index < documento.notas.length; index++) {
-          const nota = documento.notas[index]
-          const ordenGarantizado = nota.orden ?? (index + 1)
-          
-          // Mapear resultadoId si era temporal
-          const resIdReal = nota.resultadoId.startsWith('temp_') 
-            ? resultadoIdMap[nota.resultadoId] 
-            : nota.resultadoId
-            
+        for (const nota of documento.notas) {
+          // Solo guardar notas con resultado real (no temp_)
+          const resIdReal = nota.resultadoId.startsWith('temp_') ? undefined : nota.resultadoId
           if (!resIdReal) continue // No se puede guardar nota sin resultado real
 
           if (nota.id.startsWith('temp_')) {
-            await agregarNotaResultado(resIdReal, nota.contenido, ordenGarantizado)
+            await agregarNotaResultado(resIdReal, nota.contenido)
           } else {
             await actualizarNotaResultado(nota.id, {
               resul_not_cont_vac: nota.contenido,
-              res_ens_id_int: resIdReal,
-              resul_not_ordn_int: ordenGarantizado
+              res_ens_id_int: resIdReal
             })
           }
         }
@@ -1189,13 +1134,11 @@ export function useDocumentoLab() {
     agregarResultado: agregarResultadoUI,
     actualizarResultado: actualizarResultadoUI,
     eliminarResultado: eliminarResultadoUI,
-    reordenarResultado: reordenarResultadoUI,
     
     // Gestión de notas
     agregarNota: agregarNotaUI,
     actualizarNota: actualizarNotaUI,
     eliminarNota: eliminarNotaUI,
-    reordenarNota: reordenarNotaUI,
     
     // Gestión de agentes
     agregarAgente: agregarAgenteUI,

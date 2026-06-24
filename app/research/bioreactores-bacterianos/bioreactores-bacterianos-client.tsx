@@ -19,12 +19,11 @@ import Footer from "@/components/footer"
 export default function BioreactoresBacterianoClient() {
   const [showAdvances, setShowAdvances] = useState(false)
 
-  const advances = [
+  const advances: { title: string; date: string; status: string; description: string; progress?: number }[] = [
     {
       title: "Diseño Conceptual de Bioreactores",
       date: "7 de Enero, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Análisis de requisitos de diseño, selección de configuración (lote, lote alimentado, continuo) y cálculos de escalamiento.",
     },
@@ -32,7 +31,6 @@ export default function BioreactoresBacterianoClient() {
       title: "Selección de Materiales y Componentes",
       date: "28 de Enero, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Evaluación y especificación de sistemas de aireación, agitación, control de temperatura y monitoreo de parámetros.",
     },
@@ -40,7 +38,6 @@ export default function BioreactoresBacterianoClient() {
       title: "Construcción de Prototipo 10L",
       date: "20 de Febrero, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Fabricación del primer bioreactor prototipo con capacidad de 10 litros y calibración de sistemas de control.",
     },
@@ -48,7 +45,6 @@ export default function BioreactoresBacterianoClient() {
       title: "Optimización de Parámetros de Fermentación",
       date: "10 de Marzo, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Determinación experimental de condiciones óptimas: pH, temperatura, aireación y velocidad de agitación para diferentes cepas bacterianas.",
     },
@@ -56,7 +52,6 @@ export default function BioreactoresBacterianoClient() {
       title: "Evaluación de Viabilidad Bacteriana",
       date: "5 de Abril, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Desarrollo de protocolos de medición de viabilidad, recuento y determinación de tiempo de vida útil post-cosecha.",
     },
@@ -64,7 +59,6 @@ export default function BioreactoresBacterianoClient() {
       title: "Construcción de Bioreactor 50L",
       date: "20 de Mayo, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Escalamiento del bioreactor a 50 litros con validación de parámetros de fermentación a mayor escala.",
     },
@@ -72,7 +66,6 @@ export default function BioreactoresBacterianoClient() {
       title: "Optimización de Costos de Producción",
       date: "15 de Junio, 2027",
       status: "pending",
-      progress: 0,
       description:
         "Análisis económico comparativo y definición de estrategias de reducción de costos de producción.",
     },

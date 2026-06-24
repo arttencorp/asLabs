@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 export default function AboutUsFramework() {
-  const [activeSection, setActiveSection] = useState("clientes")
+  const [activeSection, setActiveSection] = useState<"clientes" | "empleados" | "ambiente" | "comunidad" | "etica">("clientes")
 
   const sections = {
     clientes: {

@@ -382,10 +382,15 @@ export function validarDocumentoParaEmision(documento: DocumentoLabUI): { valido
   
   // Verificar que los resultados tengan datos mínimos
   documento.resultados.forEach((resultado, index) => {
-    if (!resultado.parametro) {
+    // Si el parámetro y el resultado están completamente vacíos, se omitirá al guardar
+    if (!resultado.parametro.trim() && !resultado.resultado.trim()) {
+      return
+    }
+
+    if (!resultado.parametro.trim()) {
       errores.push(`Resultado ${index + 1}: Debe especificar el parámetro`)
     }
-    if (!resultado.resultado) {
+    if (!resultado.resultado.trim()) {
       errores.push(`Resultado ${index + 1}: Debe especificar el resultado`)
     }
   })

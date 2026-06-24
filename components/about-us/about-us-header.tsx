@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 
 export default function AboutUsHeader() {
-  const [activeTab, setActiveTab] = useState("mission")
+  const [activeTab, setActiveTab] = useState<"mission" | "leadership" | "story">("mission")
 
   const tabContent = {
     mission: {

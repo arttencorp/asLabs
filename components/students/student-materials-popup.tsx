@@ -19,8 +19,15 @@ interface Material {
   image: string
 }
 
-export default function StudentMaterialsPopup() {
+interface Props {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export default function StudentMaterialsPopup({ isOpen, onClose }: Props) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+
+  if (isOpen === false) return null;
 
   const materials: Material[] = [
     {
@@ -208,9 +215,14 @@ Detalles del material:
   }
 
   return (
-    <div className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+    <div className={`py-16 bg-white ${isOpen !== undefined ? 'fixed inset-0 z-50 overflow-y-auto' : ''}`}>
+      <div className="container mx-auto px-4 relative">
+        <div className="text-center mb-12 relative">
+          {onClose && (
+            <button onClick={onClose} className="absolute right-0 top-0 text-gray-500 hover:text-gray-700">
+              <X className="w-6 h-6" />
+            </button>
+          )}
           <h2 className="text-3xl font-bold text-[#01283c] mb-4">Materiales para Estudiantes UNT</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Materiales especializados, kits educativos y reactivos de alta calidad para apoyar tu formación académica en

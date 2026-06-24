@@ -1,4 +1,27 @@
-export const pipelineData = [
+export interface Project {
+  name: string;
+  id: string;
+  progress: number;
+  location: string;
+  status: string;
+  researcher?: string;
+  subtitle?: string;
+  completedDate?: string;
+  plantsProduced?: string;
+  description?: string;
+}
+
+export interface Subsection {
+  title: string;
+  projects: Project[];
+}
+
+export interface Category {
+  title: string;
+  subsections: Subsection[];
+}
+
+export const pipelineData: Category[] = [
   {
     title: "Secuenciamiento",
     subsections: [
