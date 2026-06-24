@@ -59,7 +59,7 @@ const laboratories: Laboratory[] = [
   },
 
   {
-    id: "analisis-agroindustriales",
+    id: "research",
     name: "Laboratorio de Análisis Agroindustriales",
     icon: <Beaker className="w-8 h-8" />,
     color: "text-purple-600",
@@ -78,7 +78,7 @@ const laboratories: Laboratory[] = [
     status: "active",
   },
   {
-    id: "bioreactores",
+    id: "research",
     name: "Laboratorio de Diseño y Modelado de Bioreactores",
     icon: <Settings className="w-8 h-8" />,
     color: "text-red-600",
@@ -117,7 +117,7 @@ export default function LaboratoriesSection() {
           {laboratories.map((lab) => (
             <a
               key={lab.id}
-              href={`/laboratorios/${lab.id}`}
+              href={`/${lab.id}`}
               className="group border rounded-lg overflow-hidden hover:shadow-lg transition-all bg-white"
             >
               {/* Banner Image or Icon */}

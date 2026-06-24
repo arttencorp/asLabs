@@ -47,7 +47,7 @@ export const teamData: TeamSection[] = [
         lastName: 'Guevara E.',
         role: 'Gerente de Gestión',
         area: 'Gerencia',
-        image: '/about-us/antonio.webp',
+        image: '/about-us/Antonio.webp',
         email: 'avguevaraes@aslaboratorios.com',
         linkedIn: '#',
         bio: 'Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.',
