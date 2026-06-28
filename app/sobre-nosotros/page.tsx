@@ -7,6 +7,7 @@ import Footer from "@/components/footer"
 import AboutHeader from "@/components/about-us/about-header"
 import AboutNavigation from "@/components/about-us/about-navigation"
 import AboutMission from "@/components/about-us/about-mission"
+import AboutPurpose from "@/components/about-us/about-purpose"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
 import AboutISO from "@/components/about-us/about-iso"
@@ -32,6 +33,7 @@ function SobreNosotrosContent() {
       <AboutHeader />
       <AboutNavigation activeSection={activeSection} setActiveSection={setActiveSection} />
       <AboutMission />
+      <AboutPurpose />
       <AboutOrganigram />
       <AboutISO />
       <AboutValues />
