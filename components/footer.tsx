@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Youtube } from "lucide-react"
+import FooterComplaintsButton from "./footer-complaints-button"
 
 export { Footer }
 
@@ -112,6 +113,11 @@ export default function Footer() {
                   Términos Legales
                 </Link>
               </li>
+              <li>
+                <Link href="/canal-de-quejas" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Canal de Quejas
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -173,8 +179,21 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Complaints Section */}
         <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="bg-gradient-to-r from-emerald-900 to-emerald-800 rounded-lg p-6 mb-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-1">¿Tienes una queja?</h4>
+                <p className="text-emerald-100 text-sm">Presenta tu queja de forma segura, anónima y confidencial</p>
+              </div>
+              <FooterComplaintsButton />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="w-full md:w-auto">
               <div className="text-sm text-gray-400 mb-4">
