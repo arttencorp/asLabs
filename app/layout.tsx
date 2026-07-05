@@ -8,6 +8,7 @@ import {
   LocalBusinessStructuredData,
   WebsiteStructuredData,
 } from "@/components/structured-data"
+import { Analytics } from '@vercel/analytics/next'
 
 const dmSerifText = DM_Serif_Text({
   weight: ["400"],
@@ -176,6 +177,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LocalBusinessStructuredData />
         <WebsiteStructuredData />
         {children}
+        <Analytics />
       </body>
     </html>
   )
