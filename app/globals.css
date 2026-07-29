@@ -90,7 +90,43 @@
   }
 
   body {
-    @apply bg-background text-foreground font-serif;
+    @apply bg-background text-foreground font-sans;
+    font-family: var(--font-poppins), "Poppins", sans-serif;
+  }
+}
+
+/* Main homepage redesign — intentionally scoped to avoid changing internal pages. */
+.home-redesign h1,
+.home-redesign h2,
+.home-redesign h3 {
+  font-family: var(--font-poppins), "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+.home-grain {
+  background-image:
+    radial-gradient(circle at 15% 22%, rgba(255,255,255,.2) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 78% 61%, rgba(255,255,255,.14) 0 1px, transparent 1.5px);
+  background-size: 11px 13px, 17px 19px;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.home-leaf-lines {
+  background-image:
+    linear-gradient(115deg, transparent 48%, rgba(23, 52, 40, 0.09) 49%, rgba(23, 52, 40, 0.09) 50%, transparent 51%),
+    linear-gradient(65deg, transparent 48%, rgba(23, 52, 40, 0.06) 49%, rgba(23, 52, 40, 0.06) 50%, transparent 51%);
+  background-size: 120px 120px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-redesign *,
+  .home-redesign *::before,
+  .home-redesign *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 

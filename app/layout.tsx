@@ -171,7 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="msapplication-TileColor" content="#2e7d32" />
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
-      <body className="min-h-screen bg-background text-foreground font-serif antialiased">
+      <body className="min-h-screen bg-background font-[var(--font-poppins)] text-foreground antialiased">
         <OrganizationStructuredData />
         <LocalBusinessStructuredData />
         <WebsiteStructuredData />

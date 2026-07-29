@@ -1,532 +1,401 @@
 "use client"
-import { useState } from "react"
-import type React from "react"
 
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { AnimatePresence, motion } from "framer-motion"
 import {
-  ExternalLink,
-  Menu,
-  X,
+  ArrowUpRight,
+  BriefcaseBusiness,
   ChevronDown,
+  ClipboardCheck,
   FlaskConical,
   Leaf,
-  Droplets,
+  Menu,
+  MessageCircle,
   Microscope,
-  Bug,
-  BookOpenCheck,
-  LogIn
+  Presentation,
+  Scale,
+  ShieldCheck,
+  Sparkles,
+  X,
 } from "lucide-react"
 
-interface NavItem {
-  title: string
-  href?: string
-  description: string
-  children?: NavItem[]
-  icon?: React.ReactNode
+type NavLink = {
+  label: string
+  href: string
+  description?: string
+  icon?: typeof Leaf
 }
 
-export { Navbar }
+type NavGroup = {
+  label: string
+  href?: string
+  links?: NavLink[]
+}
 
-export default function Navbar() {
-  const [activeItem, setActiveItem] = useState<string | null>(null)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null)
+const navigation: NavGroup[] = [
+  { label: "Nosotros", href: "/sobre-nosotros" },
+  {
+    label: "Biotecnología",
+    links: [
+      {
+        label: "Biotecnología vegetal",
+        href: "/biotecnologia-vegetal",
+        description: "Fundamentos y aplicaciones en el campo",
+        icon: Leaf,
+      },
+      {
+        label: "Genética",
+        href: "/genetica",
+        description: "Genética molecular, PCR y plásmidos",
+        icon: FlaskConical,
+      },
+    ],
+  },
+  {
+    label: "Servicios",
+    href: "/servicios",
+    links: [
+      { label: "Fitopatología", href: "/servicios/fitopatologia", description: "Diagnóstico de patógenos", icon: Microscope },
+      { label: "Medio ambiente", href: "/servicios/medio-ambiente", description: "Análisis microbiológicos", icon: Leaf },
+      { label: "Microbiológicos", href: "/servicios/microbiologicos", description: "Alimentos, agua y superficies", icon: Microscope },
+      { label: "Biotecnología vegetal", href: "/servicios/biotecnologia-vegetal", description: "Cultivo de tejidos in vitro", icon: Leaf },
+      { label: "Bacteriología", href: "/servicios/bacteriologia-general", description: "Suspensiones y fermentación", icon: FlaskConical },
+      { label: "Apoyo a la investigación", href: "/servicios/apoyo-investigacion", description: "Protocolos e identificación molecular", icon: Microscope },
+    ],
+  },
+  { label: "Plantines", href: "/plantines" },
+  { label: "Control biológico", href: "/control-biologico" },
+  {
+    label: "Cepas",
+    href: "/cepas",
+    links: [
+      { label: "Cepas identificadas", href: "/cepas/identificadas", description: "Cultivos locales certificados", icon: Microscope },
+      { label: "Cepas ATCC", href: "/cepas/atcc", description: "Referencias internacionales", icon: FlaskConical },
+    ],
+  },
+  { label: "Investigación", href: "/research" },
+  {
+    label: "Más",
+    links: [
+      {
+        label: "Trabaja con nosotros",
+        href: "/trabaja-con-nosotros",
+        description: "Convocatorias y oportunidades",
+        icon: BriefcaseBusiness,
+      },
+      {
+        label: "Legal",
+        href: "/legal",
+        description: "Términos, privacidad y políticas",
+        icon: Scale,
+      },
+      {
+        label: "Pitch Deck",
+        href: "/pitch-deck",
+        description: "Presentación institucional",
+        icon: Presentation,
+      },
+    ],
+  },
+]
 
-  const navItems: Record<string, NavItem> = {
-    "sobre-nosotros": {
-      title: "Sobre Nosotros",
-      href: "/sobre-nosotros",
-      description:
-        "Conoce nuestra historia, misión y visión. Desde el año 2000 trabajamos en biotecnología vegetal para mejorar la agricultura peruana.",
-    },
-    biotecnologia: {
-      title: "Biotecnología",
-      description: "Descubre la ciencia detrás de nuestras soluciones innovadoras",
-      children: [
-        {
-          title: "Qué es la Biotecnología",
-          href: "/biotecnologia-vegetal",
-          description: "Conoce los fundamentos de la biotecnología vegetal y sus aplicaciones",
-        },
-        {
-          title: "Genética",
-          href: "/genetica",
-          description: "Explora la genética molecular: inserción de genes, plásmidos, PCR y más",
-        },
-      ],
-    },
-    biofertilizantes: {
-      title: "Biofertilizantes",
-      href: "/biofertilizantes",
-      description: "Microorganismos benéficos para nutrición y salud del suelo",
-    },
-    servicios: {
-      title: "Servicios",
-      href: "/servicios",
-      description: "Análisis de laboratorio especializados",
-      children: [
-        {
-          title: "Fitopatología",
-          href: "/servicios/fitopatologia",
-          description: "Patógenos y análisis de suelos",
-          icon: <Bug className="h-4 w-4" />,
-        },
-        {
-          title: "Medio Ambiente",
-          href: "/servicios/medio-ambiente",
-          description: "Análisis microbiológicos",
-          icon: <Droplets className="h-4 w-4" />,
-        },
-        {
-          title: "Microbiológicos",
-          href: "/servicios/microbiologicos",
-          description: "Alimentos, agua y superficies",
-          icon: <Microscope className="h-4 w-4" />,
-        },
-        {
-          title: "Biotecnología Vegetal",
-          href: "/servicios/biotecnologia-vegetal",
-          description: "Cultivo de tejidos in vitro",
-          icon: <Leaf className="h-4 w-4" />,
-        },
-        {
-          title: "Bacteriología",
-          href: "/servicios/bacteriologia-general",
-          description: "Suspensiones y fermentación",
-          icon: <FlaskConical className="h-4 w-4" />,
-        },
-        {
-          title: "Apoyo a la Investigación",
-          href: "/servicios/apoyo-investigacion",
-          description: "Identificación molecular y protocolos",
-          icon: <BookOpenCheck className="h-4 w-4" />,
-        },
-      ],
-    },
-    plantines: {
-      title: "Plantines",
-      href: "/plantines",
-      description:
-        "Explora nuestra variedad de plantines in vitro de alta calidad genética y fitosanitaria para diferentes cultivos.",
-    },
-    cepas: {
-      title: "Cepas",
-      description:
-        "Cepas bacterianas y biológicas de alta calidad para control biológico y mejora agrícola.",
-      children: [
-        {
-          title: "Cepas Identificadas",
-          href: "/cepas/identificadas",
-          description: "Cultivos locales certificados de máxima viabilidad",
-          icon: <Microscope className="h-4 w-4" />,
-        },
-        {
-          title: "Cepas ATCC",
-          href: "/cepas/atcc",
-          description: "Cepas referencia internacional - Importación desde USA",
-          icon: <FlaskConical className="h-4 w-4" />,
-        },
-      ],
-    },
-    research: {
-      title: "Investigación",
-      href: "/research",
-      description: "Explora nuestros proyectos de investigación en clonación de plantas e ingeniería genética.",
-    },
-    "control-biologico": {
-      title: "Control Biológico",
-      href: "/control-biologico",
-      description:
-        "Soluciones naturales para el control de plagas. Asesoría a agricultores y venta de controladores biológicos como Billaea claripalpis y Trichogramma sp.",
-    },
-    seguimiento: {
-      title: "Seguimiento",
-      href: "/seguimiento",
-      description: "Rastrea el estado de tu pedido ingresando tu número de seguimiento.",
-    },
+function isPatrioticSeasonInPeru() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "numeric",
+    timeZone: "America/Lima",
+  }).formatToParts(new Date())
+  const year = Number(parts.find((part) => part.type === "year")?.value)
+  const month = Number(parts.find((part) => part.type === "month")?.value)
+  return year === 2026 && month === 7
+}
+
+export type NavbarProps = {
+  overlay?: boolean
+}
+
+export function Navbar({ overlay = false }: NavbarProps) {
+  const pathname = usePathname()
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [navTheme, setNavTheme] = useState<"light" | "dark">("light")
+  const [showPatrioticMessage, setShowPatrioticMessage] = useState(false)
+
+  useEffect(() => {
+    setShowPatrioticMessage(isPatrioticSeasonInPeru())
+  }, [])
+
+  useEffect(() => {
+    let frame = 0
+    const updateNavbar = () => {
+      window.cancelAnimationFrame(frame)
+      frame = window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 14)
+
+        const sampleY = window.innerWidth >= 640 ? 48 : 42
+        const themedSections = Array.from(document.querySelectorAll<HTMLElement>("[data-navbar-theme]"))
+        const activeSection = themedSections.find((section) => {
+          const rect = section.getBoundingClientRect()
+          return rect.top <= sampleY && rect.bottom >= sampleY
+        })
+
+        setNavTheme(activeSection?.dataset.navbarTheme === "dark" ? "dark" : "light")
+      })
+    }
+
+    updateNavbar()
+    window.addEventListener("scroll", updateNavbar, { passive: true })
+    window.addEventListener("resize", updateNavbar)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", updateNavbar)
+      window.removeEventListener("resize", updateNavbar)
+    }
+  }, [])
+
+  useEffect(() => {
+    setMobileOpen(false)
+    setOpenGroup(null)
+  }, [pathname])
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false)
+        setOpenGroup(null)
+      }
+    }
+
+    window.addEventListener("keydown", closeOnEscape)
+    return () => window.removeEventListener("keydown", closeOnEscape)
+  }, [])
+
+  const isActive = (item: NavGroup) => {
+    if (item.href && (pathname === item.href || pathname.startsWith(`${item.href}/`))) return true
+    return item.links?.some((link) => pathname === link.href || pathname.startsWith(`${link.href}/`)) ?? false
   }
+
+  const useDarkContrast = navTheme === "dark" && !mobileOpen
+  const inactiveLinkClass = useDarkContrast
+    ? "text-white/90 hover:bg-white/[0.14] hover:text-white"
+    : "text-[#28483a] hover:bg-[#eaf1eb] hover:text-[#1f6240]"
+  const activeLinkClass = useDarkContrast
+    ? "bg-white/[0.17] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]"
+    : "bg-[#e3ede5] text-[#1f6240] shadow-[inset_0_0_0_1px_rgba(31,98,64,0.08)]"
 
   return (
     <>
-      {/* Top navigation bar - Hidden on mobile */}
-      <div className="bg-[#2e7d32] text-white text-xs hidden lg:block">
-        <div className="container mx-auto flex justify-end items-center gap-4 py-1 px-4">
-          <Link href="/legal" className="hover:underline">
-            Legal
-          </Link>
-          <Link href="/pitch-deck" className="hover:underline">
-            Pitch Deck
-          </Link>
-          <Link href="/trabaja-con-nosotros" className="hover:underline">
-            Trabaja con nosotros
-          </Link>
-          <Link href="/control-biologico" className="hover:underline font-medium">
-            Control Biológico
-          </Link> 
-          <Link href="/tienda" className="hover:underline font-medium">
-            Tienda Online
-          </Link>
-        </div>
-      </div>
-
-      {/* Main navigation */}
-      <nav className="bg-white border-b py-1.5 2xl:py-2 relative z-20 font-serif">
-        <div className="container mx-auto flex items-center justify-between px-4 min-h-[60px] 2xl:min-h-[70px] max-w-[1600px]">
-          <div className="flex items-center gap-2 2xl:gap-6 h-full">
-            <Link href="/" className="flex items-center flex-shrink-0">
+      <motion.header
+        initial={{ opacity: 0, y: -18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 160, damping: 24 }}
+        className={`pointer-events-none fixed inset-x-0 top-0 z-[100] px-3 transition-[padding] duration-500 sm:px-5 ${scrolled ? "pt-2 sm:pt-2.5" : "pt-3 sm:pt-4"}`}
+      >
+        <nav
+          aria-label="Navegación principal"
+          className={`pointer-events-auto relative mx-auto max-w-[1420px] rounded-[1.35rem] border font-[var(--font-poppins)] backdrop-blur-[12px] backdrop-saturate-150 transition-all duration-500 ${
+            useDarkContrast
+              ? `border-white/25 bg-[#0d3024]/[0.72] ring-1 ring-white/[0.08] shadow-[0_14px_42px_-20px_rgba(0,0,0,0.5)] ${scrolled ? "bg-[#0d3024]/[0.84] shadow-[0_18px_48px_-20px_rgba(0,0,0,0.62)]" : ""}`
+              : `border-white/85 bg-[#fbfdf9]/[0.82] ring-1 ring-[#173428]/[0.05] shadow-[0_14px_42px_-22px_rgba(8,47,32,0.38)] ${scrolled ? "bg-[#fbfdf9]/[0.93] shadow-[0_18px_48px_-20px_rgba(8,47,32,0.4)]" : ""}`
+          }`}
+        >
+          <div aria-hidden="true" className={`pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent to-transparent ${useDarkContrast ? "via-white/55" : "via-white"}`} />
+          <AnimatePresence initial={false}>
+            {showPatrioticMessage && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 25, opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className={`flex items-center justify-center gap-2 overflow-hidden px-4 text-[9px] font-bold uppercase tracking-[0.14em] sm:text-[10px] ${
+                  useDarkContrast ? "text-white/90" : "text-[#385645]"
+                }`}
+                role="status"
+                aria-label="Felices Fiestas Patrias"
+              >
+                <span aria-hidden="true" className="h-px w-8 bg-gradient-to-r from-transparent via-[#d71939] to-white/80 sm:w-16" />
+                <Sparkles aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-[#dc1738]" />
+                <span>¡Felices Fiestas, Perú!</span>
+                <span className={`hidden normal-case tracking-normal sm:inline ${useDarkContrast ? "text-white/55" : "text-[#718177]"}`}>
+                  Ciencia peruana que siembra futuro.
+                </span>
+                <span aria-hidden="true" className="h-px w-8 bg-gradient-to-l from-transparent via-[#d71939] to-white/80 sm:w-16" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div className={`flex items-center justify-between px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
+            <Link href="/" aria-label="AS Labs — Inicio" className="flex shrink-0 items-center rounded-xl border border-white/80 bg-white/95 px-2 py-1 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2e7048]">
               <Image
                 src="/Frame23.png"
-                alt="AS Labs Logo"
+                alt="AS Labs"
                 width={150}
-                height={60}
+                height={52}
                 priority
-                className="h-auto w-auto max-h-12 2xl:max-h-16"
+                className={`h-auto transition-all duration-500 ${scrolled ? "w-[116px] sm:w-[126px]" : "w-[120px] sm:w-[132px]"}`}
               />
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden 2xl:flex items-center gap-4 text-sm font-serif">
-              {Object.entries(navItems).map(([key, item]) => (
+            <div className="hidden items-center gap-0.5 xl:flex">
+              {navigation.map((item) => (
                 <div
-                  key={key}
-                  className="relative flex items-center"
-                  onMouseEnter={() => setActiveItem(key)}
-                  onMouseLeave={() => setActiveItem(null)}
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => item.links && setOpenGroup(item.label)}
+                  onMouseLeave={() => item.links && setOpenGroup(null)}
                 >
-                  {item.children ? (
-                    <div
-                      className={`hover:text-[#2e7d32] py-2 transition-colors duration-200 flex items-center gap-1 cursor-pointer min-h-[40px] ${activeItem === key ? "text-[#2e7d32]" : ""
-                        }`}
+                  {item.links ? (
+                    <button
+                      type="button"
+                      onClick={() => setOpenGroup(openGroup === item.label ? null : item.label)}
+                      aria-expanded={openGroup === item.label}
+                      className={`relative flex h-9 items-center gap-1 rounded-full px-2.5 text-[11.5px] font-medium transition-all duration-200 ${
+                        isActive(item) ? activeLinkClass : inactiveLinkClass
+                      }`}
                     >
-                      <span className="flex items-center gap-1">
-                        {item.href ? (
-                          <Link href={item.href} className="hover:text-[#2e7d32]">
-                            {item.title}
-                          </Link>
-                        ) : (
-                          item.title
-                        )}
-                        <ChevronDown className="h-4 w-4" />
-                      </span>
-                      <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
-                          }`}
-                      ></span>
-                    </div>
+                      {item.label}
+                      <ChevronDown className={`h-3.5 w-3.5 transition-transform ${openGroup === item.label ? "rotate-180" : ""}`} />
+                    </button>
                   ) : (
                     <Link
-                      href={item.href || "#"}
-                      className={`hover:text-[#2e7d32] py-2 transition-colors duration-200 flex items-center gap-2 relative min-h-[40px] ${activeItem === key ? "text-[#2e7d32]" : ""
-                        }`}
+                      href={item.href || "/"}
+                      className={`relative flex h-9 items-center gap-1.5 rounded-full px-2.5 text-[11.5px] font-medium transition-all duration-200 ${
+                        isActive(item) ? activeLinkClass : inactiveLinkClass
+                      }`}
                     >
-                      <span className="flex items-center">
-                        {item.title}
-                      </span>
-                      <span
-                        className={`absolute bottom-0 left-0 h-0.5 bg-[#2e7d32] transition-all duration-300 ${activeItem === key ? "w-full" : "w-0"
-                          }`}
-                      ></span>
+                      {item.label === "Control biológico" && <ShieldCheck className="h-3.5 w-3.5" />}
+                      {item.label}
                     </Link>
                   )}
 
-                  {activeItem === key && item.children && (
-                    <div
-                      className={`absolute left-0 top-full mt-1 ${key === "servicios" || key === "cepas" ? "w-[320px]" : "w-[600px]"} bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 z-30 animate-fadeIn`}
-                      style={{
-                        animation: "fadeIn 0.3s ease-in-out",
-                        transformOrigin: "top center",
-                      }}
-                    >
-                      {key === "servicios" || key === "cepas" ? (
-                        <div className="p-3">
-                          <div className="space-y-1">
-                            {item.children.map((child, index) => (
-                              <Link
-                                key={index}
-                                href={child.href || "#"}
-                                className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-                              >
-                                <span className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 group-hover:bg-purple-200 transition-colors">
-                                  {child.icon}
+                  <AnimatePresence>
+                    {item.links && openGroup === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.975, filter: "blur(5px)" }}
+                        animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: 7, scale: 0.985, filter: "blur(3px)" }}
+                        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                        className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/90 bg-white/[0.97] p-2 shadow-[0_24px_64px_-24px_rgba(8,47,32,0.52)] backdrop-blur-xl before:absolute before:-top-3 before:left-0 before:h-3 before:w-full before:content-[''] ${item.label === "Servicios" ? "w-[560px]" : "w-[330px]"}`}
+                      >
+                        {item.href && (
+                          <Link href={item.href} className="mb-1 flex items-center justify-between rounded-xl bg-[#0c3928] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#15543a]">
+                            Ver todos: {item.label}
+                            <ArrowUpRight className="h-4 w-4" />
+                          </Link>
+                        )}
+                        <div className={item.label === "Servicios" ? "grid grid-cols-2 gap-1" : "space-y-1"}>
+                          {item.links.map((link) => {
+                            const Icon = link.icon || Leaf
+                            return (
+                              <Link key={link.href} href={link.href} className="group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-[#edf3ee]">
+                                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#dfeade] text-[#2d7047] transition-colors group-hover:bg-[#cfe1cf]">
+                                  <Icon className="h-4 w-4" />
                                 </span>
-                                <div className="flex-1 min-w-0">
-                                  <span className="font-medium text-gray-900 text-sm block">{child.title}</span>
-                                  <span className="text-xs text-gray-500 truncate block">{child.description}</span>
-                                </div>
+                                <span className="min-w-0">
+                                  <span className="block text-xs font-semibold text-[#203e31]">{link.label}</span>
+                                  <span className="mt-0.5 block truncate text-[10px] text-[#6c7c74]">{link.description}</span>
+                                </span>
                               </Link>
-                            ))}
-                          </div>
-                          {key === "servicios" && (
-                            <div className="mt-3 pt-3 border-t border-gray-100">
-                              <Link
-                                href="/servicios"
-                                className="flex items-center justify-center gap-2 w-full py-2 text-sm font-medium text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
-                              >
-                                Ver todos los servicios
-                                <svg
-                                  className="w-4 h-4"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M5 12h14M12 5l7 7-7 7"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </Link>
-                            </div>
-                          )}
+                            )
+                          })}
                         </div>
-                      ) : (
-                        <div className="flex">
-                          <div
-                            className="w-1/2 p-6 animate-slideRight"
-                            style={{ animation: "slideRight 0.4s ease-out" }}
-                          >
-                            <h3 className="text-lg font-bold text-[#2e7d32] mb-2 font-serif">{item.title}</h3>
-                            <p className="text-gray-600 font-serif text-sm">{item.description}</p>
-                            <div className="mt-4 space-y-3">
-                              {item.children.map((child, index) => (
-                                <Link
-                                  key={index}
-                                  href={child.href || "#"}
-                                  className="block p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    {child.icon && (
-                                      <span className="text-[#2e7d32] group-hover:scale-110 transition-transform">
-                                        {child.icon}
-                                      </span>
-                                    )}
-                                    <span className="font-medium text-[#2e7d32] font-serif">{child.title}</span>
-                                  </div>
-                                  <div className="text-sm text-gray-600 mt-1 font-serif">{child.description}</div>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                          <div
-                            className="w-1/2 relative animate-slideLeft bg-gradient-to-br from-[#2e7d32] to-[#81c784] flex items-center justify-center"
-                            style={{ animation: "slideLeft 0.4s ease-out" }}
-                          >
-                            <div className="text-white text-opacity-20 font-bold text-4xl font-serif">AS Labs</div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Desktop Right Side */}
-          <div className="hidden 2xl:flex items-center h-full gap-3">
-            <Link
-              href="/login"
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-serif text-gray-700"
-            >
-              <LogIn className="w-4 h-4" />
-              Ingresar
-            </Link>
-
-            <div className="flex items-center gap-3 h-full">
-              <a
-                href="https://wa.me/51961996645"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif text-sm whitespace-nowrap"
+            <div className="hidden items-center gap-1.5 xl:flex">
+              <Link
+                href="/seguimiento"
+                className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-[11.5px] font-semibold transition-all duration-200 ${
+                  pathname.startsWith("/seguimiento") ? activeLinkClass : inactiveLinkClass
+                }`}
               >
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                </svg>
-                WhatsApp
-              </a>
-              <a
-                href="https://forms.cloud.microsoft/r/wQWhqq0wR6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center bg-[#148b7d] hover:bg-[#62a9a0] text-white px-4 py-2 rounded-full transition-colors duration-300 font-serif text-sm whitespace-nowrap"
-              >
-                <Microscope className="h-4 w-4 mr-2" />
-                Investiga
+                <ClipboardCheck className="h-3.5 w-3.5" />
+                Seguimiento
+              </Link>
+              <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
+              <a href="https://wa.me/51961996645" target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
+                <MessageCircle className="h-3.5 w-3.5" />
+                Hablemos
               </a>
             </div>
 
-          </div>
-
-          {/* Mobile Right Side */}
-          <div className="flex 2xl:hidden items-center gap-2 h-full">
-            <Link
-              href="/login"
-              className="flex items-center justify-center border border-gray-300  hover:bg-gray-50 p-2 rounded-full transition-colors duration-300 font-serif text-gray-700 min-w-[40px] min-h-[40px]"
-            >
-              <LogIn className="w-4 h-4" />
-            </Link>
-
-            <a
-              href="https://wa.me/51961996645"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center bg-[#25D366] hover:bg-[#128C7E] text-white p-2 rounded-full transition-colors duration-300 font-serif min-w-[40px] min-h-[40px]"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-            </a>
-            <a
-                href="https://forms.cloud.microsoft/r/wQWhqq0wR6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-[#148b7d] hover:bg-[#62a9a0] text-white p-2 rounded-full transition-colors duration-300 font-serif min-w-[40px] min-h-[40px]"
+            <div className="flex items-center gap-2 xl:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileOpen((value) => !value)}
+                aria-expanded={mobileOpen}
+                aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+                className={`grid h-9 w-9 place-items-center rounded-full transition-colors ${useDarkContrast ? "bg-white text-[#173c2b]" : "bg-[#143d2d] text-white"}`}
               >
-                <Microscope className="h-4 w-4" /> 
-              </a>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md hover:bg-gray-100 transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center"
-              aria-label="Toggle mobile menu"
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+                {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="2xl:hidden absolute top-full left-0 right-0 bg-white border-b shadow-lg z-30 max-h-[80vh] overflow-y-auto">
-            <div className="container mx-auto px-4 py-4">
-              <div className="space-y-4">
-                {Object.entries(navItems).map(([key, item]) => (
-                  <div key={key}>
-                    {item.children ? (
-                      <div className="space-y-2">
-                        <div 
-                          className="font-medium text-gray-900 py-2 border-b border-gray-100 font-serif flex items-center justify-between cursor-pointer"
-                          onClick={() => setExpandedMobileMenu(expandedMobileMenu === key ? null : key)}
-                        >
-                          <div className="flex items-center gap-2 flex-1">
-                            {item.href ? (
-                              <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
-                                {item.title}
-                              </Link>
-                            ) : (
-                              item.title
+          <AnimatePresence>
+            {mobileOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden border-t border-[#d9e3dc]/80 xl:hidden"
+              >
+                <div className="max-h-[calc(100vh-96px)] overflow-y-auto px-3 pb-4 pt-2 sm:px-5">
+                  {navigation.map((item) => (
+                    <div key={item.label} className="border-b border-[#e3ebe5] last:border-none">
+                      {item.links ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setOpenGroup(openGroup === item.label ? null : item.label)}
+                            className={`flex w-full items-center justify-between rounded-lg px-2 py-3 text-left text-sm font-semibold transition-colors ${isActive(item) ? "bg-[#e8f0e9] text-[#1f6240]" : "text-[#203e31]"}`}
+                          >
+                            {item.label}
+                            <ChevronDown className={`h-4 w-4 transition-transform ${openGroup === item.label ? "rotate-180" : ""}`} />
+                          </button>
+                          <AnimatePresence>
+                            {openGroup === item.label && (
+                              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden pb-2">
+                                {item.href && <Link href={item.href} className="block rounded-lg bg-[#e8f0e9] px-3 py-2 text-xs font-semibold text-[#235d3d]">Ver todos</Link>}
+                                {item.links.map((link) => (
+                                  <Link key={link.href} href={link.href} className="block px-3 py-2 text-xs text-[#566a60]">{link.label}</Link>
+                                ))}
+                              </motion.div>
                             )}
-                          </div>
-                          <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${expandedMobileMenu === key ? "rotate-180" : ""}`} />
-                        </div>
-                        {expandedMobileMenu === key && (
-                          <div className="pl-4 py-2 space-y-3 bg-gray-50 rounded-lg">
-                            {item.children.map((child, index) => (
-                              <Link
-                                key={index}
-                                href={child.href || "#"}
-                                className="flex items-center gap-2 text-gray-700 hover:text-[#2e7d32] font-serif"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                {child.icon && <span className="text-[#2e7d32]">{child.icon}</span>}
-                                {child.title}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href || "#"}
-                        className="flex items-center gap-2 py-2 text-gray-700 hover:text-[#2e7d32] border-b border-gray-100 last:border-b-0 font-serif"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.title}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="space-y-2">
-                    <Link href="/legal" className="block py-2 text-sm text-gray-600 hover:text-[#2e7d32] font-serif flex items-center min-h-[32px]">
-                      Legal
-                    </Link>
-                    <Link
-                      href="/pitch-deck"
-                      className="block py-2 text-sm text-gray-600 hover:text-[#2e7d32] font-serif flex items-center min-h-[32px]"
-                    >
-                      Pitch Deck
-                    </Link>
-                    <Link href="/trabaja-con-nosotros" className="hover:underline">
-                      Trabaja con nosotros
-                    </Link>
-                    <Link
-                      href="/tienda"
-                      className="block py-2 text-sm text-gray-600 hover:text-[#2e7d32] font-medium font-serif flex items-center min-h-[32px]"
-                    >
-                      Tienda Online
-                    </Link> 
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <Link href={item.href || "/"} className={`block rounded-lg px-2 py-3 text-sm font-semibold transition-colors ${isActive(item) ? "bg-[#e8f0e9] text-[#1f6240]" : "text-[#203e31]"}`}>{item.label}</Link>
+                      )}
+                    </div>
+                  ))}
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <Link href="/seguimiento" className="rounded-full border border-[#d2ded4] px-4 py-2.5 text-center text-xs font-semibold text-[#294b3b]">Seguimiento</Link>
+                    <a href="https://wa.me/51961996645" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#ef9f38] px-4 py-2.5 text-center text-xs font-bold text-[#173428]">WhatsApp</a>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </nav>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </nav>
+      </motion.header>
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes slideRight {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        @keyframes slideLeft {
-          from {
-            opacity: 0;
-            transform: translateX(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .animate-slideRight {
-          animation: slideRight 0.4s ease-out;
-        }
-        
-        .animate-slideLeft {
-          animation: slideLeft 0.4s ease-out;
-        }
-      `}</style>
+      {!overlay && (
+        <div
+          aria-hidden="true"
+          className={showPatrioticMessage ? "h-[103px] sm:h-[111px]" : "h-[78px] sm:h-[86px]"}
+        />
+      )}
     </>
   )
 }
+
+export default Navbar
