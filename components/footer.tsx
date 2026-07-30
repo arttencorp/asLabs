@@ -1,133 +1,157 @@
 import Link from "next/link"
 import Image from "next/image"
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Youtube } from "lucide-react"
+import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react"
+import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { btnAccent } from "@/components/ui/button-styles"
 
 export { Footer }
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white font-serif">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <Image
-              src="/as-labs-logo.png"
-              alt="AS Laboratorios"
-              width={150}
-              height={60}
-              className="h-auto w-auto max-h-12 brightness-0 invert"
-            />
-            <p className="text-gray-300 text-sm">
-              Líder en biotecnología vegetal desde el año 2000. Especialistas en plantines in vitro, control biológico y
-              materiales de laboratorio para agricultura sostenible.
-            </p>
-            <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Youtube className="h-5 w-5" />
-              </Link>
+    <footer className="relative bg-gradient-to-b from-[#30241b] via-[#211811] to-[#120d09] font-serif text-white">
+      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d99b4e] to-transparent"></div>
+
+      {/* CTA Banner */}
+      <ScrollReveal>
+        <div className="container mx-auto px-4 pt-12 sm:pt-16">
+          <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#1b5e20] to-[#2e7d32] p-6 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
+            <div className="pointer-events-none absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/10 blur-2xl"></div>
+            <div className="relative">
+              <h3 className="text-xl sm:text-2xl font-bold font-serif mb-1">¿Listo para transformar tu producción agrícola?</h3>
+              <p className="text-white/80 text-sm">Conversemos sobre tu proyecto y encontremos la mejor solución biotecnológica.</p>
             </div>
+            <a
+              href="https://wa.me/51961996645"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${btnAccent} relative shrink-0`}
+            >
+              Contáctanos
+              <ArrowRight className="h-4 w-4" />
+            </a>
           </div>
+        </div>
+      </ScrollReveal>
+
+      <div className="container mx-auto px-4 py-12">
+        <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" staggerDelay={0.1}>
+          {/* Company Info */}
+          <StaggerItem className="space-y-4">
+            <div className="inline-flex rounded-xl border border-white/15 bg-white px-3 py-2 shadow-lg">
+              <Image
+                src="/Frame23.png"
+                alt="AS Laboratorios"
+                width={220}
+                height={69}
+                className="h-auto w-[190px] object-contain sm:w-[220px]"
+              />
+            </div>
+            <p className="text-gray-300 text-sm">
+              Biotecnología agrícola desde 1997. Especialistas en plantines in vitro, análisis de laboratorio, control
+              biológico e investigación aplicada.
+            </p>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 pl-1 pr-3 py-1">
+              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white overflow-hidden shrink-0">
+                <Image src="/senasaLogo.png" alt="SENASA" width={20} height={20} className="object-contain" />
+              </span>
+              <span className="text-xs text-gray-300">Vivero con registro SENASA</span>
+            </div>
+          </StaggerItem>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Enlaces Rápidos</h3>
+          <StaggerItem>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-5 text-white/90">Enlaces Rápidos</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/sobre-nosotros" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/sobre-nosotros" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Sobre Nosotros
                 </Link>
               </li>
               <li>
                 <Link
                   href="/biotecnologia-vegetal"
-                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                  className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block"
                 >
                   Biotecnología Vegetal
                 </Link>
               </li>
               <li>
-                <Link href="/plantines" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/plantines" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Nuestros Plantines
                 </Link>
               </li>
               <li>
-                <Link href="/research" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/research" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Investigación
                 </Link>
               </li>
               <li>
-                <Link href="/solucion-estudiantes" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/solucion-estudiantes" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Para Estudiantes
                 </Link>
               </li>
               <li>
-                <Link href="/tienda" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/tienda" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Tienda
                 </Link>
               </li>
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Services */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Servicios</h3>
+          <StaggerItem>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-5 text-white/90">Servicios</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/control-biologico" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Control Biológico
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/tienda" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Materiales de Laboratorio
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/servicios/apoyo-investigacion" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Asesoría Técnica
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/servicios" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Capacitación
                 </Link>
               </li>
               <li>
-                <Link href="/seguimiento" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/seguimiento" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Seguimiento de Pedidos
                 </Link>
               </li>
               <li>
-                <Link href="/legal" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/legal" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Términos Legales
                 </Link>
               </li>
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contacto</h3>
-            <div className="space-y-3">
+          <StaggerItem>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-5 text-white/90">Contacto</h3>
+            <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-[#4caf50] mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-gray-300">
-                  <p>Av. Juan Pablo II 306</p>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 text-[#4caf50] shrink-0">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div className="text-sm text-gray-300 pt-1">
+                  <p>MZ J1 San Isidro II Etapa</p>
                   <p>Trujillo, La Libertad, Perú</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-[#4caf50] flex-shrink-0" />
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 text-[#4caf50] shrink-0">
+                  <Phone className="h-4 w-4" />
+                </span>
                 <div className="text-sm text-gray-300">
                   <a href="tel:+51961996645" className="hover:text-white transition-colors">
                     +51 961 996 645
@@ -135,7 +159,9 @@ export default function Footer() {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-[#4caf50] flex-shrink-0" />
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 text-[#4caf50] shrink-0">
+                  <Mail className="h-4 w-4" />
+                </span>
                 <div className="text-sm text-gray-300">
                   <a href="mailto:ventas@aslaboratorios.com" className="hover:text-white transition-colors">
                     ventas@aslaboratorios.com
@@ -143,8 +169,10 @@ export default function Footer() {
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <Clock className="h-5 w-5 text-[#4caf50] mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-gray-300">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 text-[#4caf50] shrink-0">
+                  <Clock className="h-4 w-4" />
+                </span>
+                <div className="text-sm text-gray-300 pt-1">
                   <p>Lun - Vie: 8:00 AM - 6:00 PM</p>
                   <p>Sáb: 8:00 AM - 1:00 PM</p>
                 </div>
@@ -152,12 +180,12 @@ export default function Footer() {
             </div>
 
             {/* WhatsApp Button */}
-            <div className="mt-4">
+            <div className="mt-5">
               <a
                 href="https://wa.me/51961996645"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full transition-colors duration-300 text-sm"
+                className="inline-flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2.5 rounded-full transition-all duration-300 hover:-translate-y-0.5 shadow-[0_6px_16px_-4px_rgba(37,211,102,0.4)] hover:shadow-[0_10px_24px_-4px_rgba(37,211,102,0.5)] text-sm"
               >
                 <svg
                   className="w-4 h-4 mr-2"
@@ -170,17 +198,17 @@ export default function Footer() {
                 Contactar por WhatsApp
               </a>
             </div>
-          </div>
-        </div>
+          </StaggerItem>
+        </StaggerGroup>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 mt-8 pt-8">
+        <ScrollReveal className="border-t border-gray-800 mt-8 pt-8" delay={0.1}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="w-full md:w-auto">
               <div className="text-sm text-gray-400 mb-4">
-                © 2024 AS Laboratorios. Todos los derechos reservados.
+                © {new Date().getFullYear()} AS Laboratorios. Todos los derechos reservados.
               </div>
-              <div className="flex items-center gap-4 bg-gray-800 rounded-lg p-4 w-full md:w-auto">
+              <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-4 w-full md:w-auto">
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Afiliado a</p>
                   <Image
@@ -205,7 +233,7 @@ export default function Footer() {
               </Link>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </footer>
   )

@@ -1,394 +1,317 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
+import { motion } from "framer-motion"
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Award,
+  BadgeCheck,
+  Check,
+  FlaskConical,
+  Leaf,
+  Microscope,
+  Sprout,
+} from "lucide-react"
 import OfferCarousel from "@/components/offer-carousel"
 import TeamMemberSection from "@/components/team-member-section"
-import JourneySection from "@/components/journey-section"
 import HomeResearchSection from "@/components/home-research-section"
+import Footer from "@/components/footer"
+import Navbar from "@/components/navbar"
+import HomeRotatingHeadline from "@/components/home-rotating-headline"
+import HomeClientMap from "@/components/home-client-map"
+import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 import { OrganizationStructuredData } from "@/components/structured-data"
-import PromoModal from "@/components/promo-modal"
 
-function LogosCarousel({ logos }: { logos: Array<{ src: string; alt: string; href: string; label?: string }> }) {
-  const renderLogosSet = (keyPrefix: string, ariaHidden = false) => (
-    <div className="logos-set" aria-hidden={ariaHidden}>
-      {logos.map((logo, index) => (
-        <a
-          key={`${keyPrefix}-${index}`}
-          href={logo.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="logos-carousel-item"
-          tabIndex={ariaHidden ? -1 : undefined}
-        >
-          {logo.label && (
-            <span className="text-xs text-gray-600 mb-1 font-medium">{logo.label}</span>
-          )}
-          <div className="relative w-32 h-16 sm:w-40 sm:h-20">
-            <Image src={logo.src} alt={logo.alt} fill style={{ objectFit: "contain" }} />
-          </div>
-        </a>
-      ))}
-    </div>
-  )
+const trustLogos = [
+  { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo", type: "Agroindustria" },
+  { src: "/trustUs/CGIAR.jpeg", alt: "Centro Internacional de la Papa", type: "Investigación" },
+  { src: "/trustUs/manuelita.jpg", alt: "Manuelita", type: "Agroindustria" },
+  { src: "/trustUs/skyeast.jpg", alt: "Skyeast", type: "Empresa" },
+  { src: "/trustUs/CCLL.png", alt: "Cámara de Comercio de La Libertad", type: "Institución" },
+  { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", type: "Academia" },
+  { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", type: "Empresa" },
+]
 
+const products = [
+  {
+    title: "Banano Invitro ASWG",
+    variety: "Banano Cavendish Williams",
+    image: "/plantines/pagina19.webp",
+    accent: "bg-[#f0a23a]",
+  },
+  {
+    title: "Banano Invitro ASC5",
+    variety: "Banano Cavendish Valery",
+    image: "/plantines/pagina18.webp",
+    accent: "bg-[#8bb56d]",
+  },
+  {
+    title: "Banano Invitro ASBBG",
+    variety: "Banano Baby",
+    image: "/plantines/bananoBabyBBG.jpeg",
+    accent: "bg-[#d3a658]",
+  },
+  {
+    title: "Plátano Invitro ASDG",
+    variety: "Plátano Dominico Hartón",
+    image: "/plantines/pagina23.webp",
+    accent: "bg-[#6b9e78]",
+  },
+]
+
+function SectionLabel({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
-    <div className="logos-carousel-wrapper group">
-      <div className="logos-carousel-track animate-scroll-logos">
-        {renderLogosSet('a')}
-        {renderLogosSet('b', true)}
-        {renderLogosSet('c', true)}
-      </div>
+    <div className={`mb-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] ${light ? "text-[#f0b867]" : "text-[#c45f24]"}`}>
+      <span className="h-px w-7 bg-current" />
+      {children}
     </div>
   )
 }
 
 export default function ClientPage() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  const trustLogos = [
-    { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo", href: "https://agroindustriallaredo.com/" },
-    { src: "/trustUs/CGIAR.jpeg", alt: "Centro Internacional de la Papa", href: "https://cipotato.org/es/" },
-    { src: "/trustUs/manuelita.jpg", alt: "Manuelita", href: "https://agroindustriallaredo.com/" },
-    { src: "/trustUs/skyeast.jpg", alt: "Skyeast", href: "https://www.skyeast.co.uk/en/" },
-    { src: "/trustUs/CCLL.png", alt: "Cámara de Comercio de La Libertad", href: "https://camaralalibertad.org.pe", label: "Socios de:" },
-    { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", href: "https://www.unitru.edu.pe/", label: "Trabajamos con profesionales de:" },
-    { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", href: "https://www.arttencorp.com" },
-  ]
-
-  const slides = [
-    {
-      title: "Presentamos nuestros nuevos clones de bananos, orquídeas y otras especies de alta calidad.",
-      subtitle:
-        "Aplicamos embriogénesis vegetal para desarrollar orquídeas con floración destacada, uniformidad genética y sanidad controlada, con costos optimizados y desempeño superior en vivero.",
-    },
-    {
-      title: "Innovación en microorganismos para la agricultura sostenible.",
-      subtitle:
-        "Brindamos soluciones a estudiantes universitarios, docentes y asesorías personalizadas enfocadas en la Biología y Genética.",
-    },
-    {
-      title: "Soluciones biotecnológicas para el cambio climático.",
-      subtitle:
-        "Brindamos soluciones a estudiantes universitarios, docentes y asesorías personalizadas enfocadas en la Biología y Genética.",
-    },
-  ]
-
-  const nextSlide = () => {
-    if (isTransitioning) return
-    setIsTransitioning(true)
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
-    setTimeout(() => setIsTransitioning(false), 500)
-  }
-
-  const prevSlide = () => {
-    if (isTransitioning) return
-    setIsTransitioning(true)
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
-    setTimeout(() => setIsTransitioning(false), 500)
-  }
-
-  const goToSlide = (index: number) => {
-    if (isTransitioning || index === currentSlide) return
-    setIsTransitioning(true)
-    setCurrentSlide(index)
-    setTimeout(() => setIsTransitioning(false), 500)
-  }
-
-  const togglePause = () => {
-    setIsPaused(!isPaused)
-  }
-
-  // Auto-slide disabled - showing only first slide
-  // useEffect(() => {
-  //   if (!isPaused) {
-  //     timerRef.current = setInterval(() => {
-  //       nextSlide()
-  //     }, 5000)
-  //   } else {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current)
-  //     }
-  //   }
-
-  //   return () => {
-  //     if (timerRef.current) {
-  //       clearInterval(timerRef.current)
-  //     }
-  //   }
-  // }, [currentSlide, isTransitioning, isPaused])
-
   return (
-    <div className="flex flex-col min-h-screen">
+    <main className="home-redesign overflow-hidden bg-[#f6f3eb] font-[var(--font-poppins)] text-[#173428]">
       <OrganizationStructuredData />
-      {/*<PromoModal />*/}
-      <Navbar />
+      <Navbar overlay />
 
-      {/* Hero Section with Video Background */}
-      <section className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh]">
-        {/* Image Background - Replace video section */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <Image
-            src="/new/bannerasnuevo.webp"
-            alt="Modern laboratory with scientists working"
-            fill
-            style={{ objectFit: "cover" }}
-            className="w-full h-full"
-            priority
-          />
-          {/* Gradient overlay from dark left to light right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
-        </div>
+      <section data-navbar-theme="dark" className="relative min-h-[680px] bg-[#0a2f20] text-white sm:min-h-[700px] lg:min-h-[720px]">
+        <Image
+          src="/new/bannerasnuevo.webp"
+          alt="Equipo de AS Laboratorios trabajando en biotecnología vegetal"
+          fill
+          priority
+          className="object-cover object-[64%_center]"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,36,24,0.98)_0%,rgba(5,36,24,0.88)_42%,rgba(5,36,24,0.18)_76%,rgba(5,36,24,0.08)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,36,24,0.7)_0%,transparent_45%)]" />
+        <div className="home-grain absolute inset-0 opacity-25" />
 
-        {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-          <div className="w-full lg:w-1/2 text-left">
-            <div className="transition-opacity duration-500 ease-in-out" style={{ opacity: isTransitioning ? 0.5 : 1 }}>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 font-serif leading-tight">
-                {slides[currentSlide].title}
-              </h1>
-              <p className="text-sm sm:text-base text-white mb-6 leading-relaxed">{slides[currentSlide].subtitle}</p>
-              <Link
-                href="/plantines"
-                className="inline-block border border-[#e65100] bg-[#e65100] text-white px-4 sm:px-6 py-2 text-xs sm:text-sm uppercase rounded-md hover:bg-transparent hover:text-white transition-colors"
-              >
-                VER PLANTINES
+        <div className="relative mx-auto flex min-h-[680px] max-w-[1480px] items-center px-5 pb-20 pt-24 sm:min-h-[700px] sm:px-8 sm:pb-24 sm:pt-24 lg:min-h-[720px] lg:px-10 lg:pb-24 lg:pt-20">
+          <motion.div
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.12, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="max-w-[780px]"
+          >
+            <div className="mb-3 inline-flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#c7e7b8]">
+              <span className="grid h-7 w-7 place-items-center rounded-full border border-[#c7e7b8]/40"><Sprout className="h-3.5 w-3.5" /></span>
+              Innovación vegetal con impacto real
+            </div>
+            <HomeRotatingHeadline />
+            <div className="mt-3 grid grid-cols-2 gap-2.5 sm:flex sm:flex-row">
+              <Link href="/plantines" className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#f0a23a] px-4 py-3 text-[12px] font-bold text-[#173428] transition-colors hover:bg-[#ffc56f] sm:w-auto sm:gap-6 sm:px-5 sm:text-[13px]">
+                Ver plantines <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link href="/servicios" className="inline-flex items-center justify-center rounded-full border border-white/30 px-4 py-3 text-[12px] font-semibold text-white transition-colors hover:bg-white hover:text-[#173428] sm:w-auto sm:px-5 sm:text-[13px]">
+                Servicios
               </Link>
             </div>
-          </div>
-          
-          {/* Senasa Logo - Top Right Corner */}
-          <div className="absolute top-4 right-8 sm:top-6 sm:right-12 lg:top-8 lg:right-16">
-            <div className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48">
-              <Image
-                src="/senasaLogo.png"
-                alt="Senasa Logo"
-                fill
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* Carousel Controls - Hidden
-        <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-10">
-          <div className="container mx-auto px-4">
-            <div className="flex justify-between items-center">
-              <button
-                className="bg-white bg-opacity-20 rounded-md p-1 sm:p-2 shadow-sm mr-2 sm:mr-4 hover:bg-opacity-30 transition-colors"
-                onClick={prevSlide}
-                aria-label="Previous slide"
-              >
-                <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-              </button>
-
-              <div className="flex items-center">
-                <button
-                  onClick={togglePause}
-                  className="mr-2 sm:mr-4"
-                  aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
-                >
-                  <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 text-white">
-                    {isPaused ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 5v14l11-7-11-7z" fill="currentColor" />
-                      </svg>
-                    ) : (
-                      <div className="flex space-x-1">
-                        <div className="w-1 sm:w-1.5 h-4 sm:h-6 bg-white"></div>
-                        <div className="w-1 sm:w-1.5 h-4 sm:h-6 bg-white"></div>
-                      </div>
-                    )}
-                  </div>
-                </button>
-
-                <div className="flex gap-1 sm:gap-2">
-                  {slides.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => goToSlide(i)}
-                      className={`h-1 w-8 sm:w-16 ${i === currentSlide
-                          ? "bg-white"
-                          : i === currentSlide + 1
-                            ? "bg-white bg-opacity-50"
-                            : "bg-white bg-opacity-30"
-                        }`}
-                      aria-label={`Slide ${i + 1}`}
-                    />
-                  ))}
+            <div className="mt-3 grid max-w-[680px] grid-cols-2 gap-2">
+              <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-black/[0.15] p-2 backdrop-blur-sm sm:gap-3 sm:p-2.5">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white p-1 shadow-lg sm:h-11 sm:w-11 sm:p-1.5">
+                  <Image src="/senasaLogo.png" alt="SENASA" width={40} height={40} className="h-8 w-8 object-contain sm:h-9 sm:w-9" />
+                </div>
+                <div>
+                  <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-[#ffc56f] sm:text-[9px] sm:tracking-[0.14em]">Registro SENASA</p>
+                  <p className="mt-0.5 text-[9px] font-semibold leading-[0.85rem] text-white sm:text-[11px] sm:leading-4">Vivero de producción vegetal</p>
                 </div>
               </div>
-
-              <button
-                className="bg-white bg-opacity-20 rounded-md p-1 sm:p-2 shadow-sm ml-2 sm:ml-4 hover:bg-opacity-30 transition-colors"
-                onClick={nextSlide}
-                aria-label="Next slide"
-              >
-                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-              </button>
-            </div>
-          </div>
-        </div>
-        */}
-      </section>
-      {/* Trust on Us Section - Carousel */}
-      <section className="py-8 sm:py-8 overflow-hidden">
-        <div className="container mx-auto px-4">
-          <h2 className="text-lg sm:text-xl font-medium mb-8 font-serif text-center">Confían en Nosotros</h2>
-          <LogosCarousel logos={trustLogos} />
-        </div>
-      </section>
-      {/* Products Section */}
-      <section className="py-8 sm:py-2">
-        <div className="container mx-auto px-4">
-          <h2 className="text-lg sm:text-xl font-medium mb-6 font-serif">Productos</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {[
-              { title: "Banano Invitro ASWG", variety: "Banano Cavendish Williams" },
-              { title: "Banano Invitro ASC5", variety: "Banano Cavendish Valery" },
-              { title: "Banano Invitro ASBBG", variety: "Banano Baby" },
-              { title: "Plátano invitro ASDG", variety: "Plátano Dominico Harton" },
-            ].map((product, i) => (
-              <div key={i} className="border rounded-lg overflow-hidden">
-                <div className="p-4 border-l-4 border-[#2e7d32] h-full flex flex-col">
-                  <h3 className="font-medium font-serif text-sm sm:text-base">{product.title}</h3>
-                  <p className="text-xs sm:text-sm">{product.variety}</p>
-                  <div className="mt-auto pt-4">
-                    <p className="text-xs text-gray-500">En Producción</p>
-                  </div>
+              <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-black/[0.15] p-2 backdrop-blur-sm sm:gap-3 sm:p-2.5">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#f0a23a] text-[#173428] shadow-lg sm:h-11 sm:w-11">
+                  <BadgeCheck className="h-5 w-5 sm:h-6 sm:w-6" />
+                </div>
+                <div>
+                  <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-[#ffc56f] sm:text-[9px] sm:tracking-[0.14em]">Proveedor del Estado</p>
+                  <p className="mt-0.5 text-[9px] font-semibold leading-[0.85rem] text-white sm:text-[11px] sm:leading-4">Registro Nacional de Proveedores del Perú · RNP</p>
                 </div>
               </div>
+            </div>
+          </motion.div>
+        </div>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[76px] bg-gradient-to-r from-[#f0a23a]/10 via-[#f0a23a]/35 to-[#f0a23a]/60 [clip-path:polygon(0_92%,100%_0,100%_100%,0_100%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[-1px] z-[3] h-[68px] bg-[#f6f3eb] [clip-path:polygon(0_100%,100%_0,100%_100%,0_100%)]" />
+      </section>
+
+      <section className="relative z-10 mx-auto -mt-8 max-w-[1240px] px-5 sm:-mt-10 sm:px-8">
+        <StaggerGroup className="grid grid-cols-3 divide-x divide-[#173428]/10 overflow-hidden rounded-2xl border border-[#173428]/10 bg-white shadow-[0_24px_70px_-32px_rgba(10,47,32,0.45)]" staggerDelay={0.12} amount={0.35}>
+          {[
+            { value: "29+", label: "años al servicio del Perú", icon: Award },
+            { value: "13", label: "programas de clonación", icon: Leaf },
+            { value: "04", label: "programas de investigación", icon: FlaskConical },
+          ].map((stat) => {
+            const Icon = stat.icon
+            return (
+              <StaggerItem key={stat.label} className="flex items-center justify-center gap-4 px-2 py-5 sm:px-6 sm:py-7" distance={14}>
+                <span className="hidden h-10 w-10 place-items-center rounded-full bg-[#dce7d2] text-[#27613e] sm:grid"><Icon className="h-4.5 w-4.5" /></span>
+                <div className="text-center sm:text-left">
+                  <p className="text-2xl tracking-[-0.04em] text-[#1f6a3c] sm:text-3xl">{stat.value}</p>
+                  <p className="mt-1 max-w-[125px] text-[9px] leading-4 text-[#62736b] sm:text-[11px]">{stat.label}</p>
+                </div>
+              </StaggerItem>
+            )
+          })}
+        </StaggerGroup>
+      </section>
+
+      <section data-navbar-theme="light" className="border-y border-[#173428]/10 bg-[#f2f6f1] pb-16 pt-20 sm:pb-20 sm:pt-24">
+        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
+          <ScrollReveal className="mb-9 text-center" distance={18}>
+            <SectionLabel>Respaldo</SectionLabel>
+            <h2 className="text-2xl tracking-[-0.03em] text-[#173428] sm:text-3xl">Organizaciones que confían en nosotros</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#66756e]">Trabajamos junto a empresas, instituciones académicas y organizaciones que comparten nuestra visión de una agricultura sostenible.</p>
+          </ScrollReveal>
+          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7" staggerDelay={0.07}>
+            {trustLogos.map((logo) => (
+              <StaggerItem key={logo.alt} className="group flex min-h-[150px] flex-col rounded-2xl border border-[#dce6de] bg-white p-4 shadow-[0_12px_34px_-28px_rgba(14,60,38,0.45)] transition-all duration-300 hover:-translate-y-1 hover:border-[#aec8b4] hover:shadow-lg" distance={12}>
+                <div className="relative flex-1">
+                  <Image src={logo.src} alt={logo.alt} fill className="object-contain transition-transform duration-300 group-hover:scale-105" sizes="160px" />
+                </div>
+                <div className="mt-3 border-t border-[#e5ebe6] pt-3">
+                  <p className="truncate text-[10px] font-semibold text-[#314d3f]">{logo.alt}</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-[9px] uppercase tracking-[0.12em] text-[#819087]"><span className="h-1.5 w-1.5 rounded-full bg-[#5e9a6b]" />{logo.type}</p>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-8 gap-6">
-            {/* <div className="flex gap-3">
-              <button className="border border-gray-300 hover:border-[#2e7d32] rounded-full p-3 transition-colors duration-200 shadow-sm hover:shadow-md">
-              <ChevronLeft className="h-5 w-5 text-gray-600 hover:text-[#2e7d32]" />
-              </button>
-              <button className="border border-gray-300 hover:border-[#2e7d32] rounded-full p-3 transition-colors duration-200 shadow-sm hover:shadow-md">
-              <ChevronRight className="h-5 w-5 text-gray-600 hover:text-[#2e7d32]" />
-              </button>
-            </div>*/}
-            <Link
-              href="/plantines"
-              className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white px-6 py-3 rounded-lg text-sm font-medium flex items-center transition-all duration-200 shadow-sm hover:shadow-md group ml-auto"
-            >
-              VER TODOS LOS PRODUCTOS
-              <svg className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-              <path
-                d="M12 8L16 12L12 16M8 12H16"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              </svg>
-            </Link>
-            </div>
+          </StaggerGroup>
         </div>
       </section>
 
-      {/* Stats and Join Us Sections */}
-      <section className="py-8 sm:py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Stats and Conócenos */}
-            <div className="flex flex-col">
-              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-6 sm:gap-12 mb-8 sm:mb-10">
-                <div>
-                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">25+</h3>
-                  <p className="text-xs sm:text-sm mt-1">años al servicio</p>
-                  <p className="text-xs sm:text-sm mt-1">del Perú</p>
-                </div>
-                <div>
-                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">13</h3>
-                  <p className="text-xs sm:text-sm mt-1">programas de clonación</p>
-                  <p className="text-xs sm:text-sm mt-1">"in vitro"</p>
-                </div>
-                <div>
-                  <h3 className="text-3xl sm:text-5xl font-bold text-[#2e7d32] font-serif">4</h3>
-                  <p className="text-xs sm:text-sm mt-1">programas de</p>
-                  <p className="text-xs sm:text-sm mt-1">investigación</p>
-                </div>
-              </div>
-
-              <h3 className="text-xl sm:text-2xl font-bold text-[#2e7d32] mb-4 font-serif">Conócenos</h3>
-              <p className="text-sm sm:text-base text-[#01283c] mb-6 leading-relaxed">
-                Tenemos la misión de mejorar el germoplasma nacional y combatir el cambio climático reduciendo el uso de
-                plaguicidas mediante el control biológico.
-              </p>
-              <Link href="/sobre-nosotros" className="inline-flex items-center text-[#2e7d32] font-medium">
-                MÁS SOBRE NOSOTROS
-                <div className="ml-2 flex items-center justify-center w-6 h-6 rounded-full border border-[#2e7d32]">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M5 12h14M12 5l7 7-7 7"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-              </Link>
+      <section id="soluciones" data-navbar-theme="dark" className="relative overflow-hidden bg-[#0b3024] py-20 text-white sm:py-24 lg:py-28">
+        <div className="home-grain absolute inset-0 opacity-20" />
+        <motion.div
+          aria-hidden="true"
+          className="absolute -right-40 top-0 h-[420px] w-[420px] rounded-full bg-[#3f7548]/30 blur-3xl"
+          animate={{ x: [0, -28, 0], y: [0, 22, 0], scale: [1, 1.06, 1] }}
+          transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        />
+        <div className="relative mx-auto max-w-[1320px] px-5 sm:px-8">
+          <ScrollReveal className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-end" distance={20}>
+            <div className="max-w-3xl">
+              <SectionLabel light>Nuestro catálogo</SectionLabel>
+              <h2 className="text-[clamp(2.15rem,4vw,3.75rem)] leading-[1.02] tracking-[-0.04em]">Plantines in vitro para una producción confiable.</h2>
+              <p className="mt-5 max-w-2xl text-sm leading-6 text-white/[0.68] sm:text-base">Material vegetal uniforme, con calidad genética y fitosanitaria, producido bajo protocolos especializados y listo para continuar su desarrollo en vivero.</p>
             </div>
-
-            {/* Join Us */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="relative h-48 sm:h-64 md:h-80">
-                <Image
-                  src="/new/AlternativasSosteniblesParaeLFuturo.jpeg"
-                  alt="Scientists in lab"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-t-lg"
-                />
+            <div className="rounded-[1.65rem] border border-white/10 bg-white/[0.055] p-5 backdrop-blur-sm sm:p-6">
+              <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                {[
+                  { icon: Microscope, title: "Calidad fitosanitaria", copy: "Protocolos controlados" },
+                  { icon: BadgeCheck, title: "Identidad genética", copy: "Material uniforme" },
+                  { icon: Sprout, title: "Listos para vivero", copy: "Desarrollo acompañado" },
+                ].map((benefit) => {
+                  const Icon = benefit.icon
+                  return <div key={benefit.title} className="flex items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#f0a23a] text-[#173428]"><Icon className="h-5 w-5" /></span><div><p className="text-xs font-bold text-white">{benefit.title}</p><p className="mt-0.5 text-[10px] text-white/[0.52]">{benefit.copy}</p></div></div>
+                })}
               </div>
-              <div className="p-4 sm:p-6">
-                <h3 className="text-lg sm:text-2xl font-bold text-[#01283c] mb-4 font-serif">
-                  Alternativas Sostenibles para el Futuro
-                </h3>
-                <Link href="#" className="inline-flex items-center text-[#e65100] font-medium">
-                  Conócenos{/* 
-                  <div className="ml-2 flex items-center justify-center w-6 h-6 rounded-full border border-[#e65100]">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="./public/new/AlternativasSosteniblesParaeLFuturo.webp">
-                      <path
-                        d="M5 12h14M12 5l7 7-7 7"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>*/}
+            </div>
+          </ScrollReveal>
+
+          <StaggerGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-[1.32fr_1fr_1fr_1fr]" staggerDelay={0.1} amount={0.16}>
+            {products.map((product, index) => (
+              <StaggerItem key={product.title} className="h-full" distance={24}>
+                <Link href="/plantines" className={`group relative block min-h-[390px] overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.06] transition-all duration-500 hover:-translate-y-1.5 hover:border-white/25 hover:shadow-[0_26px_55px_-26px_rgba(0,0,0,0.85)] ${index === 0 ? "sm:col-span-2 lg:col-span-1 lg:min-h-[475px]" : "lg:min-h-[475px]"}`}>
+                  <Image src={product.image} alt={product.title} fill loading="eager" className="object-cover transition-transform duration-700 group-hover:scale-105" sizes={index === 0 ? "(min-width: 1024px) 31vw, 100vw" : "(min-width: 1024px) 23vw, 50vw"} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#071f17] via-[#071f17]/15 to-black/5" />
+                  <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+                    <span className={`rounded-full ${product.accent} px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-[#173428] shadow-lg`}>En producción</span>
+                    <span className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/15 text-white backdrop-blur-md transition group-hover:bg-white group-hover:text-[#173428]"><ArrowUpRight className="h-4 w-4" /></span>
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                    <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#ffc56f]">Cultivo in vitro</p>
+                    <h3 className={`${index === 0 ? "text-2xl" : "text-xl"} mt-2 font-semibold leading-tight tracking-[-0.03em] text-white`}>{product.title}</h3>
+                    <p className="mt-2 text-xs leading-5 text-white/[0.62]">{product.variety}</p>
+                    <div className="mt-5 flex items-center gap-2 border-t border-white/15 pt-4 text-[11px] font-semibold text-white/[0.82]">Ver ficha del plantín <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></div>
+                  </div>
                 </Link>
-              </div>
-            </div>
-          </div>
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+          <ScrollReveal className="mt-8 flex flex-col gap-4 rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-5 py-4 sm:flex-row sm:items-center sm:justify-between" distance={14}>
+            <p className="text-xs leading-5 text-white/[0.58]">¿Buscas otra variedad o necesitas coordinar volúmenes de producción?</p>
+            <Link href="/plantines" className="group inline-flex w-fit items-center gap-3 rounded-full bg-white px-5 py-2.5 text-xs font-bold text-[#173428] transition hover:bg-[#ffc56f]">Explorar todos los plantines <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* What We Offer Section */}
+      <HomeClientMap />
+
+      <section data-navbar-theme="light" className="relative overflow-hidden bg-[#f6f3eb] py-20 sm:py-28">
+        <div className="pointer-events-none absolute -right-40 top-10 h-96 w-96 rounded-full bg-[#dce7d2]/70 blur-3xl" />
+        <div className="relative mx-auto grid max-w-[1320px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+          <ScrollReveal direction="right" className="relative min-h-[440px] overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-42px_rgba(10,47,32,0.55)] sm:min-h-[570px]" distance={28}>
+            <Image src="/new/AlternativasSosteniblesParaeLFuturo.jpeg" alt="Alternativas sostenibles desarrolladas por AS Laboratorios" fill className="object-cover" sizes="(min-width: 1024px) 50vw, 100vw" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0b3024]/70 via-transparent to-transparent" />
+            <div className="absolute left-5 top-5 rounded-full border border-white/25 bg-[#173428]/80 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-sm">Desde 1997</div>
+            <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-white/20 bg-white/10 p-5 text-white backdrop-blur-md sm:left-8 sm:right-auto sm:max-w-[300px]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#ffc56f]">Nuestro propósito</p>
+              <p className="mt-2 text-lg leading-snug">Alternativas sostenibles para el futuro de la agricultura.</p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal direction="left" className="lg:pl-10" distance={28} delay={0.08}>
+            <SectionLabel>Nuestra historia</SectionLabel>
+            <h2 className="text-[clamp(2.25rem,4vw,3.7rem)] leading-[1.03] tracking-[-0.04em] text-[#173428]">La ciencia funciona mejor cuando llega al campo.</h2>
+            <p className="mt-6 text-sm leading-7 text-[#596a62] sm:text-base">
+              AS Laboratorios nació con la misión de mejorar el germoplasma nacional y responder a los desafíos de la agricultura peruana. Hoy desarrollamos clones vegetales de alta calidad, investigamos microorganismos benéficos y promovemos el control biológico para reducir el uso de plaguicidas.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-[#596a62] sm:text-base">
+              Nuestro trabajo integra laboratorio, vivero, campo y asesoría técnica. Así acompañamos a productores, empresas, universidades y estudiantes desde la investigación inicial hasta la aplicación de soluciones concretas.
+            </p>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              {[
+                "Clonación de plantas con alta calidad genética y fitosanitaria",
+                "Control biológico para una agricultura más sostenible",
+                "Asesoría técnica y apoyo especializado a la investigación",
+                "Vínculo entre laboratorio, vivero y aplicación productiva",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 rounded-2xl border border-[#dce5dc] bg-white/70 p-4 text-sm font-medium leading-6 text-[#264c3b]">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#2f7046] text-white"><Check className="h-3 w-3" /></span>
+                  {item}
+                </div>
+              ))}
+            </div>
+            <Link href="/sobre-nosotros" className="group mt-8 inline-flex items-center gap-3 rounded-full bg-[#173428] px-5 py-3 text-[13px] font-semibold text-white">
+              Conoce más sobre AS Labs <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section data-navbar-theme="dark" className="relative overflow-hidden border-y border-white/10 bg-[#123b2b] py-16 text-white sm:py-20">
+        <div className="home-grain absolute inset-0 opacity-[0.15]" />
+        <div className="relative mx-auto max-w-[1180px] px-5 sm:px-8">
+          <ScrollReveal className="mb-9 text-center">
+            <SectionLabel light>Cómo trabajamos</SectionLabel>
+            <h2 className="text-2xl tracking-[-0.03em] text-white sm:text-3xl">Una misma visión, del diagnóstico a la solución</h2>
+          </ScrollReveal>
+          <StaggerGroup className="grid gap-4 sm:grid-cols-3" staggerDelay={0.12}>
+            {[
+              { icon: Microscope, title: "Investigación aplicada", text: "Proyectos orientados a enfermedades, genética y productividad agrícola." },
+              { icon: Leaf, title: "Producción sostenible", text: "Soluciones que protegen el cultivo y reducen el impacto ambiental." },
+              { icon: FlaskConical, title: "Acompañamiento técnico", text: "Especialistas que conectan el diagnóstico con una respuesta viable." },
+            ].map((item) => {
+              const Icon = item.icon
+              return (
+                <StaggerItem key={item.title} className="flex h-full gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10" distance={18}>
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#dce7d2] text-[#2f7046]"><Icon className="h-5 w-5" /></span>
+                  <div>
+                    <h3 className="text-base text-white">{item.title}</h3>
+                    <p className="mt-1.5 text-xs leading-5 text-white/60">{item.text}</p>
+                  </div>
+                </StaggerItem>
+              )
+            })}
+          </StaggerGroup>
+        </div>
+      </section>
+
       <OfferCarousel />
-
-      {/* Research Section - Added after "What We Offer" */}
       <HomeResearchSection />
-
-      {/* Team Member Section */}
       <TeamMemberSection />
-
-      {/* Journey Section 
-      <JourneySection />*/}
-
-      {/* Footer */}
       <Footer />
-    </div>
+    </main>
   )
 }
