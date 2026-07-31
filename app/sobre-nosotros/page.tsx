@@ -13,18 +13,18 @@ import AboutImpact from "@/components/about-us/about-impact"
 import AboutCTA from "@/components/about-us/about-cta"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Sobre Nosotros",
+  title: "AS Laboratorios: Biotecnología Agrícola desde 1997",
   description:
-    "Conozca más sobre AS Laboratorios, nuestra misión, valores y el impacto que generamos en la biotecnología y el medio ambiente.",
-  keywords: ["sobre nosotros", "misión", "valores", "impacto", "biotecnología", "AS Laboratorios"],
+    "Conoce la historia, el directorio, la misión y el trabajo de AS Laboratorios en biotecnología agrícola, control biológico e investigación desde 1997.",
+  keywords: ["AS Laboratorios", "biotecnología agrícola Trujillo", "laboratorio peruano", "control biológico", "investigación agrícola", "directorio AS Labs"],
   path: "/sobre-nosotros",
   image: "/about-us-preview.png",
 })
 
 function SobreNosotrosContent() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <Navbar />
+    <div className="flex min-h-screen flex-col bg-white">
+      <Navbar overlay />
       <AboutHeader />
       <AboutNavigation />
       <AboutMission />

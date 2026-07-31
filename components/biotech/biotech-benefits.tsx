@@ -1,5 +1,3 @@
-import Image from "next/image"
-
 export default function BiotechBenefits() {
   return (
     <section className="py-16 bg-white">
@@ -128,14 +126,26 @@ export default function BiotechBenefits() {
           </div>
 
           <div className="order-1 md:order-2">
-            <div className="relative h-96 rounded-lg overflow-hidden shadow-lg">
-              <Image
-                src="/biotech-benefits.png"
-                alt="Beneficios de la biotecnología vegetal"
-                fill
-                style={{ objectFit: "cover" }}
-                className="rounded-lg"
-              />
+            <div className="relative h-96 rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-[#1b5e20] via-[#2e7d32] to-[#14401a] flex flex-col justify-center p-8">
+              <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-15"></div>
+              <div className="relative grid grid-cols-2 gap-4">
+                <div className="rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
+                  <p className="text-3xl font-bold text-white font-serif">100%</p>
+                  <p className="text-xs text-white/70 mt-1">Libres de patógenos</p>
+                </div>
+                <div className="rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
+                  <p className="text-3xl font-bold text-white font-serif">×1000</p>
+                  <p className="text-xs text-white/70 mt-1">Multiplicación por explante</p>
+                </div>
+                <div className="rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
+                  <p className="text-3xl font-bold text-white font-serif">−196°C</p>
+                  <p className="text-xs text-white/70 mt-1">Conservación criogénica</p>
+                </div>
+                <div className="rounded-xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
+                  <p className="text-3xl font-bold text-white font-serif">Todo el año</p>
+                  <p className="text-xs text-white/70 mt-1">Producción sin estación</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

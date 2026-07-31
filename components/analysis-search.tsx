@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { Search, X } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { ArrowRight, Search, X, SearchX } from "lucide-react"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 interface Analysis {
   id: string
@@ -86,6 +87,7 @@ const allAnalyses: Analysis[] = [
 export function AnalysisSearch() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [visibleCount, setVisibleCount] = useState(10)
 
   const uniqueTypes = Array.from(new Set(allAnalyses.map((a) => a.tipo)))
 
@@ -94,7 +96,7 @@ export function AnalysisSearch() {
       const matchesSearch =
         analysis.concepto.toLowerCase().includes(searchQuery.toLowerCase()) ||
         analysis.alcance.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        analysis.costo.toLowerCase().includes(searchQuery.toLowerCase())
+        analysis.tipo.toLowerCase().includes(searchQuery.toLowerCase())
 
       const matchesType = !selectedType || analysis.tipo === selectedType
 
@@ -102,151 +104,182 @@ export function AnalysisSearch() {
     })
   }, [searchQuery, selectedType])
 
+  useEffect(() => {
+    setVisibleCount(10)
+  }, [searchQuery, selectedType])
+
+  const displayedAnalyses = filteredAnalyses.slice(0, visibleCount)
+
   const clearFilters = () => {
     setSearchQuery("")
     setSelectedType(null)
   }
 
+  const getWhatsAppLink = (analysisName: string) =>
+    `https://wa.me/51961996645?text=${encodeURIComponent(`Hola, deseo consultar por el análisis: ${analysisName}`)}`
+
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-b from-muted/50 to-background">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Search Bar */}
-          <div className="bg-white rounded-3xl border border-border shadow-xl p-6 md:p-8 mb-8">
-            <div className="space-y-4 md:space-y-5">
-              <div className="mb-4">
-                <h2 className="text-xl md:text-2xl font-bold text-foreground mb-1">Buscador de Análisis</h2>
-                <p className="text-sm md:text-base text-muted-foreground">
-                  Encuentra rápidamente el análisis que necesitas
-                </p>
-              </div>
+    <section id="buscador" className="scroll-mt-24 bg-[#eef3ef] py-16 sm:py-20">
+      <div className="container mx-auto max-w-6xl px-4">
+        <ScrollReveal className="mb-8 grid gap-5 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#2e7048]">Catálogo de análisis</span>
+            <h2 className="mt-3 text-3xl font-bold tracking-[-0.025em] text-[#173a2c] sm:text-4xl">Busca dentro de nuestros servicios</h2>
+          </div>
+          <p className="max-w-xl text-sm leading-6 text-[#64766d] md:justify-self-end sm:text-base">
+            Escribe el nombre de una muestra, microorganismo o prueba. También puedes filtrar el catálogo por área técnica.
+          </p>
+        </ScrollReveal>
 
-              <div className="relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                <input
-                  type="text"
-                  placeholder="Busca por nombre de análisis, alcance o costo..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 md:py-4 text-base md:text-lg border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted-foreground/60"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded-lg transition-colors"
-                    aria-label="Limpiar búsqueda"
-                  >
-                    <X className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-                  </button>
-                )}
-              </div>
-
-              <div className="flex flex-wrap gap-2">
+        <ScrollReveal>
+          <div className="rounded-[26px] border border-[#d8e2da] bg-white p-4 shadow-[0_22px_55px_-35px_rgba(21,65,45,0.45)] sm:p-6">
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#6c7d74] transition-colors group-focus-within:text-[#2e7048]" />
+              <input
+                type="search"
+                aria-label="Buscar análisis"
+                placeholder="Ejemplo: Salmonella, agua, suelo, 16S..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                className="h-14 w-full rounded-2xl border border-[#d4dfd6] bg-[#f9fbf9] pl-12 pr-12 text-sm text-[#203e31] outline-none transition placeholder:text-[#8a9991] focus:border-[#75a181] focus:bg-white focus:ring-4 focus:ring-[#dceade] sm:text-base"
+              />
+              {searchQuery && (
                 <button
-                  onClick={() => setSelectedType(null)}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                    !selectedType
-                      ? "bg-primary text-white shadow-md"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-[#6c7d74] transition hover:bg-[#e9f0ea] hover:text-[#244f38]"
+                  aria-label="Limpiar búsqueda"
                 >
-                  Todos ({allAnalyses.length})
+                  <X className="h-4 w-4" />
                 </button>
-                {uniqueTypes.map((type) => {
-                  const count = allAnalyses.filter((a) => a.tipo === type).length
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setSelectedType(type)}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
-                        selectedType === type
-                          ? "bg-primary text-white shadow-md"
-                          : "bg-muted text-muted-foreground hover:bg-muted/80"
-                      }`}
-                    >
-                      {type} ({count})
-                    </button>
-                  )
-                })}
-              </div>
+              )}
+            </div>
 
-              <div className="flex items-center justify-between flex-wrap gap-3 text-sm">
-                <div className="text-muted-foreground">
-                  Mostrando <span className="font-semibold text-foreground">{filteredAnalyses.length}</span> de{" "}
-                  <span className="font-semibold text-foreground">{allAnalyses.length}</span> análisis
-                </div>
-                {(searchQuery || selectedType) && (
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+              <button
+                type="button"
+                aria-pressed={!selectedType}
+                onClick={() => setSelectedType(null)}
+                className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold transition ${
+                  !selectedType ? "bg-[#173f2e] text-white shadow-md" : "bg-[#edf2ee] text-[#5e7167] hover:bg-[#e2ece4]"
+                }`}
+              >
+                Todos · {allAnalyses.length}
+              </button>
+              {uniqueTypes.map((type) => {
+                const count = allAnalyses.filter((analysis) => analysis.tipo === type).length
+                return (
                   <button
-                    onClick={clearFilters}
-                    className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors text-sm"
+                    type="button"
+                    key={type}
+                    aria-pressed={selectedType === type}
+                    onClick={() => setSelectedType(type)}
+                    className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold transition ${
+                      selectedType === type ? "bg-[#173f2e] text-white shadow-md" : "bg-[#edf2ee] text-[#5e7167] hover:bg-[#e2ece4]"
+                    }`}
                   >
-                    <X className="w-4 h-4" />
-                    Limpiar filtros
+                    {type} · {count}
                   </button>
-                )}
-              </div>
+                )
+              })}
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[#e3eae5] pt-4 text-xs text-[#697b72]">
+              <p>
+                <span className="font-bold text-[#254b39]">{filteredAnalyses.length}</span> resultados en el catálogo
+              </p>
+              {(searchQuery || selectedType) && (
+                <button type="button" onClick={clearFilters} className="inline-flex items-center gap-1.5 font-bold text-[#2b6844] transition hover:text-[#173f2e]">
+                  <X className="h-3.5 w-3.5" />
+                  Limpiar filtros
+                </button>
+              )}
             </div>
           </div>
+        </ScrollReveal>
 
-          {/* Results Table */}
-          <div className="bg-white rounded-2xl border border-border overflow-hidden shadow-lg">
-            {/* Desktop Table */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-muted/50 border-b border-border">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Tipo</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Concepto</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Alcance</th>
-                    {/*<th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Costo</th>*/}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filteredAnalyses.map((analysis) => (
-                    <tr key={analysis.id} className="hover:bg-muted/50 transition-colors">
-                      <td className="px-6 py-4 text-sm text-primary font-semibold">{analysis.tipo}</td>
-                      <td className="px-6 py-4 text-sm text-foreground font-medium">{analysis.concepto}</td>
-                      <td className="px-6 py-4 text-sm text-muted-foreground">{analysis.alcance}</td>
-                      {/*<td className="px-6 py-4 text-sm font-semibold text-primary">S/. {analysis.costo}</td>*/}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Mobile Cards */}
-            <div className="md:hidden p-4 space-y-3">
-              {filteredAnalyses.map((analysis) => (
-                <div
-                  key={analysis.id}
-                  className="p-4 border border-border rounded-lg space-y-2 hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded">
-                      {analysis.tipo}
-                    </span>
-                    <span className="text-sm font-bold text-primary">S/. {analysis.costo}</span>
-                  </div>
-                  <p className="text-sm font-medium text-foreground">{analysis.concepto}</p>
-                  <p className="text-xs text-muted-foreground">{analysis.alcance}</p>
+        <ScrollReveal delay={0.08}>
+          <div className="mt-5 overflow-hidden rounded-[26px] border border-[#d8e2da] bg-white shadow-[0_22px_55px_-38px_rgba(21,65,45,0.45)]">
+            {filteredAnalyses.length > 0 ? (
+              <>
+                <div className="hidden overflow-x-auto md:block">
+                  <table className="w-full">
+                    <thead className="border-b border-[#e1e8e3] bg-[#f7f9f7]">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-[0.1em] text-[#677970]">Área</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-[0.1em] text-[#677970]">Análisis</th>
+                        <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-[0.1em] text-[#677970]">Alcance</th>
+                        <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-[0.1em] text-[#677970]">Consulta</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e5ebe6]">
+                      {displayedAnalyses.map((analysis) => (
+                        <tr key={analysis.id} className="transition-colors hover:bg-[#f5f8f5]">
+                          <td className="px-6 py-4 align-top">
+                            <span className="inline-flex rounded-full bg-[#e6f0e8] px-2.5 py-1 text-[11px] font-bold text-[#2c6845]">{analysis.tipo}</span>
+                          </td>
+                          <td className="max-w-[320px] px-6 py-4 align-top text-sm font-semibold leading-5 text-[#203e31]">{analysis.concepto}</td>
+                          <td className="max-w-[340px] px-6 py-4 align-top text-sm leading-5 text-[#6a7b72]">{analysis.alcance}</td>
+                          <td className="px-6 py-4 text-right align-top">
+                            <a
+                              href={getWhatsAppLink(analysis.concepto)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs font-bold text-[#2d6d47] transition hover:text-[#173f2e]"
+                            >
+                              Consultar
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              ))}
-            </div>
 
-            {/* Empty State */}
-            {filteredAnalyses.length === 0 && (
-              <div className="p-12 text-center">
-                <p className="text-muted-foreground mb-4">No se encontraron análisis que coincidan con tu búsqueda</p>
-                <button
-                  onClick={clearFilters}
-                  className="text-primary hover:text-primary/80 text-sm font-medium transition-colors"
-                >
-                  Limpiar filtros e intentar de nuevo
-                </button>
+                <div className="space-y-3 p-3 md:hidden">
+                  {displayedAnalyses.map((analysis) => (
+                    <article key={analysis.id} className="rounded-2xl border border-[#e0e8e2] bg-[#fafbfa] p-4">
+                      <span className="inline-flex rounded-full bg-[#e6f0e8] px-2.5 py-1 text-[10px] font-bold text-[#2c6845]">{analysis.tipo}</span>
+                      <h3 className="mt-3 text-sm font-bold leading-5 text-[#203e31]">{analysis.concepto}</h3>
+                      <p className="mt-2 text-xs leading-5 text-[#6a7b72]">{analysis.alcance}</p>
+                      <a
+                        href={getWhatsAppLink(analysis.concepto)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#2d6d47]"
+                      >
+                        Consultar este análisis
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </a>
+                    </article>
+                  ))}
+                </div>
+
+                {visibleCount < filteredAnalyses.length && (
+                  <div className="border-t border-[#e1e8e3] bg-[#fafbfa] p-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => setVisibleCount((count) => count + 10)}
+                      className="rounded-full border border-[#b9ccbd] bg-white px-5 py-2.5 text-xs font-bold text-[#285f40] transition hover:border-[#7fa489] hover:bg-[#f1f6f2]"
+                    >
+                      Mostrar 10 resultados más
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="px-6 py-14 text-center">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#e6f0e8] text-[#2e7048]">
+                  <SearchX className="h-6 w-6" />
+                </div>
+                <h3 className="mt-4 text-base font-bold text-[#244534]">No encontramos una coincidencia exacta</h3>
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#6b7b73]">Prueba con otra palabra o escríbenos para confirmar si podemos desarrollar el análisis que necesitas.</p>
+                <button type="button" onClick={clearFilters} className="mt-4 text-sm font-bold text-[#2d6d47] hover:text-[#173f2e]">Ver todo el catálogo</button>
               </div>
             )}
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )

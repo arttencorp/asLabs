@@ -9,10 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title:
-    "Apoyo a la Investigacion en Trujillo Peru | Tesis, 16S rRNA, Protocolos y Bioinformatica | AS Laboratorios",
+  title: "Apoyo para Tesis e Investigación en Trujillo | AS Laboratorios",
   description:
-    "Servicio de apoyo a la investigacion en Trujillo, La Libertad, Peru. Soporte para tesis y proyectos: suspensiones bacterianas, fermentacion, identificacion, 16S rRNA, aislamiento ambiental y analisis bioinformatico. Cotiza: +51 961 996 645.",
+    "Soporte técnico para tesis y proyectos: cultivos microbianos, identificación, 16S rRNA, fermentación, aislamiento ambiental y análisis bioinformático.",
   keywords: [
     "apoyo a la investigacion Trujillo",
     "tesis microbiologia Trujillo",
@@ -138,7 +137,6 @@ const apoyoInvestigacionServices = [
 export default function ApoyoInvestigacionPage() {
   return (
     <>
-      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Apoyo a la Investigacion en Trujillo"
         serviceDescription="Servicio de apoyo cientifico y tecnico para tesis y proyectos de investigacion en Trujillo, La Libertad, Peru. Incluye suspensiones bacterianas, fermentacion, 16S rRNA, aislamiento ambiental y bioinformatica."
@@ -159,13 +157,6 @@ export default function ApoyoInvestigacionPage() {
         listName="Servicios de Apoyo a la Investigacion AS Laboratorios Trujillo"
         listUrl="https://aslaboratorios.com/servicios/apoyo-investigacion"
         items={apoyoInvestigacionServices}
-      />
-      <ProfessionalServiceStructuredData
-        serviceName="Apoyo a la Investigacion Trujillo"
-        description="Soporte para tesis y proyectos academicos en microbiologia y biologia molecular en Trujillo, La Libertad, Peru."
-        url="https://aslaboratorios.com/servicios/apoyo-investigacion"
-        priceRange="$$"
-        image="/servicios/micro.jpeg"
       />
       <ApoyoInvestigacionClient />
     </>

@@ -9,12 +9,13 @@ import StudentFAQ from "@/components/students/student-faq"
 import { FAQStructuredData } from "@/components/structured-data"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Estudiantes",
+  title: "Materiales de Laboratorio para Estudiantes",
   description:
     "Soluciones para estudiantes universitarios de biología, biotecnología y ciencias afines. Materiales, kits y descuentos especiales.",
   keywords: ["estudiantes", "universidad", "biología", "biotecnología", "materiales de laboratorio", "kits educativos"],
   path: "/estudiantes",
   image: "/estudiantes-preview.png",
+  noIndex: true,
 })
 
 export default function EstudiantesPage() {

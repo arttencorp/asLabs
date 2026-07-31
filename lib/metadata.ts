@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 
-const baseUrl = "https://aslaboratorios.com"
-
+export const SITE_URL = "https://aslaboratorios.com"
+export const SITE_NAME = "AS Laboratorios"
+export const DEFAULT_OG_IMAGE = "/new/bannerasnuevo.webp"
 
 type MetadataProps = {
   title?: string
@@ -12,139 +13,78 @@ type MetadataProps = {
   type?: "website" | "article"
   publishedTime?: string
   modifiedTime?: string
+  noIndex?: boolean
 }
 
 export function constructMetadata({
-  title = "AS Laboratorios",
-  description = "AS Laboratorios - Líder en biotecnología vegetal en Perú. Plantines in vitro, control biológico, materiales de laboratorio y asesoría técnica para agricultura sostenible. Servicio a universidades, estudiantes y agricultores desde el año 2000.",
+  title = SITE_NAME,
+  description = "Biotecnología agrícola, plantines in vitro, análisis de laboratorio, control biológico e investigación aplicada en Trujillo, Perú.",
   keywords = [
-    "biotecnología vegetal",
+    "biotecnología agrícola Perú",
+    "laboratorio en Trujillo",
     "plantines in vitro",
+    "análisis microbiológicos",
+    "fitopatología",
     "control biológico",
-    "laboratorio Perú",
-    "agricultura sostenible",
-    "estudiantes biología",
-    "materiales laboratorio",
-    "asesoría técnica",
-    "cultivo tejidos",
-    "micropropagación",
-    "banano baby",
-    "pitahaya",
-    "fresa",
-    "piña",
-    "Trujillo",
-    "La Libertad",
-    "universidad",
-    "investigación",
-    "genética molecular",
-    "PCR",
-    "electroforesis",
-    "reactivos",
-    "medios cultivo",
-    "placas petri",
-    "microscopio",
-    "AS Labs",
-    "biotechnology Peru",
-    "plant tissue culture",
-    "biological control",
+    "cultivo de tejidos",
+    "investigación agrícola",
   ],
-  image = "/aslabs-logo.png",
+  image = DEFAULT_OG_IMAGE,
   path = "",
   type = "website",
   publishedTime,
   modifiedTime,
+  noIndex = false,
 }: MetadataProps = {}): Metadata {
+  const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`
+  const canonical = `${SITE_URL}${normalizedPath}`
   const metaTitle =
-    title === "AS Laboratorios"
-      ? "AS Laboratorios - Biotecnología Vegetal y Materiales de Laboratorio en Perú"
-      : `${title} | AS Laboratorios - Biotecnología Vegetal Perú`
-
-  const baseUrl = "https://aslaboratorios.com"
-  const fullUrl = `${baseUrl}${path}`
+    title === "Inicio" || title === SITE_NAME
+      ? "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios"
+      : title.includes(SITE_NAME)
+        ? title
+        : `${title} | ${SITE_NAME}`
 
   return {
     title: metaTitle,
     description,
-    keywords: keywords.join(", "),
-    authors: [{ name: "AS Laboratorios", url: baseUrl }],
-    creator: "AS Laboratorios",
-    publisher: "AS Laboratorios",
-    formatDetection: {
-      email: false,
-      address: false,
-      telephone: false,
-    },
-    metadataBase: new URL(baseUrl),
-    alternates: {
-      canonical: fullUrl,
-      languages: {
-        "es-PE": fullUrl,
-        es: fullUrl,
-      },
-    },
+    keywords,
+    authors: [{ name: SITE_NAME, url: SITE_URL }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
+    applicationName: SITE_NAME,
+    metadataBase: new URL(SITE_URL),
+    alternates: { canonical },
     openGraph: {
       title: metaTitle,
       description,
-      url: fullUrl,
-      siteName: "AS Laboratorios",
+      url: canonical,
+      siteName: SITE_NAME,
       locale: "es_PE",
-      type: type,
+      type,
       publishedTime,
       modifiedTime,
-      images: [
-        {
-          url: image,
-          width: 1200,
-          height: 630,
-          alt: metaTitle,
-          type: "image/png",
-        },
-        {
-          url: "/aslabs-logo.png",
-          width: 800,
-          height: 600,
-          alt: "AS Laboratorios Logo",
-          type: "image/png",
-        },
-      ],
+      images: [{ url: image, alt: metaTitle }],
     },
     twitter: {
       card: "summary_large_image",
       title: metaTitle,
       description,
       images: [image],
-      creator: "@aslaboratorios",
-      site: "@aslaboratorios",
     },
     robots: {
-      index: true,
-      follow: true,
-      nocache: false,
+      index: !noIndex,
+      follow: !noIndex,
       googleBot: {
-        index: true,
-        follow: true,
+        index: !noIndex,
+        follow: !noIndex,
         noimageindex: false,
         "max-video-preview": -1,
         "max-image-preview": "large",
         "max-snippet": -1,
       },
     },
-    verification: {
-      google: "AS-Laboratorios-Peru-Biotecnologia-Vegetal",
-      yandex: "AS-Laboratorios-Peru",
-      yahoo: "AS-Laboratorios-Peru",
-    },
-    category: "Biotechnology",
-    classification: "Business",
+    category: "Biotecnología agrícola y servicios de laboratorio",
     referrer: "origin-when-cross-origin",
-    applicationName: "AS Laboratorios",
-    generator: "Next.js",
-    manifest: "/manifest.json",
-    other: {
-      "google-site-verification": "AS-Laboratorios-Peru-Biotecnologia-Vegetal",
-      "msvalidate.01": "AS-Laboratorios-Peru-Microsoft",
-      "facebook-domain-verification": "AS-Laboratorios-Peru-Facebook",
-      "p:domain_verify": "AS-Laboratorios-Peru-Pinterest",
-    },
   }
 }

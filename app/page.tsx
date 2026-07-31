@@ -1,15 +1,24 @@
 import type { Metadata } from "next"
 import { constructMetadata } from "@/lib/metadata"
+import { LocalBusinessStructuredData, OrganizationStructuredData, WebsiteStructuredData } from "@/components/structured-data"
 import ClientPage from "./ClientPage"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Inicio",
+  title: "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios",
   description:
-    "AS Laboratorios - Creamos soluciones biotecnológicas para la preservación del medio ambiente. Brindamos soluciones a estudiantes universitarios, docentes y asesorías personalizadas.",
+    "Plantines in vitro, análisis de laboratorio, control biológico e investigación aplicada desde Trujillo para productores, empresas y universidades del Perú.",
+  keywords: ["biotecnología agrícola Perú", "laboratorio Trujillo", "plantines in vitro", "análisis microbiológicos", "fitopatología", "control biológico", "cepas microbianas", "investigación agrícola"],
   path: "/",
-  image: "/proteinmole.png",
+  image: "/new/bannerasnuevo.webp",
 })
 
 export default function Home() {
-  return <ClientPage />
+  return (
+    <>
+      <OrganizationStructuredData />
+      <LocalBusinessStructuredData />
+      <WebsiteStructuredData />
+      <ClientPage />
+    </>
+  )
 }

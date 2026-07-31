@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
 import {
   Leaf,
   Shield,
@@ -128,12 +129,12 @@ export default function MedioAmbienteClient() {
   )
 
   return (
-    <div className="min-h-screen bg-background font-serif">
+    <div className="min-h-screen bg-[#f7faf7] font-serif">
       <Navbar />
 
-      <header className="relative h-[280px] overflow-hidden">
+      <header className="relative min-h-[410px] overflow-hidden clip-angle-bottom-sm sm:min-h-[440px]">
         <Image src="/servicios/ambiente.jpg" alt="Medio Ambiente - Análisis de agua" fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl">
@@ -149,19 +150,26 @@ export default function MedioAmbienteClient() {
               <p className="text-white/80 text-base md:text-lg max-w-xl">
                 Análisis microbiológicos para el control de calidad ambiental en muestras de agua, aire y superficies.
               </p>
+              <ServiceHeroActions
+                count={serviciosMedioAmbiente.length}
+                theme="emerald"
+                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Medio%20Ambiente"
+              />
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <ServiceSectionNav activeHref="/servicios/medio-ambiente" theme="emerald" />
+
+      <main className="container mx-auto max-w-7xl px-4 py-10">
         {/* Garantías */}
-        <section className="mb-8">
+        <section id="beneficios" className="mb-10 scroll-mt-28">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {garantias.map((item, index) => (
               <div
                 key={index}
-                className="bg-card border border-border rounded-xl p-4 text-center hover:border-emerald-300 hover:shadow-md transition-all"
+                className="bg-card border border-border rounded-2xl p-5 text-center hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg transition-all"
               >
                 <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-emerald-100 flex items-center justify-center">
                   <item.icon className="w-5 h-5 text-emerald-600" />
@@ -198,14 +206,14 @@ export default function MedioAmbienteClient() {
         </section>
 
         {/* Tabla de servicios */}
-        <section className="mb-8">
+        <section id="catalogo" className="mb-8 scroll-mt-28">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-lg font-bold text-foreground">Catálogo de Servicios</h2>
             <div className="h-px flex-1 bg-border" />
             <span className="text-sm text-muted-foreground">{filteredServices.length} servicios</span>
           </div>
 
-          <div className="bg-card rounded-xl border border-border overflow-hidden">
+          <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-[0_20px_60px_-46px_rgba(14,60,38,0.5)]">
             <table className="w-full">
               <thead>
                 <tr className="bg-emerald-50 border-b border-border">
@@ -218,9 +226,8 @@ export default function MedioAmbienteClient() {
               </thead>
               <tbody>
                 {filteredServices.map((servicio, index) => (
-                  <>
+                  <Fragment key={servicio.concepto}>
                     <tr
-                      key={index}
                       className="border-b border-border last:border-0 hover:bg-emerald-50/50 transition-colors cursor-pointer"
                       onClick={() => toggleService(index)}
                     >
@@ -302,15 +309,27 @@ export default function MedioAmbienteClient() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
           </div>
         </section>
 
+        <ServiceExperience
+          activeHref="/servicios/medio-ambiente"
+          theme="emerald"
+          title="Medio Ambiente"
+          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20una%20muestra%20ambiental"
+          faqs={[
+            { question: "¿Qué tipos de muestras ambientales reciben?", answer: "Procesamos muestras de agua, hisopados de superficies y controles de ambientes. La forma de recolección y el volumen dependen del microorganismo o indicador que necesites evaluar." },
+            { question: "¿Puedo tomar yo mismo la muestra de agua?", answer: "Sí, siempre que utilices el recipiente y procedimiento adecuados. Te indicamos cómo evitar contaminación cruzada, cuánto volumen recolectar y si debe mantenerse refrigerada." },
+            { question: "¿Los resultados incluyen una interpretación?", answer: "El informe presenta el resultado, método y unidad correspondiente. Si nos indicas el uso del agua o el objetivo del control, podemos orientarte sobre el criterio técnico aplicable." },
+          ]}
+        />
+
         {/* Banner de contacto */}
-        <section>
+        <section id="contacto" className="scroll-mt-28">
           <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">

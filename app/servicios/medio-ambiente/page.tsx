@@ -9,9 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Análisis Ambiental en Trujillo Perú | Análisis de Agua, Coliformes, E. coli | AS Laboratorios",
+  title: "Análisis Microbiológico de Agua y Ambiente | AS Laboratorios",
   description:
-    "Laboratorio de análisis ambiental en Trujillo, La Libertad, Perú. Análisis microbiológico de agua, coliformes totales y fecales, E. coli, aerobios mesófilos, enterobacterias, pH. Certificado para industria alimentaria. Cotiza: +51 961 996 645.",
+    "Análisis microbiológico de agua, superficies y ambientes: coliformes, E. coli, aerobios mesófilos, enterobacterias y otros indicadores en Trujillo.",
   keywords: [
     // Keywords geográficas principales
     "análisis ambiental Trujillo",
@@ -148,10 +148,9 @@ const medioAmbienteServices = [
 export default function MedioAmbientePage() {
   return (
     <>
-      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Análisis Microbiológico Ambiental en Trujillo"
-        serviceDescription="Laboratorio especializado en análisis microbiológico ambiental en Trujillo, La Libertad, Perú: control de calidad de agua, superficies y ambientes. Detección de coliformes, E. coli y enterobacterias certificado."
+        serviceDescription="Laboratorio especializado en análisis microbiológico ambiental en Trujillo, La Libertad, Perú: control de calidad de agua, superficies y ambientes, coliformes, E. coli y enterobacterias."
         serviceUrl="https://aslaboratorios.com/servicios/medio-ambiente"
         serviceType="Análisis Microbiológico Ambiental"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima"]}
@@ -169,13 +168,6 @@ export default function MedioAmbientePage() {
         listName="Servicios de Análisis Ambiental AS Laboratorios Trujillo"
         listUrl="https://aslaboratorios.com/servicios/medio-ambiente"
         items={medioAmbienteServices}
-      />
-      <ProfessionalServiceStructuredData
-        serviceName="Análisis Ambiental Trujillo"
-        description="Laboratorio de análisis microbiológico ambiental certificado en Trujillo, La Libertad, Perú. Control de calidad de agua, superficies y ambientes."
-        url="https://aslaboratorios.com/servicios/medio-ambiente"
-        priceRange="$$"
-        image="/servicios/image.png"
       />
       <MedioAmbienteClient />
     </>

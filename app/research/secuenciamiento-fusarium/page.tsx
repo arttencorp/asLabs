@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
-import SecuenciamientoFusariumClient from "./secuenciamiento-fusarium-client"
+import ResearchProjectDetail from "@/components/research/research-project-detail"
+import ResearchProjectStructuredData from "@/components/research/research-project-structured-data"
+import { researchProjects } from "@/data/research-project-details"
 
 export const metadata: Metadata = {
-  title: "Secuenciación del Genoma de Fusarium oxysporum f. sp. cubense Raza 4 | AS Laboratorios",
+  title: "Secuenciación Genómica de Fusarium oxysporum Raza 4",
   description:
-    "Proyecto pionero de secuenciación genómica del patógeno causante de la enfermedad de Panamá en bananos. Investigación desarrollada por tesistas de AS Laboratorios en Trujillo, Perú.",
+    "Proyecto de secuenciación, ensamblaje y análisis del genoma de Fusarium oxysporum f. sp. cubense Raza 4, patógeno asociado al banano.",
   keywords: [
     "Fusarium oxysporum",
     "secuenciación genómica",
@@ -68,11 +68,11 @@ export const metadata: Metadata = {
 }
 
 export default function SecuenciamientoFusariumPage() {
+  const project = researchProjects["secuenciamiento-fusarium"]
   return (
     <>
-      <Navbar />
-      <SecuenciamientoFusariumClient />
-      <Footer />
+      <ResearchProjectStructuredData project={project} />
+      <ResearchProjectDetail project={project} />
     </>
   )
 }
