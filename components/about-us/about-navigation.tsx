@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Award, BarChart3, BookOpen, Sparkles, Users } from 'lucide-react'
 
 export default function AboutNavigation() {
   const [activeSection, setActiveSection] = useState('mision')
@@ -15,7 +16,7 @@ export default function AboutNavigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['mision', 'valores', 'organigrama', 'impacto']
+      const sections = ['mision', 'organigrama', 'estandares', 'valores', 'impacto']
       for (const id of sections) {
         const element = document.getElementById(id)
         if (element) {
@@ -32,38 +33,34 @@ export default function AboutNavigation() {
   }, [])
 
   const sections = [
-    { id: 'mision', label: 'Nuestra Historia', icon: '📖' },
-    { id: 'valores', label: 'Valores', icon: '⭐' },
-    { id: 'organigrama', label: 'Organigrama', icon: '👥' },
-    { id: 'impacto', label: 'Impacto', icon: '📈' },
+    { id: 'mision', label: 'Historia', icon: BookOpen },
+    { id: 'organigrama', label: 'Directorio', icon: Users },
+    { id: 'estandares', label: 'Estándares', icon: Award },
+    { id: 'valores', label: 'Valores', icon: Sparkles },
+    { id: 'impacto', label: 'Impacto', icon: BarChart3 },
   ]
 
   return (
-    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 z-40 hidden lg:flex">
-      <div className="bg-white rounded-l-2xl shadow-2xl overflow-hidden">
-        <div className="flex flex-col gap-0">
-          {sections.map((section, index) => (
+    <div data-navbar-theme="light" className="sticky top-[74px] z-40 -mt-6 px-4 sm:top-[82px]">
+      <div className="mx-auto flex max-w-4xl items-center gap-1 overflow-x-auto rounded-2xl border border-white/90 bg-white/90 p-2 shadow-[0_18px_48px_-28px_rgba(8,47,32,0.55)] backdrop-blur-md [scrollbar-width:none]">
+          {sections.map((section) => {
+            const Icon = section.icon
+            return (
             <button
               key={section.id}
               onClick={() => scrollToSection(section.id)}
-              className={`flex items-center justify-center w-16 h-16 transition-all duration-300 group relative ${
+              className={`flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all duration-300 sm:px-4 ${
                 activeSection === section.id
-                  ? 'bg-gradient-to-r from-[#2e7d32] to-[#1b5e20]'
-                  : 'bg-white hover:bg-gray-50'
-              } ${index !== sections.length - 1 ? 'border-b border-gray-200' : ''}`}
-              title={section.label}
+                  ? 'bg-[#245f3e] text-white shadow-md'
+                  : 'text-[#4f665b] hover:bg-[#edf3ee] hover:text-[#245f3e]'
+              }`}
+              aria-current={activeSection === section.id ? 'true' : undefined}
             >
-              <div className={`text-2xl transition-all ${activeSection === section.id ? 'scale-125' : 'scale-100'}`}>
-                {section.icon}
-              </div>
-
-              {/* Tooltip */}
-              <div className="absolute right-full mr-4 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                {section.label}
-              </div>
+              <Icon className="h-4 w-4" />
+              {section.label}
             </button>
-          ))}
-        </div>
+            )
+          })}
       </div>
     </div>
   )

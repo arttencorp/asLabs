@@ -1,78 +1,98 @@
 "use client"
 
-import { 
-  FlaskConical, 
-  TrendingUp, 
-  Shield, 
-  DollarSign, 
-  MessageCircle 
+import {
+  ArrowDown,
+  FlaskConical,
+  TrendingUp,
+  Shield,
+  DollarSign,
+  MessageCircle
 } from "lucide-react"
+import Image from "next/image"
+import { motion } from "framer-motion"
 import { handleWhatsAppContact } from "./utils"
+import { StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { btnAccent, iconBadge } from "@/components/ui/button-styles"
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-white py-6 sm:py-8 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-white opacity-60"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
+    <section data-navbar-theme="dark" className="relative min-h-[650px] overflow-hidden bg-[#123b2b] pb-24 pt-32 text-white clip-angle-bottom-sm sm:min-h-[700px]">
+      <Image src="/plantines/pagina18.webp" alt="Plantines in vitro de AS Laboratorios" fill priority className="object-cover object-center opacity-[0.45]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f22] via-[#123b2b]/95 to-[#123b2b]/[0.45]"></div>
+      <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-[0.12]"></div>
+      <div className="pointer-events-none absolute -right-28 -top-28 h-[420px] w-[420px] rounded-full bg-[#74c57d]/20 blur-3xl"></div>
+
+      <div className="container relative z-10 mx-auto max-w-7xl px-4">
         <div className="w-full">
-          
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
             {/* TEXTO - Izquierda */}
-            <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full text-xs font-medium mb-3">
-                <FlaskConical className="w-3 h-3" />
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="text-center lg:text-left"
+            >
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#cce8d2] backdrop-blur-sm">
+                <FlaskConical className="w-3.5 h-3.5" />
                 Biotecnología Vegetal de Vanguardia
               </div>
 
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 text-gray-900 leading-tight">
-                Plantines de <span className="text-emerald-600">Elite Genética</span>
-                <br className="hidden sm:block" />
-                <span className="block sm:inline"> para Agricultura Profesional</span>
+              <h1 className="mb-4 text-4xl font-bold leading-tight text-white font-serif sm:text-5xl">
+                Plantines in vitro para cultivos que empiezan mejor
               </h1>
 
-              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                Desarrollados con tecnología in vitro de vanguardia para maximizar tu productividad agrícola. 
-                Libres de plagas, alta resistencia y rendimientos superiores garantizados.
+              <p className="mx-auto mb-7 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base lg:mx-0">
+                Material vegetal uniforme, producido bajo condiciones controladas y acompañado por orientación técnica para elegir la variedad adecuada.
               </p>
 
-              <button
-                onClick={() => handleWhatsAppContact("información completa sobre plantines premium")}
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition-colors text-sm"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Asesoría Gratuita
-              </button>
-            </div>
+              <div className="flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+                <button
+                  onClick={() => handleWhatsAppContact("información completa sobre plantines in vitro")}
+                  className={btnAccent}
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Solicitar asesoría
+                </button>
+                <a href="#catalogo-plantines" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/20">
+                  Ver catálogo
+                  <ArrowDown className="h-4 w-4" />
+                </a>
+              </div>
+            </motion.div>
 
-            {/* CUADRADOS - Derecha, 2x2 grid (solo 3, el 3ro centrado abajo) */}
-            <div className="grid grid-cols-2 gap-2">
-              <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100 text-center">
-                <div className="w-6 h-6 bg-emerald-100 rounded flex items-center justify-center mb-1 mx-auto">
-                  <TrendingUp className="w-3 h-3 text-emerald-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 text-xs">Mayor Productividad</h3>
-                <p className="text-xs text-gray-600">+{Math.round(((20 - 14) / 14) * 100)}% rendimiento</p>
-              </div>
-              
-              <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100 text-center">
-                <div className="w-6 h-6 bg-emerald-100 rounded flex items-center justify-center mb-1 mx-auto">
-                  <Shield className="w-3 h-3 text-emerald-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 text-xs">Libres de Plagas</h3>
-                <p className="text-xs text-gray-600">In vitro</p>
-              </div>
-              
-              <div className="col-span-2 flex justify-center">
-                <div className="bg-white p-2 rounded-lg shadow-sm border border-gray-100 text-center w-[calc(50%-0.25rem)]">
-                  <div className="w-6 h-6 bg-emerald-100 rounded flex items-center justify-center mb-1 mx-auto">
-                    <DollarSign className="w-3 h-3 text-emerald-600" />
+            {/* CUADRADOS - Derecha */}
+            <StaggerGroup className="grid grid-cols-2 gap-4" staggerDelay={0.1}>
+              <StaggerItem>
+                <div className="h-full rounded-2xl border border-white/[0.15] bg-white/10 p-6 text-center shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.15]">
+                  <div className={`${iconBadge} mx-auto mb-3 h-12 w-12`}>
+                    <TrendingUp className="w-5 h-5" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 text-xs">ROI Garantizado</h3>
-                  <p className="text-xs text-gray-600">Rentable</p>
+                  <h3 className="text-sm font-semibold text-white">Mayor uniformidad</h3>
+                  <p className="mt-1 text-xs text-white/60">Lotes más consistentes</p>
                 </div>
-              </div>
-            </div>
+              </StaggerItem>
+
+              <StaggerItem>
+                <div className="h-full rounded-2xl border border-white/[0.15] bg-white/10 p-6 text-center shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.15]">
+                  <div className={`${iconBadge} mx-auto mb-3 w-12 h-12`}>
+                    <Shield className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-white">Producción controlada</h3>
+                  <p className="mt-1 text-xs text-white/60">Tecnología in vitro</p>
+                </div>
+              </StaggerItem>
+
+              <StaggerItem className="col-span-2 flex justify-center">
+                <div className="w-[calc(50%-0.5rem)] rounded-2xl border border-white/[0.15] bg-white/10 p-6 text-center shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.15]">
+                  <div className={`${iconBadge} mx-auto mb-3 w-12 h-12`}>
+                    <DollarSign className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-white">Acompañamiento</h3>
+                  <p className="mt-1 text-xs text-white/60">Orientación técnica</p>
+                </div>
+              </StaggerItem>
+            </StaggerGroup>
           </div>
         </div>
       </div>

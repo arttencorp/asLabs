@@ -11,7 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ["DM Serif Text", "serif"],
+        sans: ["var(--font-poppins)", "Poppins", "sans-serif"],
+        serif: ["var(--font-poppins)", "Poppins", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",

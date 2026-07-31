@@ -55,7 +55,7 @@ export default function StudentContact() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Ubicación</h3>
-                      <p className="opacity-90">Av. Juan Pablo II 306</p>
+                      <p className="opacity-90">MZ J1 San Isidro II Etapa</p>
                       <p className="text-sm opacity-75">Trujillo, La Libertad, Perú</p>
                     </div>
                   </div>

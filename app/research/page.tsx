@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import ResearchPageClient from "./ResearchPageClient"
+import ResearchPageExperience from "./ResearchPageExperience"
 
 export const metadata: Metadata = {
-  title: "Control Biológico | Trichoderma, Trichogramma, Paratheresia en Trujillo, Perú | AS Laboratorios",
+  title: "Investigación en Biotecnología Agrícola | AS Laboratorios",
   description:
-    "AS Laboratorios desarrolla investigación avanzada en control biológico en Trujillo, La Libertad, Perú. Producción de Trichoderma, Trichogramma, Paratheresia claripalpis y Bacillus biocontrolador. Soluciones sostenibles para agricultores peruanos.",
+    "Proyectos de AS Laboratorios en control biológico, secuenciamiento, mejoramiento genético y biotecnología molecular para la agricultura peruana.",
   keywords: [
     "control biológico",
     "Trichoderma Trujillo",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     { name: "Hellem Iveth Guevara Nuñez" },
   ],
   openGraph: {
-    title: "Control Biológico en Perú | Trichoderma, Trichogramma, Paratheresia | AS Laboratorios Trujillo",
+    title: "Investigación en Biotecnología Agrícola | AS Laboratorios Trujillo",
     description:
-      "Desarrollamos investigación científica en control biológico. Producción de microorganismos y agentes biocontroladores para agricultura sostenible en Perú.",
+      "Proyectos de investigación en control biológico, secuenciamiento, mejoramiento vegetal y biotecnología molecular para la agricultura peruana.",
     url: "https://aslaboratorios.com/research",
     siteName: "AS Laboratorios",
     images: [
@@ -55,9 +55,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Control Biológico | AS Laboratorios Trujillo, Perú",
+    title: "Investigación en Biotecnología | AS Laboratorios Trujillo, Perú",
     description:
-      "Investigación en Trichoderma, Trichogramma, Paratheresia claripalpis y soluciones de control biológico para agricultura.",
+      "Conoce nuestros proyectos de investigación aplicada para una agricultura más sostenible y productiva.",
     images: ["/research-preview.png"],
   },
   alternates: {
@@ -83,8 +83,8 @@ export const metadata: Metadata = {
 export default function ResearchPage() {
   return (
     <>
-      <Navbar />
-      <ResearchPageClient />
+      <Navbar overlay />
+      <ResearchPageExperience />
       <Footer />
     </>
   )

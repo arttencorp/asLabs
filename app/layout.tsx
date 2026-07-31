@@ -1,21 +1,7 @@
 import type React from "react"
 import "./globals.css"
-import { DM_Serif_Text } from "next/font/google"
 import { Poppins } from "next/font/google"
 import type { Metadata, Viewport } from "next"
-import {
-  OrganizationStructuredData,
-  LocalBusinessStructuredData,
-  WebsiteStructuredData,
-} from "@/components/structured-data"
-
-const dmSerifText = DM_Serif_Text({
-  weight: ["400"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-dm-serif",
-  preload: true,
-})
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -37,40 +23,24 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: {
-    template: "%s | AS Laboratorios - Biotecnología Vegetal Perú",
-    default: "AS Laboratorios - Líder en Biotecnología Vegetal y Materiales de Laboratorio en Perú",
-  },
+  title: { default: "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios" },
   description:
-    "AS Laboratorios - Empresa peruana líder en biotecnología vegetal desde el año 2000. Especialistas en plantines in vitro, control biológico, materiales de laboratorio, reactivos y asesoría técnica para agricultura sostenible. Servicio a universidades, estudiantes y agricultores en todo el Perú.",
+    "Biotecnología agrícola, plantines in vitro, análisis de laboratorio, control biológico e investigación aplicada desde Trujillo para todo el Perú.",
   generator: "Next.js",
   applicationName: "AS Laboratorios",
   referrer: "origin-when-cross-origin",
   keywords: [
-    "AS Laboratorios",
-    "biotecnología vegetal Perú",
+    "AS Laboratorios Trujillo",
+    "biotecnología agrícola Perú",
     "plantines in vitro",
+    "análisis de laboratorio Trujillo",
+    "análisis microbiológicos",
+    "fitopatología",
     "control biológico",
-    "materiales laboratorio Trujillo",
-    "reactivos biología",
-    "medios cultivo",
-    "placas petri",
-    "microscopio estudiantes",
-    "universidad biología",
-    "La Libertad biotecnología",
-    "agricultura sostenible",
     "cultivo tejidos",
     "micropropagación",
-    "banano baby",
-    "pitahaya plantines",
-    "fresa in vitro",
-    "piña biotecnología",
-    "genética molecular",
-    "PCR laboratorio",
-    "electroforesis",
-    "asesoría técnica agrícola",
-    "investigación biotecnológica",
-    "educación científica Perú",
+    "cepas microbianas",
+    "investigación agrícola Perú",
   ],
   authors: [{ name: "AS Laboratorios", url: "https://aslaboratorios.com" }],
   creator: "AS Laboratorios",
@@ -82,36 +52,28 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL("https://aslaboratorios.com"),
   alternates: {
-    canonical: "https://aslaboratorios.com",
-    languages: {
-      "es-PE": "https://aslaboratorios.com",
-      es: "https://aslaboratorios.com",
-    },
+    canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "es_PE",
     url: "https://aslaboratorios.com",
     siteName: "AS Laboratorios",
-    title: "AS Laboratorios - Líder en Biotecnología Vegetal Perú",
+    title: "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios",
     description:
-      "Empresa peruana especializada en biotecnología vegetal, plantines in vitro, control biológico y materiales de laboratorio. Servicio a universidades y agricultores desde el año 2000.",
+      "Plantines in vitro, análisis de laboratorio, control biológico e investigación aplicada desde Trujillo para el Perú.",
     images: [
       {
-        url: "/aslabs-logo.png",
-        width: 1200,
-        height: 630,
-        alt: "AS Laboratorios - Biotecnología Vegetal Perú",
+        url: "/new/bannerasnuevo.webp",
+        alt: "Equipo de AS Laboratorios trabajando en biotecnología agrícola",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AS Laboratorios - Biotecnología Vegetal Perú",
-    description: "Líder en biotecnología vegetal, plantines in vitro y materiales de laboratorio en Perú",
-    images: ["/aslabs-logo.png"],
-    creator: "@aslaboratorios",
-    site: "@aslaboratorios",
+    title: "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios",
+    description: "Plantines in vitro, análisis de laboratorio, control biológico e investigación aplicada en Perú.",
+    images: ["/new/bannerasnuevo.webp"],
   },
   robots: {
     index: true,
@@ -139,24 +101,13 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/manifest.json",
-  verification: {
-    google: "AS-Laboratorios-Peru-Biotecnologia-Vegetal",
-    yandex: "AS-Laboratorios-Peru",
-    yahoo: "AS-Laboratorios-Peru",
-  },
   category: "Biotechnology",
   classification: "Business",
-  other: {
-    "google-site-verification": "AS-Laboratorios-Peru-Biotecnologia-Vegetal",
-    "msvalidate.01": "AS-Laboratorios-Peru-Microsoft",
-    "facebook-domain-verification": "AS-Laboratorios-Peru-Facebook",
-    "p:domain_verify": "AS-Laboratorios-Peru-Pinterest",
-  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={`${dmSerifText.variable} ${poppins.variable}`} suppressHydrationWarning>
+    <html lang="es-PE" className={poppins.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -172,9 +123,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className="min-h-screen bg-background font-[var(--font-poppins)] text-foreground antialiased">
-        <OrganizationStructuredData />
-        <LocalBusinessStructuredData />
-        <WebsiteStructuredData />
         {children}
       </body>
     </html>

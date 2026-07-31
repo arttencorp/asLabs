@@ -1,11 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import Image from "next/image"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BarChart3, Award, Microscope, Dna, Leaf, Shield, CheckCircle, Clock, Beaker, Zap, ArrowRight } from "lucide-react"
+import { BarChart3, Award, Microscope, Dna, Leaf, Shield, CheckCircle, Beaker, Zap, ArrowRight } from "lucide-react"
 import CategorySection from "@/components/research/category-section"
 import LaboratoriesSection from "@/components/research/laboratories-section"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import {
   pipelineData,
   ingenieriaGenetica,
@@ -55,54 +56,54 @@ export default function ResearchPageClient() {
   }, 0)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
+    <div className="min-h-screen bg-[#f6f8f6]">
       {/* Premium Modern Hero Section */}
-      <section className="relative min-h-[600px] md:min-h-[700px] overflow-hidden flex items-center">
+      <section data-navbar-theme="dark" className="relative flex min-h-[680px] items-center overflow-hidden bg-[#0b3024] pt-20 md:min-h-[720px]">
         {/* Background with Image and Multiple Overlays */}
         <div className="absolute inset-0">
-          <img
+          <Image
             src="/research/research-lab.png"
             alt="Investigación de laboratorio"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            className="object-cover"
           />
           {/* Dark overlay with gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-950/75 to-gray-900/40"></div>
-          {/* Subtle noise effect */}
-          <div className="absolute inset-0 mix-blend-overlay opacity-5" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 400 400%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 result=%22noise%22 /%3E%3C/filter%3E%3Crect width=%22400%22 height=%22400%22 filter=%22url(%23noiseFilter)%22 /%3E%3C/svg%3E')" }}></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#071f17] via-[#0b3024]/90 to-[#0b3024]/[0.35]"></div>
         </div>
 
         {/* Animated gradient orbs */}
         <div className="absolute top-20 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl opacity-20"></div>
         <div className="absolute bottom-0 left-10 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl opacity-10"></div>
 
-        <div className="container mx-auto max-w-6xl px-4 relative z-10 py-20 md:py-32">
-          <div className="max-w-3xl">
+        <div className="container relative z-10 mx-auto max-w-7xl px-4 py-24 md:py-32">
+          <ScrollReveal direction="none" className="max-w-3xl">
             {/* Animated Overline */}
             <div className="inline-flex items-center gap-3 mb-8 group">
               <div className="h-1 w-12 bg-gradient-to-r from-emerald-400 to-emerald-500 group-hover:w-16 transition-all duration-500"></div>
-              <span className="text-xs md:text-sm font-bold text-emerald-300 uppercase tracking-widest">Centro Biotecnológico Líder</span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#c5e5c9] md:text-sm">Investigación aplicada</span>
             </div>
 
             {/* Premium Title with Gradient */}
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-none tracking-tight">
-              Investig<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">ación</span> de Punta
+            <h1 className="mb-6 text-4xl font-bold leading-[1.04] tracking-[-0.04em] text-white font-serif sm:text-5xl">
+              Investigación que se convierte en soluciones para el campo
             </h1>
 
             {/* Enhanced Description */}
-            <p className="text-xl md:text-2xl text-gray-200 leading-relaxed mb-4 font-light">
-              Transformamos la agricultura del futuro con soluciones biotecnológicas innovadoras
+            <p className="text-base md:text-lg text-gray-200 leading-relaxed mb-3">
+              Estudiamos problemas agrícolas con herramientas de biotecnología, microbiología y genética.
             </p>
-            <p className="text-base md:text-lg text-gray-400 leading-relaxed mb-10 max-w-2xl">
-              Control biológico avanzado, mejoramiento genético molecular, secuenciamiento de última generación y análisis de laboratorio de excelencia internacional.
+            <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-8 max-w-2xl">
+              Nuestros proyectos conectan el laboratorio con la producción: control biológico, mejoramiento vegetal, secuenciamiento y desarrollo de procesos biotecnológicos.
             </p>
 
             {/* Premium CTA Buttons */}
             <div className="flex flex-wrap gap-5 items-center">
-              <a href="#projects" className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-8 md:px-10 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/50 hover:scale-105">
+              <a href="#projects" className="group relative inline-flex items-center gap-2 rounded-full bg-[#f0a23a] px-6 py-3.5 text-sm font-bold text-[#173428] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-xl">
                 <span>Explorar Proyectos</span>
                 <Beaker className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
-              <a href="#laboratorios" className="group relative inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 md:px-10 py-4 rounded-xl font-bold text-lg backdrop-blur-xl border border-white/30 hover:border-white/50 transition-all duration-300 hover:shadow-xl">
+              <a href="#laboratorios" className="group relative inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20">
                 <span>Laboratorios</span>
                 <Microscope className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
               </a>
@@ -112,42 +113,39 @@ export default function ResearchPageClient() {
             <div className="mt-16 flex flex-wrap gap-8 text-white/90">
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-emerald-400">{totalProjects}+</div>
-                <div className="text-sm text-gray-400 mt-1">Proyectos Activos</div>
+                <div className="mt-1 text-sm text-white/60">Proyectos registrados</div>
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-teal-400">{completedProjects}+</div>
-                <div className="text-sm text-gray-400 mt-1">Investigaciones Completadas</div>
+                <div className="mt-1 text-sm text-white/60">Investigaciones completadas</div>
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-emerald-300">{totalPlantsProduced.toLocaleString()}+</div>
-                <div className="text-sm text-gray-400 mt-1">Plantas Producidas</div>
+                <div className="mt-1 text-sm text-white/60">Plantas producidas</div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
-          <div className="flex flex-col items-center gap-2 animate-bounce">
-            <span className="text-xs text-gray-300 font-medium">Desplázate</span>
-            <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex items-center justify-center">
-              <div className="w-1 h-2 bg-gray-400 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Gradient divider */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/70 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#f6f8f6] to-transparent"></div>
       </section>
 
+      <div data-navbar-theme="light" className="relative z-30 mx-auto -mt-7 w-[calc(100%-2rem)] max-w-6xl">
+        <div className="flex items-center gap-1 overflow-x-auto rounded-2xl border border-white/90 bg-white/90 p-2 shadow-[0_18px_48px_-28px_rgba(8,47,32,0.55)] backdrop-blur-md [scrollbar-width:none]">
+          {[["Laboratorios", "#laboratorios"], ["Líneas estratégicas", "#lineas"], ["Proyectos", "#projects"], ["Impacto", "#impacto-investigacion"]].map(([label, href]) => (
+            <a key={href} href={href} className="shrink-0 rounded-xl px-4 py-2.5 text-xs font-semibold text-[#4f665b] transition hover:bg-[#edf3ee] hover:text-[#245f3e]">{label}</a>
+          ))}
+        </div>
+      </div>
+
       {/* Statistics Section - Modern Cards */}
-      <section className="py-12 md:py-16 bg-white relative z-20">
+      <section data-navbar-theme="light" className="relative z-20 bg-[#f6f8f6] py-10 md:py-14">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {/* Card 1 */}
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative bg-white rounded-xl p-6 border border-gray-200 group-hover:border-emerald-300 transition-all duration-300 group-hover:shadow-xl">
+              <div className="relative rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-emerald-300 group-hover:shadow-xl">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">Total de Proyectos</p>
@@ -163,7 +161,7 @@ export default function ResearchPageClient() {
             {/* Card 2 */}
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative bg-white rounded-xl p-6 border border-gray-200 group-hover:border-blue-300 transition-all duration-300 group-hover:shadow-xl">
+              <div className="relative rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-blue-300 group-hover:shadow-xl">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">En Progreso</p>
@@ -179,7 +177,7 @@ export default function ResearchPageClient() {
             {/* Card 3 */}
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative bg-white rounded-xl p-6 border border-gray-200 group-hover:border-purple-300 transition-all duration-300 group-hover:shadow-xl">
+              <div className="relative rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-purple-300 group-hover:shadow-xl">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">Completados</p>
@@ -195,7 +193,7 @@ export default function ResearchPageClient() {
             {/* Card 4 */}
             <div className="group relative">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
-              <div className="relative bg-white rounded-xl p-6 border border-gray-200 group-hover:border-amber-300 transition-all duration-300 group-hover:shadow-xl">
+              <div className="relative rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-amber-300 group-hover:shadow-xl">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">Plantas</p>
@@ -212,20 +210,20 @@ export default function ResearchPageClient() {
       </section>
 
       {/* Laboratories Section */}
-      <section id="laboratorios" className="py-16 md:py-20 px-4 bg-white border-b border-gray-100">
+      <section id="laboratorios" data-navbar-theme="light" className="scroll-mt-28 border-b border-gray-100 bg-white px-4 py-20 md:py-28">
         <LaboratoriesSection />
       </section>
 
       {/* Research Areas Section - Modern Design */}
-      <section className="py-16 md:py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
+      <section id="lineas" data-navbar-theme="light" className="scroll-mt-28 bg-[#f3f6f3] px-4 py-20 md:py-28">
         <div className="container mx-auto max-w-6xl">
           <div className="mb-12 md:mb-16">
             <div className="inline-flex items-center gap-2 mb-4">
               <span className="h-px w-8 bg-emerald-500"></span>
               <span className="text-xs md:text-sm font-semibold text-emerald-600 uppercase tracking-widest">Investigación Especializada</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">Líneas Estratégicas</h2>
-            <p className="text-base md:text-lg text-gray-600 max-w-2xl">Cuatro áreas de investigación enfocadas en innovación y sostenibilidad agrícola</p>
+            <h2 className="mb-4 text-3xl font-bold leading-tight text-[#173428] md:text-5xl">Líneas estratégicas</h2>
+            <p className="max-w-2xl text-base leading-7 text-gray-600 md:text-lg">Cuatro áreas que organizan nuestras preguntas, metodologías y proyectos de investigación agrícola.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -289,14 +287,14 @@ export default function ResearchPageClient() {
       </section>
 
       {/* Tabs Section - Modern */}
-      <section id="projects" className="py-16 md:py-20 px-4 bg-white border-b border-gray-100">
+      <section id="projects" data-navbar-theme="light" className="scroll-mt-28 border-b border-gray-100 bg-white px-4 py-20 md:py-28">
         <div className="container mx-auto max-w-6xl">
           <div className="mb-12 md:mb-16">
             <div className="inline-flex items-center gap-2 mb-4">
               <span className="h-px w-8 bg-emerald-500"></span>
               <span className="text-xs md:text-sm font-semibold text-emerald-600 uppercase tracking-widest">Catálogo Completo</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">Proyectos de Investigación</h2>
+            <h2 className="mb-4 text-3xl font-bold leading-tight text-[#173428] md:text-5xl">Proyectos de investigación</h2>
             <p className="text-base md:text-lg text-gray-600 max-w-2xl">Explora nuestros proyectos actuales y completados en las cuatro líneas estratégicas de investigación</p>
           </div>
 
@@ -368,7 +366,7 @@ export default function ResearchPageClient() {
       </section>
 
       {/* Impact Section - Premium */}
-      <section className="py-20 md:py-24 px-4 bg-white border-t border-gray-100 relative overflow-hidden">
+      <section id="impacto-investigacion" data-navbar-theme="dark" className="relative scroll-mt-28 overflow-hidden border-t border-white/10 bg-[#123b2b] px-4 py-20 text-white md:py-28">
         {/* Background elements */}
         <div className="absolute top-20 left-0 w-80 h-80 bg-emerald-100/30 rounded-full blur-3xl -ml-40 opacity-50"></div>
         <div className="absolute bottom-20 right-0 w-96 h-96 bg-teal-100/20 rounded-full blur-3xl -mr-48 opacity-50"></div>
@@ -376,13 +374,13 @@ export default function ResearchPageClient() {
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="mb-16 md:mb-20">
             <div className="inline-flex items-center gap-2 mb-4">
-              <span className="h-px w-8 bg-emerald-500"></span>
-              <span className="text-xs md:text-sm font-bold text-emerald-600 uppercase tracking-widest">Nuestro Impacto</span>
+              <span className="h-px w-8 bg-[#2e7d32]"></span>
+              <span className="text-xs md:text-sm font-bold text-[#2e7d32] uppercase tracking-widest">Nuestro Impacto</span>
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight">
-              Transformando la <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">Agricultura</span>
+            <h2 className="mb-4 text-3xl font-bold leading-tight text-white font-serif md:text-4xl lg:text-5xl">
+              Investigación con impacto más allá del laboratorio
             </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl leading-relaxed">
+            <p className="max-w-3xl text-sm leading-relaxed text-white/70 md:text-base">
               Mediante investigación de excelencia, generamos soluciones biotecnológicas que hacen la diferencia en la agricultura sostenible peruana
             </p>
           </div>
@@ -466,12 +464,12 @@ export default function ResearchPageClient() {
                 </div>
 
                 {/* Main Heading */}
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-                  Descubre Nuestras <span className="text-emerald-200">Soluciones</span>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-serif text-white mb-6 leading-tight">
+                  Descubre Nuestras <span className="text-[#8bd394]">Soluciones</span>
                 </h2>
 
                 {/* Description */}
-                <p className="text-lg md:text-xl text-emerald-100 mb-12 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-sm md:text-base text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
                   Visita nuestros laboratorios de investigación y conoce de cerca cómo transformamos la biotecnología en soluciones reales para la agricultura
                 </p>
 

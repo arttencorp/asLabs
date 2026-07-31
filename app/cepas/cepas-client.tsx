@@ -128,7 +128,7 @@ const cepas: Cepa[] = [
 ]
 
 const categoryColors: { [key: string]: string } = {
-  "Control Biológico": "bg-emerald-100 text-emerald-700 border-emerald-300",
+  "Control Biológico": "bg-green-100 text-green-700 border-green-300",
   "Biofertilizante": "bg-blue-100 text-blue-700 border-blue-300",
   "Investigación": "bg-purple-100 text-purple-700 border-purple-300",
 }
@@ -148,18 +148,20 @@ export default function CepasClient() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50 to-teal-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50 to-green-50 flex flex-col">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 text-white py-16 border-b-4 border-emerald-700 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2"></div>
-        </div>
+      <section className="bg-gradient-to-br from-[#1b5e20] via-[#2e7d32] to-[#14401a] text-white py-16 sm:py-20 relative overflow-hidden clip-angle-bottom-sm">
+        <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-15"></div>
+        <div className="pointer-events-none absolute -top-24 -left-16 w-96 h-96 rounded-full bg-[#43a047]/30 blur-3xl"></div>
+        <div className="pointer-events-none absolute -bottom-24 right-[10%] w-80 h-80 rounded-full bg-[#e65100]/15 blur-3xl"></div>
         <div className="container mx-auto px-4 relative z-10">
-          <h1 className="text-5xl font-black mb-3">Cepas Identificadas</h1>
-          <p className="text-emerald-50 text-lg font-light max-w-3xl">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold uppercase tracking-wider px-4 py-1.5 mb-5">
+            Banco de Cepas
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold font-serif mb-4 leading-tight">Cepas Identificadas</h1>
+          <p className="text-white/85 text-base sm:text-lg max-w-3xl leading-relaxed">
             Cultivos bacterianos locales certificados de máxima viabilidad. Desarrollados con rigor científico bajo normas ISO para agricultura sostenible e investigación de calidad.
           </p>
         </div>
@@ -170,27 +172,27 @@ export default function CepasClient() {
         <div className="container mx-auto px-4 py-16">
           {/* Search and Filter Bar - Mejorado */}
           <div className="mb-12">
-            <div className="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-emerald-500">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-green-500">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* Search */}
                 <div className="flex-1 relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-emerald-400 w-5 h-5" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-green-400 w-5 h-5" />
                   <input
                     type="text"
                     placeholder="Buscar cepa por nombre científico..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-white text-gray-900 placeholder-gray-500 font-medium transition-all"
+                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 bg-white text-gray-900 placeholder-gray-500 font-medium transition-all"
                   />
                 </div>
 
                 {/* Category Filter */}
                 <div className="flex gap-2 items-center md:justify-end">
-                  <Filter className="text-emerald-400 w-5 h-5" />
+                  <Filter className="text-green-400 w-5 h-5" />
                   <select
                     value={selectedCategory || ""}
                     onChange={(e) => setSelectedCategory(e.target.value || null)}
-                    className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-white text-gray-900 font-bold transition-all"
+                    className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 bg-white text-gray-900 font-bold transition-all"
                   >
                     <option value="">Todas las cepas</option>
                     {categories.map((cat) => (
@@ -208,7 +210,7 @@ export default function CepasClient() {
                   onClick={() => setSelectedCategory(null)}
                   className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
                     !selectedCategory
-                      ? "bg-emerald-600 text-white shadow-md"
+                      ? "bg-green-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -231,12 +233,12 @@ export default function CepasClient() {
             </div>
 
             {/* Info Banner */}
-            <div className="mt-6 p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-l-4 border-emerald-500 rounded-xl shadow-sm">
+            <div className="mt-6 p-5 bg-gradient-to-r from-green-50 to-green-50 border-l-4 border-green-500 rounded-xl shadow-sm">
               <div className="flex gap-4 items-start">
                 <div className="text-3xl">✓</div>
                 <div className="text-sm">
-                  <p className="font-black text-emerald-900 mb-1">Cultivo a Pedido - Máxima Viabilidad</p>
-                  <p className="text-emerald-800 font-medium">Almacenamiento ≤2 días • Perfecto para tesistas e investigadores • Máximo caldo: 30L • Disponemos de opciones personalizadas</p>
+                  <p className="font-black text-green-900 mb-1">Cultivo a Pedido - Máxima Viabilidad</p>
+                  <p className="text-green-800 font-medium">Almacenamiento ≤2 días • Perfecto para tesistas e investigadores • Máximo caldo: 30L • Disponemos de opciones personalizadas</p>
                 </div>
               </div>
             </div>
@@ -245,7 +247,7 @@ export default function CepasClient() {
           {/* Results Count */}
           <div className="mb-8">
             <p className="text-slate-600 text-sm font-medium">
-              Mostrando <span className="text-emerald-600 font-bold">{filteredCepas.length}</span> de {cepas.length - 1} cepas
+              Mostrando <span className="text-green-600 font-bold">{filteredCepas.length}</span> de {cepas.length - 1} cepas
             </p>
           </div>
 
@@ -287,7 +289,7 @@ export default function CepasClient() {
                 <Link
                   key={cepa.id}
                   href={`/cepas/${cepa.id}`}
-                  className="group bg-white rounded-2xl border-2 border-slate-200 overflow-hidden hover:shadow-2xl hover:border-emerald-400 transition-all duration-300 flex flex-col h-full hover:-translate-y-2"
+                  className="group bg-white rounded-2xl border-2 border-slate-200 overflow-hidden hover:shadow-2xl hover:border-green-400 transition-all duration-300 flex flex-col h-full hover:-translate-y-2"
                 >
                   {/* Imagen - Más grande */}
                   <div className="h-64 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden flex items-center justify-center relative">
@@ -306,7 +308,7 @@ export default function CepasClient() {
                   {/* Content */}
                   <div className="p-6 flex-1 flex flex-col">
                     <div className="mb-4">
-                      <h3 className="font-black text-slate-900 text-lg mb-1 group-hover:text-emerald-600 transition-colors">
+                      <h3 className="font-black text-slate-900 text-lg mb-1 group-hover:text-green-600 transition-colors">
                         {cepa.nombre}
                       </h3>
                       <p className="text-xs text-slate-600 italic font-light">{cepa.cientifico}</p>
@@ -318,14 +320,14 @@ export default function CepasClient() {
                     <div className="space-y-2 mb-5 pt-4 border-t-2 border-slate-100">
                       {cepa.beneficios.slice(0, 2).map((beneficio, idx) => (
                         <p key={idx} className="text-xs text-slate-700 flex gap-2 font-medium">
-                          <span className="text-emerald-600 font-black flex-shrink-0">✓</span>
+                          <span className="text-green-600 font-black flex-shrink-0">✓</span>
                           <span>{beneficio}</span>
                         </p>
                       ))}
                     </div>
 
                     {/* CTA */}
-                    <div className="inline-flex items-center gap-2 text-emerald-600 font-black text-sm group-hover:gap-3 transition-all">
+                    <div className="inline-flex items-center gap-2 text-green-600 font-black text-sm group-hover:gap-3 transition-all">
                       Ver Producto
                       <span className="text-lg">→</span>
                     </div>
