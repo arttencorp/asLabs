@@ -13,7 +13,7 @@ export const getProfitabilityColor = (profitability: string) => {
     case "Muy Alta":
       return "text-green-600 bg-green-100"
     case "Alta":
-      return "text-emerald-600 bg-emerald-100"
+      return "text-green-600 bg-green-100"
     case "Media-Alta":
       return "text-yellow-600 bg-yellow-100"
     default:

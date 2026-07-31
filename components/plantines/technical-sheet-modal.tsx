@@ -25,7 +25,7 @@ export default function TechnicalSheetModal({ plantin, onClose }: TechnicalSheet
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-4 sm:p-6 rounded-t-xl">
+        <div className="sticky top-0 bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6 rounded-t-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-lg flex items-center justify-center">
@@ -33,7 +33,7 @@ export default function TechnicalSheetModal({ plantin, onClose }: TechnicalSheet
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-semibold">Ficha Técnica</h2>
-                <p className="text-emerald-100 text-sm">{plantin.name}</p>
+                <p className="text-green-100 text-sm">{plantin.name}</p>
               </div>
             </div>
             <button
@@ -51,7 +51,7 @@ export default function TechnicalSheetModal({ plantin, onClose }: TechnicalSheet
             <div className="space-y-4">
               <div className="bg-gray-50 p-3 sm:p-4 rounded-lg">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+                  <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                   Información General
                 </h3>
                 <div className="space-y-2 text-sm">
@@ -61,7 +61,7 @@ export default function TechnicalSheetModal({ plantin, onClose }: TechnicalSheet
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Rendimiento:</span>
-                    <span className="font-medium text-emerald-600">{plantin.yield}</span>
+                    <span className="font-medium text-green-600">{plantin.yield}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tiempo de cosecha:</span>
@@ -191,7 +191,7 @@ export default function TechnicalSheetModal({ plantin, onClose }: TechnicalSheet
           <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-200">
             <button
               onClick={() => handleWhatsAppContact(plantin.name)}
-              className="flex-1 bg-emerald-600 text-white px-4 py-2.5 sm:py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+              className="flex-1 bg-green-600 text-white px-4 py-2.5 sm:py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <MessageCircle className="w-4 h-4" />
               Solicitar Cotización
