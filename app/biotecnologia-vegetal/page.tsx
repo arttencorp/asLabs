@@ -11,16 +11,15 @@ import BiotechFAQ from "@/components/biotech/biotech-faq"
 import { ProductStructuredData } from "@/components/structured-data"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Biotecnología Vegetal y Cultivo In Vitro en Perú",
+  title: "Biotecnología Vegetal",
   description:
-    "Cultivo de tejidos, micropropagación y clonación vegetal para producir plantas uniformes y de calidad fitosanitaria en Trujillo, Perú.",
+    "Servicios de biotecnología vegetal, cultivo de tejidos, micropropagación y clonación de plantas para agricultura sostenible.",
   keywords: [
     "biotecnología vegetal",
     "cultivo de tejidos",
     "micropropagación",
     "clonación de plantas",
-    "plantas in vitro Perú",
-    "laboratorio biotecnología Trujillo",
+    "agricultura sostenible",
   ],
   path: "/biotecnologia-vegetal",
   image: "/biotecnologia-preview.png",

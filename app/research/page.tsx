@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import ResearchPageExperience from "./ResearchPageExperience"
+import ResearchPageClient from "./ResearchPageClient"
 
 export const metadata: Metadata = {
-  title: "Investigación en Biotecnología Agrícola | AS Laboratorios",
+  title: "Control Biológico | Trichoderma, Trichogramma, Paratheresia en Trujillo, Perú | AS Laboratorios",
   description:
-    "Proyectos de AS Laboratorios en control biológico, secuenciamiento, mejoramiento genético y biotecnología molecular para la agricultura peruana.",
+    "AS Laboratorios desarrolla investigación avanzada en control biológico en Trujillo, La Libertad, Perú. Producción de Trichoderma, Trichogramma, Paratheresia claripalpis y Bacillus biocontrolador. Soluciones sostenibles para agricultores peruanos.",
   keywords: [
     "control biológico",
     "Trichoderma Trujillo",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     { name: "Hellem Iveth Guevara Nuñez" },
   ],
   openGraph: {
-    title: "Investigación en Biotecnología Agrícola | AS Laboratorios Trujillo",
+    title: "Control Biológico en Perú | Trichoderma, Trichogramma, Paratheresia | AS Laboratorios Trujillo",
     description:
-      "Proyectos de investigación en control biológico, secuenciamiento, mejoramiento vegetal y biotecnología molecular para la agricultura peruana.",
+      "Desarrollamos investigación científica en control biológico. Producción de microorganismos y agentes biocontroladores para agricultura sostenible en Perú.",
     url: "https://aslaboratorios.com/research",
     siteName: "AS Laboratorios",
     images: [
@@ -55,9 +55,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Investigación en Biotecnología | AS Laboratorios Trujillo, Perú",
+    title: "Control Biológico | AS Laboratorios Trujillo, Perú",
     description:
-      "Conoce nuestros proyectos de investigación aplicada para una agricultura más sostenible y productiva.",
+      "Investigación en Trichoderma, Trichogramma, Paratheresia claripalpis y soluciones de control biológico para agricultura.",
     images: ["/research-preview.png"],
   },
   alternates: {
@@ -83,8 +83,8 @@ export const metadata: Metadata = {
 export default function ResearchPage() {
   return (
     <>
-      <Navbar overlay />
-      <ResearchPageExperience />
+      <Navbar />
+      <ResearchPageClient />
       <Footer />
     </>
   )

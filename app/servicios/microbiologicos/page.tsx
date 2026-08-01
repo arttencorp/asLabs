@@ -9,9 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Análisis Microbiológicos en Trujillo | AS Laboratorios",
+  title: "Análisis Microbiológicos en Trujillo Perú | Alimentos, Agua, Salmonella, Listeria | AS Laboratorios",
   description:
-    "Análisis microbiológicos de alimentos, agua, leche, cosméticos y superficies, con detección de Salmonella, Listeria, E. coli y otros indicadores.",
+    "Laboratorio de análisis microbiológicos en Trujillo, La Libertad, Perú. 48+ servicios: análisis de alimentos, agua, leche, cosméticos. Detección Salmonella, Listeria, Staphylococcus, E. coli, coliformes. ISO certificado. Cotiza: +51 961 996 645.",
   keywords: [
     // Keywords geográficas principales
     "análisis microbiológicos Trujillo",
@@ -156,9 +156,10 @@ const microbiologicosServices = [
 export default function MicrobiologicosPage() {
   return (
     <>
+      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Servicios Microbiológicos en Trujillo"
-        serviceDescription="Laboratorio especializado en análisis microbiológicos en Trujillo, La Libertad, Perú para alimentos, agua, leche, cosméticos y superficies. Detección de Salmonella, Listeria, E. coli y Staphylococcus."
+        serviceDescription="Laboratorio especializado en análisis microbiológicos en Trujillo, La Libertad, Perú: alimentos, agua, leche, cosméticos, superficies. Más de 48 servicios con certificación. Detección de Salmonella, Listeria, E. coli, Staphylococcus."
         serviceUrl="https://aslaboratorios.com/servicios/microbiologicos"
         serviceType="Análisis Microbiológicos de Alimentos y Aguas"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima", "Ica", "Arequipa"]}
@@ -176,6 +177,13 @@ export default function MicrobiologicosPage() {
         listName="Servicios Microbiológicos AS Laboratorios Trujillo"
         listUrl="https://aslaboratorios.com/servicios/microbiologicos"
         items={microbiologicosServices}
+      />
+      <ProfessionalServiceStructuredData
+        serviceName="Análisis Microbiológicos Trujillo"
+        description="Laboratorio de análisis microbiológicos certificado en Trujillo, La Libertad, Perú. Análisis de alimentos, agua, leche y cosméticos. Detección de patógenos."
+        url="https://aslaboratorios.com/servicios/microbiologicos"
+        priceRange="$$"
+        image="/servicios/image.png"
       />
       <MicrobiologicosClient />
     </>

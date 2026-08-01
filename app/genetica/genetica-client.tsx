@@ -145,44 +145,42 @@ export default function GeneticaClient() {
           <div className="container mx-auto max-w-6xl relative z-10">
             <div className="flex items-center justify-center gap-6 mb-8">
               <div className="relative">
-                <div className="bg-gradient-to-br from-[#2e7d32] to-[#14401a] p-6 rounded-full shadow-2xl animate-pulse-slow">
-                  <Dna className="h-14 w-14 text-white animate-spin-slow" />
+                <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 p-6 rounded-full shadow-2xl animate-pulse-slow">
+                  <Dna className="h-16 w-16 text-white animate-spin-slow" />
                 </div>
-                <div className="absolute -inset-4 bg-[#43a047] rounded-full opacity-20 animate-ping" />
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-400 to-green-400 rounded-full opacity-20 animate-ping" />
               </div>
             </div>
 
             <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-serif mb-6 text-[#01283c]">
-                Genética <span className="text-[#2e7d32]">Molecular</span>
+              <h1 className="text-6xl lg:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 bg-clip-text text-transparent animate-gradient">
+                Genética Molecular
               </h1>
-              <div className="h-1 w-24 bg-gradient-to-r from-[#2e7d32] to-[#43a047] mx-auto rounded-full" />
+              <div className="h-1 w-32 bg-gradient-to-r from-blue-500 to-green-500 mx-auto rounded-full animate-pulse" />
             </div>
 
-            <p className="text-base sm:text-lg text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up">
+            <p className="text-2xl lg:text-3xl text-gray-600 mb-12 max-w-5xl mx-auto leading-relaxed animate-fade-in-up">
               Explora los fundamentos de la genética moderna: desde la inserción de genes hasta las aplicaciones
               biotecnológicas que están transformando la agricultura y la medicina.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 mb-16">
               {[
-                { text: "Inserción Génica", icon: Dna },
-                { text: "Plásmidos", icon: FlaskConical },
-                { text: "PCR", icon: Zap },
-                { text: "Taq Polimerasa", icon: TestTube },
+                { text: "Inserción Génica", color: "from-blue-500 to-blue-600", icon: Dna },
+                { text: "Plásmidos", color: "from-green-500 to-green-600", icon: FlaskConical },
+                { text: "PCR", color: "from-purple-500 to-purple-600", icon: Zap },
+                { text: "Taq Polimerasa", color: "from-orange-500 to-orange-600", icon: TestTube },
               ].map((item, index) => {
                 const Icon = item.icon
                 return (
                   <div
                     key={index}
-                    className="bg-white border border-gray-200 text-[#01283c] px-6 py-3 rounded-full shadow-sm hover:shadow-md hover:border-[#2e7d32]/40 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up group cursor-pointer"
+                    className={`bg-gradient-to-r ${item.color} text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-110 animate-fade-in-up group cursor-pointer`}
                     style={{ animationDelay: `${index * 0.2}s` }}
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#2e7d32]/10 text-[#2e7d32]">
-                        <Icon className="h-4 w-4" />
-                      </span>
-                      <span className="font-semibold text-sm">{item.text}</span>
+                    <div className="flex items-center gap-3">
+                      <Icon className="h-6 w-6 group-hover:animate-bounce" />
+                      <span className="font-semibold text-lg">{item.text}</span>
                     </div>
                   </div>
                 )

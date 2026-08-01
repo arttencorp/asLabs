@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -82,6 +84,17 @@
   }
 }
 
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: var(--font-poppins), "Poppins", sans-serif;
+  }
+}
+
 /* Main homepage redesign — intentionally scoped to avoid changing internal pages. */
 .home-redesign h1,
 .home-redesign h2,
@@ -117,21 +130,10 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans;
-    font-family: var(--font-poppins), "Poppins", sans-serif;
-  }
-}
-
 /* Scoped typography override for Sobre Nosotros: keep layout, remove Poppins */
 .about-nosotros-font,
 .about-nosotros-font * {
-  font-family: var(--font-poppins), "Poppins", sans-serif !important;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif !important;
 }
 
 /* Responsive optimizations */
@@ -465,68 +467,6 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Diagonal brand panel that splits hero against the photo */
-.clip-panel-diagonal {
-  clip-path: polygon(0 0, 100% 0, calc(100% - 120px) 100%, 0 100%);
-}
-
-.clip-panel-diagonal-rev {
-  clip-path: polygon(120px 0, 100% 0, 100% 100%, 0 100%);
-}
-
-/* Angled section dividers for a bolder, less rectangular look */
-.clip-angle-bottom {
-  clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
-}
-
-.clip-angle-bottom-sm {
-  clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%);
-}
-
-.clip-angle-top {
-  clip-path: polygon(0 8%, 100% 0, 100% 100%, 0 100%);
-}
-
-@media (min-width: 1024px) {
-  .clip-angle-bottom {
-    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
-  }
-  .clip-angle-top {
-    clip-path: polygon(0 6%, 100% 0, 100% 100%, 0 100%);
-  }
-}
-
-/* Decorative dot-grid pattern for futuristic accents */
-.bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(46, 125, 50, 0.18) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-.bg-dot-grid-light {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-@keyframes blob-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(3%, -4%) scale(1.05); }
-  66% { transform: translate(-3%, 3%) scale(0.97); }
-}
-
-.animate-blob-float {
-  animation: blob-float 14s ease-in-out infinite;
-}
-
-.animate-blob-float-slow {
-  animation: blob-float 20s ease-in-out infinite reverse;
-}
-
-/* Fade mask for edge-to-edge carousels */
-.fade-edges {
-  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
 }
 
 /* Logo carousel infinite scroll */

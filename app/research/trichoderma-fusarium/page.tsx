@@ -1,12 +1,10 @@
 import type { Metadata } from "next"
-import ResearchProjectDetail from "@/components/research/research-project-detail"
-import ResearchProjectStructuredData from "@/components/research/research-project-structured-data"
-import { researchProjects } from "@/data/research-project-details"
+import TrichodermaFusariumClient from "./trichoderma-fusarium-client"
 
 export const metadata: Metadata = {
-  title: "Trichoderma contra Fusarium oxysporum: Proyecto de Biocontrol",
+  title: "Trichoderma vs Fusarium Oxysporum Raza 2 - Control Biológico en Trujillo | AS Laboratorios Perú",
   description:
-    "Investigación sobre la capacidad antagonista de Trichoderma frente a Fusarium oxysporum Raza 2 y sus mecanismos de control biológico.",
+    "Investigación científica sobre la capacidad antagonista de Trichoderma contra Fusarium Oxysporum Raza 2. Análisis de mecanismos moleculares y biocontrol de enfermedades fúngicas en La Libertad, Perú. Proyecto CATFOM-001 dirigido por Antonio Victor Gabriel Guevara Escobar y Hellem Iveth Guevara Nuñez.",
   keywords: [
     "Trichoderma antagonista",
     "Trichoderma Trujillo",
@@ -37,7 +35,7 @@ export const metadata: Metadata = {
     siteName: "AS Laboratorios",
     images: [
       {
-        url: "/control-biologico.png",
+        url: "/biological-control.png",
         width: 1200,
         height: 630,
         alt: "Investigación Trichoderma vs Fusarium - Control Biológico",
@@ -51,7 +49,7 @@ export const metadata: Metadata = {
     title: "Trichoderma vs Fusarium - Control Biológico | AS Laboratorios",
     description:
       "Investigación de mecanismos moleculares de Trichoderma contra Fusarium Oxysporum Raza 2 en Trujillo, Perú",
-    images: ["/control-biologico.png"],
+    images: ["/biological-control.png"],
   },
   alternates: {
     canonical: "https://aslaboratorios.com/research/trichoderma-fusarium",
@@ -76,11 +74,5 @@ export const metadata: Metadata = {
 }
 
 export default function TrichodermaFusariumPage() {
-  const project = researchProjects["trichoderma-fusarium"]
-  return (
-    <>
-      <ResearchProjectStructuredData project={project} />
-      <ResearchProjectDetail project={project} />
-    </>
-  )
+  return <TrichodermaFusariumClient />
 }

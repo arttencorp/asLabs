@@ -11,16 +11,16 @@ import StudentTestimonials from "@/components/solucion/student-testimonials"
 import StudentContact from "@/components/solucion/student-contact"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Materiales y Servicios de Laboratorio para Estudiantes",
+  title: "Soluciones para Estudiantes",
   description:
-    "Materiales, kits, reactivos y apoyo de laboratorio para estudiantes y tesistas de biología, microbiología, biotecnología y carreras afines en Perú.",
+    "Materiales, kits y servicios especializados para estudiantes universitarios de biología, biotecnología y ciencias afines.",
   keywords: [
     "soluciones estudiantes",
     "kits de laboratorio",
     "materiales biología",
     "reactivos",
-    "reactivos para estudiantes",
-    "apoyo para tesis",
+    "equipos",
+    "universidad",
   ],
   path: "/solucion-estudiantes",
   image: "/student-solution-hero.png",

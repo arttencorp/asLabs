@@ -150,7 +150,7 @@ export const plantines: Plantin[] = [
     },
   },
   {
-    id: "arandano-invitro",
+    id: "banano-cavendish",
     name: "Arándano InVitro ASAR",
     category: "Frutales",
     description:

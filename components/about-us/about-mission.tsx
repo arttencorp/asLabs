@@ -1,21 +1,14 @@
 "use client"
 
-import { Eye, FlaskConical, Sprout, Target } from "lucide-react"
-import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
-
-const milestones = [
-  { year: "1997", title: "El inicio", text: "Nacemos en Trujillo con una visión enfocada en biotecnología vegetal.", icon: Sprout },
-  { year: "Evolución", title: "Más capacidades", text: "Integramos microbiología, diagnóstico agrícola y control biológico.", icon: FlaskConical },
-  { year: "Hoy", title: "Ciencia aplicada", text: "Conectamos laboratorio, vivero, campo e investigación en una sola propuesta.", icon: Target },
-]
+import Image from "next/image"
 
 export default function AboutMission() {
   return (
-    <section id="mision" data-navbar-theme="light" className="w-full scroll-mt-32 bg-white px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    <section id="mision" className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left - Text Content */}
-          <ScrollReveal direction="right" className="space-y-7">
+          <div className="space-y-6">
             <div className="space-y-4">
               <div className="inline-block">
                 <span className="text-xs font-semibold text-[#2e7d32] uppercase tracking-[0.2em] bg-[#e8f5e9] px-5 py-3 rounded-full border border-[#2e7d32]/20">
@@ -23,60 +16,52 @@ export default function AboutMission() {
                 </span>
               </div>
               <div>
-                <h2 className="text-3xl font-serif font-bold leading-tight text-gray-900 sm:text-5xl">Nuestra <span className="text-[#2e7d32]">historia</span></h2>
+                <h2 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 leading-tight mb-2">Nuestra</h2>
+                <h2 className="text-6xl md:text-7xl font-serif font-bold text-[#2e7d32] leading-tight">Historia</h2>
               </div>
-              <p className="max-w-2xl text-base font-medium leading-7 text-gray-700 sm:text-lg sm:leading-8">
-                Desde 1997 convertimos conocimiento científico en soluciones para la agricultura peruana. Crecimos desde la biotecnología vegetal hasta integrar diagnóstico, control biológico, producción de plantines e investigación aplicada.
+              <p className="text-lg text-gray-700 leading-relaxed font-medium">
+                Fundada en 1997, AS Laboratorios nació como una visión de aplicar biotecnología avanzada al servicio de la agricultura peruana. Hoy somos una empresa integral con soluciones en biotecnología vegetal, control biológico sostenible y diagnóstico agrícola.
               </p>
             </div>
 
-            <StaggerGroup className="relative grid gap-3 sm:grid-cols-3" staggerDelay={0.1}>
-              <span className="absolute left-[16.66%] right-[16.66%] top-5 hidden h-px bg-[#bfd2c2] sm:block" />
-              {milestones.map((milestone) => {
-                const Icon = milestone.icon
-                return (
-                  <StaggerItem key={milestone.year} className="relative flex gap-4 rounded-2xl border border-[#dfe9e1] bg-[#f7faf7] p-4 sm:block sm:border-0 sm:bg-transparent sm:p-0">
-                    <span className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full border-4 border-white bg-[#2e7d32] text-white shadow-sm sm:mb-4">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#d06d28]">{milestone.year}</p>
-                      <h3 className="mt-1 text-base font-bold text-gray-900">{milestone.title}</h3>
-                      <p className="mt-1.5 text-xs font-medium leading-5 text-gray-600">{milestone.text}</p>
-                    </div>
-                  </StaggerItem>
-                )
-              })}
-            </StaggerGroup>
-          </ScrollReveal>
+            <div className="pt-6 border-t-2 border-gray-200 space-y-6">
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-[#e8f5e9] rounded-full flex items-center justify-center">
+                    <span className="text-2xl font-serif text-[#2e7d32]">◆</span>
+                  </div>
+                  <h3 className="text-2xl font-serif font-bold text-gray-900">Misión</h3>
+                </div>
+                <p className="text-lg text-gray-700 leading-relaxed font-medium pl-16">
+                  Desarrollar y proveer soluciones biotecnológicas innovadoras y sostenibles para la agricultura 
+                  peruana, contribuyendo a la seguridad alimentaria, conservación ambiental y formación de nuevos científicos.
+                </p>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center">
+                    <span className="text-2xl font-serif text-[#e65100]">◆</span>
+                  </div>
+                  <h3 className="text-2xl font-serif font-bold text-gray-900">Visión</h3>
+                </div>
+                <p className="text-lg text-gray-700 leading-relaxed font-medium pl-16">
+                  Ser líderes en biotecnología agrícola en América Latina, reconocidos por nuestra investigación 
+                  de calidad, innovación continua y compromiso con la sostenibilidad.
+                </p>
+              </div>
+            </div>
+          </div>
 
           {/* Right - Image */}
-          <ScrollReveal direction="left" delay={0.1} className="group relative order-last min-h-[340px] h-full overflow-hidden rounded-[1.75rem] shadow-[0_28px_80px_-34px_rgba(12,57,38,0.5)] sm:min-h-[480px] lg:min-h-[560px]">
+          <div className="relative h-full min-h-[500px] order-last">
             <img
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/AGROINDUSTRIAL%20ANALISIS-ObbdnPOmz6huCECzNFRd8h6eOPR2nr.webp"
               alt="Investigadores de AS Laboratorios en acción"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover rounded-2xl shadow-2xl"
             />
-          </ScrollReveal>
+          </div>
         </div>
-
-        <StaggerGroup className="mt-10 grid gap-4 border-t border-gray-200 pt-8 sm:mt-12 sm:grid-cols-2" staggerDelay={0.12}>
-          <StaggerItem className="rounded-2xl border border-[#dfe9e1] bg-[#f7faf7] p-5 sm:p-6">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e8f5e9] text-[#2e7d32]"><Target className="h-5 w-5" /></div>
-              <h3 className="text-xl font-serif font-bold text-gray-900 sm:text-2xl">Misión</h3>
-            </div>
-            <p className="text-sm font-medium leading-6 text-gray-700">Desarrollar soluciones biotecnológicas innovadoras y sostenibles para la agricultura peruana, la conservación ambiental y la formación científica.</p>
-          </StaggerItem>
-
-          <StaggerItem className="rounded-2xl border border-orange-100 bg-orange-50/50 p-5 sm:p-6">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-[#e65100]"><Eye className="h-5 w-5" /></div>
-              <h3 className="text-xl font-serif font-bold text-gray-900 sm:text-2xl">Visión</h3>
-            </div>
-            <p className="text-sm font-medium leading-6 text-gray-700">Ser referentes latinoamericanos en biotecnología agrícola por la calidad de nuestra investigación, innovación continua y compromiso sostenible.</p>
-          </StaggerItem>
-        </StaggerGroup>
       </div>
     </section>
   )

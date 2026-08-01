@@ -1,9 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Sprout, Scissors, Droplets, FlaskConical, Thermometer, Copy, GitBranch, Wind, MapPin } from "lucide-react"
-
-const stepIcons = [Sprout, Scissors, Droplets, FlaskConical, Thermometer, Copy, GitBranch, Wind, MapPin]
+import Image from "next/image"
 
 interface StepProps {
   number: number
@@ -123,22 +121,17 @@ export default function BiotechProcess() {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 h-full">
-              {/* Ilustración de marca en lugar de foto placeholder */}
-              <div className="relative h-64 bg-gradient-to-br from-[#2e7d32] to-[#14401a] flex items-center justify-center overflow-hidden">
-                <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-15"></div>
-                <span className="absolute top-6 left-6 text-white/25 font-serif font-bold text-7xl leading-none">{String(activeStep + 1).padStart(2, "0")}</span>
-                {(() => {
-                  const Icon = stepIcons[activeStep]
-                  return <Icon className="relative h-24 w-24 text-white/90 transition-transform duration-500" />
-                })()}
-                {(() => {
-                  const Icon = stepIcons[activeStep]
-                  return <Icon className="pointer-events-none absolute -right-8 -bottom-8 h-52 w-52 text-white/10" />
-                })()}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 h-full">
+              <div className="relative h-80">
+                <Image
+                  src={steps[activeStep].image || "/placeholder.svg"}
+                  alt={steps[activeStep].title}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
               </div>
               <div className="p-6">
-                <h3 className="text-2xl font-bold text-[#2e7d32] mb-4 font-serif">
+                <h3 className="text-2xl font-bold text-[#2e7d32] mb-4">
                   Paso {activeStep + 1}: {steps[activeStep].title}
                 </h3>
                 <p className="text-[#01283c]">{steps[activeStep].description}</p>
