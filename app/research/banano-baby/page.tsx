@@ -1,12 +1,10 @@
 import type { Metadata } from "next"
-import ResearchProjectDetail from "@/components/research/research-project-detail"
-import ResearchProjectStructuredData from "@/components/research/research-project-structured-data"
-import { researchProjects } from "@/data/research-project-details"
+import BananoBabyClient from "./banano-baby-client"
 
 export const metadata: Metadata = {
-  title: "Banano Baby Resistente a Hongos: Proyecto de Investigación",
+  title: "Proyecto Banano Baby - Variedad Resistente a Hongos | AS Laboratorios",
   description:
-    "Proyecto de mejoramiento genético para desarrollar banano Baby con resistencia a hongos fitopatógenos mediante investigación y cultivo in vitro.",
+    "Desarrollo de una variedad de banano baby resistente a hongos fitopatógenos. Proyecto de mejoramiento genético liderado por Antonio Guevara Escobar en AS Laboratorios, Trujillo, Perú.",
   keywords: [
     "banano baby",
     "resistencia hongos",
@@ -66,11 +64,5 @@ export const metadata: Metadata = {
 }
 
 export default function BananoBabyPage() {
-  const project = researchProjects["banano-baby"]
-  return (
-    <>
-      <ResearchProjectStructuredData project={project} />
-      <ResearchProjectDetail project={project} />
-    </>
-  )
+  return <BananoBabyClient />
 }

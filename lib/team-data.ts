@@ -9,10 +9,6 @@ export interface TeamMember {
   linkedIn: string
   bio?: string
   education?: string[]
-  specialties?: string[]
-  experience?: string[]
-  responsibilities?: string[]
-  highlights?: string[]
 }
 
 export interface TeamSection {
@@ -39,26 +35,6 @@ export const teamData: TeamSection[] = [
           'Especialización en Entomología - Universidad Nacional de Trujillo',
           'Master en Gestión Pública - Universidad Nacional de Trujillo',
         ],
-        specialties: [
-          'Entomología aplicada',
-          'Control biológico',
-          'Crianza de insectos benéficos',
-          'Gestión de laboratorios',
-        ],
-        experience: [
-          'Gerencia General de AS Laboratorios Control Biológico S.A.C. desde 2005.',
-          'Dirección de la producción de Paratheresia claripalpis, Chrysoperla sp. y Trichogramma spp.',
-          'Participación en programas de control biológico para empresas agroindustriales y productores de La Libertad.',
-        ],
-        responsibilities: [
-          'Dirigir la estrategia general y las prioridades operativas de AS Laboratorios.',
-          'Supervisar los procesos de producción y calidad de organismos benéficos.',
-          'Articular el trabajo técnico con clientes, productores y entidades del sector agrícola.',
-        ],
-        highlights: [
-          'Proveedora autorizada de agentes de control biológico registrada por SENASA.',
-          'Experiencia acompañando programas agrícolas orientados a reducir el uso de plaguicidas.',
-        ],
       },
     ],
   },
@@ -76,33 +52,13 @@ export const teamData: TeamSection[] = [
         linkedIn: '#',
         bio: 'Antonio Víctor Gabriel Guevara Escobar es Gerente de Gestión en AS Labs y se desempeña en áreas vinculadas a administración financiera y de personal, así como en procesos de aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal. De forma paralela, ocupa una jefatura de departamento en Sparked Host LLC, empresa con sede en Utah, Estados Unidos, en la que interviene en procesos técnicos, soporte remoto, gestión de proyectos digitales y análisis de métricas internas.\n\nCuenta con competencias en biotecnología y microbiología aplicada, análisis de datos, ciencia computacional, comunicación científica, diseño visual, gestión ambiental, seguridad industrial, marketing digital y liderazgo de equipos técnicos. Además, posee dominio del español como lengua materna, inglés americano avanzado, inglés británico intermedio y conocimientos básicos de alemán.',
         education: [
-          'Business Specializations — The Wharton School',
+          'Especialización en Administración y Gestión de Empresas - The Wharton School',
           'Microbiología y Parasitología - Universidad Nacional de Trujillo',
           'Inglés Avanzado - Asociación Cultural Peruano Británica',
           'Inglés Intermedio - Asociación Peruano Americana El Cultural',
           'Gestión Ambiental - Colegio de Ingenieros del Perú',
           'Análisis de Datos - IBS International Business School Americas',
           'Marketing Digital y Diseño Gráfico Avanzado - Fundación Romero',
-        ],
-        specialties: [
-          'Gestión administrativa y financiera',
-          'Microbiología y biotecnología aplicada',
-          'Análisis de datos',
-          'Gestión de proyectos digitales',
-        ],
-        experience: [
-          'Gerencia de Gestión en AS Labs, con participación en administración financiera y gestión de personal.',
-          'Trabajo técnico en aislamiento e identificación de microorganismos contaminantes y embriogénesis vegetal.',
-          'Jefatura de departamento en Sparked Host LLC, con funciones técnicas, soporte remoto y seguimiento de métricas.',
-        ],
-        responsibilities: [
-          'Coordinar recursos, procesos administrativos y seguimiento de la operación interna.',
-          'Integrar herramientas digitales y análisis de información para apoyar la toma de decisiones.',
-          'Acompañar proyectos técnicos y equipos multidisciplinarios vinculados a ciencia y tecnología.',
-        ],
-        highlights: [
-          'Perfil interdisciplinario entre gestión empresarial, ciencias biológicas y tecnología.',
-          'Experiencia en comunicación científica, diseño visual y liderazgo de equipos técnicos.',
         ],
       },
     ],

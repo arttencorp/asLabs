@@ -9,9 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Cultivo de Tejidos y Micropropagación en Trujillo | AS Laboratorios",
+  title: "Biotecnología Vegetal en Trujillo Perú | Cultivo Tejidos, Micropropagación In Vitro | AS Laboratorios",
   description:
-    "Biotecnología vegetal, cultivo de tejidos, micropropagación in vitro, microinjerto, termoterapia y conservación de material vegetal en Trujillo.",
+    "Laboratorio de biotecnología vegetal en Trujillo, La Libertad, Perú. Micropropagación in vitro, cultivo de tejidos, microinjerto, termoterapia, criopreservación. Plantas libres de virus para frutales y ornamentales. Cotiza: +51 961 996 645.",
   keywords: [
     // Keywords geográficas principales
     "biotecnología vegetal Trujillo",
@@ -149,6 +149,7 @@ const biotecnologiaServices = [
 export default function BiotecnologiaVegetalPage() {
   return (
     <>
+      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Servicios de Biotecnología Vegetal en Trujillo"
         serviceDescription="Laboratorio especializado en biotecnología vegetal en Trujillo, La Libertad, Perú: micropropagación in vitro, cultivo de tejidos, microinjerto, termoterapia, criopreservación. Producción de plantas libres de virus."
@@ -169,6 +170,13 @@ export default function BiotecnologiaVegetalPage() {
         listName="Servicios de Biotecnología Vegetal AS Laboratorios Trujillo"
         listUrl="https://aslaboratorios.com/servicios/biotecnologia-vegetal"
         items={biotecnologiaServices}
+      />
+      <ProfessionalServiceStructuredData
+        serviceName="Biotecnología Vegetal Trujillo"
+        description="Laboratorio de biotecnología vegetal certificado en Trujillo, La Libertad, Perú. Micropropagación in vitro, cultivo de tejidos y plantas libres de virus."
+        url="https://aslaboratorios.com/servicios/biotecnologia-vegetal"
+        priceRange="$$"
+        image="/servicios/image.png"
       />
       <BiotecnologiaVegetalClient />
     </>

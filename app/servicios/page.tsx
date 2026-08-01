@@ -24,19 +24,13 @@ import {
   MapPin,
   Clock,
   Award,
-  Send,
-  PackageCheck,
-  FileCheck2,
-  ShieldCheck,
-  MessageCircle,
-  ChevronRight,
 } from "lucide-react"
-import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 
 export const metadata: Metadata = {
-  title: "Análisis y Servicios de Laboratorio en Trujillo | AS Laboratorios",
+  title:
+    "Servicios de Laboratorio en Trujillo Perú | Análisis Microbiológicos, Fitopatología, Biotecnología | AS Laboratorios",
   description:
-    "Análisis microbiológicos, fitopatología, bacteriología, biotecnología vegetal y apoyo a la investigación para agricultura, industria y academia.",
+    "Laboratorio certificado en Trujillo, La Libertad, Perú. Más de 100 servicios: análisis microbiológicos de alimentos y agua, fitopatología, biotecnología vegetal, bacteriología. Resultados confiables para agricultura e industria. Cotiza ahora: +51 961 996 645.",
   keywords: [
     // Keywords geográficas principales
     "laboratorio Trujillo",
@@ -117,6 +111,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: "google-site-verification-code",
+  },
   category: "Servicios de Laboratorio",
   authors: [{ name: "AS Laboratorios", url: "https://aslaboratorios.com" }],
   creator: "AS Laboratorios",
@@ -134,7 +131,7 @@ export const metadata: Metadata = {
     "DC.title": "Servicios de Laboratorio AS Laboratorios Trujillo",
     "DC.creator": "AS Laboratorios",
     "DC.subject": "Laboratorio, Microbiología, Biotecnología, Fitopatología, Trujillo, Perú",
-    "DC.description": "Servicios de laboratorio especializados en Trujillo, Perú",
+    "DC.description": "Servicios de laboratorio certificados en Trujillo, Perú",
     "DC.publisher": "AS Laboratorios",
     "DC.language": "es-PE",
     "revisit-after": "7 days",
@@ -147,8 +144,7 @@ const servicios = [
   {
     title: "Fitopatología",
     description:
-      "Identificamos hongos y bacterias que afectan cultivos para orientar decisiones sanitarias con evidencia.",
-    audience: "Cultivos y suelos",
+      "Identificación y análisis de patógenos en plantas y suelos agrícolas. Servicio líder en Trujillo y La Libertad para detectar bacterias, hongos y microorganismos fitopatógenos que afectan tus cultivos.",
     href: "/servicios/fitopatologia",
     icon: Bug,
     color: "from-orange-500 to-amber-500",
@@ -167,8 +163,7 @@ const servicios = [
   {
     title: "Medio Ambiente",
     description:
-      "Evaluamos agua, superficies y ambientes mediante indicadores microbiológicos relevantes para su control.",
-    audience: "Agua y superficies",
+      "Análisis microbiológico de agua, superficies y ambientes en Trujillo. Garantizamos la calidad ambiental mediante detección de coliformes, E. coli y aerobios mesófilos según normativa peruana.",
     href: "/servicios/medio-ambiente",
     icon: Leaf,
     color: "from-emerald-500 to-green-500",
@@ -182,8 +177,7 @@ const servicios = [
   {
     title: "Servicios Microbiológicos",
     description:
-      "Analizamos alimentos, agua y superficies para detectar patógenos y verificar condiciones microbiológicas.",
-    audience: "Alimentos y procesos",
+      "Análisis completos de alimentos, agua, leche y cosméticos en Trujillo, Perú. Detectamos Salmonella, Listeria, Staphylococcus y otros microorganismos patógenos con certificación para industria alimentaria.",
     href: "/servicios/microbiologicos",
     icon: Microscope,
     color: "from-blue-500 to-indigo-500",
@@ -197,8 +191,7 @@ const servicios = [
   {
     title: "Biotecnología Vegetal",
     description:
-      "Desarrollamos cultivo de tejidos, micropropagación y soluciones in vitro para material vegetal confiable.",
-    audience: "Propagación vegetal",
+      "Cultivo de tejidos vegetales y micropropagación in vitro en La Libertad. Producimos plantas libres de patógenos mediante técnicas avanzadas de biotecnología para frutales y ornamentales.",
     href: "/servicios/biotecnologia-vegetal",
     icon: FlaskConical,
     color: "from-teal-500 to-cyan-500",
@@ -212,8 +205,7 @@ const servicios = [
   {
     title: "Bacteriología General",
     description:
-      "Preparamos suspensiones, fermentaciones y ensayos bacterianos bajo condiciones controladas y trazables.",
-    audience: "Procesos bacterianos",
+      "Suspensiones McFarland, fermentación y curvas de crecimiento en Trujillo. Desarrollamos biofertilizantes y bioestimulantes para agricultura sostenible en todo el norte del Perú.",
     href: "/servicios/bacteriologia-general",
     icon: Beaker,
     color: "from-purple-500 to-violet-500",
@@ -227,8 +219,7 @@ const servicios = [
   {
     title: "Apoyo a la Investigación",
     description:
-      "Acompañamos tesis y proyectos con protocolos, identificación microbiana y análisis especializado.",
-    audience: "Tesis y proyectos",
+      "Acompañamiento técnico para tesis y proyectos de investigación en Trujillo. Incluye 16S rRNA, identificación bacteriana, aislamiento ambiental y análisis bioinformático.",
     href: "/servicios/apoyo-investigacion",
     icon: BookOpenCheck,
     color: "from-sky-500 to-blue-600",
@@ -259,11 +250,13 @@ export default function ServiciosPage() {
 
   return (
     <>
+      <OrganizationStructuredData />
+      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Servicios de Laboratorio AS Laboratorios Trujillo"
-        serviceDescription="Catálogo de servicios de laboratorio especializados en Trujillo, La Libertad, Perú. Análisis microbiológicos, fitopatología, biotecnología vegetal, bacteriología y apoyo a la investigación."
+        serviceDescription="Catálogo completo de más de 100 servicios de laboratorio especializados en Trujillo, La Libertad, Perú. Análisis microbiológicos, fitopatología, biotecnología vegetal y bacteriología con certificación."
         serviceUrl="https://aslaboratorios.com/servicios"
-        serviceType="Servicios de Laboratorio"
+        serviceType="Servicios de Laboratorio Certificados"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima", "Ica", "Arequipa"]}
       />
       <BreadcrumbStructuredData
@@ -283,238 +276,175 @@ export default function ServiciosPage() {
       />
       <Navbar />
 
-      <main className="min-h-screen bg-[#f5f7f4] font-serif">
-        <section className="relative overflow-hidden bg-[#e9f0ea] pb-16 pt-28 sm:pt-32 lg:pb-20">
-          <div className="pointer-events-none absolute -left-32 top-16 h-80 w-80 rounded-full bg-[#b9d5bd]/40 blur-3xl" />
-          <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-[#f1c67e]/20 blur-3xl" />
+      <main className="min-h-screen bg-background font-serif">
+        {/* Hero Section - Optimized */}
+        <section className="relative py-16 overflow-hidden">
+          {/* Background Image Grid */}
+          <div className="absolute inset-0 grid grid-cols-3 md:grid-cols-6 opacity-30">
+            {servicios.map((s, i) => (
+              <div key={i} className="relative h-full">
+                <Image
+                  src={s.image || "/placeholder.svg"}
+                  alt={`Servicio de ${s.title} AS Laboratorios Trujillo`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
-          <div className="container relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-            <ScrollReveal>
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#b8cfbd] bg-white/65 px-3.5 py-1.5 text-xs font-bold text-[#245c3d] backdrop-blur-md">
-                  <Microscope className="h-4 w-4" />
+          <div className="container mx-auto max-w-6xl px-4 relative z-10">
+            <div className="max-w-4xl">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-medium md:text-sm">
+                  <Microscope className="w-4 h-4" />
                   {totalServicios}+ servicios especializados
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#cbd8cd] bg-white/65 px-3.5 py-1.5 text-xs font-medium text-[#587064] backdrop-blur-md">
-                  <MapPin className="h-4 w-4 text-[#2e7048]" />
-                  Trujillo, Perú
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-full text-xs font-medium md:text-sm">
+                  <MapPin className="w-4 h-4" />
+                  Trujillo, La Libertad, Perú
+                </span>
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 text-blue-600 rounded-full text-xs font-medium md:text-sm">
+                  <Award className="w-4 h-4" />
+                  Laboratorio Certificado por Senasa (Plantines InVitro)
                 </span>
               </div>
-
-              <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.04] tracking-[-0.035em] text-[#173a2c] sm:text-5xl">
-                Ciencia aplicada para tomar mejores decisiones
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Servicios de <span className="text-primary">Laboratorio</span> en Trujillo, Perú
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-[#5d7167] sm:text-lg">
-                Análisis, biotecnología y soporte técnico para agricultura, alimentos, ambiente e investigación. Te
-                ayudamos a elegir el servicio y a preparar correctamente tu muestra.
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-3xl mb-6">
+                Soluciones integrales en análisis microbiológicos, fitopatología, biotecnología vegetal y bacteriología
+                con los más altos estándares de calidad. Laboratorio líder en La Libertad con más de 20 años de
+                experiencia.
               </p>
-
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20elegir%20un%20servicio%20de%20laboratorio"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#173f2e] px-6 text-sm font-bold text-white shadow-[0_16px_30px_-18px_rgba(16,61,42,0.9)] transition hover:-translate-y-0.5 hover:bg-[#245a40]"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  Solicitar orientación
-                </a>
-                <a
-                  href="#especialidades"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#b7c8bb] bg-white/70 px-6 text-sm font-bold text-[#254d39] transition hover:border-[#8dad94] hover:bg-white"
-                >
-                  Ver especialidades
-                  <ArrowRight className="h-4 w-4" />
-                </a>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                <span className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-primary" />
+                  +51 961 996 645
+                </span>
+                <span className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-primary" />
+                  Lun-Vie: 8am-6pm | Sáb: 8am-1pm
+                </span>
+                <span className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  Huancavelica 315, Palermo, Trujillo
+                </span>
               </div>
-
-              <div className="mt-8 grid max-w-xl grid-cols-3 gap-3 border-t border-[#c8d6ca] pt-5">
-                {[
-                  { value: "6", label: "áreas técnicas" },
-                  { value: `${totalServicios}+`, label: "servicios" },
-                  { value: "1997", label: "desde" },
-                ].map((item) => (
-                  <div key={item.label}>
-                    <p className="text-xl font-bold text-[#1d5137] sm:text-2xl">{item.value}</p>
-                    <p className="mt-0.5 text-[11px] uppercase tracking-[0.12em] text-[#6c7f75]">{item.label}</p>
-                  </div>
-                ))}
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.12} className="relative mx-auto w-full max-w-xl">
-              <div className="relative h-[410px] overflow-hidden rounded-[30px] border border-white/80 bg-[#dfe9df] shadow-[0_30px_70px_-35px_rgba(12,54,36,0.55)] sm:h-[460px]">
-                <Image
-                  src="/servicios/fito.jpg"
-                  alt="Especialista de AS Laboratorios trabajando con una muestra vegetal"
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 520px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#082b1e]/80 via-[#123f2a]/10 to-transparent" />
-
-                <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/85 px-3 py-2 text-xs font-bold text-[#24583d] shadow-lg backdrop-blur-xl sm:left-6 sm:top-6">
-                  <ShieldCheck className="h-4 w-4" />
-                  Atención técnica desde el primer contacto
-                </div>
-
-                <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/30 bg-[#103928]/90 p-5 text-white shadow-2xl backdrop-blur-xl sm:inset-x-6 sm:bottom-6 sm:p-6">
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#b9d7c2]">Antes de enviar tu muestra</p>
-                  <p className="mt-2 text-xl font-bold">Confirma qué necesitas evaluar</p>
-                  <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/80">
-                    {["Tipo de muestra", "Cantidad necesaria", "Conservación", "Tiempo de entrega"].map((item) => (
-                      <span key={item} className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#91c89d]" />
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
+            </div>
           </div>
         </section>
 
-        <div className="relative z-20 mx-auto -mt-6 w-[calc(100%-2rem)] max-w-6xl">
-          <div className="flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-white/90 bg-white/90 p-2 shadow-[0_18px_45px_-24px_rgba(15,55,38,0.42)] backdrop-blur-2xl [scrollbar-width:none]">
-            <span className="shrink-0 rounded-xl bg-[#173f2e] px-4 py-2.5 text-xs font-bold text-white">Especialidades</span>
-            {servicios.map((servicio) => (
-              <Link
-                key={servicio.href}
-                href={servicio.href}
-                className="shrink-0 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-[#52675c] transition hover:bg-[#edf3ee] hover:text-[#245f3e]"
-              >
-                {servicio.title}
-              </Link>
-            ))}
-          </div>
-        </div>
+        {/* Search Section */}
+        <AnalysisSearch />
 
-        <section id="especialidades" className="scroll-mt-24 bg-white py-16 sm:py-20">
+        {/* Services Grid */}
+        <section className="py-14 bg-muted/30">
           <div className="container mx-auto max-w-6xl px-4">
-            <ScrollReveal className="mb-9 grid gap-5 md:grid-cols-[0.85fr_1.15fr] md:items-end">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#2e7048]">Áreas de servicio</span>
-                <h2 className="mt-3 text-3xl font-bold tracking-[-0.025em] text-[#173a2c] sm:text-4xl">Encuentra la especialidad adecuada</h2>
-              </div>
-              <p className="max-w-2xl text-sm leading-6 text-[#66796f] md:justify-self-end sm:text-base">
-                Explora cada área para conocer sus análisis, alcances y aplicaciones. Si aún no sabes cuál elegir,
-                puedes buscar por el nombre del microorganismo, muestra o necesidad.
-              </p>
-            </ScrollReveal>
-
-            <StaggerGroup className="grid gap-5 md:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
-              {servicios.map((servicio) => (
-                <StaggerItem key={servicio.title} className="h-full">
-                  <Link
-                    href={servicio.href}
-                    className="group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#dfe7e1] bg-[#fbfcfb] transition duration-500 hover:-translate-y-1.5 hover:border-[#b9cfbe] hover:shadow-[0_24px_55px_-28px_rgba(18,64,44,0.45)]"
-                    aria-label={`Ver servicios de ${servicio.title}`}
-                  >
-                    <div className="relative h-44 overflow-hidden">
+            <div className="grid gap-6">
+              {servicios.map((servicio, index) => (
+                <Link
+                  key={servicio.title}
+                  href={servicio.href}
+                  className="group block bg-card rounded-2xl border border-border overflow-hidden hover:shadow-2xl hover:border-primary/20 transition-all duration-500"
+                  aria-label={`Ver servicios de ${servicio.title} en Trujillo`}
+                >
+                  <div className="flex flex-col lg:flex-row">
+                    {/* Image Section */}
+                    <div
+                      className={`relative w-full lg:w-[340px] h-56 lg:h-[240px] flex-shrink-0 overflow-hidden ${index % 2 === 1 ? "lg:order-2" : ""}`}
+                    >
                       <Image
                         src={servicio.image || "/placeholder.svg"}
-                        alt={`${servicio.title} en AS Laboratorios`}
+                        alt={`Servicio de ${servicio.title} - AS Laboratorios Trujillo Perú`}
                         fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        sizes="(max-width: 768px) 100vw, 340px"
                       />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${servicio.color} opacity-35`} />
-                      <div className="absolute inset-x-4 top-4 flex items-center justify-between">
-                        <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/70 bg-white/90 shadow-lg backdrop-blur-md">
-                          <servicio.icon className={`h-5 w-5 ${servicio.textColor}`} />
-                        </span>
-                        <span className="rounded-full border border-white/60 bg-white/90 px-3 py-1.5 text-[11px] font-bold text-[#345845] shadow-md backdrop-blur-md">
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-t ${servicio.color} opacity-30 group-hover:opacity-20 transition-opacity`}
+                      />
+                      <div className="absolute top-4 left-4">
+                        <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-xl">
+                          <servicio.icon className={`w-6 h-6 ${servicio.textColor}`} />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-4 right-4">
+                        <span
+                          className={`inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm ${servicio.textColor} text-xs font-bold rounded-full shadow-lg`}
+                        >
                           {servicio.count} servicios
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex flex-1 flex-col p-5 sm:p-6">
-                      <p className={`text-[11px] font-bold uppercase tracking-[0.16em] ${servicio.textColor}`}>{servicio.audience}</p>
-                      <h3 className="mt-2 text-xl font-bold text-[#203e31] transition-colors group-hover:text-[#2e7048]">{servicio.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-[#687a71]">{servicio.description}</p>
-
-                      <div className="mt-5 space-y-2.5 border-t border-[#e2e9e4] pt-4">
-                        {servicio.services.slice(0, 3).map((service) => (
-                          <span key={service} className="flex items-center gap-2 text-xs text-[#566a60]">
-                            <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${servicio.textColor}`} />
-                            {service}
-                          </span>
-                        ))}
+                    {/* Content Section */}
+                    <div
+                      className={`flex-1 p-6 lg:p-8 flex flex-col justify-center ${index % 2 === 1 ? "lg:order-1" : ""}`}
+                    >
+                      <div className="flex items-start justify-between gap-4 mb-3">
+                        <h2 className="text-xl lg:text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                          {servicio.title}
+                        </h2>
+                        <div
+                          className={`w-10 h-10 rounded-full ${servicio.bgColor} flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all`}
+                        >
+                          <ArrowRight
+                            className={`w-5 h-5 ${servicio.textColor} group-hover:translate-x-1 transition-transform`}
+                          />
+                        </div>
                       </div>
 
-                      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#285f40]">
-                        Explorar especialidad
-                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </span>
+                      <p className="text-muted-foreground mb-5 leading-relaxed text-sm lg:text-base">
+                        {servicio.description}
+                      </p>
+
+                      <div className="grid sm:grid-cols-2 gap-2.5">
+                        {servicio.services.map((service, i) => (
+                          <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <CheckCircle2 className={`w-4 h-4 ${servicio.textColor} flex-shrink-0`} />
+                            <span>{service}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </Link>
-                </StaggerItem>
+                  </div>
+                </Link>
               ))}
-            </StaggerGroup>
+            </div>
           </div>
         </section>
 
-        <AnalysisSearch />
-
-        <section className="bg-white py-16 sm:py-20">
+        {/* CTA Section */}
+        <section className="py-14">
           <div className="container mx-auto max-w-6xl px-4">
-            <ScrollReveal className="mb-9 max-w-2xl">
-              <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#2e7048]">De la consulta al resultado</span>
-              <h2 className="mt-3 text-3xl font-bold tracking-[-0.025em] text-[#183c2d] sm:text-4xl">Una atención clara en tres pasos</h2>
-              <p className="mt-3 text-sm leading-6 text-[#66796f] sm:text-base">
-                Coordinamos contigo el servicio, la recepción de la muestra y el entregable para reducir dudas antes de iniciar.
-              </p>
-            </ScrollReveal>
-            <StaggerGroup className="grid gap-4 md:grid-cols-3" staggerDelay={0.1}>
-              {[
-                { icon: Send, number: "01", title: "Cuéntanos qué necesitas", text: "Indica qué deseas evaluar, controlar o investigar y en qué tipo de muestra." },
-                { icon: PackageCheck, number: "02", title: "Prepara y entrega la muestra", text: "Te indicamos cantidad, recipiente, conservación y condiciones de recepción." },
-                { icon: FileCheck2, number: "03", title: "Recibe resultados claros", text: "Obtén el informe correspondiente y orientación para resolver consultas técnicas." },
-              ].map((step) => (
-                <StaggerItem key={step.number}>
-                  <div className="group h-full rounded-[24px] border border-[#dfe7e1] bg-[#f8faf8] p-6 transition hover:-translate-y-1 hover:border-[#b9d1bf] hover:shadow-xl sm:p-7">
-                    <div className="flex items-center justify-between">
-                      <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#e1ede3] text-[#2e7048]"><step.icon className="h-5 w-5" /></span>
-                      <span className="text-3xl font-bold text-[#d9e5dc]">{step.number}</span>
-                    </div>
-                    <h3 className="mt-6 text-lg font-bold text-[#234436]">{step.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-[#6d7e75]">{step.text}</p>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerGroup>
-          </div>
-        </section>
-
-        <section className="bg-[#f5f7f4] py-14 sm:py-16">
-          <div className="container mx-auto max-w-6xl px-4">
-            <ScrollReveal>
-              <div className="relative overflow-hidden rounded-[28px] bg-[#123b2a] px-6 py-8 shadow-[0_30px_70px_-40px_rgba(8,42,28,0.8)] sm:px-10 sm:py-10 lg:px-12">
-                <div className="pointer-events-none absolute -right-20 -top-32 h-80 w-80 rounded-full bg-[#62a670]/25 blur-3xl" />
-                <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-[#ef9f38]/15 blur-3xl" />
-                <div className="relative z-10 flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
-                  <div className="max-w-2xl">
-                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#a9d3b2]">Orientación sin compromiso</span>
-                    <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">¿No encuentras exactamente el análisis que buscas?</h2>
-                    <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">
-                      Escríbenos qué muestra tienes y qué necesitas comprobar. Nuestro equipo te ayudará a definir el servicio adecuado.
-                    </p>
-                  </div>
-                  <a
-                    href="https://wa.me/51961996645?text=Hola,%20tengo%20una%20muestra%20y%20necesito%20ayuda%20para%20definir%20el%20análisis"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#efaa48] px-6 text-sm font-bold text-[#173428] shadow-xl transition hover:-translate-y-0.5 hover:bg-[#ffc46d]"
-                  >
-                    <WhatsAppIcon className="h-5 w-5" />
-                    Consultar por WhatsApp
-                  </a>
-                </div>
+            <div className="relative bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-5 md:p-10 overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-2xl" />
               </div>
-            </ScrollReveal>
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="text-center md:text-left">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2.5">
+                    ¿Necesitas análisis de laboratorio en Trujillo?
+                  </h2>
+                  <p className="text-white text-base md:text-lg">
+                    Contáctanos para cotizaciones especiales o consultas técnicas. Atendemos toda La Libertad y norte
+                    del Perú.
+                  </p>
+                </div>
+                <a
+                  href="https://wa.me/51961996645?text=Hola,%20necesito%20información%20sobre%20servicios%20de%20laboratorio%20en%20Trujillo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-white text-primary w-25 h-25 rounded-full hover:bg-white/90 hover:scale-105 transition-all shadow-xl"
+                  aria-label="Contactar AS Laboratorios Trujillo por WhatsApp"
+                >
+                  <WhatsAppIcon className="w-7 h-7" />
+                </a>
+              </div>
+            </div>
           </div>
         </section>
       </main>

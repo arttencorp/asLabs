@@ -1,9 +1,9 @@
 "use client"
 
 import Image from "next/image"
-import { BadgeCheck, Clock3, FileText, MessageCircle, ShieldCheck, TrendingUp } from "lucide-react"
+import { MessageCircle, FileText, Shield } from "lucide-react"
 import { Plantin } from "./types"
-import { handleWhatsAppContact } from "./utils"
+import { handleWhatsAppContact, getProfitabilityColor } from "./utils"
 
 interface PlantinCardProps {
   plantin: Plantin
@@ -11,90 +11,197 @@ interface PlantinCardProps {
 }
 
 export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardProps) {
-  const status = plantin.isResearch
-    ? { label: "En investigación", className: "bg-blue-600 text-white" }
-    : plantin.isProduction
-      ? { label: "En producción", className: "bg-amber-500 text-white" }
-      : plantin.available
-        ? { label: "Disponible", className: "bg-[#2e7048] text-white" }
-        : { label: "No disponible", className: "bg-gray-600 text-white" }
-
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#dfe8e1] bg-white shadow-[0_18px_55px_-42px_rgba(14,60,38,0.65)] transition duration-300 hover:-translate-y-1 hover:border-[#b8d1bf] hover:shadow-[0_26px_65px_-38px_rgba(14,60,38,0.5)]">
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#e8f0ea]">
+    <div className="group bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-emerald-200 transform hover:-translate-y-1">
+      {/* Imagen destacada */}
+      <div className="aspect-video relative bg-gradient-to-br from-emerald-50 to-emerald-100 overflow-hidden">
         <Image
           src={plantin.image || "/biotecnologia-vegetal.png"}
-          alt={`${plantin.name}, plantín in vitro de ${plantin.category.toLowerCase()}`}
+          alt={plantin.name}
           fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 420px"
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent" />
-        <span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em] shadow-sm ${status.className}`}>
-          {status.label}
-        </span>
-        <span className="absolute bottom-4 left-4 rounded-full border border-white/35 bg-white/90 px-3 py-1 text-[11px] font-bold text-[#214332] backdrop-blur-sm">
-          {plantin.category}
-        </span>
+        
+        {/* Badge de estado sobre la imagen */}
+        <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+          {plantin.isProduction && (
+            <span className="bg-amber-500 text-white text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg">
+              En Producción
+            </span>
+          )}
+          {plantin.isResearch && (
+            <span className="bg-blue-500 text-white text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg">
+              En Investigación
+            </span>
+          )}
+          {plantin.profitability && !plantin.isResearch && !plantin.isProduction && (
+            <span className={`text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-lg ${getProfitabilityColor(plantin.profitability)}`}>
+              {plantin.profitability}
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <div className="mb-4 flex items-start gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#e7f1e8] text-[#2e7048]">
-            <plantin.icon className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <h3 className="text-lg font-bold leading-snug text-[#183828] sm:text-xl">{plantin.name}</h3>
-            <p className="mt-1 line-clamp-2 text-sm leading-6 text-gray-600">{plantin.description}</p>
+      {/* Header con título y descripción */}
+      <div className="p-4 sm:p-6">
+        <div className="flex items-start gap-3 mb-3 sm:mb-4">
+          {/* Icono */}
+          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
+            plantin.isResearch
+              ? "bg-blue-500 text-white"
+              : plantin.id === "pitahaya"
+              ? "bg-purple-500 text-white"
+              : "bg-emerald-500 text-white"
+          } shadow-md`}>
+            <plantin.icon className="w-5 h-5 sm:w-6 sm:h-6" />
+          </div>
+          
+          {/* Título y categoría */}
+          <div className="flex-1">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 leading-tight">
+              {plantin.name}
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-500 font-medium">
+              {plantin.category}
+            </p>
           </div>
         </div>
+        
+        {/* Descripción */}
+        <p className="text-gray-600 text-sm leading-snug mb-4">
+          {plantin.description}
+        </p>
 
-        <div className="mb-4 grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-[#f8faf8]">
-          <div className="border-r border-gray-100 p-3">
-            <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-gray-500">
-              <TrendingUp className="h-3.5 w-3.5 text-[#4b8a61]" />Rendimiento
-            </span>
-            <strong className="mt-1.5 block text-sm text-[#214332]">{plantin.yield && plantin.yield !== "-" ? plantin.yield : "Según variedad"}</strong>
+        {/* Métricas en grid responsivo */}
+        <div className={`grid ${plantin.yield === "-" ? "grid-cols-3" : "grid-cols-2"} gap-3 sm:gap-6 mb-4`}>
+          <div className="text-center">
+            <div className="text-xs text-gray-500 mb-1 font-medium">Precio</div>
+            <div className="font-bold text-emerald-600 text-sm">{plantin.price}</div>
           </div>
-          <div className="p-3">
-            <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-gray-500">
-              <Clock3 className="h-3.5 w-3.5 text-[#4b8a61]" />{plantin.category === "Ornamentales" ? "Entrega" : "Cosecha"}
-            </span>
-            <strong className="mt-1.5 block text-sm text-[#214332]">{plantin.harvestTime || "A consultar"}</strong>
+          {plantin.yield !== "-" && (
+            <div className="text-center">
+              <div className="text-xs text-gray-500 mb-1 font-medium">Rendimiento</div>
+              <div className="font-bold text-blue-600 text-sm">{plantin.yield}</div>
+            </div>
+          )}
+          <div className="text-center">
+            <div className="text-xs text-gray-500 mb-1 font-medium">
+              {plantin.category === "Ornamentales" ? "Tolerancia" : "Cosecha"}
+            </div>
+            <div className="font-bold text-purple-600 text-sm">{plantin.harvestTime}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-xs text-gray-500 mb-1 font-medium">
+              {plantin.id === "banano-fusarium"
+                ? "Resistencias"
+                : "Tolerancia"
+              }
+            </div>
+            <div className="font-bold text-orange-600 text-sm">{plantin.resistance?.length || 0}+</div>
           </div>
         </div>
-
-        <div className="mb-5 space-y-2">
-          {plantin.features.slice(0, 3).map((feature) => (
-            <div key={feature} className="flex items-start gap-2 text-xs font-medium leading-5 text-gray-600">
-              <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#4b8a61]" />
-              <span>{feature}</span>
+      </div>
+      
+      {/* Características principales compactas */}
+      <div className="px-4 sm:px-6 pb-3 sm:pb-4">
+        <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-2 sm:mb-3 uppercase tracking-wide">
+          Características Principales
+        </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {plantin.features.slice(0, 4).map((feature, featureIndex) => (
+            <div key={featureIndex} className="flex items-center gap-2">
+              <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                plantin.isResearch 
+                  ? "bg-blue-400" 
+                  : plantin.id === "pitahaya"
+                  ? "bg-purple-400"
+                  : "bg-emerald-400"
+              }`}></div>
+              <span className="text-gray-700 text-xs font-medium">{feature}</span>
             </div>
           ))}
         </div>
+      </div>
 
-        {plantin.resistance && plantin.resistance.length > 0 && (
-          <div className="mb-5 mt-auto flex items-center gap-2 border-t border-gray-100 pt-4 text-xs text-gray-500">
-            <ShieldCheck className="h-4 w-4 shrink-0 text-[#4b8a61]" />
-            <span className="line-clamp-1"><strong className="font-semibold text-gray-700">Tolerancia:</strong> {plantin.resistance.slice(0, 2).join(", ")}</span>
+      {/* Resistencias destacadas (si existen) */}
+      {plantin.resistance && (
+        <div className="px-4 sm:px-6 pb-3 sm:pb-4">
+          <h4 className="text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2 uppercase tracking-wide">
+            <Shield className="w-3 h-3 text-emerald-500" />
+            {plantin.id === "banano-fusarium"
+                ? "RESISTENCIAS"
+                : "TOLERANCIA"
+              }
+            
+          </h4>
+          <div className="flex flex-wrap gap-1">
+            {plantin.resistance.slice(0, 3).map((resistance, idx) => (
+              <span
+                key={idx}
+                className={`text-xs font-medium px-2 py-1 rounded-full border ${
+                  plantin.id === "pitahaya"
+                    ? "bg-purple-100 text-purple-700 border-purple-200"
+                    : plantin.isResearch
+                    ? "bg-blue-100 text-blue-700 border-blue-200"
+                    : "bg-emerald-100 text-emerald-700 border-emerald-200"
+                }`}
+              >
+                {resistance}
+              </span>
+            ))}
+            {plantin.resistance.length > 3 && (
+              <span className="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">
+                +{plantin.resistance.length - 3}
+              </span>
+            )}
           </div>
-        )}
+        </div>
+      )}
 
-        <div className={`${plantin.resistance?.length ? "" : "mt-auto border-t border-gray-100 pt-4"} grid grid-cols-2 gap-2.5`}>
+      {/* Botones responsivos */}
+      <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+        <div className="flex flex-col sm:flex-row gap-2">
+          {/* Botón principal */}
           {plantin.available ? (
-            <button type="button" onClick={() => handleWhatsAppContact(plantin.name)} className="flex items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-3 text-sm font-bold text-white transition hover:bg-[#245c3b]">
-              <MessageCircle className="h-4 w-4" />Cotizar
+            <button
+              onClick={() => handleWhatsAppContact(plantin.name)}
+              className={`flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-md font-medium transition-colors flex items-center justify-center gap-2 shadow-sm text-sm ${
+                plantin.id === "pitahaya"
+                  ? "bg-purple-600 hover:bg-purple-700 text-white"
+                  : "bg-emerald-600 hover:bg-emerald-700 text-white"
+              }`}
+            >
+              <MessageCircle className="w-4 h-4" />
+              Cotizar
             </button>
           ) : plantin.isResearch ? (
-            <a href="/research/banano-baby" className="flex items-center justify-center rounded-xl bg-blue-600 px-3 py-3 text-center text-sm font-bold text-white transition hover:bg-blue-700">Investigación</a>
+            <a
+              href="/research/banano-baby"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 sm:px-4 sm:py-2.5 rounded-md font-medium transition-colors text-center block shadow-sm text-sm"
+            >
+              Ver Investigación
+            </a>
           ) : (
-            <button type="button" disabled className="cursor-not-allowed rounded-xl bg-gray-200 px-3 py-3 text-sm font-bold text-gray-500">No disponible</button>
+            <button
+              disabled
+              className="flex-1 bg-gray-300 text-gray-500 px-3 py-2 sm:px-4 sm:py-2.5 rounded-md font-medium cursor-not-allowed text-sm"
+            >
+              No Disponible
+            </button>
           )}
-          <button type="button" onClick={() => onTechnicalSheet(plantin)} className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm font-bold text-gray-700 transition hover:border-[#b8d1bf] hover:bg-[#f5f8f5]">
-            <FileText className="h-4 w-4" />Ficha técnica
+
+          {/* Botón secundario */}
+          <button
+            onClick={() => onTechnicalSheet(plantin)}
+            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 sm:px-4 sm:py-2.5 rounded-md font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+          >
+            <FileText className="w-4 h-4" />
+            <span className="hidden sm:inline">Ficha Técnica</span>
+            <span className="sm:hidden">Ficha</span>
           </button>
         </div>
       </div>
-    </article>
+    </div>
   )
 }

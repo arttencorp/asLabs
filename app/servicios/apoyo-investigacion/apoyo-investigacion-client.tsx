@@ -3,7 +3,6 @@
 import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
 import {
   Microscope,
   Shield,
@@ -168,18 +167,18 @@ export default function ApoyoInvestigacionClient() {
   )
 
   return (
-    <div className="min-h-screen bg-[#f7faf7] font-serif">
+    <div className="min-h-screen bg-background font-serif">
       <Navbar />
 
-      <header className="relative min-h-[410px] overflow-hidden clip-angle-bottom-sm sm:min-h-[440px]">
+      <header className="relative h-[280px] overflow-hidden">
         <Image
           src="/servicios/micro.jpeg"
-          alt="Apoyo a la Investigación"
+          alt="Apoyo a la Investigacion"
           fill
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/55 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl">
@@ -191,29 +190,22 @@ export default function ApoyoInvestigacionClient() {
                   Servicios Especializados
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Apoyo a la Investigación</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Apoyo a la Investigacion</h1>
               <p className="text-white/85 text-base md:text-lg max-w-xl">
-                Identificación molecular, 16S RNA, aislamiento bacteriano y análisis bioinformático.
+                Identificacion molecular, 16S RNA, aislamiento bacteriano y analisis bioinformatico.
               </p>
-              <ServiceHeroActions
-                count={serviciosApoyoInvestigacion.length}
-                theme="sky"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Apoyo%20a%20la%20Investigación"
-              />
             </div>
           </div>
         </div>
       </header>
 
-      <ServiceSectionNav activeHref="/servicios/apoyo-investigacion" theme="sky" />
-
-      <main className="container mx-auto max-w-7xl px-4 py-10">
-        <section id="beneficios" className="mb-10 scroll-mt-28">
+      <main className="container mx-auto px-4 py-8">
+        <section className="mb-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {garantias.map((item) => (
               <div
                 key={item.title}
-                className="bg-card border border-border rounded-2xl p-5 text-center hover:-translate-y-1 hover:border-sky-300 hover:shadow-lg transition-all"
+                className="bg-card border border-border rounded-xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all"
               >
                 <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-sky-100 flex items-center justify-center">
                   <item.icon className="w-5 h-5 text-sky-600" />
@@ -248,20 +240,20 @@ export default function ApoyoInvestigacionClient() {
           </div>
         </section>
 
-        <section id="catalogo" className="mb-8 scroll-mt-28">
+        <section className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-lg font-bold text-foreground">Catalogo de Servicios</h2>
             <div className="h-px flex-1 bg-border" />
             <span className="text-sm text-muted-foreground">{filteredServices.length} servicios</span>
           </div>
 
-          <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-[0_20px_60px_-46px_rgba(14,60,38,0.5)]">
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="bg-sky-50 border-b border-border">
                   <th className="text-left py-3 px-4 font-semibold text-foreground text-sm">Concepto</th>
                   <th className="text-left py-3 px-4 font-semibold text-foreground hidden lg:table-cell text-sm">
-                    Descripción Técnica
+                    Descripcion Tecnica
                   </th>
                   <th className="text-center py-3 px-4 font-semibold text-foreground w-24 text-sm">Unidad</th>
                 </tr>
@@ -358,23 +350,11 @@ export default function ApoyoInvestigacionClient() {
           </div>
         </section>
 
-        <ServiceExperience
-          activeHref="/servicios/apoyo-investigacion"
-          theme="sky"
-          title="Apoyo a la Investigación"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20mi%20proyecto%20de%20investigación"
-          faqs={[
-            { question: "¿Atienden tesis y proyectos en etapa de planificación?", answer: "Sí. Es el mejor momento para revisar objetivo, variables, muestras y técnica. Así podemos delimitar el apoyo del laboratorio antes de que inicies la toma de datos." },
-            { question: "¿El servicio incluye interpretación de resultados?", answer: "El alcance puede incluir procesamiento, documentación metodológica y orientación técnica sobre los resultados. La redacción académica o el análisis adicional se cotizan según la necesidad del proyecto." },
-            { question: "¿Pueden adaptar un protocolo publicado?", answer: "Podemos revisar la metodología de referencia y evaluar su adaptación a la muestra, equipos y controles disponibles. Si requiere optimización, se propone como una etapa diferenciada." },
-          ]}
-        />
-
-        <section id="contacto" className="scroll-mt-28">
+        <section>
           <div className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">
-                <h3 className="text-xl font-bold text-white mb-1">¿Necesitas apoyo para tu investigación?</h3>
+                <h3 className="text-xl font-bold text-white mb-1">Necesitas apoyo para tu investigacion?</h3>
                 <p className="text-white/85 text-sm">Te ayudamos a estructurar, ejecutar y documentar tus ensayos</p>
               </div>
               <Link

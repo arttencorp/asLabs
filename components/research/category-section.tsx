@@ -100,15 +100,11 @@ export default function CategorySection({
   }
 
   return (
-    <div className={`${colors.bg} rounded-2xl p-6 sm:p-8 ${colors.border} border`}>
+    <div className={`${colors.bg} rounded-lg p-6 ${colors.border} border`}>
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
-          {Icon && (
-            <span className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white ${colors.accent} shadow-sm`}>
-              <Icon className="w-5 h-5" />
-            </span>
-          )}
-          <h3 className={`text-xl sm:text-2xl font-bold font-serif ${colors.text}`}>{title}</h3>
+          {Icon && <Icon className={`w-6 h-6 ${colors.accent}`} />}
+          <h3 className={`text-2xl font-bold ${colors.text}`}>{title}</h3>
         </div>
         {description && <p className={`${colors.label} opacity-80`}>{description}</p>}
       </div>
@@ -120,7 +116,7 @@ export default function CategorySection({
 
             <div className="grid gap-4">
               {subsection.projects.map((project, projectIndex) => (
-                <Card key={projectIndex} className="hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 bg-white rounded-xl border-gray-100">
+                <Card key={projectIndex} className="hover:shadow-md transition-shadow bg-white">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">

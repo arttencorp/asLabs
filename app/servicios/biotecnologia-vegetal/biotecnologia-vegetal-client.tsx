@@ -1,9 +1,8 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
 import {
   Leaf,
   Shield,
@@ -141,10 +140,10 @@ export default function BiotecnologiaVegetalClient() {
   )
 
   return (
-    <div className="min-h-screen bg-[#f7faf7] font-serif">
+    <div className="min-h-screen bg-background font-serif">
       <Navbar />
 
-      <header className="relative min-h-[410px] overflow-hidden clip-angle-bottom-sm sm:min-h-[440px]">
+      <header className="relative h-[280px] overflow-hidden">
         <Image
           src="/servicios/image.png"
           alt="Biotecnología Vegetal - Cultivo de tejidos"
@@ -152,7 +151,7 @@ export default function BiotecnologiaVegetalClient() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl">
@@ -166,26 +165,19 @@ export default function BiotecnologiaVegetalClient() {
               <p className="text-white/80 text-base md:text-lg max-w-xl">
                 Servicios especializados en micropropagación, cultivo in vitro y técnicas avanzadas para plantas.
               </p>
-              <ServiceHeroActions
-                count={serviciosBiotecnologia.length}
-                theme="teal"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Biotecnología%20Vegetal"
-              />
             </div>
           </div>
         </div>
       </header>
 
-      <ServiceSectionNav activeHref="/servicios/biotecnologia-vegetal" theme="teal" />
-
-      <main className="container mx-auto max-w-7xl px-4 py-10">
+      <main className="container mx-auto px-4 py-8">
         {/* Garantías */}
-        <section id="beneficios" className="mb-10 scroll-mt-28">
+        <section className="mb-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {garantias.map((item, index) => (
               <div
                 key={index}
-                className="bg-card border border-border rounded-2xl p-5 text-center hover:-translate-y-1 hover:border-teal-300 hover:shadow-lg transition-all"
+                className="bg-card border border-border rounded-xl p-4 text-center hover:border-teal-300 hover:shadow-md transition-all"
               >
                 <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-teal-100 flex items-center justify-center">
                   <item.icon className="w-5 h-5 text-teal-600" />
@@ -222,14 +214,14 @@ export default function BiotecnologiaVegetalClient() {
         </section>
 
         {/* Tabla de servicios */}
-        <section id="catalogo" className="mb-8 scroll-mt-28">
+        <section className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-lg font-bold text-foreground">Catálogo de Servicios</h2>
             <div className="h-px flex-1 bg-border" />
             <span className="text-sm text-muted-foreground">{filteredServices.length} servicios</span>
           </div>
 
-          <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-[0_20px_60px_-46px_rgba(14,60,38,0.5)]">
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="bg-teal-50 border-b border-border">
@@ -242,8 +234,9 @@ export default function BiotecnologiaVegetalClient() {
               </thead>
               <tbody>
                 {filteredServices.map((servicio, index) => (
-                  <Fragment key={servicio.concepto}>
+                  <>
                     <tr
+                      key={index}
                       className="border-b border-border last:border-0 hover:bg-teal-50/50 transition-colors cursor-pointer"
                       onClick={() => toggleService(index)}
                     >
@@ -325,27 +318,15 @@ export default function BiotecnologiaVegetalClient() {
                         </td>
                       </tr>
                     )}
-                  </Fragment>
+                  </>
                 ))}
               </tbody>
             </table>
           </div>
         </section>
 
-        <ServiceExperience
-          activeHref="/servicios/biotecnologia-vegetal"
-          theme="teal"
-          title="Biotecnología Vegetal"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20sobre%20biotecnología%20vegetal"
-          faqs={[
-            { question: "¿Qué material vegetal se necesita para iniciar?", answer: "La selección depende de la especie y del objetivo. Evaluamos el estado de la planta madre, el tipo de explante disponible y las condiciones sanitarias antes de definir el establecimiento." },
-            { question: "¿Trabajan protocolos para especies nuevas?", answer: "Sí. Cuando no existe un protocolo validado para el material, podemos plantear una etapa de ajuste que evalúe desinfección, medio de cultivo, reguladores y respuesta del explante." },
-            { question: "¿Las plantas se entregan listas para campo?", answer: "El alcance se define al cotizar. Podemos entregar material in vitro o incluir etapas posteriores como enraizamiento y orientación para aclimatación, según el servicio elegido." },
-          ]}
-        />
-
         {/* Banner de contacto */}
-        <section id="contacto" className="scroll-mt-28">
+        <section>
           <div className="bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left">

@@ -22,6 +22,7 @@ import Navbar from "@/components/navbar"
 import HomeRotatingHeadline from "@/components/home-rotating-headline"
 import HomeClientMap from "@/components/home-client-map"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { OrganizationStructuredData } from "@/components/structured-data"
 
 const trustLogos = [
   { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo", type: "Agroindustria" },
@@ -72,6 +73,7 @@ function SectionLabel({ children, light = false }: { children: React.ReactNode; 
 export default function ClientPage() {
   return (
     <main className="home-redesign overflow-hidden bg-[#f6f3eb] font-[var(--font-poppins)] text-[#173428]">
+      <OrganizationStructuredData />
       <Navbar overlay />
 
       <section data-navbar-theme="dark" className="relative min-h-[680px] bg-[#0a2f20] text-white sm:min-h-[700px] lg:min-h-[720px]">
@@ -285,24 +287,24 @@ export default function ClientPage() {
             <SectionLabel light>Cómo trabajamos</SectionLabel>
             <h2 className="text-2xl tracking-[-0.03em] text-white sm:text-3xl">Una misma visión, del diagnóstico a la solución</h2>
           </ScrollReveal>
-        <StaggerGroup className="grid gap-4 sm:grid-cols-3" staggerDelay={0.12}>
-          {[
-            { icon: Microscope, title: "Investigación aplicada", text: "Proyectos orientados a enfermedades, genética y productividad agrícola." },
-            { icon: Leaf, title: "Producción sostenible", text: "Soluciones que protegen el cultivo y reducen el impacto ambiental." },
-            { icon: FlaskConical, title: "Acompañamiento técnico", text: "Especialistas que conectan el diagnóstico con una respuesta viable." },
-          ].map((item) => {
-            const Icon = item.icon
-            return (
-              <StaggerItem key={item.title} className="flex h-full gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10" distance={18}>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#dce7d2] text-[#2f7046]"><Icon className="h-5 w-5" /></span>
-                <div>
-                  <h3 className="text-base text-white">{item.title}</h3>
-                  <p className="mt-1.5 text-xs leading-5 text-white/60">{item.text}</p>
-                </div>
-              </StaggerItem>
-            )
-          })}
-        </StaggerGroup>
+          <StaggerGroup className="grid gap-4 sm:grid-cols-3" staggerDelay={0.12}>
+            {[
+              { icon: Microscope, title: "Investigación aplicada", text: "Proyectos orientados a enfermedades, genética y productividad agrícola." },
+              { icon: Leaf, title: "Producción sostenible", text: "Soluciones que protegen el cultivo y reducen el impacto ambiental." },
+              { icon: FlaskConical, title: "Acompañamiento técnico", text: "Especialistas que conectan el diagnóstico con una respuesta viable." },
+            ].map((item) => {
+              const Icon = item.icon
+              return (
+                <StaggerItem key={item.title} className="flex h-full gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white/10" distance={18}>
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#dce7d2] text-[#2f7046]"><Icon className="h-5 w-5" /></span>
+                  <div>
+                    <h3 className="text-base text-white">{item.title}</h3>
+                    <p className="mt-1.5 text-xs leading-5 text-white/60">{item.text}</p>
+                  </div>
+                </StaggerItem>
+              )
+            })}
+          </StaggerGroup>
         </div>
       </section>
 

@@ -9,9 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Servicios de Bacteriología en Trujillo | AS Laboratorios",
+  title: "Bacteriología en Trujillo Perú | Suspensiones McFarland, Biofertilizantes, Fermentación | AS Laboratorios",
   description:
-    "Suspensiones McFarland, cultivos bacterianos, fermentación, curvas de crecimiento, biofertilizantes y pruebas de antagonismo microbiano en Trujillo.",
+    "Laboratorio de bacteriología en Trujillo, La Libertad, Perú. Suspensiones McFarland, fermentación sólida/líquida, curvas de crecimiento, biofertilizantes, bioestimulantes, antagonismo microbiano. Cotiza: +51 961 996 645.",
   keywords: [
     // Keywords geográficas principales
     "bacteriología Trujillo",
@@ -158,6 +158,7 @@ const bacteriologiaServices = [
 export default function BacteriologiaPage() {
   return (
     <>
+      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Servicios de Bacteriología General en Trujillo"
         serviceDescription="Laboratorio especializado en bacteriología en Trujillo, La Libertad, Perú: suspensiones McFarland, fermentación sólida y líquida, curvas de crecimiento, producción de biofertilizantes y bioestimulantes para agricultura."
@@ -178,6 +179,13 @@ export default function BacteriologiaPage() {
         listName="Servicios de Bacteriología General AS Laboratorios Trujillo"
         listUrl="https://aslaboratorios.com/servicios/bacteriologia-general"
         items={bacteriologiaServices}
+      />
+      <ProfessionalServiceStructuredData
+        serviceName="Bacteriología Trujillo"
+        description="Laboratorio de bacteriología certificado en Trujillo, La Libertad, Perú. Fermentación, biofertilizantes, curvas de crecimiento y suspensiones McFarland."
+        url="https://aslaboratorios.com/servicios/bacteriologia-general"
+        priceRange="$$"
+        image="/servicios/image.png"
       />
       <BacteriologiaClient />
     </>

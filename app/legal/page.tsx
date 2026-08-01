@@ -2,21 +2,29 @@ import type { Metadata } from "next"
 import { constructMetadata } from "@/lib/metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import LegalExperience from "@/components/legal/legal-experience"
+import LegalHeader from "@/components/legal/legal-header"
+import LegalTerms from "@/components/legal/legal-terms"
+import LegalPrivacy from "@/components/legal/legal-privacy"
+import LegalCookies from "@/components/legal/legal-cookies"
+import LegalIntellectual from "@/components/legal/legal-intellectual"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Centro Legal: Términos, Privacidad y Cookies",
+  title: "Información Legal",
   description:
-    "Consulta los términos de uso, política de privacidad, cookies, almacenamiento local y propiedad intelectual de AS Laboratorios en Perú.",
-  keywords: ["legal AS Laboratorios", "términos y condiciones", "privacidad Perú", "Ley 29733", "cookies", "propiedad intelectual"],
+    "Términos y condiciones, política de privacidad, política de cookies y propiedad intelectual de AS Laboratorios.",
+  keywords: ["legal", "términos y condiciones", "privacidad", "cookies", "propiedad intelectual"],
   path: "/legal",
 })
 
 export default function LegalPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar overlay />
-      <LegalExperience />
+      <Navbar />
+      <LegalHeader />
+      <LegalTerms />
+      <LegalPrivacy />
+      <LegalCookies />
+      <LegalIntellectual />
       <Footer />
     </div>
   )

@@ -9,9 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Análisis Fitopatológico en Trujillo | AS Laboratorios",
+  title: "Fitopatología en Trujillo Perú | Detección Patógenos, Análisis Suelos Agrícolas | AS Laboratorios",
   description:
-    "Detección de hongos y bacterias fitopatógenas, diagnóstico de enfermedades vegetales y pruebas de susceptibilidad para cultivos agrícolas en Perú.",
+    "Laboratorio de fitopatología en Trujillo, La Libertad, Perú. Detección de patógenos en plantas, análisis de suelos agrícolas, pruebas de susceptibilidad, hongos y bacterias fitopatógenas. Diagnóstico fitosanitario certificado. Cotiza: +51 961 996 645.",
   keywords: [
     // Keywords geográficas principales
     "fitopatología Trujillo",
@@ -144,9 +144,10 @@ const fitopatologiaServices = [
 export default function FitopatologiaPage() {
   return (
     <>
+      <LocalBusinessStructuredData />
       <ServiceStructuredData
         serviceName="Servicios de Fitopatología en Trujillo"
-        serviceDescription="Laboratorio especializado en fitopatología en Trujillo, La Libertad, Perú: detección de patógenos en plantas, análisis de suelos agrícolas y pruebas de susceptibilidad."
+        serviceDescription="Laboratorio especializado en fitopatología en Trujillo, La Libertad, Perú: detección de patógenos en plantas, análisis de suelos agrícolas, pruebas de susceptibilidad y diagnóstico fitosanitario certificado para agricultura."
         serviceUrl="https://aslaboratorios.com/servicios/fitopatologia"
         serviceType="Fitopatología y Diagnóstico Fitosanitario"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima"]}
@@ -164,6 +165,13 @@ export default function FitopatologiaPage() {
         listName="Servicios de Fitopatología AS Laboratorios Trujillo"
         listUrl="https://aslaboratorios.com/servicios/fitopatologia"
         items={fitopatologiaServices}
+      />
+      <ProfessionalServiceStructuredData
+        serviceName="Fitopatología Trujillo"
+        description="Laboratorio de fitopatología certificado en Trujillo, La Libertad, Perú. Detección de patógenos en plantas, análisis de suelos agrícolas y diagnóstico fitosanitario."
+        url="https://aslaboratorios.com/servicios/fitopatologia"
+        priceRange="$$"
+        image="/servicios/image.png"
       />
       <FitopatologiaClient />
     </>

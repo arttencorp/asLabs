@@ -3,14 +3,16 @@ import { ControlBiologicoClient } from "./control-biologico-client"
 import {
   ServiceStructuredData,
   BreadcrumbStructuredData,
+  ProfessionalServiceStructuredData,
   ControlBiologicoStructuredData,
-  FAQStructuredData,
+  AgricultureServiceStructuredData,
+  LocalBusinessStructuredData,
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Control Biológico de Plagas en Trujillo | AS Laboratorios",
+  title: "Control Biológico en Trujillo Perú | Billaea claripalpis, Trichogramma sp | AS Laboratorios",
   description:
-    "Control biológico con Billaea claripalpis, Trichogramma y asesoría técnica para el manejo sostenible de plagas agrícolas en Trujillo y el Perú.",
+    "Control biológico de plagas en Trujillo, La Libertad, Perú. Billaea claripalpis para Diatraea saccharalis en caña de azúcar, Trichogramma sp para cultivos. Asesoría técnica a agricultores. Soluciones sostenibles. Cotiza: +51 961 996 645.",
   keywords: [
     // Keywords principales geográficas
     "control biológico Trujillo",
@@ -63,7 +65,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://aslaboratorios.com/control-biologico.png",
+        url: "https://aslaboratorios.com/aslabs-logo.png",
         width: 1200,
         height: 630,
         alt: "Control Biológico AS Laboratorios Trujillo - Billaea claripalpis",
@@ -75,7 +77,7 @@ export const metadata: Metadata = {
     title: "Control Biológico en Trujillo | Billaea claripalpis | AS Laboratorios",
     description:
       "Controladores biológicos: Billaea claripalpis, Trichogramma sp. Asesoría a agricultores. Agricultura sostenible en La Libertad, Perú.",
-    images: ["https://aslaboratorios.com/control-biologico.png"],
+    images: ["https://aslaboratorios.com/aslabs-logo.png"],
     creator: "@aslaboratorios",
     site: "@aslaboratorios",
   },
@@ -114,6 +116,7 @@ export const metadata: Metadata = {
 export default function ControlBiologicoPage() {
   return (
     <>
+      <LocalBusinessStructuredData />
       <ControlBiologicoStructuredData />
       <ServiceStructuredData
         serviceName="Control Biológico de Plagas - AS Laboratorios Trujillo"
@@ -140,24 +143,16 @@ export default function ControlBiologicoPage() {
           { name: "Control Biológico", url: "https://aslaboratorios.com/control-biologico" },
         ]}
       />
-      <FAQStructuredData
-        questions={[
-          {
-            question: "¿Qué controlador biológico necesito para mi cultivo?",
-            answer:
-              "La recomendación depende de la plaga, el cultivo, la etapa del problema y las condiciones del campo. AS Laboratorios evalúa el caso antes de proponer una liberación.",
-          },
-          {
-            question: "¿AS Laboratorios realiza envíos de controladores biológicos fuera de Trujillo?",
-            answer:
-              "Sí. La atención y logística pueden coordinarse para distintas zonas del Perú, según disponibilidad, destino y condiciones de transporte.",
-          },
-          {
-            question: "¿La compra incluye asesoría para la liberación?",
-            answer:
-              "AS Laboratorios puede orientar la planificación, liberación y seguimiento según el alcance técnico acordado para el proyecto.",
-          },
-        ]}
+      <ProfessionalServiceStructuredData
+        serviceName="Control Biológico de Plagas"
+        description="Laboratorio especializado en control biológico de plagas en Trujillo, Perú. Producción de Billaea claripalpis y Trichogramma sp. Asesoría técnica a agricultores de caña de azúcar y otros cultivos."
+        url="https://aslaboratorios.com/control-biologico"
+        priceRange="$$"
+      />
+      <AgricultureServiceStructuredData
+        serviceName="Asesoría Agrícola y Control Biológico"
+        description="Servicio de asesoría a agricultores y control biológico de plagas en Trujillo, La Libertad, Perú"
+        url="https://aslaboratorios.com/control-biologico"
       />
       <ControlBiologicoClient />
     </>

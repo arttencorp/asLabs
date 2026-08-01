@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
-import ResearchProjectDetail from "@/components/research/research-project-detail"
-import ResearchProjectStructuredData from "@/components/research/research-project-structured-data"
-import { researchProjects } from "@/data/research-project-details"
+import BioreactoresBacterianoClient from "./bioreactores-bacterianos-client"
 
 export const metadata: Metadata = {
-  title: "Bioreactores para Producción de Suspensiones Bacterianas",
+  title: "Bioreactores para Suspensiones Bacterianas | AS Laboratorios",
   description:
     "Diseño y producción de bioreactores para suspensiones bacterianas a gran escala. Optimización de producción de agentes de control biológico.",
   keywords: [
@@ -31,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "AS Laboratorios",
     images: [
       {
-        url: "/research/research-lab.png",
+        url: "/bioreactors.png",
         width: 1200,
         height: 630,
         alt: "Proyecto Bioreactores AS Laboratorios",
@@ -45,7 +43,7 @@ export const metadata: Metadata = {
     title: "Bioreactores para Suspensiones Bacterianas",
     description:
       "Diseño y producción de bioreactores optimizados para suspensiones bacterianas de control biológico.",
-    images: ["/research/research-lab.png"],
+    images: ["/bioreactors.png"],
   },
   alternates: {
     canonical: "https://aslaboratorios.com/research/bioreactores-bacterianos",
@@ -70,11 +68,5 @@ export const metadata: Metadata = {
 }
 
 export default function BioreactoresBacterianoPage() {
-  const project = researchProjects["bioreactores-bacterianos"]
-  return (
-    <>
-      <ResearchProjectStructuredData project={project} />
-      <ResearchProjectDetail project={project} />
-    </>
-  )
+  return <BioreactoresBacterianoClient />
 }

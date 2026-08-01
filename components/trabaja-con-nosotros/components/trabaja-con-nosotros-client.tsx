@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import { useForm } from "react-hook-form"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -14,18 +13,12 @@ import {
   Building2,
   BookOpen,
   FileText,
-  FlaskConical,
   Microscope,
   Leaf,
   AlertCircle,
-  ArrowRight,
   Sparkles,
   X,
   Clock,
-  MapPin,
-  Search,
-  ShieldCheck,
-  UsersRound,
 } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -207,125 +200,63 @@ export default function TrabajaConNosotrosClient() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#f3f6f3] text-[#173b2b]">
-      <section data-navbar-theme="dark" className="relative min-h-[650px] overflow-hidden bg-[#0a3022] px-4 pb-24 pt-32 text-white sm:px-6 md:min-h-[690px] md:pt-36">
-        <div className="absolute inset-0">
-          <Image
-            src="/research/research-lab.png"
-            alt="Equipo científico de AS Laboratorios"
-            fill
-            priority
-            className="object-cover object-[64%_center]"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,29,21,.98)_0%,rgba(7,42,29,.94)_48%,rgba(7,42,29,.55)_77%,rgba(7,42,29,.3)_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,28,20,.7),transparent_48%)]" />
-        </div>
-        <div className="absolute -right-24 top-28 h-96 w-96 rounded-full border border-white/10" />
-        <div className="absolute right-8 top-48 h-64 w-64 rounded-full border border-white/[0.08]" />
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+      {/* Hero Section */}
+      <section className="relative py-16 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 to-blue-600/10" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1.15fr)_360px] lg:items-end"
+          transition={{ duration: 0.6 }}
+          className="container mx-auto max-w-6xl relative z-10"
         >
-          <div className="max-w-4xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.1] px-4 py-2 text-[10px] font-black uppercase tracking-[.17em] text-[#cce6d2] backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-[#f2ab47]" />
-              Convocatorias y oportunidades
-            </span>
-            <h1 className="mt-6 max-w-4xl text-[clamp(2.8rem,6.4vw,5.7rem)] font-black leading-[.96] tracking-[-.06em] text-white">
-              Haz ciencia con propósito.
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-100">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Convocatoria Abierta 2025
+            </Badge>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Únete a Nuestro Equipo
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-white/[0.72] sm:text-lg sm:leading-8">
-              Buscamos personas curiosas, rigurosas y comprometidas con transformar preguntas científicas en soluciones útiles para la agricultura.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Buscamos talento apasionado por la ciencia. Forma parte de un laboratorio
+              líder en biotecnología vegetal y contribuye a proyectos de investigación
+              que impactan la agricultura peruana.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#convocatorias" className="inline-flex items-center gap-2 rounded-full bg-[#f1a43c] px-6 py-3.5 text-sm font-black text-[#173428] shadow-[0_18px_35px_-20px_rgba(0,0,0,.7)] transition hover:-translate-y-1 hover:bg-[#ffc56f]">
-                Ver oportunidades <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="#estado" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/[0.1] px-6 py-3.5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/[0.18]">
-                Consultar postulación <Search className="h-4 w-4" />
-              </a>
-            </div>
-            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-6 text-xs font-semibold text-white/60">
-              <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#a9d4b3]" /> Trujillo, La Libertad</span>
-              <span className="inline-flex items-center gap-2"><Microscope className="h-4 w-4 text-[#a9d4b3]" /> Ciencia y biotecnología</span>
-              <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-[#a9d4b3]" /> Proceso trazable</span>
-            </div>
           </div>
-
-          <aside className="rounded-[28px] border border-white/15 bg-[#09271d]/60 p-5 shadow-[0_30px_80px_-38px_rgba(0,0,0,.8)] backdrop-blur-xl sm:p-6">
-            <p className="text-[10px] font-black uppercase tracking-[.17em] text-white/[0.45]">Tu ruta de postulación</p>
-            <div className="mt-5 space-y-3">
-              {[
-                ["01", "Elige una oportunidad", "Revisa el perfil y las condiciones."],
-                ["02", "Comparte tu experiencia", "Completa tus datos y adjunta tu CV."],
-                ["03", "Sigue tu proceso", "Consulta el estado con tu documento."],
-              ].map(([num, title, copy]) => (
-                <div key={num} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-3.5">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.1] text-[10px] font-black text-[#f3b763]">{num}</span>
-                  <div>
-                    <p className="text-xs font-black text-white">{title}</p>
-                    <p className="mt-1 text-[10px] leading-4 text-white/[0.45]">{copy}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
         </motion.div>
       </section>
 
-      <section data-navbar-theme="light" className="relative z-20 -mt-8 px-4 sm:px-6">
-        <div className="mx-auto grid max-w-5xl gap-3 rounded-[26px] border border-white bg-white/95 p-3 shadow-[0_24px_65px_-38px_rgba(9,43,32,.58)] backdrop-blur-xl sm:grid-cols-3">
-          {[
-            { icon: UsersRound, title: "Personas primero", copy: "Evaluamos tu potencial y tu forma de aprender." },
-            { icon: FlaskConical, title: "Aprendizaje aplicado", copy: "Participa en retos reales de laboratorio." },
-            { icon: Leaf, title: "Impacto agrícola", copy: "Conecta la ciencia con necesidades del campo." },
-          ].map(({ icon: Icon, title, copy }) => (
-            <article key={title} className="flex gap-3 rounded-2xl bg-[#f2f6f2] p-4">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#dfece1] text-[#2f7049]"><Icon className="h-5 w-5" /></span>
-              <div><h2 className="text-xs font-black text-[#244534]">{title}</h2><p className="mt-1 text-[10px] leading-4 text-[#6a7b72]">{copy}</p></div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="estado" data-navbar-theme="light" className="scroll-mt-28 px-4 pb-8 pt-16 sm:px-6 md:pt-20">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-7 text-center">
-            <span className="text-[10px] font-black uppercase tracking-[.17em] text-[#4e7d5f]">Seguimiento simple</span>
-            <h2 className="mt-3 text-3xl font-black tracking-[-.035em] text-[#173b2b] sm:text-4xl">Consulta tu postulación</h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#687970]">Usa tu número de documento para conocer el estado actualizado de cada proceso.</p>
-          </div>
-          <Card className="overflow-hidden rounded-[28px] border border-[#d7e3d9] bg-white shadow-[0_28px_70px_-48px_rgba(15,60,38,.55)]">
-            <CardHeader className="border-b border-[#e2e9e3] bg-[#f8faf8] p-5 sm:p-7">
-              <CardTitle className="flex items-center gap-3 text-lg font-black text-[#244534]">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#dfece1] text-[#2f7049]"><FileText className="h-5 w-5" /></span>
-                Estado del proceso
+      {/* Consultar Estado de Postulación */}
+      <section className="py-6 px-4">
+        <div className="container mx-auto max-w-2xl">
+          <Card className="border border-blue-200 shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <FileText className="w-5 h-5 text-blue-600" />
+                Consulta el estado de tu postulación
               </CardTitle>
-              <CardDescription className="text-[#6a7b72]">
-                La consulta es privada y se realiza únicamente con tu documento.
+              <CardDescription>
+                Ingresa tu número de documento para ver el estado de tus postulaciones
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 p-5 sm:p-7">
-              <div className="flex flex-col gap-2 sm:flex-row">
+            <CardContent className="space-y-4">
+              <div className="flex gap-2">
                 <Input
                   value={consultaDoc}
                   onChange={(e) => setConsultaDoc(e.target.value)}
                   placeholder="Ingresa tu número de documento"
                   onKeyDown={(e) => e.key === "Enter" && handleConsultarEstado()}
-                  className="h-12 rounded-xl border-[#ccd9ce] bg-[#fbfcfb] px-4 focus-visible:ring-[#3b7b54]"
                 />
                 <Button
                   onClick={handleConsultarEstado}
                   disabled={consultaLoading || !consultaDoc.trim()}
-                  className="h-12 shrink-0 rounded-xl bg-[#173f2d] px-6 font-bold text-white hover:bg-[#245d40]"
+                  className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
                 >
                   {consultaLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <><Search className="mr-2 h-4 w-4" /> Consultar</>
+                    "Consultar"
                   )}
                 </Button>
               </div>
@@ -418,14 +349,8 @@ export default function TrabajaConNosotrosClient() {
 
       {/* Puestos desde Base de Datos */}
       {!loadingPuestos && puestosDB.length > 0 && (
-        <section id="convocatorias" data-navbar-theme="light" className="scroll-mt-28 px-4 py-16 sm:px-6 md:py-24">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-10 max-w-3xl">
-              <span className="text-[10px] font-black uppercase tracking-[.17em] text-[#4e7d5f]">Oportunidades abiertas</span>
-              <h2 className="mt-3 text-3xl font-black tracking-[-.035em] text-[#173b2b] sm:text-5xl">Encuentra tu lugar en el equipo.</h2>
-              <p className="mt-4 text-base leading-7 text-[#687970]">Revisa los requisitos, lo que ofrecemos y la información completa antes de enviar tu postulación.</p>
-            </div>
-            <div className="space-y-6">
+        <section className="py-8 px-4">
+          <div className="container mx-auto max-w-6xl space-y-6">
             {puestosDB.map((puesto, index) => (
               <motion.div
                 key={puesto.puest_id_int}
@@ -433,15 +358,14 @@ export default function TrabajaConNosotrosClient() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 * index }}
               >
-                <Card className="overflow-hidden rounded-[30px] border border-[#d7e3d9] bg-white shadow-[0_26px_70px_-48px_rgba(15,60,38,.55)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_34px_75px_-44px_rgba(15,60,38,.62)]">
-                  <CardHeader className="relative overflow-hidden bg-[#153f2e] p-6 text-white sm:p-8">
-                    <div className="absolute -right-12 -top-16 h-44 w-44 rounded-full border border-white/10" />
+                <Card className="border-2 border-green-200 shadow-lg overflow-hidden">
+                  <CardHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10">
+                      <div className="p-2 bg-white/20 rounded-lg">
                         <Briefcase className="w-6 h-6" />
                       </div>
                       <div>
-                        <CardTitle className="text-2xl font-black tracking-[-.02em] text-white sm:text-3xl">{puesto.puest_nom_vac}</CardTitle>
+                        <CardTitle className="text-2xl">{puesto.puest_nom_vac}</CardTitle>
                         {(puesto.modalidad_trabajo?.modalid_nom_vac || puesto.puest_salario_vac || puesto.puest_lugar_vac) && (
                           <CardDescription className="text-white">
                             {puesto.modalidad_trabajo?.modalid_nom_vac || 'Modalidad no especificada'}
@@ -456,21 +380,21 @@ export default function TrabajaConNosotrosClient() {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="p-6 sm:p-8">
+                  <CardContent className="p-6">
                     {(puesto.puest_vacantes_vac || puesto.puest_duracion_vac || puesto.puest_fec_limite_dt) && (
                       <div className="mb-4 flex flex-wrap gap-2 text-sm text-gray-700">
                         {puesto.puest_vacantes_vac && (
-                          <Badge variant="outline" className="rounded-full border-[#cfe0d2] bg-[#eff5f0] px-3 py-1.5 text-[#39714e]">
+                          <Badge variant="outline" className="bg-white/70 text-green-700 border-green-200">
                             Vacantes: {puesto.puest_vacantes_vac}
                           </Badge>
                         )}
                         {puesto.puest_duracion_vac && (
-                          <Badge variant="outline" className="rounded-full border-[#d5dfeb] bg-[#f0f4f8] px-3 py-1.5 text-[#4d6680]">
+                          <Badge variant="outline" className="bg-white/70 text-blue-700 border-blue-200">
                             Duración: {puesto.puest_duracion_vac}
                           </Badge>
                         )}
                         {puesto.puest_fec_limite_dt && (
-                          <Badge variant="outline" className="rounded-full border-[#eadbc5] bg-[#fbf5eb] px-3 py-1.5 text-[#916530]">
+                          <Badge variant="outline" className="bg-white/70 text-amber-700 border-amber-200">
                             <Clock className="w-3 h-3 mr-1" />
                             Límite: {new Date(puesto.puest_fec_limite_dt).toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' })}
                           </Badge>
@@ -480,9 +404,9 @@ export default function TrabajaConNosotrosClient() {
                     {puesto.puest_dec_vac && (
                       <p className="text-gray-600 mb-6">{puesto.puest_dec_vac}</p>
                     )}
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {puesto.puest_perfil_vac && (
-                        <div className="space-y-3 rounded-2xl border border-[#e0e8e2] bg-[#f9fbf9] p-5">
+                        <div className="space-y-3">
                           <div className="flex items-center gap-2 text-gray-700 font-semibold">
                             <GraduationCap className="w-5 h-5 text-green-600" />
                             <span>Perfil Requerido</span>
@@ -499,7 +423,7 @@ export default function TrabajaConNosotrosClient() {
                       )}
 
                       {puesto.puest_ofrece_vac && (
-                        <div className="space-y-3 rounded-2xl border border-[#e0e8e2] bg-[#f9fbf9] p-5">
+                        <div className="space-y-3">
                           <div className="flex items-center gap-2 text-gray-700 font-semibold">
                             <Microscope className="w-5 h-5 text-purple-600" />
                             <span>Qué Ofrecemos</span>
@@ -516,7 +440,7 @@ export default function TrabajaConNosotrosClient() {
                       )}
 
                       {puesto.puest_benef_vac && (
-                        <div className="space-y-3 rounded-2xl border border-[#e0e8e2] bg-[#f9fbf9] p-5">
+                        <div className="space-y-3">
                           <div className="flex items-center gap-2 text-gray-700 font-semibold">
                             <Leaf className="w-5 h-5 text-emerald-600" />
                             <span>Beneficios</span>
@@ -533,7 +457,7 @@ export default function TrabajaConNosotrosClient() {
                       )}
 
                       {puesto.puest_adicio_vac && (
-                        <div className="space-y-3 rounded-2xl border border-[#e0e8e2] bg-[#f9fbf9] p-5">
+                        <div className="space-y-3">
                           <div className="flex items-center gap-2 text-gray-700 font-semibold">
                             <FileText className="w-5 h-5 text-blue-600" />
                             <span>Información adicional</span>
@@ -546,12 +470,12 @@ export default function TrabajaConNosotrosClient() {
                     </div>
                     
                     {/* Botón Postular o mensaje de evaluación */}
-                    <div className="mt-7 border-t border-[#e4eae5] pt-5">
+                    <div className="mt-6 pt-4 border-t">
                       {puesto.Estado_Puesto?.estpuest_nom_vac === 'EN CONVOCATORIA' ? (
                         <Button
                           onClick={() => openPostulacionForm(puesto)}
                           size="lg"
-                          className="h-12 w-full rounded-full bg-[#ef9f38] text-base font-black text-[#173428] shadow-[0_12px_25px_-16px_rgba(173,91,18,.9)] hover:bg-[#ffc56f]"
+                          className="w-full bg-green-600 hover:bg-green-700 text-white h-12 text-base font-semibold"
                         >
                           <Send className="w-5 h-5 mr-2" />
                           Postular
@@ -569,27 +493,26 @@ export default function TrabajaConNosotrosClient() {
                 </Card>
               </motion.div>
             ))}
-            </div>
           </div>
         </section>
       )}
 
       {/* Empty State - No active convocatorias */}
       {!loadingPuestos && puestosDB.length === 0 && (
-        <section id="convocatorias" data-navbar-theme="light" className="scroll-mt-28 px-4 py-16 sm:px-6 md:py-24">
-          <div className="mx-auto max-w-3xl">
+        <section className="py-12 px-4">
+          <div className="container mx-auto max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="rounded-[30px] border border-[#d9e3db] bg-white p-8 text-center shadow-[0_26px_65px_-48px_rgba(15,60,38,.5)] sm:p-12">
+              <Card className="border border-gray-200 shadow-sm text-center p-8">
                 <div className="flex flex-col items-center gap-4">
-                  <div className="rounded-2xl bg-[#e8f1e9] p-4">
-                    <Briefcase className="h-9 w-9 text-[#39714e]" />
+                  <div className="p-4 bg-gray-100 rounded-full">
+                    <Briefcase className="w-10 h-10 text-gray-400" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-700">
-                    Próximamente habrá nuevas oportunidades
+                    No hay convocatorias activas por el momento
                   </h3>
                   <p className="text-gray-500 max-w-md">
                     Actualmente no contamos con vacantes disponibles. Te invitamos a seguirnos
@@ -964,6 +887,6 @@ export default function TrabajaConNosotrosClient() {
           )}
         </DialogContent>
       </Dialog>
-    </main>
+    </div>
   )
 }
