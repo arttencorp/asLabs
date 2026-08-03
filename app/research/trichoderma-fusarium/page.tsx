@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
-import TrichodermaFusariumClient from "./trichoderma-fusarium-client"
+import ResearchProjectDetail from "@/components/research/research-project-detail"
+import ResearchProjectStructuredData from "@/components/research/research-project-structured-data"
+import { researchProjects } from "@/data/research-project-details"
 
 export const metadata: Metadata = {
-  title: "Trichoderma vs Fusarium Oxysporum Raza 2 - Control Biológico en Trujillo | AS Laboratorios Perú",
+  title: "Trichoderma contra Fusarium oxysporum: Proyecto de Biocontrol",
   description:
-    "Investigación científica sobre la capacidad antagonista de Trichoderma contra Fusarium Oxysporum Raza 2. Análisis de mecanismos moleculares y biocontrol de enfermedades fúngicas en La Libertad, Perú. Proyecto CATFOM-001 dirigido por Antonio Victor Gabriel Guevara Escobar y Hellem Iveth Guevara Nuñez.",
+    "Investigación sobre la capacidad antagonista de Trichoderma frente a Fusarium oxysporum Raza 2 y sus mecanismos de control biológico.",
   keywords: [
     "Trichoderma antagonista",
     "Trichoderma Trujillo",
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "AS Laboratorios",
     images: [
       {
-        url: "/biological-control.png",
+        url: "/control-biologico.png",
         width: 1200,
         height: 630,
         alt: "Investigación Trichoderma vs Fusarium - Control Biológico",
@@ -49,7 +51,7 @@ export const metadata: Metadata = {
     title: "Trichoderma vs Fusarium - Control Biológico | AS Laboratorios",
     description:
       "Investigación de mecanismos moleculares de Trichoderma contra Fusarium Oxysporum Raza 2 en Trujillo, Perú",
-    images: ["/biological-control.png"],
+    images: ["/control-biologico.png"],
   },
   alternates: {
     canonical: "https://aslaboratorios.com/research/trichoderma-fusarium",
@@ -74,5 +76,11 @@ export const metadata: Metadata = {
 }
 
 export default function TrichodermaFusariumPage() {
-  return <TrichodermaFusariumClient />
+  const project = researchProjects["trichoderma-fusarium"]
+  return (
+    <>
+      <ResearchProjectStructuredData project={project} />
+      <ResearchProjectDetail project={project} />
+    </>
+  )
 }

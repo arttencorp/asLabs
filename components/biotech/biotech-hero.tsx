@@ -1,52 +1,48 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Leaf, ArrowRight } from "lucide-react"
 
 export default function BiotechHero() {
   return (
-    <section className="bg-gray-50 py-16 relative overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
-            <h1 className="text-4xl font-bold text-[#2e7d32] mb-4">Biotecnología Vegetal</h1>
-            <p className="text-lg text-[#01283c] mb-6">
-              Descubre cómo la ciencia moderna permite multiplicar plantas idénticas, libres de enfermedades y con
-              características mejoradas, revolucionando la agricultura y la conservación de especies.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="#proceso"
-                className="inline-block border border-[#e65100] text-[#d1343e] px-6 py-2 text-sm uppercase rounded-md hover:bg-[#e65100] hover:text-white transition-colors"
-              >
-                EXPLORAR EL PROCESO
-              </Link>
-            </div>
-          </div>
-          <div className="md:w-1/2 relative">
-            <div className="relative rounded-lg overflow-hidden shadow-lg">
-              <Image
-                src="/new/HEADER.webp"
-                alt="Laboratorio de biotecnología vegetal"
-                width={600}
-                height={400}
-                className="rounded-lg"
-              />
-              <div className="absolute top-4 right-4">
-                <Image src="/aslabs-logo.png" alt="AS Labs Logo" width={120} height={40} />
-              </div>
-            </div>
-          </div>
-        </div>
+    <section className="relative min-h-[52vh] sm:min-h-[60vh] flex items-center overflow-hidden bg-[#01283c] clip-angle-bottom-sm">
+      {/* Imagen a pantalla completa */}
+      <div className="absolute inset-0">
+        <Image
+          src="/new/HEADER.webp"
+          alt="Laboratorio de biotecnología vegetal"
+          fill
+          priority
+          className="object-cover"
+        />
       </div>
+      {/* Difuminado verde de marca */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent"></div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b2f18]/60 via-transparent to-transparent"></div>
+      <div
+        className="pointer-events-none absolute inset-0 backdrop-blur-[3px]"
+        style={{ WebkitMaskImage: "linear-gradient(to right, black 0%, transparent 55%)", maskImage: "linear-gradient(to right, black 0%, transparent 55%)" }}
+      ></div>
+      <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-15"></div>
 
-      {/* Decorative wave */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" className="w-full">
-          <path
-            fill="#ffffff"
-            fillOpacity="1"
-            d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,42.7C840,32,960,32,1080,37.3C1200,43,1320,53,1380,58.7L1440,64L1440,100L1380,100C1320,100,1200,100,1080,100C960,100,840,100,720,100C600,100,480,100,360,100C240,100,120,100,60,100L0,100Z"
-          ></path>
-        </svg>
+      <div className="container mx-auto px-4 relative z-10 py-16">
+        <div className="max-w-2xl">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold uppercase tracking-wider px-4 py-1.5 mb-5">
+            <Leaf className="h-3.5 w-3.5 text-[#8bd394]" />
+            Ciencia aplicada al cultivo
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 font-serif leading-tight">Biotecnología Vegetal</h1>
+          <p className="text-base sm:text-lg text-white/90 mb-8 leading-relaxed">
+            Descubre cómo la ciencia moderna permite multiplicar plantas idénticas, libres de enfermedades y con
+            características mejoradas, revolucionando la agricultura y la conservación de especies.
+          </p>
+          <Link
+            href="#proceso"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#e65100] to-[#f57c00] text-white px-6 py-3 text-sm font-medium uppercase tracking-wide shadow-[0_8px_20px_-6px_rgba(230,81,0,0.5)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-6px_rgba(230,81,0,0.6)] transition-all duration-300"
+          >
+            Explorar el proceso
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
     </section>
   )

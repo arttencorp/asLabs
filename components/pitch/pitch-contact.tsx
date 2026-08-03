@@ -43,7 +43,7 @@ export default function PitchContact() {
                   </div>
                   <div>
                     <p className="font-semibold">Oficinas Principales</p>
-                    <p className="text-gray-300">Av. Juan Pablo II 306, Trujillo, La Libertad, Perú</p>
+                    <p className="text-gray-300">MZ J1 San Isidro II Etapa, Trujillo, La Libertad, Perú</p>
                   </div>
                 </div>
               </div>

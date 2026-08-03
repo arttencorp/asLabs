@@ -4,9 +4,9 @@ import { Footer } from "@/components/footer"
 import TrabajaConNosotrosClient from "@/components/trabaja-con-nosotros/components/trabaja-con-nosotros-client"
 
 export const metadata: Metadata = {
-  title: "Trabaja con Nosotros | Convocatoria Prácticas Pre-Profesionales | AS Laboratorios",
+  title: "Trabaja con Nosotros: Prácticas y Convocatorias | AS Laboratorios",
   description:
-    "Únete a AS Laboratorios en Trujillo, Perú. Buscamos practicantes en Microbiología, Biología y Técnicos en Laboratorio. Trabaja en biotecnología vegetal, embriogénesis y detección de patógenos. Posibilidad de financiamiento de tesis.",
+    "Conoce las convocatorias de AS Laboratorios en Trujillo para prácticas y oportunidades en microbiología, biología, biotecnología y laboratorio.",
   keywords: [
     "trabajo laboratorio Trujillo",
     "prácticas pre-profesionales Trujillo",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: "AS Laboratorios",
     images: [
       {
-        url: "/images/trabaja-con-nosotros-preview.png",
+        url: "/research/research-lab.png",
         width: 1200,
         height: 630,
         alt: "Trabaja con AS Laboratorios - Convocatoria Prácticas Pre-Profesionales",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     title: "Trabaja con Nosotros | AS Laboratorios",
     description:
       "Convocatoria abierta para practicantes en Microbiología, Biología y Técnicos en Laboratorio. Únete a nuestro equipo.",
-    images: ["/images/trabaja-con-nosotros-preview.png"],
+    images: ["/research/research-lab.png"],
   },
   alternates: {
     canonical: "https://aslaboratorios.com/trabaja-con-nosotros",
@@ -60,7 +60,29 @@ export const metadata: Metadata = {
 export default function TrabajaConNosotrosPage() {
   return (
     <>
-      <Navbar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Trabaja con nosotros | AS Laboratorios",
+            description:
+              "Convocatorias, prácticas y oportunidades para desarrollar ciencia y biotecnología en AS Laboratorios.",
+            url: "https://aslaboratorios.com/trabaja-con-nosotros",
+            isPartOf: {
+              "@type": "WebSite",
+              name: "AS Laboratorios",
+              url: "https://aslaboratorios.com",
+            },
+            about: {
+              "@type": "Organization",
+              name: "AS Laboratorios",
+            },
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
+      <Navbar overlay />
       <TrabajaConNosotrosClient />
       <Footer />
     </>
