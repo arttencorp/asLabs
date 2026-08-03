@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
+import { constructMetadata } from "@/lib/metadata"
 import GeneticaClient from "./genetica-client"
 
-export const metadata: Metadata = {
-  title: "Genética Molecular | AS Laboratorios",
+export const metadata: Metadata = constructMetadata({
+  title: "Genética Molecular Aplicada a la Agricultura",
   description:
-    "Descubre los fundamentos de la genética molecular: inserción de genes, plásmidos, PCR, Taq polimerasa y biotecnología aplicada en agricultura.",
-  keywords:
-    "genética molecular, plásmidos, PCR, Taq polimerasa, inserción de genes, biotecnología, ingeniería genética",
-}
+    "Conoce conceptos de genética molecular, PCR, plásmidos e ingeniería genética aplicados a la biotecnología y la investigación agrícola.",
+  keywords: ["genética molecular", "PCR", "ingeniería genética", "plásmidos", "biotecnología agrícola", "investigación genética Perú"],
+  path: "/genetica",
+})
 
 export default function GeneticaPage() {
   return <GeneticaClient />
