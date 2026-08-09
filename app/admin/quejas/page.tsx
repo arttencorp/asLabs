@@ -29,7 +29,6 @@ export default function QuejasPage() {
         handleAsignar,
         handleComentario,
         handleResolucion,
-        handleEliminar,
     } = useQuejas()
 
     const [showForm, setShowForm] = useState(false)
@@ -70,7 +69,6 @@ export default function QuejasPage() {
                 quejas={quejas}
                 loading={loading}
                 onView={handleViewQueja}
-                onDelete={handleEliminar}
                 onCreate={() => setShowForm(true)}
                 onRefresh={loadQuejas}
             />
