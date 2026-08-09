@@ -434,19 +434,7 @@ export async function actualizarPrioridad(id: string, prioridad: string) {
     }
 }
 
-export async function eliminarQueja(id: string) {
-    try {
-        const { error } = await supabase
-            .from('Quejas_Reclamos')
-            .delete()
-            .eq('que_rec_id_int', id)
 
-        if (error) throw error
-    } catch (error) {
-        console.error('Error eliminando queja:', error)
-        throw error
-    }
-}
 
 export async function registrarEmailEnviado(quejaId: string, destinatario: string, asunto: string) {
     try {
