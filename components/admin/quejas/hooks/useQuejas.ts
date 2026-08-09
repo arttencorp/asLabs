@@ -11,7 +11,6 @@ import {
     registrarResolucion,
     aplicarProrroga,
     actualizarPrioridad,
-    eliminarQueja,
     cambiarTipoQueja,
     crearQueja,
     type CrearQuejaData,
@@ -209,23 +208,6 @@ export function useQuejas() {
         }
     }
 
-    const handleEliminar = async (id: string) => {
-        setLoading(true)
-        try {
-            await eliminarQueja(id)
-            await loadQuejas()
-            if (selectedQueja?.que_rec_id_int === id) {
-                setSelectedQueja(null)
-                setHistorial([])
-            }
-            showSuccess('Registro eliminado')
-        } catch (err: any) {
-            setError(err.message || 'Error eliminando registro')
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const getStats = useCallback((): QuejaStats => {
         const now = new Date()
         const vencidos = quejas.filter(q => {
@@ -288,6 +270,5 @@ export function useQuejas() {
         handleAsignar,
         handleComentario,
         handleResolucion,
-        handleEliminar,
     }
 }

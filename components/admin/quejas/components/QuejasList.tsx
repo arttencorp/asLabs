@@ -39,7 +39,6 @@ interface QuejasListProps {
     quejas: Queja[]
     loading: boolean
     onView: (queja: Queja) => void
-    onDelete: (id: string) => void
     onCreate: () => void
     onRefresh: () => void
 }
@@ -57,7 +56,6 @@ export function QuejasList({
     quejas,
     loading,
     onView,
-    onDelete,
     onCreate,
     onRefresh,
 }: QuejasListProps) {
@@ -65,7 +63,6 @@ export function QuejasList({
     const [filterEstado, setFilterEstado] = useState<string>('todos')
     const [filterTipo, setFilterTipo] = useState<string>('todos')
     const [filterPrioridad, setFilterPrioridad] = useState<string>('todos')
-    const [deleteId, setDeleteId] = useState<string | null>(null)
 
     const filtered = useMemo(() => {
         return quejas.filter((q) => {
@@ -241,15 +238,6 @@ export function QuejasList({
                                                         >
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => setDeleteId(q.que_rec_id_int)}
-                                                            className="h-7 w-7 p-0 text-gray-400 hover:text-red-600"
-                                                            title="Eliminar"
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </Button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -264,30 +252,6 @@ export function QuejasList({
                     )}
                 </CardContent>
             </Card>
-
-            {/* Confirmación eliminar */}
-            <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>¿Eliminar este registro?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Esta acción no se puede deshacer. Se eliminará el registro y todo su historial de acciones.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction
-                            className="bg-red-600 hover:bg-red-700 text-white"
-                            onClick={() => {
-                                if (deleteId) onDelete(deleteId)
-                                setDeleteId(null)
-                            }}
-                        >
-                            Eliminar
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </>
     )
 }
