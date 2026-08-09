@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: { default: "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios" },
+  title: "Biotecnología Agrícola y Laboratorio en Perú | AS Laboratorios",
   description:
     "Biotecnología agrícola, plantines in vitro, análisis de laboratorio, control biológico e investigación aplicada desde Trujillo para todo el Perú.",
   generator: "Next.js",

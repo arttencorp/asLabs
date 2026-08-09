@@ -38,3 +38,9 @@ export * from './recepcion'
 export * from './firmas'
 // Convocatorias (puestos, postulantes, áreas de interés)
 export * from './convocatorias'
+
+// Quejas y reclamos (Libro de Reclamaciones — PSG3.1/PSG3.2)
+export * from './quejas'
+
+// Configuración de correos SMTP
+export * from './config-email'
