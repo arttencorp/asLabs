@@ -152,7 +152,7 @@ export default function Footer() {
                   <MapPin className="h-4 w-4" />
                 </span>
                 <div className="text-sm text-gray-300 pt-1">
-                  <p>MZ J1 San Isidro II Etapa</p>
+                  <p>Calle 30, Urb, San Isidro II</p>
                   <p>Trujillo, La Libertad, Perú</p>
                 </div>
               </div>
@@ -216,16 +216,29 @@ export default function Footer() {
               <div className="text-sm text-gray-400 mb-4">
                 © {new Date().getFullYear()} AS Laboratorios. Todos los derechos reservados.
               </div>
-              <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-4 w-full md:w-auto">
+              <div className="flex flex-wrap items-center gap-6 bg-white/5 border border-white/10 rounded-xl p-4 w-full md:w-auto">
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Afiliado a</p>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2 font-semibold">Afiliado a</p>
                   <Image
                     src="/trustUs/camaracomercio.png"
                     alt="Cámara de Comercio de La Libertad"
                     width={180}
                     height={60}
-                    className="h-auto w-auto max-h-14"
+                    className="h-auto w-auto max-h-12"
                   />
+                </div>
+                <div className="hidden sm:block h-10 w-px bg-white/10"></div>
+                <div>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2 font-semibold">Inscrito en</p>
+                  <a href="https://ntuvrqipgvhnuynjfzbx.supabase.co/storage/v1/object/public/general-web/landing/CONSTANCIA%20DEL%20RNP%20-%20ASLABS.pdf" target="_blank" rel="noopener noreferrer" className="block transition-opacity hover:opacity-80">
+                    <Image
+                      src="/RNPv2.png"
+                      alt="Constancia del RNP"
+                      width={180}
+                      height={60}
+                      className="h-auto w-auto max-h-12"
+                    />
+                  </a>
                 </div>
               </div>
             </div>

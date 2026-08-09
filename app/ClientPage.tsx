@@ -31,6 +31,7 @@ const trustLogos = [
   { src: "/trustUs/CCLL.png", alt: "Cámara de Comercio de La Libertad", type: "Institución" },
   { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", type: "Academia" },
   { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", type: "Empresa" },
+  { src: "/RNPv2.png", alt: "Constancia del RNP", type: "Institución" },
 ]
 
 const products = [
@@ -108,25 +109,25 @@ export default function ClientPage() {
               </Link>
             </div>
 
-            <div className="mt-3 grid max-w-[680px] grid-cols-2 gap-2">
-              <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-black/[0.15] p-2 backdrop-blur-sm sm:gap-3 sm:p-2.5">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white p-1 shadow-lg sm:h-11 sm:w-11 sm:p-1.5">
-                  <Image src="/senasaLogo.png" alt="SENASA" width={40} height={40} className="h-8 w-8 object-contain sm:h-9 sm:w-9" />
+            <div className="mt-4 grid max-w-[720px] grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+              <div className="flex items-center gap-3 rounded-xl border border-white/20 bg-black/[0.15] p-3 backdrop-blur-sm transition-colors hover:bg-black/30 sm:gap-4 sm:p-3.5">
+                <div className="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-white p-1.5 shadow-lg sm:h-16 sm:w-16 sm:p-2">
+                  <Image src="/senasaLogo.png" alt="SENASA" width={64} height={64} className="h-full w-full object-contain" />
                 </div>
                 <div>
-                  <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-[#ffc56f] sm:text-[9px] sm:tracking-[0.14em]">Registro SENASA</p>
-                  <p className="mt-0.5 text-[9px] font-semibold leading-[0.85rem] text-white sm:text-[11px] sm:leading-4">Vivero de producción vegetal</p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#ffc56f] sm:text-[10px] sm:tracking-[0.14em]">Registro SENASA</p>
+                  <p className="mt-1 text-[10px] font-semibold leading-tight text-white sm:text-xs">Vivero de producción vegetal</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-xl border border-white/20 bg-black/[0.15] p-2 backdrop-blur-sm sm:gap-3 sm:p-2.5">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#f0a23a] text-[#173428] shadow-lg sm:h-11 sm:w-11">
-                  <BadgeCheck className="h-5 w-5 sm:h-6 sm:w-6" />
+              <a href="https://ntuvrqipgvhnuynjfzbx.supabase.co/storage/v1/object/public/general-web/landing/CONSTANCIA%20DEL%20RNP%20-%20ASLABS.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-xl border border-white/20 bg-black/[0.15] p-3 backdrop-blur-sm transition-colors hover:bg-black/30 sm:gap-4 sm:p-3.5">
+                <div className="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-white p-1.5 shadow-lg sm:h-16 sm:w-16 sm:p-2">
+                  <Image src="/RNPv2.png" alt="RNP" width={64} height={64} className="h-full w-full object-contain" />
                 </div>
                 <div>
-                  <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-[#ffc56f] sm:text-[9px] sm:tracking-[0.14em]">Proveedor del Estado</p>
-                  <p className="mt-0.5 text-[9px] font-semibold leading-[0.85rem] text-white sm:text-[11px] sm:leading-4">Registro Nacional de Proveedores del Perú · RNP</p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#ffc56f] sm:text-[10px] sm:tracking-[0.14em]">Proveedor del Estado</p>
+                  <p className="mt-1 text-[10px] font-semibold leading-tight text-white sm:text-xs">Registro Nacional de Proveedores del Perú · RNP</p>
                 </div>
-              </div>
+              </a>
             </div>
           </motion.div>
         </div>
