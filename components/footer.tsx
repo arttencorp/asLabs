@@ -132,6 +132,14 @@ export default function Footer() {
                   Términos Legales
                 </Link>
               </li>
+              <li className="pt-2">
+                <Link
+                  href="/libro-de-reclamaciones"
+                  className="inline-block hover:scale-105 transition-transform duration-200"
+                >
+                  <img src="/libro-de-reclamaciones.png" alt="Libro de Reclamaciones" className="w-32 h-auto object-contain" />
+                </Link>
+              </li>
             </ul>
           </StaggerItem>
 
@@ -230,6 +238,13 @@ export default function Footer() {
               </Link>
               <Link href="/legal" className="text-gray-400 hover:text-white transition-colors">
                 Cookies
+              </Link>
+              <Link
+                href="/libro-de-reclamaciones"
+                className="inline-flex items-center gap-1.5 font-semibold text-red-400 hover:text-red-300 transition-colors"
+              >
+                <span aria-hidden="true">📕</span>
+                Libro de Reclamaciones
               </Link>
             </div>
           </div>

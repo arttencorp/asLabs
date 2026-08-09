@@ -31,6 +31,7 @@ const pages = [
   ["/trabaja-con-nosotros", "weekly", 0.5],
   ["/pitch-deck", "monthly", 0.4],
   ["/legal", "yearly", 0.2],
+  ["/libro-de-reclamaciones", "monthly", 0.6],
 ] as const
 
 const identifiedPages = Array.from({ length: 6 }, (_, index) => `/cepas/identificadas/id-${index + 1}`)

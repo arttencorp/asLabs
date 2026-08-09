@@ -20,6 +20,9 @@ import {
   UserCheck,
   FlaskConical,
   PenLine,
+  MessageSquareWarning,
+  Mail,
+  Settings,
 } from "lucide-react"
 
 import {
@@ -133,6 +136,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Análisis", href: "/admin/analytics", icon: ChartColumn },
   ]
 
+  const configItems = [
+    { name: "Config. Correos", href: "/admin/configuracion/correos", icon: Mail },
+  ]
+
   return (
     <SidebarProvider
       defaultOpen={true}
@@ -172,6 +179,64 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         ${pathname === item.href
                           ? "bg-[#9d8462]/20 text-white hover:bg-[#9d8462]/30"
                           : "text-white hover:bg-[#1f1f3a] hover:text-white"
+                        }
+                      `}
+                    >
+                      <Link href={item.href} className="flex items-center gap-2 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
+                        <item.icon className="h-5 w-5 shrink-0" />
+                        <span className="group-data-[collapsible=icon]:hidden">{item.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          {/* Quejas / Reclamos destacado */}
+          <SidebarGroup className="border-t border-gray-700 pt-2">
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-1 px-2 group-data-[collapsible=icon]:px-0">
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === "/admin/quejas"}
+                    tooltip="Quejas / Reclamos"
+                    size="lg"
+                    className={`
+                      text-base
+                      ${pathname === "/admin/quejas"
+                        ? "bg-red-900/30 text-red-300 hover:bg-red-900/40"
+                        : "text-red-400 hover:bg-red-900/20 hover:text-red-300"
+                      }
+                    `}
+                  >
+                    <Link href="/admin/quejas" className="flex items-center gap-2 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
+                      <MessageSquareWarning className="h-5 w-5 shrink-0" />
+                      <span className="group-data-[collapsible=icon]:hidden">Quejas / Reclamos</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          {/* Configuración */}
+          <SidebarGroup className="border-t border-gray-700 pt-2">
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-1 px-2 group-data-[collapsible=icon]:px-0">
+                {configItems.map((item) => (
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.href}
+                      tooltip={item.name}
+                      size="lg"
+                      className={`
+                        text-base
+                        ${pathname === item.href
+                          ? "bg-[#9d8462]/20 text-white hover:bg-[#9d8462]/30"
+                          : "text-gray-400 hover:bg-[#1f1f3a] hover:text-white"
                         }
                       `}
                     >
