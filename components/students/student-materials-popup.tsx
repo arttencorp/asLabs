@@ -210,7 +210,7 @@ Detalles del material:
 
 ¿Podrían proporcionarme más información sobre cómo proceder con el pedido?`
 
-    const whatsappUrl = `https://wa.me/51987654321?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/51961996645?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 

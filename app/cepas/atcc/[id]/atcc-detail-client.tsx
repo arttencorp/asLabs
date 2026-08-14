@@ -224,7 +224,7 @@ export default function ATCCDetailClient({ cepaId }: { cepaId: string }) {
       `*TOTAL: S/ ${totalBase.toFixed(2)}*\n\n` +
       `Por favor confirmar disponibilidad y detalles de entrega.`
 
-    const numeroWhatsApp = "51987654321"
+    const numeroWhatsApp = "51961996645"
     const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`
     window.open(enlaceWhatsApp, "_blank")
   }
