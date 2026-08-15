@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { obtenerProductos, crearProducto, actualizarProducto } from '@/lib/supabase'
+import { obtenerProductos, crearProducto, actualizarProducto, ocultarProducto } from '@/lib/supabase'
 import { transformarError } from '@/utils'
 import type { ProductoDatabase } from '@/types/database'
 import type { ProductoForm } from '../types'
@@ -78,6 +78,20 @@ export function useProductos() {
     }
   }, [editingItem, showSuccess])
 
+  const handleDelete = useCallback(async (id: string) => {
+    setLoading(true)
+    setError(null)
+    try {
+      await ocultarProducto(id)
+      setItems(prevItems => prevItems.filter(item => item.pro_id_int !== id))
+      showSuccess('Producto eliminado exitosamente')
+    } catch (err) {
+      setError(transformarError(err, 'Error al ocultar producto'))
+    } finally {
+      setLoading(false)
+    }
+  }, [showSuccess])
+
   useEffect(() => {
     loadData()
   }, [loadData])
@@ -100,6 +114,7 @@ export function useProductos() {
     loadData,
     handleCreateWithForm,
     handleUpdateWithForm,
+    handleDelete,
     showSuccess
   }
 }

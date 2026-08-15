@@ -59,6 +59,7 @@ export interface ProductoDatabase {
   pro_desc_vac: string | null
   pro_prec_unitario_int: number | null
   pro_stock_int: number | null
+  pro_activo_bol?: boolean | null
   pro_created_at_dt: string
   pro_updated_at_dt: string
 }

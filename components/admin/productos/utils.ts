@@ -12,8 +12,8 @@ export const validarProducto = (data: ProductoForm): string[] => {
     errors.push('El nombre del producto debe tener al menos 3 caracteres')
   }
   
-  if (!data.pro_prec_unitario_int || data.pro_prec_unitario_int <= 0) {
-    errors.push('El precio debe ser mayor a 0')
+  if (data.pro_prec_unitario_int === undefined || data.pro_prec_unitario_int === null || data.pro_prec_unitario_int < 0) {
+    errors.push('El precio no puede ser negativo')
   }
   
   if (data.pro_prec_unitario_int && data.pro_prec_unitario_int > 999999.99) {

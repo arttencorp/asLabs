@@ -66,6 +66,7 @@ export async function obtenerProductos(): Promise<ProductoDatabase[]> {
         const { data, error } = await supabase
             .from('Productos')
             .select('*')
+            .neq('pro_activo_bol', false) // Filtrar productos que no estén explícitamente ocultos
             .order('pro_nomb_vac', { ascending: true })
 
         if (error) throw error
@@ -155,6 +156,27 @@ export async function actualizarProducto(id: string, productoData: {
         return data
     } catch (error) {
         console.error('Error actualizando producto:', error)
+        throw error
+    }
+}
+
+export async function ocultarProducto(id: string): Promise<ProductoDatabase> {
+    try {
+        if (!id || id.trim() === '') {
+            throw new Error('El ID del producto es obligatorio')
+        }
+
+        const { data, error } = await supabase
+            .from('Productos')
+            .update({ pro_activo_bol: false })
+            .eq('pro_id_int', id)
+            .select()
+            .single()
+
+        if (error) throw error
+        return data
+    } catch (error) {
+        console.error('Error ocultando producto:', error)
         throw error
     }
 }
