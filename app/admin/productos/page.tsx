@@ -23,6 +23,7 @@ export default function ProductosPage() {
     setEditingItem,
     handleCreateWithForm,
     handleUpdateWithForm,
+    handleDelete,
   } = useProductos()
 
   const openEditDialog = (producto: any) => {
@@ -69,15 +70,15 @@ export default function ProductosPage() {
         </div>
       )}
 
-      {/* Stats */}
-      <ProductosStats productos={productos} />
+      {/* Stats 
+      <ProductosStats productos={productos} />*/}
 
       {/* Products Table */}
       <ProductosTable
         productos={productos}
         loading={loading}
         onEdit={openEditDialog}
-        onDelete={() => {}} // Eliminar deshabilitado según requerimientos
+        onDelete={handleDelete} // Ahora realiza el borrado suave (ocultar)
         onCreate={openCreateDialog}
         onRefresh={() => {}} // Añadir función de refresh si es necesaria
       />

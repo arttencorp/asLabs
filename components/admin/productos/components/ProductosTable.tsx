@@ -13,7 +13,19 @@ import {
 } from "@/components/ui/table"
 import { DataPagination } from "@/components/ui/data-pagination"
 import { usePagination } from "@/hooks/usePagination"
-import { Edit, Package, Loader2, Search, RefreshCw, Plus } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Edit, Package, Loader2, Search, RefreshCw, Plus, Trash2, Eye } from "lucide-react"
 import { formatearPrecio, obtenerEstadoProducto } from '../utils'
 import type { ProductosTableProps } from '../types'
 
@@ -26,6 +38,7 @@ export function ProductosTable({
   onCreate
 }: ProductosTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
+  const [viewingProducto, setViewingProducto] = useState<any>(null)
   
   // Filtrar productos basado en el término de búsqueda
   const filteredProductos = useMemo(() => {
@@ -92,8 +105,7 @@ export function ProductosTable({
               <Table className="table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[30%]">Nombre</TableHead>
-                    <TableHead className="w-[30%]">Descripción</TableHead>
+                    <TableHead className="w-[30%]">Nombre</TableHead> 
                     <TableHead className="w-[13%] text-center">Precio</TableHead>
                     <TableHead className="w-[12%] text-center">Stock</TableHead>
                     <TableHead className="w-[15%] text-center">Acciones</TableHead>
@@ -113,13 +125,8 @@ export function ProductosTable({
                       return (
                         <TableRow key={producto.pro_id_int}>
                           <TableCell className="font-medium">
-                            <div className="truncate max-w-[300px]" title={producto.pro_nomb_vac || ''}>
+                            <div title={producto.pro_nomb_vac || ''}>
                               {producto.pro_nomb_vac || 'Sin nombre'}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="truncate max-w-[300px]" title={producto.pro_desc_vac || ''}>
-                              {producto.pro_desc_vac || 'Sin descripción'}
                             </div>
                           </TableCell>
                           <TableCell className="font-mono text-center">
@@ -139,12 +146,48 @@ export function ProductosTable({
                           <TableCell>
                             <div className="flex items-center justify-center">
                               <button
+                                className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors duration-150 mr-2"
+                                onClick={() => setViewingProducto(producto)}
+                                title="Ver detalles"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </button>
+                              <button
                                 className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-colors duration-150"
                                 onClick={() => onEdit(producto)}
                                 title="Editar producto"
                               >
                                 <Edit className="h-4 w-4" />
                               </button>
+                              {onDelete && (
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <button
+                                      className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors duration-150 ml-2"
+                                      title="Eliminar producto"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>¿Está seguro que desea eliminar este producto?</AlertDialogTitle>
+                                      <AlertDialogDescription className="text-black">
+                                        Esta acción no se puede deshacer. Esto eliminará permanentemente el producto del catálogo.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                      <AlertDialogAction 
+                                        className="bg-red-600 hover:bg-red-700 text-white"
+                                        onClick={() => onDelete(producto.pro_id_int)}
+                                      >
+                                        Aceptar
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              )}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -172,6 +215,37 @@ export function ProductosTable({
           </>
         )}
       </CardContent>
+
+      {/* Modal de Detalles */}
+      <Dialog open={!!viewingProducto} onOpenChange={(open) => !open && setViewingProducto(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Detalles del Producto</DialogTitle>
+          </DialogHeader>
+          {viewingProducto && (
+            <div className="space-y-4 mt-4">
+              <div>
+                <h4 className="text-sm font-semibold text-black">Nombre</h4>
+                <p className="text-base">{viewingProducto.pro_nomb_vac || 'Sin nombre'}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-black">Descripción</h4>
+                <p className="text-base whitespace-pre-wrap">{viewingProducto.pro_desc_vac || 'Sin descripción'}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-black">Precio Unitario</h4>
+                  <p className="text-base">{formatearPrecio(viewingProducto.pro_prec_unitario_int)}</p>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-black">Stock</h4>
+                  <p className="text-base">{viewingProducto.pro_stock_int ?? 0}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }
