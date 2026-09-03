@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import {
-  ArrowRight, Atom, BadgeCheck, BarChart3, Check, ChevronRight, CircleDot,
+  ArrowRight, ArrowUpRight, Atom, BadgeCheck, BarChart3, BookOpen, Check, ChevronRight, CircleDot,
   Dna, FileCheck2, FlaskConical, Leaf, Network, ScanSearch, ShieldCheck,
   Sparkles, TestTube2,
 } from "lucide-react"
@@ -13,14 +14,14 @@ import { Footer } from "@/components/footer"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 const services = [
-  { icon: ScanSearch, number: "01", title: "Diagnóstico molecular agrícola", description: "Detección dirigida de agentes asociados a enfermedades vegetales, desde una muestra correctamente seleccionada.", items: ["Virus y viroides", "Bacterias y fitoplasmas", "Hongos y oomicetos"], tone: "bg-[#e9f6f1] text-[#176d59]" },
-  { icon: Dna, number: "02", title: "Identificación por secuenciación", description: "Identificación taxonómica de microorganismos mediante regiones conservadas y comparación bioinformática.", items: ["16S rRNA para bacterias", "ITS para hongos", "Secuenciación Sanger"], tone: "bg-[#eef3ff] text-[#315ba8]" },
-  { icon: Leaf, number: "03", title: "Genética vegetal", description: "Herramientas moleculares para caracterizar, autenticar y estudiar material vegetal de interés productivo.", items: ["Código de barras de ADN", "Identidad genética", "Variabilidad y trazabilidad"], tone: "bg-[#eff7df] text-[#557a18]" },
-  { icon: BarChart3, number: "04", title: "PCR, qPCR y RT-PCR", description: "Ensayos cualitativos y cuantitativos adaptados al objetivo, tipo de muestra y sensibilidad requerida.", items: ["Detección específica", "Cuantificación relativa", "Análisis desde ARN"], tone: "bg-[#f2edff] text-[#6950a7]" },
-  { icon: ShieldCheck, number: "05", title: "Inocuidad y autenticidad", description: "Aplicaciones moleculares para complementar el control de materias primas, alimentos y procesos.", items: ["Detección de patógenos", "Confirmación de identidad", "Paneles de vigilancia"], tone: "bg-[#fff2e8] text-[#a95b22]" },
-  { icon: TestTube2, number: "06", title: "Muestras ambientales", description: "Detección e identificación de blancos biológicos en agua, suelo, sustratos y matrices ambientales.", items: ["ADN ambiental", "Monitoreo microbiano", "Confirmación molecular"], tone: "bg-[#e8f6f8] text-[#16707c]" },
-  { icon: Network, number: "07", title: "Investigación y bioinformática", description: "Acompañamiento para convertir una pregunta de investigación en un flujo molecular reproducible.", items: ["Diseño de primers", "Optimización de protocolos", "Análisis de secuencias"], tone: "bg-[#f8eef3] text-[#9a4569]" },
-  { icon: Atom, number: "08", title: "Desarrollos a medida", description: "Evaluación de factibilidad para blancos, organismos o matrices que requieren una estrategia propia.", items: ["Paneles multiblanco", "Validación técnica", "Proyectos especiales"], tone: "bg-[#edf4f2] text-[#345d54]" },
+  { slug: "diagnostico-molecular-agricola", icon: ScanSearch, number: "01", title: "Diagnóstico molecular agrícola", description: "Detección dirigida de agentes asociados a enfermedades vegetales, desde una muestra correctamente seleccionada.", items: ["Virus y viroides", "Bacterias y fitoplasmas", "Hongos y oomicetos"], tone: "bg-[#e9f6f1] text-[#176d59]" },
+  { slug: "identificacion-por-secuenciacion", icon: Dna, number: "02", title: "Identificación por secuenciación", description: "Identificación taxonómica de microorganismos mediante regiones conservadas y comparación bioinformática.", items: ["16S rRNA para bacterias", "ITS para hongos", "Secuenciación Sanger"], tone: "bg-[#eef3ff] text-[#315ba8]" },
+  { slug: "genetica-vegetal", icon: Leaf, number: "03", title: "Genética vegetal", description: "Herramientas moleculares para caracterizar, autenticar y estudiar material vegetal de interés productivo.", items: ["Código de barras de ADN", "Identidad genética", "Variabilidad y trazabilidad"], tone: "bg-[#eff7df] text-[#557a18]" },
+  { slug: "pcr-qpcr-rtpcr", icon: BarChart3, number: "04", title: "PCR, qPCR y RT-PCR", description: "Ensayos cualitativos y cuantitativos adaptados al objetivo, tipo de muestra y sensibilidad requerida.", items: ["Detección específica", "Cuantificación relativa", "Análisis desde ARN"], tone: "bg-[#f2edff] text-[#6950a7]" },
+  { slug: "inocuidad-y-autenticidad", icon: ShieldCheck, number: "05", title: "Inocuidad y autenticidad", description: "Aplicaciones moleculares para complementar el control de materias primas, alimentos y procesos.", items: ["Detección de patógenos", "Confirmación de identidad", "Paneles de vigilancia"], tone: "bg-[#fff2e8] text-[#a95b22]" },
+  { slug: "muestras-ambientales", icon: TestTube2, number: "06", title: "Muestras ambientales", description: "Detección e identificación de blancos biológicos en agua, suelo, sustratos y matrices ambientales.", items: ["ADN ambiental", "Monitoreo microbiano", "Confirmación molecular"], tone: "bg-[#e8f6f8] text-[#16707c]" },
+  { slug: "investigacion-y-bioinformatica", icon: Network, number: "07", title: "Investigación y bioinformática", description: "Acompañamiento para convertir una pregunta de investigación en un flujo molecular reproducible.", items: ["Diseño de primers", "Optimización de protocolos", "Análisis de secuencias"], tone: "bg-[#f8eef3] text-[#9a4569]" },
+  { slug: "desarrollos-a-medida", icon: Atom, number: "08", title: "Desarrollos a medida", description: "Evaluación de factibilidad para blancos, organismos o matrices que requieren una estrategia propia.", items: ["Paneles multiblanco", "Validación técnica", "Proyectos especiales"], tone: "bg-[#edf4f2] text-[#345d54]" },
 ]
 
 const applications = {
@@ -47,20 +48,6 @@ const faqs = [
   ["¿Cuánto demora un análisis molecular?", "El plazo cambia según técnica, número de muestras, controles y secuenciación. La cotización indica el tiempo estimado después de revisar el caso."],
 ]
 
-function MolecularOrbit() {
-  return (
-    <div className="relative mx-auto aspect-square w-full max-w-[430px]" aria-hidden="true">
-      <motion.div animate={{ rotate: 360 }} transition={{ duration: 26, repeat: Infinity, ease: "linear" }} className="absolute inset-[9%] rounded-full border border-white/15">
-        {[0, 90, 180, 270].map((rotation) => <span key={rotation} className="absolute left-1/2 top-1/2 h-3 w-3 rounded-full bg-[#83e2c2] shadow-[0_0_24px_rgba(131,226,194,.8)]" style={{ transform: `rotate(${rotation}deg) translateX(165px) translate(-50%, -50%)` }} />)}
-      </motion.div>
-      <motion.div animate={{ rotate: -360 }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }} className="absolute inset-[22%] rounded-full border border-dashed border-white/20" />
-      <div className="absolute inset-[31%] rounded-full bg-gradient-to-br from-[#7ee0be] to-[#319b7d] p-px shadow-[0_0_80px_rgba(62,190,151,.3)]"><div className="grid h-full w-full place-items-center rounded-full bg-[#0a211d]"><Dna className="h-16 w-16 text-[#9cf0d3]" strokeWidth={1.25} /></div></div>
-      <motion.div animate={{ y: [-6, 6, -6] }} transition={{ duration: 4, repeat: Infinity }} className="absolute left-0 top-[18%] rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-xs font-semibold text-white/80 backdrop-blur-xl">PCR · qPCR</motion.div>
-      <motion.div animate={{ y: [7, -7, 7] }} transition={{ duration: 4.5, repeat: Infinity }} className="absolute bottom-[16%] right-0 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-xs font-semibold text-white/80 backdrop-blur-xl">16S · ITS</motion.div>
-    </div>
-  )
-}
-
 export default function ExcellentClient() {
   const [activeApplication, setActiveApplication] = useState<ApplicationKey>("Agricultura")
   const application = applications[activeApplication]
@@ -69,23 +56,34 @@ export default function ExcellentClient() {
     <div className="min-h-screen overflow-hidden bg-[#f5f7f6] font-[var(--font-poppins)] text-[#142724]">
       <Navbar overlay />
       <main>
-        <section data-navbar-theme="dark" className="relative min-h-[760px] overflow-hidden bg-[#071815] px-4 pb-24 pt-28 text-white sm:px-6 sm:pb-28 sm:pt-36 lg:px-8">
+        <section data-navbar-theme="dark" className="relative overflow-hidden bg-[#071815] px-4 pb-20 pt-28 text-white sm:px-6 sm:pb-24 sm:pt-32 lg:px-8">
           <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(114,215,181,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(114,215,181,.08)_1px,transparent_1px)] [background-size:64px_64px]" />
           <div className="absolute -left-44 top-1/4 h-[480px] w-[480px] rounded-full bg-[#2ea782]/20 blur-[120px]" /><div className="absolute -right-40 -top-32 h-[520px] w-[520px] rounded-full bg-[#247f69]/20 blur-[130px]" />
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#f5f7f6] to-transparent" />
-          <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.12fr_.88fr]">
+          <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:min-h-[510px] lg:grid-cols-[1.02fr_.98fr]">
             <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .75, ease: [0.16, 1, 0.3, 1] }}>
               <div className="inline-flex items-center gap-2 rounded-full border border-[#89d8bd]/25 bg-[#79d9ba]/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.2em] text-[#a5efd6] backdrop-blur-xl sm:text-xs"><Sparkles className="h-3.5 w-3.5" />Nueva marca de AS Laboratorios</div>
-              <div className="mt-6 inline-flex max-w-full rounded-[22px] border border-white/15 bg-[#f2f3f2] px-4 py-3 shadow-[0_20px_70px_rgba(0,0,0,.25)] sm:px-6"><Image src="/images/excellent-logo.png" alt="exCELLlent" width={638} height={156} priority className="h-auto w-[290px] sm:w-[420px]" /></div>
-              <h1 className="mt-8 max-w-3xl text-balance text-4xl font-semibold leading-[1.02] tracking-[-.05em] sm:text-6xl lg:text-[68px]">Precisión molecular para decisiones que importan</h1>
-              <p className="mt-6 max-w-2xl text-sm leading-7 text-white/65 sm:text-base sm:leading-8">Una línea especializada en diagnóstico, identificación y análisis molecular para agricultura, microbiología, ambiente, alimentos e investigación.</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Image src="/images/excellent-logo-transparent.png" alt="exCELLlent" width={2172} height={724} priority className="mt-7 h-auto w-[178px] brightness-0 invert sm:w-[220px]" />
+              <h1 className="mt-6 max-w-2xl text-balance text-4xl font-semibold leading-[1.03] tracking-[-.05em] sm:text-5xl lg:text-[58px]">Respuestas precisas, desde el ADN</h1>
+              <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base">Diagnóstico, identificación y análisis molecular para agricultura, microbiología, ambiente, alimentos e investigación.</p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <WhatsAppContact message="Hola, quisiera cotizar un análisis molecular con exCELLlent." className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-[#80dfbf] px-7 text-sm font-bold text-[#09241d] shadow-[0_16px_38px_rgba(75,196,156,.2)] transition hover:-translate-y-1 hover:bg-[#a3efd7]">Evaluar mi muestra<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></WhatsAppContact>
-                <a href="#servicios" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[.07] px-7 text-sm font-bold text-white backdrop-blur-xl transition hover:bg-white/[.12]">Explorar servicios<ChevronRight className="h-4 w-4" /></a>
+                <Link href="/excellent/catalogo" className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[.07] px-7 text-sm font-bold text-white backdrop-blur-xl transition hover:bg-white/[.12]">Ver catálogo<BookOpen className="h-4 w-4" /></Link>
               </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/55">{["Evaluación técnica previa", "Trazabilidad de muestras", "Atención nacional"].map((item) => <span key={item} className="flex items-center gap-2"><Check className="h-4 w-4 text-[#83e2c2]" />{item}</span>)}</div>
+              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/55">{["Evaluación técnica previa", "Trazabilidad de muestras", "Atención nacional"].map((item) => <span key={item} className="flex items-center gap-2"><Check className="h-4 w-4 text-[#83e2c2]" />{item}</span>)}</div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, scale: .92 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: .15, duration: .85 }} className="hidden lg:block"><MolecularOrbit /></motion.div>
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: .12, duration: .85, ease: [0.16, 1, 0.3, 1] }} className="relative h-[330px] sm:h-[400px] lg:h-[470px]">
+              <div className="absolute inset-x-0 top-0 h-[86%] overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-[0_35px_100px_rgba(0,0,0,.3)] sm:inset-x-8 lg:left-10 lg:right-0">
+                <Image src="/research/research-lab.png" alt="Especialista de exCELLlent trabajando en análisis molecular" fill priority className="object-cover" sizes="(min-width: 1024px) 46vw, 100vw" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#061713]/80 via-transparent to-[#081c18]/20" />
+                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between"><div><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#8ce4c6]">Plataforma molecular</p><p className="mt-1 text-sm font-semibold text-white">Del objetivo al resultado interpretable</p></div><span className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/20 backdrop-blur-xl"><Dna className="h-5 w-5 text-[#95e6ca]" /></span></div>
+              </div>
+              <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 5, repeat: Infinity }} className="absolute bottom-0 left-0 w-[45%] overflow-hidden rounded-[22px] border-[5px] border-[#071815] bg-[#163b32] shadow-2xl sm:left-2">
+                <div className="relative aspect-[4/3]"><Image src="/plant-genetics-research.png" alt="Investigación genética vegetal" fill className="object-cover" sizes="220px" /><div className="absolute inset-0 bg-gradient-to-t from-[#071815]/80 to-transparent" /><span className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-[.16em] text-white">Genética vegetal</span></div>
+              </motion.div>
+              <motion.div animate={{ y: [5, -5, 5] }} transition={{ duration: 4.5, repeat: Infinity }} className="absolute right-0 top-7 rounded-2xl border border-white/15 bg-[#0b2c25]/85 px-4 py-3 text-xs font-semibold text-white shadow-xl backdrop-blur-xl">PCR · qPCR · RT-PCR</motion.div>
+              <div className="absolute bottom-7 right-2 rounded-2xl border border-[#8ce4c6]/25 bg-[#102f29]/90 px-4 py-3 backdrop-blur-xl"><strong className="block text-xl font-semibold text-[#96e8cd]">08</strong><span className="text-[10px] font-semibold uppercase tracking-[.14em] text-white/60">líneas de servicio</span></div>
+            </motion.div>
           </div>
         </section>
 
@@ -93,9 +91,37 @@ export default function ExcellentClient() {
           {[[Dna,"Biología molecular","Estrategias según el blanco"],[FlaskConical,"Múltiples matrices","Agro, micro, alimento y ambiente"],[FileCheck2,"Resultados claros","Informe con alcance definido"],[BadgeCheck,"Soporte experto","Antes, durante y después"]].map(([Icon,title,text], index) => { const ItemIcon=Icon as typeof Dna; return <div key={String(title)} className={`flex gap-4 p-5 sm:p-6 ${index < 3 ? "border-b border-black/[.06] sm:border-r lg:border-b-0" : ""}`}><span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#e7f5f0] text-[#257d65]"><ItemIcon className="h-5 w-5" /></span><div><h2 className="text-sm font-bold">{String(title)}</h2><p className="mt-1 text-xs leading-5 text-[#687a75]">{String(text)}</p></div></div>})}
         </div></section>
 
+        <section className="mx-auto max-w-7xl px-4 pt-24 sm:px-6 sm:pt-28 lg:px-8">
+          <div className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
+            <Link href="/excellent/catalogo" className="group relative min-h-[390px] overflow-hidden rounded-[32px] bg-[#123a31] p-7 text-white shadow-[0_20px_70px_rgba(15,55,45,.13)] sm:p-9">
+              <Image src="/laboratory-research.png" alt="Catálogo de análisis moleculares exCELLlent" fill className="object-cover opacity-50 transition duration-700 group-hover:scale-105 group-hover:opacity-60" sizes="(min-width:1024px) 58vw, 100vw" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#08231d]/95 via-[#08231d]/70 to-transparent" />
+              <div className="relative flex h-full max-w-md flex-col">
+                <span className="w-fit rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.2em] backdrop-blur-md">Catálogo general</span>
+                <h2 className="mt-auto text-3xl font-semibold leading-tight tracking-[-.04em] sm:text-4xl">Explora todas las capacidades moleculares</h2>
+                <p className="mt-4 text-sm leading-7 text-white/68">Ocho líneas especializadas, con muestras, técnicas, servicios incluidos y entregables claramente explicados.</p>
+                <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#9ae8ce]">Abrir catálogo <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></span>
+              </div>
+            </Link>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {[
+                { href: "/excellent/diagnostico-molecular-agricola", image: "/plant-genetics-research.png", label: "Sanidad vegetal", title: "Diagnóstico molecular agrícola" },
+                { href: "/excellent/identificacion-por-secuenciacion", image: "/research/research-lab.png", label: "16S · ITS · Sanger", title: "Identificación por secuenciación" },
+              ].map((catalog) => (
+                <Link key={catalog.href} href={catalog.href} className="group relative min-h-[187px] overflow-hidden rounded-[28px] bg-[#102e28] p-6 text-white">
+                  <Image src={catalog.image} alt={catalog.title} fill className="object-cover opacity-45 transition duration-700 group-hover:scale-105 group-hover:opacity-55" sizes="(min-width:1024px) 40vw, 50vw" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#081e19]/90 via-[#081e19]/55 to-transparent" />
+                  <div className="relative flex h-full flex-col justify-end"><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#8ee2c5]">{catalog.label}</p><h3 className="mt-2 max-w-xs text-xl font-semibold leading-tight">{catalog.title}</h3><ArrowUpRight className="absolute bottom-0 right-0 h-5 w-5 text-white/70 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="servicios" className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
           <div className="grid gap-7 lg:grid-cols-[1fr_.72fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.22em] text-[#30866f]">Portafolio molecular</p><h2 className="mt-4 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] tracking-[-.045em] text-[#102e28] sm:text-5xl">Una respuesta específica para cada pregunta biológica</h2></div><p className="max-w-xl text-sm leading-7 text-[#647670] lg:justify-self-end sm:text-base">No todas las muestras ni objetivos requieren la misma técnica. Primero entendemos el caso; después definimos el análisis, los controles y el entregable correcto.</p></div>
-          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{services.map((service,index) => <motion.article key={service.number} initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,margin:"-70px"}} transition={{delay:(index%4)*.07,duration:.5}} whileHover={{y:-7}} className="group flex min-h-[390px] flex-col rounded-[28px] border border-black/[.07] bg-white p-6 shadow-[0_15px_50px_rgba(15,55,45,.055)] transition-shadow hover:shadow-[0_24px_65px_rgba(15,55,45,.12)]"><div className="flex items-center justify-between"><span className={`grid h-12 w-12 place-items-center rounded-2xl ${service.tone}`}><service.icon className="h-5 w-5" /></span><span className="text-xs font-bold tracking-[.18em] text-[#a4b0ac]">{service.number}</span></div><h3 className="mt-7 text-xl font-semibold leading-tight tracking-[-.025em] text-[#15332d]">{service.title}</h3><p className="mt-3 text-sm leading-6 text-[#697a75]">{service.description}</p><div className="mt-auto space-y-2 border-t border-black/[.06] pt-5">{service.items.map(item => <div key={item} className="flex items-center gap-2 text-xs font-semibold text-[#456159]"><CircleDot className="h-3.5 w-3.5 text-[#45a88a]" />{item}</div>)}</div></motion.article>)}</div>
+          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{services.map((service,index) => <motion.article key={service.number} initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,margin:"-70px"}} transition={{delay:(index%4)*.07,duration:.5}} whileHover={{y:-7}} className="group overflow-hidden rounded-[28px] border border-black/[.07] bg-white shadow-[0_15px_50px_rgba(15,55,45,.055)] transition-shadow hover:shadow-[0_24px_65px_rgba(15,55,45,.12)]"><Link href={`/excellent/${service.slug}`} className="flex min-h-[410px] flex-col p-6"><div className="flex items-center justify-between"><span className={`grid h-12 w-12 place-items-center rounded-2xl ${service.tone}`}><service.icon className="h-5 w-5" /></span><span className="text-xs font-bold tracking-[.18em] text-[#a4b0ac]">{service.number}</span></div><h3 className="mt-7 text-xl font-semibold leading-tight tracking-[-.025em] text-[#15332d]">{service.title}</h3><p className="mt-3 text-sm leading-6 text-[#697a75]">{service.description}</p><div className="mt-auto space-y-2 border-t border-black/[.06] pt-5">{service.items.map(item => <div key={item} className="flex items-center gap-2 text-xs font-semibold text-[#456159]"><CircleDot className="h-3.5 w-3.5 text-[#45a88a]" />{item}</div>)}</div><span className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#277861]">Ver ficha completa <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></span></Link></motion.article>)}</div>
+          <div className="mt-8 flex justify-center"><Link href="/excellent/catalogo" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#bad6cd] bg-white px-6 text-sm font-bold text-[#245f50] transition hover:-translate-y-0.5 hover:bg-[#eaf5f1]">Ver los 8 servicios en el catálogo<ArrowRight className="h-4 w-4" /></Link></div>
           <p className="mt-6 text-center text-xs leading-5 text-[#7d8e88]">La disponibilidad, método y alcance se confirman después de revisar el objetivo y las condiciones de la muestra.</p>
         </section>
 

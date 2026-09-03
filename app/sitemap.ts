@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { excellentServices } from "@/data/excellent-catalog"
 
 const SITE_URL = "https://aslaboratorios.com"
 const LAST_MODIFIED = new Date("2026-09-03")
@@ -7,6 +8,7 @@ const pages = [
   ["", "weekly", 1],
   ["/servicios", "weekly", 0.95],
   ["/excellent", "weekly", 0.94],
+  ["/excellent/catalogo", "weekly", 0.92],
   ["/plantines", "weekly", 0.9],
   ["/control-biologico", "weekly", 0.9],
   ["/biotecnologia-vegetal", "monthly", 0.85],
@@ -53,5 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.68,
   }))
 
-  return [...primaryPages, ...catalogPages]
+  const excellentCatalogPages: MetadataRoute.Sitemap = excellentServices.map((service) => ({
+    url: `${SITE_URL}/excellent/${service.slug}`,
+    lastModified: LAST_MODIFIED,
+    changeFrequency: "monthly",
+    priority: 0.86,
+  }))
+
+  return [...primaryPages, ...catalogPages, ...excellentCatalogPages]
 }
