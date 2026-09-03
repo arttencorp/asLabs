@@ -232,14 +232,14 @@ export function Navbar({ overlay = false }: NavbarProps) {
             )}
           </AnimatePresence>
           <div className={`flex items-center justify-between px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
-            <Link href="/" aria-label="AS Labs — Inicio" className="flex shrink-0 items-center rounded-xl border border-white/80 bg-white/95 px-2 py-1 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2e7048]">
+            <Link href="/" aria-label="AS Labs — Inicio" className="flex h-9 w-[104px] shrink-0 items-center overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8ee2c5] sm:w-[112px]">
               <Image
                 src="/images/new-logo.png"
                 alt="AS Labs"
                 width={150}
                 height={52}
                 priority
-                className={`h-auto transition-all duration-500 ${scrolled ? "w-[116px] sm:w-[126px]" : "w-[120px] sm:w-[132px]"}`}
+                className={`h-auto w-full transition-all duration-500 ${useDarkContrast ? "grayscale invert contrast-[2] mix-blend-screen" : ""}`}
               />
             </Link>
 
