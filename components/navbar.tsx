@@ -11,6 +11,7 @@ import {
   BriefcaseBusiness,
   ChevronDown,
   ClipboardCheck,
+  Dna,
   FlaskConical,
   Leaf,
   Menu,
@@ -66,6 +67,7 @@ const navigation: NavGroup[] = [
       { label: "Biotecnología vegetal", href: "/servicios/biotecnologia-vegetal", description: "Cultivo de tejidos in vitro", icon: Leaf },
       { label: "Bacteriología", href: "/servicios/bacteriologia-general", description: "Suspensiones y fermentación", icon: FlaskConical },
       { label: "Apoyo a la investigación", href: "/servicios/apoyo-investigacion", description: "Protocolos e identificación molecular", icon: Microscope },
+      { label: "exCELLlent", href: "/excellent", description: "Análisis moleculares especializados", icon: Dna },
     ],
   },
   { label: "Plantines", href: "/plantines" },
@@ -232,7 +234,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
           <div className={`flex items-center justify-between px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
             <Link href="/" aria-label="AS Labs — Inicio" className="flex shrink-0 items-center rounded-xl border border-white/80 bg-white/95 px-2 py-1 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2e7048]">
               <Image
-                src="/Frame23.png"
+                src="/images/new-logo.png"
                 alt="AS Labs"
                 width={150}
                 height={52}

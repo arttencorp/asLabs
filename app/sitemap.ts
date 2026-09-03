@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next"
 
 const SITE_URL = "https://aslaboratorios.com"
-const LAST_MODIFIED = new Date("2026-07-26")
+const LAST_MODIFIED = new Date("2026-09-03")
 
 const pages = [
   ["", "weekly", 1],
   ["/servicios", "weekly", 0.95],
+  ["/excellent", "weekly", 0.94],
   ["/plantines", "weekly", 0.9],
   ["/control-biologico", "weekly", 0.9],
   ["/biotecnologia-vegetal", "monthly", 0.85],
