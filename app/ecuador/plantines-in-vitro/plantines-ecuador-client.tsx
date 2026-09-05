@@ -22,6 +22,15 @@ const preventiveFlow = [
   { icon: FlaskConical, title: "Manejo integrado", text: "Articulación con diagnóstico molecular y soluciones biológicas cuando corresponda." },
 ]
 
+const plantinServices = [
+  "Micropropagación clonal de banano y plátano",
+  "Producción de lotes por programación",
+  "Identificación y trazabilidad por código",
+  "Coordinación de aclimatación y entrega",
+  "Orientación para recepción y bioseguridad",
+  "Integración con diagnóstico molecular de Fusarium",
+]
+
 export default function PlantinesEcuadorClient() {
   return (
     <div className="min-h-screen overflow-hidden bg-[#f4f6f1] font-[var(--font-poppins)] text-[#16352a]">
@@ -33,11 +42,11 @@ export default function PlantinesEcuadorClient() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#08261b]/75 via-transparent to-transparent" />
           <div className="relative mx-auto flex min-h-[650px] max-w-[1480px] items-center px-5 pb-24 pt-28 sm:min-h-[690px] sm:px-8 lg:px-10">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .72 }} className="max-w-[760px]">
-              <Link href="/ecuador" className="inline-flex items-center gap-2 text-xs font-bold text-white/65 transition hover:text-white"><ArrowLeft className="h-4 w-4" />AS Labs Ecuador</Link>
+              <Link href="/ecuador" className="inline-flex items-center gap-2 text-xs font-bold text-white/65 transition hover:text-white"><ArrowLeft className="h-4 w-4" />Volver al inicio</Link>
               <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#efad4e]/35 bg-[#efad4e]/12 px-4 py-2 text-[10px] font-bold uppercase tracking-[.18em] text-[#ffd28c]"><Sprout className="h-4 w-4" />Biotecnología vegetal</div>
               <h1 className="mt-5 max-w-3xl text-balance text-[clamp(2.25rem,4.7vw,4.25rem)] font-medium leading-[1.01] tracking-[-.048em]">Plantines in vitro para empezar con mayor control</h1>
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">Material vegetal uniforme y trazable para proyectos de banano y plátano que integran prevención, bioseguridad y manejo frente a Fusarium.</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#variedades" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-[#f0a23a] px-7 text-sm font-bold text-[#173428] transition hover:bg-[#ffc56f]">Ver plantines<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a><WhatsAppContact mode="modal" message="Hola, quisiera consultar disponibilidad de plantines in vitro para Ecuador." className="inline-flex min-h-14 items-center justify-center rounded-full border border-white/30 bg-black/10 px-7 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-[#173428]">Consultar disponibilidad</WhatsAppContact></div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#servicios" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-[#f0a23a] px-7 text-sm font-bold text-[#173428] transition hover:bg-[#ffc56f]">Ver servicios<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a><WhatsAppContact mode="modal" message="Hola, quisiera consultar disponibilidad de plantines in vitro para Ecuador." className="inline-flex min-h-14 items-center justify-center rounded-full border border-white/30 bg-black/10 px-7 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-[#173428]">Consultar disponibilidad</WhatsAppContact></div>
               <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-[10px] font-semibold text-white/65">{["Producción controlada", "Identificación por código", "Orientación técnica"].map(item => <span key={item} className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-[#9ae0b0]" />{item}</span>)}</div>
             </motion.div>
           </div>
@@ -46,6 +55,11 @@ export default function PlantinesEcuadorClient() {
 
         <section className="relative z-10 mx-auto -mt-5 max-w-6xl px-5 sm:px-8">
           <div className="grid gap-4 rounded-[26px] border border-[#d9e4dc] bg-white p-5 shadow-[0_24px_70px_-32px_rgba(10,47,32,.35)] sm:grid-cols-[auto_1fr] sm:items-center sm:p-7"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#fff1dd] text-[#a75a13]"><Biohazard className="h-5 w-5" /></span><div><h2 className="text-sm font-bold">Un componente de una estrategia integral</h2><p className="mt-2 text-xs leading-6 text-[#64766d]">El cultivo in vitro ayuda a controlar el origen y la uniformidad del material. La prevención frente a Fusarium también requiere diagnóstico, bioseguridad, manejo de suelo, agua, herramientas y monitoreo continuo.</p></div></div>
+        </section>
+
+        <section id="servicios" className="mx-auto max-w-7xl px-5 pb-6 pt-20 sm:px-8 sm:pt-28">
+          <div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b5651d]">Lista de servicios</p><h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Servicios para planificar el material desde el origen</h2></div><p className="text-sm leading-7 text-[#65766f]">El volumen, variedad, etapa de entrega y cronograma se definen antes de iniciar la programación del lote.</p></div>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{plantinServices.map((service, index) => <motion.article key={service} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (index % 3) * .07 }} className="flex min-h-[170px] flex-col rounded-[24px] border border-[#dce6df] bg-white p-5 shadow-[0_12px_38px_rgba(15,55,45,.05)]"><div className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[#edf5ef] text-[#387e66]"><Sprout className="h-4 w-4" /></span><span className="text-2xl font-semibold text-[#16352a]/10">{String(index + 1).padStart(2, "0")}</span></div><h3 className="mt-auto pt-7 text-sm font-bold leading-6">{service}</h3></motion.article>)}</div>
         </section>
 
         <section id="variedades" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">

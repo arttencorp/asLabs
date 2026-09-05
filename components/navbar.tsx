@@ -13,7 +13,6 @@ import {
   ClipboardCheck,
   Dna,
   FlaskConical,
-  Globe2,
   Leaf,
   Menu,
   MessageCircle,
@@ -108,10 +107,15 @@ const navigation: NavGroup[] = [
 ]
 
 const ecuadorNavigation: NavGroup[] = [
-  { label: "Inicio Ecuador", href: "/ecuador" },
-  { label: "Biología molecular", href: "/ecuador/biologia-molecular" },
-  { label: "Formulaciones bacterianas", href: "/ecuador/formulaciones-bacterianas" },
-  { label: "Plantines in vitro", href: "/ecuador/plantines-in-vitro" },
+  { label: "Inicio", href: "/ecuador" },
+  {
+    label: "Servicios",
+    links: [
+      { label: "Biología molecular", href: "/ecuador/biologia-molecular", description: "PCR, secuenciamiento e identificación", icon: Dna },
+      { label: "Formulaciones bacterianas", href: "/ecuador/formulaciones-bacterianas", description: "Desarrollo y control microbiológico", icon: FlaskConical },
+      { label: "Plantines in vitro", href: "/ecuador/plantines-in-vitro", description: "Material vegetal y manejo preventivo", icon: Leaf },
+    ],
+  },
 ]
 
 function CountrySwitcher({ isEcuador, dark, compact = false }: { isEcuador: boolean; dark: boolean; compact?: boolean }) {
@@ -124,9 +128,9 @@ function CountrySwitcher({ isEcuador, dark, compact = false }: { isEcuador: bool
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-label={`País actual: ${isEcuador ? "Ecuador" : "Perú"}. Cambiar país`}
-        className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-full border px-2.5 text-[10px] font-bold transition-all hover:-translate-y-0.5 ${dark ? "border-white/20 bg-white/10 text-white hover:bg-white/20" : "border-[#c8d7cd] bg-white/75 text-[#244f3b] hover:bg-white"} ${compact ? "w-11 px-0" : ""}`}
+        className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-full border px-2.5 text-[10px] font-bold transition-all hover:-translate-y-0.5 ${dark ? "border-white/20 bg-white/10 text-white hover:bg-white/20" : "border-[#c8d7cd] bg-white/75 text-[#244f3b] hover:bg-white"} ${compact ? "w-[58px] px-1.5" : ""}`}
       >
-        <Globe2 className="h-3.5 w-3.5" />
+        <span aria-hidden="true" className="text-sm leading-none">{isEcuador ? "🇪🇨" : "🇵🇪"}</span>
         <span>{isEcuador ? "EC" : "PE"}</span>
         {!compact && <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />}
       </button>
@@ -226,7 +230,10 @@ export function Navbar({ overlay = false }: NavbarProps) {
   }, [])
 
   const isActive = (item: NavGroup) => {
-    if (item.href && (pathname === item.href || pathname.startsWith(`${item.href}/`))) return true
+    if (item.href) {
+      if (item.href === "/" || item.href === "/ecuador") return pathname === item.href
+      if (pathname === item.href || pathname.startsWith(`${item.href}/`)) return true
+    }
     return item.links?.some((link) => pathname === link.href || pathname.startsWith(`${link.href}/`)) ?? false
   }
 
@@ -312,7 +319,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
                   {item.links ? (
                     <button
                       type="button"
-                      onClick={() => setOpenGroup(openGroup === item.label ? null : item.label)}
+                      onClick={() => setOpenGroup(item.label)}
                       aria-expanded={openGroup === item.label}
                       className={`relative flex h-9 items-center gap-1 rounded-full px-2.5 text-[11.5px] font-medium transition-all duration-200 ${
                         isActive(item) ? activeLinkClass : inactiveLinkClass
