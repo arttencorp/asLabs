@@ -11,10 +11,10 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const service = getExcellentService(params.slug)
   if (!service) return {}
   return {
-    title: `${service.title} | exCELLlent`,
+    title: `${service.title} | exCELLent`,
     description: service.description,
     alternates: { canonical: `https://aslaboratorios.com/excellent/${service.slug}` },
-    openGraph: { title: `${service.title} | exCELLlent`, description: service.description, url: `https://aslaboratorios.com/excellent/${service.slug}`, images: [service.image] },
+    openGraph: { title: `${service.title} | exCELLent`, description: service.description, url: `https://aslaboratorios.com/excellent/${service.slug}`, images: [service.image] },
   }
 }
 

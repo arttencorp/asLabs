@@ -4,25 +4,25 @@ import ExcellentClient from "./excellent-client"
 const url = "https://aslaboratorios.com/excellent"
 
 export const metadata: Metadata = {
-  title: "exCELLlent | Análisis Moleculares en Perú",
+  title: "exCELLent | Análisis Moleculares en Perú",
   description:
-    "exCELLlent es la marca de AS Laboratorios especializada en análisis moleculares: PCR, qPCR, RT-PCR, secuenciación, genética vegetal y soporte para investigación.",
+    "exCELLent es la marca de AS Laboratorios especializada en análisis moleculares: PCR, qPCR, RT-PCR, secuenciación, genética vegetal y soporte para investigación.",
   keywords: [
     "análisis moleculares Perú", "PCR Trujillo", "qPCR Perú", "RT-PCR Perú",
     "secuenciación Sanger Perú", "identificación molecular de bacterias",
     "identificación molecular de hongos", "análisis 16S rRNA", "análisis ITS",
     "diagnóstico molecular de fitopatógenos", "genética vegetal Perú",
-    "biología molecular Trujillo", "exCELLlent AS Laboratorios",
+    "biología molecular Trujillo", "exCELLent AS Laboratorios",
   ],
   alternates: { canonical: url, languages: { "es-PE": url } },
   openGraph: {
     type: "website", locale: "es_PE", url, siteName: "AS Laboratorios",
-    title: "exCELLlent | Precisión molecular para decisiones que importan",
+    title: "exCELLent | Precisión molecular para decisiones que importan",
     description: "Soluciones de análisis molecular para agricultura, microbiología, ambiente, alimentos e investigación.",
-    images: [{ url: "/images/excellent-logo.png", width: 638, height: 156, alt: "exCELLlent, análisis moleculares de AS Laboratorios" }],
+    images: [{ url: "/images/excellent-logo.png", width: 638, height: 156, alt: "exCELLent, análisis moleculares de AS Laboratorios" }],
   },
   twitter: {
-    card: "summary_large_image", title: "exCELLlent | Análisis Moleculares",
+    card: "summary_large_image", title: "exCELLent | Análisis Moleculares",
     description: "PCR, qPCR, secuenciación e identificación molecular con acompañamiento técnico.",
     images: ["/images/excellent-logo.png"],
   },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 
 const structuredData = {
   "@context": "https://schema.org", "@type": "Service",
-  name: "exCELLlent — Análisis Moleculares",
+  name: "exCELLent — Análisis Moleculares",
   description: "Servicios de análisis molecular para agricultura, microbiología, ambiente, alimentos e investigación.",
   provider: { "@type": "Organization", name: "AS Laboratorios Control Biológico S.A.C.", url: "https://aslaboratorios.com" },
   areaServed: { "@type": "Country", name: "Perú" },

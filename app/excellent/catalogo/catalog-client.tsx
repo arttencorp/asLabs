@@ -18,10 +18,10 @@ export default function ExcellentCatalogClient() {
           <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(112,213,178,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(112,213,178,.08)_1px,transparent_1px)] [background-size:55px_55px]" />
           <div className="absolute right-[-12%] top-[-60%] h-[620px] w-[620px] rounded-full border-[80px] border-[#59c39f]/[.07]" />
           <div className="relative mx-auto max-w-7xl">
-            <Link href="/excellent" className="inline-flex items-center gap-2 text-xs font-bold text-white/60 transition hover:text-white"><ArrowLeft className="h-4 w-4" />Volver a exCELLlent</Link>
+            <Link href="/excellent" className="inline-flex items-center gap-2 text-xs font-bold text-white/60 transition hover:text-white"><ArrowLeft className="h-4 w-4" />Volver a exCELLent</Link>
             <div className="mt-9 grid items-end gap-10 lg:grid-cols-[1fr_.55fr]">
               <div>
-                <Image src="/images/excellent-logo-transparent.png" alt="exCELLlent" width={2172} height={724} className="h-auto w-[190px] brightness-0 invert sm:w-[230px]" priority />
+                <Image src="/images/excellent-logo-transparent.png" alt="exCELLent" width={2172} height={724} className="h-auto w-[190px] brightness-0 invert sm:w-[230px]" priority />
                 <p className="mt-7 text-xs font-bold uppercase tracking-[.22em] text-[#89e0c2]">Catálogo molecular</p>
                 <h1 className="mt-4 max-w-4xl text-balance text-4xl font-semibold tracking-[-.05em] sm:text-6xl">Encuentra el análisis que responde a tu objetivo</h1>
               </div>
@@ -32,7 +32,7 @@ export default function ExcellentCatalogClient() {
 
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="flex flex-col justify-between gap-5 border-b border-black/[.08] pb-7 sm:flex-row sm:items-end">
-            <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#31836d]">8 líneas de servicio</p><h2 className="mt-3 text-3xl font-semibold tracking-[-.04em] sm:text-4xl">Portafolio exCELLlent</h2></div>
+            <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#31836d]">8 líneas de servicio</p><h2 className="mt-3 text-3xl font-semibold tracking-[-.04em] sm:text-4xl">Portafolio exCELLent</h2></div>
             <div className="inline-flex items-center gap-2 rounded-full border border-black/[.07] bg-white px-4 py-2.5 text-xs font-semibold text-[#5d716a]"><Search className="h-4 w-4 text-[#3a9279]" />Selecciona una ficha para ver el detalle</div>
           </div>
           <div className="mt-9 grid gap-5 md:grid-cols-2">
@@ -47,7 +47,7 @@ export default function ExcellentCatalogClient() {
           </div>
         </section>
 
-        <section className="px-4 pb-24 sm:px-6 sm:pb-32 lg:px-8"><div data-navbar-theme="dark" className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 overflow-hidden rounded-[38px] bg-[#0a2a23] p-7 text-white sm:p-12 lg:flex-row lg:items-center"><div className="absolute -right-16 -top-16 h-56 w-56 rounded-full border-[35px] border-white/[.04]" /><div className="relative"><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.2em] text-[#8de2c6]"><Sparkles className="h-4 w-4" />Orientación molecular</div><h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-[-.04em] sm:text-4xl">¿No sabes qué análisis corresponde?</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-white/60">Envíanos el objetivo, tipo de muestra y número aproximado. Nosotros te ayudamos a definir el camino.</p></div><WhatsAppContact message="Hola, necesito ayuda para elegir un análisis del catálogo exCELLlent." className="relative inline-flex min-h-14 shrink-0 items-center gap-3 rounded-full bg-[#8ce3c6] px-7 text-sm font-bold text-[#09251e] transition hover:-translate-y-1">Orientar mi caso<FlaskConical className="h-4 w-4" /></WhatsAppContact></div></section>
+        <section className="px-4 pb-24 sm:px-6 sm:pb-32 lg:px-8"><div data-navbar-theme="dark" className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 overflow-hidden rounded-[38px] bg-[#0a2a23] p-7 text-white sm:p-12 lg:flex-row lg:items-center"><div className="absolute -right-16 -top-16 h-56 w-56 rounded-full border-[35px] border-white/[.04]" /><div className="relative"><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.2em] text-[#8de2c6]"><Sparkles className="h-4 w-4" />Orientación molecular</div><h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-[-.04em] sm:text-4xl">¿No sabes qué análisis corresponde?</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-white/60">Envíanos el objetivo, tipo de muestra y número aproximado. Nosotros te ayudamos a definir el camino.</p></div><WhatsAppContact message="Hola, necesito ayuda para elegir un análisis del catálogo exCELLent." className="relative inline-flex min-h-14 shrink-0 items-center gap-3 rounded-full bg-[#8ce3c6] px-7 text-sm font-bold text-[#09251e] transition hover:-translate-y-1">Orientar mi caso<FlaskConical className="h-4 w-4" /></WhatsAppContact></div></section>
       </main>
       <Footer />
     </div>
