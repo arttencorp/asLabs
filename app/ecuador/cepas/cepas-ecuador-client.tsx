@@ -24,10 +24,18 @@ type CatalogStrain = {
   cantidad: string
   precioUsd: number
   collection: "Identificada" | "ATCC"
+  identificationMethod?: string
 }
 
 const catalog: CatalogStrain[] = [
-  ...cepasIdentificadas.map((strain) => ({ ...strain, precioUsd: Math.ceil(strain.precioSinEnvio / USD_RATE), collection: "Identificada" as const })),
+  ...cepasIdentificadas.map((strain) => ({
+    ...strain,
+    precioUsd: Math.ceil(strain.precioSinEnvio / USD_RATE),
+    collection: "Identificada" as const,
+    identificationMethod: strain.nombre.startsWith("Trichoderma")
+      ? "Secuenciación de la región ITS"
+      : "Secuenciación del gen 16S rRNA",
+  })),
   ...cepasATCC.map((strain) => ({ ...strain, precioUsd: Math.ceil(strain.precioSinEnvio / USD_RATE), collection: "ATCC" as const })),
 ]
 
@@ -95,7 +103,8 @@ export default function CepasEcuadorClient() {
               const active = selected.some((item) => item.id === strain.id)
               return <motion.article key={strain.id} layout initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(index, 8) * .035 }} className={`group flex min-h-[330px] flex-col rounded-[27px] border bg-white p-6 shadow-[0_16px_48px_rgba(15,55,45,.055)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(15,55,45,.11)] ${active ? "border-[#5d9c83] ring-2 ring-[#5d9c83]/12" : "border-[#dce5df]"}`}>
                 <div className="flex items-center justify-between gap-4"><span className={`rounded-full px-3 py-2 text-[9px] font-bold uppercase tracking-[.14em] ${strain.collection === "ATCC" ? "bg-[#fff4d4] text-[#8a6112]" : "bg-[#e8f4ee] text-[#2c745d]"}`}>{strain.collection}</span><span className="rounded-full bg-[#f2f5f2] px-3 py-2 text-[9px] font-bold text-[#62766d]">{strain.bsl}</span></div>
-                <p className="mt-6 text-[10px] font-bold uppercase tracking-[.16em] text-[#4f8c78]">{strain.codigo}</p><h3 className="mt-2 text-xl font-bold leading-7 tracking-[-.025em]">{strain.nombre}</h3><p className="mt-2 line-clamp-2 text-[11px] italic leading-5 text-[#728179]">{strain.cientifico}</p>
+                <p className="mt-6 text-[10px] font-bold uppercase tracking-[.16em] text-[#4f8c78]">{strain.codigo}</p><h3 className="mt-2 text-xl font-bold italic leading-7 tracking-[-.025em]">{strain.nombre}</h3><p className="mt-2 line-clamp-2 text-[11px] italic leading-5 text-[#728179]">{strain.cientifico}</p>
+                {strain.identificationMethod && <div className="mt-4 rounded-2xl border border-[#d8e8df] bg-[#f0f7f3] px-4 py-3"><span className="block text-[8px] font-bold uppercase tracking-[.14em] text-[#6b8278]">Identificado molecularmente por:</span><strong className="mt-1.5 block text-[10px] font-bold text-[#2e745d]">{strain.identificationMethod}</strong></div>}
                 <div className="mt-5 flex flex-wrap gap-2"><span className="rounded-lg bg-[#f3f6f3] px-2.5 py-1.5 text-[9px] font-semibold text-[#61736b]">{strain.categoria}</span>{strain.productFormat && <span className="rounded-lg bg-[#f3f6f3] px-2.5 py-1.5 text-[9px] font-semibold text-[#61736b]">{strain.productFormat}</span>}</div>
                 <div className="mt-auto flex items-end justify-between gap-4 border-t border-[#e5ebe7] pt-5"><div><p className="text-[9px] font-bold uppercase tracking-[.13em] text-[#87958e]">Desde</p><p className="mt-1 text-2xl font-bold tracking-[-.04em] text-[#1c674e]">US$ {strain.precioUsd}</p><p className="mt-1 text-[9px] text-[#87958e]">{strain.cantidad}</p></div><button type="button" onClick={() => toggleSelected(strain)} aria-label={`${active ? "Quitar" : "Agregar"} ${strain.nombre} de la cotización`} className={`grid h-12 w-12 place-items-center rounded-full transition ${active ? "bg-[#e5c55e] text-[#173428]" : "bg-[#173f32] text-white hover:rotate-[-7deg] hover:scale-105"}`}>{active ? <Check className="h-5 w-5" /> : <ShoppingCart className="h-4 w-4" />}</button></div>
               </motion.article>

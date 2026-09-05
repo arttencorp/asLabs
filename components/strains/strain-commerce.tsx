@@ -314,7 +314,7 @@ function StrainCard({
         <h2 className="relative mt-2 text-2xl font-semibold leading-tight tracking-[-0.025em] text-emerald-950">
           <span className="italic">{strain.nombre}</span>
         </h2>
-        <p className="relative mt-2 line-clamp-2 min-h-[40px] text-sm leading-5 text-slate-600">{strain.cientifico}</p>
+        <p className="relative mt-2 line-clamp-2 min-h-[40px] text-sm italic leading-5 text-slate-600">{strain.cientifico}</p>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
@@ -1074,7 +1074,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                 <h1 className="mt-3 text-balance text-3xl font-semibold italic leading-[1.06] tracking-[-0.035em] text-white drop-shadow-[0_3px_16px_rgba(0,0,0,.58)] sm:text-4xl lg:text-5xl">
                   {strain.nombre}
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-7 text-white/[0.9] drop-shadow-[0_2px_10px_rgba(0,0,0,.42)]">{strain.cientifico}</p>
+                <p className="mt-5 max-w-2xl text-base italic leading-7 text-white/[0.9] drop-shadow-[0_2px_10px_rgba(0,0,0,.42)]">{strain.cientifico}</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, rotate: 3 }}

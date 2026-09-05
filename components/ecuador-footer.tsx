@@ -25,7 +25,7 @@ export default function EcuadorFooter() {
               <Link href="/ecuador/cepas" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Cepas identificadas y ATCC</Link>
               <Link href="/ecuador/sobre-nosotros" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Sobre nosotros</Link>
               <a href="https://clientes.aslaboratorios.com/" target="_blank" rel="noopener noreferrer" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Acceso Clientes</a>
-              <Link href="/" className="block text-white/45 transition hover:text-white">Cambiar a Perú</Link>
+              <Link href="/" className="block text-white/45 transition hover:text-white">Cambiar de sede</Link>
             </div>
           </div>
           <div>
