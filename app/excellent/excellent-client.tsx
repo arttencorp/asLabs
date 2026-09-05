@@ -41,6 +41,13 @@ const workflow = [
   ["05", "Informe y orientación", "Entregamos resultados claros y explicamos su alcance e interpretación."],
 ]
 
+const molecularStack = [
+  { icon: Dna, label: "Material genético", title: "ADN y ARN", text: "Extracción y preparación definidas según la matriz y el blanco." },
+  { icon: BarChart3, label: "Amplificación", title: "PCR · qPCR · RT-PCR", text: "Detección cualitativa o cuantitativa con controles por corrida." },
+  { icon: Network, label: "Identificación", title: "16S · ITS · Sanger", text: "Secuenciación y comparación para sustentar una identidad molecular." },
+  { icon: FileCheck2, label: "Interpretación", title: "Datos que se entienden", text: "Resultados organizados, trazables y explicados por especialistas." },
+]
+
 const faqs = [
   ["¿Qué tipo de muestra debo enviar?", "Depende del organismo, el síntoma y el objetivo. Antes del envío confirmamos muestra, cantidad, conservación, rotulado y transporte para reducir resultados no concluyentes."],
   ["¿Pueden desarrollar un análisis que no aparece en la lista?", "Sí. Primero evaluamos el blanco molecular, la matriz, las referencias disponibles, los controles necesarios y el uso previsto del resultado."],
@@ -76,6 +83,8 @@ export default function ExcellentClient() {
               <div className="absolute inset-x-0 top-0 h-[86%] overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-[0_35px_100px_rgba(0,0,0,.3)] sm:inset-x-8 lg:left-10 lg:right-0">
                 <Image src="/research/research-lab.png" alt="Especialista de exCELLlent trabajando en análisis molecular" fill priority className="object-cover" sizes="(min-width: 1024px) 46vw, 100vw" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#061713]/80 via-transparent to-[#081c18]/20" />
+                <motion.div animate={{ x: ["-20%", "520%"] }} transition={{ duration: 5.5, repeat: Infinity, ease: "linear", repeatDelay: 1.2 }} className="absolute inset-y-0 left-0 w-[18%] bg-gradient-to-r from-transparent via-[#8ce4c6]/20 to-transparent blur-sm" />
+                <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#09261f]/70 px-3 py-2 text-[9px] font-bold uppercase tracking-[.16em] text-white/80 backdrop-blur-xl"><motion.span animate={{scale:[1,1.5,1],opacity:[.7,1,.7]}} transition={{duration:2,repeat:Infinity}} className="h-1.5 w-1.5 rounded-full bg-[#88e3c4]" />Procesamiento molecular</div>
                 <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between"><div><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#8ce4c6]">Plataforma molecular</p><p className="mt-1 text-sm font-semibold text-white">Del objetivo al resultado interpretable</p></div><span className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/20 backdrop-blur-xl"><Dna className="h-5 w-5 text-[#95e6ca]" /></span></div>
               </div>
               <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 5, repeat: Infinity }} className="absolute bottom-0 left-0 w-[45%] overflow-hidden rounded-[22px] border-[5px] border-[#071815] bg-[#163b32] shadow-2xl sm:left-2">
@@ -114,6 +123,27 @@ export default function ExcellentClient() {
                   <div className="relative flex h-full flex-col justify-end"><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#8ee2c5]">{catalog.label}</p><h3 className="mt-2 max-w-xs text-xl font-semibold leading-tight">{catalog.title}</h3><ArrowUpRight className="absolute bottom-0 right-0 h-5 w-5 text-white/70 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
                 </Link>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 pt-20 sm:px-6 sm:pt-28 lg:px-8">
+          <div className="overflow-hidden rounded-[36px] border border-black/[.07] bg-white shadow-[0_24px_80px_rgba(18,59,49,.08)]">
+            <div className="grid lg:grid-cols-[.88fr_1.12fr]">
+              <div className="relative min-h-[390px] overflow-hidden lg:min-h-[640px]">
+                <Image src="/modern-laboratory-scientists.png" alt="Equipo especializado en análisis moleculares exCELLlent" fill className="object-cover transition duration-1000 hover:scale-[1.025]" sizes="(min-width:1024px) 44vw, 100vw" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#08251f]/90 via-[#08251f]/10 to-transparent" />
+                <div className="absolute inset-x-6 bottom-6 rounded-[24px] border border-white/15 bg-[#0a2b24]/75 p-5 text-white backdrop-blur-xl sm:inset-x-8 sm:bottom-8 sm:p-6">
+                  <div className="flex items-center justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#93e6ca]">Enfoque exCELLlent</p><h2 className="mt-2 text-2xl font-semibold tracking-[-.03em]">La técnica correcta comienza con la pregunta correcta</h2></div><span className="hidden h-12 w-12 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 sm:grid"><ScanSearch className="h-5 w-5" /></span></div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12">
+                <div className="max-w-xl"><p className="text-xs font-bold uppercase tracking-[.22em] text-[#31836d]">Capacidad analítica</p><h2 className="mt-4 text-balance text-3xl font-semibold leading-tight tracking-[-.04em] text-[#102e28] sm:text-4xl">Una ruta molecular pensada como sistema</h2><p className="mt-4 text-sm leading-7 text-[#687a74]">Cada proyecto conecta preparación de muestra, técnica, controles, análisis y una entrega útil para el objetivo planteado.</p></div>
+                <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                  {molecularStack.map((item,index) => <motion.div key={item.title} initial={{opacity:0,y:18}} whileInView={{opacity:1,y:0}} viewport={{once:true,margin:"-40px"}} transition={{delay:index*.07}} whileHover={{y:-4}} className="group rounded-[24px] border border-black/[.07] bg-[#f4f8f6] p-5 transition-colors hover:bg-[#eaf5f1]"><div className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-[#2c8069] shadow-sm"><item.icon className="h-5 w-5" /></span><span className="text-[10px] font-bold tracking-[.18em] text-[#a2b0ab]">0{index+1}</span></div><p className="mt-5 text-[10px] font-bold uppercase tracking-[.17em] text-[#388872]">{item.label}</p><h3 className="mt-2 text-base font-bold text-[#17352e]">{item.title}</h3><p className="mt-2 text-xs leading-5 text-[#677a73]">{item.text}</p></motion.div>)}
+                </div>
+                <Link href="/excellent/catalogo" className="group mt-7 inline-flex w-fit items-center gap-2 text-sm font-bold text-[#236b58]">Explorar capacidades en detalle<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
+              </div>
             </div>
           </div>
         </section>

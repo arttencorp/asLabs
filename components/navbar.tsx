@@ -239,7 +239,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
                 width={150}
                 height={52}
                 priority
-                className={`h-auto w-full transition-all duration-500 ${useDarkContrast ? "grayscale invert contrast-[2] mix-blend-screen" : ""}`}
+                className={`h-auto w-full transition-all duration-500 ${useDarkContrast ? "grayscale invert contrast-[8] brightness-125 mix-blend-screen" : ""}`}
               />
             </Link>
 
