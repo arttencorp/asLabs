@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 import { excellentServices } from "@/data/excellent-catalog"
 
 const SITE_URL = "https://aslaboratorios.com"
-const LAST_MODIFIED = new Date("2026-09-04")
+const LAST_MODIFIED = new Date("2026-09-05")
 
 const pages = [
   ["", "weekly", 1],
@@ -12,6 +12,7 @@ const pages = [
   ["/ecuador", "weekly", 0.95],
   ["/ecuador/biologia-molecular", "weekly", 0.9],
   ["/ecuador/formulaciones-bacterianas", "weekly", 0.9],
+  ["/ecuador/plantines-in-vitro", "weekly", 0.92],
   ["/plantines", "weekly", 0.9],
   ["/control-biologico", "weekly", 0.9],
   ["/biotecnologia-vegetal", "monthly", 0.85],
