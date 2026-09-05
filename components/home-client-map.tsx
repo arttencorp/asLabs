@@ -1,14 +1,15 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
-import { Globe2, MapPin, MousePointer2, TrendingUp } from "lucide-react"
+import { ArrowRight, Globe2, MapPin, MousePointer2, TrendingUp } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 const countries = [
   { id: "PER", name: "Perú", x: 31.522, y: 54.587, featured: true, labelClass: "left-1/2 top-full mt-0.5 -translate-x-1/2" },
   { id: "ARG", name: "Argentina", x: 34.788, y: 69.625, labelClass: "left-full top-1/2 ml-1 -translate-y-1/2" },
-  { id: "ECU", name: "Ecuador", x: 30.442, y: 50.123, labelClass: "right-full top-1/2 mr-1 -translate-y-1/2" },
+  { id: "ECU", name: "Ecuador", x: 30.442, y: 50.123, office: true, labelClass: "right-full top-1/2 mr-1 -translate-y-1/2" },
   { id: "MEX", name: "México", x: 25.14, y: 35.454, labelClass: "right-full bottom-1/2 mr-1 mb-0.5" },
   { id: "GBR", name: "Reino Unido", x: 49.399, y: 18.289, labelClass: "left-full top-1/2 ml-1 -translate-y-1/2" },
   { id: "COL", name: "Colombia", x: 31.786, y: 47.018, labelClass: "left-full bottom-1/2 ml-1 mb-0.5" },
@@ -62,7 +63,7 @@ export default function HomeClientMap() {
         <ScrollReveal className="mx-auto max-w-3xl text-center" distance={18}>
           <div className="mb-4 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#c45f24]"><span className="h-px w-7 bg-current" />Presencia internacional<span className="h-px w-7 bg-current" /></div>
           <h2 className="text-[clamp(2rem,4vw,3.35rem)] leading-[1.04] tracking-[-0.04em] text-[#173428]">Nuestra ciencia llega más lejos</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#64746c] sm:text-base">Atendemos clientes dentro y fuera del Perú, conectando soluciones de laboratorio y biotecnología con nuevos mercados.</p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#64746c] sm:text-base">Atendemos clientes dentro y fuera del Perú y abrimos una nueva sede en Quito para acercar nuestras capacidades especializadas a Ecuador.</p>
         </ScrollReveal>
 
       </div>
@@ -71,10 +72,11 @@ export default function HomeClientMap() {
         <div className="w-full border-y border-[#cad9cc] bg-[#f9fbf8] shadow-[0_30px_80px_-52px_rgba(18,59,43,0.48)]">
           <div className="mx-auto flex max-w-[1480px] flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <p className="flex items-center gap-2 text-xs font-semibold text-[#315643]"><span className="grid h-8 w-8 place-items-center rounded-full bg-[#dce8dc] text-[#39714d]"><Globe2 className="h-4 w-4" /></span>Países donde confían en nosotros</p>
-            <p className="inline-flex w-fit items-center gap-2 rounded-full bg-[#173f2e] px-3 py-2 text-[10px] font-semibold text-white"><MousePointer2 className="h-3.5 w-3.5 text-[#f3ae52]" />Pasa el cursor por Perú</p>
+            <div className="flex flex-wrap items-center gap-2"><Link href="/ecuador" className="inline-flex items-center gap-2 rounded-full border border-[#d9c15b]/35 bg-[#fff8d8] px-3 py-2 text-[10px] font-bold text-[#625414] transition hover:-translate-y-0.5">🇪🇨 Nueva sede en Quito<ArrowRight className="h-3.5 w-3.5" /></Link><p className="inline-flex w-fit items-center gap-2 rounded-full bg-[#173f2e] px-3 py-2 text-[10px] font-semibold text-white"><MousePointer2 className="h-3.5 w-3.5 text-[#f3ae52]" />Pasa el cursor por Perú</p></div>
           </div>
 
-          <div className="relative aspect-[1.25/1] min-h-[420px] w-full overflow-hidden border-y border-[#dbe5dc] bg-[radial-gradient(circle_at_42%_48%,#ffffff_0%,#f2f6f1_52%,#e7efe7_100%)] sm:aspect-[1.75/1] sm:min-h-0 lg:aspect-[2.15/1] xl:aspect-[2.35/1]">
+          <div className="relative h-[300px] w-full overflow-hidden border-y border-[#dbe5dc] bg-[radial-gradient(circle_at_42%_48%,#ffffff_0%,#f2f6f1_52%,#e7efe7_100%)] sm:h-auto sm:aspect-[1.9/1] lg:aspect-[2.15/1] xl:aspect-[2.35/1]">
+            <div className="absolute left-1/2 top-1/2 aspect-[2/1] w-[600px] -translate-x-1/2 -translate-y-1/2 sm:w-[105%] lg:w-full">
               <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(49,86,67,.055)_1px,transparent_1px),linear-gradient(90deg,rgba(49,86,67,.055)_1px,transparent_1px)] [background-size:42px_42px]" />
               <img src="/world-clients-map.svg" alt="Mapamundi con los países de origen de nuestros clientes" className="absolute inset-0 h-full w-full object-contain" />
               {countries.map((country) => (
@@ -90,15 +92,17 @@ export default function HomeClientMap() {
                   className={`absolute z-20 h-10 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none ${country.featured ? "cursor-default focus-visible:ring-2 focus-visible:ring-[#ef9f38]" : "pointer-events-none"}`}
                   style={{ left: `${country.x}%`, top: `${country.y}%` }}
                 >
-                  <span className={`absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-md sm:h-3.5 sm:w-3.5 ${country.featured ? "bg-[#ef9f38]" : "bg-[#39714d]"}`} />
+                  <span className={`absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-md sm:h-3.5 sm:w-3.5 ${country.featured ? "bg-[#ef9f38]" : country.office ? "bg-[#d5b72c]" : "bg-[#39714d]"}`} />
                   {country.featured && <span className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 animate-ping rounded-full border border-[#ef9f38]/70" />}
-                  <span className={`absolute hidden whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-bold shadow-md sm:block ${country.labelClass} ${country.featured ? "bg-[#ef9f38] text-[#173428]" : "bg-white text-[#315643]"}`}>{country.name}</span>
+                  {country.office && <span className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d5b72c]/70" />}
+                  <span className={`absolute hidden whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-bold shadow-md sm:block ${country.labelClass} ${country.featured ? "bg-[#ef9f38] text-[#173428]" : country.office ? "bg-[#fff3b5] text-[#655412]" : "bg-white text-[#315643]"}`}>{country.name}{country.office ? " · nueva sede" : ""}</span>
                 </div>
               ))}
 
               <AnimatePresence>
                 {showPeru && <motion.div initial={{ opacity: 0, x: 16, scale: 0.97 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: 10 }} transition={{ duration: 0.28 }} className="absolute bottom-6 right-6 z-30 hidden w-[390px] rounded-[1.4rem] border border-[#d3dfd4] bg-white/[0.97] p-4 shadow-[0_26px_65px_-24px_rgba(13,48,36,0.55)] backdrop-blur-md lg:block"><PeruDetail /></motion.div>}
               </AnimatePresence>
+            </div>
           </div>
 
           <AnimatePresence>
@@ -106,7 +110,7 @@ export default function HomeClientMap() {
           </AnimatePresence>
 
           <div className="flex flex-wrap justify-center gap-2 px-5 py-5 sm:px-8">
-            {countries.map((country) => <span key={country.id} className="inline-flex items-center gap-1.5 rounded-full border border-[#d6e1d7] bg-white px-3 py-1.5 text-[10px] font-semibold text-[#315643] sm:text-[11px]"><MapPin className={`h-3 w-3 ${country.featured ? "text-[#d8792e]" : "text-[#39714d]"}`} />{country.name}</span>)}
+            {countries.map((country) => <span key={country.id} className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-semibold sm:text-[11px] ${country.office ? "border-[#dac75f] bg-[#fff8d8] text-[#665715]" : "border-[#d6e1d7] bg-white text-[#315643]"}`}><MapPin className={`h-3 w-3 ${country.featured ? "text-[#d8792e]" : country.office ? "text-[#b59b19]" : "text-[#39714d]"}`} />{country.name}{country.office ? " · Sede" : ""}</span>)}
           </div>
         </div>
       </ScrollReveal>

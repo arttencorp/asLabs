@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   ArrowUpRight,
@@ -46,9 +47,16 @@ const features = [
 ]
 
 export default function ClientPortalAnnouncement() {
+  const pathname = usePathname()
+  const isEcuador = pathname === "/ecuador" || pathname.startsWith("/ecuador/")
   const [open, setOpen] = useState(true)
 
   useEffect(() => {
+    if (isEcuador) {
+      setOpen(false)
+      return
+    }
+
     if (window.sessionStorage.getItem(SESSION_KEY)) {
       setOpen(false)
       return
@@ -65,13 +73,15 @@ export default function ClientPortalAnnouncement() {
       document.body.style.overflow = previousOverflow
       window.removeEventListener("keydown", closeOnEscape)
     }
-  }, [])
+  }, [isEcuador])
 
   const close = () => {
     window.sessionStorage.setItem(SESSION_KEY, "seen")
     setOpen(false)
     document.body.style.overflow = ""
   }
+
+  if (isEcuador) return null
 
   return (
     <AnimatePresence>
