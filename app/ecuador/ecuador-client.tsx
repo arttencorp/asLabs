@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import {
-  ArrowRight, Atom, BadgeCheck, Beaker, Building2, ChevronDown, CircleDot, Dna,
+  ArrowRight, ArrowUpRight, Atom, BadgeCheck, Beaker, Building2, ChevronDown, CircleDot, Dna,
   FileCheck2, FlaskConical, Leaf, MapPin, Microscope, ScanLine,
   Sprout, TestTube2,
 } from "lucide-react"
@@ -32,6 +32,17 @@ const applications = [
   { icon: Beaker, title: "Industria y alimentos", text: "Evaluaciones moleculares y proyectos de microbiología aplicada." },
   { icon: Leaf, title: "Ambiente", text: "Caracterización e identificación de microorganismos de interés." },
   { icon: Atom, title: "Investigación", text: "Soporte técnico para universidades, empresas y desarrollos experimentales." },
+]
+
+const trustLogos = [
+  { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo", type: "Agroindustria", href: "https://agroindustriallaredo.com/" },
+  { src: "/trustUs/CGIAR.jpeg", alt: "Centro Internacional de la Papa", type: "Investigación", href: "https://cipotato.org/" },
+  { src: "/trustUs/manuelita.jpg", alt: "Manuelita", type: "Agroindustria", href: "https://www.manuelita.com/" },
+  { src: "/trustUs/skyeast.jpg", alt: "Skyeast", type: "Empresa", href: "https://skyeast.co.uk/" },
+  { src: "/trustUs/CCLL.png", alt: "Cámara de Comercio de La Libertad", type: "Institución", href: "https://camaralalibertad.org.pe/" },
+  { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", type: "Academia", href: "https://www.unitru.edu.pe/" },
+  { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", type: "Empresa", href: "https://www.arttencorp.com/" },
+  { src: "/partners/cavbio.png", alt: "CavBio", type: "Biotecnología", href: "https://www.linkedin.com/showcase/cavbio/" },
 ]
 
 const faqs = [
@@ -75,6 +86,37 @@ export default function EcuadorClient() {
         <section className="relative z-10 mx-auto -mt-8 max-w-[1160px] px-5 sm:-mt-10 sm:px-8">
           <div className="grid grid-cols-3 divide-x divide-[#173428]/10 overflow-hidden rounded-2xl border border-[#173428]/10 bg-white shadow-[0_24px_70px_-32px_rgba(10,47,32,.45)]">
             {[{ value: "04", label: "líneas disponibles" }, { value: "Quito", label: "atención local" }, { value: "360°", label: "trazabilidad técnica" }].map(item => <div key={item.label} className="px-2 py-5 text-center sm:px-6 sm:py-7"><strong className="block text-2xl font-medium tracking-[-.04em] text-[#1f6a3c] sm:text-3xl">{item.value}</strong><span className="mt-1 block text-[9px] leading-4 text-[#62736b] sm:text-[11px]">{item.label}</span></div>)}
+          </div>
+        </section>
+
+        <section data-navbar-theme="light" aria-labelledby="ecuador-trust-title" className="border-y border-[#173428]/10 bg-[#f2f6f1] pb-16 pt-20 sm:pb-20 sm:pt-24">
+          <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
+            <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-9 text-center">
+              <div className="mb-4 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[.2em] text-[#c45f24]"><span className="h-px w-7 bg-current" />Respaldo<span className="h-px w-7 bg-current" /></div>
+              <h2 id="ecuador-trust-title" className="text-2xl tracking-[-.03em] text-[#173428] sm:text-3xl">Organizaciones que confían en nosotros</h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#66756e]">Empresas, instituciones académicas y organizaciones que han confiado en la experiencia y capacidad técnica de AS Labs.</p>
+            </motion.div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+              {trustLogos.map((logo, index) => (
+                <motion.a
+                  key={logo.alt}
+                  href={logo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Visitar el sitio web de ${logo.alt}`}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * .055 }}
+                  className="group relative flex min-h-[150px] cursor-pointer flex-col rounded-2xl border border-[#dce6de] bg-white p-4 shadow-[0_12px_34px_-28px_rgba(14,60,38,.45)] transition duration-300 hover:-translate-y-1 hover:border-[#aec8b4] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#37836d] focus-visible:ring-offset-2"
+                >
+                  <span className="absolute right-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-[#edf4ef] text-[#39725f] opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100"><ArrowUpRight className="h-3.5 w-3.5" /></span>
+                  <div className="relative flex-1"><Image src={logo.src} alt={logo.alt} fill className="object-contain transition duration-300 group-hover:scale-105" sizes="160px" /></div>
+                  <div className="mt-3 border-t border-[#e5ebe6] pt-3"><p className="truncate text-[10px] font-semibold text-[#314d3f]">{logo.alt}</p><p className="mt-1 flex items-center gap-1.5 text-[9px] uppercase tracking-[.12em] text-[#819087]"><span className="h-1.5 w-1.5 rounded-full bg-[#5e9a6b]" />{logo.type}</p></div>
+                </motion.a>
+              ))}
+            </div>
+            <p className="mt-5 text-center text-[10px] font-medium text-[#7a8982]">Selecciona una organización para visitar su sitio web oficial.</p>
           </div>
         </section>
 
