@@ -193,6 +193,16 @@ export function Navbar({ overlay = false }: NavbarProps) {
 
   return (
     <>
+      <svg aria-hidden="true" className="pointer-events-none absolute h-0 w-0 overflow-hidden">
+        <defs>
+          <filter id="aslabs-white-logo" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -1 -1 -1 0 3"
+            />
+          </filter>
+        </defs>
+      </svg>
       <motion.header
         initial={{ opacity: 0, y: -18 }}
         animate={{ opacity: 1, y: 0 }}
@@ -239,7 +249,8 @@ export function Navbar({ overlay = false }: NavbarProps) {
                 width={150}
                 height={52}
                 priority
-                className={`h-auto w-full transition-all duration-500 ${useDarkContrast ? "grayscale invert contrast-[8] brightness-125 mix-blend-screen" : ""}`}
+                className="h-auto w-full transition-all duration-500"
+                style={useDarkContrast ? { filter: "url(#aslabs-white-logo)" } : undefined}
               />
             </Link>
 
