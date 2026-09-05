@@ -17,7 +17,7 @@ const solutions = [
   { href: "/ecuador/biologia-molecular", icon: Dna, eyebrow: "Diagnóstico, identificación y genética", title: "Biología molecular", description: "Análisis moleculares diseñados según tu muestra, objetivo y nivel de resolución requerido.", image: "/lab-header-bg.jpg", tags: ["PCR / qPCR", "16S e ITS", "Secuenciación", "ADN y ARN"], accent: "#93e6ca" },
   { href: "/ecuador/formulaciones-bacterianas", icon: FlaskConical, eyebrow: "Desarrollo y biotecnología microbiana", title: "Formulaciones bacterianas", description: "Desarrollo, estandarización y control de formulaciones para aplicaciones productivas y proyectos especiales.", image: "/servicios/image.png", tags: ["Fermentación", "Bioinsumos", "Viabilidad", "Control de calidad"], accent: "#f0d477" },
   { href: "/ecuador/plantines-in-vitro", icon: Sprout, eyebrow: "Material vegetal y prevención", title: "Plantines in vitro", description: "Material vegetal uniforme y trazable como punto de partida para programas de prevención y manejo frente a Fusarium.", image: "/new/SobreASLaboratorios.webp", tags: ["Banano", "Trazabilidad", "Sanidad vegetal", "Manejo preventivo"], accent: "#f0a23a" },
-  { href: "/ecuador/cepas", icon: Microscope, eyebrow: "Colecciones microbiológicas", title: "Cepas identificadas y ATCC", description: "Cultivos identificados y referencias internacionales para investigación, desarrollo y control de calidad, cotizados en dólares.", image: "/new/HEADER.webp", tags: ["Identificadas", "ATCC", "BSL-1", "Cotización USD"], accent: "#b8dc85" },
+  { href: "/ecuador/cepas", icon: Microscope, eyebrow: "Colección microbiológica", title: "Cepas identificadas", description: "Cultivos identificados molecularmente para investigación, desarrollo y control de calidad, cotizados en dólares.", image: "/new/HEADER.webp", tags: ["Identificación molecular", "CAVBIO", "Macrogen", "Cotización USD"], accent: "#b8dc85" },
 ]
 
 const process = [
@@ -35,7 +35,7 @@ const applications = [
 ]
 
 const faqs = [
-  { question: "¿Qué servicios están disponibles en Ecuador?", answer: "La sede reúne biología molecular, formulaciones bacterianas, plantines in vitro orientados al manejo preventivo frente a Fusarium y un catálogo de cepas identificadas y ATCC." },
+  { question: "¿Qué servicios están disponibles en Ecuador?", answer: "La sede reúne biología molecular, formulaciones bacterianas, plantines in vitro orientados al manejo preventivo frente a Fusarium y un catálogo de cepas identificadas molecularmente." },
   { question: "¿Dónde se reciben las muestras?", answer: "Coordinamos la recepción en nuestra sede de Quito: Edificio Carolina Millenium, Andrade Marin 24, 170518 Quito, Ecuador." },
   { question: "¿Pueden evaluar un requerimiento especial?", answer: "Sí. Antes de cotizar revisamos el objetivo, el tipo de muestra, la cantidad y el entregable esperado para plantear un alcance técnicamente coherente." },
   { question: "¿Cómo inicio una solicitud?", answer: "Puedes elegir una de las cuatro áreas o escribirnos por WhatsApp. Un asesor recopilará la información mínima necesaria para evaluar el proyecto." },
