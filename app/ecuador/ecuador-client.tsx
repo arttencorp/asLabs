@@ -17,6 +17,7 @@ const solutions = [
   { href: "/ecuador/biologia-molecular", icon: Dna, eyebrow: "Diagnóstico, identificación y genética", title: "Biología molecular", description: "Análisis moleculares diseñados según tu muestra, objetivo y nivel de resolución requerido.", image: "/lab-header-bg.jpg", tags: ["PCR / qPCR", "16S e ITS", "Secuenciación", "ADN y ARN"], accent: "#93e6ca" },
   { href: "/ecuador/formulaciones-bacterianas", icon: FlaskConical, eyebrow: "Desarrollo y biotecnología microbiana", title: "Formulaciones bacterianas", description: "Desarrollo, estandarización y control de formulaciones para aplicaciones productivas y proyectos especiales.", image: "/servicios/image.png", tags: ["Fermentación", "Bioinsumos", "Viabilidad", "Control de calidad"], accent: "#f0d477" },
   { href: "/ecuador/plantines-in-vitro", icon: Sprout, eyebrow: "Material vegetal y prevención", title: "Plantines in vitro", description: "Material vegetal uniforme y trazable como punto de partida para programas de prevención y manejo frente a Fusarium.", image: "/new/SobreASLaboratorios.webp", tags: ["Banano", "Trazabilidad", "Sanidad vegetal", "Manejo preventivo"], accent: "#f0a23a" },
+  { href: "/ecuador/cepas", icon: Microscope, eyebrow: "Colecciones microbiológicas", title: "Cepas identificadas y ATCC", description: "Cultivos identificados y referencias internacionales para investigación, desarrollo y control de calidad, cotizados en dólares.", image: "/new/HEADER.webp", tags: ["Identificadas", "ATCC", "BSL-1", "Cotización USD"], accent: "#b8dc85" },
 ]
 
 const process = [
@@ -34,10 +35,10 @@ const applications = [
 ]
 
 const faqs = [
-  { question: "¿Qué servicios están disponibles en Ecuador?", answer: "La sede Ecuador reúne biología molecular, formulaciones bacterianas y plantines in vitro orientados a programas de prevención y manejo frente a Fusarium." },
+  { question: "¿Qué servicios están disponibles en Ecuador?", answer: "La sede reúne biología molecular, formulaciones bacterianas, plantines in vitro orientados al manejo preventivo frente a Fusarium y un catálogo de cepas identificadas y ATCC." },
   { question: "¿Dónde se reciben las muestras?", answer: "Coordinamos la recepción en nuestra sede de Quito: Edificio Carolina Millenium, Andrade Marin 24, 170518 Quito, Ecuador." },
   { question: "¿Pueden evaluar un requerimiento especial?", answer: "Sí. Antes de cotizar revisamos el objetivo, el tipo de muestra, la cantidad y el entregable esperado para plantear un alcance técnicamente coherente." },
-  { question: "¿Cómo inicio una solicitud?", answer: "Puedes elegir una de las tres áreas o escribirnos por WhatsApp. Un asesor recopilará la información mínima necesaria para evaluar el proyecto." },
+  { question: "¿Cómo inicio una solicitud?", answer: "Puedes elegir una de las cuatro áreas o escribirnos por WhatsApp. Un asesor recopilará la información mínima necesaria para evaluar el proyecto." },
 ]
 
 export default function EcuadorClient() {
@@ -73,16 +74,16 @@ export default function EcuadorClient() {
 
         <section className="relative z-10 mx-auto -mt-8 max-w-[1160px] px-5 sm:-mt-10 sm:px-8">
           <div className="grid grid-cols-3 divide-x divide-[#173428]/10 overflow-hidden rounded-2xl border border-[#173428]/10 bg-white shadow-[0_24px_70px_-32px_rgba(10,47,32,.45)]">
-            {[{ value: "03", label: "líneas disponibles" }, { value: "Quito", label: "atención local" }, { value: "360°", label: "trazabilidad técnica" }].map(item => <div key={item.label} className="px-2 py-5 text-center sm:px-6 sm:py-7"><strong className="block text-2xl font-medium tracking-[-.04em] text-[#1f6a3c] sm:text-3xl">{item.value}</strong><span className="mt-1 block text-[9px] leading-4 text-[#62736b] sm:text-[11px]">{item.label}</span></div>)}
+            {[{ value: "04", label: "líneas disponibles" }, { value: "Quito", label: "atención local" }, { value: "360°", label: "trazabilidad técnica" }].map(item => <div key={item.label} className="px-2 py-5 text-center sm:px-6 sm:py-7"><strong className="block text-2xl font-medium tracking-[-.04em] text-[#1f6a3c] sm:text-3xl">{item.value}</strong><span className="mt-1 block text-[9px] leading-4 text-[#62736b] sm:text-[11px]">{item.label}</span></div>)}
           </div>
         </section>
 
         <section id="capacidades" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
           <div className="grid gap-7 lg:grid-cols-[1fr_.62fr] lg:items-end">
-            <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#33836d]">Portafolio Ecuador</p><h2 className="mt-4 max-w-4xl text-balance text-4xl font-semibold leading-[1.04] tracking-[-.05em] sm:text-6xl">Tres soluciones conectadas con el campo</h2></div>
-            <p className="border-l border-[#b9d4c7] pl-5 text-sm leading-7 text-[#65766f]">Diagnóstico molecular, desarrollo bacteriano y material vegetal in vitro para construir estrategias más completas.</p>
+            <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#33836d]">Portafolio Ecuador</p><h2 className="mt-4 max-w-4xl text-balance text-4xl font-semibold leading-[1.04] tracking-[-.05em] sm:text-6xl">Cuatro soluciones conectadas con el campo</h2></div>
+            <p className="border-l border-[#b9d4c7] pl-5 text-sm leading-7 text-[#65766f]">Diagnóstico molecular, desarrollo bacteriano, material vegetal in vitro y colecciones microbiológicas para construir estrategias más completas.</p>
           </div>
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 lg:grid-cols-2">
             {solutions.map((solution, index) => (
               <motion.article key={solution.href} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={{ delay: index * .1, duration: .6 }} className="group relative overflow-hidden rounded-[34px] border border-black/[.07] bg-white shadow-[0_20px_65px_rgba(15,55,45,.08)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_32px_80px_rgba(15,55,45,.13)]">
                 <Link href={solution.href} className="block">

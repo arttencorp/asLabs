@@ -146,7 +146,7 @@ export function WhatsAppContact({
         <AnimatePresence>
           {open && mode === "modal" && (
             <motion.div
-              className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#071d15]/70 p-4 backdrop-blur-md"
+              className="fixed inset-0 z-[11000] flex items-center justify-center bg-[#071d15]/70 p-4 backdrop-blur-md"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

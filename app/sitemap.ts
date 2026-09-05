@@ -13,6 +13,8 @@ const pages = [
   ["/ecuador/biologia-molecular", "weekly", 0.9],
   ["/ecuador/formulaciones-bacterianas", "weekly", 0.9],
   ["/ecuador/plantines-in-vitro", "weekly", 0.92],
+  ["/ecuador/cepas", "weekly", 0.9],
+  ["/ecuador/sobre-nosotros", "monthly", 0.78],
   ["/plantines", "weekly", 0.9],
   ["/control-biologico", "weekly", 0.9],
   ["/biotecnologia-vegetal", "monthly", 0.85],

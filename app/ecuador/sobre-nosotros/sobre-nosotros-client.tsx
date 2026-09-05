@@ -1,0 +1,55 @@
+"use client"
+
+import Image from "next/image"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { ArrowLeft, ArrowRight, BadgeCheck, Building2, Flag, FlaskConical, MapPin, Microscope, Sprout } from "lucide-react"
+import { Navbar } from "@/components/navbar"
+import EcuadorFooter from "@/components/ecuador-footer"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
+
+const values = [
+  { icon: Microscope, title: "Rigor que se entiende", text: "Convertimos procesos técnicos complejos en resultados claros, trazables y útiles para tomar decisiones." },
+  { icon: Sprout, title: "Ciencia aplicada", text: "Trabajamos sobre problemas reales del agro, la industria, la investigación y la biotecnología." },
+  { icon: BadgeCheck, title: "Responsabilidad", text: "Definimos alcances honestos, cuidamos cada muestra y comunicamos con transparencia durante el proyecto." },
+]
+
+export default function SobreNosotrosEcuadorClient() {
+  return (
+    <div className="min-h-screen overflow-hidden bg-[#f4f6f2] font-[var(--font-poppins)] text-[#15362b]">
+      <Navbar overlay />
+      <main>
+        <section data-navbar-theme="dark" className="relative min-h-[620px] overflow-hidden bg-[#082c21] text-white sm:min-h-[680px]">
+          <Image src="/new/SobreASLaboratorios.webp" alt="Equipo e instalaciones de AS Labs Perú" fill priority className="object-cover object-center" sizes="100vw" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,35,25,.98)_0%,rgba(5,35,25,.87)_47%,rgba(5,35,25,.18)_82%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06251b]/75 via-transparent to-transparent" />
+          <div className="relative mx-auto flex min-h-[620px] max-w-7xl items-center px-5 pb-24 pt-28 sm:min-h-[680px] sm:px-8">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="max-w-[780px]">
+              <Link href="/ecuador" className="inline-flex items-center gap-2 text-xs font-bold text-white/65 transition hover:text-white"><ArrowLeft className="h-4 w-4" />Volver al inicio</Link>
+              <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-white/18 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.18em] text-[#9de4c9] backdrop-blur-xl"><Flag className="h-4 w-4" />Nuestra identidad</div>
+              <h1 className="mt-5 max-w-3xl text-balance text-[clamp(2.55rem,5vw,4.7rem)] font-medium leading-[1.01] tracking-[-.052em]">Ciencia peruana que crece con la región</h1>
+              <p className="mt-6 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">Somos una empresa peruana de ciencia aplicada con trayectoria desde 1997. Hoy llevamos esa experiencia más cerca de nuestros clientes a través de una nueva sede regional.</p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#historia" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-[#e6c35a] px-7 text-sm font-bold text-[#173428] transition hover:-translate-y-1 hover:bg-[#f2d77e]">Conocer nuestra historia<ArrowRight className="h-4 w-4" /></a><WhatsAppContact mode="modal" message="Hola, quisiera conocer más sobre AS Labs y su sede en Ecuador." className="inline-flex min-h-14 items-center justify-center rounded-full border border-white/28 bg-black/10 px-7 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-[#173428]">Hablar con el equipo</WhatsAppContact></div>
+            </motion.div>
+          </div>
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[66px] bg-[#f4f6f2] [clip-path:polygon(0_100%,100%_0,100%_100%,0_100%)]" />
+        </section>
+
+        <section id="historia" className="mx-auto grid max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[.88fr_1.12fr] lg:items-center">
+          <div className="relative min-h-[500px]">
+            <div className="absolute inset-y-0 left-0 right-8 overflow-hidden rounded-[36px]"><Image src="/new/bannerasnuevo.webp" alt="Laboratorio de AS Labs en Perú" fill className="object-cover" sizes="(min-width:1024px) 44vw,100vw" /><div className="absolute inset-0 bg-gradient-to-t from-[#092a20]/65 to-transparent" /></div>
+            <div className="absolute bottom-6 left-6 right-0 rounded-[25px] border border-white bg-white/95 p-6 shadow-[0_28px_75px_rgba(10,45,33,.22)] backdrop-blur-xl sm:left-auto sm:w-[310px]"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#39816c]">Desde 1997</p><p className="mt-3 text-lg font-bold leading-7">Experiencia construida en Perú, ahora con presencia en Ecuador.</p></div>
+          </div>
+          <div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b06b25]">Nuestra historia</p><h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Una empresa peruana con mirada latinoamericana</h2><p className="mt-6 text-sm leading-7 text-[#61736a]">AS Laboratorios nació en Perú para resolver desafíos técnicos con ciencia, cercanía y responsabilidad. Durante más de dos décadas hemos acompañado a productores, empresas, universidades e investigadores.</p><p className="mt-4 text-sm leading-7 text-[#61736a]">La sede de Ecuador amplía esa misión: acerca la atención, la coordinación de proyectos y el acceso a nuestras capacidades especializadas, conservando el mismo estándar técnico y una trazabilidad compartida entre ambos países.</p><div className="mt-8 grid gap-3 sm:grid-cols-2">{["Empresa de origen peruano", "Sede y atención en Quito", "Experiencia desde 1997", "Proyectos con trazabilidad"].map(item => <div key={item} className="flex items-center gap-3 rounded-2xl border border-[#d9e5dd] bg-white px-4 py-4 text-xs font-semibold"><BadgeCheck className="h-4 w-4 text-[#348269]" />{item}</div>)}</div></div>
+        </section>
+
+        <section className="bg-[#0a2c22] py-20 text-white sm:py-28"><div className="mx-auto max-w-7xl px-5 sm:px-8"><div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#e7c968]">Un mismo estándar</p><h2 className="mt-4 text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Dos sedes, un solo equipo</h2></div><p className="text-sm leading-7 text-white/58">Cada requerimiento se coordina según la capacidad, la muestra y el destino. Los análisis moleculares especializados se procesan en nuestros laboratorios del Perú, con recepción y acompañamiento desde Quito.</p></div><div className="mt-12 grid gap-5 lg:grid-cols-2"><motion.article whileHover={{ y: -6 }} className="rounded-[30px] border border-white/10 bg-white/[.055] p-7 sm:p-9"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#174537] text-[#9ce2c8]"><FlaskConical className="h-5 w-5" /></span><p className="mt-7 text-[10px] font-bold uppercase tracking-[.18em] text-[#9ce2c8]">Perú</p><h3 className="mt-2 text-2xl font-bold">Origen y capacidad técnica</h3><p className="mt-4 text-sm leading-7 text-white/56">Laboratorios, procesamiento especializado, biotecnología vegetal, microbiología y soporte científico.</p></motion.article><motion.article whileHover={{ y: -6 }} className="rounded-[30px] border border-[#e7c968]/25 bg-[#e7c968]/[.075] p-7 sm:p-9"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#e7c968] text-[#173428]"><Building2 className="h-5 w-5" /></span><p className="mt-7 text-[10px] font-bold uppercase tracking-[.18em] text-[#efd981]">Ecuador</p><h3 className="mt-2 text-2xl font-bold">Presencia y coordinación local</h3><p className="mt-4 text-sm leading-7 text-white/56">Atención en Quito, evaluación de proyectos, coordinación de muestras y acceso a líneas especializadas.</p><div className="mt-5 flex gap-3 text-xs text-white/68"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#e7c968]" /><span>Edificio Carolina Millenium<br />Andrade Marin 24, 170518 Quito</span></div></motion.article></div></div></section>
+
+        <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b06b25]">Cómo trabajamos</p><h2 className="mt-4 text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Principios que acompañan cada proyecto</h2></div><div className="mt-12 grid gap-5 lg:grid-cols-3">{values.map((item, index) => <motion.article key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .08 }} className="rounded-[28px] border border-[#dce6df] bg-white p-7 shadow-[0_18px_55px_rgba(15,55,45,.06)]"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#eaf4ee] text-[#347b65]"><item.icon className="h-5 w-5" /></span><h3 className="mt-7 text-xl font-bold">{item.title}</h3><p className="mt-4 text-sm leading-7 text-[#65766e]">{item.text}</p></motion.article>)}</div></section>
+
+        <section className="px-5 pb-20 sm:px-8 sm:pb-24"><div data-navbar-theme="dark" className="mx-auto flex max-w-7xl flex-col justify-between gap-8 rounded-[38px] bg-[#11382c] p-8 text-white sm:p-12 lg:flex-row lg:items-center"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#e7c968]">Conversemos</p><h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-[-.045em] sm:text-5xl">Construyamos el siguiente proyecto</h2></div><WhatsAppContact mode="modal" message="Hola, quisiera conversar con el equipo de AS Labs Ecuador." className="group inline-flex min-h-14 shrink-0 items-center justify-center gap-3 rounded-full bg-[#e7c968] px-7 text-sm font-bold text-[#173428] transition hover:-translate-y-1 hover:bg-[#f2d77e]">Contactar al equipo<ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></WhatsAppContact></div></section>
+      </main>
+      <EcuadorFooter />
+    </div>
+  )
+}
