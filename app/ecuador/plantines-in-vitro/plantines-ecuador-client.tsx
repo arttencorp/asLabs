@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowLeft, ArrowRight, BadgeCheck, Biohazard, Dna, FlaskConical, Leaf, Microscope, ShieldCheck, Sprout } from "lucide-react"
+import { ArrowLeft, ArrowRight, BadgeCheck, Biohazard, ChevronRight, Dna, FlaskConical, Leaf, Microscope, ShieldCheck, Sprout } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import EcuadorFooter from "@/components/ecuador-footer"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
@@ -26,9 +26,20 @@ const plantinServices = [
   "Micropropagación clonal de banano y plátano",
   "Producción de lotes por programación",
   "Identificación y trazabilidad por código",
+  "Verificación de identidad genética según alcance",
+  "Evaluación fitosanitaria del material",
+  "Diagnóstico molecular de patógenos agrícolas",
+  "Plan preventivo frente a Fusarium",
   "Coordinación de aclimatación y entrega",
   "Orientación para recepción y bioseguridad",
-  "Integración con diagnóstico molecular de Fusarium",
+  "Acompañamiento técnico posterior a la entrega",
+]
+
+const plantinFaqs = [
+  ["¿Qué información necesitan para evaluar un pedido?", "Variedad, volumen aproximado, ubicación del proyecto, fecha prevista de instalación y etapa de entrega requerida."],
+  ["¿Los plantines eliminan por sí solos el riesgo de Fusarium?", "No. El material in vitro mejora control de origen y uniformidad, pero debe integrarse con diagnóstico, bioseguridad, manejo de suelo, agua, herramientas y monitoreo."],
+  ["¿Puedo programar lotes por etapas?", "Sí. La programación puede organizarse por volúmenes y fechas, sujeta a disponibilidad, capacidad productiva y cronograma técnico."],
+  ["¿Cómo se coordina la entrega?", "Antes de confirmar se revisan destino, volumen, estado del material, transporte, recepción y necesidades de aclimatación."],
 ]
 
 export default function PlantinesEcuadorClient() {
@@ -59,7 +70,7 @@ export default function PlantinesEcuadorClient() {
 
         <section id="servicios" className="mx-auto max-w-7xl px-5 pb-6 pt-20 sm:px-8 sm:pt-28">
           <div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b5651d]">Lista de servicios</p><h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Servicios para planificar el material desde el origen</h2></div><p className="text-sm leading-7 text-[#65766f]">El volumen, variedad, etapa de entrega y cronograma se definen antes de iniciar la programación del lote.</p></div>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{plantinServices.map((service, index) => <motion.article key={service} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (index % 3) * .07 }} className="flex min-h-[170px] flex-col rounded-[24px] border border-[#dce6df] bg-white p-5 shadow-[0_12px_38px_rgba(15,55,45,.05)]"><div className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[#edf5ef] text-[#387e66]"><Sprout className="h-4 w-4" /></span><span className="text-2xl font-semibold text-[#16352a]/10">{String(index + 1).padStart(2, "0")}</span></div><h3 className="mt-auto pt-7 text-sm font-bold leading-6">{service}</h3></motion.article>)}</div>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{plantinServices.map((service, index) => <motion.div key={service} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (index % 3) * .07 }}><WhatsAppContact mode="modal" ariaLabel={`Consultar ${service}`} message={`Hola, quisiera información sobre el servicio de plantines: ${service}.`} className="group flex min-h-[190px] w-full flex-col rounded-[24px] border border-[#dce6df] bg-white p-5 text-left shadow-[0_12px_38px_rgba(15,55,45,.05)] transition hover:-translate-y-1.5 hover:border-[#accdbf] hover:shadow-[0_20px_48px_rgba(15,55,45,.1)]"><div className="flex w-full items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[#edf5ef] text-[#387e66] transition group-hover:bg-[#173f32] group-hover:text-white"><Sprout className="h-4 w-4" /></span><span className="text-2xl font-semibold text-[#16352a]/10">{String(index + 1).padStart(2, "0")}</span></div><h3 className="mt-auto pt-7 text-sm font-bold leading-6">{service}</h3><span className="mt-4 flex items-center gap-2 text-[9px] font-bold uppercase tracking-[.13em] text-[#33705c]">Consultar servicio<ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" /></span></WhatsAppContact></motion.div>)}</div>
         </section>
 
         <section id="variedades" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
@@ -73,6 +84,8 @@ export default function PlantinesEcuadorClient() {
         </section>
 
         <section className="bg-white py-20 sm:py-28"><div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center"><div className="relative min-h-[440px] overflow-hidden rounded-[34px]"><Image src="/new/SobreASLaboratorios.webp" alt="Plantines producidos en las instalaciones de AS Labs Perú" fill className="object-cover" sizes="(min-width:1024px) 48vw,100vw" /><div className="absolute inset-0 bg-gradient-to-t from-[#0a2d23]/65 to-transparent" /></div><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b5651d]">Producción AS Labs</p><h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Del laboratorio a un establecimiento mejor planificado</h2><p className="mt-6 text-sm leading-7 text-[#62746b]">Coordinamos variedad, volumen, estado del material, destino y fecha prevista de instalación. Así podemos orientar mejor la aclimatación, el transporte y la recepción.</p><div className="mt-7 space-y-3">{["Material identificado por código", "Programación según disponibilidad", "Orientación para recepción y aclimatación", "Integración con diagnóstico molecular"].map(item => <div key={item} className="flex items-center gap-3 rounded-2xl border border-[#dce6df] bg-[#f6f8f5] px-4 py-3 text-xs font-semibold"><Leaf className="h-4 w-4 text-[#38816a]" />{item}</div>)}</div></div></div></section>
+
+        <section className="border-y border-[#dce5df] bg-[#eef4f0] py-20 sm:py-24"><div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[.72fr_1.28fr]"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#b5651d]">Antes de programar</p><h2 className="mt-4 text-4xl font-semibold tracking-[-.05em] sm:text-5xl">Preguntas frecuentes</h2><p className="mt-5 max-w-md text-sm leading-7 text-[#667870]">Información esencial para planificar el material, la recepción y el establecimiento.</p></div><div className="space-y-3">{plantinFaqs.map(([question, answer], index) => <motion.details key={question} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * .06 }} className="group rounded-[22px] border border-[#d8e3dc] bg-white p-5 open:border-[#a9c8b8] open:bg-[#f9fbf9] sm:p-6"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-sm font-bold leading-6"><span>{question}</span><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#edf4ef] text-[#356e5a] transition group-open:rotate-90 group-open:bg-[#173f32] group-open:text-white"><ChevronRight className="h-4 w-4" /></span></summary><p className="max-w-2xl pt-4 text-xs leading-6 text-[#65776e]">{answer}</p></motion.details>)}</div></div></section>
 
         <section className="px-5 py-20 sm:px-8 sm:py-24"><div data-navbar-theme="dark" className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 overflow-hidden rounded-[38px] bg-[#0a2b21] p-7 text-white shadow-[0_30px_90px_rgba(9,40,31,.2)] sm:p-12 lg:flex-row lg:items-center"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#f0b466]">Proyecto en Ecuador</p><h2 className="mt-4 max-w-3xl text-balance text-3xl font-semibold tracking-[-.045em] sm:text-5xl">Cuéntanos qué variedad y volumen necesitas</h2><p className="mt-4 max-w-2xl text-sm leading-7 text-white/60">Revisaremos disponibilidad, cronograma y condiciones técnicas antes de confirmar la propuesta.</p></div><WhatsAppContact mode="modal" message="Hola, quisiera evaluar un pedido de plantines in vitro para Ecuador." className="group inline-flex min-h-14 shrink-0 items-center justify-center gap-3 rounded-full bg-[#f0a23a] px-7 text-sm font-bold text-[#173428] transition hover:-translate-y-1 hover:bg-[#ffc56f]">Solicitar evaluación<ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></WhatsAppContact></div></section>
       </main>
