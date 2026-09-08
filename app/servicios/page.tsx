@@ -166,7 +166,7 @@ const servicios = [
     count: 6,
   },
   {
-    title: "Medio Ambiente",
+    title: "Análisis de Agua y Ambiente",
     description:
       "Evaluamos agua, superficies y ambientes mediante indicadores microbiológicos relevantes para su control.",
     audience: "Agua y superficies",

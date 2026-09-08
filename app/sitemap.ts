@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 import { excellentServices } from "@/data/excellent-catalog"
 
 const SITE_URL = "https://aslaboratorios.com"
-const LAST_MODIFIED = new Date("2026-09-05")
+const LAST_MODIFIED = new Date("2026-09-08")
 
 const pages = [
   ["", "weekly", 1],

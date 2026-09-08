@@ -118,11 +118,11 @@ export function OrganizationStructuredData() {
     url: "https://aslaboratorios.com",
     logo: {
       "@type": "ImageObject",
-      url: "https://aslaboratorios.com/aslabs-logo.png",
+      url: "https://aslaboratorios.com/images/new-logo.png",
       width: 512,
       height: 512,
     },
-    image: "https://aslaboratorios.com/aslabs-logo.png",
+    image: "https://aslaboratorios.com/images/new-logo.png",
     description:
       "Laboratorio líder en biotecnología vegetal, análisis microbiológicos, fitopatología y control biológico en Trujillo, La Libertad, Perú. Más de 20 años de experiencia en servicios de laboratorio certificados para agricultura e industria alimentaria.",
     foundingDate: "2000",
@@ -272,7 +272,7 @@ export function LocalBusinessStructuredData() {
     name: "AS Laboratorios - Laboratorio de Biotecnología y Análisis Microbiológicos Trujillo",
     alternateName: "AS Labs Trujillo",
     image: [
-      "https://aslaboratorios.com/aslabs-logo.png",
+      "https://aslaboratorios.com/images/new-logo.png",
       "https://aslaboratorios.com/laboratory-research.png",
       "https://aslaboratorios.com/modern-laboratory-scientists.png",
     ],
@@ -450,13 +450,17 @@ export function ServiceStructuredData({
     name: serviceName,
     description: serviceDescription,
     url: serviceUrl,
-    image: image || "https://aslaboratorios.com/aslabs-logo.png",
+    image: image
+      ? image.startsWith("http")
+        ? image
+        : `https://aslaboratorios.com${image}`
+      : "https://aslaboratorios.com/images/new-logo.png",
     provider: {
       "@type": "Organization",
       "@id": "https://aslaboratorios.com/#organization",
       name: provider,
       url: "https://aslaboratorios.com",
-      logo: "https://aslaboratorios.com/aslabs-logo.png",
+      logo: "https://aslaboratorios.com/images/new-logo.png",
       telephone: "+51-961-996-645",
       email: "ventas@aslaboratorios.com",
       address: {
@@ -549,6 +553,133 @@ export function ServiceStructuredData({
   )
 }
 
+export function EcuadorLocalBusinessStructuredData() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://aslaboratorios.com/ecuador#localbusiness",
+    name: "AS Labs Ecuador",
+    alternateName: "AS Laboratorios Ecuador",
+    url: "https://aslaboratorios.com/ecuador",
+    image: [
+      "https://aslaboratorios.com/ecuador/carolina-millenium.jpg",
+      "https://aslaboratorios.com/new/bannerasnuevo.webp",
+      "https://aslaboratorios.com/images/new-logo.png",
+    ],
+    logo: "https://aslaboratorios.com/images/new-logo.png",
+    description:
+      "Sede de AS Labs en Quito para biología molecular, formulaciones bacterianas, plantines in vitro y cepas bacterianas identificadas.",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Andrade Marin 24, Edificio Carolina Millenium",
+      postalCode: "170518",
+      addressLocality: "Quito",
+      addressRegion: "Pichincha",
+      addressCountry: "EC",
+    },
+    hasMap: "https://maps.google.com/?q=Andrade+Marin+24+Carolina+Millenium+Quito+Ecuador",
+    areaServed: [
+      { "@type": "City", name: "Quito" },
+      { "@type": "AdministrativeArea", name: "Pichincha" },
+      { "@type": "Country", name: "Ecuador" },
+    ],
+    parentOrganization: { "@id": "https://aslaboratorios.com/#organization" },
+    knowsAbout: [
+      "Biología molecular",
+      "PCR y qPCR",
+      "Secuenciamiento 16S rRNA e ITS",
+      "Formulaciones bacterianas",
+      "Plantines in vitro",
+      "Cepas bacterianas identificadas",
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Servicios de AS Labs para Ecuador",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Análisis de biología molecular" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Formulaciones bacterianas" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plantines in vitro" } },
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Cepas bacterianas identificadas" } },
+      ],
+    },
+  }
+
+  return (
+    <Script
+      id="ecuador-local-business-structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  )
+}
+
+export function EcuadorServiceStructuredData({
+  serviceName,
+  serviceDescription,
+  serviceUrl,
+  offers,
+  image,
+}: {
+  serviceName: string
+  serviceDescription: string
+  serviceUrl: string
+  offers: Array<{ name: string; description: string }>
+  image?: string
+}) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${serviceUrl}#service`,
+    name: serviceName,
+    description: serviceDescription,
+    url: serviceUrl,
+    image: image ? `https://aslaboratorios.com${image}` : undefined,
+    provider: {
+      "@type": "Organization",
+      "@id": "https://aslaboratorios.com/#organization",
+      name: "AS Laboratorios",
+      url: "https://aslaboratorios.com",
+    },
+    serviceArea: { "@type": "Country", name: "Ecuador" },
+    areaServed: [
+      { "@type": "City", name: "Quito" },
+      { "@type": "Country", name: "Ecuador" },
+    ],
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl,
+      serviceLocation: {
+        "@type": "Place",
+        name: "AS Labs Ecuador",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Andrade Marin 24, Edificio Carolina Millenium",
+          postalCode: "170518",
+          addressLocality: "Quito",
+          addressRegion: "Pichincha",
+          addressCountry: "EC",
+        },
+      },
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Catálogo de ${serviceName}`,
+      itemListElement: offers.map((offer) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: offer.name, description: offer.description },
+      })),
+    },
+  }
+
+  return (
+    <Script
+      id={`ecuador-service-${serviceName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  )
+}
+
 export function BreadcrumbStructuredData({
   items,
 }: {
@@ -635,7 +766,7 @@ export function ProfessionalServiceStructuredData({
     description: description,
     url: url,
     priceRange: priceRange || "$$",
-    image: image || "https://aslaboratorios.com/aslabs-logo.png",
+    image: image || "https://aslaboratorios.com/images/new-logo.png",
     telephone: "+51-961-996-645",
     email: "ventas@aslaboratorios.com",
     address: {

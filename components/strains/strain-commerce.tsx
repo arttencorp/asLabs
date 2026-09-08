@@ -125,6 +125,14 @@ function getMarketPrice(strain: StrainItem, market: "peru" | "ecuador") {
   return market === "ecuador" ? Math.ceil(basePrice / 3.75) : basePrice
 }
 
+function DhlBadge() {
+  return (
+    <span className="inline-flex h-5 shrink-0 items-center overflow-hidden rounded-[4px] shadow-sm ring-1 ring-amber-300/70" title="Envío DHL">
+      <Image src="/partners/dhl.svg" alt="DHL" width={55} height={13} className="h-5 w-[55px] object-cover" />
+    </span>
+  )
+}
+
 function useCart(strains: StrainItem[], storageKey: string) {
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [hydrated, setHydrated] = useState(false)
@@ -205,6 +213,14 @@ function CatalogSwitcher({ active }: { active: CatalogKind }) {
 
 function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number; market: "peru" | "ecuador" }) {
   const copy = catalogCopy[kind]
+  const heroTitle = market === "ecuador"
+    ? "Cepas bacterianas identificadas para Ecuador"
+    : kind === "identified"
+      ? "Cepas bacterianas y fúngicas identificadas en Perú"
+      : copy.title
+  const heroDescription = market === "ecuador"
+    ? "Catálogo microbiológico con identificación molecular, cotización en dólares y soporte técnico para investigación, docencia y desarrollo en Ecuador."
+    : copy.description
 
   return (
     <section
@@ -237,10 +253,10 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
             </span>
           </div>
           <h1 className="max-w-4xl text-balance text-4xl font-semibold leading-[1.04] tracking-[-0.035em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.62)] sm:text-5xl lg:text-6xl">
-            {copy.title}
+            {heroTitle}
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-white/[0.92] drop-shadow-[0_2px_12px_rgba(0,0,0,.45)] sm:text-lg">
-            {copy.description}
+            {heroDescription}
           </p>
         </motion.div>
 
@@ -367,7 +383,10 @@ function StrainCard({
               <p className="text-xs text-slate-500">Precio referencial desde</p>
               <p className="mt-1 text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(getMarketPrice(strain, market), market)}</p>
             </div>
-            <p className="max-w-[125px] text-right text-[11px] leading-4 text-slate-500">Envío calculado una vez por pedido</p>
+            <div className="flex max-w-[145px] flex-col items-end gap-1.5 text-right text-[11px] leading-4 text-slate-500">
+              <span>Envío calculado una vez por pedido</span>
+              <DhlBadge />
+            </div>
           </div>
           <div className={`grid gap-2 ${market === "peru" ? "grid-cols-2" : "grid-cols-1"}`}>
             {market === "peru" && <Link
@@ -574,7 +593,10 @@ function CartDrawer({
                     <dd className="font-semibold text-slate-800">{formatMoney(subtotal, market)}</dd>
                   </div>
                   <div className="flex justify-between gap-5 text-slate-600">
-                    <dt>{market === "ecuador" ? "Logística internacional" : copy.shippingLabel}</dt>
+                    <dt className="flex flex-wrap items-center gap-2">
+                      <span>{market === "ecuador" ? "Logística internacional" : copy.shippingLabel}</span>
+                      <DhlBadge />
+                    </dt>
                     <dd className="shrink-0 font-semibold text-slate-800">{market === "ecuador" ? "A cotizar" : formatMoney(shipping, market)}</dd>
                   </div>
                   <div className="mt-3 flex items-end justify-between border-t border-dashed border-slate-200 pt-4">
@@ -1246,7 +1268,10 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                     <dd className="font-semibold text-slate-800">{formatMoney(subtotal)}</dd>
                   </div>
                   <div className="flex justify-between gap-4 text-slate-600">
-                    <dt>{copy.shippingLabel}</dt>
+                    <dt className="flex flex-wrap items-center gap-2">
+                      <span>{copy.shippingLabel}</span>
+                      <DhlBadge />
+                    </dt>
                     <dd className="shrink-0 font-semibold text-slate-800">{formatMoney(copy.shipping)}</dd>
                   </div>
                   <div className="flex items-end justify-between border-t border-slate-100 pt-4">

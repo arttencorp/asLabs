@@ -134,7 +134,7 @@ export default function MedioAmbienteClient() {
       <Navbar />
 
       <header className="relative min-h-[410px] overflow-hidden clip-angle-bottom-sm sm:min-h-[440px]">
-        <Image src="/servicios/ambiente.jpg" alt="Medio Ambiente - Análisis de agua" fill className="object-cover" priority />
+        <Image src="/servicios/ambiente.jpg" alt="Laboratorio de análisis de agua en Trujillo" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">
@@ -144,12 +144,12 @@ export default function MedioAmbienteClient() {
                   <Leaf className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-emerald-300 text-sm font-medium uppercase tracking-wider">
-                  Análisis Ambiental
+                  Laboratorio microbiológico · Trujillo
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Medio Ambiente</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Análisis de agua y ambiente en Trujillo</h1>
               <p className="text-white/80 text-base md:text-lg max-w-xl">
-                Análisis microbiológicos para el control de calidad ambiental en muestras de agua, aire y superficies.
+                Evaluación microbiológica de agua, superficies y ambientes para detectar coliformes, E. coli y otros indicadores relevantes.
               </p>
               <ServiceHeroActions
                 count={serviciosMedioAmbiente.length}
