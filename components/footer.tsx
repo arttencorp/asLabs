@@ -151,7 +151,7 @@ export default function Footer() {
                   <MapPin className="h-4 w-4" />
                 </span>
                 <div className="text-sm text-gray-300 pt-1">
-                  <p>Calle 30, Urb, San Isidro II</p>
+                  <p>Ca. 30, Urb. San Isidro II</p>
                   <p>Trujillo, La Libertad, Perú</p>
                 </div>
               </div>

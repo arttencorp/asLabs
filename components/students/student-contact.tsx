@@ -37,7 +37,7 @@ export default function StudentContact() {
             <CardContent className="p-6 text-center">
               <MapPin className="h-8 w-8 mx-auto mb-3 text-yellow-300" />
               <h3 className="font-semibold mb-2">Ubicación</h3>
-              <p className="text-sm opacity-90">MZ J1 San Isidro II Etapa</p>
+              <p className="text-sm opacity-90">Ca. 30, Urb. San Isidro II</p>
               <p className="text-xs opacity-75 mt-1">Trujillo, La Libertad</p>
             </CardContent>
           </Card>

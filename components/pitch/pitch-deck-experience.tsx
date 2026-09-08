@@ -669,7 +669,7 @@ export default function PitchDeckExperience() {
           <aside className="rounded-[30px] border border-white/12 bg-[#041f17]/65 p-6 backdrop-blur-xl">
             <p className="text-xs font-bold uppercase tracking-[.16em] text-[#a8dab5]">AS Laboratorios</p>
             <div className="mt-6 space-y-4 text-sm">
-              <p className="flex gap-3 text-white/[0.78]"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ffc66f]" /> MZ J1 San Isidro II Etapa<br />Trujillo, La Libertad, Perú</p>
+              <p className="flex gap-3 text-white/[0.78]"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ffc66f]" /> Ca. 30, Urb. San Isidro II<br />Trujillo, La Libertad, Perú</p>
               <p className="flex items-center gap-3 text-white/[0.78]"><Mail className="h-4 w-4 shrink-0 text-[#ffc66f]" /> ventas@aslaboratorios.com</p>
             </div>
             <div className="mt-7 border-t border-white/10 pt-6">
