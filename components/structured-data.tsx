@@ -605,7 +605,7 @@ export function EcuadorLocalBusinessStructuredData() {
   }
 
   return (
-    <Script
+    <script
       id="ecuador-local-business-structured-data"
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -672,7 +672,7 @@ export function EcuadorServiceStructuredData({
   }
 
   return (
-    <Script
+    <script
       id={`ecuador-service-${serviceName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
