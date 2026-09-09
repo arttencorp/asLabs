@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { btnPrimary, btnAccent } from "@/components/ui/button-styles"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function AboutCTA() {
   return (
@@ -18,14 +19,12 @@ export default function AboutCTA() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-          <a
-            href="https://wa.me/51961996645"
-            target="_blank"
-            rel="noopener noreferrer"
+          <WhatsAppContact
+            message="Hola, quisiera conversar sobre una solución de biotecnología para mi operación agrícola"
             className={btnPrimary}
           >
             Contactar Ahora
-          </a>
+          </WhatsAppContact>
           <Link href="/servicios" className={btnAccent}>
             Ver Servicios
           </Link>

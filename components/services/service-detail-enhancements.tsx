@@ -14,6 +14,7 @@ import {
   Send,
 } from "lucide-react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export type ServiceTheme = "orange" | "emerald" | "blue" | "teal" | "purple" | "sky"
 
@@ -86,10 +87,10 @@ const servicePages = [
 type HeroActionsProps = {
   count: number
   theme: ServiceTheme
-  whatsappHref: string
+  whatsappMessage: string
 }
 
-export function ServiceHeroActions({ count, theme, whatsappHref }: HeroActionsProps) {
+export function ServiceHeroActions({ count, theme, whatsappMessage }: HeroActionsProps) {
   const palette = themes[theme]
 
   return (
@@ -102,15 +103,13 @@ export function ServiceHeroActions({ count, theme, whatsappHref }: HeroActionsPr
           Ver catálogo
           <ArrowDown className="h-4 w-4" />
         </Link>
-        <Link
-          href={whatsappHref}
-          target="_blank"
-          rel="noopener noreferrer"
+        <WhatsAppContact
+          message={whatsappMessage}
           className={`inline-flex h-11 items-center gap-2 rounded-full border border-white/35 px-5 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 ${palette.bg}`}
         >
           <MessageCircle className="h-4 w-4" />
           Consultar
-        </Link>
+        </WhatsAppContact>
       </div>
       <div className="flex items-center gap-2 text-sm text-white/80">
         <span className="font-bold text-white">{count}</span>
@@ -159,11 +158,11 @@ type ServiceExperienceProps = {
   activeHref: string
   theme: ServiceTheme
   title: string
-  whatsappHref: string
+  whatsappMessage: string
   faqs: Array<{ question: string; answer: string }>
 }
 
-export function ServiceExperience({ activeHref, theme, title, whatsappHref, faqs }: ServiceExperienceProps) {
+export function ServiceExperience({ activeHref, theme, title, whatsappMessage, faqs }: ServiceExperienceProps) {
   const palette = themes[theme]
   const related = servicePages.filter((service) => service.href !== activeHref).slice(0, 3)
   const steps = [
@@ -188,10 +187,10 @@ export function ServiceExperience({ activeHref, theme, title, whatsappHref, faqs
                 <p className="mt-3 text-sm leading-6 text-[#66796f]">
                   Te acompañamos antes, durante y después del análisis de {title.toLowerCase()} para que la muestra llegue correctamente y el resultado sea útil.
                 </p>
-                <Link href={whatsappHref} target="_blank" rel="noopener noreferrer" className={`mt-5 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 ${palette.bg}`}>
+                <WhatsAppContact message={whatsappMessage} className={`mt-5 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 ${palette.bg}`}>
                   Revisar mi caso
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </WhatsAppContact>
               </div>
               <StaggerGroup className="grid gap-3 sm:grid-cols-2" staggerDelay={0.08}>
                 {steps.map((step, index) => (

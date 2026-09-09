@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   Leaf,
   Shield,
@@ -153,7 +154,7 @@ export default function MedioAmbienteClient() {
               <ServiceHeroActions
                 count={serviciosMedioAmbiente.length}
                 theme="emerald"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Medio%20Ambiente"
+                whatsappMessage="Hola, deseo cotizar servicios de Medio Ambiente"
               />
             </div>
           </div>
@@ -194,14 +195,13 @@ export default function MedioAmbienteClient() {
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all"
               />
             </div>
-            <Link
-              href="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Medio%20Ambiente"
-              target="_blank"
+            <WhatsAppContact
+              message="Hola, deseo cotizar servicios de Medio Ambiente"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-500 text-white rounded-lg font-medium text-sm hover:bg-emerald-600 transition-all"
             >
               <FileText className="w-4 h-4" />
               Cotizar
-            </Link>
+            </WhatsAppContact>
           </div>
         </section>
 
@@ -320,7 +320,7 @@ export default function MedioAmbienteClient() {
           activeHref="/servicios/medio-ambiente"
           theme="emerald"
           title="Medio Ambiente"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20una%20muestra%20ambiental"
+          whatsappMessage="Hola, necesito orientación para una muestra ambiental"
           faqs={[
             { question: "¿Qué tipos de muestras ambientales reciben?", answer: "Procesamos muestras de agua, hisopados de superficies y controles de ambientes. La forma de recolección y el volumen dependen del microorganismo o indicador que necesites evaluar." },
             { question: "¿Puedo tomar yo mismo la muestra de agua?", answer: "Sí, siempre que utilices el recipiente y procedimiento adecuados. Te indicamos cómo evitar contaminación cruzada, cuánto volumen recolectar y si debe mantenerse refrigerada." },
@@ -336,14 +336,13 @@ export default function MedioAmbienteClient() {
                 <h3 className="text-xl font-bold text-white mb-1">¿Necesitas un análisis ambiental?</h3>
                 <p className="text-white/80 text-sm">Contáctanos para una cotización personalizada</p>
               </div>
-              <Link
-                href="https://wa.me/51961996645?text=Hola,%20deseo%20información%20sobre%20servicios%20de%20Medio%20Ambiente"
-                target="_blank"
+              <WhatsAppContact
+                message="Hola, deseo información sobre servicios de Medio Ambiente"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-600 rounded-lg font-semibold hover:bg-emerald-50 transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 WhatsApp
-              </Link>
+              </WhatsAppContact>
             </div>
           </div>
         </section>

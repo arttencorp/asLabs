@@ -1,9 +1,3 @@
-export const handleWhatsAppContact = (plantinName: string) => {
-  const message = `🌱 Hola AS Laboratorios! Estoy interesado en ${plantinName}. ¿Podrían proporcionarme información detallada sobre precios, disponibilidad y asesoría técnica? Soy agricultor y busco mejorar mi producción.`
-  const whatsappUrl = `https://walink.co/0441cf?text=${encodeURIComponent(message)}`
-  window.open(whatsappUrl, "_blank")
-}
-
 export const getProfitabilityColor = (profitability: string) => {
   switch (profitability) {
     case "Excepcional":

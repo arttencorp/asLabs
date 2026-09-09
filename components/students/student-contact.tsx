@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function StudentContact() {
   return (
@@ -53,15 +54,13 @@ export default function StudentContact() {
 
         <div className="text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a
-              href="https://wa.me/51961996645?text=Hola%2C%20soy%20estudiante%20y%20me%20interesa%20conocer%20más%20sobre%20sus%20productos%20para%20laboratorio"
-              target="_blank"
-              rel="noopener noreferrer"
+            <WhatsAppContact
+              message="Hola, soy estudiante y me interesa conocer más sobre sus productos para laboratorio"
               className="inline-flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-3 rounded-full transition-colors duration-300 font-medium"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
               Contactar por WhatsApp
-            </a>
+            </WhatsAppContact>
             <a
               href="mailto:ventas@aslaboratorios.com?subject=Consulta%20de%20Estudiante&body=Hola%2C%20soy%20estudiante%20y%20me%20interesa%20conocer%20más%20sobre%20sus%20productos%20para%20laboratorio."
               className="inline-flex items-center bg-white/20 hover:bg-white/30 text-white px-8 py-3 rounded-full transition-colors duration-300 font-medium border border-white/30"

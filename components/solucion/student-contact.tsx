@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Clock, MessageCircle, Users, Award, Truck } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function StudentContact() {
   return (
@@ -80,15 +81,13 @@ export default function StudentContact() {
 
             <div className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="https://wa.me/51961996645?text=Hola%2C%20soy%20estudiante%20universitario%20y%20me%20interesa%20conocer%20sus%20productos%20y%20descuentos%20especiales%20para%20estudiantes."
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppContact
+                  message="Hola, soy estudiante universitario y me interesa conocer sus productos y descuentos especiales para estudiantes"
                   className="inline-flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-8 py-4 rounded-full transition-colors duration-300 font-semibold text-lg"
                 >
                   <MessageCircle className="w-6 h-6 mr-3" />
                   Contactar por WhatsApp
-                </a>
+                </WhatsAppContact>
                 <a
                   href="mailto:ventas@aslaboratorios.com?subject=Consulta%20Estudiante%20-%20Descuentos%20Especiales&body=Hola%2C%0A%0ASoy%20estudiante%20universitario%20de%20la%20carrera%20de%20_______%20y%20me%20interesa%20conocer%20más%20sobre%3A%0A%0A-%20Productos%20disponibles%20para%20estudiantes%0A-%20Descuentos%20especiales%0A-%20Kits%20educativos%0A-%20Formas%20de%20pago%0A%0AMi%20universidad%3A%20________%0AMi%20ciclo%20académico%3A%20_______%0A%0AGracias%20por%20su%20atención."
                   className="inline-flex items-center bg-white/20 hover:bg-white/30 text-white px-8 py-4 rounded-full transition-colors duration-300 font-semibold text-lg border border-white/30"

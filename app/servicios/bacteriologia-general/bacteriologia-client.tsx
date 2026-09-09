@@ -6,6 +6,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   ChevronDown,
   Search,
@@ -184,7 +185,7 @@ export default function BacteriologiaClient() {
               <ServiceHeroActions
                 count={serviciosBacteriologia.length}
                 theme="purple"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Bacteriología%20General"
+                whatsappMessage="Hola, deseo cotizar servicios de Bacteriología General"
               />
             </div>
           </div>
@@ -225,14 +226,13 @@ export default function BacteriologiaClient() {
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-500 transition-all"
               />
             </div>
-            <Link
-              href="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Bacteriología%20General"
-              target="_blank"
+            <WhatsAppContact
+              message="Hola, deseo cotizar servicios de Bacteriología General"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-purple-500 text-white rounded-lg font-medium text-sm hover:bg-purple-600 transition-all"
             >
               <FileText className="w-4 h-4" />
               Cotizar
-            </Link>
+            </WhatsAppContact>
           </div>
         </section>
 
@@ -351,7 +351,7 @@ export default function BacteriologiaClient() {
           activeHref="/servicios/bacteriologia-general"
           theme="purple"
           title="Bacteriología General"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20sobre%20un%20servicio%20de%20bacteriología"
+          whatsappMessage="Hola, necesito orientación sobre un servicio de bacteriología"
           faqs={[
             { question: "¿Pueden trabajar con una cepa que ya tengo aislada?", answer: "Sí. Primero revisamos pureza, viabilidad, procedencia y condiciones de transporte. Según el objetivo, podemos proponer identificación, estandarización, conservación o crecimiento controlado." },
             { question: "¿Qué concentración puede tener una suspensión?", answer: "La concentración se define según el uso y la cepa. Podemos preparar suspensiones estandarizadas y documentar el método de cuantificación o equivalencia solicitado." },
@@ -367,14 +367,13 @@ export default function BacteriologiaClient() {
                 <h3 className="text-xl font-bold text-white mb-1">¿Necesitas servicios de bacteriología?</h3>
                 <p className="text-white/80 text-sm">Contáctanos para una cotización personalizada</p>
               </div>
-              <Link
-                href="https://wa.me/51961996645?text=Hola,%20deseo%20información%20sobre%20servicios%20de%20Bacteriología%20General"
-                target="_blank"
+              <WhatsAppContact
+                message="Hola, deseo información sobre servicios de Bacteriología General"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 WhatsApp
-              </Link>
+              </WhatsAppContact>
             </div>
           </div>
         </section>

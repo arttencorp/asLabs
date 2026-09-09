@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function BananoBabyClient() {
   const [showAdvances, setShowAdvances] = useState(false)
@@ -399,15 +400,13 @@ export default function BananoBabyClient() {
               socios estratégicos, inversionistas y colaboradores académicos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="https://wa.me/51961996645"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppContact
+                message="Hola, quisiera conversar sobre el proyecto Banano Baby"
                 className="inline-flex items-center px-8 py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
               >
                 Contactar por WhatsApp
                 <MessageCircle className="ml-2 h-5 w-5" />
-              </a>
+              </WhatsAppContact>
               <a
                 href="mailto:info@aslaboratorios.com"
                 className="inline-flex items-center px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors backdrop-blur-sm"

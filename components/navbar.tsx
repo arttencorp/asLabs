@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -19,6 +20,7 @@ import {
   Scale,
   ShieldCheck,
   Sparkles,
+  UserRoundCheck,
   X,
 } from "lucide-react"
 
@@ -319,11 +321,25 @@ export function Navbar({ overlay = false }: NavbarProps) {
                 <ClipboardCheck className="h-3.5 w-3.5" />
                 Seguimiento
               </Link>
-              <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
-              <a href="https://wa.me/51961996645" target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
-                <MessageCircle className="h-3.5 w-3.5" />
-                Hablemos
+              <a
+                href="https://clientes.aslaboratorios.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[11.5px] font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                  useDarkContrast
+                    ? "border-white/25 bg-white/[0.13] text-white hover:bg-white/[0.22]"
+                    : "border-[#bfd1c3] bg-[#edf4ee] text-[#24573a] hover:border-[#8eaf96] hover:bg-[#e1ece3]"
+                }`}
+                aria-label="Abrir el panel de clientes de AS Laboratorios"
+              >
+                <UserRoundCheck className="h-3.5 w-3.5" />
+                Acceso Clientes
               </a>
+              <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
+              <WhatsAppContact mode="modal" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
+                <MessageCircle className="h-3.5 w-3.5" />
+                WhatsApp
+              </WhatsAppContact>
             </div>
 
             <div className="flex items-center gap-2 xl:hidden">
@@ -377,9 +393,19 @@ export function Navbar({ overlay = false }: NavbarProps) {
                       )}
                     </div>
                   ))}
-                  <div className="mt-3 grid grid-cols-2 gap-2">
+                  <a
+                    href="https://clientes.aslaboratorios.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-4 py-2.5 text-center text-xs font-bold text-white shadow-[0_12px_28px_-18px_rgba(15,63,43,0.85)]"
+                  >
+                    <UserRoundCheck className="h-4 w-4" />
+                    Acceso Clientes
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
                     <Link href="/seguimiento" className="rounded-full border border-[#d2ded4] px-4 py-2.5 text-center text-xs font-semibold text-[#294b3b]">Seguimiento</Link>
-                    <a href="https://wa.me/51961996645" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#ef9f38] px-4 py-2.5 text-center text-xs font-bold text-[#173428]">WhatsApp</a>
+                    <WhatsAppContact mode="modal" className="flex items-center justify-center gap-1.5 rounded-full bg-[#ef9f38] px-4 py-2.5 text-center text-xs font-bold text-[#173428]"><MessageCircle className="h-3.5 w-3.5" />WhatsApp</WhatsAppContact>
                   </div>
                 </div>
               </motion.div>

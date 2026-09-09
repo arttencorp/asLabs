@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   Microscope,
   Shield,
@@ -198,7 +199,7 @@ export default function ApoyoInvestigacionClient() {
               <ServiceHeroActions
                 count={serviciosApoyoInvestigacion.length}
                 theme="sky"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Apoyo%20a%20la%20Investigación"
+                whatsappMessage="Hola, deseo cotizar servicios de Apoyo a la Investigación"
               />
             </div>
           </div>
@@ -237,14 +238,13 @@ export default function ApoyoInvestigacionClient() {
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/30 focus:border-sky-500 transition-all"
               />
             </div>
-            <Link
-              href="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Apoyo%20a%20la%20Investigacion"
-              target="_blank"
+            <WhatsAppContact
+              message="Hola, deseo cotizar servicios de Apoyo a la Investigación"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-sky-500 text-white rounded-lg font-medium text-sm hover:bg-sky-600 transition-all"
             >
               <FileText className="w-4 h-4" />
               Cotizar
-            </Link>
+            </WhatsAppContact>
           </div>
         </section>
 
@@ -362,7 +362,7 @@ export default function ApoyoInvestigacionClient() {
           activeHref="/servicios/apoyo-investigacion"
           theme="sky"
           title="Apoyo a la Investigación"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20mi%20proyecto%20de%20investigación"
+          whatsappMessage="Hola, necesito orientación para mi proyecto de investigación"
           faqs={[
             { question: "¿Atienden tesis y proyectos en etapa de planificación?", answer: "Sí. Es el mejor momento para revisar objetivo, variables, muestras y técnica. Así podemos delimitar el apoyo del laboratorio antes de que inicies la toma de datos." },
             { question: "¿El servicio incluye interpretación de resultados?", answer: "El alcance puede incluir procesamiento, documentación metodológica y orientación técnica sobre los resultados. La redacción académica o el análisis adicional se cotizan según la necesidad del proyecto." },
@@ -377,14 +377,13 @@ export default function ApoyoInvestigacionClient() {
                 <h3 className="text-xl font-bold text-white mb-1">¿Necesitas apoyo para tu investigación?</h3>
                 <p className="text-white/85 text-sm">Te ayudamos a estructurar, ejecutar y documentar tus ensayos</p>
               </div>
-              <Link
-                href="https://wa.me/51961996645?text=Hola,%20deseo%20informacion%20sobre%20Apoyo%20a%20la%20Investigacion"
-                target="_blank"
+              <WhatsAppContact
+                message="Hola, deseo información sobre Apoyo a la Investigación"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-sky-600 rounded-lg font-semibold hover:bg-sky-50 transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 WhatsApp
-              </Link>
+              </WhatsAppContact>
             </div>
           </div>
         </section>

@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Calendar, Users, Target } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function PitchContact() {
   return (
@@ -91,15 +92,13 @@ export default function PitchContact() {
                 </div>
 
                 <div className="space-y-4">
-                  <a
-                    href="https://wa.me/51961996645?text=Hola%2C%20soy%20un%20potencial%20inversor%20interesado%20en%20conocer%20más%20sobre%20AS%20Laboratorios%20y%20las%20oportunidades%20de%20inversión."
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <WhatsAppContact
+                    message="Hola, quisiera conocer más sobre AS Laboratorios y sus proyectos para fondos concursables"
                     className="w-full inline-flex items-center justify-center bg-white text-[#2e7d32] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300"
                   >
                     <Phone className="w-5 h-5 mr-2" />
                     Solicitar Reunión
-                  </a>
+                  </WhatsAppContact>
 
                   <a
                     href="mailto:ventas@aslaboratorios.com?subject=Oportunidad%20de%20Inversión%20-%20AS%20Laboratorios&body=Estimado%20equipo%20de%20AS%20Laboratorios%2C%0A%0ASoy%20un%20potencial%20inversor%20interesado%20en%20conocer%20más%20detalles%20sobre%20las%20oportunidades%20de%20inversión%20en%20su%20empresa.%0A%0APor%20favor%2C%20me%20gustaría%20programar%20una%20reunión%20para%20discutir%3A%0A-%20Modelo%20de%20negocio%20y%20proyecciones%20financieras%0A-%20Oportunidades%20de%20crecimiento%0A-%20Estructura%20de%20inversión%0A%0AQuedo%20atento%20a%20su%20respuesta.%0A%0ASaludos%20cordiales."

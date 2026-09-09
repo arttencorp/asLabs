@@ -2,7 +2,7 @@
 
 import { CheckCircle, MessageCircle, Menu, X } from "lucide-react"
 import { categories } from "./data"
-import { handleWhatsAppContact } from "./utils"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { useState } from "react"
 
 interface CategorySidebarProps {
@@ -76,16 +76,13 @@ export default function CategorySidebar({
                 <p className="text-sm text-green-700 mb-3">
                   Nuestros especialistas están listos para asesorarte
                 </p>
-                <button
-                  onClick={() => {
-                    handleWhatsAppContact("asesoría especializada para elegir los mejores plantines")
-                    setIsMobileMenuOpen(false)
-                  }}
+                <WhatsAppContact
+                  message="Hola, quisiera asesoría especializada para elegir los mejores plantines"
                   className="w-full bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
                   Consulta Gratis
-                </button>
+                </WhatsAppContact>
               </div>
             </div>
           </div>
@@ -122,13 +119,13 @@ export default function CategorySidebar({
               <p className="text-sm text-green-700 mb-3">
                 Nuestros especialistas están listos para asesorarte
               </p>
-              <button
-                onClick={() => handleWhatsAppContact("asesoría especializada para elegir los mejores plantines")}
+              <WhatsAppContact
+                message="Hola, quisiera asesoría especializada para elegir los mejores plantines"
                 className="w-full bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 Consulta Gratis
-              </button>
+              </WhatsAppContact>
             </div>
           </div>
         </div>

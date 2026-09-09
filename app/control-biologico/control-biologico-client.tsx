@@ -25,8 +25,7 @@ import {
 } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-
-const WHATSAPP = "51961996645"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 const products = [
   {
@@ -146,14 +145,9 @@ function WhatsAppLink({
     ? `Hola, deseo información y disponibilidad de ${product} para un programa de control biológico.`
     : "Hola, deseo una evaluación y cotización para implementar control biológico en mi cultivo."
   return (
-    <a
-      href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={className}
-    >
+    <WhatsAppContact message={message} className={className}>
       {children}
-    </a>
+    </WhatsAppContact>
   )
 }
 

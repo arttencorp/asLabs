@@ -26,6 +26,7 @@ import {
   pipelineData,
   secuenciamiento,
 } from "@/data/pipeline-data"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 const strategicLines = [
   { title: "Control biológico", copy: "Microorganismos para el manejo sostenible de plagas.", icon: ShieldCheck, href: "/control-biologico" },
@@ -151,7 +152,7 @@ export default function ResearchPageExperience() {
       <section data-navbar-theme="light" className="bg-[#f5f7f4] px-4 py-20 md:py-24">
         <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 rounded-[2rem] border border-[#dce5de] bg-white p-8 shadow-[0_24px_70px_-48px_rgba(9,43,32,.5)] md:flex-row md:items-center md:p-12">
           <div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#4f7d60]">Colaboremos</p><h2 className="mt-3 text-3xl font-bold tracking-[-.03em]">¿Tienes una investigación por desarrollar?</h2><p className="mt-3 text-sm leading-6 text-[#687970] md:text-base">Conversemos sobre análisis, diseño experimental y capacidades de laboratorio para tu proyecto.</p></div>
-          <a href="https://wa.me/51961996645?text=Hola%2C%20quisiera%20consultar%20sobre%20un%20proyecto%20de%20investigación" target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#f0a23a] px-6 py-3.5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc56f]">Consultar proyecto <ArrowRight className="h-4 w-4" /></a>
+          <WhatsAppContact message="Hola, quisiera consultar sobre un proyecto de investigación" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#f0a23a] px-6 py-3.5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc56f]">Consultar proyecto <ArrowRight className="h-4 w-4" /></WhatsAppContact>
         </div>
       </section>
     </main>
