@@ -73,6 +73,34 @@ interface CartEntry {
 
 const WHATSAPP_NUMBER = "51961996645"
 
+const PERU_DEPARTMENTS = [
+  "Amazonas",
+  "Áncash",
+  "Apurímac",
+  "Arequipa",
+  "Ayacucho",
+  "Cajamarca",
+  "Callao",
+  "Cusco",
+  "Huancavelica",
+  "Huánuco",
+  "Ica",
+  "Junín",
+  "La Libertad",
+  "Lambayeque",
+  "Lima",
+  "Loreto",
+  "Madre de Dios",
+  "Moquegua",
+  "Pasco",
+  "Piura",
+  "Puno",
+  "San Martín",
+  "Tacna",
+  "Tumbes",
+  "Ucayali",
+] as const
+
 const catalogCopy = {
   identified: {
     eyebrow: "Colección microbiológica AS Labs",
@@ -442,8 +470,9 @@ function CartDrawer({
   market: "peru" | "ecuador"
 }) {
   const copy = catalogCopy[kind]
+  const [department, setDepartment] = useState("")
   const subtotal = entries.reduce((sum, entry) => sum + getMarketPrice(entry.strain, market) * entry.quantity, 0)
-  const shipping = market === "ecuador" ? 0 : entries.length ? copy.shipping : 0
+  const shipping = market === "ecuador" ? 0 : entries.length && department ? copy.shipping : 0
   const total = subtotal + shipping
   const units = entries.reduce((sum, entry) => sum + entry.quantity, 0)
 
@@ -468,6 +497,7 @@ function CartDrawer({
       ...lines,
       "",
       `Subtotal referencial: ${formatMoney(subtotal, market)}`,
+      ...(market === "peru" ? [`Departamento de entrega: ${department}`] : []),
       `${market === "ecuador" ? "Logística internacional" : copy.shippingLabel}: ${market === "ecuador" ? "A cotizar" : formatMoney(shipping, market)}`,
       `Total referencial de productos: ${formatMoney(total, market)}`,
       "",
@@ -587,6 +617,24 @@ function CartDrawer({
 
             {entries.length > 0 && (
               <div className="border-t border-emerald-950/10 bg-white px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 sm:px-7">
+                {market === "peru" && (
+                  <label className="mb-5 block rounded-2xl border border-emerald-950/10 bg-emerald-50/60 p-4">
+                    <span className="flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.13em] text-emerald-800">
+                      Departamento de entrega
+                      <span className="normal-case tracking-normal text-amber-700">Obligatorio</span>
+                    </span>
+                    <select
+                      value={department}
+                      onChange={(event) => setDepartment(event.target.value)}
+                      className="mt-3 h-12 w-full appearance-none rounded-xl border border-emerald-950/15 bg-white px-4 text-sm font-semibold text-emerald-950 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/10"
+                      aria-label="Departamento de entrega"
+                    >
+                      <option value="">Selecciona tu departamento</option>
+                      {PERU_DEPARTMENTS.map((item) => <option key={item} value={item}>{item}</option>)}
+                    </select>
+                    <span className="mt-2 block text-[11px] leading-4 text-slate-500">El costo mostrado es referencial y será confirmado según el destino, peso y condiciones de conservación.</span>
+                  </label>
+                )}
                 <dl className="space-y-2.5 text-sm">
                   <div className="flex justify-between text-slate-600">
                     <dt>Subtotal · {units} {units === 1 ? "unidad" : "unidades"}</dt>
@@ -597,7 +645,7 @@ function CartDrawer({
                       <span>{market === "ecuador" ? "Logística internacional" : copy.shippingLabel}</span>
                       <DhlBadge />
                     </dt>
-                    <dd className="shrink-0 font-semibold text-slate-800">{market === "ecuador" ? "A cotizar" : formatMoney(shipping, market)}</dd>
+                    <dd className="shrink-0 font-semibold text-slate-800">{market === "ecuador" ? "A cotizar" : department ? formatMoney(shipping, market) : "Por calcular"}</dd>
                   </div>
                   <div className="mt-3 flex items-end justify-between border-t border-dashed border-slate-200 pt-4">
                     <dt>
@@ -610,10 +658,11 @@ function CartDrawer({
                 <button
                   type="button"
                   onClick={requestQuote}
-                  className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-emerald-700 px-5 text-base font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl"
+                  disabled={market === "peru" && !department}
+                  className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-emerald-700 px-5 text-base font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none disabled:hover:translate-y-0"
                 >
                   <MessageCircle className="h-5 w-5" />
-                  Solicitar cotización
+                  {market === "peru" && !department ? "Selecciona tu departamento" : "Solicitar cotización"}
                   <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="mt-3 text-center text-[11px] leading-4 text-slate-500">
@@ -1274,6 +1323,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                     </dt>
                     <dd className="shrink-0 font-semibold text-slate-800">{formatMoney(copy.shipping)}</dd>
                   </div>
+                  <p className="text-[11px] leading-4 text-slate-500">Seleccionarás el departamento de entrega al revisar tu pedido.</p>
                   <div className="flex items-end justify-between border-t border-slate-100 pt-4">
                     <dt>
                       <span className="block font-bold text-emerald-950">Total estimado</span>
@@ -1400,6 +1450,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
         kind={kind}
         onSet={cart.set}
         onRemove={cart.remove}
+        market="peru"
       />
     </div>
   )

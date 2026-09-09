@@ -32,6 +32,7 @@ const trustLogos = [
   { src: "/trustUs/untLogo.png", alt: "Universidad Nacional de Trujillo", type: "Academia" },
   { src: "/trustUs/arttencorp.jpg", alt: "ArttenCorp", type: "Empresa" },
   { src: "/RNPv2.png", alt: "Constancia del RNP", type: "Institución" },
+  { src: "/partners/cavbio.png", alt: "CavBio", type: "Biotecnología" },
 ]
 
 const products = [
@@ -163,7 +164,7 @@ export default function ClientPage() {
             <h2 className="text-2xl tracking-[-0.03em] text-[#173428] sm:text-3xl">Organizaciones que confían en nosotros</h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#66756e]">Trabajamos junto a empresas, instituciones académicas y organizaciones que comparten nuestra visión de una agricultura sostenible.</p>
           </ScrollReveal>
-          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7" staggerDelay={0.07}>
+          <StaggerGroup className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8" staggerDelay={0.07}>
             {trustLogos.map((logo) => (
               <StaggerItem key={logo.alt} className="group flex min-h-[150px] flex-col rounded-2xl border border-[#dce6de] bg-white p-4 shadow-[0_12px_34px_-28px_rgba(14,60,38,0.45)] transition-all duration-300 hover:-translate-y-1 hover:border-[#aec8b4] hover:shadow-lg" distance={12}>
                 <div className="relative flex-1">

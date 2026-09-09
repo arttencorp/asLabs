@@ -60,7 +60,7 @@ export default function EcuadorClient() {
       <Navbar overlay />
       <main>
         <section data-navbar-theme="dark" className="relative min-h-[690px] overflow-hidden bg-[#092f20] text-white sm:min-h-[710px] lg:min-h-[730px]">
-          <Image src="/new/bannerasnuevo.webp" alt="Equipo de AS Labs trabajando en sus laboratorios de Perú" fill priority className="object-cover object-[66%_center]" sizes="100vw" />
+          <Image src="/research/research-lab.png" alt="Laboratorio de biología molecular de AS Labs" fill priority className="object-cover object-center" sizes="100vw" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(4,32,22,.98)_0%,rgba(4,32,22,.90)_42%,rgba(4,32,22,.24)_76%,rgba(4,32,22,.10)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(4,32,22,.74)_0%,transparent_46%)]" />
           <div className="home-grain absolute inset-0 opacity-25" />
