@@ -249,13 +249,6 @@ export default function Footer() {
               <Link href="/legal" className="text-gray-400 hover:text-white transition-colors">
                 Cookies
               </Link>
-              <Link
-                href="/libro-de-reclamaciones"
-                className="inline-flex items-center gap-1.5 font-semibold text-red-400 hover:text-red-300 transition-colors"
-              >
-                <span aria-hidden="true">📕</span>
-                Libro de Reclamaciones
-              </Link>
             </div>
           </div>
         </ScrollReveal>

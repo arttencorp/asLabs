@@ -105,7 +105,7 @@ export default function ClientPortalAnnouncement() {
             animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, scale: 0.95, y: 14, filter: "blur(8px)" }}
             transition={{ type: "spring", stiffness: 155, damping: 22, mass: 0.85 }}
-            className="relative max-h-[92vh] w-full max-w-[980px] overflow-y-auto overflow-x-hidden rounded-[2rem] border border-white/20 bg-[#f7f5ed] shadow-[0_42px_120px_-34px_rgba(0,0,0,0.75)]"
+            className="relative max-h-[calc(100vh-1.5rem)] w-full max-w-[980px] overflow-hidden rounded-[2rem] border border-white/20 bg-[#f7f5ed] shadow-[0_42px_120px_-34px_rgba(0,0,0,0.75)] sm:max-h-[calc(100vh-3rem)]"
           >
             <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full border-[48px] border-[#dce9d6]/65" />
             <div className="pointer-events-none absolute bottom-0 left-0 h-52 w-52 -translate-x-1/2 translate-y-1/2 rounded-full bg-[#ef9f38]/25 blur-3xl" />
@@ -187,7 +187,7 @@ export default function ClientPortalAnnouncement() {
                     </span>
                   </div>
 
-                  <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                  <div className="grid gap-2.5 sm:grid-cols-2">
                     {features.map((feature, index) => {
                       const Icon = feature.icon
                       return (
@@ -196,7 +196,7 @@ export default function ClientPortalAnnouncement() {
                           initial={{ opacity: 0, y: 14 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.24 + index * 0.07, duration: 0.38 }}
-                          className={`${index === features.length - 1 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""} rounded-2xl border border-white/10 bg-white/[0.075] p-3.5 backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/[0.11]`}
+                          className={`${index === features.length - 1 ? "sm:col-span-2" : ""} rounded-2xl border border-white/10 bg-white/[0.075] p-3.5 backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/[0.11]`}
                         >
                           <div className="flex items-start gap-3">
                             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#ef9f38] text-[#14382a]">
