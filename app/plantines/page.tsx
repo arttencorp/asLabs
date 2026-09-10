@@ -9,6 +9,11 @@ export const metadata: Metadata = constructMetadata({
   keywords: ["plantines in vitro Perú", "banano in vitro", "plátano in vitro", "piña in vitro", "pitahaya in vitro", "micropropagación vegetal", "plantines Trujillo"],
   path: "/plantines",
   image: "/plantines/pagina19.webp",
+  languages: {
+    "es-PE": "https://aslaboratorios.com/plantines",
+    "es-EC": "https://aslaboratorios.com/ecuador/plantines-in-vitro",
+    "x-default": "https://aslaboratorios.com/plantines",
+  },
 })
 
 export default function PlantinesPage() {

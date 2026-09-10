@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   Microscope,
   Shield,
@@ -147,7 +148,7 @@ export default function FitopatologiaClient() {
               <ServiceHeroActions
                 count={serviciosFitopatologia.length}
                 theme="orange"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Fitopatología"
+                whatsappMessage="Hola, deseo cotizar servicios de Fitopatología"
               />
             </div>
           </div>
@@ -188,14 +189,13 @@ export default function FitopatologiaClient() {
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500 transition-all"
               />
             </div>
-            <Link
-              href="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20de%20Fitopatología"
-              target="_blank"
+            <WhatsAppContact
+              message="Hola, deseo cotizar servicios de Fitopatología"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-orange-500 text-white rounded-lg font-medium text-sm hover:bg-orange-600 transition-all"
             >
               <FileText className="w-4 h-4" />
               Cotizar
-            </Link>
+            </WhatsAppContact>
           </div>
         </section>
 
@@ -314,7 +314,7 @@ export default function FitopatologiaClient() {
           activeHref="/servicios/fitopatologia"
           theme="orange"
           title="Fitopatología"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20una%20muestra%20de%20Fitopatología"
+          whatsappMessage="Hola, necesito orientación para una muestra de Fitopatología"
           faqs={[
             { question: "¿Qué parte de la planta debo enviar?", answer: "Depende del síntoma. Generalmente se solicitan tejidos que incluyan el límite entre la zona sana y la afectada; antes del envío confirmamos contigo hojas, tallos, raíces o suelo y la cantidad necesaria." },
             { question: "¿Cómo conservo la muestra durante el traslado?", answer: "Debe ir limpia de exceso de humedad, identificada y protegida del calor. Para ciertas muestras recomendamos refrigeración; nuestro equipo te indica el empaque según el cultivo y la sospecha." },
@@ -330,14 +330,13 @@ export default function FitopatologiaClient() {
                 <h3 className="text-xl font-bold text-white mb-1">¿Necesitas un análisis fitopatológico?</h3>
                 <p className="text-white/80 text-sm">Contáctanos para una cotización personalizada</p>
               </div>
-              <Link
-                href="https://wa.me/51961996645?text=Hola,%20deseo%20información%20sobre%20servicios%20de%20Fitopatología"
-                target="_blank"
+              <WhatsAppContact
+                message="Hola, deseo información sobre servicios de Fitopatología"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 WhatsApp
-              </Link>
+              </WhatsAppContact>
             </div>
           </div>
         </section>

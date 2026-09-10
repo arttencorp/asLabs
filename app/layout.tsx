@@ -2,6 +2,7 @@ import type React from "react"
 import "./globals.css"
 import { Poppins } from "next/font/google"
 import type { Metadata, Viewport } from "next"
+import ClientPortalAnnouncement from "@/components/client-portal-announcement"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -123,6 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className="min-h-screen bg-background font-[var(--font-poppins)] text-foreground antialiased">
+        <ClientPortalAnnouncement />
         {children}
       </body>
     </html>

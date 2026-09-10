@@ -21,11 +21,16 @@ import Footer from "@/components/footer"
 import { constructMetadata } from "@/lib/metadata"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Banco de Cepas Microbianas y Cepas ATCC",
+  title: "Cepas Bacterianas y Cepas ATCC en Perú",
   description: "Cepas identificadas y microorganismos de referencia ATCC para investigación, docencia, control de calidad y validación de métodos en Perú.",
   keywords: ["cepas microbianas Perú", "cepas ATCC Perú", "cepas bacterianas", "microorganismos de referencia", "control de calidad microbiológico", "banco de cepas"],
   path: "/cepas",
   image: "/lab-header-bg.jpg",
+  languages: {
+    "es-PE": "https://aslaboratorios.com/cepas",
+    "es-EC": "https://aslaboratorios.com/ecuador/cepas",
+    "x-default": "https://aslaboratorios.com/cepas",
+  },
 })
 
 const comparison = [

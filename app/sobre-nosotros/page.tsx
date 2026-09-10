@@ -19,6 +19,11 @@ export const metadata: Metadata = constructMetadata({
   keywords: ["AS Laboratorios", "biotecnología agrícola Trujillo", "laboratorio peruano", "control biológico", "investigación agrícola", "directorio AS Labs"],
   path: "/sobre-nosotros",
   image: "/about-us-preview.png",
+  languages: {
+    "es-PE": "https://aslaboratorios.com/sobre-nosotros",
+    "es-EC": "https://aslaboratorios.com/ecuador/sobre-nosotros",
+    "x-default": "https://aslaboratorios.com/sobre-nosotros",
+  },
 })
 
 function SobreNosotrosContent() {

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import StudentProductsPopup from "./student-products-popup"
 import StudentMaterialsPopup from "./student-materials-popup"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface Product {
   id: string
@@ -196,12 +197,6 @@ export default function StudentCategories() {
   const filteredProducts =
     selectedCategory === "Todos" ? products : products.filter((product) => product.category === selectedCategory)
 
-  const handleWhatsAppContact = (product: Product) => {
-    const message = `Hola, soy estudiante universitario y me interesa el producto: ${product.name} (${product.id}). ¿Podrían darme más información sobre disponibilidad y descuentos para estudiantes?`
-    const whatsappUrl = `https://wa.me/51961996645?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, "_blank")
-  }
-
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -318,15 +313,14 @@ export default function StudentCategories() {
                     <Eye className="h-4 w-4 mr-1" />
                     Ver
                   </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => handleWhatsAppContact(product)}
-                    className="flex-1 bg-[#25D366] hover:bg-[#128C7E]"
+                  <WhatsAppContact
+                    message={`Hola, soy estudiante universitario y me interesa el producto: ${product.name} (${product.id}). ¿Podrían darme más información sobre disponibilidad y descuentos para estudiantes?`}
+                    className="inline-flex h-9 flex-1 items-center justify-center rounded-md bg-[#25D366] px-3 text-sm font-medium text-white hover:bg-[#128C7E] disabled:pointer-events-none disabled:opacity-50"
                     disabled={!product.inStock}
                   >
                     <MessageCircle className="h-4 w-4 mr-1" />
                     Consultar
-                  </Button>
+                  </WhatsAppContact>
                 </div>
               </CardContent>
             </Card>
@@ -411,14 +405,14 @@ export default function StudentCategories() {
                     )}
                   </div>
 
-                  <Button
-                    onClick={() => handleWhatsAppContact(selectedProduct)}
-                    className="w-full bg-[#25D366] hover:bg-[#128C7E]"
+                  <WhatsAppContact
+                    message={`Hola, soy estudiante universitario y me interesa el producto: ${selectedProduct.name} (${selectedProduct.id}). ¿Podrían darme más información sobre disponibilidad y descuentos para estudiantes?`}
+                    className="inline-flex h-10 w-full items-center justify-center rounded-md bg-[#25D366] px-4 py-2 text-sm font-medium text-white hover:bg-[#128C7E] disabled:pointer-events-none disabled:opacity-50"
                     disabled={!selectedProduct.inStock}
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
                     Consultar por WhatsApp
-                  </Button>
+                  </WhatsAppContact>
                 </div>
               </div>
             </div>

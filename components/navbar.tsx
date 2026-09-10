@@ -5,11 +5,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   ArrowUpRight,
   BriefcaseBusiness,
   ChevronDown,
   ClipboardCheck,
+  Dna,
   FlaskConical,
   Leaf,
   Menu,
@@ -19,6 +21,7 @@ import {
   Scale,
   ShieldCheck,
   Sparkles,
+  UserRoundCheck,
   X,
 } from "lucide-react"
 
@@ -64,6 +67,7 @@ const navigation: NavGroup[] = [
       { label: "Biotecnología vegetal", href: "/servicios/biotecnologia-vegetal", description: "Cultivo de tejidos in vitro", icon: Leaf },
       { label: "Bacteriología", href: "/servicios/bacteriologia-general", description: "Suspensiones y fermentación", icon: FlaskConical },
       { label: "Apoyo a la investigación", href: "/servicios/apoyo-investigacion", description: "Protocolos e identificación molecular", icon: Microscope },
+      { label: "exCELLent", href: "/excellent", description: "Análisis moleculares especializados", icon: Dna },
     ],
   },
   { label: "Plantines", href: "/plantines" },
@@ -102,6 +106,57 @@ const navigation: NavGroup[] = [
   },
 ]
 
+const ecuadorNavigation: NavGroup[] = [
+  { label: "Inicio", href: "/ecuador" },
+  { label: "Sobre nosotros", href: "/ecuador/sobre-nosotros" },
+  {
+    label: "Servicios",
+    links: [
+      { label: "Biología molecular", href: "/ecuador/biologia-molecular", description: "PCR, secuenciamiento e identificación", icon: Dna },
+      { label: "Formulaciones bacterianas", href: "/ecuador/formulaciones-bacterianas", description: "Desarrollo y control microbiológico", icon: FlaskConical },
+    ],
+  },
+  { label: "Plantines", href: "/ecuador/plantines-in-vitro" },
+  { label: "Cepas", href: "/ecuador/cepas" },
+]
+
+function CountrySwitcher({ isEcuador, dark, compact = false }: { isEcuador: boolean; dark: boolean; compact?: boolean }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-label={`País actual: ${isEcuador ? "Ecuador" : "Perú"}. Cambiar país`}
+        className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-full border px-2.5 text-[10px] font-bold transition-all hover:-translate-y-0.5 ${dark ? "border-white/20 bg-white/10 text-white hover:bg-white/20" : "border-[#c8d7cd] bg-white/75 text-[#244f3b] hover:bg-white"} ${compact ? "w-[58px] px-1.5" : ""}`}
+      >
+        <span aria-hidden="true" className="text-sm leading-none">{isEcuador ? "🇪🇨" : "🇵🇪"}</span>
+        <span>{isEcuador ? "EC" : "PE"}</span>
+        {!compact && <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />}
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div initial={{ opacity: 0, y: 9, scale: .97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 7, scale: .98 }} transition={{ duration: .2, ease: [0.16, 1, 0.3, 1] }} className="absolute right-0 top-full z-[130] mt-2 w-[286px] overflow-hidden rounded-[20px] border border-white bg-white p-2 text-[#173428] shadow-[0_28px_70px_-24px_rgba(5,38,25,.62)]">
+            <div className="px-3 pb-2 pt-1"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#7b8b83]">Selecciona tu país</p><p className="mt-1 text-[11px] leading-4 text-[#61736a]">Verás únicamente los servicios disponibles en esa sede.</p></div>
+            {[
+              { href: "/", code: "PE", flag: "🇵🇪", name: "Perú", detail: "Portafolio completo", active: !isEcuador },
+              { href: "/ecuador", code: "EC", flag: "🇪🇨", name: "Ecuador", detail: "4 líneas especializadas", active: isEcuador },
+            ].map((country) => (
+              <Link key={country.code} href={country.href} onClick={() => setOpen(false)} className={`mt-1 flex items-center gap-3 rounded-2xl border p-3 transition-colors ${country.active ? "border-[#a7cdbc] bg-[#eaf5ef]" : "border-transparent hover:bg-[#f1f5f2]"}`}>
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-xl shadow-sm">{country.flag}</span>
+                <span className="min-w-0 flex-1"><strong className="block text-xs">{country.name}</strong><span className="mt-0.5 block text-[10px] text-[#708078]">{country.detail}</span></span>
+                {country.active && <span className="rounded-full bg-[#276b50] px-2 py-1 text-[8px] font-bold uppercase tracking-[.12em] text-white">Actual</span>}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 function isPatrioticSeasonInPeru() {
   const parts = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
@@ -119,6 +174,8 @@ export type NavbarProps = {
 
 export function Navbar({ overlay = false }: NavbarProps) {
   const pathname = usePathname()
+  const isEcuador = pathname === "/ecuador" || pathname.startsWith("/ecuador/")
+  const visibleNavigation = isEcuador ? ecuadorNavigation : navigation
   const [openGroup, setOpenGroup] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -175,7 +232,10 @@ export function Navbar({ overlay = false }: NavbarProps) {
   }, [])
 
   const isActive = (item: NavGroup) => {
-    if (item.href && (pathname === item.href || pathname.startsWith(`${item.href}/`))) return true
+    if (item.href) {
+      if (item.href === "/" || item.href === "/ecuador") return pathname === item.href
+      if (pathname === item.href || pathname.startsWith(`${item.href}/`)) return true
+    }
     return item.links?.some((link) => pathname === link.href || pathname.startsWith(`${link.href}/`)) ?? false
   }
 
@@ -189,6 +249,16 @@ export function Navbar({ overlay = false }: NavbarProps) {
 
   return (
     <>
+      <svg aria-hidden="true" className="pointer-events-none absolute h-0 w-0 overflow-hidden">
+        <defs>
+          <filter id="aslabs-white-logo" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -1 -1 -1 0 3"
+            />
+          </filter>
+        </defs>
+      </svg>
       <motion.header
         initial={{ opacity: 0, y: -18 }}
         animate={{ opacity: 1, y: 0 }}
@@ -228,19 +298,20 @@ export function Navbar({ overlay = false }: NavbarProps) {
             )}
           </AnimatePresence>
           <div className={`flex items-center justify-between px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
-            <Link href="/" aria-label="AS Labs — Inicio" className="flex shrink-0 items-center rounded-xl border border-white/80 bg-white/95 px-2 py-1 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2e7048]">
+            <Link href={isEcuador ? "/ecuador" : "/"} aria-label={`AS Labs ${isEcuador ? "Ecuador" : "Perú"} — Inicio`} className="flex h-9 w-[104px] shrink-0 items-center overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8ee2c5] sm:w-[112px]">
               <Image
-                src="/Frame23.png"
+                src="/images/new-logo.png"
                 alt="AS Labs"
                 width={150}
                 height={52}
                 priority
-                className={`h-auto transition-all duration-500 ${scrolled ? "w-[116px] sm:w-[126px]" : "w-[120px] sm:w-[132px]"}`}
+                className="h-auto w-full transition-all duration-500"
+                style={useDarkContrast ? { filter: "url(#aslabs-white-logo)" } : undefined}
               />
             </Link>
 
             <div className="hidden items-center gap-0.5 xl:flex">
-              {navigation.map((item) => (
+              {visibleNavigation.map((item) => (
                 <div
                   key={item.label}
                   className="relative"
@@ -250,7 +321,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
                   {item.links ? (
                     <button
                       type="button"
-                      onClick={() => setOpenGroup(openGroup === item.label ? null : item.label)}
+                      onClick={() => setOpenGroup(item.label)}
                       aria-expanded={openGroup === item.label}
                       className={`relative flex h-9 items-center gap-1 rounded-full px-2.5 text-[11.5px] font-medium transition-all duration-200 ${
                         isActive(item) ? activeLinkClass : inactiveLinkClass
@@ -310,7 +381,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
             </div>
 
             <div className="hidden items-center gap-1.5 xl:flex">
-              <Link
+              {!isEcuador && <Link
                 href="/seguimiento"
                 className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-[11.5px] font-semibold transition-all duration-200 ${
                   pathname.startsWith("/seguimiento") ? activeLinkClass : inactiveLinkClass
@@ -318,15 +389,31 @@ export function Navbar({ overlay = false }: NavbarProps) {
               >
                 <ClipboardCheck className="h-3.5 w-3.5" />
                 Seguimiento
-              </Link>
-              <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
-              <a href="https://wa.me/51961996645" target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
-                <MessageCircle className="h-3.5 w-3.5" />
-                Hablemos
+              </Link>}
+              <a
+                href="https://clientes.aslaboratorios.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[11.5px] font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                  useDarkContrast
+                    ? "border-white/25 bg-white/[0.13] text-white hover:bg-white/[0.22]"
+                    : "border-[#bfd1c3] bg-[#edf4ee] text-[#24573a] hover:border-[#8eaf96] hover:bg-[#e1ece3]"
+                }`}
+                aria-label="Abrir el panel de clientes de AS Laboratorios"
+              >
+                <UserRoundCheck className="h-3.5 w-3.5" />
+                Acceso Clientes
               </a>
+              <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} />
+              <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
+              <WhatsAppContact mode="modal" message={isEcuador ? "Hola, quisiera información sobre los servicios disponibles de AS Labs Ecuador." : undefined} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
+                <MessageCircle className="h-3.5 w-3.5" />
+                WhatsApp
+              </WhatsAppContact>
             </div>
 
             <div className="flex items-center gap-2 xl:hidden">
+              <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} compact />
               <button
                 type="button"
                 onClick={() => setMobileOpen((value) => !value)}
@@ -349,7 +436,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
                 className="overflow-hidden border-t border-[#d9e3dc]/80 xl:hidden"
               >
                 <div className="max-h-[calc(100vh-96px)] overflow-y-auto px-3 pb-4 pt-2 sm:px-5">
-                  {navigation.map((item) => (
+                  {visibleNavigation.map((item) => (
                     <div key={item.label} className="border-b border-[#e3ebe5] last:border-none">
                       {item.links ? (
                         <>
@@ -377,9 +464,19 @@ export function Navbar({ overlay = false }: NavbarProps) {
                       )}
                     </div>
                   ))}
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    <Link href="/seguimiento" className="rounded-full border border-[#d2ded4] px-4 py-2.5 text-center text-xs font-semibold text-[#294b3b]">Seguimiento</Link>
-                    <a href="https://wa.me/51961996645" target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#ef9f38] px-4 py-2.5 text-center text-xs font-bold text-[#173428]">WhatsApp</a>
+                  <a
+                    href="https://clientes.aslaboratorios.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-4 py-2.5 text-center text-xs font-bold text-white shadow-[0_12px_28px_-18px_rgba(15,63,43,0.85)]"
+                  >
+                    <UserRoundCheck className="h-4 w-4" />
+                    Acceso Clientes
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                  <div className={`mt-2 grid gap-2 ${isEcuador ? "grid-cols-1" : "grid-cols-2"}`}>
+                    {!isEcuador && <Link href="/seguimiento" className="rounded-full border border-[#d2ded4] px-4 py-2.5 text-center text-xs font-semibold text-[#294b3b]">Seguimiento</Link>}
+                    <WhatsAppContact mode="modal" message={isEcuador ? "Hola, quisiera información sobre los servicios disponibles de AS Labs Ecuador." : undefined} className="flex items-center justify-center gap-1.5 rounded-full bg-[#ef9f38] px-4 py-2.5 text-center text-xs font-bold text-[#173428]"><MessageCircle className="h-3.5 w-3.5" />WhatsApp</WhatsAppContact>
                   </div>
                 </div>
               </motion.div>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { ArrowRight, Search, X, SearchX } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface Analysis {
   id: string
@@ -115,9 +116,6 @@ export function AnalysisSearch() {
     setSelectedType(null)
   }
 
-  const getWhatsAppLink = (analysisName: string) =>
-    `https://wa.me/51961996645?text=${encodeURIComponent(`Hola, deseo consultar por el análisis: ${analysisName}`)}`
-
   return (
     <section id="buscador" className="scroll-mt-24 bg-[#eef3ef] py-16 sm:py-20">
       <div className="container mx-auto max-w-6xl px-4">
@@ -221,15 +219,13 @@ export function AnalysisSearch() {
                           <td className="max-w-[320px] px-6 py-4 align-top text-sm font-semibold leading-5 text-[#203e31]">{analysis.concepto}</td>
                           <td className="max-w-[340px] px-6 py-4 align-top text-sm leading-5 text-[#6a7b72]">{analysis.alcance}</td>
                           <td className="px-6 py-4 text-right align-top">
-                            <a
-                              href={getWhatsAppLink(analysis.concepto)}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <WhatsAppContact
+                              message={`Hola, deseo consultar por el análisis: ${analysis.concepto}`}
                               className="inline-flex items-center gap-1 text-xs font-bold text-[#2d6d47] transition hover:text-[#173f2e]"
                             >
                               Consultar
                               <ArrowRight className="h-3.5 w-3.5" />
-                            </a>
+                            </WhatsAppContact>
                           </td>
                         </tr>
                       ))}
@@ -243,15 +239,13 @@ export function AnalysisSearch() {
                       <span className="inline-flex rounded-full bg-[#e6f0e8] px-2.5 py-1 text-[10px] font-bold text-[#2c6845]">{analysis.tipo}</span>
                       <h3 className="mt-3 text-sm font-bold leading-5 text-[#203e31]">{analysis.concepto}</h3>
                       <p className="mt-2 text-xs leading-5 text-[#6a7b72]">{analysis.alcance}</p>
-                      <a
-                        href={getWhatsAppLink(analysis.concepto)}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <WhatsAppContact
+                        message={`Hola, deseo consultar por el análisis: ${analysis.concepto}`}
                         className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#2d6d47]"
                       >
                         Consultar este análisis
                         <ArrowRight className="h-3.5 w-3.5" />
-                      </a>
+                      </WhatsAppContact>
                     </article>
                   ))}
                 </div>

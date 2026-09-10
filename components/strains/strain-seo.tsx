@@ -8,6 +8,7 @@ interface SeoStrain {
 interface CatalogSeoProps {
   kind: "identified" | "atcc"
   strains: Record<string, SeoStrain>
+  market?: "peru" | "ecuador"
 }
 
 interface DetailSeoProps extends CatalogSeoProps {
@@ -24,10 +25,11 @@ function JsonLd({ id, data }: { id: string; data: object }) {
   )
 }
 
-export function StrainCatalogStructuredData({ kind, strains }: CatalogSeoProps) {
+export function StrainCatalogStructuredData({ kind, strains, market = "peru" }: CatalogSeoProps) {
   const isAtcc = kind === "atcc"
-  const path = isAtcc ? "/cepas/atcc" : "/cepas/identificadas"
-  const name = isAtcc ? "Catálogo de cepas ATCC en Perú" : "Catálogo de cepas identificadas en Perú"
+  const isEcuador = market === "ecuador"
+  const path = isEcuador ? "/ecuador/cepas" : isAtcc ? "/cepas/atcc" : "/cepas/identificadas"
+  const name = isEcuador ? "Catálogo de cepas bacterianas identificadas para Ecuador" : isAtcc ? "Catálogo de cepas ATCC en Perú" : "Catálogo de cepas identificadas en Perú"
   const description = isAtcc
     ? "Microorganismos ATCC de referencia para control de calidad, validación de métodos, docencia e investigación."
     : "Cepas bacterianas y fúngicas identificadas para investigación, biofertilización, biocontrol y docencia."
@@ -76,7 +78,7 @@ export function StrainCatalogStructuredData({ kind, strains }: CatalogSeoProps) 
         url: `${SITE_URL}${path}`,
         name,
         description,
-        inLanguage: "es-PE",
+        inLanguage: isEcuador ? "es-EC" : "es-PE",
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: isAtcc
           ? ["Cepas ATCC", "Microorganismos de referencia", "Control de calidad microbiológico"]
@@ -92,7 +94,7 @@ export function StrainCatalogStructuredData({ kind, strains }: CatalogSeoProps) 
         itemListElement: Object.entries(strains).map(([id, strain], index) => ({
           "@type": "ListItem",
           position: index + 1,
-          url: `${SITE_URL}${path}/${id}`,
+          url: isEcuador ? `${SITE_URL}${path}` : `${SITE_URL}${path}/${id}`,
           name: `${strain.name} ${strain.code}`,
         })),
       },
@@ -100,7 +102,7 @@ export function StrainCatalogStructuredData({ kind, strains }: CatalogSeoProps) 
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
-          { "@type": "ListItem", position: 2, name: "Cepas", item: `${SITE_URL}/cepas` },
+          { "@type": "ListItem", position: 2, name: "Cepas", item: isEcuador ? `${SITE_URL}/ecuador/cepas` : `${SITE_URL}/cepas` },
           { "@type": "ListItem", position: 3, name, item: `${SITE_URL}${path}` },
         ],
       },

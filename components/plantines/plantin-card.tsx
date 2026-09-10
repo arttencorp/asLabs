@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { BadgeCheck, Clock3, FileText, MessageCircle, ShieldCheck, TrendingUp } from "lucide-react"
 import { Plantin } from "./types"
-import { handleWhatsAppContact } from "./utils"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface PlantinCardProps {
   plantin: Plantin
@@ -82,9 +82,9 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
 
         <div className={`${plantin.resistance?.length ? "" : "mt-auto border-t border-gray-100 pt-4"} grid grid-cols-2 gap-2.5`}>
           {plantin.available ? (
-            <button type="button" onClick={() => handleWhatsAppContact(plantin.name)} className="flex items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-3 text-sm font-bold text-white transition hover:bg-[#245c3b]">
+            <WhatsAppContact message={`Hola, quisiera cotizar ${plantin.name}`} className="flex items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-3 text-sm font-bold text-white transition hover:bg-[#245c3b]">
               <MessageCircle className="h-4 w-4" />Cotizar
-            </button>
+            </WhatsAppContact>
           ) : plantin.isResearch ? (
             <a href="/research/banano-baby" className="flex items-center justify-center rounded-xl bg-blue-600 px-3 py-3 text-center text-sm font-bold text-white transition hover:bg-blue-700">Investigación</a>
           ) : (

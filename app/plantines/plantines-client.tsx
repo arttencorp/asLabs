@@ -22,7 +22,7 @@ import {
   RotateCcw,
   ChevronDown,
 } from "lucide-react"
-import { handleWhatsAppContact } from "@/components/plantines/utils"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 
 export default function PlantinesClient() {
@@ -215,7 +215,7 @@ export default function PlantinesClient() {
                   <div className="rounded-2xl bg-[#eef5ef] p-4">
                     <p className="text-sm font-bold text-[#214332]">¿No sabes cuál elegir?</p>
                     <p className="mt-1 text-xs leading-5 text-[#5f7568]">Te ayudamos según tu zona, área y objetivo productivo.</p>
-                    <button type="button" onClick={() => handleWhatsAppContact("asesoría para elegir plantines in vitro")} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#245c3b]"><MessageCircle className="h-4 w-4" />Hablar con un asesor</button>
+                    <WhatsAppContact message="Hola, quisiera asesoría para elegir plantines in vitro" className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#245c3b]"><MessageCircle className="h-4 w-4" />Hablar con un asesor</WhatsAppContact>
                   </div>
                 </div>
               </div>
@@ -298,13 +298,13 @@ export default function PlantinesClient() {
                     <span className="text-sm font-semibold text-blue-800">Diferencia estimada:</span>
                     <span className="text-base font-bold text-blue-700">+S/. {((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}</span>
                   </div>
-                  <button
-                    onClick={() => handleWhatsAppContact(`Quiero cotizar ${hectareas} hectáreas. Ganancia estimada: S/. ${((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}`)}
+                  <WhatsAppContact
+                    message={`Hola, quiero cotizar ${hectareas} hectáreas. Ganancia estimada: S/. ${((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}`}
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-700"
                   >
                     <MessageCircle className="w-3 h-3" />
                     Consultar proyecto de {hectareas} hectáreas
-                  </button>
+                  </WhatsAppContact>
                   <p className="text-center text-[11px] leading-5 text-gray-500">Estimación referencial para comparar escenarios. El resultado real depende del cultivo, manejo, densidad y condiciones de campo.</p>
                 </div>
           </ScrollReveal>

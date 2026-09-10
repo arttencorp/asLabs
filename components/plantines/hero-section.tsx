@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { handleWhatsAppContact } from "./utils"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 import { btnAccent, iconBadge } from "@/components/ui/button-styles"
 
@@ -47,13 +47,13 @@ export default function HeroSection() {
               </p>
 
               <div className="flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-                <button
-                  onClick={() => handleWhatsAppContact("información completa sobre plantines in vitro")}
+                <WhatsAppContact
+                  message="Hola, quisiera información completa sobre plantines in vitro"
                   className={btnAccent}
                 >
                   <MessageCircle className="w-4 h-4" />
                   Solicitar asesoría
-                </button>
+                </WhatsAppContact>
                 <a href="#catalogo-plantines" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-white/20">
                   Ver catálogo
                   <ArrowDown className="h-4 w-4" />

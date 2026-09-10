@@ -32,6 +32,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export const metadata: Metadata = {
   title: "Análisis y Servicios de Laboratorio en Trujillo | AS Laboratorios",
@@ -165,7 +166,7 @@ const servicios = [
     count: 6,
   },
   {
-    title: "Medio Ambiente",
+    title: "Análisis de Agua y Ambiente",
     description:
       "Evaluamos agua, superficies y ambientes mediante indicadores microbiológicos relevantes para su control.",
     audience: "Agua y superficies",
@@ -310,15 +311,13 @@ export default function ServiciosPage() {
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20elegir%20un%20servicio%20de%20laboratorio"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppContact
+                  message="Hola, necesito orientación para elegir un servicio de laboratorio"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#173f2e] px-6 text-sm font-bold text-white shadow-[0_16px_30px_-18px_rgba(16,61,42,0.9)] transition hover:-translate-y-0.5 hover:bg-[#245a40]"
                 >
                   <MessageCircle className="h-4 w-4" />
                   Solicitar orientación
-                </a>
+                </WhatsAppContact>
                 <a
                   href="#especialidades"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#b7c8bb] bg-white/70 px-6 text-sm font-bold text-[#254d39] transition hover:border-[#8dad94] hover:bg-white"
@@ -503,15 +502,13 @@ export default function ServiciosPage() {
                       Escríbenos qué muestra tienes y qué necesitas comprobar. Nuestro equipo te ayudará a definir el servicio adecuado.
                     </p>
                   </div>
-                  <a
-                    href="https://wa.me/51961996645?text=Hola,%20tengo%20una%20muestra%20y%20necesito%20ayuda%20para%20definir%20el%20análisis"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <WhatsAppContact
+                    message="Hola, tengo una muestra y necesito ayuda para definir el análisis"
                     className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#efaa48] px-6 text-sm font-bold text-[#173428] shadow-xl transition hover:-translate-y-0.5 hover:bg-[#ffc46d]"
                   >
                     <WhatsAppIcon className="h-5 w-5" />
                     Consultar por WhatsApp
-                  </a>
+                  </WhatsAppContact>
                 </div>
               </div>
             </ScrollReveal>
