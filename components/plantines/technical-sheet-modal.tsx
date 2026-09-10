@@ -14,7 +14,8 @@ import {
   MessageCircle 
 } from "lucide-react"
 import { Plantin } from "./types"
-import { handleWhatsAppContact, getProfitabilityColor } from "./utils"
+import { getProfitabilityColor } from "./utils"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface TechnicalSheetModalProps {
   plantin: Plantin
@@ -189,13 +190,13 @@ export default function TechnicalSheetModal({ plantin, onClose }: TechnicalSheet
 
           {/* Botones de acción */}
           <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-gray-200">
-            <button
-              onClick={() => handleWhatsAppContact(plantin.name)}
+            <WhatsAppContact
+              message={`Hola, quisiera solicitar una cotización de ${plantin.name}`}
               className="flex-1 bg-green-600 text-white px-4 py-2.5 sm:py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <MessageCircle className="w-4 h-4" />
               Solicitar Cotización
-            </button>
+            </WhatsAppContact>
             <button
               onClick={onClose}
               className="px-4 py-2.5 sm:py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm sm:text-base"

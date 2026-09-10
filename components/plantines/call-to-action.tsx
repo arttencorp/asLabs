@@ -11,7 +11,7 @@ import {
   Zap, 
   FlaskConical 
 } from "lucide-react"
-import { handleWhatsAppContact } from "./utils"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 
 export default function CallToActionSection() {
@@ -82,12 +82,8 @@ export default function CallToActionSection() {
 
           {/* Botones de acción principales */}
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 justify-center items-center mb-8 sm:mb-12">
-            <button
-              onClick={() =>
-                handleWhatsAppContact(
-                  "¡Hola! Quiero una consulta completa sobre plantines premium. Estoy listo para transformar mi agricultura y maximizar mis ganancias."
-                )
-              }
+            <WhatsAppContact
+              message="Hola, quiero una consulta completa sobre plantines premium. Estoy listo para transformar mi agricultura y maximizar mis ganancias."
               className="group bg-green-500 hover:bg-green-600 text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-base sm:text-lg lg:text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-green-500/25 flex items-center gap-3 sm:gap-4 w-full sm:w-auto"
             >
               <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-green-600 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
@@ -98,7 +94,7 @@ export default function CallToActionSection() {
                 <div className="text-xs sm:text-sm opacity-80">Respuesta en menos de 5 minutos</div>
               </div>
               <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
-            </button>
+            </WhatsAppContact>
           </div>
 
           {/* Garantías y beneficios */}

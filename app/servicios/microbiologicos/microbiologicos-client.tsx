@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   FlaskConical,
   Shield,
@@ -188,7 +189,7 @@ export default function MicrobiologicosClient() {
               <ServiceHeroActions
                 count={serviciosMicrobiologicos.length}
                 theme="blue"
-                whatsappHref="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20Microbiológicos"
+                whatsappMessage="Hola, deseo cotizar servicios Microbiológicos"
               />
             </div>
           </div>
@@ -229,14 +230,13 @@ export default function MicrobiologicosClient() {
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all"
               />
             </div>
-            <Link
-              href="https://wa.me/51961996645?text=Hola,%20deseo%20cotizar%20servicios%20Microbiológicos"
-              target="_blank"
+            <WhatsAppContact
+              message="Hola, deseo cotizar servicios Microbiológicos"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-500 text-white rounded-lg font-medium text-sm hover:bg-blue-600 transition-all"
             >
               <FileText className="w-4 h-4" />
               Cotizar
-            </Link>
+            </WhatsAppContact>
           </div>
         </section>
 
@@ -355,7 +355,7 @@ export default function MicrobiologicosClient() {
           activeHref="/servicios/microbiologicos"
           theme="blue"
           title="Servicios Microbiológicos"
-          whatsappHref="https://wa.me/51961996645?text=Hola,%20necesito%20orientación%20para%20un%20análisis%20microbiológico"
+          whatsappMessage="Hola, necesito orientación para un análisis microbiológico"
           faqs={[
             { question: "¿Cómo sé qué análisis necesita mi producto?", answer: "Cuéntanos el tipo de alimento, agua, superficie o producto y el objetivo del control. Con esa información revisamos el panel más adecuado y los criterios que corresponden a tu caso." },
             { question: "¿Cuánta muestra debo entregar?", answer: "La cantidad cambia según la matriz y el panel solicitado. Antes de recibirla confirmamos peso o volumen, recipiente, temperatura y tiempo máximo de traslado para proteger su representatividad." },
@@ -371,14 +371,13 @@ export default function MicrobiologicosClient() {
                 <h3 className="text-xl font-bold text-white mb-1">¿Necesitas análisis microbiológicos?</h3>
                 <p className="text-white/80 text-sm">Contáctanos para una cotización personalizada</p>
               </div>
-              <Link
-                href="https://wa.me/51961996645?text=Hola,%20deseo%20información%20sobre%20servicios%20Microbiológicos"
-                target="_blank"
+              <WhatsAppContact
+                message="Hola, deseo información sobre servicios Microbiológicos"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 WhatsApp
-              </Link>
+              </WhatsAppContact>
             </div>
           </div>
         </section>

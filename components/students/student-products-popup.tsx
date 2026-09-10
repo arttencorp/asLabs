@@ -3,6 +3,7 @@ import { useState } from "react"
 import type React from "react"
 
 import { X, Beaker, BookOpen, Microscope, FlaskConical, GraduationCap, Users } from "lucide-react"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface Product {
   id: string
@@ -214,14 +215,12 @@ export default function StudentProductsPopup({ isOpen, onClose }: Props) {
                         >
                           Cerrar
                         </button>
-                        <a
-                          href="https://walink.co/0441cf"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <WhatsAppContact
+                          message={`Hola, quisiera solicitar información sobre ${selectedProduct.title}`}
                           className="bg-[#2e7d32] text-white px-6 py-2 rounded-md hover:bg-[#1b5e20] transition-colors inline-block"
                         >
                           Solicitar información
-                        </a>
+                        </WhatsAppContact>
                       </div>
                     </div>
                   </div>

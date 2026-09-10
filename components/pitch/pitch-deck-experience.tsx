@@ -37,6 +37,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 const capabilities = [
   {
@@ -660,15 +661,15 @@ export default function PitchDeckExperience() {
               <a href="mailto:ventas@aslaboratorios.com?subject=Alianza%20para%20fondo%20concursable" className="inline-flex items-center gap-2 rounded-full bg-[#f0a23a] px-6 py-3.5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc66f]">
                 <Mail className="h-4 w-4" /> Conversar sobre una convocatoria
               </a>
-              <a href="https://wa.me/51961996645?text=Hola%2C%20quisiera%20conversar%20sobre%20una%20convocatoria%20o%20fondo%20concursable." target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-bold backdrop-blur-xl transition hover:bg-white/15">
+              <WhatsAppContact message="Hola, quisiera conversar sobre una convocatoria o fondo concursable" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-bold backdrop-blur-xl transition hover:bg-white/15">
                 WhatsApp <ExternalLink className="h-4 w-4" />
-              </a>
+              </WhatsAppContact>
             </div>
           </div>
           <aside className="rounded-[30px] border border-white/12 bg-[#041f17]/65 p-6 backdrop-blur-xl">
             <p className="text-xs font-bold uppercase tracking-[.16em] text-[#a8dab5]">AS Laboratorios</p>
             <div className="mt-6 space-y-4 text-sm">
-              <p className="flex gap-3 text-white/[0.78]"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ffc66f]" /> MZ J1 San Isidro II Etapa<br />Trujillo, La Libertad, Perú</p>
+              <p className="flex gap-3 text-white/[0.78]"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#ffc66f]" /> Ca. 30, Urb. San Isidro II<br />Trujillo, La Libertad, Perú</p>
               <p className="flex items-center gap-3 text-white/[0.78]"><Mail className="h-4 w-4 shrink-0 text-[#ffc66f]" /> ventas@aslaboratorios.com</p>
             </div>
             <div className="mt-7 border-t border-white/10 pt-6">

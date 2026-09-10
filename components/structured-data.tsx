@@ -90,13 +90,6 @@ export function ProductStructuredData({
           itemCondition: "https://schema.org/NewCondition",
         }
       : undefined,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "150",
-      bestRating: "5",
-      worstRating: "1",
-    },
   }
 
   return (
@@ -118,30 +111,25 @@ export function OrganizationStructuredData() {
     url: "https://aslaboratorios.com",
     logo: {
       "@type": "ImageObject",
-      url: "https://aslaboratorios.com/aslabs-logo.png",
+      url: "https://aslaboratorios.com/images/new-logo.png",
       width: 512,
       height: 512,
     },
-    image: "https://aslaboratorios.com/aslabs-logo.png",
+    image: "https://aslaboratorios.com/images/new-logo.png",
     description:
-      "Laboratorio líder en biotecnología vegetal, análisis microbiológicos, fitopatología y control biológico en Trujillo, La Libertad, Perú. Más de 20 años de experiencia en servicios de laboratorio certificados para agricultura e industria alimentaria.",
-    foundingDate: "2000",
+      "Empresa peruana de biotecnología agrícola con servicios de análisis microbiológicos, fitopatología, cultivo in vitro, control biológico e investigación aplicada.",
+    foundingDate: "1997",
     foundingLocation: {
       "@type": "Place",
       name: "Trujillo, La Libertad, Perú",
     },
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Huancavelica 315, Palermo",
+      streetAddress: "Ca. 30, Urb. San Isidro II",
+      postalCode: "13001",
       addressLocality: "Trujillo",
       addressRegion: "La Libertad",
-      postalCode: "13011",
       addressCountry: "PE",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: -8.1116,
-      longitude: -79.0287,
     },
     contactPoint: [
       {
@@ -173,13 +161,6 @@ export function OrganizationStructuredData() {
       },
     ],
     email: "ventas@aslaboratorios.com",
-    sameAs: [
-      "https://www.facebook.com/aslaboratorios",
-      "https://www.instagram.com/aslaboratorios",
-      "https://www.linkedin.com/company/aslaboratorios",
-      "https://www.youtube.com/@aslaboratorios",
-      "https://twitter.com/aslaboratorios",
-    ],
     areaServed: [
       { "@type": "City", name: "Trujillo" },
       { "@type": "State", name: "La Libertad" },
@@ -247,12 +228,6 @@ export function OrganizationStructuredData() {
       ],
     },
     slogan: "Ciencia al servicio de la agricultura",
-    numberOfEmployees: {
-      "@type": "QuantitativeValue",
-      minValue: 10,
-      maxValue: 50,
-    },
-    award: ["Laboratorio Certificado", "Reconocimiento SENASA", "Certificación ISO"],
   }
 
   return (
@@ -267,12 +242,12 @@ export function OrganizationStructuredData() {
 export function LocalBusinessStructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": ["LocalBusiness", "MedicalBusiness", "ResearchOrganization"],
+    "@type": "ProfessionalService",
     "@id": "https://aslaboratorios.com/#localbusiness",
-    name: "AS Laboratorios - Laboratorio de Biotecnología y Análisis Microbiológicos Trujillo",
+    name: "AS Laboratorios",
     alternateName: "AS Labs Trujillo",
     image: [
-      "https://aslaboratorios.com/aslabs-logo.png",
+      "https://aslaboratorios.com/images/new-logo.png",
       "https://aslaboratorios.com/laboratory-research.png",
       "https://aslaboratorios.com/modern-laboratory-scientists.png",
     ],
@@ -284,18 +259,13 @@ export function LocalBusinessStructuredData() {
     paymentAccepted: "Cash, Credit Card, Bank Transfer, Yape, Plin",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Huancavelica 315, Palermo",
+      streetAddress: "Ca. 30, Urb. San Isidro II",
+      postalCode: "13001",
       addressLocality: "Trujillo",
       addressRegion: "La Libertad",
-      postalCode: "13011",
       addressCountry: "PE",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: -8.1116,
-      longitude: -79.0287,
-    },
-    hasMap: "https://maps.google.com/?q=AS+Laboratorios+Trujillo",
+    hasMap: "https://maps.google.com/?q=Ca.+30+Urb.+San+Isidro+II+Trujillo+Peru",
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -310,36 +280,6 @@ export function LocalBusinessStructuredData() {
         closes: "13:00",
       },
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "250",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    review: [
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Carlos Rodríguez" },
-        datePublished: "2024-11-15",
-        reviewBody:
-          "Excelente laboratorio, resultados precisos y atención profesional. Los mejores análisis microbiológicos de Trujillo.",
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      },
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "María García" },
-        datePublished: "2024-10-20",
-        reviewBody:
-          "Servicio de biotecnología vegetal de primera calidad. Recomendado para agricultores de La Libertad.",
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      },
-    ],
-    sameAs: [
-      "https://www.facebook.com/aslaboratorios",
-      "https://www.instagram.com/aslaboratorios",
-      "https://www.linkedin.com/company/aslaboratorios",
-    ],
     areaServed: [
       { "@type": "City", name: "Trujillo", containedInPlace: { "@type": "State", name: "La Libertad" } },
       { "@type": "City", name: "Chiclayo", containedInPlace: { "@type": "State", name: "Lambayeque" } },
@@ -350,17 +290,8 @@ export function LocalBusinessStructuredData() {
       { "@type": "State", name: "Ancash" },
       { "@type": "Country", name: "Peru" },
     ],
-    serviceArea: {
-      "@type": "GeoCircle",
-      geoMidpoint: { "@type": "GeoCoordinates", latitude: -8.1116, longitude: -79.0287 },
-      geoRadius: "500000",
-    },
-    knowsLanguage: ["Spanish", "English"],
-    foundingDate: "2000",
-    founder: {
-      "@type": "Person",
-      name: "AS Laboratorios Founders",
-    },
+    knowsLanguage: "Spanish",
+    foundingDate: "1997",
   }
 
   return (
@@ -377,31 +308,16 @@ export function WebsiteStructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": "https://aslaboratorios.com/#website",
-    name: "AS Laboratorios - Laboratorio de Biotecnología y Análisis Microbiológicos en Trujillo, Perú",
+    name: "AS Laboratorios",
     alternateName: "AS Labs",
     url: "https://aslaboratorios.com",
     description:
-      "Laboratorio líder en biotecnología vegetal, análisis microbiológicos, fitopatología, bacteriología y control biológico en Trujillo, La Libertad, Perú. Servicios certificados para agricultura e industria alimentaria.",
+      "Biotecnología agrícola, análisis microbiológicos, fitopatología, bacteriología, plantines in vitro y control biológico en Trujillo, Perú.",
     publisher: {
       "@type": "Organization",
       "@id": "https://aslaboratorios.com/#organization",
       name: "AS Laboratorios",
     },
-    potentialAction: [
-      {
-        "@type": "SearchAction",
-        target: {
-          "@type": "EntryPoint",
-          urlTemplate: "https://aslaboratorios.com/servicios?search={search_term_string}",
-        },
-        "query-input": "required name=search_term_string",
-      },
-      {
-        "@type": "ContactAction",
-        target: "https://wa.me/51961996645",
-        description: "Contactar por WhatsApp",
-      },
-    ],
     inLanguage: "es-PE",
     copyrightYear: new Date().getFullYear(),
     copyrightHolder: {
@@ -450,27 +366,26 @@ export function ServiceStructuredData({
     name: serviceName,
     description: serviceDescription,
     url: serviceUrl,
-    image: image || "https://aslaboratorios.com/aslabs-logo.png",
+    image: image
+      ? image.startsWith("http")
+        ? image
+        : `https://aslaboratorios.com${image}`
+      : "https://aslaboratorios.com/images/new-logo.png",
     provider: {
       "@type": "Organization",
       "@id": "https://aslaboratorios.com/#organization",
       name: provider,
       url: "https://aslaboratorios.com",
-      logo: "https://aslaboratorios.com/aslabs-logo.png",
+      logo: "https://aslaboratorios.com/images/new-logo.png",
       telephone: "+51-961-996-645",
       email: "ventas@aslaboratorios.com",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Huancavelica 315, Palermo",
+        streetAddress: "Ca. 30, Urb. San Isidro II",
+        postalCode: "13001",
         addressLocality: "Trujillo",
         addressRegion: "La Libertad",
-        postalCode: "13011",
         addressCountry: "PE",
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: -8.1116,
-        longitude: -79.0287,
       },
     },
     areaServed: serviceArea
@@ -489,12 +404,6 @@ export function ServiceStructuredData({
         ],
     serviceType: serviceType,
     category: "Servicios de Laboratorio",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "100",
-      bestRating: "5",
-    },
     hasOfferCatalog: offers
       ? {
           "@type": "OfferCatalog",
@@ -514,7 +423,7 @@ export function ServiceStructuredData({
           })),
         }
       : undefined,
-    termsOfService: "https://aslaboratorios.com/terminos",
+    termsOfService: "https://aslaboratorios.com/legal",
     hoursAvailable: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
@@ -531,7 +440,8 @@ export function ServiceStructuredData({
         name: "AS Laboratorios",
         address: {
           "@type": "PostalAddress",
-          streetAddress: "Huancavelica 315, Palermo",
+          streetAddress: "Ca. 30, Urb. San Isidro II",
+          postalCode: "13001",
           addressLocality: "Trujillo",
           addressRegion: "La Libertad",
           addressCountry: "PE",
@@ -543,6 +453,133 @@ export function ServiceStructuredData({
   return (
     <Script
       id={`service-structured-data-${serviceName.toLowerCase().replace(/\s/g, "-")}`}
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  )
+}
+
+export function EcuadorLocalBusinessStructuredData() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://aslaboratorios.com/ecuador#localbusiness",
+    name: "AS Labs Ecuador",
+    alternateName: "AS Laboratorios Ecuador",
+    url: "https://aslaboratorios.com/ecuador",
+    image: [
+      "https://aslaboratorios.com/ecuador/carolina-millenium.jpg",
+      "https://aslaboratorios.com/new/bannerasnuevo.webp",
+      "https://aslaboratorios.com/images/new-logo.png",
+    ],
+    logo: "https://aslaboratorios.com/images/new-logo.png",
+    description:
+      "Sede de AS Labs en Quito para biología molecular, formulaciones bacterianas, plantines in vitro y cepas bacterianas identificadas.",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Andrade Marin 24, Edificio Carolina Millenium",
+      postalCode: "170518",
+      addressLocality: "Quito",
+      addressRegion: "Pichincha",
+      addressCountry: "EC",
+    },
+    hasMap: "https://maps.google.com/?q=Andrade+Marin+24+Carolina+Millenium+Quito+Ecuador",
+    areaServed: [
+      { "@type": "City", name: "Quito" },
+      { "@type": "AdministrativeArea", name: "Pichincha" },
+      { "@type": "Country", name: "Ecuador" },
+    ],
+    parentOrganization: { "@id": "https://aslaboratorios.com/#organization" },
+    knowsAbout: [
+      "Biología molecular",
+      "PCR y qPCR",
+      "Secuenciamiento 16S rRNA e ITS",
+      "Formulaciones bacterianas",
+      "Plantines in vitro",
+      "Cepas bacterianas identificadas",
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Servicios de AS Labs para Ecuador",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Análisis de biología molecular" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Formulaciones bacterianas" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Plantines in vitro" } },
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Cepas bacterianas identificadas" } },
+      ],
+    },
+  }
+
+  return (
+    <script
+      id="ecuador-local-business-structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  )
+}
+
+export function EcuadorServiceStructuredData({
+  serviceName,
+  serviceDescription,
+  serviceUrl,
+  offers,
+  image,
+}: {
+  serviceName: string
+  serviceDescription: string
+  serviceUrl: string
+  offers: Array<{ name: string; description: string }>
+  image?: string
+}) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${serviceUrl}#service`,
+    name: serviceName,
+    description: serviceDescription,
+    url: serviceUrl,
+    image: image ? `https://aslaboratorios.com${image}` : undefined,
+    provider: {
+      "@type": "Organization",
+      "@id": "https://aslaboratorios.com/#organization",
+      name: "AS Laboratorios",
+      url: "https://aslaboratorios.com",
+    },
+    serviceArea: { "@type": "Country", name: "Ecuador" },
+    areaServed: [
+      { "@type": "City", name: "Quito" },
+      { "@type": "Country", name: "Ecuador" },
+    ],
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl,
+      serviceLocation: {
+        "@type": "Place",
+        name: "AS Labs Ecuador",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Andrade Marin 24, Edificio Carolina Millenium",
+          postalCode: "170518",
+          addressLocality: "Quito",
+          addressRegion: "Pichincha",
+          addressCountry: "EC",
+        },
+      },
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `Catálogo de ${serviceName}`,
+      itemListElement: offers.map((offer) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: offer.name, description: offer.description },
+      })),
+    },
+  }
+
+  return (
+    <script
+      id={`ecuador-service-${serviceName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
     />
@@ -635,23 +672,18 @@ export function ProfessionalServiceStructuredData({
     description: description,
     url: url,
     priceRange: priceRange || "$$",
-    image: image || "https://aslaboratorios.com/aslabs-logo.png",
+    image: image || "https://aslaboratorios.com/images/new-logo.png",
     telephone: "+51-961-996-645",
     email: "ventas@aslaboratorios.com",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Huancavelica 315, Palermo",
+      streetAddress: "Ca. 30, Urb. San Isidro II",
+      postalCode: "13001",
       addressLocality: "Trujillo",
       addressRegion: "La Libertad",
-      postalCode: "13011",
       addressCountry: "PE",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: -8.1116,
-      longitude: -79.0287,
-    },
-    hasMap: "https://maps.google.com/?q=AS+Laboratorios+Trujillo",
+    hasMap: "https://maps.google.com/?q=Ca.+30+Urb.+San+Isidro+II+Trujillo+Peru",
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -675,18 +707,6 @@ export function ProfessionalServiceStructuredData({
       { "@type": "State", name: "Ancash" },
       { "@type": "State", name: "Lima" },
       { "@type": "Country", name: "Peru" },
-    ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "150",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    sameAs: [
-      "https://www.facebook.com/aslaboratorios",
-      "https://www.instagram.com/aslaboratorios",
-      "https://www.linkedin.com/company/aslaboratorios",
     ],
     paymentAccepted: "Cash, Credit Card, Bank Transfer, Yape, Plin",
     currenciesAccepted: "PEN",
@@ -719,16 +739,10 @@ export function ControlBiologicoStructuredData() {
           name: "Billaea claripalpis",
           description:
             "Controlador biológico de Diatraea saccharalis (barrenador de caña de azúcar). Mosca parasitoide altamente efectiva para el control de plagas en cultivos de caña de azúcar en La Libertad, Lambayeque y Piura.",
-          image: "https://aslaboratorios.com/images/billaea-claripalpis.jpg",
+          image: "https://aslaboratorios.com/control-biologico.png",
           brand: { "@type": "Brand", name: "AS Laboratorios" },
           manufacturer: { "@type": "Organization", name: "AS Laboratorios Trujillo" },
           category: "Control Biológico",
-          offers: {
-            "@type": "Offer",
-            availability: "https://schema.org/InStock",
-            priceCurrency: "PEN",
-            seller: { "@type": "Organization", name: "AS Laboratorios" },
-          },
         },
       },
       {
@@ -739,16 +753,10 @@ export function ControlBiologicoStructuredData() {
           name: "Trichogramma sp",
           description:
             "Avispa parasitoide de huevos de lepidópteros plaga. Control biológico efectivo para diversos cultivos agrícolas en Perú.",
-          image: "https://aslaboratorios.com/images/trichogramma.jpg",
+          image: "https://aslaboratorios.com/control-biologico.png",
           brand: { "@type": "Brand", name: "AS Laboratorios" },
           manufacturer: { "@type": "Organization", name: "AS Laboratorios Trujillo" },
           category: "Control Biológico",
-          offers: {
-            "@type": "Offer",
-            availability: "https://schema.org/InStock",
-            priceCurrency: "PEN",
-            seller: { "@type": "Organization", name: "AS Laboratorios" },
-          },
         },
       },
     ],

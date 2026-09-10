@@ -3,6 +3,7 @@ import { useState } from "react"
 import type React from "react"
 
 import { X, Beaker, FlaskConical, Microscope, BookOpen, Package, TestTube } from "lucide-react"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface Material {
   id: string
@@ -213,7 +214,6 @@ Detalles del material:
     const whatsappUrl = `https://wa.me/51961996645?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
-
   return (
     <div className={`py-16 bg-white ${isOpen !== undefined ? 'fixed inset-0 z-50 overflow-y-auto' : ''}`}>
       <div className="container mx-auto px-4 relative">
@@ -344,12 +344,12 @@ Detalles del material:
                       >
                         Cerrar
                       </button>
-                      <button
-                        onClick={() => handleSolicitar(selectedMaterial)}
+                      <WhatsAppContact
+                        message={`Hola, soy estudiante de la UNT y me interesa solicitar información sobre ${selectedMaterial.title}. Precio: ${selectedMaterial.price}. Disponibilidad: ${selectedMaterial.availability}. Tiempo de entrega: ${selectedMaterial.deliveryTime}.`}
                         className="bg-[#2e7d32] text-white px-6 py-2 rounded-md hover:bg-[#1b5e20] transition-colors"
                       >
                         Solicitar por WhatsApp
-                      </button>
+                      </WhatsAppContact>
                     </div>
                   </div>
                 </div>

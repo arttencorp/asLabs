@@ -31,6 +31,7 @@ import {
 import Navbar from "@/components/navbar"
 import { obtenerCategorias, obtenerProductosTienda } from "@/lib/supabase"
 import type { CategoriaDatabase, ProductoTiendaDatabase } from "@/types/database"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function TiendaClient() {
   const [categorias, setCategorias] = useState<CategoriaDatabase[]>([])
@@ -108,11 +109,6 @@ export default function TiendaClient() {
   /* helpers */
   const openProductDialog = (id: string) => setOpenDialog(id)
   const closeDialog = () => setOpenDialog(null)
-  const sendWhatsApp = (prod: string, price: string) => {
-    const msg = encodeURIComponent(`Hola, estoy interesado en: ${prod} (${price}). ¿Podrían brindarme más información?`)
-    window.open(`https://walink.co/0441cf?text=${msg}`, "_blank")
-  }
-
   /* ---------- Render Card ------------- */
   const ProductCard = ({ product }: { product: ProductoTiendaDatabase }) => (
     <Card
@@ -171,12 +167,12 @@ export default function TiendaClient() {
               <DialogClose asChild>
                 <Button variant="outline">Cerrar</Button>
               </DialogClose>
-              <Button
-                className="bg-[#25D366] hover:bg-[#128C7E]"
-                onClick={() => sendWhatsApp(product.prod_tiend_nom_vac || 'Producto', formatPrice(product.prod_tiend_prec_vac))}
+              <WhatsAppContact
+                message={`Hola, estoy interesado en: ${product.prod_tiend_nom_vac || 'Producto'} (${formatPrice(product.prod_tiend_prec_vac)}). ¿Podrían brindarme más información?`}
+                className="inline-flex h-10 items-center justify-center rounded-md bg-[#25D366] px-4 py-2 text-sm font-medium text-white hover:bg-[#128C7E]"
               >
                 WhatsApp
-              </Button>
+              </WhatsAppContact>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -200,13 +196,13 @@ export default function TiendaClient() {
           <p className="text-white/90 text-lg md:text-2xl mb-8">
             Materiales y servicios de laboratorio para estudiantes UNT
           </p>
-          <Button
+          <WhatsAppContact
+            message="Hola, quisiera consultar la disponibilidad de productos de la tienda"
             className="bg-white text-green-800 hover:bg-green-50 shadow-lg"
-            onClick={() => window.open("https://walink.co/0441cf", "_blank")}
           >
             <ShoppingCart className="mr-2 h-5 w-5" />
             Consultar disponibilidad
-          </Button>
+          </WhatsAppContact>
         </div>
         {/* onda */}
         <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 120" fill="none">
@@ -275,21 +271,13 @@ export default function TiendaClient() {
 
               {/* Botón de cotización personalizada */}
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <Button
+                <WhatsAppContact
+                  message="Hola, necesito una cotización personalizada para productos de laboratorio."
                   className="w-full bg-amber-500 hover:bg-amber-600 text-white shadow-md flex gap-2"
-                  onClick={() =>
-                    window.open(
-                      "https://walink.co/0441cf?text=" +
-                        encodeURIComponent(
-                          "Hola, necesito una cotización personalizada para productos de laboratorio.",
-                        ),
-                      "_blank",
-                    )
-                  }
                 >
                   <Beaker className="h-4 w-4" />
                   Cotización personalizada
-                </Button>
+                </WhatsAppContact>
               </div>
             </div>
           </div>

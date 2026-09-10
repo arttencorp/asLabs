@@ -9,9 +9,9 @@ import {
 } from "@/components/structured-data"
 
 export const metadata: Metadata = {
-  title: "Análisis Microbiológico de Agua y Ambiente | AS Laboratorios",
+  title: "Análisis de Agua en Trujillo | Laboratorio AS Labs",
   description:
-    "Análisis microbiológico de agua, superficies y ambientes: coliformes, E. coli, aerobios mesófilos, enterobacterias y otros indicadores en Trujillo.",
+    "Laboratorio de análisis de agua en Trujillo, La Libertad. Evaluamos coliformes, E. coli, aerobios mesófilos, superficies y ambientes con soporte técnico especializado.",
   keywords: [
     // Keywords geográficas principales
     "análisis ambiental Trujillo",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Análisis Microbiológico Ambiental en Trujillo, Perú | AS Laboratorios",
+    title: "Análisis de Agua en Trujillo, Perú | AS Laboratorios",
     description:
       "Control de calidad microbiológica de agua, superficies y ambientes en Trujillo, La Libertad. Recuento bacteriano, detección de coliformes y E. coli certificado.",
     url: "https://aslaboratorios.com/servicios/medio-ambiente",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Análisis Ambiental en Trujillo | AS Laboratorios Perú",
+    title: "Análisis de Agua en Trujillo | AS Laboratorios Perú",
     description:
       "Control de calidad microbiológica certificado. Análisis de agua, superficies y ambientes en Trujillo, La Libertad.",
     images: ["/servicios/image.png"],

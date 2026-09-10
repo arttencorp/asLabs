@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import {
@@ -32,6 +33,7 @@ import {
 } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import EcuadorFooter from "@/components/ecuador-footer"
 
 export interface StrainItem {
   id: string
@@ -57,6 +59,7 @@ type CatalogKind = "identified" | "atcc"
 interface CatalogProps {
   strains: StrainItem[]
   kind: CatalogKind
+  market?: "peru" | "ecuador"
 }
 
 interface DetailProps extends CatalogProps {
@@ -69,6 +72,34 @@ interface CartEntry {
 }
 
 const WHATSAPP_NUMBER = "51961996645"
+
+const PERU_DEPARTMENTS = [
+  "Amazonas",
+  "Áncash",
+  "Apurímac",
+  "Arequipa",
+  "Ayacucho",
+  "Cajamarca",
+  "Callao",
+  "Cusco",
+  "Huancavelica",
+  "Huánuco",
+  "Ica",
+  "Junín",
+  "La Libertad",
+  "Lambayeque",
+  "Lima",
+  "Loreto",
+  "Madre de Dios",
+  "Moquegua",
+  "Pasco",
+  "Piura",
+  "Puno",
+  "San Martín",
+  "Tacna",
+  "Tumbes",
+  "Ucayali",
+] as const
 
 const catalogCopy = {
   identified: {
@@ -109,12 +140,25 @@ function getBasePrice(strain: StrainItem) {
   return strain.precioSinEnvio ?? strain.precio
 }
 
-function formatMoney(value: number) {
-  return new Intl.NumberFormat("es-PE", {
+function formatMoney(value: number, market: "peru" | "ecuador" = "peru") {
+  return new Intl.NumberFormat(market === "ecuador" ? "es-EC" : "es-PE", {
     style: "currency",
-    currency: "PEN",
+    currency: market === "ecuador" ? "USD" : "PEN",
     minimumFractionDigits: 2,
   }).format(value)
+}
+
+function getMarketPrice(strain: StrainItem, market: "peru" | "ecuador") {
+  const basePrice = getBasePrice(strain)
+  return market === "ecuador" ? Math.ceil(basePrice / 3.75) : basePrice
+}
+
+function DhlBadge() {
+  return (
+    <span className="inline-flex h-5 shrink-0 items-center overflow-hidden rounded-[4px] shadow-sm ring-1 ring-amber-300/70" title="Envío DHL">
+      <Image src="/partners/dhl.svg" alt="DHL" width={55} height={13} className="h-5 w-[55px] object-cover" />
+    </span>
+  )
 }
 
 function useCart(strains: StrainItem[], storageKey: string) {
@@ -195,8 +239,16 @@ function CatalogSwitcher({ active }: { active: CatalogKind }) {
   )
 }
 
-function CatalogHero({ kind, count }: { kind: CatalogKind; count: number }) {
+function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number; market: "peru" | "ecuador" }) {
   const copy = catalogCopy[kind]
+  const heroTitle = market === "ecuador"
+    ? "Cepas bacterianas identificadas para Ecuador"
+    : kind === "identified"
+      ? "Cepas bacterianas y fúngicas identificadas en Perú"
+      : copy.title
+  const heroDescription = market === "ecuador"
+    ? "Catálogo microbiológico con identificación molecular, cotización en dólares y soporte técnico para investigación, docencia y desarrollo en Ecuador."
+    : copy.description
 
   return (
     <section
@@ -222,17 +274,17 @@ function CatalogHero({ kind, count }: { kind: CatalogKind; count: number }) {
           className="max-w-4xl rounded-[32px] border border-white/10 bg-[#031f17]/55 p-6 shadow-[0_30px_90px_-42px_rgba(0,0,0,.9)] backdrop-blur-[4px] sm:p-8"
         >
           <div className="mb-6 flex flex-wrap items-center gap-4">
-            <CatalogSwitcher active={kind} />
+            {market === "peru" && <CatalogSwitcher active={kind} />}
             <span className="inline-flex items-center gap-2 rounded-full bg-black/20 px-3 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#e9fff0]">
               <Sparkles className="h-4 w-4" />
               {copy.eyebrow}
             </span>
           </div>
           <h1 className="max-w-4xl text-balance text-4xl font-semibold leading-[1.04] tracking-[-0.035em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.62)] sm:text-5xl lg:text-6xl">
-            {copy.title}
+            {heroTitle}
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-7 text-white/[0.92] drop-shadow-[0_2px_12px_rgba(0,0,0,.45)] sm:text-lg">
-            {copy.description}
+            {heroDescription}
           </p>
         </motion.div>
 
@@ -264,11 +316,13 @@ function StrainCard({
   kind,
   index,
   onAdd,
+  market,
 }: {
   strain: StrainItem
   kind: CatalogKind
   index: number
   onAdd: (strain: StrainItem) => void
+  market: "peru" | "ecuador"
 }) {
   const copy = catalogCopy[kind]
 
@@ -314,7 +368,7 @@ function StrainCard({
         <h2 className="relative mt-2 text-2xl font-semibold leading-tight tracking-[-0.025em] text-emerald-950">
           <span className="italic">{strain.nombre}</span>
         </h2>
-        <p className="relative mt-2 line-clamp-2 min-h-[40px] text-sm leading-5 text-slate-600">{strain.cientifico}</p>
+        <p className="relative mt-2 line-clamp-2 min-h-[40px] text-sm italic leading-5 text-slate-600">{strain.cientifico}</p>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
@@ -322,6 +376,20 @@ function StrainCard({
           <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">{strain.categoria}</span>
           <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">{strain.productFormat}</span>
         </div>
+
+        {market === "ecuador" && (
+          <div className="mt-5 rounded-2xl border border-emerald-950/10 bg-[#f7faf7] p-3.5">
+            <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-emerald-800">Identificado molecularmente por:</p>
+            <div className="mt-3 grid grid-cols-2 items-center gap-3">
+              <span className="flex h-12 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2.5">
+                <Image src="/partners/cavbio.png" alt="CavBio" width={150} height={65} className="h-auto max-h-10 w-full object-contain" />
+              </span>
+              <span className="flex h-12 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2.5">
+                <Image src="/partners/macrogen.png" alt="Macrogen" width={150} height={75} className="h-auto max-h-10 w-full object-contain" />
+              </span>
+            </div>
+          </div>
+        )}
 
         <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
           <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
@@ -341,18 +409,21 @@ function StrainCard({
           <div className="mb-4 flex items-end justify-between gap-4">
             <div>
               <p className="text-xs text-slate-500">Precio referencial desde</p>
-              <p className="mt-1 text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(getBasePrice(strain))}</p>
+              <p className="mt-1 text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(getMarketPrice(strain, market), market)}</p>
             </div>
-            <p className="max-w-[125px] text-right text-[11px] leading-4 text-slate-500">Envío calculado una vez por pedido</p>
+            <div className="flex max-w-[145px] flex-col items-end gap-1.5 text-right text-[11px] leading-4 text-slate-500">
+              <span>Envío calculado una vez por pedido</span>
+              <DhlBadge />
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <Link
+          <div className={`grid gap-2 ${market === "peru" ? "grid-cols-2" : "grid-cols-1"}`}>
+            {market === "peru" && <Link
               href={`${copy.catalogPath}/${strain.id}`}
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-emerald-950/15 px-4 text-sm font-bold text-emerald-950 transition-all hover:border-emerald-700 hover:bg-emerald-50"
             >
               Ver ficha
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            </Link>}
             <motion.button
               type="button"
               whileTap={{ scale: 0.93 }}
@@ -388,6 +459,7 @@ function CartDrawer({
   kind,
   onSet,
   onRemove,
+  market,
 }: {
   open: boolean
   onClose: () => void
@@ -395,10 +467,12 @@ function CartDrawer({
   kind: CatalogKind
   onSet: (id: string, quantity: number) => void
   onRemove: (id: string) => void
+  market: "peru" | "ecuador"
 }) {
   const copy = catalogCopy[kind]
-  const subtotal = entries.reduce((sum, entry) => sum + getBasePrice(entry.strain) * entry.quantity, 0)
-  const shipping = entries.length ? copy.shipping : 0
+  const [department, setDepartment] = useState("")
+  const subtotal = entries.reduce((sum, entry) => sum + getMarketPrice(entry.strain, market) * entry.quantity, 0)
+  const shipping = market === "ecuador" ? 0 : entries.length && department ? copy.shipping : 0
   const total = subtotal + shipping
   const units = entries.reduce((sum, entry) => sum + entry.quantity, 0)
 
@@ -415,16 +489,17 @@ function CartDrawer({
     if (!entries.length) return
     const lines = entries.map(
       ({ strain, quantity }) =>
-        `• ${strain.nombre} (${strain.codigo}) — ${quantity} × ${formatMoney(getBasePrice(strain))}`,
+        `• ${strain.nombre} (${strain.codigo}) — ${quantity} × ${formatMoney(getMarketPrice(strain, market), market)}`,
     )
     const message = [
       `Hola, deseo solicitar una cotización de cepas ${copy.shortLabel}:`,
       "",
       ...lines,
       "",
-      `Subtotal referencial: ${formatMoney(subtotal)}`,
-      `${copy.shippingLabel}: ${formatMoney(shipping)}`,
-      `Total estimado: ${formatMoney(total)}`,
+      `Subtotal referencial: ${formatMoney(subtotal, market)}`,
+      ...(market === "peru" ? [`Departamento de entrega: ${department}`] : []),
+      `${market === "ecuador" ? "Logística internacional" : copy.shippingLabel}: ${market === "ecuador" ? "A cotizar" : formatMoney(shipping, market)}`,
+      `Total referencial de productos: ${formatMoney(total, market)}`,
       "",
       "Por favor, confirmen disponibilidad, documentación, destino y plazo de entrega.",
     ].join("\n")
@@ -532,7 +607,7 @@ function CartDrawer({
                             <Plus className="h-3.5 w-3.5" />
                           </button>
                         </div>
-                        <p className="font-bold text-emerald-950">{formatMoney(getBasePrice(strain) * quantity)}</p>
+                        <p className="font-bold text-emerald-950">{formatMoney(getMarketPrice(strain, market) * quantity, market)}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -542,30 +617,52 @@ function CartDrawer({
 
             {entries.length > 0 && (
               <div className="border-t border-emerald-950/10 bg-white px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 sm:px-7">
+                {market === "peru" && (
+                  <label className="mb-5 block rounded-2xl border border-emerald-950/10 bg-emerald-50/60 p-4">
+                    <span className="flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.13em] text-emerald-800">
+                      Departamento de entrega
+                      <span className="normal-case tracking-normal text-amber-700">Obligatorio</span>
+                    </span>
+                    <select
+                      value={department}
+                      onChange={(event) => setDepartment(event.target.value)}
+                      className="mt-3 h-12 w-full appearance-none rounded-xl border border-emerald-950/15 bg-white px-4 text-sm font-semibold text-emerald-950 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/10"
+                      aria-label="Departamento de entrega"
+                    >
+                      <option value="">Selecciona tu departamento</option>
+                      {PERU_DEPARTMENTS.map((item) => <option key={item} value={item}>{item}</option>)}
+                    </select>
+                    <span className="mt-2 block text-[11px] leading-4 text-slate-500">El costo mostrado es referencial y será confirmado según el destino, peso y condiciones de conservación.</span>
+                  </label>
+                )}
                 <dl className="space-y-2.5 text-sm">
                   <div className="flex justify-between text-slate-600">
                     <dt>Subtotal · {units} {units === 1 ? "unidad" : "unidades"}</dt>
-                    <dd className="font-semibold text-slate-800">{formatMoney(subtotal)}</dd>
+                    <dd className="font-semibold text-slate-800">{formatMoney(subtotal, market)}</dd>
                   </div>
                   <div className="flex justify-between gap-5 text-slate-600">
-                    <dt>{copy.shippingLabel}</dt>
-                    <dd className="shrink-0 font-semibold text-slate-800">{formatMoney(shipping)}</dd>
+                    <dt className="flex flex-wrap items-center gap-2">
+                      <span>{market === "ecuador" ? "Logística internacional" : copy.shippingLabel}</span>
+                      <DhlBadge />
+                    </dt>
+                    <dd className="shrink-0 font-semibold text-slate-800">{market === "ecuador" ? "A cotizar" : department ? formatMoney(shipping, market) : "Por calcular"}</dd>
                   </div>
                   <div className="mt-3 flex items-end justify-between border-t border-dashed border-slate-200 pt-4">
                     <dt>
                       <span className="block font-bold text-emerald-950">Total estimado</span>
                       <span className="text-xs text-slate-500">Sujeto a confirmación</span>
                     </dt>
-                    <dd className="text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(total)}</dd>
+                    <dd className="text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(total, market)}</dd>
                   </div>
                 </dl>
                 <button
                   type="button"
                   onClick={requestQuote}
-                  className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-emerald-700 px-5 text-base font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl"
+                  disabled={market === "peru" && !department}
+                  className="mt-5 flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-emerald-700 px-5 text-base font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none disabled:hover:translate-y-0"
                 >
                   <MessageCircle className="h-5 w-5" />
-                  Solicitar cotización
+                  {market === "peru" && !department ? "Selecciona tu departamento" : "Solicitar cotización"}
                   <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="mt-3 text-center text-[11px] leading-4 text-slate-500">
@@ -616,7 +713,7 @@ function TrustStrip({ kind }: { kind: CatalogKind }) {
   )
 }
 
-export function StrainCatalog({ strains, kind }: CatalogProps) {
+export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) {
   const copy = catalogCopy[kind]
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("Todas")
@@ -663,7 +760,7 @@ export function StrainCatalog({ strains, kind }: CatalogProps) {
     <div className="min-h-screen bg-[#f5f8f5] font-sans text-slate-900">
       <Navbar overlay />
       <main>
-        <CatalogHero kind={kind} count={strains.length} />
+        <CatalogHero kind={kind} count={strains.length} market={market} />
         <TrustStrip kind={kind} />
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
@@ -675,7 +772,7 @@ export function StrainCatalog({ strains, kind }: CatalogProps) {
                   Encuentra la cepa que necesitas
                 </h2>
                 <p className="mt-3 text-sm text-slate-600">
-                  {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"} · precios referenciales en soles
+                  {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"} · precios referenciales en {market === "ecuador" ? "dólares" : "soles"}
                 </p>
               </div>
               <div className="flex gap-2">
@@ -773,7 +870,7 @@ export function StrainCatalog({ strains, kind }: CatalogProps) {
                 <motion.div layout className="grid gap-5 md:grid-cols-2">
                   <AnimatePresence mode="popLayout">
                     {filtered.map((strain, index) => (
-                      <StrainCard key={strain.id} strain={strain} kind={kind} index={index} onAdd={addToCart} />
+                      <StrainCard key={strain.id} strain={strain} kind={kind} index={index} onAdd={addToCart} market={market} />
                     ))}
                   </AnimatePresence>
                 </motion.div>
@@ -789,9 +886,9 @@ export function StrainCatalog({ strains, kind }: CatalogProps) {
           </div>
         </section>
 
-        <CatalogContent kind={kind} />
+        <CatalogContent kind={kind} market={market} />
       </main>
-      <Footer />
+      {market === "ecuador" ? <EcuadorFooter /> : <Footer />}
 
       <AnimatePresence>
         {notice && (
@@ -831,7 +928,7 @@ export function StrainCatalog({ strains, kind }: CatalogProps) {
           <>
             <span className="h-5 w-px bg-white/20" />
             <span className="hidden sm:inline">
-              {formatMoney(cart.entries.reduce((sum, entry) => sum + getBasePrice(entry.strain) * entry.quantity, 0))}
+              {formatMoney(cart.entries.reduce((sum, entry) => sum + getMarketPrice(entry.strain, market) * entry.quantity, 0), market)}
             </span>
           </>
         )}
@@ -844,12 +941,13 @@ export function StrainCatalog({ strains, kind }: CatalogProps) {
         kind={kind}
         onSet={cart.set}
         onRemove={cart.remove}
+        market={market}
       />
     </div>
   )
 }
 
-function CatalogContent({ kind }: { kind: CatalogKind }) {
+function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | "ecuador" }) {
   const copy = catalogCopy[kind]
   const isAtcc = kind === "atcc"
   const faqs = isAtcc
@@ -873,20 +971,20 @@ function CatalogContent({ kind }: { kind: CatalogKind }) {
             <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-emerald-950 sm:text-4xl">
               {isAtcc
                 ? "Solicita cepas ATCC de referencia con acompañamiento especializado"
-                : "Compra cepas microbianas identificadas en Perú con información clara"}
+                : market === "ecuador" ? "Selecciona cepas microbianas identificadas con información clara" : "Compra cepas microbianas identificadas en Perú con información clara"}
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
               {isAtcc
                 ? "Selecciona la referencia, revisa sus características y arma una solicitud sin perder el contexto técnico. La disponibilidad, documentación y logística se validan antes de confirmar."
                 : "Compara especies, códigos, presentaciones y aplicaciones desde un mismo catálogo. El equipo de AS Laboratorios confirma la compatibilidad de la referencia con el objetivo declarado."}
             </p>
-            <Link
+            {market === "peru" && <Link
               href={copy.otherPath}
               className="mt-7 inline-flex items-center gap-2 rounded-full border border-emerald-950/15 px-5 py-3 text-sm font-bold text-emerald-950 transition-all hover:-translate-y-0.5 hover:bg-emerald-50"
             >
               {copy.otherLabel}
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </Link>}
           </div>
 
           <div className="space-y-3">
@@ -1074,7 +1172,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                 <h1 className="mt-3 text-balance text-3xl font-semibold italic leading-[1.06] tracking-[-0.035em] text-white drop-shadow-[0_3px_16px_rgba(0,0,0,.58)] sm:text-4xl lg:text-5xl">
                   {strain.nombre}
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-7 text-white/[0.9] drop-shadow-[0_2px_10px_rgba(0,0,0,.42)]">{strain.cientifico}</p>
+                <p className="mt-5 max-w-2xl text-base italic leading-7 text-white/[0.9] drop-shadow-[0_2px_10px_rgba(0,0,0,.42)]">{strain.cientifico}</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, rotate: 3 }}
@@ -1219,9 +1317,13 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                     <dd className="font-semibold text-slate-800">{formatMoney(subtotal)}</dd>
                   </div>
                   <div className="flex justify-between gap-4 text-slate-600">
-                    <dt>{copy.shippingLabel}</dt>
+                    <dt className="flex flex-wrap items-center gap-2">
+                      <span>{copy.shippingLabel}</span>
+                      <DhlBadge />
+                    </dt>
                     <dd className="shrink-0 font-semibold text-slate-800">{formatMoney(copy.shipping)}</dd>
                   </div>
+                  <p className="text-[11px] leading-4 text-slate-500">Seleccionarás el departamento de entrega al revisar tu pedido.</p>
                   <div className="flex items-end justify-between border-t border-slate-100 pt-4">
                     <dt>
                       <span className="block font-bold text-emerald-950">Total estimado</span>
@@ -1348,6 +1450,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
         kind={kind}
         onSet={cart.set}
         onRemove={cart.remove}
+        market="peru"
       />
     </div>
   )

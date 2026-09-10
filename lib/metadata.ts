@@ -14,6 +14,8 @@ type MetadataProps = {
   publishedTime?: string
   modifiedTime?: string
   noIndex?: boolean
+  locale?: "es_PE" | "es_EC"
+  languages?: Record<string, string>
 }
 
 export function constructMetadata({
@@ -35,6 +37,8 @@ export function constructMetadata({
   publishedTime,
   modifiedTime,
   noIndex = false,
+  locale = "es_PE",
+  languages,
 }: MetadataProps = {}): Metadata {
   const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`
   const canonical = `${SITE_URL}${normalizedPath}`
@@ -54,13 +58,13 @@ export function constructMetadata({
     publisher: SITE_NAME,
     applicationName: SITE_NAME,
     metadataBase: new URL(SITE_URL),
-    alternates: { canonical },
+    alternates: { canonical, languages },
     openGraph: {
       title: metaTitle,
       description,
       url: canonical,
       siteName: SITE_NAME,
-      locale: "es_PE",
+      locale,
       type,
       publishedTime,
       modifiedTime,

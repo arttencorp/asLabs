@@ -294,7 +294,7 @@ export default function LegalExperience() {
           </a>
         </div>
         <div className="mx-auto mt-14 flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-7 text-xs leading-5 text-white/[0.5] sm:flex-row sm:items-center sm:justify-between">
-          <p>MZ J1 San Isidro II Etapa · Trujillo, La Libertad, Perú</p>
+          <p>Ca. 30, Urb. San Isidro II · Trujillo, La Libertad, Perú</p>
           <Link
             href="https://www.gob.pe/institucion/anpd/campa%C3%B1as/128319-nuevo-reglamento-de-proteccion-de-datos-personales"
             target="_blank"

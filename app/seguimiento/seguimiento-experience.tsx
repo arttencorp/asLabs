@@ -25,6 +25,7 @@ import { obtenerPedidoPorCodigo } from "@/lib/supabase"
 import { ESTADOS_SEGUIMIENTO } from "@/constants/seguimiento"
 import { calcularTotalCotizacion, formatCurrency, formatDate, getDocumentoCliente, getNombreCompleto } from "@/utils"
 import type { Pedido } from "@/components/admin/pedidos/types"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function SeguimientoExperience() {
   const [codigo, setCodigo] = useState("")
@@ -121,9 +122,9 @@ export default function SeguimientoExperience() {
               <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#f0a23a] text-[#173428]"><Headphones className="h-5 w-5" /></div>
               <div><p className="text-sm font-semibold">¿Necesitas ayuda?</p><p className="text-xs text-white/60">Te acompañamos durante el proceso</p></div>
             </div>
-            <a href="https://wa.me/51961996645" target="_blank" rel="noreferrer" className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-sm font-semibold text-[#ffd18c]">
+            <WhatsAppContact message="Hola, necesito ayuda con el seguimiento de mi pedido" className="mt-5 flex w-full items-center justify-between border-t border-white/10 pt-4 text-sm font-semibold text-[#ffd18c]">
               Hablar con un asesor <ArrowRight className="h-4 w-4" />
-            </a>
+            </WhatsAppContact>
           </div>
         </div>
       </section>
@@ -227,7 +228,7 @@ export default function SeguimientoExperience() {
             </div>
           </article>
 
-          <div className="mt-5 flex flex-col items-start justify-between gap-5 rounded-[2rem] bg-[#e8efe9] p-6 md:flex-row md:items-center md:p-8"><div><h3 className="text-xl font-bold">¿Tienes una consulta sobre tu pedido?</h3><p className="mt-1 text-sm text-[#687970]">Nuestro equipo puede ayudarte a revisar cualquier detalle.</p></div><div className="flex flex-wrap gap-3"><a href="mailto:ventas@aslaboratorios.com" className="inline-flex items-center gap-2 rounded-full border border-[#b8c9bd] bg-white px-5 py-3 text-sm font-bold"><Mail className="h-4 w-4" /> Escribir por correo</a><a href="https://wa.me/51961996645" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#245f3e] px-5 py-3 text-sm font-bold text-white"><Phone className="h-4 w-4" /> WhatsApp</a></div></div>
+          <div className="mt-5 flex flex-col items-start justify-between gap-5 rounded-[2rem] bg-[#e8efe9] p-6 md:flex-row md:items-center md:p-8"><div><h3 className="text-xl font-bold">¿Tienes una consulta sobre tu pedido?</h3><p className="mt-1 text-sm text-[#687970]">Nuestro equipo puede ayudarte a revisar cualquier detalle.</p></div><div className="flex flex-wrap gap-3"><a href="mailto:ventas@aslaboratorios.com" className="inline-flex items-center gap-2 rounded-full border border-[#b8c9bd] bg-white px-5 py-3 text-sm font-bold"><Mail className="h-4 w-4" /> Escribir por correo</a><WhatsAppContact message="Hola, tengo una consulta sobre mi pedido" className="inline-flex items-center gap-2 rounded-full bg-[#245f3e] px-5 py-3 text-sm font-bold text-white"><Phone className="h-4 w-4" /> WhatsApp</WhatsAppContact></div></div>
         </section>
       )}
     </main>

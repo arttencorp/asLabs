@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { ArrowLeft, Check } from "lucide-react"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 interface LabData {
   id: string
@@ -107,14 +108,12 @@ export default function LaboratoryDetailClient({ labData }: { labData: LabData }
               <p className="text-sm text-gray-700 mb-4">
                 ¿Tienes una consulta sobre este laboratorio?
               </p>
-              <a
-                href="https://wa.me/51961996645"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppContact
+                message={`Hola, quisiera consultar sobre ${labData.name}`}
                 className="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700 transition-colors text-center text-sm block"
               >
                 Contactar por WhatsApp
-              </a>
+              </WhatsAppContact>
             </div>
           </div>
         </div>
