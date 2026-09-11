@@ -42,6 +42,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   if (!product) notFound()
 
   const price = getProductReferencePricePen(product)
+  const hasMultiplePresentations = product.presentation.includes("presentaciones")
   const specifications = product.specifications ?? [
     { label: "Presentación", value: product.presentation },
     { label: "Categoría", value: product.category },
@@ -51,6 +52,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   const applications = product.applications ?? [product.category, "Investigación", "Rutinas de laboratorio"]
   const related = molecularProducts.filter((item) => item.id !== product.id && item.category === product.category).slice(0, 3)
   const detailUrl = `${SITE_URL}/kits-reactivos/${product.id}`
+  const productImage = product.image.startsWith("http") ? product.image : `${SITE_URL}${product.image}`
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -59,7 +61,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         "@id": `${detailUrl}#product`,
         name: product.name,
         sku: product.catalogNumber,
-        image: `${SITE_URL}${product.image}`,
+        image: productImage,
         description: product.longDescription ?? product.description,
         category: product.category,
         brand: { "@type": "Brand", name: product.brand },
@@ -90,7 +92,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
       <Navbar overlay />
       <main className="bg-[#f4f7f4] text-[#173f2d]">
         <section data-navbar-theme="dark" className="relative isolate overflow-hidden bg-[#082f23] pb-12 pt-24 text-white sm:pb-14 sm:pt-28">
-          <Image src={product.image} alt="" fill priority className="-z-20 object-cover opacity-30" />
+          <Image src="/lab-header-bg.jpg" alt="" fill priority className="-z-20 object-cover opacity-30" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(4,31,22,.97),rgba(4,31,22,.80)_62%,rgba(4,31,22,.42))]" />
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Link href="/kits-reactivos" className="inline-flex items-center gap-2 text-xs font-bold text-white/70 transition hover:text-white"><ArrowLeft className="h-4 w-4" /> Volver al catálogo</Link>
@@ -102,13 +104,13 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
         <section data-navbar-theme="light" className="mx-auto grid max-w-7xl gap-7 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,.85fr)] lg:px-8">
           <div className="space-y-6">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] border border-white bg-white shadow-[0_20px_60px_-32px_rgba(6,51,34,.4)]">
-              <Image src={product.image} alt={`Imagen referencial de ${product.name}`} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 58vw" />
-              <div className="absolute bottom-4 left-4 rounded-full border border-white/70 bg-white/88 px-3 py-1.5 text-[10px] font-bold text-[#285b41] shadow-sm backdrop-blur-md">Imagen referencial</div>
+            <div className="relative aspect-[16/10] overflow-hidden rounded-[28px] border border-[#dce7df] bg-white shadow-[0_20px_60px_-32px_rgba(6,51,34,.4)]">
+              <Image src={product.image} alt={`Fotografía oficial de ${product.name}`} fill className="object-contain p-6" sizes="(max-width: 1024px) 100vw, 58vw" />
+              <div className="absolute bottom-4 left-4 rounded-full border border-[#dce7df] bg-white/92 px-3 py-1.5 text-[10px] font-bold text-[#285b41] shadow-sm backdrop-blur-md">Fotografía real del producto</div>
             </div>
             <article className="rounded-[26px] border border-[#dce7df] bg-white p-6 sm:p-8">
-              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Información del producto</p>
-              <h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Uso y alcance</h2>
+              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Información oficial del producto</p>
+              <h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Descripción técnica</h2>
               <p className="mt-4 text-sm leading-7 text-[#63766b]">{product.longDescription ?? `${product.description} La compatibilidad final debe validarse con el protocolo, la matriz y el equipo utilizado por el laboratorio.`}</p>
               <div className="mt-7 grid gap-3 sm:grid-cols-3">
                 {applications.map((application) => <div key={application} className="flex items-start gap-2 rounded-2xl bg-[#eff5f0] p-3 text-xs font-bold leading-5 text-[#355a44]"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#168158]" />{application}</div>)}
@@ -118,7 +120,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           <aside className="space-y-5 lg:sticky lg:top-28 lg:self-start">
             <div className="rounded-[26px] border border-[#d9e6dc] bg-white p-6 shadow-[0_18px_55px_-34px_rgba(6,51,34,.45)] sm:p-7">
-              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial{hasMultiplePresentations ? " desde" : ""}</p>
               <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">{money(price)}</p>
               <p className="mt-2 text-xs leading-5 text-[#74857b]">Sujeto a stock, presentación, tipo de cambio y cotización final.</p>
               <WhatsAppContact message={`Hola, quisiera cotizar ${product.name} (${product.catalogNumber}), presentación ${product.presentation}.`} className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#14744d] px-5 text-sm font-bold text-white shadow-lg shadow-[#14744d]/20 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]">Solicitar cotización <ArrowRight className="h-4 w-4" /></WhatsAppContact>
@@ -135,7 +137,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           </aside>
         </section>
 
-        {related.length > 0 && <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">También puede interesarte</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Referencias relacionadas</h2></div><Link href="/kits-reactivos" className="hidden items-center gap-2 text-xs font-bold text-[#168158] sm:inline-flex">Ver catálogo <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-6 grid gap-4 sm:grid-cols-3">{related.map((item) => <Link key={item.id} href={`/kits-reactivos/${item.id}`} className="group grid grid-cols-[88px_1fr] gap-4 rounded-[22px] border border-[#dce7df] p-3 transition hover:-translate-y-1 hover:shadow-lg"><div className="relative overflow-hidden rounded-2xl bg-[#eef4ef]"><Image src={item.image} alt="" fill className="object-cover transition duration-500 group-hover:scale-105" /></div><div className="min-w-0 py-1"><p className="text-[9px] font-bold uppercase tracking-[.1em] text-[#548068]">{item.brand}</p><h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5">{item.name}</h3><p className="mt-2 text-xs font-black text-[#0d5137]">{money(getProductReferencePricePen(item))}</p></div></Link>)}</div></div></section>}
+        {related.length > 0 && <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">También puede interesarte</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Referencias relacionadas</h2></div><Link href="/kits-reactivos" className="hidden items-center gap-2 text-xs font-bold text-[#168158] sm:inline-flex">Ver catálogo <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-6 grid gap-4 sm:grid-cols-3">{related.map((item) => <Link key={item.id} href={`/kits-reactivos/${item.id}`} className="group grid grid-cols-[88px_1fr] gap-4 rounded-[22px] border border-[#dce7df] p-3 transition hover:-translate-y-1 hover:shadow-lg"><div className="relative overflow-hidden rounded-2xl bg-white"><Image src={item.image} alt={`Fotografía de ${item.name}`} fill className="object-contain p-2 transition duration-500 group-hover:scale-105" /></div><div className="min-w-0 py-1"><p className="text-[9px] font-bold uppercase tracking-[.1em] text-[#548068]">{item.brand}</p><h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5">{item.name}</h3><p className="mt-2 text-xs font-black text-[#0d5137]">{money(getProductReferencePricePen(item))}</p></div></Link>)}</div></div></section>}
       </main>
       <Footer />
     </>

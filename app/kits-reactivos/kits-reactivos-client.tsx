@@ -62,6 +62,7 @@ function ProductCard({
   onAdd: (product: MolecularProduct) => void
 }) {
   const price = getProductReferencePricePen(product)
+  const hasMultiplePresentations = product.presentation.includes("presentaciones")
 
   return (
     <motion.article
@@ -72,59 +73,48 @@ function ProductCard({
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.42, delay: Math.min(index * 0.045, 0.25) }}
       whileHover={{ y: -5 }}
-      className="group flex h-full flex-col overflow-hidden rounded-[22px] border border-[#dfe9e2] bg-white shadow-[0_12px_34px_rgba(8,48,33,.06)] transition-shadow hover:shadow-[0_18px_42px_rgba(8,48,33,.12)]"
+      className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#dfe9e2] bg-white shadow-[0_10px_28px_rgba(8,48,33,.05)] transition-shadow hover:shadow-[0_16px_36px_rgba(8,48,33,.11)]"
     >
-      <div className="relative h-36 overflow-hidden bg-gradient-to-br from-[#edf6ef] via-white to-[#e8f1ea] sm:h-40">
+      <div className="relative h-32 overflow-hidden border-b border-[#edf1ee] bg-white sm:h-36">
         <Image
           src={product.image}
-          alt={`${product.name} para laboratorio de biología molecular`}
+          alt={`Fotografía real de ${product.name}`}
           fill
-          className="object-cover opacity-90 transition duration-700 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          className="object-contain p-3 transition duration-500 group-hover:scale-[1.04]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a3426]/35 via-transparent to-white/10" />
-        <span className="absolute left-3 top-3 rounded-full border border-white/80 bg-white/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.1em] text-[#285d42] shadow-sm backdrop-blur-md">
+        <span className="absolute left-3 top-3 rounded-full border border-[#dfe9e2] bg-white/95 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[.08em] text-[#285d42] shadow-sm backdrop-blur-md">
           {product.category}
         </span>
-        <span className="absolute bottom-3 right-3 rounded-full bg-[#123e2d]/90 px-2.5 py-1 text-[9px] font-bold text-white backdrop-blur-md">
+        <span className="absolute bottom-2.5 right-2.5 rounded-full bg-[#123e2d] px-2.5 py-1 text-[8px] font-bold text-white">
           {product.catalogNumber}
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
+      <div className="flex flex-1 flex-col p-4">
         <p className="text-[11px] font-bold uppercase tracking-[.14em] text-[#4d7d60]">{product.brand}</p>
-        <h2 className="mt-1.5 text-lg font-bold leading-tight tracking-[-.025em] text-[#123e2d]">{product.name}</h2>
-        <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#66786e]">{product.description}</p>
+        <h2 className="mt-1.5 line-clamp-2 text-base font-bold leading-5 tracking-[-.02em] text-[#123e2d]">{product.name}</h2>
+        <p className="mt-2 line-clamp-1 text-[10px] font-medium text-[#77877e]">{product.presentation}</p>
 
-        <dl className="mt-3 grid grid-cols-2 gap-2 text-[10px]">
-          <div className="rounded-xl bg-[#f4f7f4] p-2.5">
-            <dt className="text-[#809087]">Presentación</dt>
-            <dd className="mt-1 font-bold leading-4 text-[#334a3e]">{product.presentation}</dd>
-          </div>
-          <div className="rounded-xl bg-[#f4f7f4] p-2.5">
-            <dt className="text-[#809087]">Conservación</dt>
-            <dd className="mt-1 font-bold leading-4 text-[#334a3e]">{product.storage}</dd>
-          </div>
-        </dl>
-
-        <div className="mt-auto pt-4">
+        <div className="mt-auto pt-3">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-[11px] font-semibold text-[#718279]">Precio referencial</p>
-              <p className="mt-0.5 text-xl font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
+              <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial{hasMultiplePresentations ? " desde" : ""}</p>
+              <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
             </div>
-            <span className="rounded-full bg-[#fff4e4] px-3 py-1.5 text-[10px] font-bold text-[#955d18]">Stock a confirmar</span>
+            <span className="rounded-full bg-[#fff4e4] px-2 py-1 text-[8px] font-bold text-[#955d18]">A confirmar</span>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
               href={`/kits-reactivos/${product.id}`}
-              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-[#ceded3] px-3 text-xs font-bold text-[#285b41] transition hover:border-[#8eb19d] hover:bg-[#eff6f1]"
+              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-[#ceded3] px-2 text-[11px] font-bold text-[#285b41] transition hover:border-[#8eb19d] hover:bg-[#eff6f1]"
             >
               Ver ficha <ArrowRight className="h-3.5 w-3.5" />
             </Link>
             <button
               type="button"
               onClick={() => onAdd(product)}
-              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#14744d] px-3 text-xs font-bold text-white shadow-lg shadow-[#14744d]/20 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
+              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
             >
               <ShoppingCart className="h-4 w-4" /> Añadir
             </button>
@@ -251,7 +241,7 @@ export default function KitsReactivosClient() {
   const [category, setCategory] = useState<(typeof categories)[number]>("Todos")
   const [brand, setBrand] = useState("Todas")
   const [sort, setSort] = useState("featured")
-  const [visibleCount, setVisibleCount] = useState(24)
+  const [visibleCount, setVisibleCount] = useState(32)
   const [cart, setCart] = useState<Record<string, number>>({})
   const [cartOpen, setCartOpen] = useState(false)
 
@@ -277,7 +267,7 @@ export default function KitsReactivosClient() {
     })
   }, [brand, category, query, sort])
 
-  useEffect(() => setVisibleCount(24), [brand, category, query, sort])
+  useEffect(() => setVisibleCount(32), [brand, category, query, sort])
 
   const add = (product: MolecularProduct) => {
     setCart((current) => ({ ...current, [product.id]: (current[product.id] ?? 0) + 1 }))
@@ -339,12 +329,12 @@ export default function KitsReactivosClient() {
               </div>
 
               <div className="mt-6 flex items-center justify-between"><p className="text-sm font-bold text-[#385344]">{filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}</p><span className="text-[10px] text-[#829087]">Disponibilidad a confirmar</span></div>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <AnimatePresence mode="popLayout">
                   {filtered.slice(0, visibleCount).map((product, index) => <ProductCard key={product.id} product={product} index={index} onAdd={add} />)}
                 </AnimatePresence>
               </div>
-              {visibleCount < filtered.length && <div className="mt-8 text-center"><button type="button" onClick={() => setVisibleCount((count) => count + 24)} className="min-h-11 rounded-full border border-[#b9cdbf] bg-white px-6 text-sm font-bold text-[#285b41] shadow-sm transition hover:-translate-y-0.5 hover:border-[#72a387] hover:bg-[#eff6f1]">Mostrar 24 productos más</button></div>}
+              {visibleCount < filtered.length && <div className="mt-8 text-center"><button type="button" onClick={() => setVisibleCount((count) => count + 32)} className="min-h-11 rounded-full border border-[#b9cdbf] bg-white px-6 text-sm font-bold text-[#285b41] shadow-sm transition hover:-translate-y-0.5 hover:border-[#72a387] hover:bg-[#eff6f1]">Mostrar 32 productos más</button></div>}
               {!filtered.length && <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center"><Search className="mx-auto h-8 w-8 text-[#84a08f]" /><h3 className="mt-4 text-lg font-bold">No encontramos esa referencia</h3><p className="mt-2 text-sm text-[#74857b]">Prueba con otro término o solicita una búsqueda especial.</p></div>}
 
               <div className="mt-8 rounded-[26px] border border-[#ead9ba] bg-[#fff9ee] p-5 text-sm leading-6 text-[#715b35]">

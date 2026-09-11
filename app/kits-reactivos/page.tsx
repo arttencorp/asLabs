@@ -66,6 +66,7 @@ const structuredData = {
           category: product.category,
           brand: { "@type": "Brand", name: product.brand },
           description: product.description,
+          image: product.image,
           url: `${SITE_URL}/kits-reactivos/${product.id}`,
           offers: {
             "@type": "Offer",
