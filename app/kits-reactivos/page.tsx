@@ -6,7 +6,7 @@ import KitsReactivosClient from "./kits-reactivos-client"
 export const metadata: Metadata = constructMetadata({
   title: "Kits, Reactivos y Medios de Cultivo en Perú",
   description:
-    "Cotiza kits, reactivos y medios de cultivo para PCR, qPCR, extracción de ADN, electroforesis y bacteriología en Perú. Más de 100 referencias en soles.",
+    "Cotiza más de 350 kits, reactivos y materiales para PCR, extracción de ADN, identificación bacteriana, electroforesis y bacteriología en Perú.",
   keywords: [
     "kits de biología molecular Perú",
     "reactivos de laboratorio Perú",
@@ -33,6 +33,12 @@ export const metadata: Metadata = constructMetadata({
     "reactivos microbiología Perú",
     "tinción de Gram Perú",
     "kits identificación bacteriana Perú",
+    "kit identificación E coli Perú",
+    "kit identificación Salmonella Perú",
+    "pruebas bioquímicas bacterianas Perú",
+    "extracción ADN bacteriano Perú",
+    "extracción ADN vegetal Perú",
+    "purificación ADN plasmídico Perú",
   ],
   path: "/kits-reactivos",
   image: "/lab-scientists.png",
@@ -47,7 +53,7 @@ const structuredData = {
       url: `${SITE_URL}/kits-reactivos`,
       name: "Kits, reactivos y medios de cultivo en Perú",
       description:
-        "Catálogo referencial con más de 100 kits, reactivos y medios para biología molecular y bacteriología con importación coordinada en Perú.",
+        "Catálogo referencial con más de 350 kits, reactivos, materiales moleculares y pruebas de identificación bacteriana con importación coordinada en Perú.",
       inLanguage: "es-PE",
       mainEntity: { "@id": `${SITE_URL}/kits-reactivos#catalog` },
     },

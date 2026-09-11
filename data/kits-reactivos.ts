@@ -12,6 +12,7 @@ export const productCategories = [
   "Consumibles PCR",
   "Materiales moleculares",
   "Bacteriología y medios",
+  "Identificación bacteriana",
 ] as const
 
 export type ProductCategory = (typeof productCategories)[number]

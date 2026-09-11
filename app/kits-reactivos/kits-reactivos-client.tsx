@@ -7,6 +7,8 @@ import { AnimatePresence, motion } from "framer-motion"
 import {
   ArrowRight,
   Beaker,
+  ChevronLeft,
+  ChevronRight,
   Dna,
   FlaskConical,
   Minus,
@@ -34,6 +36,7 @@ import {
 } from "@/data/kits-reactivos"
 
 const categories = ["Todos", ...productCategories] as const
+const PAGE_SIZE = 24
 
 const brands = [
   { name: "Fisher Scientific", detail: "Kits y reactivos", tone: "text-[#e85b2a]" },
@@ -78,7 +81,7 @@ function ProductCard({
       <div className="relative h-32 overflow-hidden border-b border-[#edf1ee] bg-white sm:h-36">
         <Image
           src={product.image}
-          alt={`Fotografía real de ${product.name}`}
+          alt={product.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-contain p-3 transition duration-500 group-hover:scale-[1.04]"
@@ -97,12 +100,9 @@ function ProductCard({
         <p className="mt-2 line-clamp-1 text-[10px] font-medium text-[#77877e]">{product.presentation}</p>
 
         <div className="mt-auto pt-3">
-          <div className="flex items-end justify-between gap-3">
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial{hasMultiplePresentations ? " desde" : ""}</p>
-              <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
-            </div>
-            <span className="rounded-full bg-[#fff4e4] px-2 py-1 text-[8px] font-bold text-[#955d18]">A confirmar</span>
+          <div>
+            <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial{hasMultiplePresentations ? " desde" : ""}</p>
+            <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
@@ -241,7 +241,7 @@ export default function KitsReactivosClient() {
   const [category, setCategory] = useState<(typeof categories)[number]>("Todos")
   const [brand, setBrand] = useState("Todas")
   const [sort, setSort] = useState("featured")
-  const [visibleCount, setVisibleCount] = useState(32)
+  const [currentPage, setCurrentPage] = useState(1)
   const [cart, setCart] = useState<Record<string, number>>({})
   const [cartOpen, setCartOpen] = useState(false)
 
@@ -267,7 +267,19 @@ export default function KitsReactivosClient() {
     })
   }, [brand, category, query, sort])
 
-  useEffect(() => setVisibleCount(32), [brand, category, query, sort])
+  useEffect(() => setCurrentPage(1), [brand, category, query, sort])
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const pageProducts = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+  const pageItems = useMemo(() => {
+    const pages = new Set([1, pageCount, currentPage - 1, currentPage, currentPage + 1])
+    return [...pages].filter((page) => page >= 1 && page <= pageCount).sort((a, b) => a - b)
+  }, [currentPage, pageCount])
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.min(Math.max(page, 1), pageCount))
+    window.requestAnimationFrame(() => document.getElementById("catalog-results")?.scrollIntoView({ behavior: "smooth", block: "start" }))
+  }
 
   const add = (product: MolecularProduct) => {
     setCart((current) => ({ ...current, [product.id]: (current[product.id] ?? 0) + 1 }))
@@ -328,13 +340,24 @@ export default function KitsReactivosClient() {
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center justify-between"><p className="text-sm font-bold text-[#385344]">{filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}</p><span className="text-[10px] text-[#829087]">Disponibilidad a confirmar</span></div>
+              <div id="catalog-results" className="mt-6 scroll-mt-28 flex items-center justify-between"><p className="text-sm font-bold text-[#385344]">{filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}</p><span className="text-[10px] font-semibold text-[#829087]">Página {currentPage} de {pageCount}</span></div>
               <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <AnimatePresence mode="popLayout">
-                  {filtered.slice(0, visibleCount).map((product, index) => <ProductCard key={product.id} product={product} index={index} onAdd={add} />)}
+                  {pageProducts.map((product, index) => <ProductCard key={product.id} product={product} index={index} onAdd={add} />)}
                 </AnimatePresence>
               </div>
-              {visibleCount < filtered.length && <div className="mt-8 text-center"><button type="button" onClick={() => setVisibleCount((count) => count + 32)} className="min-h-11 rounded-full border border-[#b9cdbf] bg-white px-6 text-sm font-bold text-[#285b41] shadow-sm transition hover:-translate-y-0.5 hover:border-[#72a387] hover:bg-[#eff6f1]">Mostrar 32 productos más</button></div>}
+              {filtered.length > PAGE_SIZE && (
+                <nav aria-label="Paginación del catálogo" className="mt-9 flex flex-wrap items-center justify-center gap-2">
+                  <button type="button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} aria-label="Página anterior" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1] disabled:cursor-not-allowed disabled:opacity-35"><ChevronLeft className="h-4 w-4" /></button>
+                  {pageItems.map((page, index) => (
+                    <div key={page} className="contents">
+                      {index > 0 && pageItems[index - 1] !== page - 1 && <span className="px-1 text-[#8b9b91]">…</span>}
+                      <button type="button" onClick={() => goToPage(page)} aria-current={page === currentPage ? "page" : undefined} className={`h-10 min-w-10 rounded-xl px-3 text-xs font-bold transition ${page === currentPage ? "bg-[#14744d] text-white shadow-md shadow-[#14744d]/20" : "border border-[#ceded3] bg-white text-[#486052] hover:border-[#78a48a] hover:bg-[#eff6f1]"}`}>{page}</button>
+                    </div>
+                  ))}
+                  <button type="button" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === pageCount} aria-label="Página siguiente" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1] disabled:cursor-not-allowed disabled:opacity-35"><ChevronRight className="h-4 w-4" /></button>
+                </nav>
+              )}
               {!filtered.length && <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center"><Search className="mx-auto h-8 w-8 text-[#84a08f]" /><h3 className="mt-4 text-lg font-bold">No encontramos esa referencia</h3><p className="mt-2 text-sm text-[#74857b]">Prueba con otro término o solicita una búsqueda especial.</p></div>}
 
               <div className="mt-8 rounded-[26px] border border-[#ead9ba] bg-[#fff9ee] p-5 text-sm leading-6 text-[#715b35]">
