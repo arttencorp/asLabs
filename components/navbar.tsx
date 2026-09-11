@@ -40,23 +40,7 @@ type NavGroup = {
 
 const navigation: NavGroup[] = [
   { label: "Nosotros", href: "/sobre-nosotros" },
-  {
-    label: "Biotecnología",
-    links: [
-      {
-        label: "Biotecnología vegetal",
-        href: "/biotecnologia-vegetal",
-        description: "Fundamentos y aplicaciones en el campo",
-        icon: Leaf,
-      },
-      {
-        label: "Genética",
-        href: "/genetica",
-        description: "Genética molecular, PCR y plásmidos",
-        icon: FlaskConical,
-      },
-    ],
-  },
+  { label: "Kits y Reactivos", href: "/kits-reactivos" },
   {
     label: "Servicios",
     href: "/servicios",

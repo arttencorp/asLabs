@@ -90,8 +90,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/tienda" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
-                  Tienda
+                <Link href="/kits-reactivos" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
+                  Kits y Reactivos
                 </Link>
               </li>
             </ul>

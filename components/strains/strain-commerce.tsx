@@ -122,7 +122,7 @@ const catalogCopy = {
     eyebrow: "Microorganismos de referencia",
     title: "Cepas ATCC para resultados comparables y trazables",
     description:
-      "Catálogo especializado de microorganismos de referencia para control de calidad, validación de métodos e investigación.",
+      "Catálogo especializado de microorganismos de referencia cuya importación gestionamos exclusivamente para investigación y docencia.",
     shortLabel: "ATCC",
     countLabel: "referencias disponibles",
     breadcrumb: "Cepas ATCC",
@@ -286,6 +286,12 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
           <p className="mt-6 max-w-2xl text-base leading-7 text-white/[0.92] drop-shadow-[0_2px_12px_rgba(0,0,0,.45)] sm:text-lg">
             {heroDescription}
           </p>
+          {kind === "atcc" && market === "peru" && (
+            <div className="mt-6 flex max-w-2xl gap-3 rounded-2xl border border-amber-200/25 bg-amber-100/10 p-4 text-sm leading-6 text-amber-50 backdrop-blur-md">
+              <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-200" />
+              <p><strong>Precio referencial.</strong> Solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.</p>
+            </div>
+          )}
         </motion.div>
 
         <motion.div
@@ -416,6 +422,11 @@ function StrainCard({
               <DhlBadge />
             </div>
           </div>
+          {kind === "atcc" && market === "peru" && (
+            <p className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[10px] leading-4 text-amber-900">
+              <strong>Precio referencial.</strong> Solo para investigación y docencia. AS Labs gestiona únicamente la importación de la cepa; no realiza su venta.
+            </p>
+          )}
           <div className={`grid gap-2 ${market === "peru" ? "grid-cols-2" : "grid-cols-1"}`}>
             {market === "peru" && <Link
               href={`${copy.catalogPath}/${strain.id}`}
@@ -655,6 +666,11 @@ function CartDrawer({
                     <dd className="text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(total, market)}</dd>
                   </div>
                 </dl>
+                {kind === "atcc" && market === "peru" && (
+                  <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[10px] leading-4 text-amber-900">
+                    <strong>Precio referencial.</strong> Solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={requestQuote}
@@ -953,8 +969,8 @@ function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | 
   const faqs = isAtcc
     ? [
         ["¿Qué documentación acompaña a una cepa ATCC?", "La documentación aplicable se confirma según la referencia seleccionada y el alcance del pedido."],
-        ["¿El precio incluye importación y entrega?", "La interfaz separa el valor referencial de la cepa y la logística internacional estimada. La cotización final depende del destino y disponibilidad."],
-        ["¿Puedo solicitar una cepa para control de calidad?", "Sí. Indica el método, microorganismo y uso previsto para recibir orientación sobre la referencia adecuada."],
+        ["¿El precio incluye importación y entrega?", "El precio es referencial. AS Labs gestiona la importación y la logística se confirma según destino y disponibilidad."],
+        ["¿Para qué usos se gestiona la importación?", "Exclusivamente para investigación y docencia, sujeto a la validación del uso previsto y los requisitos aplicables."],
       ]
     : [
         ["¿Para qué se utilizan las cepas identificadas?", "Se emplean en investigación, docencia y proyectos de desarrollo microbiológico, de acuerdo con la ficha y el uso previsto."],
@@ -967,15 +983,15 @@ function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[1fr_0.9fr]">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Compra informada</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">{isAtcc ? "Solicitud informada" : "Compra informada"}</p>
             <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-emerald-950 sm:text-4xl">
               {isAtcc
-                ? "Solicita cepas ATCC de referencia con acompañamiento especializado"
+                ? "Solicita la gestión de importación de cepas ATCC"
                 : market === "ecuador" ? "Selecciona cepas microbianas identificadas con información clara" : "Compra cepas microbianas identificadas en Perú con información clara"}
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
               {isAtcc
-                ? "Selecciona la referencia, revisa sus características y arma una solicitud sin perder el contexto técnico. La disponibilidad, documentación y logística se validan antes de confirmar."
+                ? "Selecciona la referencia para investigación o docencia y arma una solicitud con contexto técnico. AS Labs no vende las cepas: valida disponibilidad, documentación y logística para gestionar su importación."
                 : "Compara especies, códigos, presentaciones y aplicaciones desde un mismo catálogo. El equipo de AS Laboratorios confirma la compatibilidad de la referencia con el objetivo declarado."}
             </p>
             {market === "peru" && <Link
@@ -1083,7 +1099,7 @@ function detailBenefits(strain: StrainItem, kind: CatalogKind) {
 
 function detailApplications(strain: StrainItem, kind: CatalogKind) {
   if (kind === "atcc") {
-    return ["Control de calidad microbiológico", "Validación o verificación de métodos", "Docencia e investigación comparativa"]
+    return ["Investigación microbiológica", "Docencia práctica", "Desarrollo y comparación de métodos académicos"]
   }
   const category = strain.categoria.toLocaleLowerCase("es")
   if (category.includes("biocontrol")) return ["Ensayos de antagonismo", "Investigación agrícola", "Desarrollo de biocontroladores"]
@@ -1271,7 +1287,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                 <div>
                   <h2 className="font-bold text-amber-950">Uso profesional y responsable</h2>
                   <p className="mt-2 text-sm leading-6 text-amber-900/75">
-                    La referencia se entrega para el uso declarado y bajo las condiciones técnicas aplicables. Confirma requisitos, documentación y manipulación con el equipo antes de comprar.
+                    La referencia se entrega para el uso declarado y bajo las condiciones técnicas aplicables. Confirma requisitos, documentación y manipulación con el equipo antes de solicitarla.
                   </p>
                 </div>
               </div>
@@ -1287,6 +1303,11 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                   <span className="h-2 w-2 rounded-full bg-emerald-500" />
                   Disponibilidad a confirmar
                 </p>
+                {kind === "atcc" && (
+                  <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[10px] normal-case leading-4 tracking-normal text-amber-900">
+                    Solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.
+                  </p>
+                )}
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between">
