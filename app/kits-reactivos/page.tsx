@@ -4,9 +4,9 @@ import { getProductReferencePricePen, molecularProducts, REFERENCE_SHIPPING_PEN 
 import KitsReactivosClient from "./kits-reactivos-client"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Kits y Reactivos de Biología Molecular en Perú",
+  title: "Kits, Reactivos y Medios de Cultivo en Perú",
   description:
-    "Cotiza kits y reactivos para PCR, qPCR, extracción de ADN y electroforesis en Perú. Catálogo Fisher Scientific en soles, importación y envío coordinados.",
+    "Cotiza kits, reactivos y medios de cultivo para PCR, qPCR, extracción de ADN, electroforesis y bacteriología en Perú. Más de 100 referencias en soles.",
   keywords: [
     "kits de biología molecular Perú",
     "reactivos de laboratorio Perú",
@@ -27,9 +27,15 @@ export const metadata: Metadata = constructMetadata({
     "ensayo de citotoxicidad LDH Perú",
     "CyQUANT LDH Cytotoxicity Assay",
     "importación de reactivos de laboratorio",
+    "medios de cultivo bacteriología Perú",
+    "MacConkey agar Perú",
+    "Mueller Hinton agar Perú",
+    "reactivos microbiología Perú",
+    "tinción de Gram Perú",
+    "kits identificación bacteriana Perú",
   ],
   path: "/kits-reactivos",
-  image: "/laboratory-research.png",
+  image: "/lab-scientists.png",
 })
 
 const structuredData = {
@@ -39,9 +45,9 @@ const structuredData = {
       "@type": "CollectionPage",
       "@id": `${SITE_URL}/kits-reactivos#page`,
       url: `${SITE_URL}/kits-reactivos`,
-      name: "Kits y reactivos de biología molecular en Perú",
+      name: "Kits, reactivos y medios de cultivo en Perú",
       description:
-        "Catálogo referencial de kits y reactivos para PCR, qPCR, extracción de ADN y electroforesis con importación coordinada en Perú.",
+        "Catálogo referencial con más de 100 kits, reactivos y medios para biología molecular y bacteriología con importación coordinada en Perú.",
       inLanguage: "es-PE",
       mainEntity: { "@id": `${SITE_URL}/kits-reactivos#catalog` },
     },
@@ -60,7 +66,7 @@ const structuredData = {
           category: product.category,
           brand: { "@type": "Brand", name: product.brand },
           description: product.description,
-          url: `${SITE_URL}/kits-reactivos#${product.id}`,
+          url: `${SITE_URL}/kits-reactivos/${product.id}`,
           offers: {
             "@type": "Offer",
             priceCurrency: "PEN",

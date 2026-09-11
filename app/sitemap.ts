@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next"
 import { excellentServices } from "@/data/excellent-catalog"
+import { molecularProducts } from "@/data/kits-reactivos"
 
 const SITE_URL = "https://aslaboratorios.com"
-const LAST_MODIFIED = new Date("2026-09-10")
+const LAST_MODIFIED = new Date("2026-09-11")
 
 const pages = [
   ["", "weekly", 1],
@@ -69,5 +70,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.86,
   }))
 
-  return [...primaryPages, ...catalogPages, ...excellentCatalogPages]
+  const molecularCatalogPages: MetadataRoute.Sitemap = molecularProducts.map((product) => ({
+    url: `${SITE_URL}/kits-reactivos/${product.id}`,
+    lastModified: LAST_MODIFIED,
+    changeFrequency: "monthly",
+    priority: 0.72,
+  }))
+
+  return [...primaryPages, ...catalogPages, ...excellentCatalogPages, ...molecularCatalogPages]
 }
