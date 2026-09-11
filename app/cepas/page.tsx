@@ -22,7 +22,7 @@ import { constructMetadata } from "@/lib/metadata"
 
 export const metadata: Metadata = constructMetadata({
   title: "Cepas Bacterianas y Cepas ATCC en Perú",
-  description: "Cepas identificadas y microorganismos de referencia ATCC para investigación, docencia, control de calidad y validación de métodos en Perú.",
+  description: "Cepas identificadas y gestión de importación de microorganismos ATCC con precios referenciales para investigación y docencia en Perú.",
   keywords: ["cepas microbianas Perú", "cepas ATCC Perú", "cepas bacterianas", "microorganismos de referencia", "control de calidad microbiológico", "banco de cepas"],
   path: "/cepas",
   image: "/lab-header-bg.jpg",
@@ -35,7 +35,7 @@ export const metadata: Metadata = constructMetadata({
 
 const comparison = [
   { label: "Origen", identified: "Colección identificada por AS Laboratorios", atcc: "Colección internacional de referencia" },
-  { label: "Uso recomendado", identified: "Investigación, docencia y desarrollo", atcc: "Validación, controles y métodos estandarizados" },
+  { label: "Uso recomendado", identified: "Investigación, docencia y desarrollo", atcc: "Investigación, docencia y comparación académica" },
   { label: "Preparación", identified: "Cultivo bajo solicitud", atcc: "Gestión según disponibilidad de la colección" },
   { label: "Documentación", identified: "Identificación y ficha de la cepa", atcc: "Documentación oficial de referencia" },
 ]
@@ -60,8 +60,12 @@ export default function CepasPage() {
                 Cepas confiables para resultados reproducibles.
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white/[0.9] drop-shadow-[0_2px_10px_rgba(0,0,0,.45)] md:text-lg">
-                Accede a cepas identificadas y microorganismos de referencia ATCC para investigación, docencia, control de calidad y validación de métodos.
+                Accede a cepas identificadas y solicita la gestión de importación de microorganismos ATCC para investigación y docencia.
               </p>
+              <div className="mt-5 flex max-w-2xl gap-3 rounded-2xl border border-[#ffd18c]/30 bg-[#ffd18c]/10 p-4 text-sm leading-6 text-white/[0.9] backdrop-blur-md">
+                <FileCheck2 className="mt-0.5 h-5 w-5 shrink-0 text-[#ffd18c]" />
+                <p><strong>Cepas ATCC:</strong> precio referencial, solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.</p>
+              </div>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href="/cepas/identificadas" className="inline-flex items-center gap-2 rounded-full bg-[#f0a23a] px-6 py-3.5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc56f]">Ver cepas identificadas <ArrowRight className="h-4 w-4" /></Link>
                 <Link href="/cepas/atcc" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20">Explorar cepas ATCC <Globe2 className="h-4 w-4" /></Link>
@@ -100,7 +104,7 @@ export default function CepasPage() {
             <Link href="/cepas/atcc" className="group relative flex min-h-[500px] flex-col overflow-hidden rounded-[2rem] border border-[#dce5de] bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-9">
               <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full border border-[#dce5de]" /><div className="absolute -right-4 top-4 h-36 w-36 rounded-full border border-[#e6ece7]" />
               <div className="relative flex items-center justify-between"><div className="grid h-14 w-14 place-items-center rounded-2xl bg-[#eaf2ec] text-[#245f3e]"><Globe2 className="h-7 w-7" /></div><span className="rounded-full bg-[#edf3ee] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-[#4e755d]">Referencia global</span></div>
-              <div className="relative mt-16"><p className="text-xs font-bold uppercase tracking-[.18em] text-[#4e7d5f]">Cepas ATCC</p><h3 className="mt-3 text-3xl font-bold tracking-[-.03em] md:text-4xl">Estándares para control y validación</h3><p className="mt-4 max-w-xl text-sm leading-6 text-[#687970] md:text-base">Microorganismos de referencia internacional con documentación oficial para métodos que demandan identidad y trazabilidad estandarizadas.</p></div>
+              <div className="relative mt-16"><p className="text-xs font-bold uppercase tracking-[.18em] text-[#4e7d5f]">Cepas ATCC</p><h3 className="mt-3 text-3xl font-bold tracking-[-.03em] md:text-4xl">Referencias para investigación y docencia</h3><p className="mt-4 max-w-xl text-sm leading-6 text-[#687970] md:text-base">Microorganismos de referencia internacional cuya importación gestionamos para trabajos académicos y científicos que requieren identidad y trazabilidad.</p></div>
               <ul className="relative mt-8 grid gap-3 text-sm text-[#53685d] sm:grid-cols-2">
                 <Feature text="Referencia certificada" dark /><Feature text="Documentación ATCC" dark /><Feature text="Gestión de importación" dark /><Feature text="Consulta de disponibilidad" dark />
               </ul>
@@ -111,7 +115,7 @@ export default function CepasPage() {
 
         <section data-navbar-theme="light" className="bg-[#eaf0ea] px-4 py-20 md:py-28">
           <div className="mx-auto max-w-6xl">
-            <div className="grid gap-10 lg:grid-cols-[.68fr_1.32fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#4e7d5f]">Comparación rápida</p><h2 className="mt-4 text-3xl font-bold tracking-[-.035em] md:text-5xl">Encuentra la opción adecuada</h2></div><p className="max-w-2xl text-base leading-7 text-[#687970] lg:justify-self-end">La elección depende del uso previsto. Para validaciones normativas o controles de referencia, una cepa ATCC suele ser la opción indicada.</p></div>
+            <div className="grid gap-10 lg:grid-cols-[.68fr_1.32fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#4e7d5f]">Comparación rápida</p><h2 className="mt-4 text-3xl font-bold tracking-[-.035em] md:text-5xl">Encuentra la opción adecuada</h2></div><p className="max-w-2xl text-base leading-7 text-[#687970] lg:justify-self-end">La elección depende del uso previsto. La gestión de importación de cepas ATCC está disponible exclusivamente para investigación y docencia.</p></div>
             <div className="mt-12 hidden overflow-hidden rounded-[2rem] border border-[#d7e1d9] bg-white md:block">
               <div className="grid grid-cols-[.55fr_1fr_1fr] bg-[#173f2d] px-6 py-5 text-xs font-bold uppercase tracking-[.15em] text-white"><span>Criterio</span><span>Cepas identificadas</span><span>Cepas ATCC</span></div>
               {comparison.map((row) => <div key={row.label} className="grid grid-cols-[.55fr_1fr_1fr] border-t border-[#e4ebe5] px-6 py-5 text-sm"><span className="font-bold text-[#31483d]">{row.label}</span><span className="pr-6 leading-6 text-[#687970]">{row.identified}</span><span className="leading-6 text-[#687970]">{row.atcc}</span></div>)}

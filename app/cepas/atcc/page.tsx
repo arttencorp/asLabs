@@ -5,15 +5,15 @@ import { atccStrains } from "@/data/cepas-seo"
 import ATCCEnhancedClient from "./atcc-enhanced-client"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Cepas ATCC en Perú: Microorganismos de Referencia",
+  title: "Importación de Cepas ATCC en Perú para Investigación",
   description:
-    "Solicita cepas ATCC de referencia en Perú para control de calidad, validación de métodos, docencia e investigación. Revisa códigos, formatos y trazabilidad.",
+    "Gestión de importación de cepas ATCC en Perú exclusivamente para investigación y docencia. Precios referenciales, códigos, formatos y trazabilidad.",
   keywords: [
-    "comprar cepas ATCC Perú",
+    "importación de cepas ATCC Perú",
     "cepas ATCC en Perú",
     "microorganismos de referencia",
-    "cepas para control de calidad microbiológico",
-    "cepas para validación de métodos",
+    "cepas ATCC para investigación",
+    "cepas ATCC para docencia",
     "Bacillus subtilis ATCC",
     "Escherichia coli ATCC 25922",
     "colección ATCC Perú",

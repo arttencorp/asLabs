@@ -31,7 +31,7 @@ export function StrainCatalogStructuredData({ kind, strains, market = "peru" }: 
   const path = isEcuador ? "/ecuador/cepas" : isAtcc ? "/cepas/atcc" : "/cepas/identificadas"
   const name = isEcuador ? "Catálogo de cepas bacterianas identificadas para Ecuador" : isAtcc ? "Catálogo de cepas ATCC en Perú" : "Catálogo de cepas identificadas en Perú"
   const description = isAtcc
-    ? "Microorganismos ATCC de referencia para control de calidad, validación de métodos, docencia e investigación."
+    ? "Gestión de importación de microorganismos ATCC de referencia, exclusivamente para investigación y docencia. AS Laboratorios no realiza su venta."
     : "Cepas bacterianas y fúngicas identificadas para investigación, biofertilización, biocontrol y docencia."
   const questions = isAtcc
     ? [
@@ -43,12 +43,12 @@ export function StrainCatalogStructuredData({ kind, strains, market = "peru" }: 
         {
           question: "¿El precio de una cepa ATCC incluye importación y entrega?",
           answer:
-            "La cotización separa el valor referencial de la cepa y la logística internacional estimada. El total final depende del destino y disponibilidad.",
+            "El precio es referencial. AS Laboratorios solo gestiona la importación de la cepa y no realiza su venta. La logística final depende del destino y disponibilidad.",
         },
         {
           question: "¿Puedo solicitar una cepa ATCC para control de calidad?",
           answer:
-            "Sí. AS Laboratorios atiende solicitudes para control de calidad, validación de métodos, docencia e investigación.",
+            "El servicio de importación se ofrece exclusivamente para investigación y docencia, sujeto a validación del uso previsto y requisitos aplicables.",
         },
       ]
     : [
@@ -148,15 +148,18 @@ export function StrainDetailStructuredData({ kind, strains, id }: DetailSeoProps
           "@type": "Brand",
           name: isAtcc ? "ATCC" : "AS Laboratorios",
         },
-        seller: {
-          "@type": "Organization",
-          "@id": `${SITE_URL}/#organization`,
-          name: "AS Laboratorios",
-          url: SITE_URL,
-        },
+        ...(isAtcc ? {} : {
+          seller: {
+            "@type": "Organization",
+            "@id": `${SITE_URL}/#organization`,
+            name: "AS Laboratorios",
+            url: SITE_URL,
+          },
+        }),
         additionalProperty: [
           { "@type": "PropertyValue", name: "Nivel de bioseguridad", value: "BSL-1" },
           { "@type": "PropertyValue", name: "Código de referencia", value: strain.code },
+          ...(isAtcc ? [{ "@type": "PropertyValue", name: "Rol de AS Laboratorios", value: "Gestión de importación; no venta" }] : []),
         ],
       },
       {

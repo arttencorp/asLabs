@@ -90,8 +90,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/tienda" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
-                  Tienda
+                <Link href="/kits-reactivos" className="text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
+                  Kits y Reactivos
                 </Link>
               </li>
             </ul>
@@ -248,13 +248,6 @@ export default function Footer() {
               </Link>
               <Link href="/legal" className="text-gray-400 hover:text-white transition-colors">
                 Cookies
-              </Link>
-              <Link
-                href="/libro-de-reclamaciones"
-                className="inline-flex items-center gap-1.5 font-semibold text-red-400 hover:text-red-300 transition-colors"
-              >
-                <span aria-hidden="true">📕</span>
-                Libro de Reclamaciones
               </Link>
             </div>
           </div>
