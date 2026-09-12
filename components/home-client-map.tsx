@@ -100,7 +100,7 @@ export default function HomeClientMap() {
               ))}
 
               <AnimatePresence>
-                {showPeru && <motion.div initial={{ opacity: 0, x: 16, scale: 0.97 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: 10 }} transition={{ duration: 0.28 }} className="absolute bottom-6 right-6 z-30 hidden w-[390px] rounded-[1.4rem] border border-[#d3dfd4] bg-white/[0.97] p-4 shadow-[0_26px_65px_-24px_rgba(13,48,36,0.55)] backdrop-blur-md lg:block"><PeruDetail /></motion.div>}
+                {showPeru && <motion.div initial={{ opacity: 0, x: -16, scale: 0.97 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.28 }} className="absolute left-[36%] top-1/2 z-30 hidden w-[390px] -translate-y-1/2 rounded-[1.4rem] border border-[#d3dfd4] bg-white/[0.97] p-4 shadow-[0_26px_65px_-24px_rgba(13,48,36,0.55)] backdrop-blur-md lg:block"><PeruDetail /></motion.div>}
               </AnimatePresence>
             </div>
           </div>
