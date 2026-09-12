@@ -26,7 +26,6 @@ export type MolecularProduct = {
   category: ProductCategory
   description: string
   longDescription?: string
-  sourcePriceUsd?: number
   pricePen?: number
   image: string
   storage: string
@@ -34,17 +33,14 @@ export type MolecularProduct = {
   specifications?: Array<{ label: string; value: string }>
 }
 
-export const REFERENCE_EXCHANGE_RATE = 3.5
-export const COMMERCIAL_FACTOR = 1.4
 export const REFERENCE_SHIPPING_PEN = 250
 
-export function getReferencePricePen(sourcePriceUsd: number) {
-  return Math.ceil((sourcePriceUsd * REFERENCE_EXCHANGE_RATE * COMMERCIAL_FACTOR) / 10) * 10
+export function hasVerifiedProductPrice(product: MolecularProduct) {
+  return typeof product.pricePen === "number" && Number.isFinite(product.pricePen) && product.pricePen > 0
 }
 
 export function getProductReferencePricePen(product: MolecularProduct) {
-  if (typeof product.pricePen === "number") return product.pricePen
-  return getReferencePricePen(product.sourcePriceUsd ?? 0)
+  return hasVerifiedProductPrice(product) ? product.pricePen! : null
 }
 
 const fixedPriceProducts: MolecularProduct[] = [

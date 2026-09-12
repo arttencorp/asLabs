@@ -74,14 +74,18 @@ const structuredData = {
           description: product.description,
           image: product.image,
           url: `${SITE_URL}/kits-reactivos/${product.id}`,
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "PEN",
-            price: getProductReferencePricePen(product),
-            availability: "https://schema.org/PreOrder",
-            seller: { "@type": "Organization", name: "AS Laboratorios" },
-            description: "Precio referencial sujeto a stock, tipo de cambio y cotización final.",
-          },
+          ...(getProductReferencePricePen(product) !== null
+            ? {
+                offers: {
+                  "@type": "Offer",
+                  priceCurrency: "PEN",
+                  price: getProductReferencePricePen(product),
+                  availability: "https://schema.org/PreOrder",
+                  seller: { "@type": "Organization", name: "AS Laboratorios" },
+                  description: "Precio verificado para esta presentación; sujeto a disponibilidad y cotización final.",
+                },
+              }
+            : {}),
         },
       })),
     },
@@ -100,10 +104,10 @@ const structuredData = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "¿Los precios de kits y reactivos son finales?",
+          name: "¿Cómo se confirma el precio de kits y reactivos?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "No. Todos los precios son referenciales y la cotización final depende del tipo de cambio, stock, presentación, conservación y condiciones de importación.",
+            text: "Cada referencia sin precio verificado se cotiza individualmente según presentación, precio vigente del fabricante, tipo de cambio, stock, conservación y condiciones de importación. No se calcula un total hasta completar esa validación.",
           },
         },
         {

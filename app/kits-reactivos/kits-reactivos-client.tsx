@@ -29,6 +29,7 @@ import Footer from "@/components/footer"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   getProductReferencePricePen,
+  hasVerifiedProductPrice,
   molecularProducts,
   productCategories,
   REFERENCE_SHIPPING_PEN,
@@ -65,7 +66,6 @@ function ProductCard({
   onAdd: (product: MolecularProduct) => void
 }) {
   const price = getProductReferencePricePen(product)
-  const hasMultiplePresentations = product.presentation.includes("presentaciones")
 
   return (
     <motion.article
@@ -101,8 +101,17 @@ function ProductCard({
 
         <div className="mt-auto pt-3">
           <div>
-            <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial{hasMultiplePresentations ? " desde" : ""}</p>
-            <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
+            {price !== null ? (
+              <>
+                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio verificado</p>
+                <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
+              </>
+            ) : (
+              <>
+                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio</p>
+                <p className="mt-0.5 text-sm font-black tracking-[-.02em] text-[#0b4a33]">Bajo cotización</p>
+              </>
+            )}
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
@@ -116,7 +125,7 @@ function ProductCard({
               onClick={() => onAdd(product)}
               className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
             >
-              <ShoppingCart className="h-4 w-4" /> Añadir
+              <ShoppingCart className="h-4 w-4" /> {price !== null ? "Añadir" : "Cotizar"}
             </button>
           </div>
         </div>
@@ -168,16 +177,19 @@ function CartDrawer({
 }) {
   const entries = molecularProducts.filter((product) => (cart[product.id] ?? 0) > 0)
   const units = entries.reduce((total, product) => total + cart[product.id], 0)
-  const subtotal = entries.reduce((total, product) => total + getProductReferencePricePen(product) * cart[product.id], 0)
-  const total = subtotal + (entries.length ? REFERENCE_SHIPPING_PEN : 0)
+  const allPricesVerified = entries.length > 0 && entries.every(hasVerifiedProductPrice)
+  const subtotal = allPricesVerified
+    ? entries.reduce((total, product) => total + getProductReferencePricePen(product)! * cart[product.id], 0)
+    : null
+  const total = subtotal === null ? null : subtotal + REFERENCE_SHIPPING_PEN
   const message = [
-    "Hola, deseo solicitar una cotización referencial de kits y reactivos:",
+    "Hola, deseo solicitar una cotización de kits y reactivos:",
     "",
     ...entries.map((product) => `• ${product.name} (${product.catalogNumber}) — ${cart[product.id]} unidad(es)`),
     "",
-    `Subtotal referencial: ${money(subtotal)}`,
-    `Envío referencial: ${money(REFERENCE_SHIPPING_PEN)}`,
-    `Total referencial: ${money(total)}`,
+    ...(subtotal !== null && total !== null
+      ? [`Subtotal: ${money(subtotal)}`, `Envío referencial: ${money(REFERENCE_SHIPPING_PEN)}`, `Total referencial: ${money(total)}`]
+      : ["Precio, presentación, importación y envío: por confirmar en cotización."]),
     "",
     "Por favor, confirmen disponibilidad, tipo de cambio y plazo de importación.",
   ].join("\n")
@@ -195,6 +207,7 @@ function CartDrawer({
             <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7">
               {entries.length ? entries.map((product) => {
                 const quantity = cart[product.id]
+                const price = getProductReferencePricePen(product)
                 return (
                   <article key={product.id} className="mb-3 rounded-3xl border border-[#dfe8e2] bg-white p-4 shadow-sm">
                     <div className="flex items-start gap-3">
@@ -208,7 +221,7 @@ function CartDrawer({
                         <span className="w-8 text-center text-sm font-bold">{quantity}</span>
                         <button type="button" onClick={() => onSet(product.id, quantity + 1)} aria-label="Aumentar cantidad" className="grid h-8 w-8 place-items-center rounded-full hover:bg-white"><Plus className="h-3.5 w-3.5" /></button>
                       </div>
-                      <p className="font-black text-[#0d5137]">{money(getProductReferencePricePen(product) * quantity)}</p>
+                      <p className="font-black text-[#0d5137]">{price !== null ? money(price * quantity) : "Bajo cotización"}</p>
                     </div>
                   </article>
                 )
@@ -218,11 +231,18 @@ function CartDrawer({
             </div>
             {entries.length > 0 && (
               <footer className="max-h-[48vh] overflow-y-auto border-t border-[#dfe8e2] bg-white px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 sm:px-7">
-                <dl className="space-y-3 text-sm">
-                  <div className="flex justify-between text-[#66786e]"><dt>Subtotal · {units} {units === 1 ? "unidad" : "unidades"}</dt><dd className="font-bold text-[#2d4639]">{money(subtotal)}</dd></div>
-                  <div className="flex justify-between text-[#66786e]"><dt className="flex items-center gap-2"><Truck className="h-4 w-4" />Envío referencial</dt><dd className="font-bold text-[#2d4639]">{money(REFERENCE_SHIPPING_PEN)}</dd></div>
-                  <div className="flex items-end justify-between border-t border-dashed border-[#dfe8e2] pt-4"><dt><span className="block font-bold text-[#173f2d]">Total estimado</span><span className="text-[10px] text-[#829087]">Sujeto a cotización final</span></dt><dd className="text-2xl font-black text-[#0d5137]">{money(total)}</dd></div>
-                </dl>
+                {subtotal !== null && total !== null ? (
+                  <dl className="space-y-3 text-sm">
+                    <div className="flex justify-between text-[#66786e]"><dt>Subtotal · {units} {units === 1 ? "unidad" : "unidades"}</dt><dd className="font-bold text-[#2d4639]">{money(subtotal)}</dd></div>
+                    <div className="flex justify-between text-[#66786e]"><dt className="flex items-center gap-2"><Truck className="h-4 w-4" />Envío referencial</dt><dd className="font-bold text-[#2d4639]">{money(REFERENCE_SHIPPING_PEN)}</dd></div>
+                    <div className="flex items-end justify-between border-t border-dashed border-[#dfe8e2] pt-4"><dt><span className="block font-bold text-[#173f2d]">Total estimado</span><span className="text-[10px] text-[#829087]">Sujeto a cotización final</span></dt><dd className="text-2xl font-black text-[#0d5137]">{money(total)}</dd></div>
+                  </dl>
+                ) : (
+                  <div className="rounded-2xl border border-[#ead9ba] bg-[#fff9ee] p-4">
+                    <p className="text-sm font-bold text-[#60491e]">Cotización personalizada · {units} {units === 1 ? "unidad" : "unidades"}</p>
+                    <p className="mt-1 text-xs leading-5 text-[#7b6845]">No se calculará ningún total hasta validar precio, presentación, importación y envío.</p>
+                  </div>
+                )}
                 <WhatsAppContact message={message} className="mt-5 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#14744d] px-5 text-base font-bold text-white shadow-lg shadow-[#14744d]/20 transition hover:bg-[#0f5e3e]">
                   Solicitar cotización <ArrowRight className="h-4 w-4" />
                 </WhatsAppContact>
@@ -261,8 +281,6 @@ export default function KitsReactivosClient() {
 
     return [...results].sort((a, b) => {
       if (sort === "name") return a.name.localeCompare(b.name, "es")
-      if (sort === "price-asc") return getProductReferencePricePen(a) - getProductReferencePricePen(b)
-      if (sort === "price-desc") return getProductReferencePricePen(b) - getProductReferencePricePen(a)
       return 0
     })
   }, [brand, category, query, sort])
@@ -325,7 +343,7 @@ export default function KitsReactivosClient() {
         <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div>
               <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <div className="max-w-2xl"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-2 text-3xl font-bold tracking-[-.035em] sm:text-4xl">Encuentra la referencia adecuada</h2><p className="mt-3 text-sm leading-6 text-[#687970]">Precios referenciales en soles. Confirma stock, presentación y plazo de importación antes de comprar.</p></div>
+                <div className="max-w-2xl"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-2 text-3xl font-bold tracking-[-.035em] sm:text-4xl">Encuentra la referencia adecuada</h2><p className="mt-3 text-sm leading-6 text-[#687970]">Solicita una cotización validada según presentación, stock y condiciones de importación.</p></div>
                 <button type="button" onClick={() => setCartOpen(true)} className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5"><ShoppingCart className="h-4 w-4" /> Pedido {itemCount > 0 && <span className="rounded-full bg-[#d7f2dd] px-2 py-0.5 text-[10px] text-[#173f2d]">{itemCount}</span>}</button>
               </div>
 
@@ -333,7 +351,7 @@ export default function KitsReactivosClient() {
                 <div className="grid gap-3 lg:grid-cols-[minmax(280px,1fr)_220px_190px]">
                   <label className="relative block"><Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><span className="sr-only">Buscar producto</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar producto, marca o código…" className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-11 pr-4 text-sm font-medium outline-none transition focus:border-[#72a387] focus:ring-4 focus:ring-[#72a387]/10" /></label>
                   <label className="relative"><span className="sr-only">Filtrar por marca</span><SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-11 w-full appearance-none rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-10 pr-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="Todas">Todas las marcas</option>{brandFilterOptions.slice(1).map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label><span className="sr-only">Ordenar productos</span><select value={sort} onChange={(event) => setSort(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="featured">Destacados</option><option value="name">Nombre A–Z</option><option value="price-asc">Menor precio</option><option value="price-desc">Mayor precio</option></select></label>
+                  <label><span className="sr-only">Ordenar productos</span><select value={sort} onChange={(event) => setSort(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="featured">Destacados</option><option value="name">Nombre A–Z</option></select></label>
                 </div>
                 <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
                   {categories.map((item) => <button key={item} type="button" onClick={() => setCategory(item)} className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${category === item ? "bg-[#14744d] text-white" : "bg-[#edf3ee] text-[#50685b] hover:bg-[#e0ebe3]"}`}>{item}</button>)}
@@ -361,7 +379,7 @@ export default function KitsReactivosClient() {
               {!filtered.length && <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center"><Search className="mx-auto h-8 w-8 text-[#84a08f]" /><h3 className="mt-4 text-lg font-bold">No encontramos esa referencia</h3><p className="mt-2 text-sm text-[#74857b]">Prueba con otro término o solicita una búsqueda especial.</p></div>}
 
               <div className="mt-8 rounded-[26px] border border-[#ead9ba] bg-[#fff9ee] p-5 text-sm leading-6 text-[#715b35]">
-                <div className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#9d6a1e]" /><p><strong>Condiciones referenciales.</strong> Los precios pueden variar por tipo de cambio, disponibilidad del fabricante, cadena de frío, recargos o cambios de presentación. La cotización final será confirmada por un asesor antes de cualquier pedido.</p></div>
+                <div className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#9d6a1e]" /><p><strong>Precios protegidos.</strong> No mostramos ni calculamos importes sin validación comercial. Un asesor confirmará cada precio, presentación, stock, cadena de frío y condición de importación antes de cualquier pedido.</p></div>
               </div>
           </div>
         </section>
