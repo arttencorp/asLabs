@@ -39,15 +39,6 @@ import {
 const categories = ["Todos", ...productCategories] as const
 const PAGE_SIZE = 24
 
-const brands = [
-  { name: "Fisher Scientific", detail: "Kits y reactivos", tone: "text-[#e85b2a]" },
-  { name: "HiMedia", detail: "Medios y microbiología", tone: "text-[#2859a5]" },
-  { name: "CavBio", detail: "Biología molecular", tone: "text-[#157f67]", image: "/partners/cavbio.png" },
-  { name: "Arttencorp", detail: "Equipamiento científico", tone: "text-[#643d8c]", image: "/trustUs/arttencorp.jpg" },
-  { name: "ATCC", detail: "Importación gestionada", tone: "text-[#d33345]" },
-  { name: "BIOSTELLAR", detail: "Soluciones de laboratorio", tone: "text-[#087d89]" },
-]
-
 function money(value: number) {
   return new Intl.NumberFormat("es-PE", {
     style: "currency",
@@ -131,36 +122,6 @@ function ProductCard({
         </div>
       </div>
     </motion.article>
-  )
-}
-
-function BrandStrip() {
-  return (
-    <section data-navbar-theme="light" aria-labelledby="brands-title" className="relative z-10 mx-auto -mt-5 max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div className="rounded-[24px] border border-white bg-white p-4 shadow-[0_18px_55px_-34px_rgba(7,49,33,.4)] sm:p-5">
-        <div className="flex flex-col gap-1 border-b border-[#e5ebe7] pb-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#4e7c61]">Red técnica y comercial</p>
-            <h2 id="brands-title" className="mt-0.5 text-lg font-bold tracking-[-.02em] text-[#173f2d]">Trabajamos con estas marcas</h2>
-          </div>
-          <p className="text-[10px] text-[#718178]">Disponibilidad sujeta a cada referencia.</p>
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-          {brands.map((brand) => (
-            <article key={brand.name} className="flex min-h-20 flex-col items-center justify-center rounded-xl border border-[#e3ebe5] bg-[#fafcf9] px-2 py-3 text-center transition hover:-translate-y-0.5 hover:border-[#b8d0c0] hover:bg-white hover:shadow-md">
-              {brand.image ? (
-                <div className="relative h-6 w-full">
-                  <Image src={brand.image} alt={brand.name} fill className="object-contain" />
-                </div>
-              ) : (
-                <p className={`text-sm font-black tracking-[-.025em] ${brand.tone}`}>{brand.name}</p>
-              )}
-              <p className="mt-1 text-[8px] font-semibold uppercase tracking-[.07em] text-[#829087]">{brand.detail}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
   )
 }
 
@@ -331,13 +292,10 @@ export default function KitsReactivosClient() {
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a href="#catalogo" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#efaa4a] px-5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc875]">Explorar catálogo <ArrowRight className="h-4 w-4" /></a>
                 <WhatsAppContact message="Hola, quisiera consultar el servicio de extracción de ADN." className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20"><Dna className="h-4 w-4 text-[#bfe9c8]" /><span><strong>Extracción de ADN</strong><span className="ml-2 hidden font-normal text-white/60 sm:inline">vegetal, bacteriano y tejidos</span></span></WhatsAppContact>
-                <span className="rounded-full border border-white/15 bg-[#031f17]/55 px-4 py-2.5 text-xs font-bold text-white/80 backdrop-blur-xl">{molecularProducts.length} referencias</span>
               </div>
             </motion.div>
           </div>
         </section>
-
-        <BrandStrip />
 
         <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div>
