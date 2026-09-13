@@ -136,26 +136,26 @@ function ProductCard({
 
 function BrandStrip() {
   return (
-    <section data-navbar-theme="light" aria-labelledby="brands-title" className="relative z-10 mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div className="rounded-[30px] border border-white bg-white p-5 shadow-[0_22px_70px_-34px_rgba(7,49,33,.45)] sm:p-7">
-        <div className="flex flex-col gap-2 border-b border-[#e5ebe7] pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <section data-navbar-theme="light" aria-labelledby="brands-title" className="relative z-10 mx-auto -mt-5 max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="rounded-[24px] border border-white bg-white p-4 shadow-[0_18px_55px_-34px_rgba(7,49,33,.4)] sm:p-5">
+        <div className="flex flex-col gap-1 border-b border-[#e5ebe7] pb-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#4e7c61]">Red técnica y comercial</p>
-            <h2 id="brands-title" className="mt-1 text-xl font-bold tracking-[-.02em] text-[#173f2d]">Trabajamos con estas marcas</h2>
+            <h2 id="brands-title" className="mt-0.5 text-lg font-bold tracking-[-.02em] text-[#173f2d]">Trabajamos con estas marcas</h2>
           </div>
-          <p className="text-xs text-[#718178]">Disponibilidad y representación sujetas a cada referencia.</p>
+          <p className="text-[10px] text-[#718178]">Disponibilidad sujeta a cada referencia.</p>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
           {brands.map((brand) => (
-            <article key={brand.name} className="flex min-h-24 flex-col items-center justify-center rounded-2xl border border-[#e3ebe5] bg-[#fafcf9] px-3 py-4 text-center transition hover:-translate-y-0.5 hover:border-[#b8d0c0] hover:bg-white hover:shadow-md">
+            <article key={brand.name} className="flex min-h-20 flex-col items-center justify-center rounded-xl border border-[#e3ebe5] bg-[#fafcf9] px-2 py-3 text-center transition hover:-translate-y-0.5 hover:border-[#b8d0c0] hover:bg-white hover:shadow-md">
               {brand.image ? (
-                <div className="relative h-8 w-full">
+                <div className="relative h-6 w-full">
                   <Image src={brand.image} alt={brand.name} fill className="object-contain" />
                 </div>
               ) : (
-                <p className={`text-base font-black tracking-[-.025em] ${brand.tone}`}>{brand.name}</p>
+                <p className={`text-sm font-black tracking-[-.025em] ${brand.tone}`}>{brand.name}</p>
               )}
-              <p className="mt-2 text-[9px] font-semibold uppercase tracking-[.08em] text-[#829087]">{brand.detail}</p>
+              <p className="mt-1 text-[8px] font-semibold uppercase tracking-[.07em] text-[#829087]">{brand.detail}</p>
             </article>
           ))}
         </div>
@@ -339,14 +339,14 @@ export default function KitsReactivosClient() {
 
         <BrandStrip />
 
-        <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div>
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-                <div className="max-w-2xl"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-2 text-3xl font-bold tracking-[-.035em] sm:text-4xl">Encuentra la referencia adecuada</h2><p className="mt-3 text-sm leading-6 text-[#687970]">Solicita una cotización validada según presentación, stock y condiciones de importación.</p></div>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div className="max-w-2xl"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-1 text-2xl font-bold tracking-[-.03em] sm:text-3xl">Encuentra la referencia adecuada</h2><p className="mt-2 text-xs leading-5 text-[#687970]">Cotización validada según presentación, stock e importación.</p></div>
                 <button type="button" onClick={() => setCartOpen(true)} className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5"><ShoppingCart className="h-4 w-4" /> Pedido {itemCount > 0 && <span className="rounded-full bg-[#d7f2dd] px-2 py-0.5 text-[10px] text-[#173f2d]">{itemCount}</span>}</button>
               </div>
 
-              <div className="mt-8 rounded-[22px] border border-[#dce7df] bg-white p-4 shadow-sm">
+              <div className="mt-5 rounded-[20px] border border-[#dce7df] bg-white p-3 shadow-sm">
                 <div className="grid gap-3 lg:grid-cols-[minmax(280px,1fr)_220px_190px]">
                   <label className="relative block"><Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><span className="sr-only">Buscar producto</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar producto, marca o código…" className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-11 pr-4 text-sm font-medium outline-none transition focus:border-[#72a387] focus:ring-4 focus:ring-[#72a387]/10" /></label>
                   <label className="relative"><span className="sr-only">Filtrar por marca</span><SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-11 w-full appearance-none rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-10 pr-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="Todas">Todas las marcas</option>{brandFilterOptions.slice(1).map((item) => <option key={item}>{item}</option>)}</select></label>
@@ -357,8 +357,8 @@ export default function KitsReactivosClient() {
                 </div>
               </div>
 
-              <div id="catalog-results" className="mt-6 scroll-mt-28 flex items-center justify-between"><p className="text-sm font-bold text-[#385344]">{filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}</p><span className="text-[10px] font-semibold text-[#829087]">Página {currentPage} de {pageCount}</span></div>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div id="catalog-results" className="mt-4 scroll-mt-28 flex items-center justify-between"><p className="text-sm font-bold text-[#385344]">{filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}</p><span className="text-[10px] font-semibold text-[#829087]">Página {currentPage} de {pageCount}</span></div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <AnimatePresence mode="popLayout">
                   {pageProducts.map((product, index) => <ProductCard key={product.id} product={product} index={index} onAdd={add} />)}
                 </AnimatePresence>
