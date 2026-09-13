@@ -185,6 +185,12 @@ function IdentificationBadge({ provider = "cavbio", compact = false }: { provide
   )
 }
 
+function getIdentificationProvider(strain: StrainItem): "cavbio" | "macrogen" {
+  if (strain.identificationProvider) return strain.identificationProvider
+  const identity = `${strain.nombre} ${strain.cientifico} ${strain.depositedAs}`.toLocaleLowerCase("es")
+  return /\b(azospirillum|azotobacter|pseudomonas)\b/.test(identity) ? "macrogen" : "cavbio"
+}
+
 function useCart(strains: StrainItem[], storageKey: string) {
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [hydrated, setHydrated] = useState(false)
@@ -409,7 +415,7 @@ function StrainCard({
 
         {kind === "identified" && (
           <div className="mt-5">
-            <IdentificationBadge provider={strain.identificationProvider} compact />
+            <IdentificationBadge provider={getIdentificationProvider(strain)} compact />
           </div>
         )}
 
@@ -1259,7 +1265,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
               </dl>
               {kind === "identified" && (
                 <div className="mt-5 max-w-md">
-                  <IdentificationBadge provider={strain.identificationProvider} />
+                  <IdentificationBadge provider={getIdentificationProvider(strain)} />
                 </div>
               )}
               {kind === "atcc" && strain.link && (
