@@ -82,7 +82,7 @@ const structuredData = {
                   price: getProductReferencePricePen(product),
                   availability: "https://schema.org/PreOrder",
                   seller: { "@type": "Organization", name: "AS Laboratorios" },
-                  description: "Precio verificado para esta presentación; sujeto a disponibilidad y cotización final.",
+                  description: "Precio referencial desde para una configuración base; la variante y el importe final se confirman por cotización.",
                 },
               }
             : {}),
@@ -107,7 +107,7 @@ const structuredData = {
           name: "¿Cómo se confirma el precio de kits y reactivos?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Cada referencia sin precio verificado se cotiza individualmente según presentación, precio vigente del fabricante, tipo de cambio, stock, conservación y condiciones de importación. No se calcula un total hasta completar esa validación.",
+            text: "Cada familia muestra un precio referencial desde cuando existe una configuración base validada. Las variables no tienen precios individuales publicados; presentación, impuestos, stock, conservación y condiciones de importación se confirman antes del pedido.",
           },
         },
         {
@@ -115,7 +115,7 @@ const structuredData = {
           name: "¿Cuánto cuesta el envío de kits y reactivos?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: `La página muestra un envío referencial de S/${REFERENCE_SHIPPING_PEN} por pedido, sujeto a confirmación según destino y condiciones de conservación.`,
+            text: `La página muestra un envío base referencial desde S/${REFERENCE_SHIPPING_PEN} por pedido, sujeto a confirmación según destino, peso, impuestos y condiciones de conservación.`,
           },
         },
         {

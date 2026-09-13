@@ -103,8 +103,8 @@ function ProductCard({
           <div>
             {price !== null ? (
               <>
-                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio verificado</p>
-                <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{money(price)}</p>
+                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial</p>
+                <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">Desde {money(price)}</p>
               </>
             ) : (
               <>
@@ -177,18 +177,17 @@ function CartDrawer({
 }) {
   const entries = molecularProducts.filter((product) => (cart[product.id] ?? 0) > 0)
   const units = entries.reduce((total, product) => total + cart[product.id], 0)
-  const allPricesVerified = entries.length > 0 && entries.every(hasVerifiedProductPrice)
-  const subtotal = allPricesVerified
+  const allPricesAvailable = entries.length > 0 && entries.every(hasVerifiedProductPrice)
+  const subtotalFrom = allPricesAvailable
     ? entries.reduce((total, product) => total + getProductReferencePricePen(product)! * cart[product.id], 0)
     : null
-  const total = subtotal === null ? null : subtotal + REFERENCE_SHIPPING_PEN
   const message = [
     "Hola, deseo solicitar una cotización de kits y reactivos:",
     "",
     ...entries.map((product) => `• ${product.name} (${product.catalogNumber}) — ${cart[product.id]} unidad(es)`),
     "",
-    ...(subtotal !== null && total !== null
-      ? [`Subtotal: ${money(subtotal)}`, `Envío referencial: ${money(REFERENCE_SHIPPING_PEN)}`, `Total referencial: ${money(total)}`]
+    ...(subtotalFrom !== null
+      ? [`Subtotal referencial desde: ${money(subtotalFrom)}`, `Envío base referencial desde: ${money(REFERENCE_SHIPPING_PEN)}`, "Total final: por confirmar según variables, impuestos y conservación."]
       : ["Precio, presentación, importación y envío: por confirmar en cotización."]),
     "",
     "Por favor, confirmen disponibilidad, tipo de cambio y plazo de importación.",
@@ -221,7 +220,7 @@ function CartDrawer({
                         <span className="w-8 text-center text-sm font-bold">{quantity}</span>
                         <button type="button" onClick={() => onSet(product.id, quantity + 1)} aria-label="Aumentar cantidad" className="grid h-8 w-8 place-items-center rounded-full hover:bg-white"><Plus className="h-3.5 w-3.5" /></button>
                       </div>
-                      <p className="font-black text-[#0d5137]">{price !== null ? money(price * quantity) : "Bajo cotización"}</p>
+                      <p className="text-right font-black text-[#0d5137]">{price !== null ? `Desde ${money(price * quantity)}` : "Bajo cotización"}</p>
                     </div>
                   </article>
                 )
@@ -231,11 +230,11 @@ function CartDrawer({
             </div>
             {entries.length > 0 && (
               <footer className="max-h-[48vh] overflow-y-auto border-t border-[#dfe8e2] bg-white px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 sm:px-7">
-                {subtotal !== null && total !== null ? (
+                {subtotalFrom !== null ? (
                   <dl className="space-y-3 text-sm">
-                    <div className="flex justify-between text-[#66786e]"><dt>Subtotal · {units} {units === 1 ? "unidad" : "unidades"}</dt><dd className="font-bold text-[#2d4639]">{money(subtotal)}</dd></div>
-                    <div className="flex justify-between text-[#66786e]"><dt className="flex items-center gap-2"><Truck className="h-4 w-4" />Envío referencial</dt><dd className="font-bold text-[#2d4639]">{money(REFERENCE_SHIPPING_PEN)}</dd></div>
-                    <div className="flex items-end justify-between border-t border-dashed border-[#dfe8e2] pt-4"><dt><span className="block font-bold text-[#173f2d]">Total estimado</span><span className="text-[10px] text-[#829087]">Sujeto a cotización final</span></dt><dd className="text-2xl font-black text-[#0d5137]">{money(total)}</dd></div>
+                    <div className="flex justify-between text-[#66786e]"><dt>Subtotal desde · {units} {units === 1 ? "unidad" : "unidades"}</dt><dd className="font-bold text-[#2d4639]">{money(subtotalFrom)}</dd></div>
+                    <div className="flex justify-between text-[#66786e]"><dt className="flex items-center gap-2"><Truck className="h-4 w-4" />Envío base desde</dt><dd className="font-bold text-[#2d4639]">{money(REFERENCE_SHIPPING_PEN)}</dd></div>
+                    <div className="border-t border-dashed border-[#dfe8e2] pt-4"><p className="font-bold text-[#173f2d]">Total final por confirmar</p><p className="mt-1 text-[10px] leading-4 text-[#829087]">Depende de la variante, impuestos, destino y cadena de frío.</p></div>
                   </dl>
                 ) : (
                   <div className="rounded-2xl border border-[#ead9ba] bg-[#fff9ee] p-4">
@@ -379,7 +378,7 @@ export default function KitsReactivosClient() {
               {!filtered.length && <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center"><Search className="mx-auto h-8 w-8 text-[#84a08f]" /><h3 className="mt-4 text-lg font-bold">No encontramos esa referencia</h3><p className="mt-2 text-sm text-[#74857b]">Prueba con otro término o solicita una búsqueda especial.</p></div>}
 
               <div className="mt-8 rounded-[26px] border border-[#ead9ba] bg-[#fff9ee] p-5 text-sm leading-6 text-[#715b35]">
-                <div className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#9d6a1e]" /><p><strong>Precios protegidos.</strong> No mostramos ni calculamos importes sin validación comercial. Un asesor confirmará cada precio, presentación, stock, cadena de frío y condición de importación antes de cualquier pedido.</p></div>
+                <div className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#9d6a1e]" /><p><strong>Precios referenciales desde.</strong> Cada ficha agrupa sus variables sin asignarles un precio individual. Un asesor confirmará presentación, impuestos, stock, cadena de frío y condiciones de importación antes de cualquier pedido.</p></div>
               </div>
           </div>
         </section>

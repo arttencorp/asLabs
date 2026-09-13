@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardCheck, Dna, FlaskConical, PackageCheck, ShieldCheck, Snowflake } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import ProductQuoteConfigurator from "@/components/product-quote-configurator"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { constructMetadata, SITE_URL } from "@/lib/metadata"
 import { getMolecularProduct, getProductReferencePricePen, molecularProducts } from "@/data/kits-reactivos"
@@ -113,7 +114,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                 price,
                 availability: "https://schema.org/PreOrder",
                 seller: { "@type": "Organization", name: "AS Laboratorios", url: SITE_URL },
-                description: "Precio verificado para esta presentación; sujeto a disponibilidad y cotización final.",
+                description: "Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.",
               },
             }
           : {}),
@@ -178,9 +179,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               <div className="mb-5 flex items-center justify-between gap-3 border-b border-[#e5ece7] pb-4"><span className="rounded-full bg-[#edf5ef] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.12em] text-[#397052]">{product.brand}</span><span className="text-[10px] font-bold text-[#708178]">{product.catalogNumber}</span></div>
               {price !== null ? (
                 <>
-                  <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio verificado</p>
-                  <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">{money(price)}</p>
-                  <p className="mt-2 text-xs leading-5 text-[#74857b]">Corresponde a la presentación indicada y está sujeto a disponibilidad y cotización final.</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial</p>
+                  <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">Desde {money(price)}</p>
+                  <p className="mt-2 text-xs leading-5 text-[#74857b]">Parte de una configuración base verificada. Las variables seleccionadas no tienen precio individual publicado y se confirman en la cotización final.</p>
                 </>
               ) : (
                 <>
@@ -189,7 +190,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   <p className="mt-2 text-xs leading-5 text-[#74857b]">Validamos directamente la presentación, el precio vigente, el stock y las condiciones de importación.</p>
                 </>
               )}
-              <WhatsAppContact message={`Hola, quisiera cotizar ${product.name} (${product.catalogNumber}), presentación ${product.presentation}.`} className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#14744d] px-5 text-sm font-bold text-white shadow-lg shadow-[#14744d]/20 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]">Solicitar cotización <ArrowRight className="h-4 w-4" /></WhatsAppContact>
+              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} pricePen={price} />
               <Link href={`/kits-reactivos#${product.id}`} className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-[#d5e2d9] text-xs font-bold text-[#3c5e4b] transition hover:bg-[#eff6f1]">Ver dentro del catálogo</Link>
             </div>
 
@@ -202,7 +203,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           </aside>
         </section>
 
-        {related.length > 0 && <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">También puede interesarte</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Referencias relacionadas</h2></div><Link href="/kits-reactivos" className="hidden items-center gap-2 text-xs font-bold text-[#168158] sm:inline-flex">Ver catálogo <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-6 grid gap-4 sm:grid-cols-3">{related.map((item) => { const itemPrice = getProductReferencePricePen(item); return <Link key={item.id} href={`/kits-reactivos/${item.id}`} className="group grid grid-cols-[88px_1fr] gap-4 rounded-[22px] border border-[#dce7df] p-3 transition hover:-translate-y-1 hover:shadow-lg"><div className="relative overflow-hidden rounded-2xl bg-white"><Image src={item.image} alt={`Fotografía de ${item.name}`} fill className="object-contain p-2 transition duration-500 group-hover:scale-105" /></div><div className="min-w-0 py-1"><p className="text-[9px] font-bold uppercase tracking-[.1em] text-[#548068]">{item.brand}</p><h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5">{item.name}</h3><p className="mt-2 text-xs font-black text-[#0d5137]">{itemPrice !== null ? money(itemPrice) : "Bajo cotización"}</p></div></Link> })}</div></div></section>}
+        {related.length > 0 && <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">También puede interesarte</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Referencias relacionadas</h2></div><Link href="/kits-reactivos" className="hidden items-center gap-2 text-xs font-bold text-[#168158] sm:inline-flex">Ver catálogo <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-6 grid gap-4 sm:grid-cols-3">{related.map((item) => { const itemPrice = getProductReferencePricePen(item); return <Link key={item.id} href={`/kits-reactivos/${item.id}`} className="group grid grid-cols-[88px_1fr] gap-4 rounded-[22px] border border-[#dce7df] p-3 transition hover:-translate-y-1 hover:shadow-lg"><div className="relative overflow-hidden rounded-2xl bg-white"><Image src={item.image} alt={`Fotografía de ${item.name}`} fill className="object-contain p-2 transition duration-500 group-hover:scale-105" /></div><div className="min-w-0 py-1"><p className="text-[9px] font-bold uppercase tracking-[.1em] text-[#548068]">{item.brand}</p><h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5">{item.name}</h3><p className="mt-2 text-xs font-black text-[#0d5137]">{itemPrice !== null ? `Desde ${money(itemPrice)}` : "Bajo cotización"}</p></div></Link> })}</div></div></section>}
       </main>
       <Footer />
     </>

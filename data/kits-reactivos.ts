@@ -1,4 +1,5 @@
 import fisherProducts from "./fisher-products.generated.json"
+import fisherPricesPen from "./fisher-prices-pen.generated.json"
 
 export const productCategories = [
   "PCR y qPCR",
@@ -86,7 +87,12 @@ const fixedPriceProducts: MolecularProduct[] = [
   },
 ]
 
-const realFisherProducts = fisherProducts as MolecularProduct[]
+const realFisherProducts = (fisherProducts as MolecularProduct[]).map((product, index) => {
+  const verifiedPrice = fisherPricesPen[index]
+  return typeof verifiedPrice === "number" && Number.isFinite(verifiedPrice) && verifiedPrice > 0
+    ? { ...product, pricePen: verifiedPrice }
+    : product
+})
 
 export const molecularProducts: MolecularProduct[] = [...fixedPriceProducts, ...realFisherProducts]
 
