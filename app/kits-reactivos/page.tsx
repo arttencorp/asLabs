@@ -74,14 +74,18 @@ const structuredData = {
           description: product.description,
           image: product.image,
           url: `${SITE_URL}/kits-reactivos/${product.id}`,
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "PEN",
-            price: getProductReferencePricePen(product),
-            availability: "https://schema.org/PreOrder",
-            seller: { "@type": "Organization", name: "AS Laboratorios" },
-            description: "Precio referencial sujeto a stock, tipo de cambio y cotización final.",
-          },
+          ...(getProductReferencePricePen(product) !== null
+            ? {
+                offers: {
+                  "@type": "Offer",
+                  priceCurrency: "PEN",
+                  price: getProductReferencePricePen(product),
+                  availability: "https://schema.org/PreOrder",
+                  seller: { "@type": "Organization", name: "AS Laboratorios" },
+                  description: "Precio referencial desde para una configuración base; la variante y el importe final se confirman por cotización.",
+                },
+              }
+            : {}),
         },
       })),
     },
@@ -100,10 +104,10 @@ const structuredData = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "¿Los precios de kits y reactivos son finales?",
+          name: "¿Cómo se confirma el precio de kits y reactivos?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "No. Todos los precios son referenciales y la cotización final depende del tipo de cambio, stock, presentación, conservación y condiciones de importación.",
+            text: "Cada familia muestra un precio referencial desde cuando existe una configuración base validada. Las variables no tienen precios individuales publicados; presentación, impuestos, stock, conservación y condiciones de importación se confirman antes del pedido.",
           },
         },
         {
@@ -111,7 +115,7 @@ const structuredData = {
           name: "¿Cuánto cuesta el envío de kits y reactivos?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: `La página muestra un envío referencial de S/${REFERENCE_SHIPPING_PEN} por pedido, sujeto a confirmación según destino y condiciones de conservación.`,
+            text: `La página muestra un envío base referencial desde S/${REFERENCE_SHIPPING_PEN} por pedido, sujeto a confirmación según destino, peso, impuestos y condiciones de conservación.`,
           },
         },
         {

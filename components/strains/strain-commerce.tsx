@@ -52,6 +52,7 @@ export interface StrainItem {
   referencia: string
   disponibilidad: boolean
   link?: string
+  identificationProvider?: "cavbio" | "macrogen"
 }
 
 type CatalogKind = "identified" | "atcc"
@@ -159,6 +160,35 @@ function DhlBadge() {
       <Image src="/partners/dhl.svg" alt="DHL" width={55} height={13} className="h-5 w-[55px] object-cover" />
     </span>
   )
+}
+
+function IdentificationBadge({ provider = "cavbio", compact = false }: { provider?: "cavbio" | "macrogen"; compact?: boolean }) {
+  const isMacrogen = provider === "macrogen"
+  return (
+    <div className={`flex items-center gap-3 rounded-2xl border border-emerald-950/10 bg-[#f7faf7] ${compact ? "px-3 py-2.5" : "p-4"}`}>
+      <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2 ${compact ? "h-9 w-24" : "h-12 w-36"}`}>
+        <Image
+          src={isMacrogen ? "/partners/macrogen.png" : "/partners/cavbio.png"}
+          alt={isMacrogen ? "Macrogen" : "CavBio"}
+          width={150}
+          height={65}
+          className="h-auto max-h-8 w-full object-contain"
+        />
+      </span>
+      <div className="min-w-0">
+        <p className="text-[8px] font-bold uppercase tracking-[0.13em] text-emerald-700">Identificación molecular</p>
+        <p className={`${compact ? "text-[10px]" : "text-xs"} mt-0.5 font-bold text-emerald-950`}>
+          Identificada por {isMacrogen ? "Macrogen" : "CavBio"}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function getIdentificationProvider(strain: StrainItem): "cavbio" | "macrogen" {
+  if (strain.identificationProvider) return strain.identificationProvider
+  const identity = `${strain.nombre} ${strain.cientifico} ${strain.depositedAs}`.toLocaleLowerCase("es")
+  return /\b(azospirillum|azotobacter|pseudomonas)\b/.test(identity) ? "macrogen" : "cavbio"
 }
 
 function useCart(strains: StrainItem[], storageKey: string) {
@@ -383,17 +413,9 @@ function StrainCard({
           <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">{strain.productFormat}</span>
         </div>
 
-        {market === "ecuador" && (
-          <div className="mt-5 rounded-2xl border border-emerald-950/10 bg-[#f7faf7] p-3.5">
-            <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-emerald-800">Identificado molecularmente por:</p>
-            <div className="mt-3 grid grid-cols-2 items-center gap-3">
-              <span className="flex h-12 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2.5">
-                <Image src="/partners/cavbio.png" alt="CavBio" width={150} height={65} className="h-auto max-h-10 w-full object-contain" />
-              </span>
-              <span className="flex h-12 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2.5">
-                <Image src="/partners/macrogen.png" alt="Macrogen" width={150} height={75} className="h-auto max-h-10 w-full object-contain" />
-              </span>
-            </div>
+        {kind === "identified" && (
+          <div className="mt-5">
+            <IdentificationBadge provider={getIdentificationProvider(strain)} compact />
           </div>
         )}
 
@@ -1241,6 +1263,11 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                   </div>
                 ))}
               </dl>
+              {kind === "identified" && (
+                <div className="mt-5 max-w-md">
+                  <IdentificationBadge provider={getIdentificationProvider(strain)} />
+                </div>
+              )}
               {kind === "atcc" && strain.link && (
                 <a
                   href={strain.link}
