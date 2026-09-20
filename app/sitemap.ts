@@ -3,7 +3,7 @@ import { excellentServices } from "@/data/excellent-catalog"
 import { molecularProducts } from "@/data/kits-reactivos"
 
 const SITE_URL = "https://aslaboratorios.com"
-const LAST_MODIFIED = new Date("2026-09-11")
+const LAST_MODIFIED = new Date("2026-09-19")
 
 const pages = [
   ["", "weekly", 1],
@@ -19,6 +19,10 @@ const pages = [
   ["/plantines", "weekly", 0.9],
   ["/control-biologico", "weekly", 0.9],
   ["/kits-reactivos", "weekly", 0.92],
+  ["/kits-reactivos/biologia-molecular", "weekly", 0.92],
+  ["/kits-reactivos/microbiologia", "weekly", 0.9],
+  ["/kits-reactivos/medios-de-cultivo", "weekly", 0.92],
+  ["/kits-reactivos/equipos-consumibles", "weekly", 0.86],
   ["/biotecnologia-vegetal", "monthly", 0.85],
   ["/cepas", "weekly", 0.85],
   ["/research", "weekly", 0.85],
