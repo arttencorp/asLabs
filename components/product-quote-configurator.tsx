@@ -11,6 +11,8 @@ type ProductQuoteConfiguratorProps = {
   presentationOptions?: string[]
   priceBasis?: string
   pricePen: number | null
+  taxNote?: string
+  researchUseOnly?: boolean
 }
 
 function money(value: number) {
@@ -28,6 +30,8 @@ export default function ProductQuoteConfigurator({
   presentationOptions,
   priceBasis,
   pricePen,
+  taxNote,
+  researchUseOnly,
 }: ProductQuoteConfiguratorProps) {
   const [quantity, setQuantity] = useState(1)
   const [variables, setVariables] = useState("")
@@ -46,8 +50,10 @@ export default function ProductQuoteConfigurator({
           ? `Familia consultada: ${presentation}. Necesito ayuda para elegir la presentación correcta.`
           : null,
       "Entiendo que el importe publicado es referencial desde y que la configuración final debe ser cotizada.",
+      taxNote ? `El precio publicado se indica ${taxNote}.` : null,
+      researchUseOnly ? "Confirmo que la solicitud es únicamente para investigación y no para uso clínico o diagnóstico." : null,
     ].filter(Boolean).join("\n"),
-    [catalogNumber, presentation, productName, quantity, selectedPresentation, variables],
+    [catalogNumber, presentation, productName, quantity, researchUseOnly, selectedPresentation, taxNote, variables],
   )
 
   return (
@@ -114,10 +120,12 @@ export default function ProductQuoteConfigurator({
       {pricePen !== null && (
         <div className="mt-3 rounded-2xl bg-[#edf6ef] px-4 py-3">
           <p className="text-[10px] font-bold uppercase tracking-[.1em] text-[#4e765f]">{showsPublishedPrice ? `Precio referencial ${priceBasis ?? "base"}` : `Presentación ${selectedPresentation}`}</p>
-          <p className="mt-1 text-sm font-black text-[#0b4a33]">{showsPublishedPrice ? money(pricePen) : "Precio por cotizar"}</p>
+          <p className="mt-1 text-sm font-black text-[#0b4a33]">{showsPublishedPrice ? `${money(pricePen)}${taxNote ? ` ${taxNote}` : ""}` : "Precio por cotizar"}</p>
           <p className="mt-1 text-[10px] leading-4 text-[#687c70]">{showsPublishedPrice ? "El valor final se confirma antes de procesar la importación." : `El precio publicado corresponde a ${priceBasis}; confirmaremos la cotización de ${selectedPresentation}.`}</p>
         </div>
       )}
+
+      {researchUseOnly && <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-[10px] font-semibold leading-5 text-amber-900">Solo para investigación. No destinado a diagnóstico, tratamiento, consumo humano, uso veterinario ni procedimientos clínicos.</div>}
 
       <WhatsAppContact
         message={message}

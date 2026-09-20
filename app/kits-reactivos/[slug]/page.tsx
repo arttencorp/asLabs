@@ -22,6 +22,13 @@ function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularP
   const text = `${product.name} ${product.description} ${product.longDescription ?? ""}`.toLocaleLowerCase("es")
 
   if (product.category === "Medios de cultivo") return `${product.name} en Perú`
+  if (product.category === "Bacteriófagos") {
+    if (/ms2/.test(text)) return "Bacteriófago MS2 para control molecular en Perú"
+    if (/snipha 360/.test(text)) return "SniPha 360 bacteriófagos para investigación en Perú"
+    if (/snipha 580/.test(text)) return "SniPha 580 bacteriófagos para investigación en Perú"
+    if (/pyo/.test(text)) return "Bacteriófago PYO para investigación en Perú"
+    return "Bacteriófagos para investigación en Perú"
+  }
 
   if (product.category === "Extracción y purificación") {
     if (/plant|vegetal/.test(text)) return "Extracción de ADN vegetal en Perú"
@@ -55,12 +62,14 @@ function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularP
     "Materiales moleculares": "Materiales para biología molecular en Perú",
     "Bacteriología y medios": "Medios de cultivo y reactivos bacteriológicos en Perú",
     "Medios de cultivo": "Medios de cultivo microbiológico en Perú",
+    Bacteriófagos: "Bacteriófagos para investigación en Perú",
   }
   return topics[product.category] ?? "Kits y reactivos de laboratorio en Perú"
 }
 
 function getCategoryLanding(product: NonNullable<ReturnType<typeof getMolecularProduct>>) {
   if (product.category === "Medios de cultivo") return { label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo" }
+  if (product.category === "Bacteriófagos") return { label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos" }
   if (product.category === "Bacteriología y medios" || product.category === "Identificación bacteriana") return { label: "Microbiología", href: "/kits-reactivos/microbiologia" }
   if (product.category === "Equipos moleculares" || product.category === "Consumibles PCR" || product.category === "Materiales moleculares") return { label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles" }
   return { label: "Biología molecular", href: "/kits-reactivos/biologia-molecular" }
@@ -72,7 +81,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const seoTopic = getGenericSeoTopic(product)
   return constructMetadata({
     title: `${seoTopic} | ${product.brand} ${product.catalogNumber}`,
-    description: `${seoTopic}. Consulta aplicaciones y presentaciones de la referencia ${product.brand} ${product.catalogNumber} y solicita una cotización de importación validada.`,
+    description: `${seoTopic}. Consulta aplicaciones, microorganismos objetivo, presentación y conservación de ${product.brand} ${product.catalogNumber}.${product.researchUseOnly ? " Uso únicamente para investigación." : ""}`,
     keywords: [
       seoTopic,
       `${product.category} en Perú`,
@@ -81,6 +90,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       "reactivos de laboratorio Trujillo",
       "kits de biología molecular Perú",
       "medios de cultivo microbiología Perú",
+      "bacteriófagos para investigación Perú",
+      "bacteriófagos microbiología Perú",
       `${product.brand} ${product.catalogNumber} Perú`,
       ...(product.applications?.map((application) => `${application} Perú`) ?? []),
     ],
@@ -133,7 +144,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                 seller: { "@type": "Organization", name: "AS Laboratorios", url: SITE_URL },
                 description: product.priceBasis
                   ? `Precio referencial para la presentación ${product.priceBasis}; otras presentaciones se confirman por cotización.`
-                  : "Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.",
+                  : `Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.${product.taxNote ? ` ${product.taxNote}.` : ""}${product.researchUseOnly ? " Uso únicamente para investigación." : ""}`,
               },
             }
           : {}),
@@ -161,6 +172,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Link href={categoryLanding.href} className="inline-flex items-center gap-2 text-xs font-bold text-white/70 transition hover:text-white"><ArrowLeft className="h-4 w-4" /> Volver a {categoryLanding.label.toLocaleLowerCase("es")}</Link>
             <div className="mt-6 flex max-w-4xl flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[.14em] text-[#d5f2dc]"><span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">{product.category}</span><span>{product.brand}</span><span className="text-white/35">•</span><span>{product.catalogNumber}</span></div>
+            {product.researchUseOnly && <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-200/30 bg-amber-100/10 px-4 py-2 text-[10px] font-black uppercase tracking-[.12em] text-amber-100"><ShieldCheck className="h-4 w-4" /> Uso únicamente para investigación</div>}
             <h1 className="mt-4 max-w-4xl text-balance text-3xl font-bold leading-[1.06] tracking-[-.04em] sm:text-4xl lg:text-5xl">{product.name}</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-white/72 sm:text-base">{product.description}</p>
           </div>
@@ -180,7 +192,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Resumen técnico</p>
               <h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Aplicación y características</h2>
               <p className="mt-4 text-sm leading-7 text-[#536b5e]">{product.description}</p>
-              {product.longDescription && product.longDescription !== product.description && <div className="mt-6 rounded-2xl border border-[#deebe2] bg-[#f3f8f4] p-5"><p className="text-[9px] font-bold uppercase tracking-[.16em] text-[#5f806d]">Descripción del fabricante</p><p lang="en" className="mt-2 text-xs leading-6 text-[#65786d]">{product.longDescription}</p></div>}
+              {product.researchUseOnly && <div role="note" className="mt-5 flex gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-6 text-amber-950"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" /><p><strong>Uso restringido.</strong> Este producto se ofrece únicamente para investigación. No está destinado a diagnóstico, tratamiento, consumo humano, uso veterinario ni procedimientos clínicos.</p></div>}
+              {product.longDescription && product.longDescription !== product.description && <div className="mt-6 rounded-2xl border border-[#deebe2] bg-[#f3f8f4] p-5"><p className="text-[9px] font-bold uppercase tracking-[.16em] text-[#5f806d]">Información técnica</p><p className="mt-2 text-xs leading-6 text-[#65786d]">{product.longDescription}</p></div>}
               <div className="mt-7 flex flex-wrap gap-2">
                 {applications.map((application) => <span key={application} className="inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-2 text-[11px] font-bold text-[#355a44]"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#168158]" />{application}</span>)}
               </div>
@@ -200,7 +213,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               {price !== null ? (
                 <>
                   <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial{product.priceBasis ? ` · ${product.priceBasis}` : ""}</p>
-                  <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">{product.priceBasis ? money(price) : `Desde ${money(price)}`}</p>
+                  <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">{product.priceBasis ? money(price) : `Desde ${money(price)}`} {product.taxNote && <span className="text-sm font-black text-[#567064]">{product.taxNote}</span>}</p>
                   <p className="mt-2 text-xs leading-5 text-[#74857b]">{product.priceBasis ? `El precio corresponde a ${product.priceBasis}. Las presentaciones de 1 kg y 2 kg se cotizan por separado según disponibilidad e importación.` : "Parte de una configuración base verificada. Las variables seleccionadas no tienen precio individual publicado y se confirman en la cotización final."}</p>
                 </>
               ) : (
@@ -210,8 +223,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   <p className="mt-2 text-xs leading-5 text-[#74857b]">Validamos directamente la presentación, el precio vigente, el stock y las condiciones de importación.</p>
                 </>
               )}
-              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} presentationOptions={product.presentationOptions} priceBasis={product.priceBasis} pricePen={price} />
-              <Link href={`/kits-reactivos#${product.id}`} className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-[#d5e2d9] text-xs font-bold text-[#3c5e4b] transition hover:bg-[#eff6f1]">Ver dentro del catálogo</Link>
+              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} presentationOptions={product.presentationOptions} priceBasis={product.priceBasis} pricePen={price} taxNote={product.taxNote} researchUseOnly={product.researchUseOnly} />
+              <Link href={`${categoryLanding.href}#${product.id}`} className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-[#d5e2d9] text-xs font-bold text-[#3c5e4b] transition hover:bg-[#eff6f1]">Ver dentro del catálogo</Link>
             </div>
 
             <dl className="overflow-hidden rounded-[26px] border border-[#dce7df] bg-white">
@@ -223,7 +236,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           </aside>
         </section>
 
-        {related.length > 0 && <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">También puede interesarte</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Referencias relacionadas</h2></div><Link href="/kits-reactivos" className="hidden items-center gap-2 text-xs font-bold text-[#168158] sm:inline-flex">Ver catálogo <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-6 grid gap-4 sm:grid-cols-3">{related.map((item) => { const itemPrice = getProductReferencePricePen(item); return <Link key={item.id} href={`/kits-reactivos/${item.id}`} className="group grid grid-cols-[88px_1fr] gap-4 rounded-[22px] border border-[#dce7df] p-3 transition hover:-translate-y-1 hover:shadow-lg"><div className="relative overflow-hidden rounded-2xl bg-white"><Image src={item.image} alt={`Fotografía de ${item.name}`} fill className="object-contain p-2 transition duration-500 group-hover:scale-105" /></div><div className="min-w-0 py-1"><p className="text-[9px] font-bold uppercase tracking-[.1em] text-[#548068]">{item.brand}</p><h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5">{item.name}</h3><p className="mt-2 text-xs font-black text-[#0d5137]">{itemPrice !== null ? `Desde ${money(itemPrice)}` : "Bajo cotización"}</p></div></Link> })}</div></div></section>}
+        {related.length > 0 && <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 lg:px-8"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">También puede interesarte</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">Referencias relacionadas</h2></div><Link href={categoryLanding.href} className="hidden items-center gap-2 text-xs font-bold text-[#168158] sm:inline-flex">Ver catálogo <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-6 grid gap-4 sm:grid-cols-3">{related.map((item) => { const itemPrice = getProductReferencePricePen(item); return <Link key={item.id} href={`/kits-reactivos/${item.id}`} className="group grid grid-cols-[88px_1fr] gap-4 rounded-[22px] border border-[#dce7df] p-3 transition hover:-translate-y-1 hover:shadow-lg"><div className="relative overflow-hidden rounded-2xl bg-white"><Image src={item.image} alt={`Fotografía de ${item.name}`} fill className="object-contain p-2 transition duration-500 group-hover:scale-105" /></div><div className="min-w-0 py-1"><p className="text-[9px] font-bold uppercase tracking-[.1em] text-[#548068]">{item.brand}</p><h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5">{item.name}</h3><p className="mt-2 text-xs font-black text-[#0d5137]">{itemPrice !== null ? `Desde ${money(itemPrice)}${item.taxNote ? ` ${item.taxNote}` : ""}` : "Bajo cotización"}</p></div></Link> })}</div></div></section>}
       </main>
       <Footer />
     </>

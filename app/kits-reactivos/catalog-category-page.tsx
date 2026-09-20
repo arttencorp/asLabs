@@ -7,6 +7,7 @@ const categoriesByScope: Record<CatalogPageConfig["scope"], ProductCategory[]> =
   microbiologia: ["Bacteriología y medios", "Identificación bacteriana"],
   medios: ["Medios de cultivo"],
   equipos: ["Equipos moleculares", "Consumibles PCR", "Materiales moleculares"],
+  bacteriofagos: ["Bacteriófagos"],
 }
 
 export type CatalogCategoryPageProps = {
@@ -30,7 +31,7 @@ export default function CatalogCategoryPage({ config, path }: CatalogCategoryPag
         isPartOf: { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "AS Laboratorios", url: SITE_URL },
         publisher: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "AS Laboratorios" },
         about: { "@type": "Thing", name: config.eyebrow },
-        dateModified: "2026-09-19",
+        dateModified: "2026-09-20",
         mainEntity: { "@id": `${url}#catalog` },
       },
       {

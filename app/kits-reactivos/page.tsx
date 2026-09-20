@@ -6,7 +6,7 @@ import KitsReactivosClient from "./kits-reactivos-client"
 export const metadata: Metadata = constructMetadata({
   title: "Kits, Reactivos y Medios de Cultivo en Perú",
   description:
-    "Cotiza más de 350 kits, reactivos y materiales para PCR, extracción de ADN, identificación bacteriana, electroforesis y bacteriología en Perú.",
+    "Cotiza más de 350 kits, reactivos, bacteriófagos y materiales para PCR, extracción de ADN, identificación bacteriana, electroforesis y bacteriología en Perú.",
   keywords: [
     "kits de biología molecular Perú",
     "reactivos de laboratorio Perú",
@@ -39,6 +39,11 @@ export const metadata: Metadata = constructMetadata({
     "extracción ADN bacteriano Perú",
     "extracción ADN vegetal Perú",
     "purificación ADN plasmídico Perú",
+    "bacteriófagos para investigación Perú",
+    "bacteriófago MS2 Perú",
+    "SniPha 360 Perú",
+    "SniPha 580 Perú",
+    "bacteriófago PYO Perú",
   ],
   path: "/kits-reactivos",
   image: "/lab-scientists.png",
@@ -53,7 +58,7 @@ const structuredData = {
       url: `${SITE_URL}/kits-reactivos`,
       name: "Kits, reactivos y medios de cultivo en Perú",
       description:
-        "Catálogo referencial con más de 350 kits, reactivos, materiales moleculares y pruebas de identificación bacteriana con importación coordinada en Perú.",
+        "Catálogo referencial con más de 350 kits, reactivos, bacteriófagos, materiales moleculares y pruebas de identificación bacteriana con importación coordinada en Perú.",
       inLanguage: "es-PE",
       mainEntity: { "@id": `${SITE_URL}/kits-reactivos#catalog` },
     },
@@ -61,12 +66,13 @@ const structuredData = {
       "@type": "ItemList",
       "@id": `${SITE_URL}/kits-reactivos#catalog`,
       name: "Familias del catálogo de laboratorio",
-      numberOfItems: 4,
+      numberOfItems: 5,
       itemListElement: [
         { name: "Biología molecular", path: "/kits-reactivos/biologia-molecular" },
         { name: "Microbiología", path: "/kits-reactivos/microbiologia" },
         { name: "Medios de cultivo", path: "/kits-reactivos/medios-de-cultivo" },
         { name: "Equipos y consumibles", path: "/kits-reactivos/equipos-consumibles" },
+        { name: "Bacteriófagos", path: "/kits-reactivos/bacteriofagos" },
       ].map((category, index) => ({
         "@type": "ListItem",
         position: index + 1,

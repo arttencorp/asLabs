@@ -15,6 +15,7 @@ export const productCategories = [
   "Bacteriología y medios",
   "Medios de cultivo",
   "Identificación bacteriana",
+  "Bacteriófagos",
 ] as const
 
 export type ProductCategory = (typeof productCategories)[number]
@@ -36,6 +37,8 @@ export type MolecularProduct = {
   imported?: boolean
   applications?: string[]
   specifications?: Array<{ label: string; value: string }>
+  taxNote?: string
+  researchUseOnly?: boolean
 }
 
 export const REFERENCE_SHIPPING_PEN = 250
@@ -87,6 +90,111 @@ const fixedPriceProducts: MolecularProduct[] = [
       { label: "Código de referencia", value: "C20302" },
       { label: "Capacidad", value: "200 preparaciones" },
       { label: "Lectura", value: "Fluorescencia" },
+    ],
+  },
+]
+
+const bacteriophageProducts: MolecularProduct[] = [
+  {
+    id: "snipha-360-bacteriofagos-20ml",
+    name: "SniPha 360 Bacteriófagos Microorganismos",
+    brand: "Phage24 · SniPha",
+    catalogNumber: "SNIPHA-360",
+    presentation: "Vial estéril de 20 mL",
+    category: "Bacteriófagos",
+    description: "Mezcla de bacteriófagos líticos altamente específicos para seis especies bacterianas, presentada en solución estéril para investigación.",
+    longDescription: "SniPha 360 es una mezcla de bacteriófagos líticos dirigida a Escherichia coli, Staphylococcus aureus, Pseudomonas aeruginosa, Streptococcus pyogenes, Proteus vulgaris y Proteus mirabilis. La especificidad del preparado permite trabajar con las bacterias objetivo sin afectar de manera general a otros microorganismos. El suministro incluye una jeringa desechable de 5 mL, una cánula roma y las indicaciones de manipulación para extraer la solución del vial.",
+    pricePen: 320,
+    taxNote: "+ IGV",
+    researchUseOnly: true,
+    imported: true,
+    image: "https://www.phage24.com/media/image/product/1/lg/snipha-360-bakteriophagen-mikroorganismen-20ml~2.jpg",
+    storage: "Refrigerado entre 2 y 8 °C; conservar sin abrir hasta la fecha de caducidad indicada",
+    applications: ["Investigación microbiológica", "Ensayos con bacteriófagos", "Estudios de especificidad bacteriana"],
+    specifications: [
+      { label: "Presentación", value: "1 vial estéril de 20 mL" },
+      { label: "Concentración declarada", value: "1 × 10⁶ UFP/mL" },
+      { label: "Bacterias objetivo", value: "E. coli, S. aureus, P. aeruginosa, S. pyogenes, P. vulgaris y P. mirabilis" },
+      { label: "Incluye", value: "Jeringa desechable de 5 mL y cánula roma" },
+      { label: "Conservación", value: "2–8 °C" },
+      { label: "Uso", value: "Únicamente para investigación" },
+    ],
+  },
+  {
+    id: "snipha-580-bacteriofagos-20ml",
+    name: "SniPha 580 Bacteriófagos Microorganismos",
+    brand: "Phage24 · SniPha",
+    catalogNumber: "SNIPHA-580",
+    presentation: "Vial estéril de 20 mL",
+    category: "Bacteriófagos",
+    description: "Mezcla específica de bacteriófagos para E. coli, Klebsiella pneumoniae y Enterococcus faecalis en solución estéril.",
+    longDescription: "SniPha 580 es una mezcla de bacteriófagos líticos dirigida a Escherichia coli, Klebsiella pneumoniae y Enterococcus faecalis. El producto se suministra en un vial estéril de 20 mL e incluye una jeringa desechable de 5 mL y una cánula roma de 1,2 × 40 mm para la extracción segura de la solución.",
+    pricePen: 320,
+    taxNote: "+ IGV",
+    researchUseOnly: true,
+    imported: true,
+    image: "/products/bacteriophages/snipha-580.png",
+    storage: "Refrigerado entre 2 y 8 °C; el vial sin abrir puede transportarse sin refrigeración hasta 30 días acumulados, según la información suministrada",
+    applications: ["Investigación microbiológica", "Ensayos con bacteriófagos", "Estudios de especificidad bacteriana"],
+    specifications: [
+      { label: "Presentación", value: "1 vial estéril de 20 mL" },
+      { label: "Concentración declarada", value: "1 × 10⁶ UFP/mL" },
+      { label: "Bacterias objetivo", value: "E. coli, K. pneumoniae y E. faecalis" },
+      { label: "Incluye", value: "Jeringa desechable de 5 mL y cánula roma de 1,2 × 40 mm" },
+      { label: "Conservación", value: "2–8 °C" },
+      { label: "Transporte", value: "Hasta 30 días acumulados sin refrigeración, sin abrir" },
+      { label: "Uso", value: "Únicamente para investigación" },
+    ],
+  },
+  {
+    id: "zeptometrix-ms2-bacteriofago-0810052",
+    name: "ZeptoMetrix™ MS2 Bacteriófago Low",
+    brand: "ZeptoMetrix",
+    catalogNumber: "0810052",
+    presentation: "1 alícuota congelada de 0,1 mL",
+    category: "Bacteriófagos",
+    description: "Bacteriófago MS2 vivo y titulado, virus de ARN monocatenario que infecta E. coli, para control de procesos de amplificación molecular.",
+    longDescription: "Cada alícuota contiene 0,1 mL de bacteriófago MS2 vivo, parcialmente purificado y titulado. El preparado se suministra en tampón SM, puede contener ácidos nucleicos de E. coli y está diseñado como control interno o de proceso en flujos de extracción, retrotranscripción y amplificación de ácidos nucleicos. Los controles deben procesarse con protocolos equivalentes a los empleados para las muestras evaluadas.",
+    pricePen: 1400,
+    researchUseOnly: true,
+    imported: true,
+    image: "/products/bacteriophages/zeptometrix-ms2.png",
+    storage: "Congelado a −20 °C o menos; evitar ciclos repetidos de congelación y descongelación",
+    applications: ["Control interno para RT-PCR", "Amplificación de ácidos nucleicos", "Monitoreo de extracción de ARN"],
+    specifications: [
+      { label: "Tipo", value: "Bacteriófago MS2 vivo, ARN monocatenario" },
+      { label: "Presentación", value: "0,1 mL por alícuota" },
+      { label: "Título objetivo", value: "1,0 × 10⁹ UFP/mL" },
+      { label: "Hospedador", value: "Escherichia coli" },
+      { label: "Matriz", value: "Tampón SM; puede contener ácidos nucleicos de E. coli" },
+      { label: "Conservación", value: "−20 °C o menos" },
+      { label: "Clasificación", value: "RUO · Solo para investigación, no para procedimientos diagnósticos" },
+    ],
+  },
+  {
+    id: "eliava-pyo-bacteriofago-5x10ml",
+    name: "Bacteriófago PYO",
+    brand: "Eliava BioPreparations",
+    catalogNumber: "PYO-5X10ML",
+    presentation: "1 caja · 5 viales × 10 mL",
+    category: "Bacteriófagos",
+    description: "Mezcla líquida de fagos con actividad específica declarada frente a cinco grupos bacterianos, en caja de cinco viales.",
+    longDescription: "PYO es una mezcla de filtrados estériles de lisados de fagos con actividad específica declarada frente a Staphylococcus aureus, Streptococcus spp., diferentes serotipos de Escherichia coli, Pseudomonas aeruginosa y Proteus spp. AS Laboratorios ofrece esta presentación exclusivamente como material para investigación y no comunica ni recomienda usos clínicos.",
+    pricePen: 870,
+    researchUseOnly: true,
+    imported: true,
+    image: "https://mybacteriophage.net/cdn/shop/files/IMG-6852_1200x1200.jpg?v=1728558959",
+    storage: "Entre 2 y 8 °C, en lugar seco y protegido de la luz directa",
+    applications: ["Investigación microbiológica", "Estudios de lisis bacteriana", "Ensayos con mezclas de fagos"],
+    specifications: [
+      { label: "Presentación", value: "1 caja con 5 viales de 10 mL" },
+      { label: "S. aureus", value: "Título no menor de 10⁵ mL⁻¹" },
+      { label: "Streptococcus spp.", value: "Título no menor de 10⁴ mL⁻¹" },
+      { label: "E. coli", value: "Diferentes serotipos; título no menor de 10⁵ mL⁻¹" },
+      { label: "P. aeruginosa", value: "Título no menor de 10⁵ mL⁻¹" },
+      { label: "Proteus spp.", value: "Título no menor de 10⁵ mL⁻¹" },
+      { label: "Conservación", value: "2–8 °C" },
+      { label: "Uso", value: "Únicamente para investigación" },
     ],
   },
 ]
@@ -305,7 +413,7 @@ const realFisherProducts = (fisherProducts as MolecularProduct[]).map((product, 
     : product
 })
 
-export const molecularProducts: MolecularProduct[] = [...hiMediaCultureMedia, ...fixedPriceProducts, ...realFisherProducts]
+export const molecularProducts: MolecularProduct[] = [...bacteriophageProducts, ...hiMediaCultureMedia, ...fixedPriceProducts, ...realFisherProducts]
 
 export function getMolecularProduct(slug: string) {
   return molecularProducts.find((product) => product.id === slug)
