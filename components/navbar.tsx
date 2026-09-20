@@ -40,7 +40,17 @@ type NavGroup = {
 
 const navigation: NavGroup[] = [
   { label: "Nosotros", href: "/sobre-nosotros" },
-  { label: "Kits y Reactivos", href: "/kits-reactivos" },
+  {
+    label: "Kits y Reactivos",
+    href: "/kits-reactivos",
+    links: [
+      { label: "Catálogo completo", href: "/kits-reactivos", description: "Todas las referencias", icon: FlaskConical },
+      { label: "Biología molecular", href: "/kits-reactivos?grupo=molecular#catalogo", description: "Kits, reactivos y purificación", icon: Dna },
+      { label: "Microbiología", href: "/kits-reactivos?grupo=microbiologia#catalogo", description: "Pruebas y reactivos bacteriológicos", icon: Microscope },
+      { label: "Medios de cultivo", href: "/kits-reactivos?categoria=Medios%20de%20cultivo#catalogo", description: "Agares HiMedia de importación", icon: FlaskConical },
+      { label: "Equipos y consumibles", href: "/kits-reactivos?grupo=equipos#catalogo", description: "Instrumentos y materiales", icon: ClipboardCheck },
+    ],
+  },
   {
     label: "Servicios",
     href: "/servicios",

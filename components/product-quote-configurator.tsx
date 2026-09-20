@@ -8,6 +8,8 @@ type ProductQuoteConfiguratorProps = {
   productName: string
   catalogNumber: string
   presentation: string
+  presentationOptions?: string[]
+  priceBasis?: string
   pricePen: number | null
 }
 
@@ -23,21 +25,29 @@ export default function ProductQuoteConfigurator({
   productName,
   catalogNumber,
   presentation,
+  presentationOptions,
+  priceBasis,
   pricePen,
 }: ProductQuoteConfiguratorProps) {
   const [quantity, setQuantity] = useState(1)
   const [variables, setVariables] = useState("")
+  const [selectedPresentation, setSelectedPresentation] = useState(presentationOptions?.[0] ?? "")
+  const hasSelectablePresentations = Boolean(presentationOptions?.length)
+  const showsPublishedPrice = !hasSelectablePresentations || selectedPresentation === priceBasis
 
   const message = useMemo(
     () => [
       `Hola, quisiera cotizar ${productName} (${catalogNumber}).`,
       `Cantidad: ${quantity}.`,
+      selectedPresentation ? `Presentación: ${selectedPresentation}.` : null,
       variables.trim()
-        ? `Presentación o variables requeridas: ${variables.trim()}.`
-        : `Familia consultada: ${presentation}. Necesito ayuda para elegir la presentación correcta.`,
+        ? `Variables requeridas: ${variables.trim()}.`
+        : !selectedPresentation
+          ? `Familia consultada: ${presentation}. Necesito ayuda para elegir la presentación correcta.`
+          : null,
       "Entiendo que el importe publicado es referencial desde y que la configuración final debe ser cotizada.",
-    ].join("\n"),
-    [catalogNumber, presentation, productName, quantity, variables],
+    ].filter(Boolean).join("\n"),
+    [catalogNumber, presentation, productName, quantity, selectedPresentation, variables],
   )
 
   return (
@@ -50,14 +60,27 @@ export default function ProductQuoteConfigurator({
         Indica solo las variables que necesitas. No se asigna un precio automático a cada variante.
       </p>
 
-      <label className="mt-4 block">
+      {hasSelectablePresentations && (
+        <label className="mt-4 block">
+          <span className="text-[10px] font-bold uppercase tracking-[.1em] text-[#62776b]">Presentación</span>
+          <select
+            value={selectedPresentation}
+            onChange={(event) => setSelectedPresentation(event.target.value)}
+            className="mt-2 h-12 w-full rounded-2xl border border-[#d8e4dc] bg-[#f8faf8] px-4 text-sm font-bold text-[#294c3a] outline-none transition focus:border-[#76a68a] focus:ring-4 focus:ring-[#76a68a]/10"
+          >
+            {presentationOptions?.map((option) => <option key={option}>{option}</option>)}
+          </select>
+        </label>
+      )}
+
+      <label className={`${hasSelectablePresentations ? "mt-3" : "mt-4"} block`}>
         <span className="text-[10px] font-bold uppercase tracking-[.1em] text-[#62776b]">
-          Presentación, formato o número de ensayos
+          {hasSelectablePresentations ? "Detalle adicional (opcional)" : "Presentación, formato o número de ensayos"}
         </span>
         <input
           value={variables}
           onChange={(event) => setVariables(event.target.value)}
-          placeholder="Ej. 100 ensayos, 500 mL, formato kit…"
+          placeholder={hasSelectablePresentations ? "Ej. uso previsto, protocolo o requerimiento…" : "Ej. 100 ensayos, 500 mL, formato kit…"}
           className="mt-2 h-12 w-full rounded-2xl border border-[#d8e4dc] bg-[#f8faf8] px-4 text-sm text-[#294c3a] outline-none transition placeholder:text-[#9ba8a0] focus:border-[#76a68a] focus:ring-4 focus:ring-[#76a68a]/10"
         />
       </label>
@@ -90,9 +113,9 @@ export default function ProductQuoteConfigurator({
 
       {pricePen !== null && (
         <div className="mt-3 rounded-2xl bg-[#edf6ef] px-4 py-3">
-          <p className="text-[10px] font-bold uppercase tracking-[.1em] text-[#4e765f]">Referencia base</p>
-          <p className="mt-1 text-sm font-black text-[#0b4a33]">Desde {money(pricePen)}</p>
-          <p className="mt-1 text-[10px] leading-4 text-[#687c70]">No cambia al escribir una variable; el valor final se confirma por cotización.</p>
+          <p className="text-[10px] font-bold uppercase tracking-[.1em] text-[#4e765f]">{showsPublishedPrice ? `Precio referencial ${priceBasis ?? "base"}` : `Presentación ${selectedPresentation}`}</p>
+          <p className="mt-1 text-sm font-black text-[#0b4a33]">{showsPublishedPrice ? money(pricePen) : "Precio por cotizar"}</p>
+          <p className="mt-1 text-[10px] leading-4 text-[#687c70]">{showsPublishedPrice ? "El valor final se confirma antes de procesar la importación." : `El precio publicado corresponde a ${priceBasis}; confirmaremos la cotización de ${selectedPresentation}.`}</p>
         </div>
       )}
 

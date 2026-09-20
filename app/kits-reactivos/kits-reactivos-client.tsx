@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Dna,
   FlaskConical,
+  MessageCircle,
   Minus,
   PackageCheck,
   Plus,
@@ -36,8 +37,19 @@ import {
   type MolecularProduct,
 } from "@/data/kits-reactivos"
 
-const categories = ["Todos", ...productCategories] as const
 const PAGE_SIZE = 24
+
+const categoryGroups: Record<string, readonly (typeof productCategories)[number][]> = {
+  molecular: ["PCR y qPCR", "Extracción y purificación", "ARN y transcriptómica", "Cuantificación y detección", "Clonación y expresión", "Reactivos moleculares", "Electroforesis"],
+  microbiologia: ["Bacteriología y medios", "Identificación bacteriana", "Medios de cultivo"],
+  equipos: ["Equipos moleculares", "Consumibles PCR", "Materiales moleculares"],
+}
+
+function matchesCategory(product: MolecularProduct, selected: string) {
+  if (selected === "Todos") return true
+  if (selected.startsWith("grupo:")) return categoryGroups[selected.slice(6)]?.includes(product.category) ?? false
+  return product.category === selected
+}
 
 function money(value: number) {
   return new Intl.NumberFormat("es-PE", {
@@ -94,8 +106,8 @@ function ProductCard({
           <div>
             {price !== null ? (
               <>
-                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial</p>
-                <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">Desde {money(price)}</p>
+                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial{product.priceBasis ? ` · ${product.priceBasis}` : ""}</p>
+                <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{product.priceBasis ? money(price) : `Desde ${money(price)}`}</p>
               </>
             ) : (
               <>
@@ -111,13 +123,17 @@ function ProductCard({
             >
               Ver ficha <ArrowRight className="h-3.5 w-3.5" />
             </Link>
-            <button
-              type="button"
-              onClick={() => onAdd(product)}
-              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
-            >
-              <ShoppingCart className="h-4 w-4" /> {price !== null ? "Añadir" : "Cotizar"}
-            </button>
+            {product.presentationOptions?.length ? (
+              <Link href={`/kits-reactivos/${product.id}`} className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"><SlidersHorizontal className="h-4 w-4" /> Elegir</Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onAdd(product)}
+                className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
+              >
+                <ShoppingCart className="h-4 w-4" /> {price !== null ? "Añadir" : "Cotizar"}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -218,7 +234,7 @@ function CartDrawer({
 
 export default function KitsReactivosClient() {
   const [query, setQuery] = useState("")
-  const [category, setCategory] = useState<(typeof categories)[number]>("Todos")
+  const [category, setCategory] = useState("Todos")
   const [brand, setBrand] = useState("Todas")
   const [sort, setSort] = useState("featured")
   const [currentPage, setCurrentPage] = useState(1)
@@ -233,10 +249,10 @@ export default function KitsReactivosClient() {
   const filtered = useMemo(() => {
     const normalized = query.toLocaleLowerCase("es")
     const results = molecularProducts.filter((product) => {
-      const matchesCategory = category === "Todos" || product.category === category
+      const categoryMatch = matchesCategory(product, category)
       const matchesBrand = brand === "Todas" || product.brand === brand
       const haystack = `${product.name} ${product.brand} ${product.catalogNumber} ${product.description}`.toLocaleLowerCase("es")
-      return matchesCategory && matchesBrand && haystack.includes(normalized)
+      return categoryMatch && matchesBrand && haystack.includes(normalized)
     })
 
     return [...results].sort((a, b) => {
@@ -246,6 +262,14 @@ export default function KitsReactivosClient() {
   }, [brand, category, query, sort])
 
   useEffect(() => setCurrentPage(1), [brand, category, query, sort])
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const requestedGroup = params.get("grupo")
+    const requestedCategory = params.get("categoria")
+    if (requestedGroup && categoryGroups[requestedGroup]) setCategory(`grupo:${requestedGroup}`)
+    else if (requestedCategory && productCategories.includes(requestedCategory as (typeof productCategories)[number])) setCategory(requestedCategory)
+  }, [])
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const pageProducts = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
@@ -301,17 +325,18 @@ export default function KitsReactivosClient() {
           <div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="max-w-2xl"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-1 text-2xl font-bold tracking-[-.03em] sm:text-3xl">Encuentra la referencia adecuada</h2><p className="mt-2 text-xs leading-5 text-[#687970]">Cotización validada según presentación, stock e importación.</p></div>
-                <button type="button" onClick={() => setCartOpen(true)} className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5"><ShoppingCart className="h-4 w-4" /> Pedido {itemCount > 0 && <span className="rounded-full bg-[#d7f2dd] px-2 py-0.5 text-[10px] text-[#173f2d]">{itemCount}</span>}</button>
+                <div className="flex flex-wrap gap-2">
+                  <WhatsAppContact message="Hola, quisiera asesoría para elegir un kit, reactivo o medio de cultivo." className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full border border-[#b8cfc0] bg-white px-5 text-sm font-bold text-[#176844] shadow-sm transition hover:-translate-y-0.5 hover:border-[#76a88b]"><MessageCircle className="h-4 w-4" /> WhatsApp</WhatsAppContact>
+                  <button type="button" onClick={() => setCartOpen(true)} className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5"><ShoppingCart className="h-4 w-4" /> Pedido {itemCount > 0 && <span className="rounded-full bg-[#d7f2dd] px-2 py-0.5 text-[10px] text-[#173f2d]">{itemCount}</span>}</button>
+                </div>
               </div>
 
               <div className="mt-5 rounded-[20px] border border-[#dce7df] bg-white p-3 shadow-sm">
-                <div className="grid gap-3 lg:grid-cols-[minmax(280px,1fr)_220px_190px]">
+                <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[minmax(260px,1fr)_220px_200px_170px]">
                   <label className="relative block"><Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><span className="sr-only">Buscar producto</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar producto, marca o código…" className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-11 pr-4 text-sm font-medium outline-none transition focus:border-[#72a387] focus:ring-4 focus:ring-[#72a387]/10" /></label>
+                  <label><span className="sr-only">Filtrar por familia</span><select value={category} onChange={(event) => setCategory(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="Todos">Todas las familias</option><optgroup label="Familias principales"><option value="grupo:molecular">Biología molecular</option><option value="grupo:microbiologia">Microbiología</option><option value="Medios de cultivo">Medios de cultivo</option><option value="grupo:equipos">Equipos y consumibles</option></optgroup><optgroup label="Categorías específicas">{productCategories.map((item) => <option key={item} value={item}>{item}</option>)}</optgroup></select></label>
                   <label className="relative"><span className="sr-only">Filtrar por marca</span><SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-11 w-full appearance-none rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-10 pr-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="Todas">Todas las marcas</option>{brandFilterOptions.slice(1).map((item) => <option key={item}>{item}</option>)}</select></label>
                   <label><span className="sr-only">Ordenar productos</span><select value={sort} onChange={(event) => setSort(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="featured">Destacados</option><option value="name">Nombre A–Z</option></select></label>
-                </div>
-                <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-                  {categories.map((item) => <button key={item} type="button" onClick={() => setCategory(item)} className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${category === item ? "bg-[#14744d] text-white" : "bg-[#edf3ee] text-[#50685b] hover:bg-[#e0ebe3]"}`}>{item}</button>)}
                 </div>
               </div>
 

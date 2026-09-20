@@ -52,6 +52,7 @@ function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularP
     "Consumibles PCR": "Consumibles para PCR y qPCR en Perú",
     "Materiales moleculares": "Materiales para biología molecular en Perú",
     "Bacteriología y medios": "Medios de cultivo y reactivos bacteriológicos en Perú",
+    "Medios de cultivo": "Medios de cultivo microbiológico en Perú",
   }
   return topics[product.category] ?? "Kits y reactivos de laboratorio en Perú"
 }
@@ -114,7 +115,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                 price,
                 availability: "https://schema.org/PreOrder",
                 seller: { "@type": "Organization", name: "AS Laboratorios", url: SITE_URL },
-                description: "Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.",
+                description: product.priceBasis
+                  ? `Precio referencial para la presentación ${product.priceBasis}; otras presentaciones se confirman por cotización.`
+                  : "Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.",
               },
             }
           : {}),
@@ -179,9 +182,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               <div className="mb-5 flex items-center justify-between gap-3 border-b border-[#e5ece7] pb-4"><span className="rounded-full bg-[#edf5ef] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[.12em] text-[#397052]">{product.brand}</span><span className="text-[10px] font-bold text-[#708178]">{product.catalogNumber}</span></div>
               {price !== null ? (
                 <>
-                  <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial</p>
-                  <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">Desde {money(price)}</p>
-                  <p className="mt-2 text-xs leading-5 text-[#74857b]">Parte de una configuración base verificada. Las variables seleccionadas no tienen precio individual publicado y se confirman en la cotización final.</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial{product.priceBasis ? ` · ${product.priceBasis}` : ""}</p>
+                  <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">{product.priceBasis ? money(price) : `Desde ${money(price)}`}</p>
+                  <p className="mt-2 text-xs leading-5 text-[#74857b]">{product.priceBasis ? `El precio corresponde a ${product.priceBasis}. Las presentaciones de 1 kg y 2 kg se cotizan por separado según disponibilidad e importación.` : "Parte de una configuración base verificada. Las variables seleccionadas no tienen precio individual publicado y se confirman en la cotización final."}</p>
                 </>
               ) : (
                 <>
@@ -190,7 +193,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   <p className="mt-2 text-xs leading-5 text-[#74857b]">Validamos directamente la presentación, el precio vigente, el stock y las condiciones de importación.</p>
                 </>
               )}
-              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} pricePen={price} />
+              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} presentationOptions={product.presentationOptions} priceBasis={product.priceBasis} pricePen={price} />
               <Link href={`/kits-reactivos#${product.id}`} className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-[#d5e2d9] text-xs font-bold text-[#3c5e4b] transition hover:bg-[#eff6f1]">Ver dentro del catálogo</Link>
             </div>
 
