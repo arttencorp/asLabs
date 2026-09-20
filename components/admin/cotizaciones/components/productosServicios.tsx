@@ -181,7 +181,7 @@ export function ProductosServicios({
                     }`}
                   onClick={() => setPreciosConIGV(true)}
                 >
-                  Incluye IGV
+                  No incluye IGV
                 </button>
                 <button
                   type="button"
@@ -189,7 +189,7 @@ export function ProductosServicios({
                     }`}
                   onClick={() => setPreciosConIGV(false)}
                 >
-                  No incluye IGV
+                  Incluye IGV
                 </button>
               </div>
             </div>
