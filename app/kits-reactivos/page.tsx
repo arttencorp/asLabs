@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { constructMetadata, SITE_URL } from "@/lib/metadata"
-import { getProductReferencePricePen, molecularProducts, REFERENCE_SHIPPING_PEN } from "@/data/kits-reactivos"
+import { REFERENCE_SHIPPING_PEN } from "@/data/kits-reactivos"
 import KitsReactivosClient from "./kits-reactivos-client"
 
 export const metadata: Metadata = constructMetadata({
@@ -60,33 +60,18 @@ const structuredData = {
     {
       "@type": "ItemList",
       "@id": `${SITE_URL}/kits-reactivos#catalog`,
-      name: "Catálogo de kits y reactivos moleculares",
-      numberOfItems: molecularProducts.length,
-      itemListElement: molecularProducts.map((product, index) => ({
+      name: "Familias del catálogo de laboratorio",
+      numberOfItems: 4,
+      itemListElement: [
+        { name: "Biología molecular", path: "/kits-reactivos/biologia-molecular" },
+        { name: "Microbiología", path: "/kits-reactivos/microbiologia" },
+        { name: "Medios de cultivo", path: "/kits-reactivos/medios-de-cultivo" },
+        { name: "Equipos y consumibles", path: "/kits-reactivos/equipos-consumibles" },
+      ].map((category, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        item: {
-          "@type": "Product",
-          name: product.name,
-          sku: product.catalogNumber,
-          category: product.category,
-          brand: { "@type": "Brand", name: product.brand },
-          description: product.description,
-          image: product.image,
-          url: `${SITE_URL}/kits-reactivos/${product.id}`,
-          ...(getProductReferencePricePen(product) !== null
-            ? {
-                offers: {
-                  "@type": "Offer",
-                  priceCurrency: "PEN",
-                  price: getProductReferencePricePen(product),
-                  availability: "https://schema.org/PreOrder",
-                  seller: { "@type": "Organization", name: "AS Laboratorios" },
-                  description: "Precio referencial desde para una configuración base; la variante y el importe final se confirman por cotización.",
-                },
-              }
-            : {}),
-        },
+        name: category.name,
+        url: `${SITE_URL}${category.path}`,
       })),
     },
     {

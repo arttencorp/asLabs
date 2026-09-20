@@ -52,6 +52,10 @@ export type CatalogPageConfig = {
   title: string
   description: string
   image: string
+  introTitle: string
+  intro: string[]
+  useCases: Array<{ title: string; text: string }>
+  faq: Array<{ question: string; answer: string }>
 }
 
 const familyPages = [
@@ -299,6 +303,12 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const pageProducts = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+
+  useEffect(() => {
+    const requestedPage = Number(new URLSearchParams(window.location.search).get("pagina"))
+    if (Number.isInteger(requestedPage) && requestedPage >= 1 && requestedPage <= pageCount) setCurrentPage(requestedPage)
+  }, [pageCount])
+
   const pageItems = useMemo(() => {
     const pages = new Set([1, pageCount, currentPage - 1, currentPage, currentPage + 1])
     return [...pages].filter((page) => page >= 1 && page <= pageCount).sort((a, b) => a - b)
@@ -323,6 +333,8 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
   }
 
   const itemCount = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0)
+  const catalogPath = pageConfig ? familyPages.find((item) => item.scope === pageConfig.scope)?.href ?? "/kits-reactivos" : "/kits-reactivos"
+  const paginationHref = (page: number) => `${catalogPath}${page > 1 ? `?pagina=${page}` : ""}#catalog-results`
 
   return (
     <>
@@ -336,6 +348,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="max-w-4xl">
+              {pageConfig && <nav aria-label="Ruta de navegación" className="mb-4 flex flex-wrap items-center gap-2 text-[10px] font-semibold text-white/58"><Link href="/">Inicio</Link><span aria-hidden="true">/</span><Link href="/kits-reactivos">Kits y reactivos</Link><span aria-hidden="true">/</span><span aria-current="page" className="text-white/90">{pageConfig.eyebrow}</span></nav>}
               <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.2em] text-[#d9f7df] backdrop-blur-md"><HeroIcon className="h-4 w-4" /> {pageConfig?.eyebrow ?? "Catálogo de laboratorio"}</div>
               <h1 className="mt-4 max-w-3xl text-balance text-3xl font-bold leading-[1.04] tracking-[-.04em] sm:text-4xl lg:text-5xl">{pageConfig?.title ?? "Kits y reactivos para tu laboratorio."}</h1>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-white/78 sm:text-base">{pageConfig?.description ?? "Biología molecular y bacteriología en un catálogo referencial con importación coordinada."}</p>
@@ -355,6 +368,18 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
                   return <Link key={family.scope} href={family.href} aria-current={active ? "page" : undefined} className={`group rounded-[18px] border p-4 transition hover:-translate-y-0.5 hover:shadow-md ${active ? "border-[#5f9877] bg-[#173f2d] text-white shadow-md" : "border-[#d9e5dd] bg-white text-[#264b39]"}`}><span className={`text-xs font-black ${active ? "text-white" : "text-[#176844]"}`}>{family.label}</span><span className={`mt-1 block text-[10px] leading-4 ${active ? "text-white/65" : "text-[#718178]"}`}>{family.description}</span></Link>
                 })}
               </nav>
+              {pageConfig && (
+                <section aria-labelledby="catalog-introduction" className="mb-8 grid gap-5 rounded-[24px] border border-[#d9e6dd] bg-white p-5 shadow-[0_16px_45px_-36px_rgba(8,48,33,.45)] sm:p-7 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,.75fr)]">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Suministro especializado en Perú</p>
+                    <h2 id="catalog-introduction" className="mt-2 text-2xl font-bold tracking-[-.03em] text-[#173f2d] sm:text-3xl">{pageConfig.introTitle}</h2>
+                    <div className="mt-4 space-y-3 text-sm leading-7 text-[#5c7065]">{pageConfig.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                    {pageConfig.useCases.map((useCase) => <article key={useCase.title} className="rounded-2xl border border-[#e0e9e3] bg-[#f5f9f6] p-4"><h3 className="text-xs font-black text-[#24583e]">{useCase.title}</h3><p className="mt-1.5 text-[11px] leading-5 text-[#6b7d72]">{useCase.text}</p></article>)}
+                  </div>
+                </section>
+              )}
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="max-w-2xl"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-1 text-2xl font-bold tracking-[-.03em] sm:text-3xl">Encuentra la referencia adecuada</h2><p className="mt-2 text-xs leading-5 text-[#687970]">Cotización validada según presentación, stock e importación.</p></div>
                 <div className="flex flex-wrap gap-2">
@@ -380,14 +405,14 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
               </div>
               {filtered.length > PAGE_SIZE && (
                 <nav aria-label="Paginación del catálogo" className="mt-9 flex flex-wrap items-center justify-center gap-2">
-                  <button type="button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} aria-label="Página anterior" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1] disabled:cursor-not-allowed disabled:opacity-35"><ChevronLeft className="h-4 w-4" /></button>
+                  {currentPage === 1 ? <span aria-disabled="true" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] opacity-35"><ChevronLeft className="h-4 w-4" /></span> : <Link href={paginationHref(currentPage - 1)} onClick={() => goToPage(currentPage - 1)} aria-label="Página anterior" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1]"><ChevronLeft className="h-4 w-4" /></Link>}
                   {pageItems.map((page, index) => (
                     <div key={page} className="contents">
                       {index > 0 && pageItems[index - 1] !== page - 1 && <span className="px-1 text-[#8b9b91]">…</span>}
-                      <button type="button" onClick={() => goToPage(page)} aria-current={page === currentPage ? "page" : undefined} className={`h-10 min-w-10 rounded-xl px-3 text-xs font-bold transition ${page === currentPage ? "bg-[#14744d] text-white shadow-md shadow-[#14744d]/20" : "border border-[#ceded3] bg-white text-[#486052] hover:border-[#78a48a] hover:bg-[#eff6f1]"}`}>{page}</button>
+                      <Link href={paginationHref(page)} onClick={() => goToPage(page)} aria-current={page === currentPage ? "page" : undefined} className={`grid h-10 min-w-10 place-items-center rounded-xl px-3 text-xs font-bold transition ${page === currentPage ? "bg-[#14744d] text-white shadow-md shadow-[#14744d]/20" : "border border-[#ceded3] bg-white text-[#486052] hover:border-[#78a48a] hover:bg-[#eff6f1]"}`}>{page}</Link>
                     </div>
                   ))}
-                  <button type="button" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === pageCount} aria-label="Página siguiente" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1] disabled:cursor-not-allowed disabled:opacity-35"><ChevronRight className="h-4 w-4" /></button>
+                  {currentPage === pageCount ? <span aria-disabled="true" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] opacity-35"><ChevronRight className="h-4 w-4" /></span> : <Link href={paginationHref(currentPage + 1)} onClick={() => goToPage(currentPage + 1)} aria-label="Página siguiente" className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1]"><ChevronRight className="h-4 w-4" /></Link>}
                 </nav>
               )}
               {!filtered.length && <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center"><Search className="mx-auto h-8 w-8 text-[#84a08f]" /><h3 className="mt-4 text-lg font-bold">No encontramos esa referencia</h3><p className="mt-2 text-sm text-[#74857b]">Prueba con otro término o solicita una búsqueda especial.</p></div>}
@@ -397,6 +422,17 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
               </div>
           </div>
         </section>
+
+        {pageConfig && (
+          <section data-navbar-theme="light" className="border-t border-[#dfe8e2] bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+            <div className="mx-auto max-w-5xl">
+              <div className="text-center"><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Preguntas frecuentes</p><h2 className="mt-2 text-2xl font-bold tracking-[-.03em] text-[#173f2d] sm:text-3xl">Antes de solicitar una cotización</h2></div>
+              <div className="mt-7 grid gap-3 md:grid-cols-2">
+                {pageConfig.faq.map((item) => <details key={item.question} className="group rounded-[20px] border border-[#dce7df] bg-[#f8faf8] p-5 open:bg-white open:shadow-sm"><summary className="cursor-pointer list-none pr-6 text-sm font-bold leading-6 text-[#264b39] marker:content-none">{item.question}<span aria-hidden="true" className="float-right -mr-6 text-[#168158] transition group-open:rotate-45">+</span></summary><p className="mt-3 text-xs leading-6 text-[#687a70]">{item.answer}</p></details>)}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section data-navbar-theme="dark" className="bg-[#0b3225] px-4 py-16 text-white sm:py-20">
           <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">

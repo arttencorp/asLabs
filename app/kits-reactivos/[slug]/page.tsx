@@ -21,6 +21,8 @@ export function generateStaticParams() {
 function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularProduct>>) {
   const text = `${product.name} ${product.description} ${product.longDescription ?? ""}`.toLocaleLowerCase("es")
 
+  if (product.category === "Medios de cultivo") return `${product.name} en Perú`
+
   if (product.category === "Extracción y purificación") {
     if (/plant|vegetal/.test(text)) return "Extracción de ADN vegetal en Perú"
     if (/bacter|microbi/.test(text)) return "Extracción de ADN bacteriano en Perú"
@@ -57,13 +59,20 @@ function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularP
   return topics[product.category] ?? "Kits y reactivos de laboratorio en Perú"
 }
 
+function getCategoryLanding(product: NonNullable<ReturnType<typeof getMolecularProduct>>) {
+  if (product.category === "Medios de cultivo") return { label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo" }
+  if (product.category === "Bacteriología y medios" || product.category === "Identificación bacteriana") return { label: "Microbiología", href: "/kits-reactivos/microbiologia" }
+  if (product.category === "Equipos moleculares" || product.category === "Consumibles PCR" || product.category === "Materiales moleculares") return { label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles" }
+  return { label: "Biología molecular", href: "/kits-reactivos/biologia-molecular" }
+}
+
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const product = getMolecularProduct(params.slug)
   if (!product) return {}
   const seoTopic = getGenericSeoTopic(product)
   return constructMetadata({
-    title: `${seoTopic} | AS Laboratorios`,
-    description: `${seoTopic}: consulta aplicaciones, presentaciones y solicita una cotización validada con importación coordinada por AS Laboratorios.`,
+    title: `${seoTopic} | ${product.brand} ${product.catalogNumber}`,
+    description: `${seoTopic}. Consulta aplicaciones y presentaciones de la referencia ${product.brand} ${product.catalogNumber} y solicita una cotización de importación validada.`,
     keywords: [
       seoTopic,
       `${product.category} en Perú`,
@@ -72,6 +81,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       "reactivos de laboratorio Trujillo",
       "kits de biología molecular Perú",
       "medios de cultivo microbiología Perú",
+      `${product.brand} ${product.catalogNumber} Perú`,
+      ...(product.applications?.map((application) => `${application} Perú`) ?? []),
     ],
     path: `/kits-reactivos/${product.id}`,
     image: product.image,
@@ -83,6 +94,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   if (!product) notFound()
 
   const price = getProductReferencePricePen(product)
+  const categoryLanding = getCategoryLanding(product)
   const hasMultiplePresentations = product.presentation.includes("presentaciones")
   const specifications = product.specifications ?? [
     { label: "Presentación", value: product.presentation },
@@ -102,10 +114,14 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         "@id": `${detailUrl}#product`,
         name: product.name,
         sku: product.catalogNumber,
+        mpn: product.catalogNumber,
         image: productImage,
         description: product.longDescription ?? product.description,
         category: product.category,
         brand: { "@type": "Brand", name: product.brand },
+        mainEntityOfPage: { "@type": "WebPage", "@id": detailUrl },
+        audience: { "@type": "Audience", audienceType: "Laboratorios, universidades e investigadores" },
+        additionalProperty: specifications.map((item) => ({ "@type": "PropertyValue", name: item.label, value: item.value })),
         ...(price !== null
           ? {
               offers: {
@@ -127,7 +143,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
           { "@type": "ListItem", position: 2, name: "Kits y Reactivos", item: `${SITE_URL}/kits-reactivos` },
-          { "@type": "ListItem", position: 3, name: product.name, item: detailUrl },
+          { "@type": "ListItem", position: 3, name: categoryLanding.label, item: `${SITE_URL}${categoryLanding.href}` },
+          { "@type": "ListItem", position: 4, name: product.name, item: detailUrl },
         ],
       },
     ],
@@ -142,7 +159,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           <Image src="/lab-header-bg.jpg" alt="" fill priority className="-z-20 object-cover opacity-30" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(4,31,22,.97),rgba(4,31,22,.80)_62%,rgba(4,31,22,.42))]" />
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Link href="/kits-reactivos" className="inline-flex items-center gap-2 text-xs font-bold text-white/70 transition hover:text-white"><ArrowLeft className="h-4 w-4" /> Volver al catálogo</Link>
+            <Link href={categoryLanding.href} className="inline-flex items-center gap-2 text-xs font-bold text-white/70 transition hover:text-white"><ArrowLeft className="h-4 w-4" /> Volver a {categoryLanding.label.toLocaleLowerCase("es")}</Link>
             <div className="mt-6 flex max-w-4xl flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[.14em] text-[#d5f2dc]"><span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">{product.category}</span><span>{product.brand}</span><span className="text-white/35">•</span><span>{product.catalogNumber}</span></div>
             <h1 className="mt-4 max-w-4xl text-balance text-3xl font-bold leading-[1.06] tracking-[-.04em] sm:text-4xl lg:text-5xl">{product.name}</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-white/72 sm:text-base">{product.description}</p>

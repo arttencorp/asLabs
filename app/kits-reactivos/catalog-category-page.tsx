@@ -1,4 +1,4 @@
-import { getProductReferencePricePen, molecularProducts, type ProductCategory } from "@/data/kits-reactivos"
+import { molecularProducts, type ProductCategory } from "@/data/kits-reactivos"
 import { SITE_URL } from "@/lib/metadata"
 import KitsReactivosClient, { type CatalogPageConfig } from "./kits-reactivos-client"
 
@@ -27,6 +27,10 @@ export default function CatalogCategoryPage({ config, path }: CatalogCategoryPag
         name: config.title,
         description: config.description,
         inLanguage: "es-PE",
+        isPartOf: { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "AS Laboratorios", url: SITE_URL },
+        publisher: { "@type": "Organization", "@id": `${SITE_URL}/#organization`, name: "AS Laboratorios" },
+        about: { "@type": "Thing", name: config.eyebrow },
+        dateModified: "2026-09-19",
         mainEntity: { "@id": `${url}#catalog` },
       },
       {
@@ -37,27 +41,17 @@ export default function CatalogCategoryPage({ config, path }: CatalogCategoryPag
         itemListElement: products.map((product, index) => ({
           "@type": "ListItem",
           position: index + 1,
-          item: {
-            "@type": "Product",
-            name: product.name,
-            sku: product.catalogNumber,
-            category: product.category,
-            brand: { "@type": "Brand", name: product.brand },
-            description: product.description,
-            image: product.image,
-            url: `${SITE_URL}/kits-reactivos/${product.id}`,
-            ...(getProductReferencePricePen(product) !== null
-              ? {
-                  offers: {
-                    "@type": "Offer",
-                    priceCurrency: "PEN",
-                    price: getProductReferencePricePen(product),
-                    availability: "https://schema.org/PreOrder",
-                    seller: { "@type": "Organization", name: "AS Laboratorios" },
-                  },
-                }
-              : {}),
-          },
+          name: product.name,
+          url: `${SITE_URL}/kits-reactivos/${product.id}`,
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        mainEntity: config.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
         })),
       },
       {
