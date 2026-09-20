@@ -6,7 +6,7 @@ import KitsReactivosClient from "./kits-reactivos-client"
 export const metadata: Metadata = constructMetadata({
   title: "Kits, Reactivos y Equipos de Laboratorio en Perú",
   description:
-    "Cotiza kits, reactivos, bacteriófagos, medios de cultivo y equipos ONiLAB para PCR, extracción de ADN, microbiología y rutinas de laboratorio en Perú.",
+    "Cotiza kits, reactivos, bacteriófagos, medios de cultivo y equipos para PCR, extracción de ADN, microbiología y rutinas de laboratorio en Perú.",
   keywords: [
     "kits de biología molecular Perú",
     "reactivos de laboratorio Perú",
@@ -45,7 +45,6 @@ export const metadata: Metadata = constructMetadata({
     "SniPha 580 Perú",
     "bacteriófago PYO Perú",
     "equipos de laboratorio Perú",
-    "equipos ONiLAB Perú",
     "centrífugas de laboratorio Perú",
     "agitadores magnéticos Perú",
     "mezcladores vortex Perú",
@@ -64,7 +63,7 @@ const structuredData = {
       url: `${SITE_URL}/kits-reactivos`,
       name: "Kits, reactivos y equipos de laboratorio en Perú",
       description:
-        "Catálogo referencial de kits, reactivos, bacteriófagos, materiales moleculares y equipos ONiLAB con importación coordinada en Perú.",
+        "Catálogo referencial de kits, reactivos, bacteriófagos, materiales moleculares y equipos de laboratorio con importación coordinada en Perú.",
       inLanguage: "es-PE",
       mainEntity: { "@id": `${SITE_URL}/kits-reactivos#catalog` },
     },
@@ -79,7 +78,7 @@ const structuredData = {
         { name: "Medios de cultivo", path: "/kits-reactivos/medios-de-cultivo" },
         { name: "Equipos y consumibles", path: "/kits-reactivos/equipos-consumibles" },
         { name: "Bacteriófagos", path: "/kits-reactivos/bacteriofagos" },
-        { name: "Equipos de laboratorio ONiLAB", path: "/kits-reactivos/equipos-de-laboratorio" },
+        { name: "Equipos de laboratorio", path: "/kits-reactivos/equipos-de-laboratorio" },
       ].map((category, index) => ({
         "@type": "ListItem",
         position: index + 1,

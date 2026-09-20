@@ -54,10 +54,7 @@ export type MolecularProduct = {
   specifications?: Array<{ label: string; value: string }>
   taxNote?: string
   researchUseOnly?: boolean
-  sourcePriceUsd?: number
   shippingPen?: number
-  pricingNote?: string
-  sourceCheckedAt?: string
 }
 
 export const REFERENCE_SHIPPING_PEN = 250
@@ -446,9 +443,9 @@ const onilabApplications: Record<OnilabCategory, string[]> = {
 const onilabProducts: MolecularProduct[] = onilabProductSeeds.map((seed) => {
   const pricePen = Math.round(seed.priceUsd * ONILAB_EXCHANGE_RATE_PEN * ONILAB_MARGIN_MULTIPLIER * 100) / 100
   return {
-    id: `onilab-${seed.asin.toLowerCase()}`,
+    id: `equipo-${seed.asin.toLowerCase()}`,
     name: seed.name,
-    brand: "ONiLAB",
+    brand: "Importación especializada",
     catalogNumber: seed.asin,
     presentation: "1 unidad",
     category: seed.category,
@@ -459,18 +456,12 @@ const onilabProducts: MolecularProduct[] = onilabProductSeeds.map((seed) => {
     storage: "Conservar en ambiente seco y seguir las indicaciones del manual del fabricante",
     imported: true,
     applications: onilabApplications[seed.category],
-    sourcePriceUsd: seed.priceUsd,
     shippingPen: ONILAB_REFERENCE_SHIPPING_PEN,
-    pricingNote: "Precio base en USD × tipo de cambio S/4 × 1,50. El envío referencial se cotiza por separado.",
-    sourceCheckedAt: "20 de septiembre de 2026",
     specifications: [
-      { label: "Marca", value: "ONiLAB" },
-      { label: "Código ASIN", value: seed.asin },
+      { label: "Proveedor", value: "Importación especializada" },
+      { label: "Código de referencia", value: seed.asin },
       { label: "Categoría", value: seed.category },
-      { label: "Precio base consultado", value: `US$${seed.priceUsd.toFixed(2)}` },
-      { label: "Tipo de cambio aplicado", value: "US$1 = S/4,00" },
-      { label: "Cálculo referencial", value: "Precio base × S/4 × 1,50" },
-      { label: "Envío referencial", value: "US$90 · S/360 por pedido, no incluido" },
+      { label: "Envío referencial", value: "S/360 por pedido, no incluido" },
       { label: "Disponibilidad", value: "Importación bajo pedido" },
     ],
   }

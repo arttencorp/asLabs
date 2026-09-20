@@ -14,7 +14,6 @@ type ProductQuoteConfiguratorProps = {
   taxNote?: string
   researchUseOnly?: boolean
   shippingPen?: number
-  pricingNote?: string
 }
 
 function money(value: number) {
@@ -35,7 +34,6 @@ export default function ProductQuoteConfigurator({
   taxNote,
   researchUseOnly,
   shippingPen,
-  pricingNote,
 }: ProductQuoteConfiguratorProps) {
   const [quantity, setQuantity] = useState(1)
   const [variables, setVariables] = useState("")
@@ -57,9 +55,8 @@ export default function ProductQuoteConfigurator({
       taxNote ? `El precio publicado se indica ${taxNote}.` : null,
       researchUseOnly ? "Confirmo que la solicitud es únicamente para investigación y no para uso clínico o diagnóstico." : null,
       shippingPen ? `Envío referencial por pedido: ${money(shippingPen)}, sujeto a confirmación.` : null,
-      pricingNote ?? null,
     ].filter(Boolean).join("\n"),
-    [catalogNumber, presentation, pricingNote, productName, quantity, researchUseOnly, selectedPresentation, shippingPen, taxNote, variables],
+    [catalogNumber, presentation, productName, quantity, researchUseOnly, selectedPresentation, shippingPen, taxNote, variables],
   )
 
   return (

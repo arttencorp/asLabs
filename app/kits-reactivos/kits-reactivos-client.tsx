@@ -65,10 +65,10 @@ export type CatalogPageConfig = {
 const familyPages = [
   { scope: "molecular", label: "Biología molecular", href: "/kits-reactivos/biologia-molecular", description: "PCR, qPCR, extracción y análisis" },
   { scope: "microbiologia", label: "Microbiología", href: "/kits-reactivos/microbiologia", description: "Identificación y pruebas bacterianas" },
-  { scope: "medios", label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares HiMedia de importación" },
+  { scope: "medios", label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares y medios deshidratados" },
   { scope: "equipos", label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles", description: "Instrumentos y materiales de laboratorio" },
   { scope: "bacteriofagos", label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos", description: "Mezclas y controles para investigación" },
-  { scope: "laboratorio", label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "50 referencias ONiLAB de importación" },
+  { scope: "laboratorio", label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "50 referencias de importación" },
 ] as const
 
 function matchesCategory(product: MolecularProduct, selected: string) {
@@ -452,7 +452,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
             {[
               { icon: Beaker, title: "Selección técnica", text: "Referencias filtradas según aplicación y protocolo." },
               { icon: PackageCheck, title: "Importación coordinada", text: "Validamos stock, conservación y tiempo de entrega." },
-              { icon: Truck, title: "Envío referencial", text: pageConfig?.scope === "laboratorio" ? "S/360 por pedido ONiLAB, sujeto a destino y condiciones." : "S/250 por pedido, sujeto a destino y condiciones." },
+              { icon: Truck, title: "Envío referencial", text: pageConfig?.scope === "laboratorio" ? "S/360 por pedido, sujeto a destino y condiciones." : "S/250 por pedido, sujeto a destino y condiciones." },
               { icon: TestTube2, title: "Soporte molecular", text: "Acompañamiento para elegir kits y reactivos." },
             ].map((item) => <article key={item.title} className="rounded-[26px] border border-white/10 bg-white/[.06] p-5"><item.icon className="h-5 w-5 text-[#bfe9c8]" /><h3 className="mt-5 font-bold">{item.title}</h3><p className="mt-2 text-xs leading-5 text-white/55">{item.text}</p></article>)}
           </div>

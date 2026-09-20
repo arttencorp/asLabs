@@ -3,12 +3,11 @@ import { constructMetadata } from "@/lib/metadata"
 import CatalogCategoryPage from "../catalog-category-page"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Equipos de Laboratorio ONiLAB en Perú",
+  title: "Equipos de Laboratorio",
   description:
-    "Catálogo de equipos ONiLAB en Perú: centrífugas, agitadores magnéticos, vortex, agitadores orbitales, pipetas, incubadoras y medidores de pH con precio referencial en soles.",
+    "Catálogo de equipos de laboratorio en Perú: centrífugas, agitadores magnéticos, vortex, agitadores orbitales, pipetas, incubadoras y medidores de pH con precios referenciales en soles.",
   keywords: [
     "equipos de laboratorio Perú",
-    "equipos ONiLAB Perú",
     "centrífuga de laboratorio Perú",
     "agitador magnético con calefacción Perú",
     "mezclador vortex Perú",
@@ -26,14 +25,14 @@ export const metadata: Metadata = constructMetadata({
 const config = {
   scope: "laboratorio" as const,
   eyebrow: "Equipos de laboratorio",
-  title: "Equipos ONiLAB para tu laboratorio.",
+  title: "Equipos de laboratorio",
   description:
-    "Cincuenta referencias para mezcla, centrifugación, pipeteo, incubación y medición, con fotografías del producto y cálculo referencial transparente en soles.",
+    "Cincuenta referencias para mezcla, centrifugación, pipeteo, incubación y medición, con fotografías del producto y precios referenciales en soles.",
   image: "https://m.media-amazon.com/images/I/61USTYJ+OPL._AC_CR0%2C0%2C0%2C0_SX1500_.jpg",
   introTitle: "Instrumentación seleccionada para rutinas reales",
   intro: [
-    "La selección reúne equipos ONiLAB para preparación de soluciones, procesamiento de muestras, transferencia de líquidos y control básico de laboratorio. Cada referencia tiene una ficha individual con aplicaciones, características y código ASIN.",
-    "El precio referencial se calcula con el precio base en dólares consultado el 20 de septiembre de 2026, tipo de cambio de S/4 por dólar y un factor comercial de 1,50. El envío referencial es de US$90, equivalente a S/360 por pedido, y se muestra por separado.",
+    "La selección reúne equipos para preparación de soluciones, procesamiento de muestras, transferencia de líquidos y control básico de laboratorio. Cada referencia tiene una ficha individual con aplicaciones y características principales.",
+    "Consulta la disponibilidad, configuración eléctrica, accesorios incluidos y condiciones de importación antes de confirmar tu pedido.",
   ],
   useCases: [
     { title: "Preparación y mezcla", text: "Agitadores magnéticos, orbitales, vortex y de techo para distintas escalas y viscosidades." },
@@ -42,8 +41,8 @@ const config = {
   ],
   faq: [
     {
-      question: "¿Cómo se calcula el precio publicado?",
-      answer: "Se toma el precio base visible en dólares, se convierte con US$1 = S/4 y se multiplica por 1,50. La ficha muestra el precio base usado y la fecha de consulta para que el cálculo pueda auditarse.",
+      question: "¿Cómo solicito una cotización?",
+      answer: "Selecciona el equipo y la cantidad requerida. Un asesor confirmará la versión, disponibilidad, configuración eléctrica, accesorios y plazo de importación antes de procesar el pedido.",
     },
     {
       question: "¿El precio incluye el envío internacional?",
@@ -58,9 +57,6 @@ const config = {
       answer: "Se confirman durante la cotización. Las publicaciones y precios de origen pueden cambiar, por lo que AS Laboratorios verifica disponibilidad, accesorios incluidos, versión y condiciones de garantía antes de procesar el pedido.",
     },
   ],
-  noticeTitle: "Cálculo transparente.",
-  notice:
-    "Precio base consultado × S/4 × 1,50. Envío referencial de S/360 por pedido no incluido. Stock, impuestos, aduanas, peso, voltaje y configuración final se confirman en la cotización.",
 }
 
 export default function EquiposLaboratorioPage() {

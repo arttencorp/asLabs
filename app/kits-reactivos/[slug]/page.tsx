@@ -31,14 +31,14 @@ function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularP
   }
 
   const equipmentTopics: Partial<Record<typeof product.category, string>> = {
-    "Agitadores magnéticos": "Agitadores magnéticos ONiLAB en Perú",
-    Centrífugas: "Centrífugas de laboratorio ONiLAB en Perú",
-    "Pipeteo y dispensación": "Micropipetas y dispensadores ONiLAB en Perú",
-    "Mezcladores vortex": "Mezcladores vortex ONiLAB en Perú",
-    "Agitadores orbitales": "Agitadores orbitales ONiLAB en Perú",
-    "Agitadores de techo": "Agitadores de techo ONiLAB en Perú",
-    "Incubadoras y calentadores": "Incubadoras y calentadores ONiLAB en Perú",
-    "Medición de pH": "Medidores de pH ONiLAB en Perú",
+    "Agitadores magnéticos": "Agitadores magnéticos de laboratorio en Perú",
+    Centrífugas: "Centrífugas de laboratorio en Perú",
+    "Pipeteo y dispensación": "Micropipetas y dispensadores en Perú",
+    "Mezcladores vortex": "Mezcladores vortex en Perú",
+    "Agitadores orbitales": "Agitadores orbitales de laboratorio en Perú",
+    "Agitadores de techo": "Agitadores de techo para laboratorio en Perú",
+    "Incubadoras y calentadores": "Incubadoras y calentadores de laboratorio en Perú",
+    "Medición de pH": "Medidores de pH para laboratorio en Perú",
   }
   if (equipmentTopics[product.category]) return equipmentTopics[product.category]!
 
@@ -103,7 +103,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       "medios de cultivo microbiología Perú",
       "bacteriófagos para investigación Perú",
       "bacteriófagos microbiología Perú",
-      "equipos de laboratorio ONiLAB Perú",
+      "equipos de laboratorio Perú",
       "importación equipos de laboratorio Perú",
       `${product.brand} ${product.catalogNumber} Perú`,
       ...(product.applications?.map((application) => `${application} Perú`) ?? []),
@@ -155,9 +155,9 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                 price,
                 availability: "https://schema.org/PreOrder",
                 seller: { "@type": "Organization", name: "AS Laboratorios", url: SITE_URL },
-                description: product.pricingNote ?? (product.priceBasis
+                description: product.priceBasis
                   ? `Precio referencial para la presentación ${product.priceBasis}; otras presentaciones se confirman por cotización.`
-                  : `Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.${product.taxNote ? ` ${product.taxNote}.` : ""}${product.researchUseOnly ? " Uso únicamente para investigación." : ""}`),
+                  : `Precio referencial desde para una configuración base verificada; la variante y el importe final se confirman por cotización.${product.taxNote ? ` ${product.taxNote}.` : ""}${product.researchUseOnly ? " Uso únicamente para investigación." : ""}`,
               },
             }
           : {}),
@@ -228,7 +228,6 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Precio referencial{product.priceBasis ? ` · ${product.priceBasis}` : ""}</p>
                   <p className="mt-2 text-4xl font-black tracking-[-.04em] text-[#0b4a33]">{product.priceBasis ? money(price) : `Desde ${money(price)}`} {product.taxNote && <span className="text-sm font-black text-[#567064]">{product.taxNote}</span>}</p>
                   <p className="mt-2 text-xs leading-5 text-[#74857b]">{product.priceBasis ? `El precio corresponde a ${product.priceBasis}. Las presentaciones de 1 kg y 2 kg se cotizan por separado según disponibilidad e importación.` : "Parte de una configuración base verificada. Las variables seleccionadas no tienen precio individual publicado y se confirman en la cotización final."}</p>
-                  {product.sourcePriceUsd && <div className="mt-4 rounded-2xl border border-[#dce8df] bg-[#f5f9f6] p-4 text-[10px] leading-5 text-[#587064]"><p className="font-black uppercase tracking-[.1em] text-[#2d5f44]">Cálculo del precio</p><p className="mt-1">Base consultada: <strong>US${product.sourcePriceUsd.toFixed(2)}</strong> · Cambio: <strong>S/4,00</strong> · Factor: <strong>1,50</strong></p><p>Envío referencial separado: <strong>{money(product.shippingPen ?? 0)}</strong> por pedido.</p>{product.sourceCheckedAt && <p>Consulta de origen: {product.sourceCheckedAt}.</p>}</div>}
                 </>
               ) : (
                 <>
@@ -237,7 +236,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   <p className="mt-2 text-xs leading-5 text-[#74857b]">Validamos directamente la presentación, el precio vigente, el stock y las condiciones de importación.</p>
                 </>
               )}
-              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} presentationOptions={product.presentationOptions} priceBasis={product.priceBasis} pricePen={price} taxNote={product.taxNote} researchUseOnly={product.researchUseOnly} shippingPen={product.shippingPen} pricingNote={product.pricingNote} />
+              <ProductQuoteConfigurator productName={product.name} catalogNumber={product.catalogNumber} presentation={product.presentation} presentationOptions={product.presentationOptions} priceBasis={product.priceBasis} pricePen={price} taxNote={product.taxNote} researchUseOnly={product.researchUseOnly} shippingPen={product.shippingPen} />
               <Link href={`${categoryLanding.href}#${product.id}`} className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-[#d5e2d9] text-xs font-bold text-[#3c5e4b] transition hover:bg-[#eff6f1]">Ver dentro del catálogo</Link>
             </div>
 

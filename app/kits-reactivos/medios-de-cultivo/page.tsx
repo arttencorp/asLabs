@@ -5,12 +5,12 @@ import { constructMetadata } from "@/lib/metadata"
 const config = {
   scope: "medios" as const,
   eyebrow: "Medios de cultivo",
-  title: "Medios de cultivo HiMedia para microbiología",
-  description: "Agares y medios deshidratados HiMedia de importación en presentaciones de 500 g, 1 kg y 2 kg para diagnóstico, investigación y control microbiológico.",
+  title: "Medios de cultivo",
+  description: "Agares y medios deshidratados de importación en presentaciones de 500 g, 1 kg y 2 kg para diagnóstico, investigación y control microbiológico.",
   image: "/kit-microbiologia.png",
-  introTitle: "Agares y medios deshidratados HiMedia de importación",
+  introTitle: "Agares y medios deshidratados de importación",
   intro: [
-    "Cotiza medios de cultivo microbiológico HiMedia en Perú para aislamiento, diferenciación, recuento, antibiogramas y control de calidad. Cada ficha incluye código, aplicación, preparación, pH y precio referencial de la presentación de 500 g.",
+    "Cotiza medios de cultivo microbiológico en Perú para aislamiento, diferenciación, recuento, antibiogramas y control de calidad. Cada ficha incluye código, aplicación, preparación, pH y precio referencial de la presentación de 500 g.",
     "Ofrecemos presentaciones de 500 g, 1 kg y 2 kg. Las presentaciones mayores se cotizan según disponibilidad; antes del pedido confirmamos la referencia exacta, el lote, las condiciones de importación y el plazo estimado.",
   ],
   useCases: [
@@ -20,16 +20,16 @@ const config = {
   ],
   faq: [
     { question: "¿Qué presentaciones de medios de cultivo ofrecen?", answer: "Trabajamos presentaciones de 500 g, 1 kg y 2 kg. El precio visible corresponde a 500 g; las presentaciones de 1 kg y 2 kg se cotizan por separado." },
-    { question: "¿Los medios de cultivo son marca HiMedia?", answer: "Sí. Las referencias publicadas en esta sección corresponden a medios deshidratados HiMedia identificados por su código de fabricante." },
+    { question: "¿Las referencias incluyen ficha técnica?", answer: "Sí. Cada referencia muestra su código, presentación, preparación, pH, aplicaciones y condiciones de conservación." },
     { question: "¿Cómo selecciono el agar adecuado?", answer: "Depende del microorganismo, la muestra, el objetivo del ensayo y el método aplicado. Podemos revisar esos datos antes de confirmar el producto." },
     { question: "¿Realizan importación de medios de cultivo a Perú?", answer: "Sí. La cotización final considera disponibilidad, presentación, importación, destino y condiciones de conservación del producto." },
   ],
 }
 
 export const metadata: Metadata = constructMetadata({
-  title: "Medios de Cultivo HiMedia en Perú",
-  description: "Medios de cultivo HiMedia en Perú: MacConkey, Mueller-Hinton, TSA, Sabouraud, TSI y más. Presentaciones de 500 g, 1 kg y 2 kg.",
-  keywords: ["medios de cultivo HiMedia Perú", "comprar medios de cultivo Perú", "agar MacConkey Perú", "agar Mueller Hinton Perú", "agar TSA Perú", "agar Sabouraud Perú", "agar TSI Perú", "medios microbiológicos Perú", "medios de cultivo Trujillo"],
+  title: "Medios de Cultivo en Perú",
+  description: "Medios de cultivo en Perú: MacConkey, Mueller-Hinton, TSA, Sabouraud, TSI y más. Presentaciones de 500 g, 1 kg y 2 kg.",
+  keywords: ["medios de cultivo Perú", "comprar medios de cultivo Perú", "agar MacConkey Perú", "agar Mueller Hinton Perú", "agar TSA Perú", "agar Sabouraud Perú", "agar TSI Perú", "medios microbiológicos Perú", "medios de cultivo Trujillo"],
   path: "/kits-reactivos/medios-de-cultivo",
   image: config.image,
 })
