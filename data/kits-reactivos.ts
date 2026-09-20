@@ -1,5 +1,12 @@
 import fisherProducts from "./fisher-products.generated.json"
 import fisherPricesPen from "./fisher-prices-pen.generated.json"
+import {
+  ONILAB_EXCHANGE_RATE_PEN,
+  ONILAB_MARGIN_MULTIPLIER,
+  ONILAB_REFERENCE_SHIPPING_PEN,
+  onilabProductSeeds,
+  type OnilabCategory,
+} from "./onilab-products"
 
 export const productCategories = [
   "PCR y qPCR",
@@ -16,6 +23,14 @@ export const productCategories = [
   "Medios de cultivo",
   "Identificación bacteriana",
   "Bacteriófagos",
+  "Agitadores magnéticos",
+  "Centrífugas",
+  "Pipeteo y dispensación",
+  "Mezcladores vortex",
+  "Agitadores orbitales",
+  "Agitadores de techo",
+  "Incubadoras y calentadores",
+  "Medición de pH",
 ] as const
 
 export type ProductCategory = (typeof productCategories)[number]
@@ -39,6 +54,10 @@ export type MolecularProduct = {
   specifications?: Array<{ label: string; value: string }>
   taxNote?: string
   researchUseOnly?: boolean
+  sourcePriceUsd?: number
+  shippingPen?: number
+  pricingNote?: string
+  sourceCheckedAt?: string
 }
 
 export const REFERENCE_SHIPPING_PEN = 250
@@ -413,7 +432,51 @@ const realFisherProducts = (fisherProducts as MolecularProduct[]).map((product, 
     : product
 })
 
-export const molecularProducts: MolecularProduct[] = [...bacteriophageProducts, ...hiMediaCultureMedia, ...fixedPriceProducts, ...realFisherProducts]
+const onilabApplications: Record<OnilabCategory, string[]> = {
+  "Agitadores magnéticos": ["Preparación de soluciones", "Mezcla con o sin calentamiento", "Rutinas de laboratorio"],
+  Centrífugas: ["Separación de muestras", "Procesamiento de tubos", "Flujos de biología molecular"],
+  "Pipeteo y dispensación": ["Transferencia de líquidos", "Preparación de ensayos", "Trabajo con microvolúmenes"],
+  "Mezcladores vortex": ["Homogeneización rápida", "Mezcla de tubos", "Preparación de muestras"],
+  "Agitadores orbitales": ["Agitación orbital", "Mezcla de matraces y placas", "Cultivo y preparación de muestras"],
+  "Agitadores de techo": ["Mezcla de alta viscosidad", "Formulación", "Homogeneización mecánica"],
+  "Incubadoras y calentadores": ["Incubación controlada", "Calentamiento de muestras", "Preparación térmica"],
+  "Medición de pH": ["Control de pH", "Preparación de medios", "Verificación de soluciones"],
+}
+
+const onilabProducts: MolecularProduct[] = onilabProductSeeds.map((seed) => {
+  const pricePen = Math.round(seed.priceUsd * ONILAB_EXCHANGE_RATE_PEN * ONILAB_MARGIN_MULTIPLIER * 100) / 100
+  return {
+    id: `onilab-${seed.asin.toLowerCase()}`,
+    name: seed.name,
+    brand: "ONiLAB",
+    catalogNumber: seed.asin,
+    presentation: "1 unidad",
+    category: seed.category,
+    description: seed.summary,
+    longDescription: `${seed.name}. ${seed.summary} La configuración, compatibilidad eléctrica, accesorios incluidos y disponibilidad se validan antes de confirmar la importación.`,
+    pricePen,
+    image: seed.image,
+    storage: "Conservar en ambiente seco y seguir las indicaciones del manual del fabricante",
+    imported: true,
+    applications: onilabApplications[seed.category],
+    sourcePriceUsd: seed.priceUsd,
+    shippingPen: ONILAB_REFERENCE_SHIPPING_PEN,
+    pricingNote: "Precio base en USD × tipo de cambio S/4 × 1,50. El envío referencial se cotiza por separado.",
+    sourceCheckedAt: "20 de septiembre de 2026",
+    specifications: [
+      { label: "Marca", value: "ONiLAB" },
+      { label: "Código ASIN", value: seed.asin },
+      { label: "Categoría", value: seed.category },
+      { label: "Precio base consultado", value: `US$${seed.priceUsd.toFixed(2)}` },
+      { label: "Tipo de cambio aplicado", value: "US$1 = S/4,00" },
+      { label: "Cálculo referencial", value: "Precio base × S/4 × 1,50" },
+      { label: "Envío referencial", value: "US$90 · S/360 por pedido, no incluido" },
+      { label: "Disponibilidad", value: "Importación bajo pedido" },
+    ],
+  }
+})
+
+export const molecularProducts: MolecularProduct[] = [...onilabProducts, ...bacteriophageProducts, ...hiMediaCultureMedia, ...fixedPriceProducts, ...realFisherProducts]
 
 export function getMolecularProduct(slug: string) {
   return molecularProducts.find((product) => product.id === slug)

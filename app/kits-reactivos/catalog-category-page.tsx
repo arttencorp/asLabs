@@ -8,6 +8,7 @@ const categoriesByScope: Record<CatalogPageConfig["scope"], ProductCategory[]> =
   medios: ["Medios de cultivo"],
   equipos: ["Equipos moleculares", "Consumibles PCR", "Materiales moleculares"],
   bacteriofagos: ["Bacteriófagos"],
+  laboratorio: ["Agitadores magnéticos", "Centrífugas", "Pipeteo y dispensación", "Mezcladores vortex", "Agitadores orbitales", "Agitadores de techo", "Incubadoras y calentadores", "Medición de pH"],
 }
 
 export type CatalogCategoryPageProps = {

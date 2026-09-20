@@ -45,10 +45,11 @@ const categoryGroups: Record<string, readonly (typeof productCategories)[number]
   medios: ["Medios de cultivo"],
   equipos: ["Equipos moleculares", "Consumibles PCR", "Materiales moleculares"],
   bacteriofagos: ["Bacteriófagos"],
+  laboratorio: ["Agitadores magnéticos", "Centrífugas", "Pipeteo y dispensación", "Mezcladores vortex", "Agitadores orbitales", "Agitadores de techo", "Incubadoras y calentadores", "Medición de pH"],
 }
 
 export type CatalogPageConfig = {
-  scope: "molecular" | "microbiologia" | "medios" | "equipos" | "bacteriofagos"
+  scope: "molecular" | "microbiologia" | "medios" | "equipos" | "bacteriofagos" | "laboratorio"
   eyebrow: string
   title: string
   description: string
@@ -58,6 +59,7 @@ export type CatalogPageConfig = {
   useCases: Array<{ title: string; text: string }>
   faq: Array<{ question: string; answer: string }>
   notice?: string
+  noticeTitle?: string
 }
 
 const familyPages = [
@@ -66,6 +68,7 @@ const familyPages = [
   { scope: "medios", label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares HiMedia de importación" },
   { scope: "equipos", label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles", description: "Instrumentos y materiales de laboratorio" },
   { scope: "bacteriofagos", label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos", description: "Mezclas y controles para investigación" },
+  { scope: "laboratorio", label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "50 referencias ONiLAB de importación" },
 ] as const
 
 function matchesCategory(product: MolecularProduct, selected: string) {
@@ -132,6 +135,7 @@ function ProductCard({
               <>
                 <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">Precio referencial{product.priceBasis ? ` · ${product.priceBasis}` : ""}</p>
                 <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">{product.priceBasis ? money(price) : `Desde ${money(price)}`} {product.taxNote && <span className="text-[10px] font-bold text-[#5f7569]">{product.taxNote}</span>}</p>
+                {product.shippingPen && <p className="mt-1 text-[9px] font-semibold text-[#7b8d83]">Envío ref. por pedido: {money(product.shippingPen)}</p>}
               </>
             ) : (
               <>
@@ -180,6 +184,8 @@ function CartDrawer({
   const units = entries.reduce((total, product) => total + cart[product.id], 0)
   const allPricesAvailable = entries.length > 0 && entries.every(hasVerifiedProductPrice)
   const hasTaxExcludedProducts = entries.some((product) => Boolean(product.taxNote))
+  const shippingValues = [...new Set(entries.map((product) => product.shippingPen ?? REFERENCE_SHIPPING_PEN))]
+  const shippingReference = shippingValues.length === 1 ? shippingValues[0] : null
   const subtotalFrom = allPricesAvailable
     ? entries.reduce((total, product) => total + getProductReferencePricePen(product)! * cart[product.id], 0)
     : null
@@ -189,7 +195,7 @@ function CartDrawer({
     ...entries.map((product) => `• ${product.name} (${product.catalogNumber}) — ${cart[product.id]} unidad(es)${product.taxNote ? ` · ${product.taxNote}` : ""}${product.researchUseOnly ? " · solo para investigación" : ""}`),
     "",
     ...(subtotalFrom !== null
-      ? [`Subtotal referencial desde: ${money(subtotalFrom)}${hasTaxExcludedProducts ? " (incluye productos con IGV no sumado)" : ""}`, `Envío base referencial desde: ${money(REFERENCE_SHIPPING_PEN)}`, "Total final: por confirmar según variables, impuestos y conservación."]
+      ? [`Subtotal referencial desde: ${money(subtotalFrom)}${hasTaxExcludedProducts ? " (incluye productos con IGV no sumado)" : ""}`, shippingReference !== null ? `Envío base referencial por pedido: ${money(shippingReference)}` : "Envío referencial: por confirmar porque el pedido combina familias distintas.", "Total final: por confirmar según variables, impuestos, destino y conservación."]
       : ["Precio, presentación, importación y envío: por confirmar en cotización."]),
     "",
     "Por favor, confirmen disponibilidad, tipo de cambio y plazo de importación.",
@@ -235,7 +241,7 @@ function CartDrawer({
                 {subtotalFrom !== null ? (
                   <dl className="space-y-3 text-sm">
                     <div className="flex justify-between text-[#66786e]"><dt>Subtotal desde · {units} {units === 1 ? "unidad" : "unidades"}</dt><dd className="font-bold text-[#2d4639]">{money(subtotalFrom)}</dd></div>
-                    <div className="flex justify-between text-[#66786e]"><dt className="flex items-center gap-2"><Truck className="h-4 w-4" />Envío base desde</dt><dd className="font-bold text-[#2d4639]">{money(REFERENCE_SHIPPING_PEN)}</dd></div>
+                    <div className="flex justify-between gap-4 text-[#66786e]"><dt className="flex items-center gap-2"><Truck className="h-4 w-4" />Envío referencial</dt><dd className="text-right font-bold text-[#2d4639]">{shippingReference !== null ? money(shippingReference) : "Por confirmar"}</dd></div>
                     <div className="border-t border-dashed border-[#dfe8e2] pt-4"><p className="font-bold text-[#173f2d]">Total final por confirmar</p><p className="mt-1 text-[10px] leading-4 text-[#829087]">Depende de la variante, impuestos, destino y cadena de frío.</p></div>
                     {hasTaxExcludedProducts && <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] leading-4 text-amber-900">El subtotal contiene referencias publicadas “+ IGV”. El impuesto se calcula en la cotización final.</div>}
                   </dl>
@@ -304,7 +310,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
   }, [pageConfig])
 
   const scopedCategories = pageConfig ? categoryGroups[pageConfig.scope] : productCategories
-  const heroIcon = pageConfig?.scope === "molecular" ? Dna : pageConfig?.scope === "equipos" ? SlidersHorizontal : pageConfig?.scope === "bacteriofagos" ? ShieldCheck : FlaskConical
+  const heroIcon = pageConfig?.scope === "molecular" ? Dna : pageConfig?.scope === "equipos" ? SlidersHorizontal : pageConfig?.scope === "laboratorio" ? Beaker : pageConfig?.scope === "bacteriofagos" ? ShieldCheck : FlaskConical
   const HeroIcon = heroIcon
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
@@ -368,13 +374,13 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
 
         <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div>
-              <nav aria-label="Familias del catálogo" className="mb-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+              <nav aria-label="Familias del catálogo" className="mb-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                 {familyPages.map((family) => {
                   const active = pageConfig?.scope === family.scope
                   return <Link key={family.scope} href={family.href} aria-current={active ? "page" : undefined} className={`group rounded-[18px] border p-4 transition hover:-translate-y-0.5 hover:shadow-md ${active ? "border-[#5f9877] bg-[#173f2d] text-white shadow-md" : "border-[#d9e5dd] bg-white text-[#264b39]"}`}><span className={`text-xs font-black ${active ? "text-white" : "text-[#176844]"}`}>{family.label}</span><span className={`mt-1 block text-[10px] leading-4 ${active ? "text-white/65" : "text-[#718178]"}`}>{family.description}</span></Link>
                 })}
               </nav>
-              {pageConfig?.notice && <div role="note" className="mb-6 flex items-start gap-3 rounded-[20px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950 shadow-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" /><p><strong>Uso restringido.</strong> {pageConfig.notice}</p></div>}
+              {pageConfig?.notice && <div role="note" className="mb-6 flex items-start gap-3 rounded-[20px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950 shadow-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" /><p><strong>{pageConfig.noticeTitle ?? "Información importante."}</strong> {pageConfig.notice}</p></div>}
               {pageConfig && (
                 <section aria-labelledby="catalog-introduction" className="mb-8 grid gap-5 rounded-[24px] border border-[#d9e6dd] bg-white p-5 shadow-[0_16px_45px_-36px_rgba(8,48,33,.45)] sm:p-7 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,.75fr)]">
                   <div>
@@ -398,7 +404,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
               <div className="mt-5 rounded-[20px] border border-[#dce7df] bg-white p-3 shadow-sm">
                 <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[minmax(260px,1fr)_220px_200px_170px]">
                   <label className="relative block"><Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><span className="sr-only">Buscar producto</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar producto, marca o código…" className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-11 pr-4 text-sm font-medium outline-none transition focus:border-[#72a387] focus:ring-4 focus:ring-[#72a387]/10" /></label>
-                  <label><span className="sr-only">Filtrar por categoría</span><select value={category} onChange={(event) => setCategory(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value={pageConfig ? `grupo:${pageConfig.scope}` : "Todos"}>{pageConfig ? `Toda la familia: ${familyPages.find((item) => item.scope === pageConfig.scope)?.label}` : "Todas las categorías"}</option>{!pageConfig && <optgroup label="Familias principales"><option value="grupo:molecular">Biología molecular</option><option value="grupo:microbiologia">Microbiología</option><option value="grupo:medios">Medios de cultivo</option><option value="grupo:equipos">Equipos y consumibles</option><option value="grupo:bacteriofagos">Bacteriófagos</option></optgroup>}<optgroup label="Categorías específicas">{scopedCategories.map((item) => <option key={item} value={item}>{item}</option>)}</optgroup></select></label>
+                  <label><span className="sr-only">Filtrar por categoría</span><select value={category} onChange={(event) => setCategory(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value={pageConfig ? `grupo:${pageConfig.scope}` : "Todos"}>{pageConfig ? `Toda la familia: ${familyPages.find((item) => item.scope === pageConfig.scope)?.label}` : "Todas las categorías"}</option>{!pageConfig && <optgroup label="Familias principales"><option value="grupo:molecular">Biología molecular</option><option value="grupo:microbiologia">Microbiología</option><option value="grupo:medios">Medios de cultivo</option><option value="grupo:equipos">Equipos y consumibles</option><option value="grupo:bacteriofagos">Bacteriófagos</option><option value="grupo:laboratorio">Equipos de laboratorio</option></optgroup>}<optgroup label="Categorías específicas">{scopedCategories.map((item) => <option key={item} value={item}>{item}</option>)}</optgroup></select></label>
                   <label className="relative"><span className="sr-only">Filtrar por marca</span><SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" /><select value={brand} onChange={(event) => setBrand(event.target.value)} className="h-11 w-full appearance-none rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-10 pr-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="Todas">Todas las marcas</option>{brandFilterOptions.slice(1).map((item) => <option key={item}>{item}</option>)}</select></label>
                   <label><span className="sr-only">Ordenar productos</span><select value={sort} onChange={(event) => setSort(event.target.value)} className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"><option value="featured">Destacados</option><option value="name">Nombre A–Z</option></select></label>
                 </div>
@@ -446,7 +452,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
             {[
               { icon: Beaker, title: "Selección técnica", text: "Referencias filtradas según aplicación y protocolo." },
               { icon: PackageCheck, title: "Importación coordinada", text: "Validamos stock, conservación y tiempo de entrega." },
-              { icon: Truck, title: "Envío referencial", text: "S/250 por pedido, sujeto a destino y condiciones." },
+              { icon: Truck, title: "Envío referencial", text: pageConfig?.scope === "laboratorio" ? "S/360 por pedido ONiLAB, sujeto a destino y condiciones." : "S/250 por pedido, sujeto a destino y condiciones." },
               { icon: TestTube2, title: "Soporte molecular", text: "Acompañamiento para elegir kits y reactivos." },
             ].map((item) => <article key={item.title} className="rounded-[26px] border border-white/10 bg-white/[.06] p-5"><item.icon className="h-5 w-5 text-[#bfe9c8]" /><h3 className="mt-5 font-bold">{item.title}</h3><p className="mt-2 text-xs leading-5 text-white/55">{item.text}</p></article>)}
           </div>

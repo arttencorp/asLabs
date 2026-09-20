@@ -24,6 +24,7 @@ const pages = [
   ["/kits-reactivos/medios-de-cultivo", "weekly", 0.92],
   ["/kits-reactivos/equipos-consumibles", "weekly", 0.86],
   ["/kits-reactivos/bacteriofagos", "weekly", 0.92],
+  ["/kits-reactivos/equipos-de-laboratorio", "weekly", 0.92],
   ["/biotecnologia-vegetal", "monthly", 0.85],
   ["/cepas", "weekly", 0.85],
   ["/research", "weekly", 0.85],

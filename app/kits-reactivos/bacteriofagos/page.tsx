@@ -63,6 +63,7 @@ const config = {
   ],
   notice:
     "Todos los bacteriófagos de esta sección son únicamente para investigación. No están destinados a diagnóstico, tratamiento, consumo humano, uso veterinario ni procedimientos clínicos.",
+  noticeTitle: "Uso restringido.",
 }
 
 export default function BacteriofagosPage() {

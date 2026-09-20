@@ -13,6 +13,8 @@ type ProductQuoteConfiguratorProps = {
   pricePen: number | null
   taxNote?: string
   researchUseOnly?: boolean
+  shippingPen?: number
+  pricingNote?: string
 }
 
 function money(value: number) {
@@ -32,6 +34,8 @@ export default function ProductQuoteConfigurator({
   pricePen,
   taxNote,
   researchUseOnly,
+  shippingPen,
+  pricingNote,
 }: ProductQuoteConfiguratorProps) {
   const [quantity, setQuantity] = useState(1)
   const [variables, setVariables] = useState("")
@@ -52,8 +56,10 @@ export default function ProductQuoteConfigurator({
       "Entiendo que el importe publicado es referencial desde y que la configuración final debe ser cotizada.",
       taxNote ? `El precio publicado se indica ${taxNote}.` : null,
       researchUseOnly ? "Confirmo que la solicitud es únicamente para investigación y no para uso clínico o diagnóstico." : null,
+      shippingPen ? `Envío referencial por pedido: ${money(shippingPen)}, sujeto a confirmación.` : null,
+      pricingNote ?? null,
     ].filter(Boolean).join("\n"),
-    [catalogNumber, presentation, productName, quantity, researchUseOnly, selectedPresentation, taxNote, variables],
+    [catalogNumber, presentation, pricingNote, productName, quantity, researchUseOnly, selectedPresentation, shippingPen, taxNote, variables],
   )
 
   return (
@@ -122,6 +128,7 @@ export default function ProductQuoteConfigurator({
           <p className="text-[10px] font-bold uppercase tracking-[.1em] text-[#4e765f]">{showsPublishedPrice ? `Precio referencial ${priceBasis ?? "base"}` : `Presentación ${selectedPresentation}`}</p>
           <p className="mt-1 text-sm font-black text-[#0b4a33]">{showsPublishedPrice ? `${money(pricePen)}${taxNote ? ` ${taxNote}` : ""}` : "Precio por cotizar"}</p>
           <p className="mt-1 text-[10px] leading-4 text-[#687c70]">{showsPublishedPrice ? "El valor final se confirma antes de procesar la importación." : `El precio publicado corresponde a ${priceBasis}; confirmaremos la cotización de ${selectedPresentation}.`}</p>
+          {shippingPen && <p className="mt-2 border-t border-[#d7e8db] pt-2 text-[10px] font-bold text-[#476b56]">Envío referencial separado: {money(shippingPen)} por pedido</p>}
         </div>
       )}
 

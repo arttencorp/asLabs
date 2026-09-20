@@ -50,6 +50,7 @@ const navigation: NavGroup[] = [
       { label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares HiMedia de importación", icon: FlaskConical },
       { label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos", description: "Mezclas y controles para investigación", icon: ShieldCheck },
       { label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles", description: "Instrumentos y materiales", icon: ClipboardCheck },
+      { label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "Centrífugas, agitadores, pipetas y más", icon: FlaskConical },
     ],
   },
   {
