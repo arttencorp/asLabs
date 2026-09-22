@@ -17,6 +17,8 @@ import {
   FileCheck2,
   FlaskConical,
   Info,
+  ImageIcon,
+  MapPin,
   MessageCircle,
   Microscope,
   Minus,
@@ -54,6 +56,8 @@ export interface StrainItem {
   disponibilidad: boolean
   link?: string
   identificationProvider?: "cavbio" | "macrogen"
+  isolatedFrom?: string
+  image?: string
 }
 
 type CatalogKind = "identified" | "atcc"
@@ -166,19 +170,19 @@ function DhlBadge() {
 function IdentificationBadge({ provider = "cavbio", compact = false }: { provider?: "cavbio" | "macrogen"; compact?: boolean }) {
   const isMacrogen = provider === "macrogen"
   return (
-    <div className={`flex items-center gap-3 rounded-2xl border border-emerald-950/10 bg-[#f7faf7] ${compact ? "px-3 py-2.5" : "p-4"}`}>
-      <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2 ${compact ? "h-9 w-24" : "h-12 w-36"}`}>
+    <div className={`flex items-center rounded-2xl border border-emerald-950/10 bg-[#f7faf7] ${compact ? "gap-2 px-2.5 py-2" : "gap-3 p-4"}`}>
+      <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white px-2 ${compact ? "h-8 w-20" : "h-12 w-36"}`}>
         <Image
           src={isMacrogen ? "/partners/macrogen.png" : "/partners/cavbio.png"}
           alt={isMacrogen ? "Macrogen" : "CavBio"}
           width={150}
           height={65}
-          className="h-auto max-h-8 w-full object-contain"
+          className={`${compact ? "max-h-6" : "max-h-8"} h-auto w-full object-contain`}
         />
       </span>
       <div className="min-w-0">
-        <p className="text-[8px] font-bold uppercase tracking-[0.13em] text-emerald-700">Identificación molecular</p>
-        <p className={`${compact ? "text-[10px]" : "text-xs"} mt-0.5 font-bold text-emerald-950`}>
+        <p className={`${compact ? "text-[7px]" : "text-[8px]"} font-bold uppercase tracking-[0.12em] text-emerald-700`}>Identificación molecular</p>
+        <p className={`${compact ? "text-[9px]" : "text-xs"} mt-0.5 font-bold text-emerald-950`}>
           Identificada por {isMacrogen ? "Macrogen" : "CavBio"}
         </p>
       </div>
@@ -362,6 +366,8 @@ function StrainCard({
   market: "peru" | "ecuador"
 }) {
   const copy = catalogCopy[kind]
+  const isIdentified = kind === "identified"
+  const hasPrice = strain.precioSinEnvio != null || strain.precio != null
 
   return (
     <motion.article
@@ -371,99 +377,103 @@ function StrainCard({
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.42, delay: Math.min(index * 0.035, 0.25) }}
       whileHover={{ y: -6 }}
-      className="group flex h-full flex-col overflow-hidden rounded-[28px] border border-emerald-950/10 bg-white shadow-[0_16px_50px_rgba(5,46,34,.07)] transition-shadow duration-300 hover:shadow-[0_24px_70px_rgba(5,46,34,.14)]"
+      className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-emerald-950/10 bg-white shadow-[0_14px_42px_rgba(5,46,34,.07)] transition-shadow duration-300 hover:shadow-[0_22px_58px_rgba(5,46,34,.13)]"
     >
       <div className="h-1 w-full bg-gradient-to-r from-emerald-300 via-lime-300 to-emerald-700 opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
-      <div className="relative overflow-hidden border-b border-emerald-950/8 bg-gradient-to-br from-emerald-50 via-white to-lime-50/70 p-6">
-        <div className="absolute -right-7 -top-7 h-28 w-28 rounded-full border-[18px] border-emerald-500/[0.06] transition-transform duration-700 group-hover:rotate-45 group-hover:scale-110" />
-        <motion.span
-          aria-hidden="true"
-          className="absolute right-16 top-20 h-2.5 w-2.5 rounded-full bg-lime-300/70"
-          animate={{ y: [0, -8, 0], opacity: [0.45, 1, 0.45] }}
-          transition={{ duration: 3.2, repeat: Infinity, delay: index * 0.08 }}
-        />
-        <motion.span
-          aria-hidden="true"
-          className="absolute right-10 top-28 h-1.5 w-1.5 rounded-full bg-emerald-500/50"
-          animate={{ x: [0, 7, 0], y: [0, -5, 0] }}
-          transition={{ duration: 4.2, repeat: Infinity, delay: index * 0.05 }}
-        />
-        <div className="relative flex items-start justify-between gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-950 text-emerald-100 shadow-lg shadow-emerald-950/20">
-            <Dna className="h-6 w-6" />
+      {isIdentified ? (
+        <div className="relative aspect-square overflow-hidden border-b border-emerald-950/8 bg-gradient-to-br from-[#e8f5ec] via-[#f9fcf9] to-[#dff1df]">
+          {strain.image ? (
+            <Image
+              src={strain.image}
+              alt={`Cultivo de ${strain.nombre}`}
+              fill
+              sizes="(min-width: 1280px) 300px, (min-width: 768px) 42vw, 92vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-emerald-950/45">
+              <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-emerald-900/10 bg-white/65 shadow-inner">
+                <div className="absolute inset-3 rounded-full border border-dashed border-emerald-600/20" />
+                <ImageIcon className="h-9 w-9" />
+              </div>
+              <span className="mt-4 rounded-full bg-white/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em]">Colección AS Labs</span>
+            </div>
+          )}
+          <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
+            <span className="rounded-full bg-emerald-950/90 px-2.5 py-1 text-[10px] font-bold text-white shadow-lg backdrop-blur-md">{strain.codigo}</span>
+            <span className="rounded-full border border-white/70 bg-white/85 px-2.5 py-1 text-[10px] font-bold text-emerald-800 shadow-sm backdrop-blur-md">{strain.bsl}</span>
           </div>
-          <div className="flex flex-wrap justify-end gap-2">
-            <span className="rounded-full border border-emerald-200 bg-white/85 px-3 py-1 text-xs font-bold text-emerald-800">
-              {strain.bsl}
-            </span>
-            {strain.typeStrain === "Sí" && (
-              <span className="rounded-full bg-lime-200 px-3 py-1 text-xs font-bold text-lime-950">Cepa tipo</span>
+        </div>
+      ) : (
+        <div className="relative overflow-hidden border-b border-emerald-950/8 bg-gradient-to-br from-emerald-50 via-white to-lime-50/70 p-6">
+          <div className="absolute -right-7 -top-7 h-28 w-28 rounded-full border-[18px] border-emerald-500/[0.06] transition-transform duration-700 group-hover:rotate-45 group-hover:scale-110" />
+          <div className="relative flex items-start justify-between gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-950 text-emerald-100 shadow-lg shadow-emerald-950/20"><Dna className="h-6 w-6" /></div>
+            <span className="rounded-full border border-emerald-200 bg-white/85 px-3 py-1 text-xs font-bold text-emerald-800">{strain.bsl}</span>
+          </div>
+          <p className="relative mt-5 text-xs font-bold uppercase tracking-[0.17em] text-emerald-700">{strain.codigo}</p>
+          <h2 className="relative mt-2 text-2xl font-semibold leading-tight tracking-[-0.025em] text-emerald-950"><span className="italic">{strain.nombre}</span></h2>
+          <p className="relative mt-2 line-clamp-2 min-h-[40px] text-sm italic leading-5 text-slate-600">{strain.cientifico}</p>
+        </div>
+      )}
+
+      <div className={`flex flex-1 flex-col ${isIdentified ? "p-4" : "p-6"}`}>
+        {isIdentified && (
+          <>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700">{strain.categoria}</p>
+            <h2 className="mt-1.5 line-clamp-2 text-xl font-semibold italic leading-tight tracking-[-0.02em] text-emerald-950">{strain.nombre}</h2>
+            {strain.isolatedFrom && (
+              <p className="mt-2 flex items-start gap-1.5 text-xs font-medium leading-5 text-slate-600">
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                <span><strong className="text-slate-800">Aislado de:</strong> {strain.isolatedFrom}</span>
+              </p>
             )}
-          </div>
-        </div>
-        <p className="relative mt-5 text-xs font-bold uppercase tracking-[0.17em] text-emerald-700">{strain.codigo}</p>
-        <h2 className="relative mt-2 text-2xl font-semibold leading-tight tracking-[-0.025em] text-emerald-950">
-          <span className="italic">{strain.nombre}</span>
-        </h2>
-        <p className="relative mt-2 line-clamp-2 min-h-[40px] text-sm italic leading-5 text-slate-600">{strain.cientifico}</p>
-      </div>
+          </>
+        )}
 
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">{strain.categoria}</span>
-          <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">{strain.productFormat}</span>
-        </div>
+        {!isIdentified && <div className="flex flex-wrap gap-2"><span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">{strain.categoria}</span><span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">{strain.productFormat}</span></div>}
 
-        {kind === "identified" && (
-          <div className="mt-5">
+        {isIdentified && (
+          <div className="mt-3">
             <IdentificationBadge provider={getIdentificationProvider(strain)} compact />
           </div>
         )}
 
-        <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
-          <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
-            <dt className="text-xs text-slate-500">Presentación</dt>
-            <dd className="mt-1 font-semibold text-slate-800">{strain.cantidad}</dd>
-          </div>
-          <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
-            <dt className="text-xs text-slate-500">Disponibilidad</dt>
-            <dd className="mt-1 flex items-center gap-1.5 font-semibold text-emerald-700">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              A confirmar
-            </dd>
-          </div>
-        </dl>
+        {isIdentified ? (
+          <p className="mt-3 line-clamp-2 border-t border-slate-100 pt-3 text-[11px] font-medium leading-4 text-slate-500"><span className="font-bold text-slate-700">Presentación:</span> {strain.cantidad}</p>
+        ) : (
+          <dl className="mt-5 grid grid-cols-2 gap-3 text-sm"><div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3"><dt className="text-xs text-slate-500">Presentación</dt><dd className="mt-1 font-semibold text-slate-800">{strain.cantidad}</dd></div><div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-3"><dt className="text-xs text-slate-500">Disponibilidad</dt><dd className="mt-1 flex items-center gap-1.5 font-semibold text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" />A confirmar</dd></div></dl>
+        )}
 
-        <div className="mt-auto pt-6">
+        <div className={`mt-auto ${isIdentified ? "pt-4" : "pt-6"}`}>
           {kind === "atcc" ? (
             <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
               <p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-700">Disponible para investigación</p>
               <p className="mt-2 text-sm leading-6 text-emerald-950/75">Para tesistas, investigadores y proyectos académicos. El acceso se evalúa según el uso declarado.</p>
             </div>
-          ) : (
-            <div className="mb-4 flex items-end justify-between gap-4">
+          ) : hasPrice ? (
+            <div className="mb-3 flex items-end justify-between gap-3">
               <div>
-                <p className="text-xs text-slate-500">Precio referencial desde</p>
-                <p className="mt-1 text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(getMarketPrice(strain, market), market)}</p>
+                <p className="text-[10px] text-slate-500">Precio referencial</p>
+                <p className="mt-0.5 text-xl font-bold tracking-tight text-emerald-950">{formatMoney(getMarketPrice(strain, market), market)}</p>
               </div>
-              <div className="flex max-w-[145px] flex-col items-end gap-1.5 text-right text-[11px] leading-4 text-slate-500">
-                <span>Envío calculado una vez por pedido</span>
-                <DhlBadge />
-              </div>
+              <DhlBadge />
             </div>
+          ) : (
+            <div className="mb-3 rounded-xl bg-amber-50 px-3 py-2.5"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700">Precio referencial</p><p className="mt-0.5 text-sm font-bold text-amber-950">Consultar</p></div>
           )}
           <div className={`grid gap-2 ${market === "peru" ? "grid-cols-2" : "grid-cols-1"}`}>
             {market === "peru" && <Link
               href={`${copy.catalogPath}/${strain.id}`}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-emerald-950/15 px-4 text-sm font-bold text-emerald-950 transition-all hover:border-emerald-700 hover:bg-emerald-50"
+              className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-emerald-950/15 px-3 text-xs font-bold text-emerald-950 transition-all hover:border-emerald-700 hover:bg-emerald-50"
             >
               Ver ficha
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>}
-            {kind === "atcc" ? (
+            {kind === "atcc" || !hasPrice ? (
               <WhatsAppContact
-                message={`Hola, soy investigador/a o tesista y deseo consultar la disponibilidad de ${strain.nombre} (${strain.codigo}) para un proyecto de investigación.`}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                message={kind === "atcc" ? `Hola, soy investigador/a o tesista y deseo consultar la disponibilidad de ${strain.nombre} (${strain.codigo}) para un proyecto de investigación.` : `Hola, deseo consultar el precio y la disponibilidad de ${strain.nombre} (${strain.codigo}).`}
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-3 text-xs font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
               >
                 <MessageCircle className="h-4 w-4" /> Consultar
               </WhatsAppContact>
@@ -472,7 +482,7 @@ function StrainCard({
                 type="button"
                 whileTap={{ scale: 0.93 }}
                 onClick={() => onAdd(strain)}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-3 text-xs font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
                 aria-label={`Añadir ${strain.nombre} al pedido`}
               >
                 <ShoppingCart className="h-4 w-4" /> Añadir
@@ -914,7 +924,7 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
                     className="h-16 w-full rounded-2xl border border-emerald-950/10 bg-white pl-14 pr-5 text-base shadow-[0_10px_35px_rgba(5,46,34,.05)] outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                   />
                 </div>
-                <motion.div layout className="grid gap-5 md:grid-cols-2">
+                <motion.div layout className={`grid gap-5 md:grid-cols-2 ${kind === "identified" ? "xl:grid-cols-3" : ""}`}>
                   <AnimatePresence mode="popLayout">
                     {filtered.map((strain, index) => (
                       <StrainCard key={strain.id} strain={strain} kind={kind} index={index} onAdd={addToCart} market={market} />
@@ -1241,6 +1251,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
   const applications = detailApplications(strain, kind)
   const subtotal = getBasePrice(strain) * quantity
   const total = subtotal + copy.shipping
+  const hasPrice = strain.precioSinEnvio != null || strain.precio != null
   const related = strains.filter((item) => item.id !== strain.id && item.categoria === strain.categoria).slice(0, 3)
 
   const addToCart = () => {
@@ -1290,16 +1301,16 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                 initial={{ opacity: 0, scale: 0.9, rotate: 3 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 transition={{ delay: 0.12, duration: 0.6 }}
-                className="hidden aspect-[4/3] items-center justify-center rounded-[38px] border border-white/12 bg-white/[0.07] backdrop-blur-xl lg:flex"
+                className="relative hidden aspect-square items-center justify-center overflow-hidden rounded-[38px] border border-white/12 bg-white/[0.07] backdrop-blur-xl lg:flex"
               >
-                <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-emerald-200/30">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 12, ease: "linear", repeat: Infinity }}
-                    className="absolute inset-3 rounded-full border border-dashed border-lime-200/50"
-                  />
-                  <Dna className="h-14 w-14 text-lime-200" />
-                </div>
+                {strain.image ? (
+                  <Image src={strain.image} alt={`Cultivo de ${strain.nombre}`} fill sizes="300px" className="object-cover" />
+                ) : (
+                  <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-emerald-200/30">
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 12, ease: "linear", repeat: Infinity }} className="absolute inset-3 rounded-full border border-dashed border-lime-200/50" />
+                    <Dna className="h-14 w-14 text-lime-200" />
+                  </div>
+                )}
               </motion.div>
             </div>
           </div>
@@ -1328,6 +1339,7 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                   ["Designación", strain.strainDesignation || "Consultar documentación"],
                   ["Formato", strain.productFormat],
                   ["Presentación", strain.cantidad],
+                  ...(strain.isolatedFrom ? [["Aislado de", strain.isolatedFrom]] : []),
                   ["Referencia", strain.referencia],
                   ["Cepa tipo", strain.typeStrain],
                 ].map(([label, value]) => (
@@ -1397,6 +1409,25 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
 
           <aside className="lg:sticky lg:top-28">
             <div className="overflow-hidden rounded-[30px] border border-emerald-950/10 bg-white shadow-[0_20px_70px_rgba(5,46,34,.12)]">
+              {!hasPrice ? (
+                <>
+                  <div className="border-b border-amber-100 bg-gradient-to-br from-amber-50 to-lime-50 p-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-700">Precio referencial</p>
+                    <p className="mt-2 text-3xl font-bold tracking-tight text-emerald-950">Consultar</p>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">Confirma disponibilidad, presentación y precio directamente con un asesor.</p>
+                  </div>
+                  <div className="p-6">
+                    <WhatsAppContact
+                      message={`Hola, deseo consultar el precio y la disponibilidad de ${strain.nombre} (${strain.codigo}).`}
+                      className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:bg-emerald-800"
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                      Consultar con un asesor
+                    </WhatsAppContact>
+                  </div>
+                </>
+              ) : (
+                <>
               <div className="border-b border-slate-100 bg-gradient-to-br from-emerald-50 to-lime-50 p-6">
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">Precio referencial</p>
                 <p className="mt-2 text-3xl font-bold tracking-tight text-emerald-950">{formatMoney(getBasePrice(strain))}</p>
@@ -1472,6 +1503,8 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                   <span className="rounded-xl bg-slate-50 px-2 py-3"><Truck className="mx-auto mb-1 h-4 w-4" />Entrega coordinada</span>
                 </div>
               </div>
+                </>
+              )}
             </div>
             <Link
               href={copy.catalogPath}

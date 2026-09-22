@@ -14,6 +14,8 @@ export const metadata: Metadata = constructMetadata({
     "cepas bacterianas para investigación",
     "cepas de Bacillus subtilis",
     "Pseudomonas fluorescens",
+    "Escherichia coli identificada Perú",
+    "Pseudomonas putida Ecuador",
     "Trichoderma reesei",
     "microorganismos para biocontrol",
     "biofertilizantes microbianos",

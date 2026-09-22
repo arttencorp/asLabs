@@ -16,6 +16,24 @@ interface CartItem {
 // Datos de Cepas Identificadas
 export const cepasIdentificadas = [
   {
+    id: "id-0",
+    nombre: "Escherichia coli",
+    codigo: "AS-EC-001",
+    cientifico: "Escherichia coli",
+    bsl: "BSL-1",
+    categoria: "Investigación",
+    productFormat: "Cultivo microbiológico",
+    strainDesignation: "Cepa identificada y caracterizada en AS Labs",
+    depositedAs: "Escherichia coli",
+    typeStrain: "No",
+    precio: 550.00,
+    precioSinEnvio: 550.00,
+    cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
+    referencia: "AS-EC-001",
+    disponibilidad: true,
+    isolatedFrom: "Matriz reservada · Perú",
+  },
+  {
     id: "id-1",
     nombre: "Bacillus subtilis",
     codigo: "AS-BS-001",
@@ -31,6 +49,7 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-BS-001",
     disponibilidad: true,
+    isolatedFrom: "Sullana · Piura · Perú",
   },
   {
     id: "id-2",
@@ -48,6 +67,7 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-PF-001",
     disponibilidad: true,
+    isolatedFrom: "Bogotá · Colombia",
   },
   {
     id: "id-3",
@@ -65,6 +85,7 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-AB-001",
     disponibilidad: true,
+    isolatedFrom: "Trujillo · Perú",
   },
   {
     id: "id-4",
@@ -82,6 +103,7 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-BM-001",
     disponibilidad: true,
+    isolatedFrom: "Trujillo · Perú",
   },
   {
     id: "id-5",
@@ -90,7 +112,7 @@ export const cepasIdentificadas = [
     cientifico: "Trichoderma reesei",
     bsl: "BSL-1",
     categoria: "Biocontrol",
-    productFormat: "Cultivo microbiológico",
+    productFormat: "Hongo filamentoso",
     strainDesignation: "Cepa antagonista de hongos",
     depositedAs: "Trichoderma reesei",
     typeStrain: "No",
@@ -99,6 +121,7 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-TR-001",
     disponibilidad: true,
+    isolatedFrom: "Trujillo · Perú",
   },
   {
     id: "id-6",
@@ -116,6 +139,23 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-ST-001",
     disponibilidad: true,
+    isolatedFrom: "Interior del país · India",
+  },
+  {
+    id: "id-7",
+    nombre: "Pseudomonas putida",
+    codigo: "AS-PP-001",
+    cientifico: "Pseudomonas putida",
+    bsl: "BSL-1",
+    categoria: "Biofertilizantes",
+    productFormat: "Cultivo microbiológico",
+    strainDesignation: "Cepa identificada y caracterizada en AS Labs",
+    depositedAs: "Pseudomonas putida",
+    typeStrain: "No",
+    cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
+    referencia: "AS-PP-001",
+    disponibilidad: true,
+    isolatedFrom: "Ciudad reservada · Guayaquil · Ecuador",
   },
 ]
 

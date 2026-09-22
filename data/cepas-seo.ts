@@ -1,10 +1,12 @@
-export const identifiedStrains: Record<string, { name: string; code: string }> = {
-  "id-1": { name: "Bacillus subtilis", code: "AS-BS-001" },
-  "id-2": { name: "Pseudomonas fluorescens", code: "AS-PF-001" },
-  "id-3": { name: "Azospirillum brasilense", code: "AS-AB-001" },
-  "id-4": { name: "Bacillus megaterium", code: "AS-BM-001" },
-  "id-5": { name: "Trichoderma reesei", code: "AS-TR-001" },
-  "id-6": { name: "Streptomyces sp.", code: "AS-ST-001" },
+export const identifiedStrains: Record<string, { name: string; code: string; origin?: string }> = {
+  "id-0": { name: "Escherichia coli", code: "AS-EC-001", origin: "Matriz reservada, Perú" },
+  "id-1": { name: "Bacillus subtilis", code: "AS-BS-001", origin: "Sullana, Piura, Perú" },
+  "id-2": { name: "Pseudomonas fluorescens", code: "AS-PF-001", origin: "Bogotá, Colombia" },
+  "id-3": { name: "Azospirillum brasilense", code: "AS-AB-001", origin: "Trujillo, Perú" },
+  "id-4": { name: "Bacillus megaterium", code: "AS-BM-001", origin: "Trujillo, Perú" },
+  "id-5": { name: "Trichoderma reesei", code: "AS-TR-001", origin: "Trujillo, Perú" },
+  "id-6": { name: "Streptomyces sp.", code: "AS-ST-001", origin: "Interior del país, India" },
+  "id-7": { name: "Pseudomonas putida", code: "AS-PP-001", origin: "Ciudad reservada, Guayaquil, Ecuador" },
 }
 
 export const atccStrains: Record<string, { name: string; code: string }> = {

@@ -3,6 +3,7 @@ import { SITE_URL } from "@/lib/metadata"
 interface SeoStrain {
   name: string
   code: string
+  origin?: string
 }
 
 interface CatalogSeoProps {
@@ -156,6 +157,7 @@ export function StrainDetailStructuredData({ kind, strains, id }: DetailSeoProps
         additionalProperty: [
           { "@type": "PropertyValue", name: "Nivel de bioseguridad", value: "BSL-1" },
           { "@type": "PropertyValue", name: "Código de referencia", value: strain.code },
+          ...(strain.origin ? [{ "@type": "PropertyValue", name: "Origen del aislamiento", value: strain.origin }] : []),
           ...(isAtcc ? [{ "@type": "PropertyValue", name: "Uso", value: "Investigación, docencia y trabajos de tesis" }] : []),
         ],
       },
