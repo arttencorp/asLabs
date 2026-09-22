@@ -13,17 +13,18 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
   return constructMetadata({
     title: strain ? `${strain.name} ${strain.code}: Cepa ATCC en Perú` : "Cepa ATCC de referencia",
     description: strain
-      ? `Ficha, documentación y disponibilidad de ${strain.name} ${strain.code}, cepa ATCC de referencia para investigación y control de calidad en Perú.`
-      : "Información de una cepa ATCC de referencia disponible mediante AS Laboratorios.",
+      ? `Ficha, documentación y disponibilidad de ${strain.name} ${strain.code}, cepa ATCC de referencia para investigación, docencia y tesis en Perú.`
+      : "Información de una cepa ATCC de referencia disponible para investigación y tesis en AS Laboratorios.",
     keywords: strain
       ? [
           strain.name,
           strain.code,
-          `comprar ${strain.code} Perú`,
+          `${strain.code} para investigación Perú`,
           "cepa ATCC Perú",
           "microorganismo de referencia",
           "control de calidad microbiológico",
           "validación de métodos microbiológicos",
+          "cepas ATCC para tesistas",
         ]
       : undefined,
     path: `/cepas/atcc/${params.id}`,
