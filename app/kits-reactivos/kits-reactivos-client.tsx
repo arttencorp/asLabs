@@ -63,12 +63,7 @@ export type CatalogPageConfig = {
 }
 
 const familyPages = [
-  { scope: "molecular", label: "Biología molecular", href: "/kits-reactivos/biologia-molecular", description: "PCR, qPCR, extracción y análisis" },
-  { scope: "microbiologia", label: "Microbiología", href: "/kits-reactivos/microbiologia", description: "Identificación y pruebas bacterianas" },
   { scope: "medios", label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares y medios deshidratados" },
-  { scope: "equipos", label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles", description: "Instrumentos y materiales de laboratorio" },
-  { scope: "bacteriofagos", label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos", description: "Mezclas y controles para investigación" },
-  { scope: "laboratorio", label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "50 referencias de importación" },
 ] as const
 
 function matchesCategory(product: MolecularProduct, selected: string) {
@@ -374,12 +369,6 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
 
         <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div>
-              <nav aria-label="Familias del catálogo" className="mb-7 grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-6">
-                {familyPages.map((family) => {
-                  const active = pageConfig?.scope === family.scope
-                  return <Link key={family.scope} href={family.href} aria-current={active ? "page" : undefined} className={`group rounded-[14px] border px-3 py-2.5 transition hover:-translate-y-0.5 hover:shadow-md ${active ? "border-[#5f9877] bg-[#173f2d] text-white shadow-md" : "border-[#d9e5dd] bg-white text-[#264b39]"}`}><span className={`block text-[11px] font-black leading-4 ${active ? "text-white" : "text-[#176844]"}`}>{family.label}</span><span className={`mt-0.5 block truncate text-[9px] leading-3 ${active ? "text-white/65" : "text-[#718178]"}`}>{family.description}</span></Link>
-                })}
-              </nav>
               {pageConfig?.notice && <div role="note" className="mb-6 flex items-start gap-3 rounded-[20px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950 shadow-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" /><p><strong>{pageConfig.noticeTitle ?? "Información importante."}</strong> {pageConfig.notice}</p></div>}
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="max-w-2xl"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-1 text-2xl font-bold tracking-[-.03em] sm:text-3xl">Encuentra la referencia adecuada</h2><p className="mt-2 text-xs leading-5 text-[#687970]">Cotización validada según presentación, stock e importación.</p></div>

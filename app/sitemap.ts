@@ -18,13 +18,7 @@ const pages = [
   ["/ecuador/sobre-nosotros", "monthly", 0.78],
   ["/plantines", "weekly", 0.9],
   ["/control-biologico", "weekly", 0.9],
-  ["/kits-reactivos", "weekly", 0.92],
-  ["/kits-reactivos/biologia-molecular", "weekly", 0.92],
-  ["/kits-reactivos/microbiologia", "weekly", 0.9],
   ["/kits-reactivos/medios-de-cultivo", "weekly", 0.92],
-  ["/kits-reactivos/equipos-consumibles", "weekly", 0.86],
-  ["/kits-reactivos/bacteriofagos", "weekly", 0.92],
-  ["/kits-reactivos/equipos-de-laboratorio", "weekly", 0.92],
   ["/biotecnologia-vegetal", "monthly", 0.85],
   ["/cepas", "weekly", 0.85],
   ["/research", "weekly", 0.85],
@@ -76,7 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.86,
   }))
 
-  const molecularCatalogPages: MetadataRoute.Sitemap = molecularProducts.map((product) => ({
+  const molecularCatalogPages: MetadataRoute.Sitemap = molecularProducts.filter((product) => product.category === "Medios de cultivo").map((product) => ({
     url: `${SITE_URL}/kits-reactivos/${product.id}`,
     lastModified: LAST_MODIFIED,
     changeFrequency: "monthly",

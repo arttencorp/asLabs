@@ -1357,17 +1357,6 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                   <IdentificationBadge provider={getIdentificationProvider(strain)} />
                 </div>
               )}
-              {kind === "atcc" && strain.link && (
-                <a
-                  href={strain.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-900"
-                >
-                  Consultar referencia genómica en NCBI
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              )}
             </motion.section>
 
             <div className="grid gap-6 md:grid-cols-2">
