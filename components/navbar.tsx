@@ -44,13 +44,7 @@ const navigation: NavGroup[] = [
     label: "Kits y Reactivos",
     href: "/kits-reactivos",
     links: [
-      { label: "Catálogo completo", href: "/kits-reactivos", description: "Todas las referencias", icon: FlaskConical },
-      { label: "Biología molecular", href: "/kits-reactivos/biologia-molecular", description: "Kits, reactivos y purificación", icon: Dna },
-      { label: "Microbiología", href: "/kits-reactivos/microbiologia", description: "Pruebas y reactivos bacteriológicos", icon: Microscope },
       { label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares y medios deshidratados", icon: FlaskConical },
-      { label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos", description: "Mezclas y controles para investigación", icon: ShieldCheck },
-      { label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles", description: "Instrumentos y materiales", icon: ClipboardCheck },
-      { label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "Centrífugas, agitadores, pipetas y más", icon: FlaskConical },
     ],
   },
   {
