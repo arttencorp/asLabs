@@ -32,6 +32,7 @@ export const cepasIdentificadas = [
     referencia: "AS-EC-001",
     disponibilidad: true,
     isolatedFrom: "Matriz reservada · Perú",
+    image: "/cepas/identified/escherichia-coli.jpg",
   },
   {
     id: "id-1",
@@ -68,6 +69,7 @@ export const cepasIdentificadas = [
     referencia: "AS-PF-001",
     disponibilidad: true,
     isolatedFrom: "Bogotá · Colombia",
+    image: "/cepas/identified/pseudomonas-fluorescens.jpg",
   },
   {
     id: "id-3",
@@ -86,6 +88,7 @@ export const cepasIdentificadas = [
     referencia: "AS-AB-001",
     disponibilidad: true,
     isolatedFrom: "Trujillo · Perú",
+    image: "/cepas/identified/azospirillum-brasilense.jpg",
   },
   {
     id: "id-4",
@@ -104,6 +107,7 @@ export const cepasIdentificadas = [
     referencia: "AS-BM-001",
     disponibilidad: true,
     isolatedFrom: "Trujillo · Perú",
+    image: "/cepas/identified/bacillus-megaterium.jpg",
   },
   {
     id: "id-5",
@@ -122,6 +126,7 @@ export const cepasIdentificadas = [
     referencia: "AS-TR-001",
     disponibilidad: true,
     isolatedFrom: "Trujillo · Perú",
+    image: "/cepas/identified/trichoderma-reesei.jpg",
   },
   {
     id: "id-6",
@@ -140,6 +145,7 @@ export const cepasIdentificadas = [
     referencia: "AS-ST-001",
     disponibilidad: true,
     isolatedFrom: "Interior del país · India",
+    image: "/cepas/identified/streptomyces-sp.jpg",
   },
   {
     id: "id-7",
@@ -156,6 +162,7 @@ export const cepasIdentificadas = [
     referencia: "AS-PP-001",
     disponibilidad: true,
     isolatedFrom: "Ciudad reservada · Guayaquil · Ecuador",
+    image: "/cepas/identified/pseudomonas-putida.jpg",
   },
 ]
 

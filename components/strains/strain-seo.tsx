@@ -4,6 +4,7 @@ interface SeoStrain {
   name: string
   code: string
   origin?: string
+  image?: string
 }
 
 interface CatalogSeoProps {
@@ -144,6 +145,7 @@ export function StrainDetailStructuredData({ kind, strains, id }: DetailSeoProps
         sku: strain.code,
         description,
         url,
+        ...(strain.image ? { image: `${SITE_URL}${strain.image}` } : {}),
         category: isAtcc ? "Cepa ATCC de referencia" : "Cepa microbiana identificada",
         ...(isAtcc ? { identifier: strain.code, taxonomicRange: strain.name } : {
           brand: { "@type": "Brand", name: "AS Laboratorios" },
