@@ -32,7 +32,7 @@ export function generateMetadata({ params }: IdentificadasDetailPageProps): Meta
         ]
       : undefined,
     path: `/cepas/identificadas/${params.id}`,
-    image: "/lab-header-bg.jpg",
+    image: strain?.image ?? "/lab-header-bg.jpg",
     noIndex: !strain,
   })
 }

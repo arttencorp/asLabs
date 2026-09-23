@@ -63,12 +63,7 @@ export type CatalogPageConfig = {
 }
 
 const familyPages = [
-  { scope: "molecular", label: "Biología molecular", href: "/kits-reactivos/biologia-molecular", description: "PCR, qPCR, extracción y análisis" },
-  { scope: "microbiologia", label: "Microbiología", href: "/kits-reactivos/microbiologia", description: "Identificación y pruebas bacterianas" },
   { scope: "medios", label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares y medios deshidratados" },
-  { scope: "equipos", label: "Equipos y consumibles", href: "/kits-reactivos/equipos-consumibles", description: "Instrumentos y materiales de laboratorio" },
-  { scope: "bacteriofagos", label: "Bacteriófagos", href: "/kits-reactivos/bacteriofagos", description: "Mezclas y controles para investigación" },
-  { scope: "laboratorio", label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "50 referencias de importación" },
 ] as const
 
 function matchesCategory(product: MolecularProduct, selected: string) {
@@ -352,7 +347,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
     <>
       <Navbar overlay />
       <main className="overflow-hidden bg-[#f4f7f4] text-[#173f2d]">
-        <section data-navbar-theme="dark" className="relative isolate overflow-hidden bg-[#082f23] pb-14 pt-24 text-white sm:pb-16 sm:pt-28">
+        <section data-navbar-theme="dark" className="relative isolate overflow-hidden bg-[#082f23] pb-10 pt-20 text-white sm:pb-12 sm:pt-24">
           <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(76,195,132,.23),transparent_32%),linear-gradient(115deg,#05251b_0%,#0b4934_60%,#133b2e_100%)]" />
           <Image src={pageConfig?.image ?? "/lab-scientists.png"} alt={pageConfig?.title ?? "Kits y reactivos para laboratorio"} fill priority className="-z-10 object-cover object-center opacity-25 mix-blend-luminosity" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(4,30,21,.97)_0%,rgba(4,30,21,.83)_55%,rgba(4,30,21,.34)_100%)]" />
@@ -362,9 +357,9 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="max-w-4xl">
               {pageConfig && <nav aria-label="Ruta de navegación" className="mb-4 flex flex-wrap items-center gap-2 text-[10px] font-semibold text-white/58"><Link href="/">Inicio</Link><span aria-hidden="true">/</span><Link href="/kits-reactivos">Kits y reactivos</Link><span aria-hidden="true">/</span><span aria-current="page" className="text-white/90">{pageConfig.eyebrow}</span></nav>}
               <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.2em] text-[#d9f7df] backdrop-blur-md"><HeroIcon className="h-4 w-4" /> {pageConfig?.eyebrow ?? "Catálogo de laboratorio"}</div>
-              <h1 className="mt-4 max-w-3xl text-balance text-3xl font-bold leading-[1.04] tracking-[-.04em] sm:text-4xl lg:text-5xl">{pageConfig?.title ?? "Kits y reactivos para tu laboratorio."}</h1>
-              <p className="mt-4 max-w-2xl text-sm leading-6 text-white/78 sm:text-base">{pageConfig?.description ?? "Biología molecular y bacteriología en un catálogo referencial con importación coordinada."}</p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <h1 className="mt-3 max-w-3xl text-balance text-3xl font-bold leading-[1.04] tracking-[-.04em] sm:text-4xl">{pageConfig?.title ?? "Kits y reactivos para tu laboratorio."}</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/78">{pageConfig?.description ?? "Biología molecular y bacteriología en un catálogo referencial con importación coordinada."}</p>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <a href="#catalogo" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#efaa4a] px-5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc875]">Explorar catálogo <ArrowRight className="h-4 w-4" /></a>
                 <WhatsAppContact message={pageConfig ? `Hola, quisiera asesoría sobre ${pageConfig.eyebrow.toLocaleLowerCase("es")}.` : "Hola, quisiera consultar el servicio de extracción de ADN."} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20"><Dna className="h-4 w-4 text-[#bfe9c8]" /><span><strong>{pageConfig ? "Asesoría técnica" : "Extracción de ADN"}</strong><span className="ml-2 hidden font-normal text-white/60 sm:inline">{pageConfig ? "para elegir la referencia correcta" : "vegetal, bacteriano y tejidos"}</span></span></WhatsAppContact>
               </div>
@@ -374,25 +369,7 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
 
         <section id="catalogo" data-navbar-theme="light" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div>
-              <nav aria-label="Familias del catálogo" className="mb-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-                {familyPages.map((family) => {
-                  const active = pageConfig?.scope === family.scope
-                  return <Link key={family.scope} href={family.href} aria-current={active ? "page" : undefined} className={`group rounded-[18px] border p-4 transition hover:-translate-y-0.5 hover:shadow-md ${active ? "border-[#5f9877] bg-[#173f2d] text-white shadow-md" : "border-[#d9e5dd] bg-white text-[#264b39]"}`}><span className={`text-xs font-black ${active ? "text-white" : "text-[#176844]"}`}>{family.label}</span><span className={`mt-1 block text-[10px] leading-4 ${active ? "text-white/65" : "text-[#718178]"}`}>{family.description}</span></Link>
-                })}
-              </nav>
               {pageConfig?.notice && <div role="note" className="mb-6 flex items-start gap-3 rounded-[20px] border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950 shadow-sm"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" /><p><strong>{pageConfig.noticeTitle ?? "Información importante."}</strong> {pageConfig.notice}</p></div>}
-              {pageConfig && (
-                <section aria-labelledby="catalog-introduction" className="mb-8 grid gap-5 rounded-[24px] border border-[#d9e6dd] bg-white p-5 shadow-[0_16px_45px_-36px_rgba(8,48,33,.45)] sm:p-7 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,.75fr)]">
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Suministro especializado en Perú</p>
-                    <h2 id="catalog-introduction" className="mt-2 text-2xl font-bold tracking-[-.03em] text-[#173f2d] sm:text-3xl">{pageConfig.introTitle}</h2>
-                    <div className="mt-4 space-y-3 text-sm leading-7 text-[#5c7065]">{pageConfig.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
-                  </div>
-                  <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
-                    {pageConfig.useCases.map((useCase) => <article key={useCase.title} className="rounded-2xl border border-[#e0e9e3] bg-[#f5f9f6] p-4"><h3 className="text-xs font-black text-[#24583e]">{useCase.title}</h3><p className="mt-1.5 text-[11px] leading-5 text-[#6b7d72]">{useCase.text}</p></article>)}
-                  </div>
-                </section>
-              )}
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="max-w-2xl"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">Catálogo AS Laboratorios</p><h2 className="mt-1 text-2xl font-bold tracking-[-.03em] sm:text-3xl">Encuentra la referencia adecuada</h2><p className="mt-2 text-xs leading-5 text-[#687970]">Cotización validada según presentación, stock e importación.</p></div>
                 <div className="flex flex-wrap gap-2">

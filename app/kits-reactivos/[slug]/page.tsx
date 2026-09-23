@@ -15,7 +15,7 @@ function money(value: number) {
 }
 
 export function generateStaticParams() {
-  return molecularProducts.map((product) => ({ slug: product.id }))
+  return molecularProducts.filter((product) => product.category === "Medios de cultivo").map((product) => ({ slug: product.id }))
 }
 
 function getGenericSeoTopic(product: NonNullable<ReturnType<typeof getMolecularProduct>>) {
@@ -88,7 +88,7 @@ function getCategoryLanding(product: NonNullable<ReturnType<typeof getMolecularP
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const product = getMolecularProduct(params.slug)
-  if (!product) return {}
+  if (!product || product.category !== "Medios de cultivo") return {}
   const seoTopic = getGenericSeoTopic(product)
   return constructMetadata({
     title: `${seoTopic} | ${product.brand} ${product.catalogNumber}`,
@@ -115,7 +115,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
 export default function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = getMolecularProduct(params.slug)
-  if (!product) notFound()
+  if (!product || product.category !== "Medios de cultivo") notFound()
 
   const price = getProductReferencePricePen(product)
   const categoryLanding = getCategoryLanding(product)

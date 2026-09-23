@@ -9,12 +9,31 @@ import Link from "next/link"
 const ENVIO_PERU = 155.00
 
 interface CartItem {
-  cepa: (typeof cepasIdentificadas)[0]
+  cepa: PricedCepa
   cantidad: number
 }
 
 // Datos de Cepas Identificadas
 export const cepasIdentificadas = [
+  {
+    id: "id-0",
+    nombre: "Escherichia coli",
+    codigo: "AS-EC-001",
+    cientifico: "Escherichia coli",
+    bsl: "BSL-1",
+    categoria: "Investigación",
+    productFormat: "Cultivo microbiológico",
+    strainDesignation: "Cepa identificada y caracterizada en AS Labs",
+    depositedAs: "Escherichia coli",
+    typeStrain: "No",
+    precio: 550.00,
+    precioSinEnvio: 550.00,
+    cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
+    referencia: "AS-EC-001",
+    disponibilidad: true,
+    isolatedFrom: "Matriz reservada · Perú",
+    image: "/cepas/identified/escherichia-coli.jpg",
+  },
   {
     id: "id-1",
     nombre: "Bacillus subtilis",
@@ -31,6 +50,7 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-BS-001",
     disponibilidad: true,
+    isolatedFrom: "Sullana · Piura · Perú",
   },
   {
     id: "id-2",
@@ -48,6 +68,8 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-PF-001",
     disponibilidad: true,
+    isolatedFrom: "Bogotá · Colombia",
+    image: "/cepas/identified/pseudomonas-fluorescens.jpg",
   },
   {
     id: "id-3",
@@ -65,6 +87,8 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-AB-001",
     disponibilidad: true,
+    isolatedFrom: "Trujillo · Perú",
+    image: "/cepas/identified/azospirillum-brasilense.jpg",
   },
   {
     id: "id-4",
@@ -82,6 +106,8 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-BM-001",
     disponibilidad: true,
+    isolatedFrom: "Trujillo · Perú",
+    image: "/cepas/identified/bacillus-megaterium.jpg",
   },
   {
     id: "id-5",
@@ -90,7 +116,7 @@ export const cepasIdentificadas = [
     cientifico: "Trichoderma reesei",
     bsl: "BSL-1",
     categoria: "Biocontrol",
-    productFormat: "Cultivo microbiológico",
+    productFormat: "Hongo filamentoso",
     strainDesignation: "Cepa antagonista de hongos",
     depositedAs: "Trichoderma reesei",
     typeStrain: "No",
@@ -99,6 +125,8 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-TR-001",
     disponibilidad: true,
+    isolatedFrom: "Trujillo · Perú",
+    image: "/cepas/identified/trichoderma-reesei.jpg",
   },
   {
     id: "id-6",
@@ -116,8 +144,34 @@ export const cepasIdentificadas = [
     cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
     referencia: "AS-ST-001",
     disponibilidad: true,
+    isolatedFrom: "Interior del país · India",
+    image: "/cepas/identified/streptomyces-sp.jpg",
+  },
+  {
+    id: "id-7",
+    nombre: "Pseudomonas putida",
+    codigo: "AS-PP-001",
+    cientifico: "Pseudomonas putida",
+    bsl: "BSL-1",
+    categoria: "Biofertilizantes",
+    productFormat: "Cultivo microbiológico",
+    strainDesignation: "Cepa identificada y caracterizada en AS Labs",
+    depositedAs: "Pseudomonas putida",
+    typeStrain: "No",
+    cantidad: "Cultivo puro · Suspensión líquida · Placa estriada",
+    referencia: "AS-PP-001",
+    disponibilidad: true,
+    isolatedFrom: "Ciudad reservada · Guayaquil · Ecuador",
+    image: "/cepas/identified/pseudomonas-putida.jpg",
   },
 ]
+
+type CepaIdentificada = (typeof cepasIdentificadas)[number]
+type PricedCepa = CepaIdentificada & { precio: number; precioSinEnvio: number }
+
+function hasPrice(cepa: CepaIdentificada): cepa is PricedCepa {
+  return typeof cepa.precio === "number" && typeof cepa.precioSinEnvio === "number"
+}
 
 const categorias = [
   "Biofertilizantes",
@@ -134,11 +188,12 @@ export default function IdentificadasClient() {
   const [carrito, setCarrito] = useState<CartItem[]>([])
   const [lista, setLista] = useState<typeof cepasIdentificadas>([])
   const [showCartModal, setShowCartModal] = useState(false)
-  const [selectedCepaForCart, setSelectedCepaForCart] = useState<typeof cepasIdentificadas[0] | null>(null)
+  const [selectedCepaForCart, setSelectedCepaForCart] = useState<PricedCepa | null>(null)
   const [cantidadCarrito, setCantidadCarrito] = useState(1)
   const [showCarrito, setShowCarrito] = useState(false)
 
-  const handleAgregarAlCarrito = (cepa: typeof cepasIdentificadas[0]) => {
+  const handleAgregarAlCarrito = (cepa: CepaIdentificada) => {
+    if (!hasPrice(cepa)) return
     setSelectedCepaForCart(cepa)
     setCantidadCarrito(1)
     setShowCartModal(true)
@@ -215,9 +270,9 @@ export default function IdentificadasClient() {
   const sortedCepas = [...filteredCepas].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
-        return a.precio - b.precio
+        return (a.precio ?? Infinity) - (b.precio ?? Infinity)
       case "price-high":
-        return b.precio - a.precio
+        return (b.precio ?? -Infinity) - (a.precio ?? -Infinity)
       case "name":
         return a.nombre.localeCompare(b.nombre)
       default:
@@ -409,11 +464,11 @@ export default function IdentificadasClient() {
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-green-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-green-700 mb-1">Precio base:</p>
-                          <p className="text-3xl font-bold text-green-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
-                          <p className="text-xs text-green-500 mb-2">+ S/ 155 envío a Trujillo, Perú</p>
+                          <p className="text-3xl font-bold text-green-900 mb-1">{hasPrice(cepa) ? `S/ ${cepa.precioSinEnvio.toFixed(2)}` : "Consultar precio"}</p>
+                          {hasPrice(cepa) && <p className="text-xs text-green-500 mb-2">+ S/ 155 envío a Trujillo, Perú</p>}
                           <p className="text-xs text-green-500 mb-4">{cepa.cantidad}</p>
 
-                          {cepa.disponibilidad ? (
+                          {cepa.disponibilidad && hasPrice(cepa) ? (
                             <>
                               <div className="flex items-center gap-2 mb-3">
                                 <span className="text-sm text-green-700">Cantidad</span>
@@ -432,6 +487,15 @@ export default function IdentificadasClient() {
                                 ♡ Agregar a lista
                               </button>
                             </>
+                          ) : cepa.disponibilidad ? (
+                            <a
+                              href={`https://wa.me/51961996645?text=${encodeURIComponent(`Hola, quisiera consultar el precio y la disponibilidad de ${cepa.nombre} (${cepa.codigo}).`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded flex items-center justify-center gap-2"
+                            >
+                              Consultar precio
+                            </a>
                           ) : (
                             <button className="w-full bg-green-300 text-green-800 font-bold py-3 rounded flex items-center justify-center gap-2 cursor-not-allowed">
                               <Lock className="w-4 h-4" />
