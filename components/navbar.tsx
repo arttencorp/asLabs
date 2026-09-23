@@ -40,7 +40,18 @@ type NavGroup = {
 
 const navigation: NavGroup[] = [
   { label: "Nosotros", href: "/sobre-nosotros" },
-  { label: "Kits y Reactivos", href: "/kits-reactivos" },
+  {
+    label: "Kits y Reactivos",
+    href: "/kits-reactivos",
+    links: [
+      {
+        label: "Medios de cultivo",
+        href: "/kits-reactivos",
+        description: "Medios de cultivo bacteriológicos",
+        icon: FlaskConical,
+      },
+    ],
+  },
   {
     label: "Servicios",
     href: "/servicios",
