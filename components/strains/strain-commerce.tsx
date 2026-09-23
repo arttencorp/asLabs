@@ -288,7 +288,7 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
   return (
     <section
       data-navbar-theme="dark"
-      className="relative isolate overflow-hidden bg-[#062d21] pb-20 pt-28 text-white sm:pb-24 sm:pt-32"
+      className="relative isolate overflow-hidden bg-[#062d21] pb-10 pt-20 text-white sm:pb-16 sm:pt-28"
     >
       <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(52,211,153,.24),transparent_34%),radial-gradient(circle_at_88%_22%,rgba(163,230,53,.16),transparent_30%),linear-gradient(145deg,#062d21_0%,#0a4b36_55%,#062d21_100%)]" />
       <div className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
@@ -301,28 +301,31 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
         <div className="absolute left-10 top-4 h-5 w-5 rounded-full bg-lime-300 shadow-[0_0_35px_rgba(190,242,100,.8)]" />
       </motion.div>
 
-      <div className="mx-auto grid max-w-7xl items-end gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_320px] lg:px-8">
+      <div className="mx-auto grid max-w-7xl items-end gap-4 px-4 sm:gap-6 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl rounded-[32px] border border-white/10 bg-[#031f17]/55 p-6 shadow-[0_30px_90px_-42px_rgba(0,0,0,.9)] backdrop-blur-[4px] sm:p-8"
+          className="max-w-4xl rounded-[28px] border border-white/10 bg-[#031f17]/55 p-4 shadow-[0_30px_90px_-42px_rgba(0,0,0,.9)] backdrop-blur-[4px] sm:p-7"
         >
-          <div className="mb-6 flex flex-wrap items-center gap-4">
+          <div className="mb-3 flex flex-wrap items-center gap-3 sm:mb-4">
             {market === "peru" && <CatalogSwitcher active={kind} />}
             <span className="inline-flex items-center gap-2 rounded-full bg-black/20 px-3 py-2 text-xs font-bold uppercase tracking-[0.22em] text-[#e9fff0]">
               <Sparkles className="h-4 w-4" />
               {copy.eyebrow}
             </span>
+            <span className="relative h-9 w-28 overflow-hidden rounded-lg border border-white/15 bg-white shadow-lg sm:w-32">
+              <Image src="/brands/cultiq.jpg" alt="CULTIQ Microbial Culture Collection" fill sizes="128px" className="object-contain" />
+            </span>
           </div>
-          <h1 className="max-w-4xl text-balance text-4xl font-semibold leading-[1.04] tracking-[-0.035em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.62)] sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-4xl text-balance text-[2rem] font-semibold leading-[1.02] tracking-[-0.035em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.62)] sm:text-4xl lg:text-5xl">
             {heroTitle}
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-white/[0.92] drop-shadow-[0_2px_12px_rgba(0,0,0,.45)] sm:text-lg">
+          <p className="mt-3 max-w-2xl text-[13px] leading-5 text-white/[0.92] drop-shadow-[0_2px_12px_rgba(0,0,0,.45)] sm:mt-4 sm:text-base sm:leading-6">
             {heroDescription}
           </p>
           {kind === "atcc" && market === "peru" && (
-            <div className="mt-6 flex max-w-2xl gap-3 rounded-2xl border border-amber-200/25 bg-amber-100/10 p-4 text-sm leading-6 text-amber-50 backdrop-blur-md">
+            <div className="mt-4 flex max-w-2xl gap-3 rounded-2xl border border-amber-200/25 bg-amber-100/10 p-3 text-xs leading-5 text-amber-50 backdrop-blur-md">
               <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-200" />
               <p><strong>Uso académico y científico.</strong> Estas referencias están disponibles para investigadores, tesistas y proyectos de docencia, previa evaluación del objetivo y protocolo.</p>
             </div>
@@ -333,13 +336,13 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.18, duration: 0.6 }}
-          className="grid grid-cols-2 gap-3 lg:grid-cols-1"
+          className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-1"
         >
-          <div className="rounded-3xl border border-white/20 bg-[#031f17]/70 p-5 shadow-xl backdrop-blur-xl">
-            <p className="text-3xl font-semibold text-white">{count}</p>
+          <div className="rounded-2xl border border-white/20 bg-[#031f17]/70 p-3 shadow-xl backdrop-blur-xl sm:p-4">
+            <p className="text-2xl font-semibold text-white">{count}</p>
             <p className="mt-1 text-sm text-white/[0.82]">{copy.countLabel}</p>
           </div>
-          <div className="rounded-3xl border border-white/20 bg-[#031f17]/70 p-5 shadow-xl backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/20 bg-[#031f17]/70 p-3 shadow-xl backdrop-blur-xl sm:p-4">
             <div className="flex items-center gap-2 text-lime-200">
               <ShieldCheck className="h-5 w-5" />
               <span className="font-semibold">BSL-1</span>
