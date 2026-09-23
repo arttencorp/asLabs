@@ -34,6 +34,7 @@ import {
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import EcuadorFooter from "@/components/ecuador-footer"
+import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export interface StrainItem {
   id: string
@@ -46,7 +47,7 @@ export interface StrainItem {
   strainDesignation: string
   depositedAs: string
   typeStrain: string
-  precio: number
+  precio?: number
   precioSinEnvio?: number
   cantidad: string
   referencia: string
@@ -121,9 +122,9 @@ const catalogCopy = {
   },
   atcc: {
     eyebrow: "Microorganismos de referencia",
-    title: "Cepas ATCC para resultados comparables y trazables",
+    title: "Cepas ATCC disponibles para investigación y tesis",
     description:
-      "Catálogo especializado de microorganismos de referencia cuya importación gestionamos exclusivamente para investigación y docencia.",
+      "Contamos con microorganismos de referencia destinados exclusivamente a proyectos de investigación, docencia y trabajos de tesis.",
     shortLabel: "ATCC",
     countLabel: "referencias disponibles",
     breadcrumb: "Cepas ATCC",
@@ -131,14 +132,14 @@ const catalogCopy = {
     otherPath: "/cepas/identificadas",
     otherLabel: "Ver cepas identificadas",
     shipping: 4500,
-    shippingLabel: "Logística internacional estimada",
+    shippingLabel: "Coordinación técnica",
     accent: "lime",
     storageKey: "aslabs-cart-atcc-v2",
   },
 } as const
 
 function getBasePrice(strain: StrainItem) {
-  return strain.precioSinEnvio ?? strain.precio
+  return strain.precioSinEnvio ?? strain.precio ?? 0
 }
 
 function formatMoney(value: number, market: "peru" | "ecuador" = "peru") {
@@ -319,7 +320,7 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
           {kind === "atcc" && market === "peru" && (
             <div className="mt-6 flex max-w-2xl gap-3 rounded-2xl border border-amber-200/25 bg-amber-100/10 p-4 text-sm leading-6 text-amber-50 backdrop-blur-md">
               <Info className="mt-0.5 h-5 w-5 shrink-0 text-amber-200" />
-              <p><strong>Precio referencial.</strong> Solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.</p>
+              <p><strong>Uso académico y científico.</strong> Estas referencias están disponibles para investigadores, tesistas y proyectos de docencia, previa evaluación del objetivo y protocolo.</p>
             </div>
           )}
         </motion.div>
@@ -339,7 +340,7 @@ function CatalogHero({ kind, count, market }: { kind: CatalogKind; count: number
               <ShieldCheck className="h-5 w-5" />
               <span className="font-semibold">BSL-1</span>
             </div>
-            <p className="mt-1 text-sm text-white/[0.82]">Selección para uso profesional</p>
+            <p className="mt-1 text-sm text-white/[0.82]">{kind === "atcc" ? "Selección para uso científico" : "Selección para uso profesional"}</p>
           </div>
         </motion.div>
       </div>
@@ -434,20 +435,22 @@ function StrainCard({
         </dl>
 
         <div className="mt-auto pt-6">
-          <div className="mb-4 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs text-slate-500">Precio referencial desde</p>
-              <p className="mt-1 text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(getMarketPrice(strain, market), market)}</p>
+          {kind === "atcc" ? (
+            <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-700">Disponible para investigación</p>
+              <p className="mt-2 text-sm leading-6 text-emerald-950/75">Para tesistas, investigadores y proyectos académicos. El acceso se evalúa según el uso declarado.</p>
             </div>
-            <div className="flex max-w-[145px] flex-col items-end gap-1.5 text-right text-[11px] leading-4 text-slate-500">
-              <span>Envío calculado una vez por pedido</span>
-              <DhlBadge />
+          ) : (
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs text-slate-500">Precio referencial desde</p>
+                <p className="mt-1 text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(getMarketPrice(strain, market), market)}</p>
+              </div>
+              <div className="flex max-w-[145px] flex-col items-end gap-1.5 text-right text-[11px] leading-4 text-slate-500">
+                <span>Envío calculado una vez por pedido</span>
+                <DhlBadge />
+              </div>
             </div>
-          </div>
-          {kind === "atcc" && market === "peru" && (
-            <p className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[10px] leading-4 text-amber-900">
-              <strong>Precio referencial.</strong> Solo para investigación y docencia. AS Labs gestiona únicamente la importación de la cepa; no realiza su venta.
-            </p>
           )}
           <div className={`grid gap-2 ${market === "peru" ? "grid-cols-2" : "grid-cols-1"}`}>
             {market === "peru" && <Link
@@ -457,16 +460,24 @@ function StrainCard({
               Ver ficha
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>}
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.93 }}
-              onClick={() => onAdd(strain)}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
-              aria-label={`Añadir ${strain.nombre} al pedido`}
-            >
-              <ShoppingCart className="h-4 w-4" />
-              Añadir
-            </motion.button>
+            {kind === "atcc" ? (
+              <WhatsAppContact
+                message={`Hola, soy investigador/a o tesista y deseo consultar la disponibilidad de ${strain.nombre} (${strain.codigo}) para un proyecto de investigación.`}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                <MessageCircle className="h-4 w-4" /> Consultar
+              </WhatsAppContact>
+            ) : (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.93 }}
+                onClick={() => onAdd(strain)}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-700 to-emerald-800 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-700/20 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                aria-label={`Añadir ${strain.nombre} al pedido`}
+              >
+                <ShoppingCart className="h-4 w-4" /> Añadir
+              </motion.button>
+            )}
           </div>
           {kind === "atcc" && strain.link && (
             <a
@@ -688,11 +699,6 @@ function CartDrawer({
                     <dd className="text-2xl font-bold tracking-tight text-emerald-950">{formatMoney(total, market)}</dd>
                   </div>
                 </dl>
-                {kind === "atcc" && market === "peru" && (
-                  <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[10px] leading-4 text-amber-900">
-                    <strong>Precio referencial.</strong> Solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.
-                  </p>
-                )}
                 <button
                   type="button"
                   onClick={requestQuote}
@@ -720,8 +726,8 @@ function TrustStrip({ kind }: { kind: CatalogKind }) {
     kind === "atcc"
       ? [
           { icon: BadgeCheck, title: "Trazabilidad", text: "Referencia y designación visibles" },
-          { icon: FileCheck2, title: "Documentación", text: "Validada antes de la entrega" },
-          { icon: PackageCheck, title: "Logística asistida", text: "Importación y envío coordinados" },
+          { icon: FileCheck2, title: "Uso científico", text: "Para investigación, docencia y tesis" },
+          { icon: Microscope, title: "Evaluación técnica", text: "Revisión previa del proyecto declarado" },
         ]
       : [
           { icon: Microscope, title: "Identificación", text: "Información técnica por cepa" },
@@ -759,6 +765,7 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [notice, setNotice] = useState("")
   const cart = useCart(strains, copy.storageKey)
+  const isAtccResearch = kind === "atcc" && market === "peru"
 
   const categories = useMemo(
     () => ["Todas", ...Array.from(new Set(strains.map((strain) => strain.categoria)))],
@@ -805,12 +812,14 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
           <div className="flex flex-col gap-7">
             <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Catálogo disponible</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
+                  {isAtccResearch ? "Referencias para investigación" : "Catálogo disponible"}
+                </p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-emerald-950 sm:text-4xl">
-                  Encuentra la cepa que necesitas
+                  {isAtccResearch ? "Explora las cepas disponibles" : "Encuentra la cepa que necesitas"}
                 </h2>
                 <p className="mt-3 text-sm text-slate-600">
-                  {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"} · precios referenciales en {market === "ecuador" ? "dólares" : "soles"}
+                  {filtered.length} {filtered.length === 1 ? "referencia disponible" : "referencias disponibles"}{!isAtccResearch && ` · precios referenciales en ${market === "ecuador" ? "dólares" : "soles"}`}
                 </p>
               </div>
               <div className="flex gap-2">
@@ -822,7 +831,7 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
                   <SlidersHorizontal className="h-4 w-4" />
                   Filtros
                 </button>
-                <button
+                {!isAtccResearch && <button
                   type="button"
                   onClick={() => setCartOpen(true)}
                   className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-emerald-950 px-5 text-sm font-bold text-white shadow-lg shadow-emerald-950/15 lg:flex-none"
@@ -832,7 +841,7 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
                   {cart.entries.length > 0 && (
                     <span className="rounded-full bg-lime-300 px-2 py-0.5 text-xs text-emerald-950">{cart.entries.length}</span>
                   )}
-                </button>
+                </button>}
               </div>
             </div>
 
@@ -928,7 +937,7 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
       </main>
       {market === "ecuador" ? <EcuadorFooter /> : <Footer />}
 
-      <AnimatePresence>
+      {!isAtccResearch && <AnimatePresence>
         {notice && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.96 }}
@@ -943,9 +952,9 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
             </button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>}
 
-      <motion.button
+      {!isAtccResearch && <motion.button
         type="button"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -970,9 +979,9 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
             </span>
           </>
         )}
-      </motion.button>
+      </motion.button>}
 
-      <CartDrawer
+      {!isAtccResearch && <CartDrawer
         open={cartOpen}
         onClose={() => setCartOpen(false)}
         entries={cart.entries}
@@ -980,7 +989,7 @@ export function StrainCatalog({ strains, kind, market = "peru" }: CatalogProps) 
         onSet={cart.set}
         onRemove={cart.remove}
         market={market}
-      />
+      />}
     </div>
   )
 }
@@ -990,9 +999,9 @@ function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | 
   const isAtcc = kind === "atcc"
   const faqs = isAtcc
     ? [
-        ["¿Qué documentación acompaña a una cepa ATCC?", "La documentación aplicable se confirma según la referencia seleccionada y el alcance del pedido."],
-        ["¿El precio incluye importación y entrega?", "El precio es referencial. AS Labs gestiona la importación y la logística se confirma según destino y disponibilidad."],
-        ["¿Para qué usos se gestiona la importación?", "Exclusivamente para investigación y docencia, sujeto a la validación del uso previsto y los requisitos aplicables."],
+        ["¿Quiénes pueden consultar estas cepas?", "Investigadores, tesistas, docentes y equipos académicos con un proyecto definido y un uso científico declarado."],
+        ["¿Qué información debo presentar?", "Indica la institución, el objetivo del proyecto, la referencia requerida, el protocolo previsto y la persona responsable del trabajo."],
+        ["¿Qué documentación acompaña a la referencia?", "La documentación aplicable se confirma según la cepa y el alcance del proyecto de investigación."],
       ]
     : [
         ["¿Para qué se utilizan las cepas identificadas?", "Se emplean en investigación, docencia y proyectos de desarrollo microbiológico, de acuerdo con la ficha y el uso previsto."],
@@ -1005,15 +1014,15 @@ function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[1fr_0.9fr]">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">{isAtcc ? "Solicitud informada" : "Compra informada"}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">{isAtcc ? "Acceso para investigación" : "Compra informada"}</p>
             <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-emerald-950 sm:text-4xl">
               {isAtcc
-                ? "Solicita la gestión de importación de cepas ATCC"
+                ? "Consulta cepas ATCC para tu investigación o tesis"
                 : market === "ecuador" ? "Selecciona cepas microbianas identificadas con información clara" : "Compra cepas microbianas identificadas en Perú con información clara"}
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
               {isAtcc
-                ? "Selecciona la referencia para investigación o docencia y arma una solicitud con contexto técnico. AS Labs no vende las cepas: valida disponibilidad, documentación y logística para gestionar su importación."
+                ? "Selecciona la referencia que requiere tu trabajo y cuéntanos el objetivo, la institución y el protocolo. Nuestro equipo evaluará la disponibilidad y compatibilidad con el proyecto declarado."
                 : "Compara especies, códigos, presentaciones y aplicaciones desde un mismo catálogo. El equipo de AS Laboratorios confirma la compatibilidad de la referencia con el objetivo declarado."}
             </p>
             {market === "peru" && <Link
@@ -1051,9 +1060,9 @@ function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | 
           <div className="relative">
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-lime-200">Pedido en cuatro pasos</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-lime-200">{isAtcc ? "Consulta en cuatro pasos" : "Pedido en cuatro pasos"}</p>
                 <h3 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">
-                  Del catálogo a una entrega coordinada
+                  {isAtcc ? "De la referencia al proyecto de investigación" : "Del catálogo a una entrega coordinada"}
                 </h3>
               </div>
               <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold text-emerald-100 backdrop-blur-xl">
@@ -1062,12 +1071,17 @@ function CatalogContent({ kind, market }: { kind: CatalogKind; market: "peru" | 
               </span>
             </div>
             <div className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {[
+              {(isAtcc ? [
+                ["01", "Explora", "Busca por nombre, código o aplicación."],
+                ["02", "Revisa", "Consulta formato, designación y ficha."],
+                ["03", "Describe tu proyecto", "Indica institución, objetivo y protocolo."],
+                ["04", "Evaluamos", "Revisamos disponibilidad y uso científico."],
+              ] : [
                 ["01", "Explora", "Busca por nombre, código o aplicación."],
                 ["02", "Revisa", "Lee formato, presentación y ficha."],
                 ["03", "Arma tu pedido", "Ajusta cantidades y consulta el total."],
                 ["04", "Confirma", "Validamos disponibilidad y entrega."],
-              ].map(([step, title, description], index) => (
+              ]).map(([step, title, description], index) => (
                 <motion.div
                   key={step}
                   initial={{ opacity: 0, y: 18 }}
@@ -1130,6 +1144,64 @@ function detailApplications(strain: StrainItem, kind: CatalogKind) {
   return ["Investigación microbiológica", "Docencia aplicada", "Desarrollo experimental"]
 }
 
+function AtccResearchDetail({ strain, strains }: { strain: StrainItem; strains: StrainItem[] }) {
+  const related = strains.filter((item) => item.id !== strain.id && item.categoria === strain.categoria).slice(0, 3)
+  const message = `Hola, soy investigador/a o tesista y deseo consultar la disponibilidad de ${strain.nombre} (${strain.codigo}) para un proyecto de investigación. Puedo compartir la institución, el objetivo y el protocolo previsto.`
+
+  return (
+    <div className="min-h-screen bg-[#f5f8f5] font-sans text-slate-900">
+      <Navbar overlay />
+      <main>
+        <section data-navbar-theme="dark" className="relative overflow-hidden bg-[#062d21] pb-16 pt-28 text-white sm:pb-20 sm:pt-32">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_20%,rgba(163,230,53,.17),transparent_28%),radial-gradient(circle_at_10%_60%,rgba(52,211,153,.16),transparent_32%)]" />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <nav aria-label="Migas de pan" className="flex flex-wrap items-center gap-2 text-sm font-medium text-white/[0.82]">
+              <Link href="/">Inicio</Link><ChevronRight className="h-4 w-4" /><Link href="/cepas/atcc">Cepas ATCC</Link><ChevronRight className="h-4 w-4" /><span className="text-white">{strain.codigo}</span>
+            </nav>
+            <div className="mt-7 grid items-end gap-8 lg:grid-cols-[1fr_300px]">
+              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="rounded-[30px] border border-white/10 bg-[#031f17]/52 p-6 shadow-[0_28px_80px_-38px_rgba(0,0,0,.82)] backdrop-blur-[4px] sm:p-8">
+                <div className="flex flex-wrap gap-2"><span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold">{strain.bsl}</span><span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold">{strain.categoria}</span><span className="rounded-full bg-lime-300 px-3 py-1.5 text-xs font-bold text-emerald-950">Para investigación y tesis</span></div>
+                <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-lime-200">{strain.codigo}</p>
+                <h1 className="mt-3 text-balance text-3xl font-semibold italic leading-[1.06] tracking-[-0.035em] sm:text-4xl lg:text-5xl">{strain.nombre}</h1>
+                <p className="mt-5 max-w-2xl text-base italic leading-7 text-white/[0.9]">{strain.cientifico}</p>
+              </motion.div>
+              <div className="hidden aspect-[4/3] items-center justify-center rounded-[38px] border border-white/12 bg-white/[0.07] backdrop-blur-xl lg:flex"><div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-emerald-200/30"><Dna className="h-14 w-14 text-lime-200" /></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto grid max-w-7xl items-start gap-8 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,1fr)_390px] lg:px-8">
+          <div className="space-y-7">
+            <section className="rounded-[30px] border border-emerald-950/10 bg-white p-6 shadow-[0_16px_55px_rgba(5,46,34,.06)] sm:p-8">
+              <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700"><BookOpen className="h-5 w-5" /></span><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">Referencia científica</p><h2 className="text-2xl font-semibold text-emerald-950">Información técnica</h2></div></div>
+              <dl className="mt-7 grid gap-px overflow-hidden rounded-2xl border border-slate-100 bg-slate-100 sm:grid-cols-2">
+                {[["Nombre depositado", strain.depositedAs], ["Designación", strain.strainDesignation || "Consultar documentación"], ["Formato", strain.productFormat], ["Presentación", strain.cantidad], ["Referencia", strain.referencia], ["Cepa tipo", strain.typeStrain]].map(([label, value]) => <div key={label} className="bg-white p-4"><dt className="text-xs font-semibold text-slate-500">{label}</dt><dd className="mt-1.5 text-sm font-bold leading-5 text-slate-800">{value}</dd></div>)}
+              </dl>
+              {strain.link && <a href={strain.link} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-900">Consultar referencia genómica en NCBI <ExternalLink className="h-4 w-4" /></a>}
+            </section>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <section className="rounded-[30px] bg-emerald-950 p-6 text-white sm:p-8"><FlaskConical className="h-7 w-7 text-lime-200" /><h2 className="mt-5 text-2xl font-semibold">Usos científicos</h2><ul className="mt-5 space-y-4">{detailBenefits(strain, "atcc").map((item) => <li key={item} className="flex gap-3 text-sm leading-6 text-emerald-50/80"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-lime-300" />{item}</li>)}</ul></section>
+              <section className="rounded-[30px] border border-emerald-950/10 bg-white p-6 sm:p-8"><Microscope className="h-7 w-7 text-emerald-700" /><h2 className="mt-5 text-2xl font-semibold text-emerald-950">Aplicaciones</h2><ul className="mt-5 space-y-3">{detailApplications(strain, "atcc").map((item) => <li key={item} className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700"><span className="h-2 w-2 rounded-full bg-emerald-500" />{item}</li>)}</ul></section>
+            </div>
+          </div>
+
+          <aside className="lg:sticky lg:top-28">
+            <div className="overflow-hidden rounded-[30px] border border-emerald-950/10 bg-white shadow-[0_20px_70px_rgba(5,46,34,.12)]">
+              <div className="bg-gradient-to-br from-emerald-50 to-lime-50 p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">Disponible para investigación</p><h2 className="mt-3 text-2xl font-semibold text-emerald-950">Para investigadores y tesistas</h2><p className="mt-3 text-sm leading-6 text-slate-600">AS Laboratorios cuenta con esta referencia para proyectos científicos, académicos y de tesis. La disponibilidad se evalúa según el objetivo y protocolo declarado.</p></div>
+              <div className="p-6"><p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Para realizar la consulta</p><ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600"><li className="flex gap-2"><CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />Institución y responsable</li><li className="flex gap-2"><CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />Objetivo de investigación o tesis</li><li className="flex gap-2"><CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-600" />Protocolo y uso previsto</li></ul><WhatsAppContact message={message} className="mt-6 flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 font-bold text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-800"><MessageCircle className="h-5 w-5" />Consultar para investigación</WhatsAppContact><p className="mt-4 text-center text-[11px] leading-5 text-slate-500">La consulta no implica reserva automática. El equipo revisará el alcance científico antes de confirmar disponibilidad.</p></div>
+            </div>
+            <Link href="/cepas/atcc" className="mt-4 flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold text-slate-600 hover:text-emerald-800"><ArrowLeft className="h-4 w-4" />Volver a cepas ATCC</Link>
+          </aside>
+        </section>
+
+        {related.length > 0 && <section className="border-t border-emerald-950/10 bg-white py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Otras referencias para investigación</p><h2 className="mt-2 text-3xl font-semibold text-emerald-950">Cepas relacionadas</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{related.map((item) => <Link key={item.id} href={`/cepas/atcc/${item.id}`} className="rounded-[24px] border border-emerald-950/10 bg-[#f7faf7] p-5 transition hover:-translate-y-1 hover:shadow-lg"><p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-700">{item.codigo}</p><h3 className="mt-2 text-xl font-semibold italic text-emerald-950">{item.nombre}</h3><p className="mt-4 flex items-center gap-2 text-sm font-bold text-emerald-700">Ver ficha <ArrowRight className="h-4 w-4" /></p></Link>)}</div></div></section>}
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
 export function StrainDetail({ strains, kind, strainId }: DetailProps) {
   const copy = catalogCopy[kind]
   const strain = strains.find((item) => item.id === strainId)
@@ -1162,6 +1234,8 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
       </div>
     )
   }
+
+  if (kind === "atcc") return <AtccResearchDetail strain={strain} strains={strains} />
 
   const benefits = detailBenefits(strain, kind)
   const applications = detailApplications(strain, kind)
@@ -1330,11 +1404,6 @@ export function StrainDetail({ strains, kind, strainId }: DetailProps) {
                   <span className="h-2 w-2 rounded-full bg-emerald-500" />
                   Disponibilidad a confirmar
                 </p>
-                {kind === "atcc" && (
-                  <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[10px] normal-case leading-4 tracking-normal text-amber-900">
-                    Solo para investigación y docencia. AS Labs solo se encarga de la importación de la cepa y no de su venta.
-                  </p>
-                )}
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between">

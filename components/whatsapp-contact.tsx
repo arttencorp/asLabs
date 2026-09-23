@@ -7,18 +7,18 @@ import { ArrowUpRight, Headphones, MessageCircle, X } from "lucide-react"
 
 const advisors = [
   {
-    name: "Andy Hassan",
-    role: "Asesor",
-    phone: "+51 952 194 005",
-    whatsapp: "51952194005",
-    initials: "AH",
-  },
-  {
     name: "Luis Cabrera",
     role: "Asesor",
     phone: "+51 961 996 645",
     whatsapp: "51961996645",
     initials: "LC",
+  },
+  {
+    name: "Andy Hudson",
+    role: "Asesor",
+    phone: "+51 952 194 005",
+    whatsapp: "51952194005",
+    initials: "AH",
   },
 ] as const
 

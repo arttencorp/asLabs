@@ -31,24 +31,24 @@ export function StrainCatalogStructuredData({ kind, strains, market = "peru" }: 
   const path = isEcuador ? "/ecuador/cepas" : isAtcc ? "/cepas/atcc" : "/cepas/identificadas"
   const name = isEcuador ? "Catálogo de cepas bacterianas identificadas para Ecuador" : isAtcc ? "Catálogo de cepas ATCC en Perú" : "Catálogo de cepas identificadas en Perú"
   const description = isAtcc
-    ? "Gestión de importación de microorganismos ATCC de referencia, exclusivamente para investigación y docencia. AS Laboratorios no realiza su venta."
+    ? "Cepas ATCC de referencia disponibles en AS Laboratorios para proyectos de investigación, docencia y trabajos de tesis."
     : "Cepas bacterianas y fúngicas identificadas para investigación, biofertilización, biocontrol y docencia."
   const questions = isAtcc
     ? [
         {
           question: "¿Qué documentación acompaña a una cepa ATCC?",
           answer:
-            "La documentación aplicable se confirma según la referencia seleccionada y el alcance del pedido.",
+            "La documentación aplicable se confirma según la referencia seleccionada y el alcance del proyecto de investigación.",
         },
         {
-          question: "¿El precio de una cepa ATCC incluye importación y entrega?",
+          question: "¿Quiénes pueden consultar la disponibilidad de una cepa ATCC?",
           answer:
-            "El precio es referencial. AS Laboratorios solo gestiona la importación de la cepa y no realiza su venta. La logística final depende del destino y disponibilidad.",
+            "Investigadores, tesistas, docentes y equipos académicos con un proyecto definido y un uso científico declarado.",
         },
         {
-          question: "¿Puedo solicitar una cepa ATCC para control de calidad?",
+          question: "¿Qué información se necesita para evaluar el proyecto?",
           answer:
-            "El servicio de importación se ofrece exclusivamente para investigación y docencia, sujeto a validación del uso previsto y requisitos aplicables.",
+            "Se solicita la institución, el responsable, el objetivo del proyecto, la referencia requerida y el protocolo previsto.",
         },
       ]
     : [
@@ -136,19 +136,16 @@ export function StrainDetailStructuredData({ kind, strains, id }: DetailSeoProps
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Product",
-        "@id": `${url}#product`,
+        "@type": isAtcc ? "BioChemEntity" : "Product",
+        "@id": `${url}#reference`,
         name: `${strain.name} ${strain.code}`,
         alternateName: strain.code,
         sku: strain.code,
         description,
         url,
         category: isAtcc ? "Cepa ATCC de referencia" : "Cepa microbiana identificada",
-        brand: {
-          "@type": "Brand",
-          name: isAtcc ? "ATCC" : "AS Laboratorios",
-        },
-        ...(isAtcc ? {} : {
+        ...(isAtcc ? { identifier: strain.code, taxonomicRange: strain.name } : {
+          brand: { "@type": "Brand", name: "AS Laboratorios" },
           seller: {
             "@type": "Organization",
             "@id": `${SITE_URL}/#organization`,
@@ -159,7 +156,7 @@ export function StrainDetailStructuredData({ kind, strains, id }: DetailSeoProps
         additionalProperty: [
           { "@type": "PropertyValue", name: "Nivel de bioseguridad", value: "BSL-1" },
           { "@type": "PropertyValue", name: "Código de referencia", value: strain.code },
-          ...(isAtcc ? [{ "@type": "PropertyValue", name: "Rol de AS Laboratorios", value: "Gestión de importación; no venta" }] : []),
+          ...(isAtcc ? [{ "@type": "PropertyValue", name: "Uso", value: "Investigación, docencia y trabajos de tesis" }] : []),
         ],
       },
       {
