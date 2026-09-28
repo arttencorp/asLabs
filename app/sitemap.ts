@@ -28,6 +28,7 @@ const pages = [
   ["/servicios/medio-ambiente", "monthly", 0.8],
   ["/servicios/biotecnologia-vegetal", "monthly", 0.82],
   ["/servicios/apoyo-investigacion", "monthly", 0.8],
+  ["/servicios/aislamiento-seleccion-cepas", "monthly", 0.9],
   ["/cepas/identificadas", "weekly", 0.88],
   ["/cepas/atcc", "weekly", 0.88],
   ["/sobre-nosotros", "monthly", 0.75],

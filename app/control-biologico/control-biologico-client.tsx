@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import {
   ArrowRight,
@@ -22,6 +23,7 @@ import {
   Sprout,
   Target,
   Users,
+  Dna,
 } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -419,6 +421,51 @@ export function ControlBiologicoClient() {
                 </motion.article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="relative overflow-hidden bg-emerald-950 px-4 py-20 text-white sm:px-6 sm:py-24 lg:px-8">
+          <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-lime-300/10 blur-3xl" />
+          <div className="absolute -bottom-40 left-1/4 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.12fr_.88fr] lg:items-center">
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <span className="inline-flex items-center gap-2 rounded-full border border-lime-300/20 bg-lime-300/10 px-3.5 py-2 text-xs font-bold text-lime-300">
+                <Dna className="h-4 w-4" />
+                Para empresas de biofertilizantes
+              </span>
+              <h2 className="mt-5 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">
+                Desarrollamos la cepa desde el aislamiento hasta su transferencia
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-7 text-emerald-50/70">
+                Recuperamos hasta 30 aislados, seleccionamos los candidatos con mejor desempeño, confirmamos su identidad
+                mediante WGS y acompañamos la validación, entrega y estabilidad del cultivo.
+              </p>
+              <Link
+                href="/servicios/aislamiento-seleccion-cepas"
+                className="group mt-8 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-lime-300 px-6 text-sm font-black text-emerald-950 transition hover:-translate-y-1 hover:bg-lime-200"
+              >
+                Conocer el servicio
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1"
+            >
+              {[
+                ["Hasta 30", "aislados trazables"],
+                ["WGS 100×", "y bioinformática"],
+                ["5 años", "de resguardo y QC"],
+              ].map(([value, label]) => (
+                <div key={label} className="rounded-[24px] border border-white/10 bg-white/[.06] p-5 backdrop-blur-sm lg:flex lg:items-center lg:justify-between">
+                  <p className="text-2xl font-black text-lime-300">{value}</p>
+                  <p className="mt-1 text-xs font-bold uppercase tracking-[.13em] text-emerald-50/55 lg:mt-0">{label}</p>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </section>
 

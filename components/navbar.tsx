@@ -57,6 +57,7 @@ const navigation: NavGroup[] = [
       { label: "Biotecnología vegetal", href: "/servicios/biotecnologia-vegetal", description: "Cultivo de tejidos in vitro", icon: Leaf },
       { label: "Bacteriología", href: "/servicios/bacteriologia-general", description: "Suspensiones y fermentación", icon: FlaskConical },
       { label: "Apoyo a la investigación", href: "/servicios/apoyo-investigacion", description: "Protocolos e identificación molecular", icon: Microscope },
+      { label: "Desarrollo de cepas", href: "/servicios/aislamiento-seleccion-cepas", description: "Aislamiento, selección y WGS", icon: Dna },
       { label: "exCELLent", href: "/excellent", description: "Análisis moleculares especializados", icon: Dna },
     ],
   },
