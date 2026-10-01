@@ -3,7 +3,7 @@ import { excellentServices } from "@/data/excellent-catalog"
 import { molecularProducts } from "@/data/kits-reactivos"
 
 const SITE_URL = "https://aslaboratorios.com"
-const LAST_MODIFIED = new Date("2026-09-20")
+const LAST_MODIFIED = new Date("2026-10-01")
 
 const pages = [
   ["", "weekly", 1],
@@ -13,6 +13,7 @@ const pages = [
   ["/ecuador", "weekly", 0.95],
   ["/ecuador/biologia-molecular", "weekly", 0.9],
   ["/ecuador/formulaciones-bacterianas", "weekly", 0.9],
+  ["/ecuador/aislamiento-seleccion-cepas", "weekly", 0.92],
   ["/ecuador/plantines-in-vitro", "weekly", 0.92],
   ["/ecuador/cepas", "weekly", 0.9],
   ["/ecuador/sobre-nosotros", "monthly", 0.78],

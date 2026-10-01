@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import EcuadorFooter from "@/components/ecuador-footer"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 import { BreadcrumbStructuredData, FAQStructuredData, ServiceStructuredData } from "@/components/structured-data"
@@ -128,14 +129,25 @@ const faqs = [
 ]
 
 export default function StrainDevelopmentPage() {
+  return <StrainDevelopmentPageContent />
+}
+
+export function StrainDevelopmentPageContent({ ecuador = false }: { ecuador?: boolean }) {
+  const pageUrl = ecuador
+    ? "https://aslaboratorios.com/ecuador/aislamiento-seleccion-cepas"
+    : "https://aslaboratorios.com/servicios/aislamiento-seleccion-cepas"
+  const homeUrl = ecuador ? "https://aslaboratorios.com/ecuador" : "https://aslaboratorios.com"
+  const servicesUrl = ecuador ? "https://aslaboratorios.com/ecuador" : "https://aslaboratorios.com/servicios"
+  const backHref = ecuador ? "/ecuador" : "/servicios"
+
   return (
     <>
       <ServiceStructuredData
         serviceName="Aislamiento, Selección e Identificación de Cepas"
         serviceDescription="Programa para empresas de biofertilizantes y control biológico con aislamiento de hasta 30 candidatos, selección funcional, WGS, bioinformática, validación, transferencia y seguimiento anual."
-        serviceUrl="https://aslaboratorios.com/servicios/aislamiento-seleccion-cepas"
+        serviceUrl={pageUrl}
         serviceType="Desarrollo y caracterización de cepas microbianas"
-        serviceArea={["La Libertad", "Lima", "Piura", "Lambayeque", "Arequipa"]}
+        serviceArea={ecuador ? ["Pichincha", "Guayas", "El Oro", "Los Ríos"] : ["La Libertad", "Lima", "Piura", "Lambayeque", "Arequipa"]}
         image="/research/research-lab.png"
         offers={[
           { name: "Aislamiento de cepas", description: "Recuperación trazable de hasta 30 aislados según el objetivo del proyecto" },
@@ -146,16 +158,16 @@ export default function StrainDevelopmentPage() {
       />
       <BreadcrumbStructuredData
         items={[
-          { name: "Inicio", url: "https://aslaboratorios.com" },
-          { name: "Servicios", url: "https://aslaboratorios.com/servicios" },
-          { name: "Desarrollo de Cepas", url: "https://aslaboratorios.com/servicios/aislamiento-seleccion-cepas" },
+          { name: ecuador ? "AS Labs Ecuador" : "Inicio", url: homeUrl },
+          { name: "Servicios", url: servicesUrl },
+          { name: "Desarrollo de Cepas", url: pageUrl },
         ]}
       />
       <FAQStructuredData questions={faqs} />
       <Navbar overlay />
 
       <main className="min-h-screen bg-[#f4f7f3]">
-        <section className="relative isolate min-h-[690px] overflow-hidden bg-[#082b20] pt-28 text-white sm:min-h-[720px] sm:pt-32">
+        <section data-navbar-theme="dark" className="relative isolate min-h-[690px] overflow-hidden bg-[#082b20] pt-28 text-white sm:min-h-[720px] sm:pt-32">
           <Image
             src="/research/research-lab.png"
             alt="Investigación y selección de cepas microbianas en AS Laboratorios"
@@ -171,11 +183,11 @@ export default function StrainDevelopmentPage() {
           <div className="mx-auto grid max-w-7xl gap-12 px-4 pb-20 sm:px-6 lg:grid-cols-[1.1fr_.9fr] lg:items-end lg:px-8 lg:pb-24">
             <ScrollReveal className="max-w-3xl">
               <Link
-                href="/servicios"
+                href={backHref}
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-emerald-50 backdrop-blur-xl transition hover:bg-white/15"
               >
                 <ChevronRight className="h-4 w-4 rotate-180" />
-                Servicios para empresas
+                {ecuador ? "Servicios en Ecuador" : "Servicios para empresas"}
               </Link>
               <p className="mt-8 text-xs font-black uppercase tracking-[0.23em] text-lime-300">
                 De la biodiversidad a una cepa lista para escalar
@@ -219,7 +231,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <div className="relative z-10 mx-auto -mt-6 w-[calc(100%-2rem)] max-w-6xl">
+        <div data-navbar-theme="light" className="relative z-10 mx-auto -mt-6 w-[calc(100%-2rem)] max-w-6xl">
           <nav className="flex gap-1.5 overflow-x-auto rounded-2xl border border-white bg-white/90 p-2 shadow-[0_20px_55px_-30px_rgba(5,46,32,.55)] backdrop-blur-2xl [scrollbar-width:none]">
             {[
               ["Proceso", "#proceso"],
@@ -236,7 +248,7 @@ export default function StrainDevelopmentPage() {
           </nav>
         </div>
 
-        <section id="proceso" className="scroll-mt-28 px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <section id="proceso" data-navbar-theme="light" className="scroll-mt-28 px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <ScrollReveal className="grid gap-6 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
               <div>
@@ -267,7 +279,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <section id="seleccion" className="scroll-mt-24 bg-white px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <section id="seleccion" data-navbar-theme="light" className="scroll-mt-24 bg-white px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
             <ScrollReveal className="relative min-h-[510px] overflow-hidden rounded-[36px] bg-emerald-950">
               <Image src="/servicios/micro.jpeg" alt="Selección experimental de aislados microbianos" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 52vw" />
@@ -302,7 +314,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <section id="wgs" className="scroll-mt-24 bg-[#082f23] px-4 py-20 text-white sm:px-6 sm:py-28 lg:px-8">
+        <section id="wgs" data-navbar-theme="dark" className="scroll-mt-24 bg-[#082f23] px-4 py-20 text-white sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <ScrollReveal className="grid gap-7 lg:grid-cols-[.85fr_1.15fr] lg:items-end">
               <div>
@@ -355,7 +367,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <section id="parcelas" className="scroll-mt-24 bg-[#eef4ea] px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <section id="parcelas" data-navbar-theme="light" className="scroll-mt-24 bg-[#eef4ea] px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <ScrollReveal className="mx-auto max-w-3xl text-center">
               <p className="text-xs font-black uppercase tracking-[.2em] text-emerald-700">Validación agronómica</p>
@@ -407,7 +419,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <section id="transferencia" className="scroll-mt-24 bg-white px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <section id="transferencia" data-navbar-theme="light" className="scroll-mt-24 bg-white px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <ScrollReveal className="grid gap-6 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
               <div>
@@ -488,7 +500,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <section id="preguntas" className="scroll-mt-24 bg-[#f1f5ef] px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <section id="preguntas" data-navbar-theme="light" className="scroll-mt-24 bg-[#f1f5ef] px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.75fr_1.25fr]">
             <ScrollReveal>
               <p className="text-xs font-black uppercase tracking-[.2em] text-emerald-700">Antes de iniciar</p>
@@ -513,7 +525,7 @@ export default function StrainDevelopmentPage() {
           </div>
         </section>
 
-        <section className="bg-[#f1f5ef] px-4 pb-20 sm:px-6 sm:pb-28 lg:px-8">
+        <section data-navbar-theme="light" className="bg-[#f1f5ef] px-4 pb-20 sm:px-6 sm:pb-28 lg:px-8">
           <ScrollReveal className="relative mx-auto max-w-7xl overflow-hidden rounded-[34px] bg-emerald-950 p-8 text-white shadow-[0_32px_80px_-42px_rgba(2,45,31,.8)] sm:p-12 lg:p-14">
             <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-lime-300/15 blur-3xl" />
             <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
@@ -535,7 +547,7 @@ export default function StrainDevelopmentPage() {
           </ScrollReveal>
         </section>
       </main>
-      <Footer />
+      {ecuador ? <EcuadorFooter /> : <Footer />}
     </>
   )
 }

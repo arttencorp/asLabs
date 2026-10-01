@@ -2,6 +2,7 @@ import type React from "react"
 import "./globals.css"
 import { Poppins } from "next/font/google"
 import type { Metadata, Viewport } from "next"
+import { InternshipCallout } from "@/components/internship-callout"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -124,6 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-background font-[var(--font-poppins)] text-foreground antialiased">
         {children}
+        <InternshipCallout />
       </body>
     </html>
   )

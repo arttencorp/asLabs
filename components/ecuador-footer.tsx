@@ -13,7 +13,7 @@ export default function EcuadorFooter() {
             <Link href="/ecuador" className="inline-flex h-12 w-[145px] items-center overflow-hidden rounded-xl bg-white px-3">
               <Image src="/images/new-logo.png" alt="AS Labs Ecuador" width={180} height={62} className="h-auto w-full" />
             </Link>
-            <p className="mt-5 max-w-md text-sm leading-7 text-white/60">Biología molecular, formulaciones bacterianas, plantines in vitro y cepas para empresas, productores, universidades y proyectos en Ecuador.</p>
+            <p className="mt-5 max-w-md text-sm leading-7 text-white/60">Biología molecular, formulaciones, desarrollo de cepas, plantines in vitro y colecciones microbianas para empresas y proyectos en Ecuador.</p>
             <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#e5bd45]/25 bg-[#e5bd45]/10 px-3 py-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#f2d77e]">🇪🇨 Sede Quito, Ecuador</div>
           </div>
           <div>
@@ -21,6 +21,7 @@ export default function EcuadorFooter() {
             <div className="mt-5 space-y-3 text-sm">
               <Link href="/ecuador/biologia-molecular" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Biología molecular</Link>
               <Link href="/ecuador/formulaciones-bacterianas" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Formulaciones bacterianas</Link>
+              <Link href="/ecuador/aislamiento-seleccion-cepas" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Desarrollo de cepas</Link>
               <Link href="/ecuador/plantines-in-vitro" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Plantines in vitro</Link>
               <Link href="/ecuador/cepas" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Cepas identificadas</Link>
               <Link href="/ecuador/sobre-nosotros" className="block text-white/70 transition hover:translate-x-1 hover:text-white">Sobre nosotros</Link>

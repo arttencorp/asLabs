@@ -105,6 +105,7 @@ const ecuadorNavigation: NavGroup[] = [
     links: [
       { label: "Biología molecular", href: "/ecuador/biologia-molecular", description: "PCR, secuenciamiento e identificación", icon: Dna },
       { label: "Formulaciones bacterianas", href: "/ecuador/formulaciones-bacterianas", description: "Desarrollo y control microbiológico", icon: FlaskConical },
+      { label: "Desarrollo de cepas", href: "/ecuador/aislamiento-seleccion-cepas", description: "Aislamiento, selección y WGS", icon: Dna },
     ],
   },
   { label: "Plantines", href: "/ecuador/plantines-in-vitro" },
@@ -133,7 +134,7 @@ function CountrySwitcher({ isEcuador, dark, compact = false }: { isEcuador: bool
             <div className="px-3 pb-2 pt-1"><p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#7b8b83]">Selecciona tu país</p><p className="mt-1 text-[11px] leading-4 text-[#61736a]">Verás únicamente los servicios disponibles en esa sede.</p></div>
             {[
               { href: "/", code: "PE", flag: "🇵🇪", name: "Perú", detail: "Portafolio completo", active: !isEcuador },
-              { href: "/ecuador", code: "EC", flag: "🇪🇨", name: "Ecuador", detail: "4 líneas especializadas", active: isEcuador },
+              { href: "/ecuador", code: "EC", flag: "🇪🇨", name: "Ecuador", detail: "5 líneas especializadas", active: isEcuador },
             ].map((country) => (
               <Link key={country.code} href={country.href} onClick={() => setOpen(false)} className={`mt-1 flex items-center gap-3 rounded-2xl border p-3 transition-colors ${country.active ? "border-[#a7cdbc] bg-[#eaf5ef]" : "border-transparent hover:bg-[#f1f5f2]"}`}>
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-xl shadow-sm">{country.flag}</span>
