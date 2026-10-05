@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
+import { LanguageSwitcher } from "@/components/language-experience"
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -397,6 +398,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
                 Acceso Clientes
               </a>
               <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} />
+              <LanguageSwitcher dark={useDarkContrast} compact />
               <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
               <WhatsAppContact mode="modal" message={isEcuador ? "Hola, quisiera información sobre los servicios disponibles de AS Labs Ecuador." : undefined} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
                 <MessageCircle className="h-3.5 w-3.5" />
@@ -406,6 +408,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
 
             <div className="flex items-center gap-2 xl:hidden">
               <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} compact />
+              <LanguageSwitcher dark={useDarkContrast} compact />
               <button
                 type="button"
                 onClick={() => setMobileOpen((value) => !value)}

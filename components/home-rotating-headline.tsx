@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { useLanguage } from "@/components/language-experience"
 
-const slides = [
+const slides = {
+  es: [
   {
     title: "Análisis fisicoquímicos para tus cultivos",
     subtitle: "Conoce el estado de tus muestras y toma decisiones agrícolas con mejor información.",
@@ -24,25 +26,50 @@ const slides = [
     title: "Análisis para tesistas e investigadores",
     subtitle: "Acompañamiento técnico para tesis, ensayos y proyectos científicos.",
   },
-]
+  ],
+  en: [
+    {
+      title: "Physicochemical analysis for your crops",
+      subtitle: "Understand the condition of your samples and make better-informed agricultural decisions.",
+    },
+    {
+      title: "Detect pests and diseases with precision",
+      subtitle: "We identify pathogens early to protect the health and performance of your crops.",
+    },
+    {
+      title: "In vitro plants with assured genetic quality",
+      subtitle: "Uniform, healthy plant material produced under controlled conditions.",
+    },
+    {
+      title: "Banana, pineapple, dragon fruit and more in vitro clones",
+      subtitle: "Selected clones of species with productive, commercial and ornamental value.",
+    },
+    {
+      title: "Laboratory analysis for researchers and students",
+      subtitle: "Technical support for theses, trials and scientific projects.",
+    },
+  ],
+}
 
 export default function HomeRotatingHeadline() {
+  const { language } = useLanguage()
+  const localizedSlides = slides[language]
   const [activeSlide, setActiveSlide] = useState(0)
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     if (reduceMotion) return
     const timeout = window.setTimeout(() => {
-      setActiveSlide((current) => (current + 1) % slides.length)
+      setActiveSlide((current) => (current + 1) % localizedSlides.length)
     }, 2000)
     return () => window.clearTimeout(timeout)
-  }, [activeSlide, reduceMotion])
+  }, [activeSlide, reduceMotion, localizedSlides.length])
 
-  const slide = slides[activeSlide]
+  const slide = localizedSlides[activeSlide]
   let letterIndex = 0
 
   return (
-    <div className="max-w-[720px]">
+    <div className="max-w-[720px]" translate="no">
       <div className="min-h-[160px] sm:min-h-[150px] lg:min-h-[138px]">
         <div className="grid">
           <AnimatePresence initial={false}>
@@ -131,13 +158,13 @@ export default function HomeRotatingHeadline() {
         </div>
       </div>
 
-      <div className="mt-2 flex items-center gap-2" aria-label="Titulares del Home">
-        {slides.map((item, index) => (
+      <div className="mt-2 flex items-center gap-2" aria-label={language === "en" ? "Homepage headlines" : "Titulares del Home"}>
+        {localizedSlides.map((item, index) => (
           <button
             key={item.title}
             type="button"
             onClick={() => setActiveSlide(index)}
-            aria-label={`Mostrar: ${item.title}`}
+            aria-label={`${language === "en" ? "Show" : "Mostrar"}: ${item.title}`}
             aria-current={index === activeSlide ? "true" : undefined}
             className={`relative h-1.5 overflow-hidden rounded-full transition-[width,background-color] duration-300 ${index === activeSlide ? "w-10 bg-white/25" : "w-3 bg-white/[0.35] hover:bg-white/60"}`}
           >

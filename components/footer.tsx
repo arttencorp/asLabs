@@ -170,7 +170,7 @@ export default function Footer() {
                   <Mail className="h-4 w-4" />
                 </span>
                 <div className="text-sm text-gray-300">
-                  <a href="mailto:ventas@aslaboratorios.com" className="hover:text-white transition-colors">
+                  <a href="mailto:ventas@aslaboratorios.com" translate="no" className="notranslate hover:text-white transition-colors">
                     ventas@aslaboratorios.com
                   </a>
                 </div>
