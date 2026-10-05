@@ -10,7 +10,7 @@ import {
 export const metadata: Metadata = {
   title: "Control Biológico de Plagas en Trujillo | AS Laboratorios",
   description:
-    "Control biológico con Billaea claripalpis, Trichogramma y asesoría técnica para el manejo sostenible de plagas agrícolas en Trujillo y el Perú.",
+    "Control biológico con Billaea claripalpis, Trichogramma, desarrollo de cepas microbianas y asesoría técnica para el manejo sostenible de plagas agrícolas en Perú.",
   keywords: [
     // Keywords principales geográficas
     "control biológico Trujillo",
@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     "control biológico barrenador",
     "AS Laboratorios control biológico",
     "laboratorio control biológico Trujillo",
+    "aislamiento de cepas para control biológico",
+    "selección de cepas biofertilizantes Perú",
+    "desarrollo de cepas bacterianas agrícolas",
   ],
   alternates: {
     canonical: "https://aslaboratorios.com/control-biologico",
@@ -132,6 +135,10 @@ export default function ControlBiologicoPage() {
             description: "Diagnóstico fitosanitario y plan de manejo integrado de plagas",
           },
           { name: "Capacitación Técnica", description: "Formación en control biológico y buenas prácticas agrícolas" },
+          {
+            name: "Desarrollo de cepas microbianas",
+            description: "Aislamiento, selección funcional, WGS, transferencia y seguimiento para biofertilizantes y control biológico",
+          },
         ]}
       />
       <BreadcrumbStructuredData
