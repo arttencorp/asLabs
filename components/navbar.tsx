@@ -55,23 +55,30 @@ const navigation: NavGroup[] = [
       { label: "exCELLent", href: "/excellent", description: "Análisis moleculares especializados", icon: Dna },
     ],
   },
+  { label: "Plantines", href: "/plantines" },
+  { label: "Kits", href: "/kits-reactivos" },
   {
-    label: "Catálogo",
+    label: "Cepas",
     links: [
-      { label: "Kits y reactivos", href: "/kits-reactivos", description: "Catálogo especializado", icon: FlaskConical },
-      { label: "Plantines in vitro", href: "/plantines", description: "Material vegetal uniforme", icon: Leaf },
-      { label: "Control biológico", href: "/control-biologico", description: "Biocontroladores y formulaciones", icon: ShieldCheck },
       { label: "Cepas identificadas", href: "/cepas/identificadas", description: "Cultivos locales certificados", icon: Microscope },
       { label: "Cepas de referencia", href: "/cepas/atcc", description: "Disponibles para investigación", icon: FlaskConical },
-      { label: "Biología molecular", href: "/kits-reactivos/biologia-molecular", description: "Kits, reactivos y purificación", icon: Dna },
-      { label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares y medios deshidratados", icon: FlaskConical },
-      { label: "Equipos de laboratorio", href: "/kits-reactivos/equipos-de-laboratorio", description: "Instrumentos y consumibles", icon: ClipboardCheck },
     ],
   },
-  { label: "Investigación", href: "/research" },
   {
     label: "Más",
     links: [
+      {
+        label: "Investigación",
+        href: "/research",
+        description: "Proyectos científicos en curso",
+        icon: Microscope,
+      },
+      {
+        label: "Control biológico",
+        href: "/control-biologico",
+        description: "Biocontroladores y formulaciones",
+        icon: ShieldCheck,
+      },
       {
         label: "Seguimiento",
         href: "/seguimiento",
@@ -111,20 +118,19 @@ const ecuadorNavigation: NavGroup[] = [
       { label: "Desarrollo de cepas", href: "/ecuador/aislamiento-seleccion-cepas", description: "Aislamiento, selección y WGS", icon: Dna },
     ],
   },
-  {
-    label: "Catálogo",
-    links: [
-      { label: "Plantines in vitro", href: "/ecuador/plantines-in-vitro", description: "Material vegetal y prevención", icon: Leaf },
-      { label: "Cepas identificadas", href: "/ecuador/cepas", description: "Colección microbiana", icon: Microscope },
-    ],
-  },
+  { label: "Plantines", href: "/ecuador/plantines-in-vitro" },
+  { label: "Cepas", href: "/ecuador/cepas" },
 ]
 
 const englishNavText: Record<string, string> = {
   "Nosotros": "About",
   "Servicios": "Services",
   "Catálogo": "Catalog",
+  "Plantines": "Plantlets",
+  "Kits": "Kits",
+  "Cepas": "Strains",
   "Investigación": "Research",
+  "Proyectos científicos en curso": "Ongoing scientific projects",
   "Más": "More",
   "Inicio": "Home",
   "Sobre nosotros": "About",
