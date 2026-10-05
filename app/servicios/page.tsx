@@ -30,6 +30,7 @@ import {
   ShieldCheck,
   MessageCircle,
   ChevronRight,
+  Dna,
 } from "lucide-react"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
@@ -37,7 +38,7 @@ import { WhatsAppContact } from "@/components/whatsapp-contact"
 export const metadata: Metadata = {
   title: "Análisis y Servicios de Laboratorio en Trujillo | AS Laboratorios",
   description:
-    "Análisis microbiológicos, fitopatología, bacteriología, biotecnología vegetal y apoyo a la investigación para agricultura, industria y academia.",
+    "Análisis microbiológicos, fitopatología, biotecnología vegetal y desarrollo de cepas con selección funcional, WGS y validación para agricultura, industria y academia.",
   keywords: [
     // Keywords geográficas principales
     "laboratorio Trujillo",
@@ -72,6 +73,9 @@ export const metadata: Metadata = {
     "mejor laboratorio Trujillo",
     "laboratorio agrícola Perú",
     "laboratorio industrial Trujillo",
+    "aislamiento de cepas bacterianas Perú",
+    "selección de cepas biofertilizantes",
+    "WGS bacteriano Perú",
   ],
   alternates: {
     canonical: "https://aslaboratorios.com/servicios",
@@ -245,6 +249,26 @@ const servicios = [
     image: "/servicios/micro.jpeg",
     count: 9,
   },
+  {
+    title: "Desarrollo de Cepas",
+    description:
+      "Aislamos, seleccionamos y caracterizamos cepas con potencial para biofertilizantes, promoción del crecimiento y control biológico.",
+    audience: "Empresas de bioinsumos",
+    href: "/servicios/aislamiento-seleccion-cepas",
+    icon: Dna,
+    color: "from-lime-500 to-emerald-600",
+    bgColor: "bg-lime-50",
+    borderColor: "border-lime-200",
+    textColor: "text-emerald-700",
+    services: [
+      "Aislamiento de hasta 30 candidatos",
+      "Selección funcional y ensayos",
+      "WGS y análisis bioinformático",
+      "Transferencia, resguardo y seguimiento",
+    ],
+    image: "/research/research-lab.png",
+    count: 7,
+  },
 ]
 
 function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -262,7 +286,7 @@ export default function ServiciosPage() {
     <>
       <ServiceStructuredData
         serviceName="Servicios de Laboratorio AS Laboratorios Trujillo"
-        serviceDescription="Catálogo de servicios de laboratorio especializados en Trujillo, La Libertad, Perú. Análisis microbiológicos, fitopatología, biotecnología vegetal, bacteriología y apoyo a la investigación."
+        serviceDescription="Catálogo de servicios de laboratorio especializados en Trujillo, Perú. Análisis microbiológicos, fitopatología, biotecnología vegetal, bacteriología, desarrollo de cepas, WGS y apoyo a la investigación."
         serviceUrl="https://aslaboratorios.com/servicios"
         serviceType="Servicios de Laboratorio"
         serviceArea={["La Libertad", "Lambayeque", "Piura", "Cajamarca", "Ancash", "Lima", "Ica", "Arequipa"]}
@@ -329,7 +353,7 @@ export default function ServiciosPage() {
 
               <div className="mt-8 grid max-w-xl grid-cols-3 gap-3 border-t border-[#c8d6ca] pt-5">
                 {[
-                  { value: "6", label: "áreas técnicas" },
+                  { value: "7", label: "áreas técnicas" },
                   { value: `${totalServicios}+`, label: "servicios" },
                   { value: "1997", label: "desde" },
                 ].map((item) => (

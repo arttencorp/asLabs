@@ -82,6 +82,7 @@ const servicePages = [
   { label: "Biotecnología Vegetal", href: "/servicios/biotecnologia-vegetal", summary: "Cultivo de tejidos in vitro" },
   { label: "Bacteriología", href: "/servicios/bacteriologia-general", summary: "Cepas, fermentación y bioproductos" },
   { label: "Apoyo a Investigación", href: "/servicios/apoyo-investigacion", summary: "Protocolos y análisis molecular" },
+  { label: "Desarrollo de Cepas", href: "/servicios/aislamiento-seleccion-cepas", summary: "Aislamiento, selección y WGS" },
 ]
 
 type HeroActionsProps = {

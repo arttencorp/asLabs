@@ -83,6 +83,14 @@ const allAnalyses: Analysis[] = [
   { id: "60", tipo: "Apoyo a la Investigación", concepto: "Formulación de Protocolos y Estandarización", alcance: "protocolos optimizados y documentados", costo: "600" },
   { id: "61", tipo: "Apoyo a la Investigación", concepto: "Aislamiento de Bacterias", alcance: "aislamiento selectivo y purificación", costo: "180" },
   { id: "62", tipo: "Apoyo a la Investigación", concepto: "Servicio Análisis e Informes Bioinformática", alcance: "procesamiento y visualización de datos moleculares", costo: "350" },
+  // Desarrollo de Cepas
+  { id: "63", tipo: "Desarrollo de Cepas", concepto: "Programa de aislamiento de microorganismos", alcance: "hasta 30 aislados trazables según matriz y objetivo", costo: "consulta" },
+  { id: "64", tipo: "Desarrollo de Cepas", concepto: "Selección funcional de cepas", alcance: "pruebas comparativas para biocontrol o promoción del crecimiento", costo: "consulta" },
+  { id: "65", tipo: "Desarrollo de Cepas", concepto: "Secuenciación de genoma completo bacteriano", alcance: "WGS, control de calidad y ensamblaje", costo: "consulta" },
+  { id: "66", tipo: "Desarrollo de Cepas", concepto: "Análisis bioinformático de aislados", alcance: "anotación, comparación y análisis filogenético", costo: "consulta" },
+  { id: "67", tipo: "Desarrollo de Cepas", concepto: "Validación agronómica de cepas", alcance: "ensayos en invernadero o parcela demostrativa", costo: "consulta" },
+  { id: "68", tipo: "Desarrollo de Cepas", concepto: "Transferencia de cultivos de inicio", alcance: "cultivos puros, liofilizados y viales de producción", costo: "consulta" },
+  { id: "69", tipo: "Desarrollo de Cepas", concepto: "Custodia y control anual de cepas", alcance: "resguardo por cinco años y seguimiento de estabilidad", costo: "consulta" },
 ]
 
 export function AnalysisSearch() {
