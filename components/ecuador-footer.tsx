@@ -34,7 +34,7 @@ export default function EcuadorFooter() {
             <div className="mt-5 space-y-4 text-sm text-white/65">
               <div className="flex gap-3"><Building2 className="mt-0.5 h-4 w-4 shrink-0 text-[#e5bd45]" /><span>Edificio <strong className="font-semibold text-white">Carolina Millenium</strong></span></div>
               <div className="flex gap-3"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#e5bd45]" /><span>Andrade Marin 24<br />170518 Quito, Ecuador</span></div>
-              <div className="flex gap-3"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#e5bd45]" /><a href="mailto:ventas@aslaboratorios.com" className="hover:text-white">ventas@aslaboratorios.com</a></div>
+              <div className="flex gap-3"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#e5bd45]" /><a href="mailto:ventas@aslaboratorios.com" translate="no" className="notranslate hover:text-white">ventas@aslaboratorios.com</a></div>
             </div>
           </div>
         </div>
