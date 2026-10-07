@@ -3,6 +3,7 @@ import "./globals.css"
 import { Poppins } from "next/font/google"
 import type { Metadata, Viewport } from "next"
 import { InternshipCallout } from "@/components/internship-callout"
+import { LanguageProvider } from "@/components/language-experience"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -108,7 +109,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-PE" className={poppins.variable} suppressHydrationWarning>
+    <html lang="en" className={poppins.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -124,8 +125,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className="min-h-screen bg-background font-[var(--font-poppins)] text-foreground antialiased">
-        {children}
-        <InternshipCallout />
+        <LanguageProvider>
+          {children}
+          <InternshipCallout />
+        </LanguageProvider>
       </body>
     </html>
   )

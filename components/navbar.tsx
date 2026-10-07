@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
+import { LanguageSwitcher, useLanguage } from "@/components/language-experience"
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -41,13 +42,6 @@ type NavGroup = {
 const navigation: NavGroup[] = [
   { label: "Nosotros", href: "/sobre-nosotros" },
   {
-    label: "Kits y Reactivos",
-    href: "/kits-reactivos",
-    links: [
-      { label: "Medios de cultivo", href: "/kits-reactivos/medios-de-cultivo", description: "Agares y medios deshidratados", icon: FlaskConical },
-    ],
-  },
-  {
     label: "Servicios",
     href: "/servicios",
     links: [
@@ -62,19 +56,35 @@ const navigation: NavGroup[] = [
     ],
   },
   { label: "Plantines", href: "/plantines" },
-  { label: "Control biológico", href: "/control-biologico" },
+  { label: "Kits", href: "/kits-reactivos" },
   {
     label: "Cepas",
-    href: "/cepas",
     links: [
       { label: "Cepas identificadas", href: "/cepas/identificadas", description: "Cultivos locales certificados", icon: Microscope },
-      { label: "Cepas ATCC", href: "/cepas/atcc", description: "Referencias internacionales", icon: FlaskConical },
+      { label: "Cepas de referencia", href: "/cepas/atcc", description: "Disponibles para investigación", icon: FlaskConical },
     ],
   },
-  { label: "Investigación", href: "/research" },
   {
     label: "Más",
     links: [
+      {
+        label: "Investigación",
+        href: "/research",
+        description: "Proyectos científicos en curso",
+        icon: Microscope,
+      },
+      {
+        label: "Control biológico",
+        href: "/control-biologico",
+        description: "Biocontroladores y formulaciones",
+        icon: ShieldCheck,
+      },
+      {
+        label: "Seguimiento",
+        href: "/seguimiento",
+        description: "Consulta el avance de tu servicio",
+        icon: ClipboardCheck,
+      },
       {
         label: "Trabaja con nosotros",
         href: "/trabaja-con-nosotros",
@@ -111,6 +121,64 @@ const ecuadorNavigation: NavGroup[] = [
   { label: "Plantines", href: "/ecuador/plantines-in-vitro" },
   { label: "Cepas", href: "/ecuador/cepas" },
 ]
+
+const englishNavText: Record<string, string> = {
+  "Nosotros": "About",
+  "Servicios": "Services",
+  "Catálogo": "Catalog",
+  "Plantines": "Plantlets",
+  "Kits": "Kits",
+  "Cepas": "Strains",
+  "Investigación": "Research",
+  "Proyectos científicos en curso": "Ongoing scientific projects",
+  "Más": "More",
+  "Inicio": "Home",
+  "Sobre nosotros": "About",
+  "Fitopatología": "Plant pathology",
+  "Diagnóstico de patógenos": "Pathogen diagnostics",
+  "Medio ambiente": "Environmental analysis",
+  "Análisis microbiológicos": "Microbiological testing",
+  "Microbiológicos": "Microbiology",
+  "Alimentos, agua y superficies": "Food, water and surfaces",
+  "Biotecnología vegetal": "Plant biotechnology",
+  "Cultivo de tejidos in vitro": "In vitro tissue culture",
+  "Bacteriología": "Bacteriology",
+  "Suspensiones y fermentación": "Suspensions and fermentation",
+  "Apoyo a la investigación": "Research support",
+  "Protocolos e identificación molecular": "Protocols and molecular identification",
+  "Desarrollo de cepas": "Strain development",
+  "Aislamiento, selección y WGS": "Isolation, selection and WGS",
+  "Análisis moleculares especializados": "Specialized molecular analysis",
+  "Kits y reactivos": "Kits and reagents",
+  "Catálogo especializado": "Specialized catalog",
+  "Plantines in vitro": "In vitro plantlets",
+  "Material vegetal uniforme": "Uniform plant material",
+  "Control biológico": "Biological control",
+  "Biocontroladores y formulaciones": "Biocontrol and formulations",
+  "Cepas identificadas": "Identified strains",
+  "Cultivos locales certificados": "Certified local cultures",
+  "Cepas de referencia": "Reference strains",
+  "Disponibles para investigación": "Available for research",
+  "Biología molecular": "Molecular biology",
+  "Kits, reactivos y purificación": "Kits, reagents and purification",
+  "Medios de cultivo": "Culture media",
+  "Agares y medios deshidratados": "Agars and dehydrated media",
+  "Equipos de laboratorio": "Laboratory equipment",
+  "Instrumentos y consumibles": "Instruments and consumables",
+  "Seguimiento": "Tracking",
+  "Consulta el avance de tu servicio": "Check the progress of your service",
+  "Trabaja con nosotros": "Careers",
+  "Convocatorias y oportunidades": "Openings and opportunities",
+  "Legal": "Legal",
+  "Términos, privacidad y políticas": "Terms, privacy and policies",
+  "Pitch Deck": "Pitch deck",
+  "Presentación institucional": "Company presentation",
+  "PCR, secuenciamiento e identificación": "PCR, sequencing and identification",
+  "Formulaciones bacterianas": "Bacterial formulations",
+  "Desarrollo y control microbiológico": "Microbial development and control",
+  "Material vegetal y prevención": "Plant material and prevention",
+  "Colección microbiana": "Microbial collection",
+}
 
 function CountrySwitcher({ isEcuador, dark, compact = false }: { isEcuador: boolean; dark: boolean; compact?: boolean }) {
   const [open, setOpen] = useState(false)
@@ -166,6 +234,7 @@ export type NavbarProps = {
 
 export function Navbar({ overlay = false }: NavbarProps) {
   const pathname = usePathname()
+  const { language } = useLanguage()
   const isEcuador = pathname === "/ecuador" || pathname.startsWith("/ecuador/")
   const visibleNavigation = isEcuador ? ecuadorNavigation : navigation
   const [openGroup, setOpenGroup] = useState<string | null>(null)
@@ -238,6 +307,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
   const activeLinkClass = useDarkContrast
     ? "bg-white/[0.17] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]"
     : "bg-[#e3ede5] text-[#1f6240] shadow-[inset_0_0_0_1px_rgba(31,98,64,0.08)]"
+  const navText = (text: string) => language === "en" ? englishNavText[text] || text : text
 
   return (
     <>
@@ -289,8 +359,8 @@ export function Navbar({ overlay = false }: NavbarProps) {
               </motion.div>
             )}
           </AnimatePresence>
-          <div className={`flex items-center justify-between px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
-            <Link href={isEcuador ? "/ecuador" : "/"} aria-label={`AS Labs ${isEcuador ? "Ecuador" : "Perú"} — Inicio`} className="flex h-9 w-[104px] shrink-0 items-center overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8ee2c5] sm:w-[112px]">
+          <div className={`flex items-center justify-between gap-3 px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
+            <Link href={isEcuador ? "/ecuador" : "/"} aria-label={`AS Labs ${isEcuador ? "Ecuador" : "Perú"} — Inicio`} className="flex h-9 w-[104px] shrink-0 items-center overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8ee2c5] sm:w-[116px]">
               <Image
                 src="/images/new-logo.png"
                 alt="AS Labs"
@@ -302,7 +372,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
               />
             </Link>
 
-            <div className="hidden items-center gap-0.5 xl:flex">
+            <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 px-2 xl:flex">
               {visibleNavigation.map((item) => (
                 <div
                   key={item.label}
@@ -315,22 +385,22 @@ export function Navbar({ overlay = false }: NavbarProps) {
                       type="button"
                       onClick={() => setOpenGroup(item.label)}
                       aria-expanded={openGroup === item.label}
-                      className={`relative flex h-9 items-center gap-1 rounded-full px-2.5 text-[11.5px] font-medium transition-all duration-200 ${
+                      className={`relative flex h-9 items-center gap-1 rounded-full px-3.5 text-[11.5px] font-medium transition-all duration-200 ${
                         isActive(item) ? activeLinkClass : inactiveLinkClass
                       }`}
                     >
-                      {item.label}
+                      <span translate="no">{navText(item.label)}</span>
                       <ChevronDown className={`h-3.5 w-3.5 transition-transform ${openGroup === item.label ? "rotate-180" : ""}`} />
                     </button>
                   ) : (
                     <Link
                       href={item.href || "/"}
-                      className={`relative flex h-9 items-center gap-1.5 rounded-full px-2.5 text-[11.5px] font-medium transition-all duration-200 ${
+                      className={`relative flex h-9 items-center gap-1.5 rounded-full px-3.5 text-[11.5px] font-medium transition-all duration-200 ${
                         isActive(item) ? activeLinkClass : inactiveLinkClass
                       }`}
                     >
                       {item.label === "Control biológico" && <ShieldCheck className="h-3.5 w-3.5" />}
-                      {item.label}
+                      <span translate="no">{navText(item.label)}</span>
                     </Link>
                   )}
 
@@ -341,15 +411,15 @@ export function Navbar({ overlay = false }: NavbarProps) {
                         animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0, y: 7, scale: 0.985, filter: "blur(3px)" }}
                         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                        className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/90 bg-white/[0.97] p-2 shadow-[0_24px_64px_-24px_rgba(8,47,32,0.52)] backdrop-blur-xl before:absolute before:-top-3 before:left-0 before:h-3 before:w-full before:content-[''] ${item.label === "Servicios" ? "w-[560px]" : "w-[330px]"}`}
+                        className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/90 bg-white/[0.97] p-2 shadow-[0_24px_64px_-24px_rgba(8,47,32,0.52)] backdrop-blur-xl before:absolute before:-top-3 before:left-0 before:h-3 before:w-full before:content-[''] ${item.label === "Servicios" || item.label === "Catálogo" ? "w-[560px]" : "w-[330px]"}`}
                       >
                         {item.href && (
-                          <Link href={item.href} className="mb-1 flex items-center justify-between rounded-xl bg-[#0c3928] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#15543a]">
-                            Ver todos: {item.label}
+                          <Link href={item.href} translate="no" className="mb-1 flex items-center justify-between rounded-xl bg-[#0c3928] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#15543a]">
+                            {language === "en" ? `View all: ${navText(item.label)}` : `Ver todos: ${item.label}`}
                             <ArrowUpRight className="h-4 w-4" />
                           </Link>
                         )}
-                        <div className={item.label === "Servicios" ? "grid grid-cols-2 gap-1" : "space-y-1"}>
+                        <div className={item.label === "Servicios" || item.label === "Catálogo" ? "grid grid-cols-2 gap-1" : "space-y-1"}>
                           {item.links.map((link) => {
                             const Icon = link.icon || Leaf
                             return (
@@ -358,8 +428,8 @@ export function Navbar({ overlay = false }: NavbarProps) {
                                   <Icon className="h-4 w-4" />
                                 </span>
                                 <span className="min-w-0">
-                                  <span className="block text-xs font-semibold text-[#203e31]">{link.label}</span>
-                                  <span className="mt-0.5 block truncate text-[10px] text-[#6c7c74]">{link.description}</span>
+                                  <span translate="no" className="block text-xs font-semibold text-[#203e31]">{navText(link.label)}</span>
+                                  <span translate="no" className="mt-0.5 block truncate text-[10px] text-[#6c7c74]">{link.description ? navText(link.description) : ""}</span>
                                 </span>
                               </Link>
                             )
@@ -372,33 +442,26 @@ export function Navbar({ overlay = false }: NavbarProps) {
               ))}
             </div>
 
-            <div className="hidden items-center gap-1.5 xl:flex">
-              {!isEcuador && <Link
-                href="/seguimiento"
-                className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-[11.5px] font-semibold transition-all duration-200 ${
-                  pathname.startsWith("/seguimiento") ? activeLinkClass : inactiveLinkClass
-                }`}
-              >
-                <ClipboardCheck className="h-3.5 w-3.5" />
-                Seguimiento
-              </Link>}
+            <div className="hidden shrink-0 items-center gap-1 xl:flex">
               <a
                 href="https://clientes.aslaboratorios.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[11.5px] font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
                   useDarkContrast
                     ? "border-white/25 bg-white/[0.13] text-white hover:bg-white/[0.22]"
                     : "border-[#bfd1c3] bg-[#edf4ee] text-[#24573a] hover:border-[#8eaf96] hover:bg-[#e1ece3]"
                 }`}
                 aria-label="Abrir el panel de clientes de AS Laboratorios"
+                translate="no"
               >
                 <UserRoundCheck className="h-3.5 w-3.5" />
-                Acceso Clientes
+                {language === "en" ? "Clients" : "Clientes"}
               </a>
-              <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} />
+              <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} compact />
+              <LanguageSwitcher dark={useDarkContrast} compact />
               <span className={`mx-0.5 h-5 w-px ${useDarkContrast ? "bg-white/20" : "bg-[#173428]/15"}`} />
-              <WhatsAppContact mode="modal" message={isEcuador ? "Hola, quisiera información sobre los servicios disponibles de AS Labs Ecuador." : undefined} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3.5 text-[12px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
+              <WhatsAppContact mode="modal" message={isEcuador ? "Hola, quisiera información sobre los servicios disponibles de AS Labs Ecuador." : undefined} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#ef9f38] px-3 text-[11.5px] font-bold text-[#173428] shadow-[0_8px_22px_-12px_rgba(173,91,18,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ffc56f] hover:shadow-[0_12px_26px_-12px_rgba(173,91,18,0.9)]">
                 <MessageCircle className="h-3.5 w-3.5" />
                 WhatsApp
               </WhatsAppContact>
@@ -406,6 +469,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
 
             <div className="flex items-center gap-2 xl:hidden">
               <CountrySwitcher isEcuador={isEcuador} dark={useDarkContrast} compact />
+              <LanguageSwitcher dark={useDarkContrast} compact />
               <button
                 type="button"
                 onClick={() => setMobileOpen((value) => !value)}
@@ -437,22 +501,22 @@ export function Navbar({ overlay = false }: NavbarProps) {
                             onClick={() => setOpenGroup(openGroup === item.label ? null : item.label)}
                             className={`flex w-full items-center justify-between rounded-lg px-2 py-3 text-left text-sm font-semibold transition-colors ${isActive(item) ? "bg-[#e8f0e9] text-[#1f6240]" : "text-[#203e31]"}`}
                           >
-                            {item.label}
+                            <span translate="no">{navText(item.label)}</span>
                             <ChevronDown className={`h-4 w-4 transition-transform ${openGroup === item.label ? "rotate-180" : ""}`} />
                           </button>
                           <AnimatePresence>
                             {openGroup === item.label && (
                               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden pb-2">
-                                {item.href && <Link href={item.href} className="block rounded-lg bg-[#e8f0e9] px-3 py-2 text-xs font-semibold text-[#235d3d]">Ver todos</Link>}
+                                {item.href && <Link href={item.href} translate="no" className="block rounded-lg bg-[#e8f0e9] px-3 py-2 text-xs font-semibold text-[#235d3d]">{language === "en" ? "View all" : "Ver todos"}</Link>}
                                 {item.links.map((link) => (
-                                  <Link key={link.href} href={link.href} className="block px-3 py-2 text-xs text-[#566a60]">{link.label}</Link>
+                                  <Link key={link.href} href={link.href} translate="no" className="block px-3 py-2 text-xs text-[#566a60]">{navText(link.label)}</Link>
                                 ))}
                               </motion.div>
                             )}
                           </AnimatePresence>
                         </>
                       ) : (
-                        <Link href={item.href || "/"} className={`block rounded-lg px-2 py-3 text-sm font-semibold transition-colors ${isActive(item) ? "bg-[#e8f0e9] text-[#1f6240]" : "text-[#203e31]"}`}>{item.label}</Link>
+                        <Link href={item.href || "/"} className={`block rounded-lg px-2 py-3 text-sm font-semibold transition-colors ${isActive(item) ? "bg-[#e8f0e9] text-[#1f6240]" : "text-[#203e31]"}`}><span translate="no">{navText(item.label)}</span></Link>
                       )}
                     </div>
                   ))}

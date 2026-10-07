@@ -9,6 +9,7 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { btnPrimary, arrowCircle } from "@/components/ui/button-styles"
 import { Bug, Leaf, Users, FlaskConical, Play, Pause } from "lucide-react"
+import { useLanguage } from "@/components/language-experience"
 
 interface OfferItem {
   id: number
@@ -21,12 +22,13 @@ interface OfferItem {
 }
 
 export default function OfferCarousel() {
+  const { language } = useLanguage()
   const [activeItem, setActiveItem] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const offerItems: OfferItem[] = [
+  const spanishOfferItems: OfferItem[] = [
     {
       id: 0,
       title: "Control Biológico",
@@ -68,6 +70,49 @@ export default function OfferCarousel() {
       icon: FlaskConical,
     },
   ]
+  const englishOfferItems: OfferItem[] = [
+    {
+      id: 0,
+      title: "Biological Control",
+      content:
+        "We develop beneficial microorganisms to control pests and diseases in agricultural crops. Our solutions include antagonistic fungi, plant growth-promoting bacteria and biostimulants that reduce dependence on agrochemicals while protecting the environment and farmers' health.",
+      image: "/control-biologico.png",
+      link: "DISCOVER OUR BIOCONTROLLERS",
+      href: "/control-biologico",
+      icon: Bug,
+    },
+    {
+      id: 1,
+      title: "Plant Biotechnology",
+      content:
+        "We produce in vitro plants with high genetic and phytosanitary quality using micropropagation techniques. We offer banana, plantain, pineapple, blueberry and ornamental plantlets, providing disease-free material with superior genetic characteristics.",
+      image: "/new/BiotecnologiaVegetal.webp",
+      link: "EXPLORE OUR PLANTLETS",
+      href: "/plantines",
+      icon: Leaf,
+    },
+    {
+      id: 2,
+      title: "Technical Consulting",
+      content:
+        "We provide specialized consulting in plant biotechnology, integrated pest and disease management, and sustainable production systems. Our team develops tailored solutions to optimize our clients' agricultural production.",
+      image: "/scientists-meeting.png",
+      link: "REQUEST A CONSULTATION",
+      href: "/servicios/apoyo-investigacion",
+      icon: Users,
+    },
+    {
+      id: 3,
+      title: "Laboratory Supplies",
+      content:
+        "We supply materials, equipment and reagents for research and university teaching laboratories. From culture media to specialized instruments, we provide high-quality products for biotechnology students, lecturers and researchers.",
+      image: "/offer/insumosLab.jpeg",
+      link: "VIEW SUPPLIES CATALOG",
+      href: "/tienda",
+      icon: FlaskConical,
+    },
+  ]
+  const offerItems = language === "en" ? englishOfferItems : spanishOfferItems
 
   const togglePause = useCallback(() => {
     setIsPaused(prev => !prev)
@@ -108,14 +153,16 @@ export default function OfferCarousel() {
   }, [isPaused, isMounted, nextSlide])
 
   return (
-    <section data-navbar-theme="light" className="bg-[#f6f3eb] py-20 sm:py-28">
+    <section data-navbar-theme="light" className="bg-[#f6f3eb] py-20 sm:py-28" translate="no">
       <div className="container mx-auto max-w-[1320px] px-4 sm:px-8">
         <ScrollReveal>
           <SectionHeading
-            eyebrow="Nuestros Servicios"
-            title="¿Qué es lo que ofrecemos?"
+            eyebrow={language === "en" ? "Our services" : "Nuestros Servicios"}
+            title={language === "en" ? "What do we offer?" : "¿Qué es lo que ofrecemos?"}
             description={
-              'AS Laboratorios ofrece una amplia gama de servicios y productos, desde la producción de plantas "in vitro" hasta materiales para estudiantes universitarios.'
+              language === "en"
+                ? "AS Laboratorios provides a broad range of services and products, from in vitro plant production to specialized laboratory supplies."
+                : 'AS Laboratorios ofrece una amplia gama de servicios y productos, desde la producción de plantas "in vitro" hasta materiales para estudiantes universitarios.'
             }
             align="center"
             className="mb-10"
@@ -157,7 +204,7 @@ export default function OfferCarousel() {
           <button
             onClick={togglePause}
             className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-colors hover:border-[#2e7d32]/40 hover:text-[#2e7d32]"
-            aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
+            aria-label={isPaused ? (language === "en" ? "Play slideshow" : "Reproducir carrusel") : (language === "en" ? "Pause slideshow" : "Pausar carrusel")}
           >
             {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
           </button>
