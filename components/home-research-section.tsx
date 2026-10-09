@@ -2,8 +2,8 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Dna, FlaskConical, Leaf } from "lucide-react"
-import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 const projects = [
   {
@@ -12,65 +12,53 @@ const projects = [
     href: "/research/secuenciamiento-fusarium",
     image: "/lab-header-bg.jpg",
     label: "Genómica",
-    icon: Dna,
-    color: "bg-blue-100 text-blue-700",
   },
   {
     title: "Trichoderma frente a Fusarium",
-    description: "Evaluación de microorganismos benéficos como alternativa para el manejo biológico de enfermedades.",
+    description: "Evaluación de microorganismos benéficos como alternativa para el manejo biológico.",
     href: "/research/trichoderma-fusarium",
     image: "/control-biologico.png",
     label: "Control biológico",
-    icon: FlaskConical,
-    color: "bg-purple-100 text-purple-700",
   },
   {
     title: "Programa Banano Baby",
-    description: "Desarrollo y validación de material vegetal orientado a calidad, adaptación y valor productivo.",
+    description: "Desarrollo y validación de material vegetal orientado a calidad y adaptación productiva.",
     href: "/research/banano-baby",
     image: "/plantines/bananoBabyBBG.jpeg",
     label: "Mejoramiento vegetal",
-    icon: Leaf,
-    color: "bg-green-100 text-green-700",
   },
 ]
 
 export default function HomeResearchSection() {
   return (
-    <section data-navbar-theme="light" className="border-y border-[#dfe7e1] bg-white py-16 sm:py-20">
-      <div className="mx-auto grid max-w-[1320px] gap-9 px-5 sm:px-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-14">
-        <ScrollReveal className="lg:sticky lg:top-28 lg:h-fit">
-          <span className="text-[10px] font-semibold text-[#2e7048]">Investigación e innovación</span>
-          <h2 className="mt-3 max-w-[540px] text-[clamp(2rem,3.4vw,3.2rem)] leading-[1.03] tracking-[-0.04em] text-[#173428]">Preguntas de campo, respuestas de laboratorio.</h2>
-          <p className="mt-5 max-w-[520px] text-sm leading-6 text-[#63736b]">Genética, microorganismos y cultivo de tejidos orientados a problemas concretos de la agricultura.</p>
-          <Link href="/research" className="group mt-7 inline-flex w-fit items-center gap-3 rounded-full bg-[#173428] px-5 py-3 text-xs font-semibold text-white transition hover:bg-[#245a40]">
-            Explorar investigación
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+    <section data-navbar-theme="light" className="border-y border-[#d6ddd8] bg-[#edf2ee] py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
+        <ScrollReveal className="grid gap-6 border-b border-[#cbd5ce] pb-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+          <div>
+            <p className="text-[11px] font-semibold text-[#0b7a55]">Investigación activa</p>
+            <h2 className="mt-3 text-[clamp(2rem,3.8vw,3.8rem)] font-medium leading-[1.02] tracking-[-0.045em] text-[#17211d]">Preguntas de campo. Evidencia de laboratorio.</h2>
+          </div>
+          <div className="flex flex-col gap-4 lg:items-end">
+            <p className="max-w-xl text-sm leading-7 text-[#5d6c64]">Genética, microorganismos y cultivo de tejidos aplicados a problemas concretos de la agricultura.</p>
+            <Link href="/research" className="group inline-flex items-center gap-3 text-xs font-semibold text-[#0b7a55]">Ver investigación <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
+          </div>
         </ScrollReveal>
 
-        <StaggerGroup className="overflow-hidden rounded-[1.5rem] border border-[#dfe7e1] bg-[#f7f9f6]" staggerDelay={0.09}>
+        <div className="mt-8 grid border-l border-t border-[#cbd5ce] lg:grid-cols-12">
           {projects.map((project, index) => (
-            <StaggerItem key={project.title}>
-              <Link href={project.href} className="group grid border-b border-[#dfe7e1] bg-[#f7f9f6] transition-colors last:border-b-0 hover:bg-white sm:grid-cols-[180px_1fr]">
-                <div className="relative min-h-[168px] overflow-hidden sm:min-h-[190px]">
-                  <Image src={project.image} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width:1024px) 33vw, 100vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b3024]/40 via-transparent to-transparent" />
-                  <span className={`absolute left-3 top-3 inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 text-[9px] font-semibold ${project.color}`}>
-                    <project.icon className="h-3.5 w-3.5" />
-                    {project.label}
-                  </span>
-                </div>
-                <div className="flex min-w-0 flex-col justify-center p-5 sm:p-6">
-                  <div className="mb-3 flex items-center justify-between gap-4"><span className="text-[10px] font-medium text-[#9aaa9f]">Proyecto activo · 0{index + 1}</span><ArrowRight className="h-4 w-4 text-[#2e7048] transition-transform group-hover:translate-x-1" /></div>
-                  <h3 className="text-lg font-semibold tracking-[-0.02em] text-[#173428] sm:text-xl">{project.title}</h3>
-                  <p className="mt-2 text-xs leading-5 text-[#66756e] sm:text-sm sm:leading-6">{project.description}</p>
-                  <div className="mt-4 h-px w-12 bg-[#c59b52] transition-all duration-300 group-hover:w-20" />
-                  </div>
-              </Link>
-            </StaggerItem>
+            <Link key={project.title} href={project.href} className={`group border-b border-r border-[#cbd5ce] bg-white ${index === 0 ? "lg:col-span-6" : "lg:col-span-3"}`}>
+              <div className={`relative overflow-hidden ${index === 0 ? "aspect-[1.5/1]" : "aspect-[1.25/1] lg:aspect-[.83/1]"}`}>
+                <Image src={project.image} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-[1.035]" sizes={index === 0 ? "(min-width:1024px) 50vw, 100vw" : "(min-width:1024px) 25vw, 100vw"} />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#062b22]/55 via-transparent to-transparent" />
+                <span className="absolute left-4 top-4 bg-white/90 px-2.5 py-1 text-[9px] font-semibold text-[#184b38] backdrop-blur">{project.label}</span>
+              </div>
+              <div className="p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-5"><h3 className={`${index === 0 ? "text-xl sm:text-2xl" : "text-base sm:text-lg"} font-medium leading-tight tracking-[-0.025em] text-[#17211d]`}>{project.title}</h3><ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[#0b7a55] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></div>
+                <p className="mt-3 text-[11px] leading-5 text-[#5d6c64] sm:text-xs">{project.description}</p>
+              </div>
+            </Link>
           ))}
-        </StaggerGroup>
+        </div>
       </div>
     </section>
   )

@@ -79,22 +79,20 @@ export default function HomeClientMap() {
   const [showPeru, setShowPeru] = useState(false)
 
   return (
-    <section data-navbar-theme="light" className="relative overflow-hidden border-b border-[#173428]/10 bg-[#eef3ed] pb-14 pt-16 sm:pb-16 sm:pt-20">
-      <div className="pointer-events-none absolute -left-36 top-20 h-80 w-80 rounded-full bg-[#d4e3d1]/70 blur-3xl" />
+    <section data-navbar-theme="light" className="relative overflow-hidden border-b border-[#d6ddd8] bg-white pb-16 pt-16 sm:pb-20 sm:pt-20 lg:pt-24">
       <div className="relative mx-auto max-w-[1320px] px-5 sm:px-8">
-        <ScrollReveal className="mx-auto max-w-3xl text-center" distance={18}>
-          <div className="mb-4 flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#c45f24]"><span className="h-px w-7 bg-current" />Presencia internacional<span className="h-px w-7 bg-current" /></div>
-          <h2 className="text-[clamp(2rem,4vw,3.35rem)] leading-[1.04] tracking-[-0.04em] text-[#173428]">Nuestra ciencia llega más lejos</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#64746c] sm:text-base">Atendemos clientes dentro y fuera del Perú y abrimos una nueva sede en Quito para acercar nuestras capacidades especializadas a Ecuador.</p>
+        <ScrollReveal className="grid gap-5 border-b border-[#cbd5ce] pb-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end" distance={18}>
+          <div><p className="text-[11px] font-semibold text-[#0b7a55]">Presencia internacional</p><h2 className="mt-3 text-[clamp(2rem,4vw,3.7rem)] font-medium leading-[1.03] tracking-[-0.045em] text-[#17211d]">Ciencia conectada con cada territorio.</h2></div>
+          <p className="max-w-2xl text-sm leading-7 text-[#5d6c64] lg:justify-self-end">Atendemos clientes dentro y fuera del Perú y acercamos nuestras capacidades especializadas a Ecuador desde nuestra sede en Quito.</p>
         </ScrollReveal>
 
       </div>
 
       <ScrollReveal className="mt-8 w-full" distance={24} delay={0.08}>
-        <div className="w-full border-y border-[#cad9cc] bg-[#f9fbf8] shadow-[0_30px_80px_-52px_rgba(18,59,43,0.48)]">
+        <div className="w-full border-y border-[#cad9cc] bg-[#f9fbf8]">
           <div className="mx-auto flex max-w-[1480px] flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <p className="flex items-center gap-2 text-xs font-semibold text-[#315643]"><span className="grid h-8 w-8 place-items-center rounded-full bg-[#dce8dc] text-[#39714d]"><Globe2 className="h-4 w-4" /></span>Países donde confían en nosotros</p>
-            <div className="flex flex-wrap items-center gap-2"><Link href="/ecuador" className="inline-flex items-center gap-2 rounded-full border border-[#d9c15b]/35 bg-[#fff8d8] px-3 py-2 text-[10px] font-bold text-[#625414] transition hover:-translate-y-0.5">🇪🇨 Nueva sede en Quito<ArrowRight className="h-3.5 w-3.5" /></Link><p className="inline-flex w-fit items-center gap-2 rounded-full bg-[#173f2e] px-3 py-2 text-[10px] font-semibold text-white"><MousePointer2 className="h-3.5 w-3.5 text-[#f3ae52]" />Pasa el cursor por Perú</p></div>
+            <p className="flex items-center gap-2 text-xs font-semibold text-[#315643]"><span className="grid h-8 w-8 place-items-center border border-[#c9d7ce] text-[#39714d]"><Globe2 className="h-4 w-4" /></span>Países donde confían en nosotros</p>
+            <div className="flex flex-wrap items-center gap-2"><Link href="/ecuador" className="inline-flex items-center gap-2 border border-[#cfc786] bg-[#fffbea] px-3 py-2 text-[10px] font-bold text-[#625414] transition hover:bg-[#fff4bf]">🇪🇨 Nueva sede en Quito<ArrowRight className="h-3.5 w-3.5" /></Link><p className="inline-flex w-fit items-center gap-2 bg-[#173f2e] px-3 py-2 text-[10px] font-semibold text-white"><MousePointer2 className="h-3.5 w-3.5 text-[#f3ae52]" />Pasa el cursor por Perú</p></div>
           </div>
 
           <div className="relative h-[300px] w-full overflow-hidden border-y border-[#dbe5dc] bg-[radial-gradient(circle_at_42%_48%,#ffffff_0%,#f2f6f1_52%,#e7efe7_100%)] sm:h-auto sm:aspect-[1.9/1] lg:aspect-[2.15/1] xl:aspect-[2.35/1]">
@@ -138,14 +136,14 @@ export default function HomeClientMap() {
       </ScrollReveal>
 
       <div className="relative mx-auto mt-5 max-w-[1320px] px-5 sm:px-8">
-        <ScrollReveal className="grid overflow-hidden rounded-[1.45rem] border border-[#cad9cc] bg-white shadow-[0_24px_65px_-48px_rgba(18,59,43,.55)] lg:grid-cols-[220px_1fr_1fr]" distance={18}>
+        <ScrollReveal className="grid overflow-hidden border border-[#cad9cc] bg-white lg:grid-cols-[220px_1fr_1fr]" distance={18}>
           <div className="flex items-center gap-3 border-b border-[#dbe5dc] bg-[#173f2e] px-5 py-5 text-white lg:border-b-0 lg:border-r">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-[#f0b867]"><Building2 className="h-5 w-5" /></span>
             <div><p className="text-[10px] font-semibold text-white/60">Nuestras sedes</p><p className="mt-1 text-sm font-semibold">Dos países, una misma ciencia</p></div>
           </div>
           {offices.map((office) => (
             <Link key={office.name} href={office.href} className="group grid grid-cols-[92px_1fr] gap-4 border-b border-[#dbe5dc] p-3 transition-colors hover:bg-[#f4f7f3] last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
-              <div className="relative min-h-[104px] overflow-hidden rounded-xl bg-[#dfe7df]">
+              <div className="relative min-h-[104px] overflow-hidden bg-[#dfe7df]">
                 <Image src={office.image} alt={`Sede de AS Laboratorios en ${office.city}`} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="92px" />
                 <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 text-xs shadow-sm backdrop-blur">{office.flag}</span>
               </div>

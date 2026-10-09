@@ -94,8 +94,38 @@
 .home-redesign h2,
 .home-redesign h3 {
   font-family: var(--font-poppins), "Poppins", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
 }
+
+.home-lab-grid {
+  background-image:
+    linear-gradient(rgba(168, 216, 193, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 216, 193, 0.08) 1px, transparent 1px);
+  background-size: 84px 84px;
+  -webkit-mask-image: linear-gradient(90deg, black, transparent 62%);
+  mask-image: linear-gradient(90deg, black, transparent 62%);
+  pointer-events: none;
+}
+
+.home-sample-line {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(11, 122, 85, 0.22) 12%, rgba(11, 122, 85, 0.22) 88%, transparent);
+  pointer-events: none;
+}
+
+.home-sample-line::before,
+.home-sample-line::after {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  content: "";
+  transform: translateX(-50%);
+  background: #d5a34f;
+}
+
+.home-sample-line::before { top: 18%; }
+.home-sample-line::after { bottom: 14%; }
 
 .home-grain {
   background-image:
