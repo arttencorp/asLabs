@@ -9,7 +9,6 @@ import AboutMission from "@/components/about-us/about-mission"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
 import AboutISO from "@/components/about-us/about-iso"
-import AboutImpact from "@/components/about-us/about-impact"
 import AboutCTA from "@/components/about-us/about-cta"
 
 export const metadata: Metadata = constructMetadata({
@@ -28,7 +27,7 @@ export const metadata: Metadata = constructMetadata({
 
 function SobreNosotrosContent() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-[#f5f7f4] font-[var(--font-poppins)]">
       <Navbar overlay />
       <AboutHeader />
       <AboutNavigation />
@@ -36,7 +35,6 @@ function SobreNosotrosContent() {
       <AboutOrganigram />
       <AboutISO />
       <AboutValues />
-      <AboutImpact />
       <AboutCTA />
       <Footer />
     </div>

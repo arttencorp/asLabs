@@ -20,7 +20,7 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
         : { label: "No disponible", className: "bg-gray-600 text-white" }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#dfe8e1] bg-white shadow-[0_18px_55px_-42px_rgba(14,60,38,0.65)] transition duration-300 hover:-translate-y-1 hover:border-[#b8d1bf] hover:shadow-[0_26px_65px_-38px_rgba(14,60,38,0.5)]">
+    <article className="group flex h-full flex-col overflow-hidden border border-[#d5ddd7] bg-white transition-colors duration-300 hover:border-[#8cad99]">
       <div className="relative aspect-[16/10] overflow-hidden bg-[#e8f0ea]">
         <Image
           src={plantin.image || "/biotecnologia-vegetal.png"}
@@ -30,17 +30,17 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 420px"
         />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent" />
-        <span className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em] shadow-sm ${status.className}`}>
+        <span className={`absolute left-4 top-4 px-3 py-1.5 text-[9px] font-semibold ${status.className}`}>
           {status.label}
         </span>
-        <span className="absolute bottom-4 left-4 rounded-full border border-white/35 bg-white/90 px-3 py-1 text-[11px] font-bold text-[#214332] backdrop-blur-sm">
+        <span className="absolute bottom-4 left-4 border border-white/35 bg-white/90 px-3 py-1 text-[10px] font-semibold text-[#214332] backdrop-blur-sm">
           {plantin.category}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="mb-4 flex items-start gap-3">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#e7f1e8] text-[#2e7048]">
+          <span className="grid h-10 w-10 shrink-0 place-items-center border border-[#cbd8cf] text-[#2e7048]">
             <plantin.icon className="h-5 w-5" />
           </span>
           <div className="min-w-0">
@@ -49,7 +49,7 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
           </div>
         </div>
 
-        <div className="mb-4 grid grid-cols-2 overflow-hidden rounded-2xl border border-gray-100 bg-[#f8faf8]">
+        <div className="mb-4 grid grid-cols-2 overflow-hidden border border-[#e0e6e2] bg-[#f8faf8]">
           <div className="border-r border-gray-100 p-3">
             <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-gray-500">
               <TrendingUp className="h-3.5 w-3.5 text-[#4b8a61]" />Rendimiento
@@ -82,15 +82,15 @@ export default function PlantinCard({ plantin, onTechnicalSheet }: PlantinCardPr
 
         <div className={`${plantin.resistance?.length ? "" : "mt-auto border-t border-gray-100 pt-4"} grid grid-cols-2 gap-2.5`}>
           {plantin.available ? (
-            <WhatsAppContact message={`Hola, quisiera cotizar ${plantin.name}`} className="flex items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-3 text-sm font-bold text-white transition hover:bg-[#245c3b]">
+            <WhatsAppContact message={`Hola, quisiera cotizar ${plantin.name}`} className="flex items-center justify-center gap-2 bg-[#062b22] px-3 py-3 text-sm font-semibold text-white transition hover:bg-[#0b4a39]">
               <MessageCircle className="h-4 w-4" />Cotizar
             </WhatsAppContact>
           ) : plantin.isResearch ? (
-            <a href="/research/banano-baby" className="flex items-center justify-center rounded-xl bg-blue-600 px-3 py-3 text-center text-sm font-bold text-white transition hover:bg-blue-700">Investigación</a>
+            <a href="/research/banano-baby" className="flex items-center justify-center bg-[#315f80] px-3 py-3 text-center text-sm font-semibold text-white transition hover:bg-[#244c69]">Investigación</a>
           ) : (
             <button type="button" disabled className="cursor-not-allowed rounded-xl bg-gray-200 px-3 py-3 text-sm font-bold text-gray-500">No disponible</button>
           )}
-          <button type="button" onClick={() => onTechnicalSheet(plantin)} className="flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm font-bold text-gray-700 transition hover:border-[#b8d1bf] hover:bg-[#f5f8f5]">
+          <button type="button" onClick={() => onTechnicalSheet(plantin)} className="flex items-center justify-center gap-2 border border-[#cdd8d1] bg-white px-3 py-3 text-sm font-semibold text-gray-700 transition hover:border-[#8cad99] hover:bg-[#f5f8f5]">
             <FileText className="h-4 w-4" />Ficha técnica
           </button>
         </div>
