@@ -9,7 +9,7 @@ import Link from "next/link"
 const ENVIO_PERU = 155.00
 
 interface CartItem {
-  cepa: PricedCepa
+  cepa: (typeof cepasIdentificadas)[0]
   cantidad: number
 }
 
@@ -166,13 +166,6 @@ export const cepasIdentificadas = [
   },
 ]
 
-type CepaIdentificada = (typeof cepasIdentificadas)[number]
-type PricedCepa = CepaIdentificada & { precio: number; precioSinEnvio: number }
-
-function hasPrice(cepa: CepaIdentificada): cepa is PricedCepa {
-  return typeof cepa.precio === "number" && typeof cepa.precioSinEnvio === "number"
-}
-
 const categorias = [
   "Biofertilizantes",
   "Fijación de Nitrógeno",
@@ -188,12 +181,11 @@ export default function IdentificadasClient() {
   const [carrito, setCarrito] = useState<CartItem[]>([])
   const [lista, setLista] = useState<typeof cepasIdentificadas>([])
   const [showCartModal, setShowCartModal] = useState(false)
-  const [selectedCepaForCart, setSelectedCepaForCart] = useState<PricedCepa | null>(null)
+  const [selectedCepaForCart, setSelectedCepaForCart] = useState<typeof cepasIdentificadas[0] | null>(null)
   const [cantidadCarrito, setCantidadCarrito] = useState(1)
   const [showCarrito, setShowCarrito] = useState(false)
 
-  const handleAgregarAlCarrito = (cepa: CepaIdentificada) => {
-    if (!hasPrice(cepa)) return
+  const handleAgregarAlCarrito = (cepa: typeof cepasIdentificadas[0]) => {
     setSelectedCepaForCart(cepa)
     setCantidadCarrito(1)
     setShowCartModal(true)
@@ -254,7 +246,7 @@ export default function IdentificadasClient() {
       "*TOTAL: S/ " + totalBase.toFixed(2) + "*\n\n" +
       "Por favor confirmar disponibilidad y detalles de entrega."
 
-    const numeroWhatsApp = "51961996645"
+    const numeroWhatsApp = "51952194005"
     const enlaceWhatsApp = "https://wa.me/" + numeroWhatsApp + "?text=" + encodeURIComponent(mensaje)
     window.open(enlaceWhatsApp, "_blank")
   }
@@ -270,9 +262,9 @@ export default function IdentificadasClient() {
   const sortedCepas = [...filteredCepas].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
-        return (a.precio ?? Infinity) - (b.precio ?? Infinity)
+        return a.precio - b.precio
       case "price-high":
-        return (b.precio ?? -Infinity) - (a.precio ?? -Infinity)
+        return b.precio - a.precio
       case "name":
         return a.nombre.localeCompare(b.nombre)
       default:
@@ -464,11 +456,11 @@ export default function IdentificadasClient() {
                       <div className="lg:w-72 flex-shrink-0 lg:text-right">
                         <div className="bg-green-50 rounded p-6 lg:p-4">
                           <p className="text-sm font-semibold text-green-700 mb-1">Precio base:</p>
-                          <p className="text-3xl font-bold text-green-900 mb-1">{hasPrice(cepa) ? `S/ ${cepa.precioSinEnvio.toFixed(2)}` : "Consultar precio"}</p>
-                          {hasPrice(cepa) && <p className="text-xs text-green-500 mb-2">+ S/ 155 envío a Trujillo, Perú</p>}
+                          <p className="text-3xl font-bold text-green-900 mb-1">S/ {cepa.precioSinEnvio.toFixed(2)}</p>
+                          <p className="text-xs text-green-500 mb-2">+ S/ 155 envío a Trujillo, Perú</p>
                           <p className="text-xs text-green-500 mb-4">{cepa.cantidad}</p>
 
-                          {cepa.disponibilidad && hasPrice(cepa) ? (
+                          {cepa.disponibilidad ? (
                             <>
                               <div className="flex items-center gap-2 mb-3">
                                 <span className="text-sm text-green-700">Cantidad</span>
@@ -487,15 +479,6 @@ export default function IdentificadasClient() {
                                 ♡ Agregar a lista
                               </button>
                             </>
-                          ) : cepa.disponibilidad ? (
-                            <a
-                              href={`https://wa.me/51961996645?text=${encodeURIComponent(`Hola, quisiera consultar el precio y la disponibilidad de ${cepa.nombre} (${cepa.codigo}).`)}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded flex items-center justify-center gap-2"
-                            >
-                              Consultar precio
-                            </a>
                           ) : (
                             <button className="w-full bg-green-300 text-green-800 font-bold py-3 rounded flex items-center justify-center gap-2 cursor-not-allowed">
                               <Lock className="w-4 h-4" />

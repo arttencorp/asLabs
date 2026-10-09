@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
-import { ArrowRight, Globe2, MapPin, MousePointer2, TrendingUp } from "lucide-react"
+import { ArrowRight, Building2, Globe2, MapPin, MousePointer2, TrendingUp } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 const countries = [
@@ -20,6 +21,27 @@ const regions = [
   { name: "La Libertad", x: 26.135, y: 44.128 },
   { name: "Lima", x: 37.935, y: 63.603 },
   { name: "Arequipa", x: 70.625, y: 85.486, left: true },
+]
+
+const offices = [
+  {
+    city: "Trujillo, Perú",
+    name: "Laboratorios centrales",
+    address: "Ca. 30, Urb. San Isidro II · 13001 Trujillo",
+    detail: "Biotecnología vegetal, microbiología, análisis y soporte científico.",
+    image: "/new/SobreASLaboratorios.webp",
+    href: "/sobre-nosotros",
+    flag: "🇵🇪",
+  },
+  {
+    city: "Quito, Ecuador",
+    name: "Sede Ecuador",
+    address: "Andrade Marín 24 · Edificio Carolina Millenium",
+    detail: "Biología molecular, formulaciones bacterianas y soluciones especializadas.",
+    image: "/ecuador/carolina-millenium.jpg",
+    href: "/ecuador/sobre-nosotros",
+    flag: "🇪🇨",
+  },
 ]
 
 function PeruDetail() {
@@ -57,7 +79,7 @@ export default function HomeClientMap() {
   const [showPeru, setShowPeru] = useState(false)
 
   return (
-    <section data-navbar-theme="light" className="relative overflow-hidden border-b border-[#173428]/10 bg-[#eef3ed] pt-20 sm:pt-24">
+    <section data-navbar-theme="light" className="relative overflow-hidden border-b border-[#173428]/10 bg-[#eef3ed] pb-14 pt-16 sm:pb-16 sm:pt-20">
       <div className="pointer-events-none absolute -left-36 top-20 h-80 w-80 rounded-full bg-[#d4e3d1]/70 blur-3xl" />
       <div className="relative mx-auto max-w-[1320px] px-5 sm:px-8">
         <ScrollReveal className="mx-auto max-w-3xl text-center" distance={18}>
@@ -68,7 +90,7 @@ export default function HomeClientMap() {
 
       </div>
 
-      <ScrollReveal className="mt-10 w-full" distance={24} delay={0.08}>
+      <ScrollReveal className="mt-8 w-full" distance={24} delay={0.08}>
         <div className="w-full border-y border-[#cad9cc] bg-[#f9fbf8] shadow-[0_30px_80px_-52px_rgba(18,59,43,0.48)]">
           <div className="mx-auto flex max-w-[1480px] flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <p className="flex items-center gap-2 text-xs font-semibold text-[#315643]"><span className="grid h-8 w-8 place-items-center rounded-full bg-[#dce8dc] text-[#39714d]"><Globe2 className="h-4 w-4" /></span>Países donde confían en nosotros</p>
@@ -109,11 +131,34 @@ export default function HomeClientMap() {
             {showPeru && <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} className="border-b border-[#d3dfd4] bg-white p-5 lg:hidden"><div className="mx-auto max-w-xl"><PeruDetail /></div></motion.div>}
           </AnimatePresence>
 
-          <div className="flex flex-wrap justify-center gap-2 px-5 py-5 sm:px-8">
+          <div className="flex flex-wrap justify-center gap-2 px-5 py-4 sm:px-8">
             {countries.map((country) => <span key={country.id} className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-semibold sm:text-[11px] ${country.office ? "border-[#dac75f] bg-[#fff8d8] text-[#665715]" : "border-[#d6e1d7] bg-white text-[#315643]"}`}><MapPin className={`h-3 w-3 ${country.featured ? "text-[#d8792e]" : country.office ? "text-[#b59b19]" : "text-[#39714d]"}`} />{country.name}{country.office ? " · Sede" : ""}</span>)}
           </div>
         </div>
       </ScrollReveal>
+
+      <div className="relative mx-auto mt-5 max-w-[1320px] px-5 sm:px-8">
+        <ScrollReveal className="grid overflow-hidden rounded-[1.45rem] border border-[#cad9cc] bg-white shadow-[0_24px_65px_-48px_rgba(18,59,43,.55)] lg:grid-cols-[220px_1fr_1fr]" distance={18}>
+          <div className="flex items-center gap-3 border-b border-[#dbe5dc] bg-[#173f2e] px-5 py-5 text-white lg:border-b-0 lg:border-r">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-[#f0b867]"><Building2 className="h-5 w-5" /></span>
+            <div><p className="text-[10px] font-semibold text-white/60">Nuestras sedes</p><p className="mt-1 text-sm font-semibold">Dos países, una misma ciencia</p></div>
+          </div>
+          {offices.map((office) => (
+            <Link key={office.name} href={office.href} className="group grid grid-cols-[92px_1fr] gap-4 border-b border-[#dbe5dc] p-3 transition-colors hover:bg-[#f4f7f3] last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0">
+              <div className="relative min-h-[104px] overflow-hidden rounded-xl bg-[#dfe7df]">
+                <Image src={office.image} alt={`Sede de AS Laboratorios en ${office.city}`} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="92px" />
+                <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 text-xs shadow-sm backdrop-blur">{office.flag}</span>
+              </div>
+              <div className="flex min-w-0 flex-col justify-center py-1">
+                <p className="text-[9px] font-semibold text-[#c66b28]">{office.city}</p>
+                <h3 className="mt-1 text-sm font-semibold text-[#173428]">{office.name}</h3>
+                <p className="mt-1 text-[10px] leading-4 text-[#566a60]">{office.address}</p>
+                <p className="mt-1.5 line-clamp-2 text-[9px] leading-4 text-[#7a8981]">{office.detail}</p>
+              </div>
+            </Link>
+          ))}
+        </ScrollReveal>
+      </div>
     </section>
   )
 }

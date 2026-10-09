@@ -77,7 +77,7 @@ interface CartEntry {
   quantity: number
 }
 
-const WHATSAPP_NUMBER = "51961996645"
+const WHATSAPP_NUMBER = "51952194005"
 
 const PERU_DEPARTMENTS = [
   "Amazonas",

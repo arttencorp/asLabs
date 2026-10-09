@@ -208,8 +208,8 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
       <>
         <Navbar />
         <div className="container mx-auto px-4 py-12 text-center">
-          <h1 className="text-3xl font-bold text-emerald-900 mb-4">Cepa no encontrada</h1>
-          <Link href="/cepas/identificadas" className="text-emerald-600 hover:text-emerald-700">
+          <h1 className="text-3xl font-bold text-green-900 mb-4">Cepa no encontrada</h1>
+          <Link href="/cepas/identificadas" className="text-green-600 hover:text-green-700">
             Volver al catálogo
           </Link>
         </div>
@@ -254,7 +254,7 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
       "*TOTAL: S/ " + totalBase.toFixed(2) + "*\n\n" +
       "Por favor confirmar disponibilidad y detalles de entrega."
 
-    const numeroWhatsApp = "51961996645"
+    const numeroWhatsApp = "51952194005"
     const enlaceWhatsApp = "https://wa.me/" + numeroWhatsApp + "?text=" + encodeURIComponent(mensaje)
     window.open(enlaceWhatsApp, "_blank")
   }
@@ -263,9 +263,9 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
     <>
       <Navbar />
 
-      <div className="bg-emerald-50 border-b">
+      <div className="bg-green-50 border-b">
         <div className="container mx-auto px-4 py-6">
-          <Link href="/cepas/identificadas" className="text-emerald-600 hover:text-emerald-700 flex items-center gap-2 mb-4">
+          <Link href="/cepas/identificadas" className="text-green-600 hover:text-green-700 flex items-center gap-2 mb-4">
             <ArrowLeft className="w-4 h-4" />
             Volver al catálogo
           </Link>
@@ -278,25 +278,25 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
             {/* Información Principal */}
             <div className="lg:col-span-2 space-y-8">
               {/* Header */}
-              <div className="bg-white rounded-lg border border-emerald-200 p-8">
+              <div className="bg-white rounded-lg border border-green-200 p-8">
                 <div className="mb-4">
-                  <span className="inline-block bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                  <span className="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
                     {cepa.categoria}
                   </span>
                 </div>
-                <h1 className="text-4xl font-bold text-emerald-900 mb-2">{cepa.nombre}</h1>
-                <p className="text-lg text-emerald-700 mb-4">{cepa.codigo}</p>
-                <p className="text-base text-emerald-600 italic mb-6 font-light">{cepa.cientifico}</p>
+                <h1 className="text-4xl font-bold text-green-900 mb-2">{cepa.nombre}</h1>
+                <p className="text-lg text-green-700 mb-4">{cepa.codigo}</p>
+                <p className="text-base text-green-600 italic mb-6 font-light">{cepa.cientifico}</p>
                 <p className="text-gray-700 leading-relaxed">{cepa.descripcion}</p>
               </div>
 
               {/* Beneficios */}
-              <div className="bg-white rounded-lg border border-emerald-200 p-8">
-                <h2 className="text-2xl font-bold text-emerald-900 mb-6">Beneficios</h2>
+              <div className="bg-white rounded-lg border border-green-200 p-8">
+                <h2 className="text-2xl font-bold text-green-900 mb-6">Beneficios</h2>
                 <ul className="space-y-3">
                   {cepa.beneficios?.map((beneficio, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <span className="text-emerald-600 font-bold mt-1">✓</span>
+                      <span className="text-green-600 font-bold mt-1">✓</span>
                       <span className="text-gray-700">{beneficio}</span>
                     </li>
                   ))}
@@ -304,12 +304,12 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
               </div>
 
               {/* Aplicaciones */}
-              <div className="bg-white rounded-lg border border-emerald-200 p-8">
-                <h2 className="text-2xl font-bold text-emerald-900 mb-6">Aplicaciones</h2>
+              <div className="bg-white rounded-lg border border-green-200 p-8">
+                <h2 className="text-2xl font-bold text-green-900 mb-6">Aplicaciones</h2>
                 <ul className="space-y-3">
                   {cepa.aplicaciones?.map((app, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <span className="text-emerald-600 font-bold mt-1">→</span>
+                      <span className="text-green-600 font-bold mt-1">→</span>
                       <span className="text-gray-700">{app}</span>
                     </li>
                   ))}
@@ -317,23 +317,23 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
               </div>
 
               {/* Especificaciones */}
-              <div className="bg-white rounded-lg border border-emerald-200 p-8">
-                <h2 className="text-2xl font-bold text-emerald-900 mb-6">Especificaciones Técnicas</h2>
+              <div className="bg-white rounded-lg border border-green-200 p-8">
+                <h2 className="text-2xl font-bold text-green-900 mb-6">Especificaciones Técnicas</h2>
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <p className="text-sm text-emerald-600 font-semibold">Formato</p>
+                    <p className="text-sm text-green-600 font-semibold">Formato</p>
                     <p className="text-gray-700">{cepa.productFormat}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-emerald-600 font-semibold">Cantidad</p>
+                    <p className="text-sm text-green-600 font-semibold">Cantidad</p>
                     <p className="text-gray-700">{cepa.cantidad}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-emerald-600 font-semibold">Nivel de Bioseguridad</p>
+                    <p className="text-sm text-green-600 font-semibold">Nivel de Bioseguridad</p>
                     <p className="text-gray-700">{cepa.bsl}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-emerald-600 font-semibold">Referencia</p>
+                    <p className="text-sm text-green-600 font-semibold">Referencia</p>
                     <p className="text-gray-700">{cepa.referencia}</p>
                   </div>
                 </div>
@@ -342,27 +342,27 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
 
             {/* Sidebar - Compra */}
             <div className="lg:col-span-1 h-fit sticky top-20">
-              <div className="bg-emerald-50 rounded-lg border border-emerald-200 p-8 space-y-6">
+              <div className="bg-green-50 rounded-lg border border-green-200 p-8 space-y-6">
                 <div>
-                  <p className="text-sm font-semibold text-emerald-700 mb-2">Precio por unidad</p>
-                  <p className="text-4xl font-bold text-emerald-900">${(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
-                  <p className="text-xs text-emerald-600 mt-2">+ S/ {ENVIO_PERU.toFixed(2)} envío</p>
+                  <p className="text-sm font-semibold text-green-700 mb-2">Precio por unidad</p>
+                  <p className="text-4xl font-bold text-green-900">${(cepa.precio - ENVIO_PERU).toFixed(2)}</p>
+                  <p className="text-xs text-green-600 mt-2">+ S/ {ENVIO_PERU.toFixed(2)} envío</p>
                 </div>
 
-                <div className="border-t border-emerald-200 pt-6">
-                  <label className="block text-sm font-semibold text-emerald-900 mb-3">Cantidad</label>
+                <div className="border-t border-green-200 pt-6">
+                  <label className="block text-sm font-semibold text-green-900 mb-3">Cantidad</label>
                   <input
                     type="number"
                     min="1"
                     value={cantidad}
                     onChange={(e) => setCantidad(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-full px-4 py-2 border border-emerald-300 rounded-lg focus:outline-none focus:border-emerald-600"
+                    className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:border-green-600"
                   />
                 </div>
 
                 <button
                   onClick={handleAgregarAlCarrito}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   Agregar al carrito
@@ -373,7 +373,7 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
                   className={`w-full border-2 font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 ${
                     enLista
                       ? "bg-red-50 border-red-300 text-red-600"
-                      : "bg-white border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                      : "bg-white border-green-300 text-green-700 hover:bg-green-50"
                   }`}
                 >
                   <Heart className="w-5 h-5" fill={enLista ? "currentColor" : "none"} />
@@ -382,14 +382,14 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
 
                 {carrito.length > 0 && (
                   <>
-                    <div className="border-t border-emerald-200 pt-6">
-                      <h3 className="font-semibold text-emerald-900 mb-4">Carrito ({carrito.length})</h3>
+                    <div className="border-t border-green-200 pt-6">
+                      <h3 className="font-semibold text-green-900 mb-4">Carrito ({carrito.length})</h3>
                       <div className="space-y-3 max-h-40 overflow-y-auto mb-4">
                         {carrito.map((item, idx) => (
                           <div key={idx} className="flex justify-between items-start text-sm bg-white p-3 rounded">
                             <div>
-                              <p className="font-semibold text-emerald-900">{item.cepa.nombre}</p>
-                              <p className="text-emerald-600">x{item.cantidad}</p>
+                              <p className="font-semibold text-green-900">{item.cepa.nombre}</p>
+                              <p className="text-green-600">x{item.cantidad}</p>
                             </div>
                             <button
                               onClick={() => setCarrito(carrito.filter((_, i) => i !== idx))}
@@ -401,16 +401,16 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
                         ))}
                       </div>
 
-                      <div className="border-t border-emerald-200 pt-3 mb-4">
+                      <div className="border-t border-green-200 pt-3 mb-4">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-emerald-700">Subtotal:</span>
+                          <span className="text-green-700">Subtotal:</span>
                           <span className="font-bold">S/ {(totalCarrito - ENVIO_PERU).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-emerald-700">Envío:</span>
+                          <span className="text-green-700">Envío:</span>
                           <span className="font-bold">S/ {ENVIO_PERU.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-lg font-bold text-emerald-900 mt-3 bg-white p-2 rounded">
+                        <div className="flex justify-between text-lg font-bold text-green-900 mt-3 bg-white p-2 rounded">
                           <span>Total:</span>
                           <span>S/ {totalCarrito.toFixed(2)}</span>
                         </div>
@@ -418,7 +418,7 @@ export default function IdentificadasDetailClient({ cepaId }: { cepaId: string }
 
                       <button
                         onClick={generarMensajeWhatsApp}
-                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                       >
                         <MessageCircle className="w-5 h-5" />
                         Comprar por WhatsApp

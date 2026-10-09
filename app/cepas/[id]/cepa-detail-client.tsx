@@ -710,7 +710,7 @@ export default function CepaDetailClient({ cepaId }: { cepaId: string }) {
                   </div>
                 )}
                 <a
-                  href={`https://wa.me/?text=${generateWhatsAppMessage()}`}
+                  href={`https://wa.me/51952194005?text=${generateWhatsAppMessage()}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-black flex items-center justify-center gap-2 transition-all"

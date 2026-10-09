@@ -271,7 +271,7 @@ export default function CepasClient() {
                         <span className="text-xl">→</span>
                       </a>
                       <a
-                        href="https://wa.me/?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
+                        href="https://wa.me/51952194005?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-black text-base transition-all shadow-lg hover:shadow-xl"
