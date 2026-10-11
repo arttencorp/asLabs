@@ -277,16 +277,16 @@ export default function IdentificadasClient() {
       <Navbar />
 
       {/* Hero Section con Carrito Flotante */}
-      <section className="bg-gradient-to-br from-[#1b5e20] via-[#2e7d32] to-[#14401a] text-white pt-14 pb-16 sm:pb-20 relative overflow-hidden clip-angle-bottom-sm">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1b5e20] via-[#2e7d32] to-[#14401a] pb-10 pt-10 text-white sm:pb-12 sm:pt-12">
         <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-15"></div>
         <div className="pointer-events-none absolute -top-24 -left-16 w-96 h-96 rounded-full bg-[#43a047]/30 blur-3xl"></div>
         <div className="container mx-auto px-4 flex items-center justify-between relative z-10">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold uppercase tracking-wider px-4 py-1.5 mb-4">
+            <span className="mb-3 inline-flex items-center gap-2 border border-white/25 bg-white/15 px-3 py-1.5 text-[9px] font-semibold tracking-[.12em] text-white backdrop-blur-md">
               Cultivos Locales Certificados
             </span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-3 leading-tight">Cepas Identificadas</h1>
-            <p className="text-white/85 max-w-2xl leading-relaxed">
+            <h1 className="mb-2 text-3xl font-bold leading-tight text-white sm:text-4xl">Cepas Identificadas</h1>
+            <p className="max-w-2xl text-sm leading-6 text-white/78">
               Cepas bacterianas identificadas y caracterizadas en AS Laboratorios. Bacterias benéficas para agricultura, biocontrol e investigación.
             </p>
           </div>

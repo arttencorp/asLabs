@@ -54,6 +54,33 @@ const divisions = [
   { name: "In Vitro Solutions", label: "Plant biotechnology", text: "Programas de propagación clonal para cultivos que necesitan uniformidad, sanidad y escala.", href: "/plantines", image: "/new/HEADER.webp" },
 ]
 
+function InteractiveDna({ reduceMotion }: { reduceMotion: boolean }) {
+  const [active, setActive] = useState(false)
+  const rungs = [
+    [46, 36, 104, 36], [25, 72, 125, 72], [20, 108, 130, 108], [40, 144, 110, 144],
+    [54, 180, 96, 180], [39, 216, 111, 216], [20, 252, 130, 252], [26, 288, 124, 288],
+    [47, 324, 103, 324],
+  ]
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      onMouseEnter={() => setActive(true)}
+      onMouseLeave={() => setActive(false)}
+      className="group absolute right-[5%] top-1/2 z-10 hidden h-[390px] w-[150px] -translate-y-1/2 cursor-crosshair lg:block"
+      animate={reduceMotion ? undefined : { y: active ? [-4, 4, -4] : [-2, 2, -2], scale: active ? 1.055 : 1 }}
+      transition={{ duration: active ? 2.4 : 5.5, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <svg viewBox="0 0 150 360" className="h-full w-full overflow-visible drop-shadow-[0_0_22px_rgba(175,235,207,.2)]">
+        <motion.path d="M42 8 C142 52 142 96 42 136 C-16 160 -16 200 42 224 C142 264 142 308 42 352" fill="none" stroke={active ? "#e4b866" : "#b8d8c8"} strokeWidth="2" strokeLinecap="round" animate={reduceMotion ? undefined : { pathLength: active ? [0.72, 1, 0.72] : [0.9, 1, 0.9], opacity: active ? [0.55, 1, 0.55] : [0.35, 0.62, 0.35] }} transition={{ duration: active ? 1.9 : 4.8, repeat: Infinity, ease: "easeInOut" }} />
+        <motion.path d="M108 8 C8 52 8 96 108 136 C166 160 166 200 108 224 C8 264 8 308 108 352" fill="none" stroke={active ? "#7fe0ad" : "#6fa98d"} strokeWidth="2" strokeLinecap="round" animate={reduceMotion ? undefined : { pathLength: active ? [1, 0.72, 1] : [1, 0.9, 1], opacity: active ? [1, 0.55, 1] : [0.62, 0.35, 0.62] }} transition={{ duration: active ? 1.9 : 4.8, repeat: Infinity, ease: "easeInOut" }} />
+        {rungs.map(([x1, y1, x2, y2], index) => <motion.line key={y1} x1={x1} y1={y1} x2={x2} y2={y2} stroke={active ? (index % 2 ? "#d5a34f" : "#8ee3b7") : "rgba(255,255,255,.28)"} strokeWidth="1.25" animate={reduceMotion ? undefined : { opacity: active ? [0.35, 0.95, 0.35] : [0.18, 0.42, 0.18] }} transition={{ duration: active ? 1.25 : 3.8, repeat: Infinity, delay: index * 0.08 }} />)}
+      </svg>
+      <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap border-t px-3 pt-2 text-[8px] font-medium transition-colors ${active ? "border-[#d5a34f]/70 text-[#e7c982]" : "border-white/15 text-white/38"}`}>DNA · WGS · 16S</div>
+    </motion.div>
+  )
+}
+
 function EvidenceItem({ icon: Icon, title, children }: { icon: typeof BadgeCheck; title: string; children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[38px_1fr] items-center gap-3 border-l border-[#c9d3cd] px-4 first:border-l-0 sm:px-5">
@@ -64,9 +91,7 @@ function EvidenceItem({ icon: Icon, title, children }: { icon: typeof BadgeCheck
 }
 
 export default function ClientPage() {
-  const [activeCapability, setActiveCapability] = useState(0)
   const reduceMotion = useReducedMotion()
-  const selectedCapability = capabilities[activeCapability]
 
   return (
     <main className="home-redesign overflow-hidden bg-[#f5f7f4] font-[var(--font-poppins)] text-[#17211d]">
@@ -95,6 +120,7 @@ export default function ClientPage() {
             <div className="absolute bottom-9 left-5 right-5 border-y border-white/25 bg-[#062b22]/68 px-4 py-3 backdrop-blur-md sm:left-8 sm:right-8 lg:bottom-12 lg:left-auto lg:right-10 lg:w-[330px]">
               <div className="flex items-center justify-between gap-4"><div><p className="text-[9px] font-semibold text-[#b8d8c8]">Unidad activa</p><p className="mt-1 text-xs font-medium text-white">Biotecnología vegetal · Trujillo</p></div><span className="flex items-center gap-2 text-[9px] text-white/65"><span className="h-2 w-2 bg-[#6ed29b] shadow-[0_0_0_4px_rgba(110,210,155,.14)]" /> Operativa</span></div>
             </div>
+            <InteractiveDna reduceMotion={Boolean(reduceMotion)} />
           </motion.div>
         </div>
 
@@ -116,28 +142,18 @@ export default function ClientPage() {
         </div>
       </section>
 
-      <section id="capacidades" data-navbar-theme="light" className="relative bg-[#f5f7f4] py-16 sm:py-20 lg:py-24">
-        <div className="home-sample-line absolute left-1/2 top-0 hidden h-full lg:block" aria-hidden="true" />
+      <section id="capacidades" data-navbar-theme="light" className="relative bg-[#f5f7f4] py-12 sm:py-14 lg:py-16">
         <div className="relative mx-auto max-w-[1360px] px-5 sm:px-8">
-          <ScrollReveal className="grid gap-6 border-b border-[#cfd8d2] pb-8 lg:grid-cols-[1fr_0.78fr] lg:items-end">
-            <div><p className="text-[11px] font-semibold text-[#0b7a55]">Un ecosistema científico conectado</p><h2 className="mt-3 max-w-[760px] text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.045em] text-[#17211d]">De la muestra a una respuesta que se puede aplicar.</h2></div>
-            <p className="max-w-[520px] text-sm leading-7 text-[#5c6c64] lg:justify-self-end">Ocho capacidades, un solo flujo técnico. Selecciona una línea para conocer cómo puede integrarse a tu investigación, control o producción.</p>
+          <ScrollReveal className="grid gap-4 border-b border-[#cfd8d2] pb-6 lg:grid-cols-[1fr_.72fr] lg:items-end">
+            <div><p className="text-[11px] font-semibold text-[#0b7a55]">Capacidades científicas</p><h2 className="mt-2 max-w-[720px] text-[clamp(1.8rem,3.2vw,3.15rem)] font-medium leading-[1.02] tracking-[-0.04em] text-[#17211d]">De la muestra a una respuesta aplicable.</h2></div>
+            <p className="max-w-[500px] text-xs leading-6 text-[#5c6c64] lg:justify-self-end">Análisis, genómica, cultivos microbianos, material vegetal y suministros integrados en un mismo ecosistema técnico.</p>
           </ScrollReveal>
 
-          <div className="mt-10 grid gap-7 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
-            <div className="relative min-h-[380px] overflow-hidden bg-[#dfe7e1] sm:min-h-[520px] lg:sticky lg:top-28 lg:h-[610px]">
-              <Image key={selectedCapability.image} src={selectedCapability.image} alt={selectedCapability.title} fill className="object-cover" sizes="(min-width:1024px) 46vw, 100vw" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#062b22]/88 via-[#062b22]/5 to-transparent" />
-              <motion.div key={selectedCapability.code} initial={reduceMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="absolute bottom-0 left-0 right-0 p-5 text-white sm:p-7"><div className="flex items-center gap-3 text-[10px] text-[#c8dfd3]"><span className="h-px w-8 bg-[#d5a34f]" />{selectedCapability.code}</div><h3 className="mt-3 max-w-lg text-2xl font-medium leading-tight tracking-[-0.025em] sm:text-3xl">{selectedCapability.title}</h3><p className="mt-2 max-w-lg text-xs leading-5 text-white/65 sm:text-sm sm:leading-6">{selectedCapability.description}</p></motion.div>
-            </div>
-
-            <div className="border-t border-[#cfd8d2]">
-              {capabilities.map((capability, index) => {
+          <div className="mt-6 grid border-l border-t border-[#cfd8d2] sm:grid-cols-2 xl:grid-cols-4">
+              {capabilities.map((capability) => {
                 const Icon = capability.icon
-                const active = index === activeCapability
-                return <Link key={capability.code} href={capability.href} onMouseEnter={() => setActiveCapability(index)} onFocus={() => setActiveCapability(index)} className={`group grid grid-cols-[40px_1fr_28px] items-start gap-3 border-b border-[#cfd8d2] py-4 transition-colors sm:grid-cols-[54px_1fr_32px] sm:gap-4 sm:py-5 ${active ? "bg-white" : "hover:bg-white/70"}`}><span className={`ml-2 grid h-9 w-9 place-items-center border transition-colors sm:h-10 sm:w-10 ${active ? "border-[#0b7a55] bg-[#0b7a55] text-white" : "border-[#cbd6cf] text-[#35604d]"}`}><Icon className="h-4 w-4" /></span><span><span className="text-[9px] font-semibold text-[#829087]">{capability.code}</span><strong className="mt-1 block text-sm font-semibold tracking-[-0.015em] text-[#17211d] sm:text-base">{capability.title}</strong><span className={`mt-1 block overflow-hidden text-[11px] leading-5 text-[#627168] transition-all sm:text-xs ${active ? "max-h-12 opacity-100" : "max-h-0 opacity-0 lg:group-hover:max-h-12 lg:group-hover:opacity-100"}`}>{capability.description}</span></span><ArrowUpRight className={`mt-5 h-4 w-4 transition ${active ? "text-[#0b7a55]" : "text-[#9aa59e] group-hover:text-[#0b7a55]"}`} /></Link>
+                return <Link key={capability.code} href={capability.href} className="group relative min-h-[142px] border-b border-r border-[#cfd8d2] bg-white/35 p-4 transition-colors hover:bg-white sm:p-5"><div className="flex items-start justify-between gap-3"><span className="grid h-8 w-8 place-items-center border border-[#cbd6cf] text-[#0b7a55] transition-colors group-hover:border-[#0b7a55] group-hover:bg-[#0b7a55] group-hover:text-white"><Icon className="h-4 w-4" /></span><span className="text-[9px] font-semibold text-[#829087]">{capability.code}</span></div><strong className="mt-4 block text-[13px] font-semibold leading-5 tracking-[-0.012em] text-[#17211d] sm:text-sm">{capability.title}</strong><span className="mt-1 line-clamp-2 block text-[10px] leading-4 text-[#627168]">{capability.description}</span><ArrowUpRight className="absolute bottom-4 right-4 h-3.5 w-3.5 text-[#9aa59e] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#0b7a55]" /></Link>
               })}
-            </div>
           </div>
         </div>
       </section>

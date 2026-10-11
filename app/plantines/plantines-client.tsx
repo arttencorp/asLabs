@@ -216,7 +216,7 @@ export default function PlantinesClient() {
                 </label>
               </div>
 
-              <StaggerGroup className="grid grid-cols-1 gap-5 md:grid-cols-2" staggerDelay={0.07} amount={0.06}>
+              <StaggerGroup className="space-y-4" staggerDelay={0.05} amount={0.04}>
                 {sortedPlantines.map((plantin) => (
                   <StaggerItem key={plantin.id} distance={16}>
                     <PlantinCard plantin={plantin} onTechnicalSheet={handleTechnicalSheet} />

@@ -14,7 +14,6 @@ import {
   MessageCircle,
   Microscope,
   PackageCheck,
-  ShieldCheck,
 } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
@@ -45,7 +44,7 @@ export default function CepasPage() {
     <>
       <Navbar overlay />
       <main className="overflow-hidden bg-[#f5f7f4] text-[#173428]">
-        <section data-navbar-theme="dark" className="relative min-h-[510px] overflow-hidden bg-[#092b20] pt-24 md:min-h-[550px] md:pt-28">
+        <section data-navbar-theme="dark" className="relative min-h-[390px] overflow-hidden bg-[#092b20] pt-20 md:min-h-[410px] md:pt-20">
           <div className="absolute inset-0">
             <Image src="/lab-header-bg.jpg" alt="Trabajo microbiológico en laboratorio" fill priority className="object-cover object-center" />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,31,22,.98)_0%,rgba(8,44,31,.9)_48%,rgba(8,44,31,.45)_78%,rgba(8,44,31,.25)_100%)]" />
@@ -53,33 +52,28 @@ export default function CepasPage() {
           </div>
           <div className="absolute -bottom-24 -right-20 h-80 w-80 rounded-full border border-white/10" />
           <div className="absolute -bottom-6 right-14 h-52 w-52 rounded-full border border-white/10" />
-          <div className="relative mx-auto flex min-h-[410px] max-w-6xl items-center px-4 pb-16 pt-6 md:min-h-[440px] md:pb-14">
-            <div className="max-w-3xl rounded-[1.75rem] border border-white/10 bg-[#031d15]/45 p-6 shadow-[0_28px_80px_-36px_rgba(0,0,0,.75)] backdrop-blur-[3px] sm:p-7 md:-ml-8">
-              <div className="mb-4 flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#062d21]/75 px-4 py-2 text-xs font-bold uppercase tracking-[.18em] text-white shadow-lg backdrop-blur-md"><Dna className="h-4 w-4 text-[#ffc66f]" /> Banco de cepas</span><span className="relative h-10 w-32 overflow-hidden rounded-lg border border-white/20 bg-white shadow-lg"><Image src="/brands/cultiq.jpg" alt="CULTIQ Microbial Culture Collection" fill sizes="128px" className="object-contain" /></span></div>
-              <h1 className="max-w-3xl text-4xl font-bold leading-[1.04] tracking-[-.045em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.55)] sm:text-5xl md:text-[3.35rem]">
+          <div className="relative mx-auto flex min-h-[310px] max-w-6xl items-center px-4 pb-11 pt-4 md:min-h-[330px] md:pb-10">
+            <div className="max-w-3xl border-l border-white/18 bg-[#031d15]/38 p-5 shadow-[0_28px_80px_-36px_rgba(0,0,0,.75)] backdrop-blur-[3px] sm:p-6 md:-ml-4">
+              <div className="mb-3 flex flex-wrap items-center gap-2"><span className="inline-flex items-center gap-2 border border-white/25 bg-[#062d21]/75 px-3 py-1.5 text-[9px] font-bold tracking-[.12em] text-white backdrop-blur-md"><Dna className="h-3.5 w-3.5 text-[#ffc66f]" /> Banco de cepas</span><span className="relative h-8 w-24 overflow-hidden border border-white/20 bg-white"><Image src="/brands/cultiq.jpg" alt="CULTIQ Microbial Culture Collection" fill sizes="96px" className="object-contain" /></span></div>
+              <h1 className="max-w-3xl text-3xl font-bold leading-[1.04] tracking-[-.04em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.55)] sm:text-4xl">
                 Cepas confiables para resultados reproducibles.
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-white/[0.9] drop-shadow-[0_2px_10px_rgba(0,0,0,.45)] md:text-lg">
+              <p className="mt-3 max-w-2xl text-xs leading-5 text-white/[0.82] drop-shadow-[0_2px_10px_rgba(0,0,0,.45)] sm:text-sm">
                 Accede a cepas identificadas y consulta referencias ATCC disponibles para investigación, docencia y trabajos de tesis.
               </p>
-              <div className="mt-4 flex max-w-2xl gap-3 rounded-2xl border border-[#ffd18c]/30 bg-[#ffd18c]/10 p-3 text-xs leading-5 text-white/[0.9] backdrop-blur-md sm:text-sm">
-                <FileCheck2 className="mt-0.5 h-5 w-5 shrink-0 text-[#ffd18c]" />
+              <div className="mt-3 flex max-w-2xl gap-2 border border-[#ffd18c]/25 bg-[#ffd18c]/10 px-3 py-2 text-[10px] leading-4 text-white/[0.86] backdrop-blur-md sm:text-xs">
+                <FileCheck2 className="mt-0.5 h-4 w-4 shrink-0 text-[#ffd18c]" />
                 <p><strong>Cepas ATCC:</strong> contamos con referencias destinadas a investigadores, tesistas y proyectos académicos, previa evaluación del uso científico.</p>
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/cepas/identificadas" className="inline-flex items-center gap-2 rounded-full bg-[#f0a23a] px-6 py-3.5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc56f]">Ver cepas identificadas <ArrowRight className="h-4 w-4" /></Link>
-                <Link href="/cepas/atcc" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20">Explorar cepas ATCC <Globe2 className="h-4 w-4" /></Link>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/20 pt-5 text-xs font-semibold text-white/[0.88]">
-                <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-[#b9edc5]" /> Identidad documentada</span>
-                <span className="inline-flex items-center gap-2"><Microscope className="h-4 w-4 text-[#b9edc5]" /> Preparación especializada</span>
-                <span className="inline-flex items-center gap-2"><FileCheck2 className="h-4 w-4 text-[#b9edc5]" /> Trazabilidad por solicitud</span>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                <Link href="/cepas/identificadas" className="inline-flex h-9 items-center gap-2 bg-[#f0a23a] px-4 text-xs font-bold text-[#173428] transition hover:bg-[#ffc56f]">Ver cepas identificadas <ArrowRight className="h-3.5 w-3.5" /></Link>
+                <Link href="/cepas/atcc" className="inline-flex h-9 items-center gap-2 border border-white/25 bg-white/10 px-4 text-xs font-bold text-white backdrop-blur-md transition hover:bg-white/20">Explorar cepas ATCC <Globe2 className="h-3.5 w-3.5" /></Link>
               </div>
             </div>
           </div>
         </section>
 
-        <section data-navbar-theme="light" className="relative z-10 mx-auto -mt-8 max-w-6xl px-4">
+        <section data-navbar-theme="light" className="relative z-10 mx-auto -mt-5 max-w-6xl px-4">
           <div className="grid overflow-hidden rounded-[1.75rem] border border-white bg-white shadow-[0_28px_80px_-44px_rgba(9,43,32,.55)] sm:grid-cols-3">
             <TrustItem icon={BadgeCheck} title="Selección definida" copy="Elige según el objetivo de tu método." />
             <TrustItem icon={FlaskConical} title="Preparación técnica" copy="Coordinamos formato y requerimientos." />
