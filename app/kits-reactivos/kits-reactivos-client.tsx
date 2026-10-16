@@ -347,21 +347,21 @@ export default function KitsReactivosClient({ pageConfig }: { pageConfig?: Catal
     <>
       <Navbar overlay />
       <main className="overflow-hidden bg-[#f4f7f4] text-[#173f2d]">
-        <section data-navbar-theme="dark" className="relative isolate overflow-hidden bg-[#082f23] pb-10 pt-20 text-white sm:pb-12 sm:pt-24">
+        <section data-navbar-theme="dark" className="relative isolate overflow-hidden bg-[#082f23] pb-7 pt-16 text-white sm:pb-8 sm:pt-20">
           <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(76,195,132,.23),transparent_32%),linear-gradient(115deg,#05251b_0%,#0b4934_60%,#133b2e_100%)]" />
           <Image src={pageConfig?.image ?? "/lab-scientists.png"} alt={pageConfig?.title ?? "Kits y reactivos para laboratorio"} fill priority className="-z-10 object-cover object-center opacity-25 mix-blend-luminosity" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(4,30,21,.97)_0%,rgba(4,30,21,.83)_55%,rgba(4,30,21,.34)_100%)]" />
-          <motion.div aria-hidden="true" className="absolute -right-24 top-20 h-80 w-80 rounded-full border border-white/10" animate={{ rotate: 360 }} transition={{ duration: 35, repeat: Infinity, ease: "linear" }}><span className="absolute left-12 top-2 h-4 w-4 rounded-full bg-[#c2f2cd] shadow-[0_0_30px_rgba(194,242,205,.8)]" /></motion.div>
+          <motion.div aria-hidden="true" className="absolute -right-16 top-12 h-52 w-52 rounded-full border border-white/10" animate={{ rotate: 360 }} transition={{ duration: 35, repeat: Infinity, ease: "linear" }}><span className="absolute left-8 top-1 h-3 w-3 rounded-full bg-[#c2f2cd] shadow-[0_0_24px_rgba(194,242,205,.7)]" /></motion.div>
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="max-w-4xl">
-              {pageConfig && <nav aria-label="Ruta de navegación" className="mb-4 flex flex-wrap items-center gap-2 text-[10px] font-semibold text-white/58"><Link href="/">Inicio</Link><span aria-hidden="true">/</span><Link href="/kits-reactivos">Kits y reactivos</Link><span aria-hidden="true">/</span><span aria-current="page" className="text-white/90">{pageConfig.eyebrow}</span></nav>}
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.2em] text-[#d9f7df] backdrop-blur-md"><HeroIcon className="h-4 w-4" /> {pageConfig?.eyebrow ?? "Catálogo de laboratorio"}</div>
-              <h1 className="mt-3 max-w-3xl text-balance text-3xl font-bold leading-[1.04] tracking-[-.04em] sm:text-4xl">{pageConfig?.title ?? "Kits y reactivos para tu laboratorio."}</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/78">{pageConfig?.description ?? "Biología molecular y bacteriología en un catálogo referencial con importación coordinada."}</p>
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <a href="#catalogo" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#efaa4a] px-5 text-sm font-bold text-[#173428] transition hover:-translate-y-0.5 hover:bg-[#ffc875]">Explorar catálogo <ArrowRight className="h-4 w-4" /></a>
-                <WhatsAppContact message={pageConfig ? `Hola, quisiera asesoría sobre ${pageConfig.eyebrow.toLocaleLowerCase("es")}.` : "Hola, quisiera consultar el servicio de extracción de ADN."} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/20"><Dna className="h-4 w-4 text-[#bfe9c8]" /><span><strong>{pageConfig ? "Asesoría técnica" : "Extracción de ADN"}</strong><span className="ml-2 hidden font-normal text-white/60 sm:inline">{pageConfig ? "para elegir la referencia correcta" : "vegetal, bacteriano y tejidos"}</span></span></WhatsAppContact>
+              {pageConfig && <nav aria-label="Ruta de navegación" className="mb-3 flex flex-wrap items-center gap-2 text-[9px] font-semibold text-white/58"><Link href="/">Inicio</Link><span aria-hidden="true">/</span><Link href="/kits-reactivos">Kits y reactivos</Link><span aria-hidden="true">/</span><span aria-current="page" className="text-white/90">{pageConfig.eyebrow}</span></nav>}
+              <div className="inline-flex items-center gap-2 border border-white/20 bg-white/10 px-3 py-1.5 text-[9px] font-bold tracking-[.12em] text-[#d9f7df] backdrop-blur-md"><HeroIcon className="h-3.5 w-3.5" /> {pageConfig?.eyebrow ?? "Catálogo de laboratorio"}</div>
+              <h1 className="mt-3 max-w-3xl text-balance text-2xl font-bold leading-[1.08] tracking-[-.035em] sm:text-3xl">{pageConfig?.title ?? "Kits y reactivos para tu laboratorio."}</h1>
+              <p className="mt-2 max-w-2xl text-xs leading-5 text-white/72">{pageConfig?.description ?? "Biología molecular y bacteriología en un catálogo referencial con importación coordinada."}</p>
+              <div className="mt-4 flex flex-wrap items-center gap-2.5">
+                <a href="#catalogo" className="inline-flex min-h-9 items-center gap-2 bg-[#efaa4a] px-4 text-xs font-bold text-[#173428] transition hover:bg-[#ffc875]">Explorar catálogo <ArrowRight className="h-3.5 w-3.5" /></a>
+                <WhatsAppContact message={pageConfig ? `Hola, quisiera asesoría sobre ${pageConfig.eyebrow.toLocaleLowerCase("es")}.` : "Hola, quisiera consultar el servicio de extracción de ADN."} className="inline-flex min-h-9 items-center gap-2 border border-white/20 bg-white/10 px-4 text-xs font-bold text-white backdrop-blur-md transition hover:bg-white/20"><Dna className="h-3.5 w-3.5 text-[#bfe9c8]" /><span><strong>{pageConfig ? "Asesoría técnica" : "Extracción de ADN"}</strong><span className="ml-2 hidden font-normal text-white/60 sm:inline">{pageConfig ? "para elegir la referencia correcta" : "vegetal, bacteriano y tejidos"}</span></span></WhatsAppContact>
               </div>
             </motion.div>
           </div>

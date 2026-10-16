@@ -1,139 +1,19 @@
 "use client"
 
-import { 
-  Users, 
-  TrendingUp, 
-  Target, 
-  MessageCircle, 
-  Phone, 
-  ArrowRight, 
-  CheckCircle, 
-  Zap, 
-  FlaskConical 
-} from "lucide-react"
+import { ArrowRight, CheckCircle2, MessageCircle } from "lucide-react"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
-import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 export default function CallToActionSection() {
   return (
-    <section data-navbar-theme="dark" className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 py-12 text-white sm:py-16 lg:py-20">
-      {/* Elementos decorativos sutiles */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-32 sm:w-64 h-32 sm:h-64 bg-green-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-24 sm:w-48 h-24 sm:h-48 bg-blue-500 rounded-full blur-3xl"></div>
-      </div>
-      
-      <div className="container mx-auto px-4 text-center relative z-10">
-        <div className="max-w-5xl mx-auto">
-          {/* Título principal */}
-          <ScrollReveal>
-          <div className="mb-8">
-            <span className="inline-block bg-green-500 text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-4">
-              Transforma tu Agricultura Hoy
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
-              ¿Listo para <span className="text-green-400 relative">
-                Maximizar
-                <div className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-0.5 sm:h-1 bg-green-400 rounded"></div>
-              </span> tus Ganancias?
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl opacity-90 leading-relaxed max-w-3xl mx-auto">
-              Únete a más de <strong className="text-green-400">500+ agricultores exitosos</strong> que han 
-              transformado sus cultivos con nuestros plantines de elite genética
-            </p>
-          </div>
-          </ScrollReveal>
-
-          {/* Estadísticas destacadas */}
-          <StaggerGroup className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 lg:mb-16" staggerDelay={0.1}>
-            <StaggerItem>
-            <div className="bg-white/5 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-xl border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group h-full">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-green-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-2">500+</div>
-              <div className="text-base sm:text-lg opacity-90">Agricultores Exitosos</div>
-              <div className="text-xs sm:text-sm opacity-70 mt-2">Confiando en nuestra tecnología</div>
-            </div>
-            </StaggerItem>
-
-            <StaggerItem>
-            <div className="bg-white/5 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-xl border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group h-full">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">60%</div>
-              <div className="text-base sm:text-lg opacity-90">Más Productividad</div>
-              <div className="text-xs sm:text-sm opacity-70 mt-2">Promedio vs plantines tradicionales</div>
-            </div>
-            </StaggerItem>
-
-            <StaggerItem>
-            <div className="bg-white/5 backdrop-blur-sm p-4 sm:p-6 lg:p-8 rounded-xl border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group h-full">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 bg-purple-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Target className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-2">98%</div>
-              <div className="text-base sm:text-lg opacity-90">Tasa de Supervivencia</div>
-              <div className="text-xs sm:text-sm opacity-70 mt-2">Tecnología in vitro comprobada</div>
-            </div>
-            </StaggerItem>
-          </StaggerGroup>
-
-          {/* Botones de acción principales */}
-          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 justify-center items-center mb-8 sm:mb-12">
-            <WhatsAppContact
-              message="Hola, quiero una consulta completa sobre plantines premium. Estoy listo para transformar mi agricultura y maximizar mis ganancias."
-              className="group bg-green-500 hover:bg-green-600 text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-xl font-bold text-base sm:text-lg lg:text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-green-500/25 flex items-center gap-3 sm:gap-4 w-full sm:w-auto"
-            >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-green-600 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
-                <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
-              </div>
-              <div className="text-left">
-                <div className="text-base sm:text-lg lg:text-xl font-bold">Asesoría Gratuita</div>
-                <div className="text-xs sm:text-sm opacity-80">Respuesta en menos de 5 minutos</div>
-              </div>
-              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
-            </WhatsAppContact>
-          </div>
-
-          {/* Garantías y beneficios */}
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-white/10">
-            <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">¿Por qué elegir AS Laboratorios?</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-left">
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div>
-                  <div className="font-semibold text-base sm:text-lg">Garantía Total</div>
-                  <div className="text-xs sm:text-sm opacity-80">100% de satisfacción garantizada</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div>
-                  <div className="font-semibold text-base sm:text-lg">Envío Nacional</div>
-                  <div className="text-xs sm:text-sm opacity-80">Llegamos a todo el Perú</div>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <FlaskConical className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div>
-                  <div className="font-semibold text-base sm:text-lg">Soporte Técnico</div>
-                  <div className="text-xs sm:text-sm opacity-80">Asesoría especializada incluida</div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <section data-navbar-theme="dark" className="bg-[#062b22] py-16 text-white sm:py-20">
+      <ScrollReveal className="mx-auto grid max-w-[1360px] gap-8 px-5 sm:px-8 lg:grid-cols-[1fr_.72fr] lg:items-end">
+        <div><p className="text-[11px] font-semibold text-[#a8d8c1]">Planifica tu pedido</p><h2 className="mt-3 max-w-[800px] text-[clamp(2rem,4vw,3.8rem)] font-medium leading-[1.03] tracking-[-.045em]">Confirma variedad, cantidad y fecha con el equipo técnico.</h2><p className="mt-5 max-w-[680px] text-sm leading-7 text-white/60">La recomendación depende del cultivo, zona, objetivo productivo y etapa de entrega requerida.</p></div>
+        <div className="border-t border-white/15 pt-5 lg:justify-self-end lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+          <div className="space-y-3">{["Disponibilidad confirmada antes del pedido", "Orientación para elegir la variedad", "Coordinación de entrega y soporte técnico"].map((item) => <p key={item} className="flex items-start gap-3 text-xs leading-5 text-white/70"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#d5a34f]" />{item}</p>)}</div>
+          <WhatsAppContact message="Hola, quisiera coordinar un pedido de plantines in vitro" className="group mt-6 inline-flex h-11 items-center gap-3 bg-[#d5a34f] px-5 text-xs font-semibold text-[#10251e] hover:bg-[#e4b866]"><MessageCircle className="h-4 w-4" />Hablar con el equipo <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></WhatsAppContact>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   )
 }
