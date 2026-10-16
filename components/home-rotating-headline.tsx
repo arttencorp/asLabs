@@ -29,11 +29,11 @@ const slides = {
   ],
   en: [
     {
-      title: "Physicochemical analysis for your crops",
+      title: "Physicochemical analysis for crops",
       subtitle: "Understand the condition of your samples and make better-informed agricultural decisions.",
     },
     {
-      title: "Detect pests and diseases with precision",
+      title: "Precision detection of pests and diseases",
       subtitle: "We identify pathogens early to protect the health and performance of your crops.",
     },
     {
@@ -41,11 +41,11 @@ const slides = {
       subtitle: "Uniform, healthy plant material produced under controlled conditions.",
     },
     {
-      title: "Banana, pineapple, dragon fruit and more in vitro clones",
+      title: "Banana, pineapple and more in vitro clones",
       subtitle: "Selected clones of species with productive, commercial and ornamental value.",
     },
     {
-      title: "Laboratory analysis for researchers and students",
+      title: "Laboratory analysis for research",
       subtitle: "Technical support for theses, trials and scientific projects.",
     },
   ],
@@ -70,12 +70,12 @@ export default function HomeRotatingHeadline() {
 
   return (
     <div className="max-w-[720px]" translate="no">
-      <div className="min-h-[160px] sm:min-h-[150px] lg:min-h-[138px]">
+      <div className="h-[138px] sm:h-[152px] lg:h-[190px] xl:h-[176px]">
         <div className="grid">
           <AnimatePresence initial={false}>
             <motion.h1
               key={slide.title}
-              className="col-start-1 row-start-1 text-[clamp(1.85rem,3.8vw,3.4rem)] font-medium leading-[1.02] tracking-[-0.04em] text-white"
+              className="col-start-1 row-start-1 text-[clamp(2rem,3.7vw,3.65rem)] font-medium leading-[1.015] tracking-[-0.05em] text-white"
               style={{ perspective: 900 }}
               initial={reduceMotion ? { opacity: 0 } : "hidden"}
               animate={reduceMotion ? { opacity: 1 } : "visible"}
@@ -142,23 +142,10 @@ export default function HomeRotatingHeadline() {
           </AnimatePresence>
         </div>
 
-        <div className="mt-3 grid max-w-2xl">
-          <AnimatePresence initial={false}>
-            <motion.p
-              key={slide.subtitle}
-              initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -8, filter: "blur(3px)" }}
-              transition={{ duration: 0.38, delay: reduceMotion ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="col-start-1 row-start-1 text-sm leading-5 text-white/75 sm:text-[15px] sm:leading-6"
-            >
-              {slide.subtitle}
-            </motion.p>
-          </AnimatePresence>
-        </div>
       </div>
 
-      <div className="mt-2 flex items-center gap-2" aria-label={language === "en" ? "Homepage headlines" : "Titulares del Home"}>
+      <div className="mt-5 flex items-center gap-2" aria-label={language === "en" ? "Homepage headlines" : "Titulares del Home"}>
+        <span className="mr-2 text-[9px] tabular-nums text-white/45">0{activeSlide + 1} / 0{localizedSlides.length}</span>
         {localizedSlides.map((item, index) => (
           <button
             key={item.title}
@@ -166,12 +153,12 @@ export default function HomeRotatingHeadline() {
             onClick={() => setActiveSlide(index)}
             aria-label={`${language === "en" ? "Show" : "Mostrar"}: ${item.title}`}
             aria-current={index === activeSlide ? "true" : undefined}
-            className={`relative h-1.5 overflow-hidden rounded-full transition-[width,background-color] duration-300 ${index === activeSlide ? "w-10 bg-white/25" : "w-3 bg-white/[0.35] hover:bg-white/60"}`}
+            className={`relative h-px overflow-hidden transition-[width,background-color] duration-300 ${index === activeSlide ? "w-12 bg-white/25" : "w-4 bg-white/[0.28] hover:bg-white/60"}`}
           >
             {index === activeSlide && (
               <motion.span
                 key={`${activeSlide}-progress`}
-                className="absolute inset-0 origin-left rounded-full bg-[#f0a23a]"
+                className="absolute inset-0 origin-left bg-[#d5a34f]"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: reduceMotion ? 0 : 2, ease: "linear" }}

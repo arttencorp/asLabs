@@ -11,16 +11,13 @@ import { plantines, categories } from "@/components/plantines/data"
 import { Plantin } from "@/components/plantines/types"
 import {
   Leaf,
-  Calculator,
   MessageCircle,
   Search,
   X,
-  PackageCheck,
-  Sprout,
-  Headphones,
   SlidersHorizontal,
   RotateCcw,
   ChevronDown,
+  CheckCircle2,
 } from "lucide-react"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
@@ -32,7 +29,6 @@ export default function PlantinesClient() {
   const [sortOrder, setSortOrder] = useState("recommended")
   const [showTechnicalSheet, setShowTechnicalSheet] = useState(false)
   const [selectedTechnicalData, setSelectedTechnicalData] = useState<Plantin | null>(null)
-  const [hectareas, setHectareas] = useState(5)
 
   const normalizeText = (text: string) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 
@@ -98,36 +94,18 @@ export default function PlantinesClient() {
         <HeroSection />
       </ScrollReveal>
 
-      <div data-navbar-theme="light" className="relative z-20 mx-auto -mt-7 w-[calc(100%-2rem)] max-w-6xl">
-        <StaggerGroup className="grid overflow-hidden rounded-2xl border border-white/90 bg-white/95 shadow-[0_20px_60px_-34px_rgba(14,60,38,0.45)] backdrop-blur-md sm:grid-cols-3" staggerDelay={0.08}>
-          {[
-            { icon: Sprout, title: "Material uniforme", text: "Propagación bajo condiciones controladas" },
-            { icon: PackageCheck, title: "Pedido coordinado", text: "Disponibilidad y entrega según cultivo" },
-            { icon: Headphones, title: "Soporte técnico", text: "Orientación antes y después de elegir" },
-          ].map((item) => (
-            <StaggerItem key={item.title}>
-              <div className="flex h-full items-center gap-4 border-b border-[#e4ebe6] p-5 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#e7f1e8] text-[#2e7048]"><item.icon className="h-5 w-5" /></span>
-                <div><h2 className="text-sm font-bold text-[#214332]">{item.title}</h2><p className="mt-1 text-xs leading-5 text-[#6b7d73]">{item.text}</p></div>
-              </div>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
-      </div>
-
       {/* Catálogo de Plantines */}
-      <section id="catalogo-plantines" data-navbar-theme="light" className="scroll-mt-28 bg-[#f5f8f5] py-16 sm:py-20">
-        <div className="container mx-auto max-w-7xl px-4">
-          <ScrollReveal className="mb-8 max-w-3xl sm:mb-10" distance={18}>
-            <span className="mb-3 inline-block text-xs font-bold uppercase tracking-[0.18em] text-[#2e7048]">Catálogo disponible</span>
-            <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Encuentra el plantín adecuado para tu cultivo</h2>
-            <p className="text-sm leading-7 text-gray-600 sm:text-base">
+      <section id="catalogo-plantines" data-navbar-theme="light" className="scroll-mt-24 bg-[#f5f7f4] py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
+          <ScrollReveal className="mb-9 grid gap-5 border-b border-[#cfd8d2] pb-8 lg:grid-cols-[1fr_.78fr] lg:items-end" distance={18}>
+            <div><p className="text-[11px] font-semibold text-[#0b7a55]">Catálogo de material vegetal</p><h2 className="mt-3 text-[clamp(2rem,4vw,3.8rem)] font-medium leading-[1.03] tracking-[-.045em] text-[#17211d]">Selecciona por cultivo, etapa y disponibilidad.</h2></div>
+            <p className="max-w-[520px] text-sm leading-7 text-[#5d6c64] lg:justify-self-end">
               Compara variedades, tiempos de cosecha y características técnicas. Filtra el catálogo para encontrar rápidamente el material que necesita tu proyecto.
             </p>
           </ScrollReveal>
 
           {/* Filtros compactos para móvil */}
-          <details className="group mb-5 overflow-hidden rounded-2xl border border-[#dce8df] bg-white shadow-sm lg:hidden">
+          <details className="group mb-5 overflow-hidden border border-[#d5ddd7] bg-white lg:hidden">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-sm font-bold text-[#214332] marker:content-none">
               <span className="flex items-center gap-2">
                 <SlidersHorizontal className="h-4 w-4 text-[#2e7048]" />
@@ -170,9 +148,9 @@ export default function PlantinesClient() {
           <div className="grid items-start gap-6 lg:grid-cols-[270px_minmax(0,1fr)] xl:gap-8">
             {/* Panel lateral de filtros */}
             <aside className="hidden lg:block">
-              <div className="sticky top-28 overflow-hidden rounded-3xl border border-[#dce8df] bg-white shadow-[0_18px_55px_-42px_rgba(14,60,38,0.6)]">
+              <div className="sticky top-24 overflow-hidden border border-[#d5ddd7] bg-white">
                 <div className="flex items-center justify-between border-b border-gray-100 px-5 py-5">
-                  <h3 className="flex items-center gap-2 text-base font-bold text-[#214332]"><SlidersHorizontal className="h-4 w-4 text-[#2e7048]" />Filtros</h3>
+                  <h3 className="flex items-center gap-2 text-sm font-semibold text-[#214332]"><SlidersHorizontal className="h-4 w-4 text-[#2e7048]" />Filtrar catálogo</h3>
                   {activeFilterCount > 0 && <button type="button" onClick={resetFilters} className="text-xs font-semibold text-[#2e7048] hover:underline">Limpiar</button>}
                 </div>
 
@@ -181,7 +159,7 @@ export default function PlantinesClient() {
                     <label htmlFor="desktop-plant-search" className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">Buscar plantín</label>
                     <div className="relative">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                      <input id="desktop-plant-search" type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Cultivo o variedad" className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-10 pr-9 text-sm text-gray-800 outline-none transition focus:border-green-400 focus:bg-white" />
+                    <input id="desktop-plant-search" type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Cultivo o variedad" className="w-full border border-gray-200 bg-gray-50 py-3 pl-10 pr-9 text-sm text-gray-800 outline-none transition focus:border-green-500 focus:bg-white" />
                       {searchQuery && <button type="button" onClick={() => setSearchQuery("")} aria-label="Limpiar búsqueda" className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-500 hover:bg-gray-100"><X className="h-4 w-4" /></button>}
                     </div>
                   </div>
@@ -192,7 +170,7 @@ export default function PlantinesClient() {
                       {categories.map((category) => {
                         const categoryCount = category === "Todos" ? plantines.length : plantines.filter((plantin) => plantin.category === category).length
                         return (
-                          <button key={category} type="button" onClick={() => setSelectedCategory(category)} className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition ${selectedCategory === category ? "bg-[#e7f1e8] text-[#214332]" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}>
+                          <button key={category} type="button" onClick={() => setSelectedCategory(category)} className={`flex w-full items-center justify-between px-3 py-2.5 text-left text-sm font-semibold transition ${selectedCategory === category ? "bg-[#e7f1e8] text-[#214332]" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}>
                             <span>{category}</span><span className={`rounded-full px-2 py-0.5 text-[10px] ${selectedCategory === category ? "bg-white text-[#2e7048]" : "bg-gray-100 text-gray-500"}`}>{categoryCount}</span>
                           </button>
                         )
@@ -212,10 +190,10 @@ export default function PlantinesClient() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl bg-[#eef5ef] p-4">
+                  <div className="border-t border-[#d9e2db] bg-[#eef5ef] p-4">
                     <p className="text-sm font-bold text-[#214332]">¿No sabes cuál elegir?</p>
                     <p className="mt-1 text-xs leading-5 text-[#5f7568]">Te ayudamos según tu zona, área y objetivo productivo.</p>
-                    <WhatsAppContact message="Hola, quisiera asesoría para elegir plantines in vitro" className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2e7048] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#245c3b]"><MessageCircle className="h-4 w-4" />Hablar con un asesor</WhatsAppContact>
+                    <WhatsAppContact message="Hola, quisiera asesoría para elegir plantines in vitro" className="mt-3 flex w-full items-center justify-center gap-2 bg-[#062b22] px-3 py-2.5 text-xs font-semibold text-white transition hover:bg-[#0b4a39]"><MessageCircle className="h-4 w-4" />Hablar con un asesor</WhatsAppContact>
                   </div>
                 </div>
               </div>
@@ -223,14 +201,14 @@ export default function PlantinesClient() {
 
             {/* Resultados */}
             <div className="min-w-0">
-              <div className="mb-5 flex flex-col gap-3 rounded-2xl border border-[#e1e9e3] bg-white px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mb-5 flex flex-col gap-3 border-y border-[#d5ddd7] bg-white px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm font-bold text-gray-900">{sortedPlantines.length} plantín{sortedPlantines.length === 1 ? "" : "es"}</p>
                   <p className="mt-0.5 text-xs text-gray-500">{selectedCategory === "Todos" ? "Todos los cultivos" : selectedCategory}{selectedStatus === "Todos" ? "" : ` · ${selectedStatus}`}</p>
                 </div>
                 <label className="flex items-center gap-2 text-xs font-semibold text-gray-500">
                   Ordenar por
-                  <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-700 outline-none focus:border-green-400" aria-label="Ordenar catálogo">
+                  <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} className="border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-700 outline-none focus:border-green-500" aria-label="Ordenar catálogo">
                     <option value="recommended">Recomendados</option>
                     <option value="name">Nombre A–Z</option>
                     <option value="category">Tipo de cultivo</option>
@@ -238,7 +216,7 @@ export default function PlantinesClient() {
                 </label>
               </div>
 
-              <StaggerGroup className="grid grid-cols-1 gap-5 md:grid-cols-2" staggerDelay={0.07} amount={0.06}>
+              <StaggerGroup className="space-y-4" staggerDelay={0.05} amount={0.04}>
                 {sortedPlantines.map((plantin) => (
                   <StaggerItem key={plantin.id} distance={16}>
                     <PlantinCard plantin={plantin} onTechnicalSheet={handleTechnicalSheet} />
@@ -257,56 +235,18 @@ export default function PlantinesClient() {
             </div>
           </div>
 
-          {/* Calculadora de Rentabilidad */}
-          <ScrollReveal className="mx-auto mt-12 max-w-3xl overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_20px_60px_-42px_rgba(14,60,38,0.45)]" distance={18}>
-                <div className="bg-gradient-to-r from-[#276b44] to-[#1d5136] px-5 py-4 text-white">
-                  <h3 className="flex items-center gap-2 text-base font-bold">
-                    <Calculator className="w-4 h-4" />
-                    Estimador comparativo por hectáreas
-                  </h3>
-                </div>
-                <div className="space-y-4 p-5 sm:p-6">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <span className="text-sm font-semibold text-gray-700">Selecciona el área:</span>
-                    <div className="flex flex-wrap gap-2">
-                      {[1, 5, 10, 20, 50].map((value) => (
-                        <button
-                          key={value}
-                          onClick={() => setHectareas(value)}
-                          className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                            hectareas === value
-                              ? "bg-green-600 text-white shadow"
-                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                          }`}
-                        >
-                          {value} ha
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="grid gap-3 text-sm sm:grid-cols-2">
-                    <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-center">
-                      <span className="block text-xs font-semibold uppercase tracking-wide text-gray-500">Escenario tradicional</span>
-                      <span className="mt-1 block text-xl font-bold text-gray-800">S/. {(hectareas * 14 * 2500).toLocaleString()}</span>
-                    </div>
-                    <div className="rounded-2xl border border-green-200 bg-green-50 p-4 text-center">
-                      <span className="block text-xs font-semibold uppercase tracking-wide text-green-600">Escenario in vitro</span>
-                      <span className="mt-1 block text-xl font-bold text-green-700">S/. {(hectareas * 20 * 2500).toLocaleString()}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between rounded-2xl bg-blue-50 px-4 py-3">
-                    <span className="text-sm font-semibold text-blue-800">Diferencia estimada:</span>
-                    <span className="text-base font-bold text-blue-700">+S/. {((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}</span>
-                  </div>
-                  <WhatsAppContact
-                    message={`Hola, quiero cotizar ${hectareas} hectáreas. Ganancia estimada: S/. ${((hectareas * 20 * 2500) - (hectareas * 14 * 2500)).toLocaleString()}`}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-green-700"
-                  >
-                    <MessageCircle className="w-3 h-3" />
-                    Consultar proyecto de {hectareas} hectáreas
-                  </WhatsAppContact>
-                  <p className="text-center text-[11px] leading-5 text-gray-500">Estimación referencial para comparar escenarios. El resultado real depende del cultivo, manejo, densidad y condiciones de campo.</p>
-                </div>
+          <ScrollReveal className="mt-14 border-t border-[#cfd8d2] pt-9" distance={18}>
+            <div className="grid gap-8 lg:grid-cols-[.66fr_1.34fr]">
+              <div><p className="text-[11px] font-semibold text-[#0b7a55]">Cómo coordinamos</p><h3 className="mt-3 text-[clamp(1.8rem,3vw,3rem)] font-medium leading-[1.05] tracking-[-.04em] text-[#17211d]">Un pedido técnico, explicado paso a paso.</h3><p className="mt-4 text-sm leading-7 text-[#5d6c64]">La disponibilidad, presentación y fecha se confirman según cultivo y etapa productiva.</p></div>
+              <div className="grid border-l border-t border-[#cfd8d2] sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { title: "Seleccionar", text: "Definimos cultivo y variedad." },
+                  { title: "Dimensionar", text: "Revisamos cantidad y cronograma." },
+                  { title: "Preparar", text: "Coordinamos etapa y aclimatación." },
+                  { title: "Entregar", text: "Organizamos recojo o despacho." },
+                ].map((step, index) => <div key={step.title} className="border-b border-r border-[#cfd8d2] p-5 sm:min-h-[190px]"><span className="text-[10px] text-[#b16f2d]">0{index + 1}</span><CheckCircle2 className="mt-8 h-5 w-5 text-[#0b7a55]" /><h4 className="mt-4 text-base font-medium text-[#17211d]">{step.title}</h4><p className="mt-2 text-[11px] leading-5 text-[#627168]">{step.text}</p></div>)}
+              </div>
+            </div>
           </ScrollReveal>
         </div>
       </section>

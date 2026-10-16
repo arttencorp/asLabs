@@ -152,16 +152,16 @@ export default function CepasClient() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#1b5e20] via-[#2e7d32] to-[#14401a] text-white py-16 sm:py-20 relative overflow-hidden clip-angle-bottom-sm">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1b5e20] via-[#2e7d32] to-[#14401a] py-10 text-white sm:py-12">
         <div className="pointer-events-none absolute inset-0 bg-dot-grid-light opacity-15"></div>
         <div className="pointer-events-none absolute -top-24 -left-16 w-96 h-96 rounded-full bg-[#43a047]/30 blur-3xl"></div>
         <div className="pointer-events-none absolute -bottom-24 right-[10%] w-80 h-80 rounded-full bg-[#e65100]/15 blur-3xl"></div>
         <div className="container mx-auto px-4 relative z-10">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-semibold uppercase tracking-wider px-4 py-1.5 mb-5">
+          <span className="mb-3 inline-flex items-center gap-2 border border-white/25 bg-white/15 px-3 py-1.5 text-[9px] font-semibold tracking-[.12em] text-white backdrop-blur-md">
             Banco de Cepas
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold font-serif mb-4 leading-tight">Cepas Identificadas</h1>
-          <p className="text-white/85 text-base sm:text-lg max-w-3xl leading-relaxed">
+          <h1 className="mb-2 text-3xl font-bold leading-tight sm:text-4xl">Cepas Identificadas</h1>
+          <p className="max-w-3xl text-sm leading-6 text-white/78">
             Cultivos bacterianos locales certificados de máxima viabilidad. Desarrollados con rigor científico bajo normas ISO para agricultura sostenible e investigación de calidad.
           </p>
         </div>
@@ -271,7 +271,7 @@ export default function CepasClient() {
                         <span className="text-xl">→</span>
                       </a>
                       <a
-                        href="https://wa.me/?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
+                        href="https://wa.me/51952194005?text=Hola%20AS%20Labs%2C%20quisiera%20solicitar%20una%20especie%20bacteriana%20específica"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-black text-base transition-all shadow-lg hover:shadow-xl"

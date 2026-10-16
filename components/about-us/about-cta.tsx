@@ -1,34 +1,16 @@
-'use client'
+"use client"
 
 import Link from "next/link"
+import { ArrowRight, MessageCircle } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
-import { btnPrimary, btnAccent } from "@/components/ui/button-styles"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function AboutCTA() {
   return (
-    <section data-navbar-theme="light" className="relative w-full overflow-hidden bg-gradient-to-br from-[#e8f5e9] via-white to-orange-50 px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-      <div className="pointer-events-none absolute -top-24 -left-24 w-72 h-72 rounded-full bg-[#2e7d32]/10 blur-3xl"></div>
-      <div className="pointer-events-none absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-[#e65100]/10 blur-3xl"></div>
-      <ScrollReveal className="max-w-4xl mx-auto text-center space-y-8 relative">
-        <div>
-          <h2 className="mb-6 text-3xl font-serif font-bold text-gray-900 sm:text-4xl md:text-5xl">Convirtamos una necesidad en una solución</h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Descubre cómo nuestras soluciones innovadoras en biotecnología pueden transformar tu operación agrícola
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-          <WhatsAppContact
-            message="Hola, quisiera conversar sobre una solución de biotecnología para mi operación agrícola"
-            className={btnPrimary}
-          >
-            Contactar Ahora
-          </WhatsAppContact>
-          <Link href="/servicios" className={btnAccent}>
-            Ver Servicios
-          </Link>
-        </div>
+    <section data-navbar-theme="light" className="border-y border-[#d5ddd7] bg-white py-14 sm:py-16">
+      <ScrollReveal className="mx-auto grid max-w-[1360px] gap-7 px-5 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div><p className="text-[11px] font-semibold text-[#0b7a55]">Hablemos de tu proyecto</p><h2 className="mt-3 max-w-[800px] text-[clamp(2rem,3.5vw,3.4rem)] font-medium leading-[1.04] tracking-[-.04em] text-[#17211d]">Una necesidad técnica merece una conversación clara.</h2></div>
+        <div className="flex flex-wrap gap-3 lg:justify-end"><WhatsAppContact message="Hola, quisiera conversar sobre una solución de biotecnología para mi operación agrícola" className="inline-flex h-11 items-center gap-2 bg-[#062b22] px-5 text-xs font-semibold text-white hover:bg-[#0b4a39]"><MessageCircle className="h-4 w-4" />Hablar con un asesor</WhatsAppContact><Link href="/servicios" className="group inline-flex h-11 items-center gap-3 border border-[#bcc9c1] px-5 text-xs font-semibold text-[#173d2e] hover:bg-[#f2f5f2]">Ver servicios <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link></div>
       </ScrollReveal>
     </section>
   )

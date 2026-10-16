@@ -94,8 +94,38 @@
 .home-redesign h2,
 .home-redesign h3 {
   font-family: var(--font-poppins), "Poppins", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
 }
+
+.home-lab-grid {
+  background-image:
+    linear-gradient(rgba(168, 216, 193, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 216, 193, 0.08) 1px, transparent 1px);
+  background-size: 84px 84px;
+  -webkit-mask-image: linear-gradient(90deg, black, transparent 62%);
+  mask-image: linear-gradient(90deg, black, transparent 62%);
+  pointer-events: none;
+}
+
+.home-sample-line {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(11, 122, 85, 0.22) 12%, rgba(11, 122, 85, 0.22) 88%, transparent);
+  pointer-events: none;
+}
+
+.home-sample-line::before,
+.home-sample-line::after {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  content: "";
+  transform: translateX(-50%);
+  background: #d5a34f;
+}
+
+.home-sample-line::before { top: 18%; }
+.home-sample-line::after { bottom: 14%; }
 
 .home-grain {
   background-image:
@@ -111,6 +141,18 @@
     linear-gradient(115deg, transparent 48%, rgba(23, 52, 40, 0.09) 49%, rgba(23, 52, 40, 0.09) 50%, transparent 51%),
     linear-gradient(65deg, transparent 48%, rgba(23, 52, 40, 0.06) 49%, rgba(23, 52, 40, 0.06) 50%, transparent 51%);
   background-size: 120px 120px;
+}
+
+.home-specimen-grid {
+  background-image:
+    linear-gradient(rgba(173, 213, 185, 0.065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(173, 213, 185, 0.065) 1px, transparent 1px),
+    radial-gradient(circle at 18% 28%, rgba(240, 184, 103, 0.3) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 82% 66%, rgba(173, 213, 185, 0.35) 0 2px, transparent 2.5px);
+  background-size: 72px 72px, 72px 72px, 360px 360px, 440px 440px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

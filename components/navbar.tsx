@@ -322,20 +322,19 @@ export function Navbar({ overlay = false }: NavbarProps) {
         </defs>
       </svg>
       <motion.header
-        initial={{ opacity: 0, y: -18 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 160, damping: 24 }}
-        className={`pointer-events-none fixed inset-x-0 top-0 z-[100] px-3 transition-[padding] duration-500 sm:px-5 ${scrolled ? "pt-2 sm:pt-2.5" : "pt-3 sm:pt-4"}`}
+        className="pointer-events-none fixed inset-x-0 top-0 z-[100]"
       >
         <nav
           aria-label="Navegación principal"
-          className={`pointer-events-auto relative mx-auto max-w-[1420px] rounded-[1.35rem] border font-[var(--font-poppins)] backdrop-blur-[12px] backdrop-saturate-150 transition-all duration-500 ${
+          className={`pointer-events-auto relative w-full border-b font-[var(--font-poppins)] backdrop-blur-[16px] backdrop-saturate-150 transition-all duration-500 ${
             useDarkContrast
-              ? `border-white/25 bg-[#0d3024]/[0.72] ring-1 ring-white/[0.08] shadow-[0_14px_42px_-20px_rgba(0,0,0,0.5)] ${scrolled ? "bg-[#0d3024]/[0.84] shadow-[0_18px_48px_-20px_rgba(0,0,0,0.62)]" : ""}`
-              : `border-white/85 bg-[#fbfdf9]/[0.82] ring-1 ring-[#173428]/[0.05] shadow-[0_14px_42px_-22px_rgba(8,47,32,0.38)] ${scrolled ? "bg-[#fbfdf9]/[0.93] shadow-[0_18px_48px_-20px_rgba(8,47,32,0.4)]" : ""}`
+              ? `border-white/15 bg-[#082f25]/[0.78] ${scrolled ? "bg-[#082f25]/[0.95] shadow-[0_12px_36px_-24px_rgba(0,0,0,0.72)]" : ""}`
+              : `border-[#d7dfd9] bg-[#f8faf8]/[0.9] ${scrolled ? "bg-[#f8faf8]/[0.97] shadow-[0_12px_36px_-26px_rgba(8,47,32,0.48)]" : ""}`
           }`}
         >
-          <div aria-hidden="true" className={`pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent to-transparent ${useDarkContrast ? "via-white/55" : "via-white"}`} />
           <AnimatePresence initial={false}>
             {showPatrioticMessage && (
               <motion.div
@@ -359,7 +358,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
               </motion.div>
             )}
           </AnimatePresence>
-          <div className={`flex items-center justify-between gap-3 px-3.5 transition-[height] duration-500 sm:px-5 ${scrolled ? "h-[54px] sm:h-[58px]" : "h-[58px] sm:h-[62px]"}`}>
+          <div className={`mx-auto flex max-w-[1480px] items-center justify-between gap-3 px-4 transition-[height] duration-500 sm:px-7 ${scrolled ? "h-[56px] sm:h-[60px]" : "h-[62px] sm:h-[66px]"}`}>
             <Link href={isEcuador ? "/ecuador" : "/"} aria-label={`AS Labs ${isEcuador ? "Ecuador" : "Perú"} — Inicio`} className="flex h-9 w-[104px] shrink-0 items-center overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8ee2c5] sm:w-[116px]">
               <Image
                 src="/images/new-logo.png"
@@ -411,7 +410,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
                         animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0, y: 7, scale: 0.985, filter: "blur(3px)" }}
                         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                        className={`absolute left-1/2 top-full mt-2 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/90 bg-white/[0.97] p-2 shadow-[0_24px_64px_-24px_rgba(8,47,32,0.52)] backdrop-blur-xl before:absolute before:-top-3 before:left-0 before:h-3 before:w-full before:content-[''] ${item.label === "Servicios" || item.label === "Catálogo" ? "w-[560px]" : "w-[330px]"}`}
+                        className={`absolute left-1/2 top-full -translate-x-1/2 overflow-hidden border border-[#d8e1da] bg-white/[0.98] p-2 shadow-[0_24px_64px_-24px_rgba(8,47,32,0.52)] backdrop-blur-xl before:absolute before:-top-3 before:left-0 before:h-3 before:w-full before:content-[''] ${item.label === "Servicios" || item.label === "Catálogo" ? "w-[560px]" : "w-[330px]"}`}
                       >
                         {item.href && (
                           <Link href={item.href} translate="no" className="mb-1 flex items-center justify-between rounded-xl bg-[#0c3928] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#15543a]">
@@ -544,7 +543,7 @@ export function Navbar({ overlay = false }: NavbarProps) {
       {!overlay && (
         <div
           aria-hidden="true"
-          className={showPatrioticMessage ? "h-[103px] sm:h-[111px]" : "h-[78px] sm:h-[86px]"}
+          className={showPatrioticMessage ? "h-[91px] sm:h-[95px]" : "h-[62px] sm:h-[66px]"}
         />
       )}
     </>

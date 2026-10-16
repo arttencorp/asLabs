@@ -2,24 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
+import { usePathname } from "next/navigation"
 import { AnimatePresence, motion } from "framer-motion"
 import { ArrowUpRight, Headphones, MessageCircle, X } from "lucide-react"
+import { buildWhatsAppUrl, WHATSAPP_ADVISORS } from "@/lib/whatsapp"
 
 const advisors = [
-  {
-    name: "Luis Cabrera",
-    role: "Asesor",
-    phone: "+51 961 996 645",
-    whatsapp: "51961996645",
-    initials: "LC",
-  },
-  {
-    name: "Andy Hudson",
-    role: "Asesor",
-    phone: "+51 952 194 005",
-    whatsapp: "51952194005",
-    initials: "AH",
-  },
+  WHATSAPP_ADVISORS.generalAnalysis,
+  WHATSAPP_ADVISORS.microbiology,
 ] as const
 
 type WhatsAppContactProps = {
@@ -47,10 +37,13 @@ export function WhatsAppContact({
   onOpen,
   disabled = false,
 }: WhatsAppContactProps) {
+  const pathname = usePathname()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [mounted, setMounted] = useState(false)
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState<MenuPosition | null>(null)
+  const isStrainContext = pathname === "/cepas" || pathname.startsWith("/cepas/") || pathname === "/ecuador/cepas" || pathname.startsWith("/ecuador/cepas/")
+  const visibleAdvisors = isStrainContext ? [WHATSAPP_ADVISORS.microbiology] : advisors
 
   const updatePosition = useCallback(() => {
     if (!buttonRef.current || mode !== "dropdown") return
@@ -98,6 +91,11 @@ export function WhatsAppContact({
 
   const openMenu = () => {
     if (disabled) return
+    if (visibleAdvisors.length === 1) {
+      onOpen?.()
+      window.open(buildWhatsAppUrl(visibleAdvisors[0].whatsapp, message), "_blank", "noopener,noreferrer")
+      return
+    }
     if (!open) {
       updatePosition()
       onOpen?.()
@@ -107,10 +105,10 @@ export function WhatsAppContact({
 
   const advisorOptions = (compact: boolean) => (
     <div className={compact ? "mt-3 space-y-2" : "mt-5 space-y-3"}>
-      {advisors.map((advisor, index) => (
+      {visibleAdvisors.map((advisor, index) => (
         <motion.a
           key={advisor.whatsapp}
-          href={`https://wa.me/${advisor.whatsapp}?text=${encodeURIComponent(message)}`}
+          href={buildWhatsAppUrl(advisor.whatsapp, message)}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => setOpen(false)}
@@ -125,11 +123,9 @@ export function WhatsAppContact({
             {advisor.initials}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#7b8e82]">
-              {advisor.role} {index + 1}
-            </span>
+            <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[#7b8e82]">Área de atención</span>
             <span className={`${compact ? "text-sm" : "text-[15px]"} mt-0.5 block font-bold text-[#173c2b]`}>
-              {advisor.name}
+              {advisor.label}
             </span>
             <span className="mt-0.5 block text-[11px] font-medium text-[#64776c]">{advisor.phone}</span>
           </span>
@@ -172,8 +168,8 @@ export function WhatsAppContact({
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#3f7655]">Atención personalizada</p>
-                    <h2 className="mt-1 text-xl font-bold tracking-[-0.025em] text-[#173c2b] sm:text-2xl">¿Con quién deseas conversar?</h2>
-                    <p className="mt-1.5 text-xs leading-5 text-[#6a7b71]">Elige un asesor y continúa directamente en WhatsApp.</p>
+                    <h2 className="mt-1 text-xl font-bold tracking-[-0.025em] text-[#173c2b] sm:text-2xl">¿Qué tipo de asesoría necesitas?</h2>
+                    <p className="mt-1.5 text-xs leading-5 text-[#6a7b71]">Elige el área adecuada y continúa directamente en WhatsApp.</p>
                   </div>
                   <button
                     type="button"
@@ -212,7 +208,7 @@ export function WhatsAppContact({
                     <MessageCircle className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-xs font-bold text-[#173c2b]">Elige un asesor</p>
+                    <p className="text-xs font-bold text-[#173c2b]">Elige un área</p>
                     <p className="mt-0.5 text-[10px] text-[#74857b]">Te atenderemos por WhatsApp</p>
                   </div>
                 </div>
@@ -231,9 +227,9 @@ export function WhatsAppContact({
         ref={buttonRef}
         type="button"
         onClick={openMenu}
-        aria-label={ariaLabel}
-        aria-haspopup={mode === "modal" ? "dialog" : "menu"}
-        aria-expanded={open}
+        aria-label={isStrainContext ? "Contactar por WhatsApp con Microbiología, Cepas y Genómica" : ariaLabel}
+        aria-haspopup={visibleAdvisors.length === 1 ? undefined : mode === "modal" ? "dialog" : "menu"}
+        aria-expanded={visibleAdvisors.length === 1 ? undefined : open}
         disabled={disabled}
         className={className}
       >
