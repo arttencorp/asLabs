@@ -468,6 +468,7 @@ const onilabProducts: MolecularProduct[] = onilabProductSeeds.map((seed) => {
 })
 
 export const molecularProducts: MolecularProduct[] = [...onilabProducts, ...bacteriophageProducts, ...hiMediaCultureMedia, ...fixedPriceProducts, ...realFisherProducts]
+export const featuredScientificProducts: MolecularProduct[] = [...fixedPriceProducts, ...realFisherProducts]
 
 export function getMolecularProduct(slug: string) {
   return molecularProducts.find((product) => product.id === slug)

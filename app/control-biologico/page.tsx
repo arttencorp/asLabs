@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ControlBiologicoClient } from "./control-biologico-client"
+import { ControlBiologicoEditorial } from "@/components/control-biologico/control-biologico-editorial"
 import {
   ServiceStructuredData,
   BreadcrumbStructuredData,
@@ -166,7 +166,7 @@ export default function ControlBiologicoPage() {
           },
         ]}
       />
-      <ControlBiologicoClient />
+      <ControlBiologicoEditorial />
     </>
   )
 }

@@ -38,6 +38,7 @@ import {
   Users,
 } from "lucide-react"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
+import { MoreExplorer } from "@/components/public/more-explorer"
 
 const capabilities = [
   {
@@ -648,6 +649,18 @@ export default function PitchDeckExperience() {
           </div>
         </div>
       </section>
+
+      <MoreExplorer
+        current="/pitch-deck"
+        title="Una tesis de innovación preparada para fondos y alianzas."
+        description="Presenta la plataforma científica, la evidencia y la ruta de ejecución de AS Laboratorios para oportunidades no dilutivas."
+        details={[
+          { label: "Para quién", text: "Fondos, concursos, instituciones y socios de innovación." },
+          { label: "Qué puedes hacer", text: "Revisar oportunidad, capacidades, evidencia y hoja de ruta." },
+          { label: "Qué obtienes", text: "Identificar módulos financiables con aplicación agrícola y científica." },
+        ]}
+        action={{ href: "#tesis", label: "Ver la propuesta" }}
+      />
 
       <section id="contacto-fondos" data-navbar-theme="dark" className="scroll-mt-24 relative overflow-hidden bg-[#092f23] px-4 py-20 text-white sm:px-6 md:py-28 lg:px-8">
         <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full border border-white/10" />

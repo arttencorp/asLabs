@@ -79,10 +79,10 @@ const servicePages = [
   { label: "Fitopatología", href: "/servicios/fitopatologia", summary: "Patógenos en plantas y suelos" },
   { label: "Medio Ambiente", href: "/servicios/medio-ambiente", summary: "Agua, aire y superficies" },
   { label: "Microbiológicos", href: "/servicios/microbiologicos", summary: "Alimentos y control industrial" },
+  { label: "Fisicoquímica y Bioquímica", href: "/servicios/fisicoquimicos-bioquimicos", summary: "Enzimas, proteínas, lípidos y composición" },
   { label: "Biotecnología Vegetal", href: "/servicios/biotecnologia-vegetal", summary: "Cultivo de tejidos in vitro" },
   { label: "Bacteriología", href: "/servicios/bacteriologia-general", summary: "Cepas, fermentación y bioproductos" },
   { label: "Apoyo a Investigación", href: "/servicios/apoyo-investigacion", summary: "Protocolos y análisis molecular" },
-  { label: "Desarrollo de Cepas", href: "/servicios/aislamiento-seleccion-cepas", summary: "Aislamiento, selección y WGS" },
 ]
 
 type HeroActionsProps = {
@@ -95,24 +95,24 @@ export function ServiceHeroActions({ count, theme, whatsappMessage }: HeroAction
   const palette = themes[theme]
 
   return (
-    <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+    <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center">
       <div className="flex flex-wrap gap-2">
         <Link
           href="#catalogo"
-          className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#173c2b] shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-white/90"
+          className="inline-flex h-11 items-center gap-2 bg-white px-5 text-xs font-semibold text-[#173c2b] transition hover:bg-[#eaf2ed]"
         >
           Ver catálogo
           <ArrowDown className="h-4 w-4" />
         </Link>
         <WhatsAppContact
           message={whatsappMessage}
-          className={`inline-flex h-11 items-center gap-2 rounded-full border border-white/35 px-5 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 ${palette.bg}`}
+          className="inline-flex h-11 items-center gap-2 border border-white/30 bg-white/8 px-5 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-white hover:text-[#173c2b]"
         >
           <MessageCircle className="h-4 w-4" />
           Consultar
         </WhatsAppContact>
       </div>
-      <div className="flex items-center gap-2 text-sm text-white/80">
+      <div className="flex items-center gap-2 text-[11px] text-white/65">
         <span className="font-bold text-white">{count}</span>
         servicios disponibles
         <span aria-hidden="true" className="h-1 w-1 rounded-full bg-white/50" />
@@ -131,9 +131,9 @@ export function ServiceSectionNav({ activeHref, theme }: SectionNavProps) {
   const palette = themes[theme]
 
   return (
-    <div className="relative z-20 mx-auto -mt-5 w-[calc(100%-2rem)] max-w-7xl">
-      <div className="flex items-center gap-1 overflow-x-auto rounded-2xl border border-white/90 bg-white/85 p-2 shadow-[0_18px_45px_-24px_rgba(15,55,38,0.42)] backdrop-blur-2xl [scrollbar-width:none]">
-        <Link href="/servicios" className={`shrink-0 rounded-xl px-3.5 py-2 text-xs font-semibold ${palette.softText} ${palette.softBg}`}>
+    <div className="relative z-20 border-b border-[#d5ded8] bg-white">
+      <div className="mx-auto flex max-w-7xl items-center gap-0 overflow-x-auto px-4 [scrollbar-width:none]">
+        <Link href="/servicios" className={`shrink-0 border-x border-[#e1e7e3] px-4 py-3 text-[11px] font-semibold ${palette.softText} ${palette.softBg}`}>
           Todos los servicios
         </Link>
         {[
@@ -142,7 +142,7 @@ export function ServiceSectionNav({ activeHref, theme }: SectionNavProps) {
           ["Cómo trabajamos", "#proceso"],
           ["Preguntas", "#preguntas"],
         ].map(([label, href]) => (
-          <Link key={href} href={href} className="shrink-0 rounded-xl px-3.5 py-2 text-xs font-medium text-[#51655b] transition hover:bg-[#edf3ee] hover:text-[#245f3e]">
+          <Link key={href} href={href} className="shrink-0 border-r border-[#e1e7e3] px-4 py-3 text-[11px] font-medium text-[#51655b] transition hover:bg-[#edf3ee] hover:text-[#245f3e]">
             {label}
           </Link>
         ))}
@@ -175,37 +175,35 @@ export function ServiceExperience({ activeHref, theme, title, whatsappMessage, f
 
   return (
     <>
-      <section id="proceso" className="scroll-mt-28 py-5 md:py-8">
+      <section id="proceso" className="scroll-mt-28 py-10 md:py-16">
         <ScrollReveal>
-          <div className={`overflow-hidden rounded-[1.75rem] border ${palette.border} bg-white shadow-[0_22px_70px_-42px_rgba(10,55,36,0.45)]`}>
-            <div className="grid gap-7 p-6 md:p-9 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
-              <div>
-                <span className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] ${palette.softText}`}>
+          <div className="overflow-hidden bg-[#102f25] text-white">
+            <div className="grid lg:grid-cols-[0.72fr_1.28fr]">
+              <div className="border-b border-white/15 p-7 md:p-10 lg:border-b-0 lg:border-r">
+                <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#a9c9b8]">
                   <ClipboardCheck className="h-4 w-4" />
-                  Proceso de atención
+                  Ruta de la muestra
                 </span>
-                <h2 className="mt-3 text-2xl font-bold leading-tight text-[#183c2d] md:text-3xl">De la consulta al informe, sin incertidumbre</h2>
-                <p className="mt-3 text-sm leading-6 text-[#66796f]">
+                <h2 className="mt-5 text-3xl font-medium leading-tight tracking-[-.03em] md:text-4xl">De la consulta al informe, cada etapa queda clara.</h2>
+                <p className="mt-5 text-sm leading-7 text-white/65">
                   Te acompañamos antes, durante y después del análisis de {title.toLowerCase()} para que la muestra llegue correctamente y el resultado sea útil.
                 </p>
-                <WhatsAppContact message={whatsappMessage} className={`mt-5 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 ${palette.bg}`}>
+                <WhatsAppContact message={whatsappMessage} className={`mt-7 inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110 ${palette.bg}`}>
                   Revisar mi caso
                   <ArrowRight className="h-4 w-4" />
                 </WhatsAppContact>
               </div>
-              <StaggerGroup className="grid gap-3 sm:grid-cols-2" staggerDelay={0.08}>
+              <StaggerGroup className="divide-y divide-white/12" staggerDelay={0.06}>
                 {steps.map((step, index) => (
                   <StaggerItem key={step.title}>
-                    <div className={`group h-full rounded-2xl border border-[#e4ebe6] bg-[#fbfcfb] p-4 transition ${palette.hover}`}>
-                      <div className="flex items-start gap-3">
-                        <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${palette.softBg} ${palette.softText}`}>
-                          <step.icon className="h-5 w-5" />
-                        </span>
-                        <div>
-                          <span className={`text-[10px] font-bold uppercase tracking-widest ${palette.softText}`}>Paso {index + 1}</span>
-                          <h3 className="mt-0.5 text-sm font-bold text-[#234436]">{step.title}</h3>
-                          <p className="mt-1 text-xs leading-5 text-[#6d7e75]">{step.text}</p>
-                        </div>
+                    <div className="group grid gap-4 p-6 transition hover:bg-white/[0.05] sm:grid-cols-[38px_46px_1fr] sm:items-center md:px-9">
+                      <span className="text-xs font-semibold text-white/35">0{index + 1}</span>
+                      <span className="grid h-10 w-10 shrink-0 place-items-center border border-white/15 bg-white/[0.06] text-white/80">
+                        <step.icon className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-sm font-semibold text-white">{step.title}</h3>
+                        <p className="mt-1 text-xs leading-5 text-white/52">{step.text}</p>
                       </div>
                     </div>
                   </StaggerItem>
@@ -216,25 +214,26 @@ export function ServiceExperience({ activeHref, theme, title, whatsappMessage, f
         </ScrollReveal>
       </section>
 
-      <section id="preguntas" className="scroll-mt-28 py-7 md:py-10">
+      <section id="preguntas" className="scroll-mt-28 border-y border-[#ccd7d0] py-14 md:py-20">
         <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <ScrollReveal direction="right">
-            <span className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] ${palette.softText}`}>
+            <span className={`inline-flex items-center gap-2 text-xs font-semibold ${palette.softText}`}>
               <HelpCircle className="h-4 w-4" />
               Antes de enviar tu muestra
             </span>
-            <h2 className="mt-3 text-2xl font-bold text-[#183c2d] md:text-3xl">Preguntas frecuentes</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-[#66796f]">Estas respuestas te ayudan a preparar la solicitud. Si tu caso es especial, nuestro equipo puede revisarlo contigo.</p>
+            <h2 className="mt-4 text-3xl font-medium tracking-[-.03em] text-[#183c2d] md:text-4xl">Antes de preparar el envío.</h2>
+            <p className="mt-4 max-w-md text-sm leading-7 text-[#66796f]">Estas respuestas evitan repeticiones de muestreo. Si el caso es especial, el equipo puede revisar contigo la matriz y el objetivo.</p>
           </ScrollReveal>
           <ScrollReveal direction="left" delay={0.08}>
-            <div className="space-y-3">
+            <div className="border-t border-[#cad6ce]">
               {faqs.map((faq, index) => (
-                <details key={faq.question} className={`group rounded-2xl border border-[#dfe7e1] bg-white px-5 py-4 open:ring-4 ${palette.ring}`} open={index === 0}>
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-[#234436]">
-                    {faq.question}
-                    <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full ${palette.softBg} ${palette.softText} transition group-open:rotate-45`}>+</span>
+                <details key={faq.question} className="group border-b border-[#cad6ce] bg-transparent py-5" open={index === 0}>
+                  <summary className="grid cursor-pointer list-none grid-cols-[34px_1fr_28px] items-center gap-3 text-sm font-semibold text-[#234436]">
+                    <span className="text-[10px] text-[#8a9991]">0{index + 1}</span>
+                    <span>{faq.question}</span>
+                    <span className={`grid h-7 w-7 shrink-0 place-items-center ${palette.softText} transition group-open:rotate-45`}>+</span>
                   </summary>
-                  <p className="pt-3 text-sm leading-6 text-[#687b71]">{faq.answer}</p>
+                  <p className="pl-[46px] pr-8 pt-4 text-sm leading-7 text-[#687b71]">{faq.answer}</p>
                 </details>
               ))}
             </div>
@@ -242,21 +241,21 @@ export function ServiceExperience({ activeHref, theme, title, whatsappMessage, f
         </div>
       </section>
 
-      <section className="pb-7 pt-2 md:pb-10">
-        <div className="mb-4 flex items-end justify-between gap-4">
+      <section className="pb-12 pt-14 md:pb-16">
+        <div className="mb-5 flex items-end justify-between gap-4">
           <div>
-            <span className={`text-xs font-bold uppercase tracking-[0.18em] ${palette.softText}`}>También puede interesarte</span>
-            <h2 className="mt-2 text-xl font-bold text-[#183c2d]">Otras especialidades del laboratorio</h2>
+            <span className={`text-xs font-semibold ${palette.softText}`}>Conecta este análisis</span>
+            <h2 className="mt-2 text-2xl font-medium tracking-[-.02em] text-[#183c2d]">Otras especialidades del laboratorio</h2>
           </div>
           <Link href="/servicios" className="hidden items-center gap-1 text-xs font-semibold text-[#416553] sm:flex">Ver todas <ArrowRight className="h-3.5 w-3.5" /></Link>
         </div>
-        <StaggerGroup className="grid gap-3 md:grid-cols-3" staggerDelay={0.08}>
+        <StaggerGroup className="grid divide-y divide-[#d2dcd5] border-y border-[#d2dcd5] md:grid-cols-3 md:divide-x md:divide-y-0" staggerDelay={0.08}>
           {related.map((service) => (
             <StaggerItem key={service.href}>
-              <Link href={service.href} className={`group flex h-full items-center justify-between gap-4 rounded-2xl border border-[#dfe7e1] bg-white p-5 transition hover:-translate-y-1 hover:shadow-lg ${palette.hover}`}>
+              <Link href={service.href} className={`group flex h-full min-h-28 items-center justify-between gap-4 bg-transparent p-5 transition ${palette.hover}`}>
                 <div>
-                  <h3 className="text-sm font-bold text-[#234436]">{service.label}</h3>
-                  <p className="mt-1 text-xs text-[#74837b]">{service.summary}</p>
+                  <h3 className="text-sm font-semibold text-[#234436]">{service.label}</h3>
+                  <p className="mt-2 text-xs leading-5 text-[#74837b]">{service.summary}</p>
                 </div>
                 <ArrowRight className={`h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1 ${palette.softText}`} />
               </Link>
