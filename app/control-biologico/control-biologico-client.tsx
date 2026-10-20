@@ -28,6 +28,7 @@ import {
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
+import { MoreExplorer } from "@/components/public/more-explorer"
 
 const products = [
   {
@@ -547,6 +548,18 @@ export function ControlBiologicoClient() {
             </div>
           </div>
         </section>
+
+        <MoreExplorer
+          current="/control-biologico"
+          title="Una estrategia de campo antes que un producto aislado."
+          description="Relacionamos cultivo, plaga y condiciones de aplicación para orientar una intervención biológica responsable."
+          details={[
+            { label: "Para quién", text: "Productores, fundos, asociaciones y equipos técnicos agrícolas." },
+            { label: "Qué puedes hacer", text: "Conocer controladores, proceso de evaluación y acompañamiento." },
+            { label: "Qué obtienes", text: "Definir una ruta de manejo con selección, liberación y seguimiento." },
+          ]}
+          action={{ href: "#controladores", label: "Ver controladores" }}
+        />
 
         <section className="px-4 pb-20 sm:px-6 sm:pb-28 lg:px-8">
           <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[40px] bg-[#0a3a29] px-6 py-14 text-white shadow-[0_28px_90px_rgba(5,46,34,.2)] sm:px-10 lg:px-14">

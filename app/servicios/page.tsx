@@ -200,6 +200,21 @@ const servicios = [
     count: 48,
   },
   {
+    title: "Fisicoquímica y Bioquímica",
+    description:
+      "Caracterizamos azúcares, proteínas, lípidos y actividad enzimática en alimentos, muestras biológicas, agrícolas e industriales.",
+    audience: "Composición y función",
+    href: "/servicios/fisicoquimicos-bioquimicos",
+    icon: FlaskConical,
+    color: "from-cyan-500 to-blue-500",
+    bgColor: "bg-cyan-50",
+    borderColor: "border-cyan-200",
+    textColor: "text-cyan-700",
+    services: ["Análisis enzimáticos", "Proteínas totales y perfiles", "Lípidos y grasas", "Azúcares y composición"],
+    image: "/servicios/micro.jpeg",
+    count: 18,
+  },
+  {
     title: "Biotecnología Vegetal",
     description:
       "Desarrollamos cultivo de tejidos, micropropagación y soluciones in vitro para material vegetal confiable.",
@@ -230,44 +245,19 @@ const servicios = [
     count: 13,
   },
   {
-    title: "Apoyo a la Investigación",
+    title: "Investigación, Bioquímica y Enzimática",
     description:
-      "Acompañamos tesis y proyectos con protocolos, identificación microbiana y análisis especializado.",
-    audience: "Tesis y proyectos",
+      "Acompañamos ensayos, tesis y desarrollo científico con análisis enzimáticos, bioquímicos y moleculares.",
+    audience: "Investigación científica",
     href: "/servicios/apoyo-investigacion",
     icon: BookOpenCheck,
     color: "from-sky-500 to-blue-600",
     bgColor: "bg-sky-50",
     borderColor: "border-sky-200",
     textColor: "text-sky-600",
-    services: [
-      "Suspensiones bacterianas",
-      "Análisis 16S rRNA",
-      "Diseño de protocolos",
-      "Análisis bioinformático",
-    ],
+    services: ["Actividad enzimática", "Parámetros bioquímicos", "Diseño de ensayos", "Análisis molecular y bioinformático"],
     image: "/servicios/micro.jpeg",
     count: 9,
-  },
-  {
-    title: "Desarrollo de Cepas",
-    description:
-      "Aislamos, seleccionamos y caracterizamos cepas con potencial para biofertilizantes, promoción del crecimiento y control biológico.",
-    audience: "Empresas de bioinsumos",
-    href: "/servicios/aislamiento-seleccion-cepas",
-    icon: Dna,
-    color: "from-lime-500 to-emerald-600",
-    bgColor: "bg-lime-50",
-    borderColor: "border-lime-200",
-    textColor: "text-emerald-700",
-    services: [
-      "Aislamiento de hasta 30 candidatos",
-      "Selección funcional y ensayos",
-      "WGS y análisis bioinformático",
-      "Transferencia, resguardo y seguimiento",
-    ],
-    image: "/research/research-lab.png",
-    count: 7,
   },
 ]
 
@@ -276,6 +266,78 @@ function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
       <path d="M20.52 3.48A11.78 11.78 0 0 0 12.11 0C5.58 0 .27 5.3.27 11.83c0 2.09.55 4.13 1.6 5.94L0 24l6.41-1.82a11.78 11.78 0 0 0 5.7 1.46h.01c6.53 0 11.83-5.31 11.83-11.83 0-3.16-1.23-6.13-3.43-8.33ZM12.12 21.65h-.01a9.8 9.8 0 0 1-4.99-1.37l-.36-.22-3.8 1.08 1.1-3.71-.24-.38a9.83 9.83 0 0 1-1.5-5.22C2.32 6.4 6.7 2.02 12.11 2.02c2.62 0 5.09 1.02 6.95 2.88a9.76 9.76 0 0 1 2.87 6.95c0 5.41-4.4 9.8-9.81 9.8Zm5.37-7.36c-.3-.15-1.8-.88-2.08-.98-.28-.1-.48-.15-.69.15-.2.3-.79.98-.97 1.18-.18.2-.36.23-.66.08-.3-.15-1.29-.48-2.46-1.53a9.12 9.12 0 0 1-1.71-2.13c-.18-.3-.02-.46.14-.61.13-.13.3-.33.45-.5.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.69-1.65-.94-2.26-.25-.59-.51-.51-.69-.52h-.58c-.2 0-.53.08-.81.38-.28.3-1.06 1.03-1.06 2.52 0 1.49 1.09 2.93 1.24 3.13.15.2 2.14 3.27 5.18 4.58.72.31 1.28.5 1.72.64.72.23 1.37.2 1.89.12.58-.09 1.8-.74 2.06-1.45.25-.71.25-1.32.18-1.45-.08-.13-.28-.2-.58-.35Z" />
     </svg>
+  )
+}
+
+function EditorialServices() {
+  const totalServicios = servicios.reduce((acc, service) => acc + service.count, 0)
+
+  return (
+    <main className="min-h-screen bg-[#f4f6f3] font-[var(--font-poppins)] text-[#18231e]">
+      <section data-navbar-theme="dark" className="relative overflow-hidden bg-[#062b22] pb-14 pt-28 text-white sm:pt-32 lg:pb-16">
+        <div aria-hidden="true" className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:72px_72px]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(101,180,132,.26),transparent_31%)]" />
+        <div className="relative mx-auto grid max-w-[1360px] gap-10 px-5 sm:px-8 lg:grid-cols-[.92fr_1.08fr] lg:items-end">
+          <div>
+            <div className="flex items-center gap-3 text-[10px] font-medium text-[#b7d4c5]"><span className="h-2 w-2 bg-[#d5a34f]" />Servicios científicos<span className="h-px w-24 bg-white/15" /></div>
+            <h1 className="mt-5 max-w-[680px] text-[clamp(2.35rem,5vw,4.85rem)] font-medium leading-[.98] tracking-[-.052em]">Una muestra. Una pregunta. Evidencia para decidir.</h1>
+            <p className="mt-6 max-w-[620px] text-sm leading-7 text-white/66">Análisis microbiológicos, bioquímicos, enzimáticos y moleculares; fitopatología, biotecnología vegetal y soporte para investigación.</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#especialidades" className="group inline-flex h-11 items-center gap-3 bg-[#d5a34f] px-5 text-xs font-semibold text-[#10251e] transition hover:bg-[#e4b866]">Explorar especialidades <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a>
+              <WhatsAppContact message="Hola, necesito orientación para elegir un servicio de laboratorio" className="inline-flex h-11 items-center gap-2 border border-white/25 px-5 text-xs font-semibold text-white transition hover:bg-white hover:text-[#062b22]"><MessageCircle className="h-4 w-4" />Orientación técnica</WhatsAppContact>
+            </div>
+          </div>
+          <div className="grid border-l border-t border-white/16 sm:grid-cols-[1.2fr_.8fr]">
+            <div className="relative min-h-[300px] overflow-hidden border-b border-r border-white/16 sm:min-h-[390px]">
+              <Image src="/servicios/fito.jpg" alt="Evaluación de muestras vegetales en AS Laboratorios" fill priority className="object-cover" sizes="(max-width: 1024px) 100vw, 55vw" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#062b22]/85 via-transparent to-transparent" />
+              <div className="absolute inset-x-5 bottom-5"><p className="text-[10px] text-white/52">Muestra → método → resultado</p><p className="mt-1 max-w-sm text-lg font-medium">Diseñamos la ruta analítica según la matriz y la pregunta.</p></div>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-1">
+              {[{ value: "07", label: "plataformas técnicas" }, { value: `${totalServicios}+`, label: "servicios disponibles" }, { value: "1997", label: "ciencia aplicada" }].map((stat) => <div key={stat.label} className="border-b border-r border-white/16 p-5 sm:p-6"><p className="text-2xl font-medium tracking-[-.04em] text-[#d5a34f] sm:text-3xl">{stat.value}</p><p className="mt-2 text-[9px] leading-4 text-white/48">{stat.label}</p></div>)}
+              <div className="border-b border-r border-white/16 p-5 sm:p-6"><MapPin className="h-4 w-4 text-[#9bcdb4]" /><p className="mt-3 text-[10px] leading-5 text-white/58">Recepción y procesamiento técnico en Trujillo, Perú.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <nav aria-label="Especialidades" className="border-b border-[#d5ddd7] bg-white">
+        <div className="mx-auto flex max-w-[1360px] overflow-x-auto [scrollbar-width:none]">
+          {servicios.map((service, index) => <Link key={service.href} href={service.href} className="group flex min-w-[205px] flex-1 items-center gap-3 border-r border-[#e1e6e2] px-4 py-4 transition hover:bg-[#f0f4f0]"><span className="text-[9px] text-[#9aa69f]">{String(index + 1).padStart(2, "0")}</span><span className="text-[10px] font-semibold leading-4 text-[#30463a] group-hover:text-[#0b7a55]">{service.title}</span></Link>)}
+        </div>
+      </nav>
+
+      <section id="especialidades" data-navbar-theme="light" className="scroll-mt-20 bg-[#f4f6f3] py-14 sm:py-16 lg:py-20">
+        <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
+          <div className="grid gap-4 border-b border-[#cbd5ce] pb-6 lg:grid-cols-[1fr_.7fr] lg:items-end">
+            <div><p className="text-[10px] font-semibold text-[#0b7a55]">Capacidades por especialidad</p><h2 className="mt-2 max-w-[780px] text-[clamp(2rem,3.5vw,3.6rem)] font-medium leading-[1.02] tracking-[-.045em]">Encuentra el método adecuado para tu muestra.</h2></div>
+            <p className="max-w-[520px] text-xs leading-6 text-[#617068] lg:justify-self-end">Cada división reúne métodos, requisitos de muestra y entregables específicos. Explora la que corresponde a tu objetivo.</p>
+          </div>
+          <div className="mt-7 border-l border-t border-[#cbd5ce]">
+            {servicios.map((service, index) => <Link key={service.href} href={service.href} className="group grid border-b border-r border-[#cbd5ce] bg-white transition-colors hover:bg-[#f9fbf9] md:grid-cols-[250px_1fr] xl:grid-cols-[300px_1fr_340px]">
+              <div className="relative min-h-[190px] overflow-hidden border-b border-[#dce3de] md:border-b-0 md:border-r"><Image src={service.image} alt={`${service.title} en AS Laboratorios`} fill className="object-cover transition-transform duration-700 group-hover:scale-[1.035]" sizes="300px" /><div className="absolute inset-0 bg-gradient-to-t from-[#062b22]/52 to-transparent" /><span className="absolute left-4 top-4 grid h-9 w-9 place-items-center border border-white/50 bg-white/90 text-[#0b7a55]"><service.icon className="h-4 w-4" /></span><span className="absolute bottom-4 left-4 text-[9px] font-medium text-white/80">{service.count} servicios disponibles</span></div>
+              <div className="p-5 sm:p-7 lg:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-[9px] font-semibold text-[#0b7a55]">{service.audience}</p><h3 className="mt-2 text-xl font-medium tracking-[-.025em] text-[#17251e] sm:text-2xl">{service.title}</h3></div><span className="text-[10px] text-[#9aa69f]">{String(index + 1).padStart(2, "0")}</span></div><p className="mt-4 max-w-2xl text-xs leading-6 text-[#637168]">{service.description}</p><span className="mt-5 inline-flex items-center gap-2 text-[11px] font-semibold text-[#0b7a55]">Ver métodos y requisitos <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span></div>
+              <div className="hidden border-l border-[#dce3de] p-7 xl:block"><p className="text-[9px] font-semibold text-[#78867e]">Incluye</p><div className="mt-4 space-y-3">{service.services.map((item) => <span key={item} className="flex items-start gap-3 text-[11px] leading-5 text-[#42564b]"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-[#d5a34f]" />{item}</span>)}</div></div>
+            </Link>)}
+          </div>
+        </div>
+      </section>
+
+      <AnalysisSearch />
+
+      <section data-navbar-theme="dark" className="relative overflow-hidden bg-[#062b22] py-16 text-white sm:py-20">
+        <div aria-hidden="true" className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:72px_72px]" />
+        <div className="relative mx-auto max-w-[1360px] px-5 sm:px-8"><div className="grid gap-6 lg:grid-cols-[.72fr_1.28fr]"><div><p className="text-[10px] font-semibold text-[#a8d8c1]">Ruta de atención</p><h2 className="mt-3 text-[clamp(2rem,3.5vw,3.6rem)] font-medium leading-[1.03] tracking-[-.04em]">De la consulta al informe, sin pasos ambiguos.</h2></div><div className="grid border-l border-t border-white/15 sm:grid-cols-3">{[
+          { icon: Send, title: "Define la pregunta", text: "Cuéntanos qué necesitas medir, comprobar o investigar." },
+          { icon: PackageCheck, title: "Prepara la muestra", text: "Confirmamos cantidad, recipiente y conservación antes del envío." },
+          { icon: FileCheck2, title: "Recibe evidencia", text: "Entregamos el informe y resolvemos tus consultas técnicas." },
+        ].map((step, index) => <div key={step.title} className="relative min-h-[220px] border-b border-r border-white/15 p-5 sm:p-6"><step.icon className="h-5 w-5 text-[#d5a34f]" /><span className="absolute right-5 top-5 text-[10px] text-white/35">{String(index + 1).padStart(2, "0")}</span><h3 className="mt-12 text-base font-medium">{step.title}</h3><p className="mt-3 text-[11px] leading-5 text-white/55">{step.text}</p></div>)}</div></div></div>
+      </section>
+
+      <section data-navbar-theme="light" className="border-t border-[#d4ddd7] bg-white py-14 sm:py-16">
+        <div className="mx-auto flex max-w-[1360px] flex-col gap-7 px-5 sm:px-8 md:flex-row md:items-center md:justify-between"><div className="max-w-2xl"><p className="text-[10px] font-semibold text-[#0b7a55]">Orientación técnica</p><h2 className="mt-2 text-2xl font-medium tracking-[-.035em] text-[#17251e] sm:text-3xl">¿Tienes una muestra, pero aún no sabes qué análisis corresponde?</h2><p className="mt-3 text-xs leading-6 text-[#65736b]">Descríbenos la matriz y tu objetivo. Te ayudamos a definir el método, la cantidad necesaria y el entregable.</p></div><WhatsAppContact message="Hola, tengo una muestra y necesito ayuda para definir el análisis" className="inline-flex h-12 shrink-0 items-center justify-center gap-3 bg-[#0b7a55] px-6 text-xs font-semibold text-white transition hover:bg-[#086545]"><WhatsAppIcon className="h-5 w-5" />Consultar por WhatsApp</WhatsAppContact></div>
+      </section>
+    </main>
   )
 }
 
@@ -308,7 +370,9 @@ export default function ServiciosPage() {
       />
       <Navbar />
 
-      <main className="min-h-screen bg-[#f5f7f4] font-serif">
+      <EditorialServices />
+
+      {false && <main className="min-h-screen bg-[#f5f7f4] font-serif">
         <section className="relative overflow-hidden bg-[#e9f0ea] pb-16 pt-28 sm:pt-32 lg:pb-20">
           <div className="pointer-events-none absolute -left-32 top-16 h-80 w-80 rounded-full bg-[#b9d5bd]/40 blur-3xl" />
           <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-[#f1c67e]/20 blur-3xl" />
@@ -538,7 +602,7 @@ export default function ServiciosPage() {
             </ScrollReveal>
           </div>
         </section>
-      </main>
+      </main>}
 
       <Footer />
     </>
