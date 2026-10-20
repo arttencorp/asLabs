@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { ServicePortfolio } from "@/components/services/service-portfolio"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   Leaf,
@@ -142,10 +143,10 @@ export default function BiotecnologiaVegetalClient() {
   )
 
   return (
-    <div className="min-h-screen bg-[#f7faf7] font-serif">
+    <div className="min-h-screen bg-[#f3f5f1] font-[var(--font-poppins)]">
       <Navbar />
 
-      <header className="relative min-h-[410px] overflow-hidden clip-angle-bottom-sm sm:min-h-[440px]">
+      <header data-navbar-theme="dark" className="relative min-h-[365px] overflow-hidden sm:min-h-[390px]">
         <Image
           src="/servicios/image.png"
           alt="Biotecnología Vegetal - Cultivo de tejidos"
@@ -155,7 +156,7 @@ export default function BiotecnologiaVegetalClient() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent" />
         <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
+          <div className="mx-auto w-full max-w-[1380px] px-5 sm:px-8">
             <div className="max-w-2xl">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-lg bg-teal-500 flex items-center justify-center">
@@ -163,7 +164,7 @@ export default function BiotecnologiaVegetalClient() {
                 </div>
                 <span className="text-teal-300 text-sm font-medium uppercase tracking-wider">Cultivo de Tejidos</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Biotecnología Vegetal</h1>
+              <h1 className="mb-3 text-4xl font-medium tracking-[-.045em] text-white md:text-5xl">Biotecnología vegetal</h1>
               <p className="text-white/80 text-base md:text-lg max-w-xl">
                 Servicios especializados en micropropagación, cultivo in vitro y técnicas avanzadas para plantas.
               </p>
@@ -180,8 +181,16 @@ export default function BiotecnologiaVegetalClient() {
       <ServiceSectionNav activeHref="/servicios/biotecnologia-vegetal" theme="teal" />
 
       <main className="container mx-auto max-w-7xl px-4 py-10">
+        <ServicePortfolio
+          services={serviciosBiotecnologia}
+          assurances={garantias}
+          theme="teal"
+          discipline="Biotecnología vegetal"
+          intro="Compara alternativas de introducción, saneamiento, multiplicación y conservación de material vegetal. Cada expediente detalla el punto de partida y el entregable."
+          whatsappMessage="Hola, deseo cotizar servicios de Biotecnología Vegetal"
+        />
         {/* Garantías */}
-        <section id="beneficios" className="mb-10 scroll-mt-28">
+        <section className="hidden" aria-hidden="true">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {garantias.map((item, index) => (
               <div
@@ -199,7 +208,7 @@ export default function BiotecnologiaVegetalClient() {
         </section>
 
         {/* Buscador y Cotizar */}
-        <section className="mb-6">
+        <section className="hidden" aria-hidden="true">
           <div className="flex flex-col sm:flex-row gap-3 max-w-xl">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -222,7 +231,7 @@ export default function BiotecnologiaVegetalClient() {
         </section>
 
         {/* Tabla de servicios */}
-        <section id="catalogo" className="mb-8 scroll-mt-28">
+        <section className="hidden" aria-hidden="true">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-lg font-bold text-foreground">Catálogo de Servicios</h2>
             <div className="h-px flex-1 bg-border" />

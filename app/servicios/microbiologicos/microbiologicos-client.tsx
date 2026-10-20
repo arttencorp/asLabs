@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ServiceExperience, ServiceHeroActions, ServiceSectionNav } from "@/components/services/service-detail-enhancements"
+import { ServicePortfolio } from "@/components/services/service-portfolio"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 import {
   FlaskConical,
@@ -165,14 +166,14 @@ export default function MicrobiologicosClient() {
   )
 
   return (
-    <div className="min-h-screen bg-[#f7faf7] font-serif">
+    <div className="min-h-screen bg-[#f3f5f1] font-[var(--font-poppins)]">
       <Navbar />
 
-      <header className="relative min-h-[410px] overflow-hidden clip-angle-bottom-sm sm:min-h-[440px]">
+      <header data-navbar-theme="dark" className="relative min-h-[365px] overflow-hidden sm:min-h-[390px]">
         <Image src="/servicios/servMicrobiologicos.jpeg" alt="Servicios Microbiológicos" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f18] via-[#1b5e20]/70 to-transparent" />
         <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
+          <div className="mx-auto w-full max-w-[1380px] px-5 sm:px-8">
             <div className="max-w-2xl">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
@@ -182,7 +183,7 @@ export default function MicrobiologicosClient() {
                   Análisis de Laboratorio
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Servicios Microbiológicos</h1>
+              <h1 className="mb-3 text-4xl font-medium tracking-[-.045em] text-white md:text-5xl">Servicios Microbiológicos</h1>
               <p className="text-white/80 text-base md:text-lg max-w-xl">
                 Análisis completos para alimentos, agua, superficies y control de calidad industrial.
               </p>
@@ -199,8 +200,16 @@ export default function MicrobiologicosClient() {
       <ServiceSectionNav activeHref="/servicios/microbiologicos" theme="blue" />
 
       <main className="container mx-auto max-w-7xl px-4 py-10">
+        <ServicePortfolio
+          services={serviciosMicrobiologicos}
+          assurances={garantias}
+          theme="blue"
+          discipline="Microbiología"
+          intro="Explora controles para alimentos, agua, superficies y procesos. La selección abre un expediente técnico claro para preparar correctamente la muestra."
+          whatsappMessage="Hola, deseo cotizar servicios Microbiológicos"
+        />
         {/* Garantías */}
-        <section id="beneficios" className="mb-10 scroll-mt-28">
+        <section className="hidden" aria-hidden="true">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {garantias.map((item, index) => (
               <div
@@ -218,7 +227,7 @@ export default function MicrobiologicosClient() {
         </section>
 
         {/* Buscador y Cotizar */}
-        <section className="mb-6">
+        <section className="hidden" aria-hidden="true">
           <div className="flex flex-col sm:flex-row gap-3 max-w-xl">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -241,7 +250,7 @@ export default function MicrobiologicosClient() {
         </section>
 
         {/* Tabla de servicios */}
-        <section id="catalogo" className="mb-8 scroll-mt-28">
+        <section className="hidden" aria-hidden="true">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-lg font-bold text-foreground">Catálogo de Servicios</h2>
             <div className="h-px flex-1 bg-border" />

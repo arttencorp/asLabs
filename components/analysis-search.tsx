@@ -83,14 +83,14 @@ const allAnalyses: Analysis[] = [
   { id: "60", tipo: "Apoyo a la Investigación", concepto: "Formulación de Protocolos y Estandarización", alcance: "protocolos optimizados y documentados", costo: "600" },
   { id: "61", tipo: "Apoyo a la Investigación", concepto: "Aislamiento de Bacterias", alcance: "aislamiento selectivo y purificación", costo: "180" },
   { id: "62", tipo: "Apoyo a la Investigación", concepto: "Servicio Análisis e Informes Bioinformática", alcance: "procesamiento y visualización de datos moleculares", costo: "350" },
-  // Desarrollo de Cepas
-  { id: "63", tipo: "Desarrollo de Cepas", concepto: "Programa de aislamiento de microorganismos", alcance: "hasta 30 aislados trazables según matriz y objetivo", costo: "consulta" },
-  { id: "64", tipo: "Desarrollo de Cepas", concepto: "Selección funcional de cepas", alcance: "pruebas comparativas para biocontrol o promoción del crecimiento", costo: "consulta" },
-  { id: "65", tipo: "Desarrollo de Cepas", concepto: "Secuenciación de genoma completo bacteriano", alcance: "WGS, control de calidad y ensamblaje", costo: "consulta" },
-  { id: "66", tipo: "Desarrollo de Cepas", concepto: "Análisis bioinformático de aislados", alcance: "anotación, comparación y análisis filogenético", costo: "consulta" },
-  { id: "67", tipo: "Desarrollo de Cepas", concepto: "Validación agronómica de cepas", alcance: "ensayos en invernadero o parcela demostrativa", costo: "consulta" },
-  { id: "68", tipo: "Desarrollo de Cepas", concepto: "Transferencia de cultivos de inicio", alcance: "cultivos puros, liofilizados y viales de producción", costo: "consulta" },
-  { id: "69", tipo: "Desarrollo de Cepas", concepto: "Custodia y control anual de cepas", alcance: "resguardo por cinco años y seguimiento de estabilidad", costo: "consulta" },
+  // Fisicoquímica y Bioquímica
+  { id: "63", tipo: "Fisicoquímica y Bioquímica", concepto: "Análisis de azúcares totales", alcance: "cuantificación en alimentos, bebidas, extractos y fertilizantes", costo: "Consultar" },
+  { id: "64", tipo: "Fisicoquímica y Bioquímica", concepto: "Actividad enzimática", alcance: "evaluación de preparados, extractos biológicos y muestras microbianas", costo: "Consultar" },
+  { id: "65", tipo: "Fisicoquímica y Bioquímica", concepto: "Proteínas totales", alcance: "cuantificación en matrices alimentarias, biológicas y biotecnológicas", costo: "Consultar" },
+  { id: "66", tipo: "Fisicoquímica y Bioquímica", concepto: "Proteínas solubles", alcance: "cuantificación y comparación entre tratamientos o procesos", costo: "Consultar" },
+  { id: "67", tipo: "Fisicoquímica y Bioquímica", concepto: "Perfil de proteínas", alcance: "caracterización comparativa según matriz y objetivo", costo: "Consultar" },
+  { id: "68", tipo: "Fisicoquímica y Bioquímica", concepto: "Lípidos totales", alcance: "determinación en alimentos, biomasa, extractos y matrices agrícolas", costo: "Consultar" },
+  { id: "69", tipo: "Fisicoquímica y Bioquímica", concepto: "Caracterización de grasas y aceites", alcance: "evaluación fisicoquímica según muestra y alcance solicitado", costo: "Consultar" },
 ]
 
 export function AnalysisSearch() {

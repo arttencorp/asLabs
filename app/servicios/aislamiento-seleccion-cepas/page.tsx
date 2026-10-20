@@ -24,6 +24,7 @@ import { WhatsAppContact } from "@/components/whatsapp-contact"
 import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-reveal"
 import { BreadcrumbStructuredData, FAQStructuredData, ServiceStructuredData } from "@/components/structured-data"
 import { constructMetadata } from "@/lib/metadata"
+import StrainDevelopmentEditorial from "@/components/services/strain-development-editorial"
 
 const canonicalPath = "/servicios/aislamiento-seleccion-cepas"
 
@@ -129,7 +130,7 @@ const faqs = [
 ]
 
 export default function StrainDevelopmentPage() {
-  return <StrainDevelopmentPageContent />
+  return <StrainDevelopmentEditorial />
 }
 
 export function StrainDevelopmentPageContent({ ecuador = false }: { ecuador?: boolean }) {

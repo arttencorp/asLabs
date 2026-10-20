@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react"
+import { MoreExplorer } from "@/components/public/more-explorer"
 
 const navigation = [
   { href: "#terminos", label: "Términos" },
@@ -157,6 +158,18 @@ export default function LegalExperience() {
           ))}
         </nav>
       </div>
+
+      <MoreExplorer
+        current="/legal"
+        title="Condiciones legibles para decidir con confianza."
+        description="Términos, privacidad, cookies y propiedad intelectual explicados por tema y sin lenguaje innecesariamente complejo."
+        details={[
+          { label: "Para quién", text: "Clientes, visitantes, postulantes y usuarios de las plataformas." },
+          { label: "Qué puedes hacer", text: "Consultar el tratamiento aplicable y ejercer tus derechos." },
+          { label: "Qué obtienes", text: "Comprender qué información usamos, por qué y cómo solicitar atención." },
+        ]}
+        action={{ href: "#terminos", label: "Revisar términos" }}
+      />
 
       <section id="terminos" data-navbar-theme="light" className="scroll-mt-28 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
         <div className="mx-auto max-w-7xl">

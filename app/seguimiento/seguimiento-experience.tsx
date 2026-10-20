@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import { obtenerPedidoPorCodigo } from "@/lib/supabase"
 import { ESTADOS_SEGUIMIENTO } from "@/constants/seguimiento"
+import { MoreExplorer } from "@/components/public/more-explorer"
 import { calcularTotalCotizacion, formatCurrency, formatDate, getDocumentoCliente, getNombreCompleto } from "@/utils"
 import type { Pedido } from "@/components/admin/pedidos/types"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
@@ -129,7 +130,7 @@ export default function SeguimientoExperience() {
         </div>
       </section>
 
-      <section data-navbar-theme="light" className="relative z-10 mx-auto -mt-20 max-w-5xl px-4">
+      <section id="consulta-seguimiento" data-navbar-theme="light" className="relative z-10 mx-auto -mt-20 max-w-5xl scroll-mt-28 px-4">
         <form onSubmit={handleSearch} className="rounded-[2rem] border border-white bg-white p-5 shadow-[0_28px_80px_-38px_rgba(9,43,32,.45)] md:p-7">
           <div className="mb-4 flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
             <div><label htmlFor="tracking-code" className="text-base font-bold text-[#173428]">Código de seguimiento</label><p className="mt-1 text-sm text-[#64756d]">Lo encontrarás en la confirmación de tu pedido.</p></div>
@@ -147,6 +148,18 @@ export default function SeguimientoExperience() {
           {error && <div role="alert" className="mt-4 flex items-start gap-3 rounded-2xl bg-[#fff1eb] p-4 text-sm text-[#934227]"><AlertCircle className="mt-0.5 h-5 w-5 shrink-0" /><span>{error}</span></div>}
         </form>
       </section>
+
+      <MoreExplorer
+        current="/seguimiento"
+        title="El avance de tu servicio, explicado sin intermediarios."
+        description="Consulta de manera privada la etapa actual, los hitos completados y la información de entrega disponible."
+        details={[
+          { label: "Para quién", text: "Clientes con un código de seguimiento activo." },
+          { label: "Qué puedes hacer", text: "Ingresar el código único recibido con la confirmación." },
+          { label: "Qué obtienes", text: "Conocer el estado real del pedido y lo que falta para completarlo." },
+        ]}
+        action={{ href: "#consulta-seguimiento", label: "Consultar ahora" }}
+      />
 
       {!pedido && (
         <section data-navbar-theme="light" className="mx-auto max-w-6xl px-4 py-16 md:py-20">

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { MoreExplorer } from "@/components/public/more-explorer"
 import Image from "next/image"
 import { useForm } from "react-hook-form"
 import { motion, AnimatePresence } from "framer-motion"
@@ -208,7 +209,7 @@ export default function TrabajaConNosotrosClient() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#f3f6f3] text-[#173b2b]">
-      <section data-navbar-theme="dark" className="relative min-h-[650px] overflow-hidden bg-[#0a3022] px-4 pb-24 pt-32 text-white sm:px-6 md:min-h-[690px] md:pt-36">
+      <section data-navbar-theme="dark" className="order-1 relative min-h-[500px] overflow-hidden bg-[#0a3022] px-5 pb-12 pt-24 text-white md:min-h-[550px] md:px-10 md:pt-28 lg:px-16">
         <div className="absolute inset-0">
           <Image
             src="/research/research-lab.png"
@@ -290,6 +291,18 @@ export default function TrabajaConNosotrosClient() {
           ))}
         </div>
       </section>
+
+      <MoreExplorer
+        current="/trabaja-con-nosotros"
+        title="Un proceso de selección claro desde el primer contacto."
+        description="Reúne oportunidades, requisitos, postulación y consulta de estado en una sola experiencia."
+        details={[
+          { label: "Para quién", text: "Estudiantes, técnicos y profesionales de ciencia y laboratorio." },
+          { label: "Qué puedes hacer", text: "Explorar vacantes, postular y seguir el proceso con tu documento." },
+          { label: "Qué obtienes", text: "Entender dónde puedes aportar y qué ocurrirá después de postular." },
+        ]}
+        action={{ href: "#convocatorias", label: "Ver oportunidades" }}
+      />
 
       <section id="estado" data-navbar-theme="light" className="scroll-mt-28 px-4 pb-8 pt-16 sm:px-6 md:pt-20">
         <div className="mx-auto max-w-3xl">
@@ -610,6 +623,16 @@ export default function TrabajaConNosotrosClient() {
           </div>
         </section>
       )}
+
+      <section data-navbar-theme="dark" className="order-5 bg-[#0c2f24] text-white">
+        <div className="grid lg:grid-cols-[.9fr_1.1fr]">
+          <div className="grid min-h-[420px] grid-cols-2">
+            <div className="relative overflow-hidden"><Image src="/research/research-lab.png" alt="Trabajo científico en AS Laboratorios" fill className="object-cover" sizes="45vw" /></div>
+            <div className="grid grid-rows-2"><div className="relative overflow-hidden"><Image src="/biotecnologia-vegetal/biotecnologia.jpeg" alt="Biotecnología vegetal en AS Laboratorios" fill className="object-cover" sizes="25vw" /></div><div className="relative overflow-hidden"><Image src="/servicios/servMicrobiologicos.jpeg" alt="Microbiología en AS Laboratorios" fill className="object-cover" sizes="25vw" /></div></div>
+          </div>
+          <div className="flex items-center px-6 py-12 md:px-12 lg:px-16"><div className="max-w-xl"><p className="text-xs font-semibold uppercase tracking-[.18em] text-[#9dc5ae]">Aprender haciendo</p><h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-.04em] md:text-5xl">El laboratorio también es un lugar para crecer.</h2><p className="mt-5 text-base leading-7 text-white/62">Buscamos criterio, responsabilidad y curiosidad. El trabajo combina protocolos, bioseguridad, documentación y colaboración entre especialidades.</p><div className="mt-8 grid gap-px bg-white/15 sm:grid-cols-3"><div className="bg-[#123a2e] px-4 py-5 text-sm font-medium">Rigor técnico</div><div className="bg-[#123a2e] px-4 py-5 text-sm font-medium">Trabajo en equipo</div><div className="bg-[#123a2e] px-4 py-5 text-sm font-medium">Aprendizaje continuo</div></div></div></div>
+        </div>
+      </section>
 
       {/* Dialog de Postulación por Puesto */}
       <Dialog open={isFormOpen} onOpenChange={(open) => !open && closeForm()}>

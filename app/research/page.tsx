@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import ResearchPageExperience from "./ResearchPageExperience"
+import ResearchEditorial from "@/components/research/research-editorial"
 
 export const metadata: Metadata = {
   title: "Investigación en Biotecnología Agrícola | AS Laboratorios",
@@ -84,7 +84,7 @@ export default function ResearchPage() {
   return (
     <>
       <Navbar overlay />
-      <ResearchPageExperience />
+      <ResearchEditorial />
       <Footer />
     </>
   )

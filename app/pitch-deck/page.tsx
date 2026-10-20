@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { constructMetadata } from "@/lib/metadata"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import PitchDeckExperience from "@/components/pitch/pitch-deck-experience"
+import PitchEditorial from "@/components/pitch/pitch-editorial"
 
 export const metadata: Metadata = constructMetadata({
   title: "Pitch de Innovación: Fondos y Concursos Financiados",
@@ -17,7 +17,7 @@ export default function PitchDeckPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar overlay />
-      <PitchDeckExperience />
+      <PitchEditorial />
       <Footer />
     </div>
   )
