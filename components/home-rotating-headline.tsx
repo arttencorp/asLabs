@@ -46,10 +46,15 @@ export default function HomeRotatingHeadline() {
 
   return (
     <div className="max-w-[720px]" translate="no">
+      <h1 className="mb-4 flex items-center gap-3 text-[11px] font-semibold tracking-[0.01em] text-[#b8d8c8] sm:text-xs">
+        <span className="h-2 w-2 bg-[#d5a34f]" aria-hidden="true" />
+        {language === "en" ? "Laboratory and biotechnology in Peru" : "Laboratorio y biotecnología en Perú"}
+        <span className="hidden h-px max-w-24 flex-1 bg-white/15 sm:block" aria-hidden="true" />
+      </h1>
       <div className="h-[150px] sm:h-[156px] lg:h-[174px]">
         <div className="grid">
           <AnimatePresence initial={false}>
-            <motion.h1
+            <motion.h2
               key={slide.title}
               className="col-start-1 row-start-1 max-w-[680px] text-[clamp(1.95rem,3.35vw,3.35rem)] font-medium leading-[1.025] tracking-[-0.045em] text-white"
               style={{ perspective: 900 }}
@@ -114,7 +119,7 @@ export default function HomeRotatingHeadline() {
                   })}
                 </span>
               ))}
-            </motion.h1>
+            </motion.h2>
           </AnimatePresence>
         </div>
 

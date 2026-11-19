@@ -6,15 +6,16 @@ import Footer from "@/components/footer"
 import AboutHeader from "@/components/about-us/about-header"
 import AboutNavigation from "@/components/about-us/about-navigation"
 import AboutMission from "@/components/about-us/about-mission"
+import AboutSites from "@/components/about-us/about-sites"
 import AboutValues from "@/components/about-us/about-values"
 import AboutOrganigram from "@/components/about-us/about-organigram"
 import AboutISO from "@/components/about-us/about-iso"
 import AboutCTA from "@/components/about-us/about-cta"
 
 export const metadata: Metadata = constructMetadata({
-  title: "AS Laboratorios: Biotecnología Agrícola desde 1997",
+  title: "Sobre AS Laboratorios | Historia, Sedes y Liderazgo",
   description:
-    "Conoce la historia, el directorio, la misión y el trabajo de AS Laboratorios en biotecnología agrícola, control biológico e investigación desde 1997.",
+    "Conoce la historia de AS Laboratorios desde 1997, sus sedes en Trujillo y Quito, misión, visión, liderazgo y capacidades científicas y productivas.",
   keywords: ["AS Laboratorios", "biotecnología agrícola Trujillo", "laboratorio peruano", "control biológico", "investigación agrícola", "directorio AS Labs"],
   path: "/sobre-nosotros",
   image: "/about-us-preview.png",
@@ -32,6 +33,7 @@ function SobreNosotrosContent() {
       <AboutHeader />
       <AboutNavigation />
       <AboutMission />
+      <AboutSites />
       <AboutOrganigram />
       <AboutISO />
       <AboutValues />
