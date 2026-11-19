@@ -41,7 +41,6 @@ type NavGroup = {
 
 const navigation: NavGroup[] = [
   { label: "Nosotros", href: "/sobre-nosotros" },
-  { label: "Centro de Investigación", href: "/centro-investigacion" },
   {
     label: "Servicios",
     href: "/servicios",
@@ -49,7 +48,6 @@ const navigation: NavGroup[] = [
       { label: "Fitopatología", href: "/servicios/fitopatologia", description: "Diagnóstico de patógenos", icon: Microscope },
       { label: "Medio ambiente", href: "/servicios/medio-ambiente", description: "Análisis microbiológicos", icon: Leaf },
       { label: "Microbiológicos", href: "/servicios/microbiologicos", description: "Alimentos, agua y superficies", icon: Microscope },
-      { label: "Fisicoquímica y bioquímica", href: "/servicios/fisicoquimicos-bioquimicos", description: "Enzimas, proteínas y lípidos", icon: FlaskConical },
       { label: "Biotecnología vegetal", href: "/servicios/biotecnologia-vegetal", description: "Cultivo de tejidos in vitro", icon: Leaf },
       { label: "Bacteriología", href: "/servicios/bacteriologia-general", description: "Suspensiones y fermentación", icon: FlaskConical },
       { label: "Apoyo a la investigación", href: "/servicios/apoyo-investigacion", description: "Protocolos e identificación molecular", icon: Microscope },
@@ -58,11 +56,11 @@ const navigation: NavGroup[] = [
     ],
   },
   { label: "Plantines", href: "/plantines" },
-  { label: "Equipos", href: "/kits-reactivos" },
+  { label: "Kits", href: "/kits-reactivos" },
   {
     label: "Cepas",
     links: [
-      { label: "Cultivos y Cepas", href: "/cepas/identificadas", description: "Identificación fenotípica y genotípica", icon: Microscope },
+      { label: "Cepas identificadas", href: "/cepas/identificadas", description: "Cultivos locales certificados", icon: Microscope },
       { label: "Cepas de referencia", href: "/cepas/atcc", description: "Disponibles para investigación", icon: FlaskConical },
     ],
   },
@@ -126,11 +124,10 @@ const ecuadorNavigation: NavGroup[] = [
 
 const englishNavText: Record<string, string> = {
   "Nosotros": "About",
-  "Centro de Investigación": "Research Center",
   "Servicios": "Services",
   "Catálogo": "Catalog",
   "Plantines": "Plantlets",
-  "Equipos": "Equipment",
+  "Kits": "Kits",
   "Cepas": "Strains",
   "Investigación": "Research",
   "Proyectos científicos en curso": "Ongoing scientific projects",
@@ -142,8 +139,6 @@ const englishNavText: Record<string, string> = {
   "Medio ambiente": "Environmental analysis",
   "Análisis microbiológicos": "Microbiological testing",
   "Microbiológicos": "Microbiology",
-  "Fisicoquímica y bioquímica": "Physicochemistry and biochemistry",
-  "Enzimas, proteínas y lípidos": "Enzymes, proteins and lipids",
   "Alimentos, agua y superficies": "Food, water and surfaces",
   "Biotecnología vegetal": "Plant biotechnology",
   "Cultivo de tejidos in vitro": "In vitro tissue culture",
@@ -160,8 +155,8 @@ const englishNavText: Record<string, string> = {
   "Material vegetal uniforme": "Uniform plant material",
   "Control biológico": "Biological control",
   "Biocontroladores y formulaciones": "Biocontrol and formulations",
-  "Cultivos y Cepas": "Cultures & strains",
-  "Identificación fenotípica y genotípica": "Phenotypic and genotypic identification",
+  "Cepas identificadas": "Identified strains",
+  "Cultivos locales certificados": "Certified local cultures",
   "Cepas de referencia": "Reference strains",
   "Disponibles para investigación": "Available for research",
   "Biología molecular": "Molecular biology",
