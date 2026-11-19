@@ -6,47 +6,23 @@ import { useLanguage } from "@/components/language-experience"
 
 const slides = {
   es: [
-  {
-    title: "Análisis fisicoquímicos para tus cultivos",
-    subtitle: "Conoce el estado de tus muestras y toma decisiones agrícolas con mejor información.",
-  },
-  {
-    title: "Detecta plagas y enfermedades con precisión",
-    subtitle: "Identificamos patógenos a tiempo para proteger la salud y el rendimiento de tus cultivos.",
-  },
-  {
-    title: "Plantas in vitro y calidad genética asegurada",
-    subtitle: "Material vegetal uniforme, sano y producido bajo condiciones controladas.",
-  },
-  {
-    title: "Banano, piña, pitahaya y más clones in vitro",
-    subtitle: "Clones seleccionados de especies con valor productivo, comercial y ornamental.",
-  },
-  {
-    title: "Análisis para tesistas e investigadores",
-    subtitle: "Acompañamiento técnico para tesis, ensayos y proyectos científicos.",
-  },
+    {
+      title: "Análisis enzimáticos y bioquímicos para investigación",
+      subtitle: "Cuantificamos actividad enzimática, metabolitos y parámetros bioquímicos para ensayos, tesis y desarrollo científico.",
+    },
+    {
+      title: "Genómica y microbiología para nuevos descubrimientos",
+      subtitle: "Integramos identificación molecular, secuenciamiento y caracterización microbiana con soporte técnico especializado.",
+    },
   ],
   en: [
     {
-      title: "Physicochemical analysis for crops",
-      subtitle: "Understand the condition of your samples and make better-informed agricultural decisions.",
+      title: "Enzymatic and biochemical analysis for research",
+      subtitle: "We quantify enzymatic activity, metabolites and biochemical parameters for trials, theses and scientific development.",
     },
     {
-      title: "Precision detection of pests and diseases",
-      subtitle: "We identify pathogens early to protect the health and performance of your crops.",
-    },
-    {
-      title: "In vitro plants with assured genetic quality",
-      subtitle: "Uniform, healthy plant material produced under controlled conditions.",
-    },
-    {
-      title: "Banana, pineapple and more in vitro clones",
-      subtitle: "Selected clones of species with productive, commercial and ornamental value.",
-    },
-    {
-      title: "Laboratory analysis for research",
-      subtitle: "Technical support for theses, trials and scientific projects.",
+      title: "Genomics and microbiology for new discoveries",
+      subtitle: "We integrate molecular identification, sequencing and microbial characterization with specialized technical support.",
     },
   ],
 }
@@ -70,12 +46,12 @@ export default function HomeRotatingHeadline() {
 
   return (
     <div className="max-w-[720px]" translate="no">
-      <div className="h-[138px] sm:h-[152px] lg:h-[190px] xl:h-[176px]">
+      <div className="h-[150px] sm:h-[156px] lg:h-[174px]">
         <div className="grid">
           <AnimatePresence initial={false}>
             <motion.h1
               key={slide.title}
-              className="col-start-1 row-start-1 text-[clamp(2rem,3.7vw,3.65rem)] font-medium leading-[1.015] tracking-[-0.05em] text-white"
+              className="col-start-1 row-start-1 max-w-[680px] text-[clamp(1.95rem,3.35vw,3.35rem)] font-medium leading-[1.025] tracking-[-0.045em] text-white"
               style={{ perspective: 900 }}
               initial={reduceMotion ? { opacity: 0 } : "hidden"}
               animate={reduceMotion ? { opacity: 1 } : "visible"}
@@ -144,7 +120,22 @@ export default function HomeRotatingHeadline() {
 
       </div>
 
-      <div className="mt-5 flex items-center gap-2" aria-label={language === "en" ? "Homepage headlines" : "Titulares del Home"}>
+      <div className="relative h-[52px] max-w-[610px]">
+        <AnimatePresence initial={false} mode="wait">
+          <motion.p
+            key={slide.subtitle}
+            initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 7 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -5 }}
+            transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-x-0 top-0 text-[12px] leading-5 text-white/68 sm:text-[13px] sm:leading-6"
+          >
+            {slide.subtitle}
+          </motion.p>
+        </AnimatePresence>
+      </div>
+
+      <div className="mt-3 flex items-center gap-2" aria-label={language === "en" ? "Homepage headlines" : "Titulares del Home"}>
         <span className="mr-2 text-[9px] tabular-nums text-white/45">0{activeSlide + 1} / 0{localizedSlides.length}</span>
         {localizedSlides.map((item, index) => (
           <button
