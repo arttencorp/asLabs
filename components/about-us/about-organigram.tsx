@@ -22,6 +22,21 @@ import { ScrollReveal, StaggerGroup, StaggerItem } from "@/components/ui/scroll-
 const directorio = teamData
   .flatMap((section) => section.members)
   .filter((member) => member.id === 'natasha-escobar' || member.id === 'antonio-guevara')
+  .map((member) => member.id === 'antonio-guevara'
+    ? {
+        ...member,
+        lastName: 'Guevara Escobar',
+        role: 'Administrador',
+        bio: 'Antonio Víctor Gabriel Guevara Escobar es Administrador de AS Laboratorios. Su trabajo se concentra en la planificación administrativa, el control presupuestal, la organización financiera, las compras, la cadena de suministro, la gestión del personal y el seguimiento de la operación. Coordina recursos y procesos para que las áreas de la empresa cuenten con insumos, información y capacidad de ejecución en los plazos previstos.',
+        specialties: ['Administración y presupuestos', 'Compras y cadena de suministro', 'Planificación financiera'],
+      }
+    : { ...member, role: 'Bióloga · Gerente General · CBP 3102' })
+
+const supportTeam = [
+  { area: 'Gestión de sede', name: 'Ing. Luis Enrrique Cabrera', role: 'Gerente de Sucursal · Sede San Isidro', email: 'luisg@aslaboratorios.com' },
+  { area: 'Soporte administrativo', name: 'Ing. Ana Sofia Jimenez', role: 'Asistente de Sucursal', email: 'ajimenez@aslaboratorios.com' },
+  { area: 'Infraestructura digital', name: 'Ing. Gino Guevara Villalobos', role: 'Sistemas y Tecnologías', email: 'ginov@aslaboratorios.com' },
+]
 
 function getAreaColor(area: string): string {
   return area === 'Gerencia' ? '#2e7048' : '#315f80'
@@ -69,27 +84,25 @@ export default function AboutOrganigram() {
   }
 
   return (
-    <section id="organigrama" data-navbar-theme="light" className="relative w-full scroll-mt-32 overflow-hidden bg-[#f8f6f1] px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-      <div className="pointer-events-none absolute -left-40 top-24 h-96 w-96 rounded-full bg-[#9fc8a5]/15 blur-3xl" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-[430px] w-[430px] rounded-full bg-[#e2b67d]/15 blur-3xl" />
+    <section id="organigrama" data-navbar-theme="light" className="relative w-full scroll-mt-32 overflow-hidden bg-[#eef2ee] px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
 
       <div className="relative z-10 mx-auto max-w-7xl">
         <ScrollReveal className="grid gap-7 lg:grid-cols-[1fr_.78fr] lg:items-end">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#cadbce] bg-white/75 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.17em] text-[#2e7048] shadow-sm backdrop-blur-md">
+            <span className="inline-flex items-center gap-2 text-[11px] font-semibold text-[#2e7048]">
               <ShieldCheck className="h-4 w-4" />
               Liderazgo y dirección
             </span>
-            <h2 className="mt-6 text-4xl font-black tracking-[-0.035em] text-[#203d30] sm:text-5xl">Directorio</h2>
+            <h2 className="mt-4 max-w-3xl text-[clamp(2.1rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-.045em] text-[#203d30]">Liderazgo con responsabilidades definidas.</h2>
             <p className="mt-4 max-w-2xl text-base leading-7 text-[#68786f] sm:text-lg">
-              Dos perfiles que articulan la experiencia científica, la gestión empresarial y la visión de largo plazo de AS Laboratorios.
+              La Gerencia General conduce la visión institucional y técnica; la Administración organiza recursos, presupuestos, abastecimiento y continuidad operativa.
             </p>
           </div>
 
-          <div className="rounded-[24px] border border-white/90 bg-white/75 p-5 shadow-[0_22px_60px_-42px_rgba(55,57,42,.44)] backdrop-blur-lg sm:p-6">
+          <div className="border-l-2 border-[#d5a34f] bg-white/65 p-5 sm:p-6">
             <div className="flex items-start gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#e6f0e8] text-[#2e7048]"><Sparkles className="h-5 w-5" /></span>
-              <div><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#8d7f6e]">Conoce sus perfiles</p><p className="mt-2 text-sm font-semibold leading-6 text-[#4f6258]">Abre cada ficha para revisar trayectoria, responsabilidades, especialidades y formación.</p></div>
+              <span className="grid h-10 w-10 shrink-0 place-items-center border border-[#cbd7cf] text-[#2e7048]"><Sparkles className="h-4 w-4" /></span>
+              <div><p className="text-[11px] font-semibold text-[#8d6d3e]">Perfiles de dirección</p><p className="mt-2 text-sm leading-6 text-[#4f6258]">Cada ficha distingue trayectoria, formación, responsabilidades actuales y ámbito de decisión.</p></div>
             </div>
           </div>
         </ScrollReveal>
@@ -102,10 +115,15 @@ export default function AboutOrganigram() {
           ))}
         </StaggerGroup>
 
+        <ScrollReveal className="mt-12 border-t border-[#cbd5ce] pt-7">
+          <div className="grid gap-5 lg:grid-cols-[.72fr_1.28fr] lg:items-end"><div><p className="text-[11px] font-semibold text-[#2e7048]">Administración y soporte operativo</p><h3 className="mt-2 text-2xl font-medium tracking-[-.03em] text-[#203d30] sm:text-3xl">Responsables de sede y sistemas.</h3></div><p className="max-w-2xl text-sm leading-6 text-[#68786f] lg:justify-self-end">El equipo administrativo coordina la operación de sede, la atención interna y la continuidad de la infraestructura tecnológica.</p></div>
+          <div className="mt-6 grid border-l border-t border-[#cbd5ce] md:grid-cols-3">{supportTeam.map((member) => <article key={member.email} className="flex min-h-[190px] flex-col border-b border-r border-[#cbd5ce] bg-white p-5 sm:p-6"><span className="text-[9px] font-semibold text-[#8d6d3e]">{member.area}</span><h4 className="mt-5 text-lg font-medium leading-tight tracking-[-.02em] text-[#203d30]">{member.name}</h4><p className="mt-2 text-xs font-semibold leading-5 text-[#557064]">{member.role}</p><a href={`mailto:${member.email}`} className="mt-auto inline-flex items-center gap-2 pt-6 text-[11px] font-semibold text-[#2e7048] transition-colors hover:text-[#173f2e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2e7048] focus-visible:ring-offset-2"><Mail className="h-3.5 w-3.5" />{member.email}</a></article>)}</div>
+        </ScrollReveal>
+
         <ScrollReveal className="mt-7" delay={0.08}>
-          <div className="flex flex-col gap-3 rounded-2xl border border-[#ded5c8] bg-white/45 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <p className="text-xs font-semibold leading-5 text-[#68786f]">El Directorio conecta la experiencia acumulada de la empresa con nuevas capacidades científicas, digitales y de gestión.</p>
-            <span className="shrink-0 text-[10px] font-black uppercase tracking-[0.16em] text-[#2e7048]">Dirección AS Laboratorios</span>
+          <div className="flex flex-col gap-3 border-y border-[#cbd5ce] px-1 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs leading-5 text-[#68786f]">La dirección conecta estrategia, conocimiento técnico, personas y recursos con una operación documentada.</p>
+            <span className="shrink-0 text-[10px] font-semibold text-[#2e7048]">Dirección AS Laboratorios</span>
           </div>
         </ScrollReveal>
       </div>
@@ -120,35 +138,35 @@ function DirectorioCard({ member, onOpen }: { member: TeamMember; onOpen: () => 
   const summary = member.bio?.split('\n\n')[0]
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[30px] border border-white/90 bg-white shadow-[0_24px_65px_-42px_rgba(57,51,38,.45)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_32px_75px_-42px_rgba(57,51,38,.54)] sm:grid sm:grid-cols-[.82fr_1.18fr]">
-      <div className="relative min-h-[360px] overflow-hidden bg-[#e8ece8] sm:min-h-[470px]">
+    <article className="group flex h-full flex-col overflow-hidden border border-[#cbd5ce] bg-white sm:grid sm:grid-cols-[.76fr_1.24fr]">
+      <div className="relative min-h-[330px] overflow-hidden bg-[#e8ece8] sm:min-h-[430px]">
         {member.image ? (
           <Image src={member.image} alt={`${member.name} ${member.lastName}`} fill className="object-cover transition-transform duration-700 group-hover:scale-[1.035]" sizes="(max-width: 640px) 100vw, 40vw" />
         ) : (
           <div className="grid h-full place-items-center text-5xl font-black text-[#9dad9f]">{member.name[0]}{member.lastName[0]}</div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0d2d21]/70 via-transparent to-transparent" />
-        <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl border border-white/20 bg-[#103627]/85 px-4 py-3 text-white shadow-xl backdrop-blur-xl">
-          <div><p className="text-[9px] font-bold uppercase tracking-[0.16em] text-white/55">Área</p><p className="mt-1 text-xs font-bold">{member.area}</p></div>
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/10"><BriefcaseBusiness className="h-4 w-4" /></span>
+        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t border-white/20 bg-[#103627]/90 px-4 py-3 text-white backdrop-blur-xl">
+          <div><p className="text-[9px] text-white/55">Área de responsabilidad</p><p className="mt-1 text-xs font-semibold">{member.area}</p></div>
+          <span className="grid h-8 w-8 place-items-center border border-white/15"><BriefcaseBusiness className="h-4 w-4" /></span>
         </div>
       </div>
 
       <div className="flex flex-col p-6 sm:p-7">
-        <span className="w-fit rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.13em]" style={{ color: accent, backgroundColor: `${accent}12` }}>Directorio</span>
-        <h3 className="mt-5 text-2xl font-black leading-[1.08] tracking-[-0.025em] text-[#203d30] sm:text-3xl">{member.name}<br />{member.lastName}</h3>
-        <p className="mt-3 text-sm font-bold" style={{ color: accent }}>{member.role}</p>
+        <span className="w-fit border-b border-[#d6ddd8] pb-2 text-[10px] font-semibold" style={{ color: accent }}>Dirección</span>
+        <h3 className="mt-5 text-2xl font-medium leading-[1.08] tracking-[-.03em] text-[#203d30] sm:text-3xl">{member.name}<br />{member.lastName}</h3>
+        <p className="mt-3 text-sm font-semibold" style={{ color: accent }}>{member.role}</p>
         {summary && <p className="mt-5 line-clamp-4 text-sm leading-6 text-[#697970]">{summary}</p>}
 
         <div className="mt-6 flex flex-wrap gap-2">
           {(member.specialties || []).slice(0, 3).map((specialty) => (
-            <span key={specialty} className="rounded-full border border-[#dce5de] bg-[#f7f9f7] px-3 py-1.5 text-[10px] font-bold text-[#5a6d62]">{specialty}</span>
+            <span key={specialty} className="border border-[#dce5de] bg-[#f7f9f7] px-3 py-1.5 text-[10px] font-semibold text-[#5a6d62]">{specialty}</span>
           ))}
         </div>
 
         <div className="mt-auto flex items-center justify-between gap-3 border-t border-[#e6ebe7] pt-6">
-          <a href={`mailto:${member.email}`} className="grid h-10 w-10 place-items-center rounded-xl border border-[#dce5de] text-[#607269] transition hover:border-[#9ebbA4] hover:bg-[#edf4ee] hover:text-[#2e7048]" aria-label={`Enviar correo a ${member.name}`}><Mail className="h-4 w-4" /></a>
-          <button type="button" onClick={onOpen} className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#173f2e] px-4 text-xs font-bold text-white transition hover:bg-[#245c40]">
+          <a href={`mailto:${member.email}`} className="grid h-10 w-10 place-items-center border border-[#dce5de] text-[#607269] transition hover:border-[#9ebbA4] hover:bg-[#edf4ee] hover:text-[#2e7048]" aria-label={`Enviar correo a ${member.name}`}><Mail className="h-4 w-4" /></a>
+          <button type="button" onClick={onOpen} className="flex h-11 flex-1 items-center justify-center gap-2 bg-[#173f2e] px-4 text-xs font-semibold text-white transition hover:bg-[#245c40]">
             Ver perfil completo
             <ArrowUpRight className="h-4 w-4" />
           </button>
