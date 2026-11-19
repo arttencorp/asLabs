@@ -26,6 +26,8 @@ import HomeResearchSection from "@/components/home-research-section"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 const trustLogos = [
+  { src: "/trustUs/hortifrut.png", alt: "Hortifrut" },
+  { src: "/trustUs/crops-protection.png", alt: "Crops Protection" },
   { src: "/trustUs/soldelaredo.jpg", alt: "Sol de Laredo" },
   { src: "/trustUs/CGIAR.jpeg", alt: "Centro Internacional de la Papa" },
   { src: "/trustUs/manuelita.jpg", alt: "Manuelita" },
@@ -43,7 +45,7 @@ const capabilities = [
   { code: "INV", title: "Plantines in vitro", description: "Material clonal uniforme y producido bajo control técnico.", image: "/new/HEADER.webp", href: "/plantines", icon: Sprout },
   { code: "SUP", title: "Kits, reactivos y medios de cultivo", description: "Suministros seleccionados para rutinas de laboratorio.", image: "/offer/insumosLab.jpeg", href: "/kits-reactivos", icon: FlaskConical },
   { code: "EQP", title: "Equipos de laboratorio", description: "Instrumentación y consumibles para investigación y control.", image: "/lab-equipment.png", href: "/kits-reactivos/equipos-de-laboratorio", icon: Gauge },
-  { code: "ALI", title: "Análisis enzimáticos y de alimentos", description: "Evaluación de calidad, composición y procesos alimentarios.", image: "/servicios/image.png", href: "/servicios/microbiologicos", icon: Beaker },
+  { code: "ALI", title: "Análisis enzimáticos, proteínas y lípidos", description: "Composición, actividad enzimática y evaluación de alimentos.", image: "/servicios/image.png", href: "/servicios/fisicoquimicos-bioquimicos", icon: Beaker },
   { code: "DEV", title: "Aislamiento y selección de cepas", description: "Aislados, evaluación funcional, identificación y seguimiento.", image: "/new/BiotecnologiaVegetal.webp", href: "/servicios/aislamiento-seleccion-cepas", icon: PackageSearch },
 ]
 
@@ -81,7 +83,6 @@ export default function ClientPage() {
         <div className="relative mx-auto flex min-h-[690px] max-w-[1480px] lg:min-h-[720px]">
           <div className="relative z-10 flex w-full flex-col justify-center px-5 pb-44 pt-28 sm:px-8 lg:px-12 lg:pb-40 lg:pt-32 xl:px-16">
             <motion.div initial={reduceMotion ? false : { opacity: 0, x: -22 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }} className="max-w-[700px]">
-              <div className="mb-6 flex items-center gap-3 text-[11px] font-medium text-[#b8d8c8]"><span className="h-2 w-2 bg-[#d5a34f]" aria-hidden="true" />Ciencia aplicada desde 1997<span className="h-px max-w-28 flex-1 bg-white/15" aria-hidden="true" /></div>
               <HomeRotatingHeadline />
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link href="#capacidades" className="group inline-flex h-11 items-center gap-3 bg-[#d5a34f] px-5 text-xs font-semibold text-[#10251e] transition-colors hover:bg-[#e4b866] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Explorar capacidades <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
@@ -112,8 +113,8 @@ export default function ClientPage() {
       <section id="capacidades" data-navbar-theme="light" className="relative bg-[#f5f7f4] py-12 sm:py-14 lg:py-16">
         <div className="relative mx-auto max-w-[1360px] px-5 sm:px-8">
           <ScrollReveal className="grid gap-4 border-b border-[#cfd8d2] pb-6 lg:grid-cols-[1fr_.72fr] lg:items-end">
-            <div><p className="text-[11px] font-semibold text-[#0b7a55]">Capacidades científicas</p><h2 className="mt-2 max-w-[720px] text-[clamp(1.8rem,3.2vw,3.15rem)] font-medium leading-[1.02] tracking-[-0.04em] text-[#17211d]">De la muestra a una respuesta aplicable.</h2></div>
-            <p className="max-w-[500px] text-xs leading-6 text-[#5c6c64] lg:justify-self-end">Análisis, genómica, cultivos microbianos, material vegetal y suministros integrados en un mismo ecosistema técnico.</p>
+            <div><p className="text-[11px] font-semibold text-[#0b7a55]">Capacidades científicas</p><h2 className="mt-2 max-w-[720px] text-[clamp(1.8rem,3.2vw,3.15rem)] font-medium leading-[1.02] tracking-[-0.04em] text-[#17211d]">Análisis y servicios de laboratorio para cada tipo de muestra.</h2></div>
+            <p className="max-w-[500px] text-xs leading-6 text-[#5c6c64] lg:justify-self-end">Análisis de agua y alimentos, microbiología, PCR, genómica, cultivos microbianos, material vegetal y suministros científicos en Perú.</p>
           </ScrollReveal>
 
           <div className="mt-6 grid border-l border-t border-[#cfd8d2] sm:grid-cols-2 xl:grid-cols-4">

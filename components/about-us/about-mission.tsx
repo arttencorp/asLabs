@@ -5,9 +5,9 @@ import { Eye, FlaskConical, Sprout, Target } from "lucide-react"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
 const milestones = [
-  { year: "1997", title: "Origen", text: "AS Laboratorios nace en Trujillo con una visión centrada en biotecnología vegetal.", icon: Sprout },
-  { year: "Evolución", title: "Capacidades conectadas", text: "Integramos microbiología, diagnóstico agrícola, control biológico y soporte a investigación.", icon: FlaskConical },
-  { year: "Hoy", title: "Una plataforma científica", text: "Laboratorio, vivero, campo y genómica operan como un flujo técnico continuo.", icon: Target },
+  { year: "1997", title: "Origen", text: "AS Laboratorios fue fundada en Perú para responder a desafíos productivos mediante biotecnología y control biológico.", icon: Sprout },
+  { year: "Evolución", title: "Capacidades conectadas", text: "La operación incorporó análisis, diagnóstico, producción vegetal, genómica y soporte a investigación.", icon: FlaskConical },
+  { year: "Hoy", title: "Una plataforma integrada", text: "Laboratorio, vivero, campo y gestión técnica trabajan como un sistema continuo y trazable.", icon: Target },
 ]
 
 export default function AboutMission() {
@@ -16,7 +16,7 @@ export default function AboutMission() {
       <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
         <ScrollReveal className="grid gap-7 border-b border-[#cfd8d2] pb-9 lg:grid-cols-[1fr_.78fr] lg:items-end">
           <div><p className="text-[11px] font-semibold text-[#0b7a55]">Nuestra historia</p><h2 className="mt-3 max-w-[820px] text-[clamp(2.1rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-.045em] text-[#17211d]">Una trayectoria que amplió su alcance sin perder el propósito.</h2></div>
-          <p className="max-w-[520px] text-sm leading-7 text-[#5d6c64] lg:justify-self-end">Convertimos conocimiento científico en soluciones para la agricultura, desde la propagación vegetal hasta el diagnóstico molecular.</p>
+          <p className="max-w-[520px] text-sm leading-7 text-[#5d6c64] lg:justify-self-end">Crecimos por capacidades, no por divisiones aisladas: cada área aporta a una misma respuesta técnica para empresas, productores e investigadores.</p>
         </ScrollReveal>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.08fr_.92fr] lg:items-stretch">
@@ -29,8 +29,8 @@ export default function AboutMission() {
           <div className="border-t border-[#cfd8d2]">
             {milestones.map((milestone) => <div key={milestone.year} className="grid grid-cols-[48px_1fr] gap-4 border-b border-[#cfd8d2] py-6 sm:grid-cols-[58px_1fr] sm:py-8"><span className="grid h-10 w-10 place-items-center border border-[#b9c9bf] text-[#0b7a55]"><milestone.icon className="h-4 w-4" /></span><div><p className="text-[10px] font-semibold text-[#b16f2d]">{milestone.year}</p><h3 className="mt-1 text-lg font-medium tracking-[-.02em] text-[#17211d]">{milestone.title}</h3><p className="mt-2 text-xs leading-6 text-[#627168]">{milestone.text}</p></div></div>)}
             <div className="grid border-b border-[#cfd8d2] sm:grid-cols-2">
-              <div className="border-b border-[#cfd8d2] p-5 sm:border-b-0 sm:border-r sm:p-6"><Target className="h-5 w-5 text-[#0b7a55]" /><h3 className="mt-5 text-lg font-medium">Misión</h3><p className="mt-2 text-xs leading-6 text-[#627168]">Desarrollar soluciones biotecnológicas rigurosas y sostenibles para agricultura, ambiente e investigación.</p></div>
-              <div className="p-5 sm:p-6"><Eye className="h-5 w-5 text-[#d5a34f]" /><h3 className="mt-5 text-lg font-medium">Visión</h3><p className="mt-2 text-xs leading-6 text-[#627168]">Ser un referente latinoamericano por la calidad científica, innovación y capacidad de aplicación.</p></div>
+              <div className="border-b border-[#cfd8d2] p-5 sm:border-b-0 sm:border-r sm:p-6"><Target className="h-5 w-5 text-[#0b7a55]" /><h3 className="mt-5 text-lg font-medium">Misión</h3><p className="mt-2 text-xs leading-6 text-[#627168]">Transformar preguntas técnicas en resultados, materiales y procesos que puedan aplicarse con claridad y responsabilidad.</p></div>
+              <div className="p-5 sm:p-6"><Eye className="h-5 w-5 text-[#d5a34f]" /><h3 className="mt-5 text-lg font-medium">Visión</h3><p className="mt-2 text-xs leading-6 text-[#627168]">Construir una plataforma latinoamericana reconocida por integrar ciencia, operación y acompañamiento técnico.</p></div>
             </div>
           </div>
         </div>

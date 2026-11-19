@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Award, BookOpen, Sparkles, Users } from 'lucide-react'
+import { Award, BookOpen, Building2, Sparkles, Users } from 'lucide-react'
 
 export default function AboutNavigation() {
   const [activeSection, setActiveSection] = useState('mision')
@@ -16,7 +16,7 @@ export default function AboutNavigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['mision', 'organigrama', 'estandares', 'valores']
+      const sections = ['mision', 'sedes', 'organigrama', 'estandares', 'valores']
       for (const id of sections) {
         const element = document.getElementById(id)
         if (element) {
@@ -34,6 +34,7 @@ export default function AboutNavigation() {
 
   const sections = [
     { id: 'mision', label: 'Historia', icon: BookOpen },
+    { id: 'sedes', label: 'Sedes', icon: Building2 },
     { id: 'organigrama', label: 'Directorio', icon: Users },
     { id: 'estandares', label: 'Estándares', icon: Award },
     { id: 'valores', label: 'Valores', icon: Sparkles },
