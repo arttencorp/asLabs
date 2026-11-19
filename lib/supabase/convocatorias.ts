@@ -1,4 +1,10 @@
-import { supabase } from './client'
+import { createAuthenticatedClient, supabase } from './client'
+import {
+    CONVOCATORIA_ETAPAS,
+    CONVOCATORIAS_RESULTADOS_BUCKET,
+    MAX_RESULTADO_PDF_BYTES,
+    obtenerEtapaConvocatoria,
+} from '@/lib/convocatorias-resultados'
 import type {
     PuestoDatabase,
     AreaInteres,
@@ -7,6 +13,10 @@ import type {
     PostulanteDatabase,
     EstadoPostulacion,
     TipoDocumentoIdentidad,
+    ConvocatoriaEtapa,
+    ConvocatoriaPublica,
+    ConvocatoriaResultadoDatabase,
+    ConvocatoriaResultadoPublico,
 } from '@/types/database'
 
 // ============================================
@@ -555,3 +565,181 @@ export async function consultarEstadoPostulacion(nroDocumento: string): Promise<
 
     return postulantes
 }
+
+// ============================================
+// RESULTADOS POR ETAPA DE CONVOCATORIA
+// ============================================
+
+export async function obtenerResultadosConvocatoria(
+    puestoId: string,
+): Promise<ConvocatoriaResultadoDatabase[]> {
+    const client = createAuthenticatedClient()
+    const { data, error } = await client
+        .from('Convocatoria_Resultado')
+        .select('*')
+        .eq('puest_id_int', puestoId)
+        .order('etapa', { ascending: true })
+
+    if (error) throw error
+    return (data || []) as ConvocatoriaResultadoDatabase[]
+}
+
+export async function subirResultadoConvocatoria(params: {
+    puestoId: string
+    etapa: ConvocatoriaEtapa
+    archivo: File
+}): Promise<ConvocatoriaResultadoDatabase> {
+    const { puestoId, etapa, archivo } = params
+    const esPdf = archivo.type === 'application/pdf' || archivo.name.toLowerCase().endsWith('.pdf')
+    if (!esPdf) throw new Error('Solo se permiten archivos PDF.')
+    if (archivo.size > MAX_RESULTADO_PDF_BYTES) throw new Error('El PDF no puede superar los 10 MB.')
+
+    const client = createAuthenticatedClient()
+    const { data: actual, error: actualError } = await client
+        .from('Convocatoria_Resultado')
+        .select('*')
+        .eq('puest_id_int', puestoId)
+        .eq('etapa', etapa)
+        .maybeSingle()
+
+    if (actualError) throw actualError
+
+    const archivoPath = `${puestoId}/etapa-${etapa}/${crypto.randomUUID()}.pdf`
+    const { error: uploadError } = await client.storage
+        .from(CONVOCATORIAS_RESULTADOS_BUCKET)
+        .upload(archivoPath, archivo, {
+            contentType: 'application/pdf',
+            cacheControl: '3600',
+            upsert: false,
+        })
+
+    if (uploadError) throw uploadError
+
+    const etapaConfig = obtenerEtapaConvocatoria(etapa)
+    const { data, error: saveError } = await client
+        .from('Convocatoria_Resultado')
+        .upsert({
+            puest_id_int: puestoId,
+            etapa,
+            titulo: etapaConfig.titulo,
+            archivo_path: archivoPath,
+            archivo_nombre: archivo.name,
+            publicado_bool: actual?.publicado_bool ?? false,
+            publicado_at_dt: actual?.publicado_at_dt ?? null,
+        }, { onConflict: 'puest_id_int,etapa' })
+        .select('*')
+        .single()
+
+    if (saveError) {
+        await client.storage.from(CONVOCATORIAS_RESULTADOS_BUCKET).remove([archivoPath])
+        throw saveError
+    }
+
+    if (actual?.archivo_path && actual.archivo_path !== archivoPath) {
+        await client.storage.from(CONVOCATORIAS_RESULTADOS_BUCKET).remove([actual.archivo_path])
+    }
+
+    return data as ConvocatoriaResultadoDatabase
+}
+
+export async function cambiarPublicacionResultado(
+    resultadoId: string,
+    publicado: boolean,
+): Promise<ConvocatoriaResultadoDatabase> {
+    const client = createAuthenticatedClient()
+    const { data, error } = await client
+        .from('Convocatoria_Resultado')
+        .update({
+            publicado_bool: publicado,
+            publicado_at_dt: publicado ? new Date().toISOString() : null,
+        })
+        .eq('resultado_id', resultadoId)
+        .select('*')
+        .single()
+
+    if (error) throw error
+    return data as ConvocatoriaResultadoDatabase
+}
+
+export async function eliminarResultadoConvocatoria(resultadoId: string): Promise<void> {
+    const client = createAuthenticatedClient()
+    const { data: resultado, error: readError } = await client
+        .from('Convocatoria_Resultado')
+        .select('archivo_path')
+        .eq('resultado_id', resultadoId)
+        .single()
+
+    if (readError) throw readError
+
+    const { error } = await client
+        .from('Convocatoria_Resultado')
+        .delete()
+        .eq('resultado_id', resultadoId)
+
+    if (error) throw error
+    if (resultado?.archivo_path) {
+        await client.storage.from(CONVOCATORIAS_RESULTADOS_BUCKET).remove([resultado.archivo_path])
+    }
+}
+
+export async function obtenerUrlResultado(
+    archivoPath: string,
+    autenticado = false,
+    descargar = false,
+): Promise<string> {
+    const client = autenticado ? createAuthenticatedClient() : supabase
+    const { data, error } = await client.storage
+        .from(CONVOCATORIAS_RESULTADOS_BUCKET)
+        .createSignedUrl(archivoPath, 60 * 15, descargar ? { download: true } : undefined)
+
+    if (error) throw error
+    return data.signedUrl
+}
+
+export async function obtenerConvocatoriasConResultadosPublicados(): Promise<ConvocatoriaPublica[]> {
+    const { data, error } = await supabase
+        .from('Convocatoria_Resultado')
+        .select(`
+            *,
+            Puesto!inner(
+                *,
+                modalidad_trabajo(*),
+                Estado_Puesto(*)
+            )
+        `)
+        .eq('publicado_bool', true)
+        .order('etapa', { ascending: true })
+
+    if (error) throw error
+
+    const filas = (data || []) as unknown as Array<ConvocatoriaResultadoDatabase & { Puesto: PuestoDatabase }>
+    const resultadosConUrl = await Promise.all(
+        filas.map(async (resultado): Promise<ConvocatoriaResultadoPublico> => {
+            const [archivoUrl, descargaUrl] = await Promise.all([
+                obtenerUrlResultado(resultado.archivo_path),
+                obtenerUrlResultado(resultado.archivo_path, false, true),
+            ])
+            return { ...resultado, archivo_url: archivoUrl, descarga_url: descargaUrl }
+        }),
+    )
+
+    const porPuesto = new Map<string, ConvocatoriaPublica>()
+    for (const resultado of resultadosConUrl) {
+        if (!resultado.Puesto) continue
+        const actual = porPuesto.get(resultado.puest_id_int)
+        if (actual) {
+            actual.resultados.push(resultado)
+        } else {
+            porPuesto.set(resultado.puest_id_int, {
+                puesto: resultado.Puesto,
+                resultados: [resultado],
+            })
+        }
+    }
+
+    return Array.from(porPuesto.values()).sort((a, b) =>
+        new Date(b.puesto.puest_created_at_dt).getTime() - new Date(a.puesto.puest_created_at_dt).getTime(),
+    )
+}
+
+export { CONVOCATORIA_ETAPAS }

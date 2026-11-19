@@ -213,6 +213,32 @@ export interface PuestoDatabase {
   Estado_Puesto?: EstadoPuesto | null
 }
 
+export type ConvocatoriaEtapa = 1 | 2 | 3 | 4 | 5
+
+export interface ConvocatoriaResultadoDatabase {
+  resultado_id: string
+  puest_id_int: string
+  etapa: ConvocatoriaEtapa
+  titulo: string
+  archivo_path: string
+  archivo_nombre: string
+  publicado_bool: boolean
+  publicado_at_dt: string | null
+  created_at_dt: string
+  updated_at_dt: string
+  Puesto?: PuestoDatabase | null
+}
+
+export interface ConvocatoriaResultadoPublico extends ConvocatoriaResultadoDatabase {
+  archivo_url: string
+  descarga_url: string
+}
+
+export interface ConvocatoriaPublica {
+  puesto: PuestoDatabase
+  resultados: ConvocatoriaResultadoPublico[]
+}
+
 export interface PostulanteDatabase {
   post_id_int: string
   post_nom_vac: string | null

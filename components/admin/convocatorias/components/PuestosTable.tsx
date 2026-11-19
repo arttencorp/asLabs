@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, FileCheck2, Pencil, Trash2 } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { PuestosTableProps } from '../types'
@@ -21,6 +21,7 @@ export function PuestosTable({
   onEdit,
   onDelete,
   onToggleEstado,
+  onManageResults,
   onCambiarEstadoPostulacion,
   onEliminarPostulacion,
 }: PuestosTableProps) {
@@ -134,6 +135,13 @@ export function PuestosTable({
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => onManageResults(puesto)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 transition-colors duration-150 hover:bg-emerald-100 hover:text-emerald-800"
+                          title="Gestionar resultados"
+                        >
+                          <FileCheck2 className="h-4 w-4" />
+                        </button>
                         <button
                           onClick={() => onEdit(puesto)}
                           className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-colors duration-150"

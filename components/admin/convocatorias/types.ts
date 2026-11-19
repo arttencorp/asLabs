@@ -42,6 +42,7 @@ export interface PuestosTableProps {
   onEdit: (puesto: PuestoDatabase) => void
   onDelete: (id: string) => void
   onToggleEstado: (puesto: PuestoDatabase) => void
+  onManageResults: (puesto: PuestoDatabase) => void
   onCambiarEstadoPostulacion: (postId: string, nuevoEstado: string) => void
   onEliminarPostulacion: (postId: string) => void
 }
