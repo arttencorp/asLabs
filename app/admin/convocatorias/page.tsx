@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import {
@@ -7,11 +8,14 @@ import {
   PuestoFormDialog,
   PuestosTable,
   PuestosStats,
+  ResultadosDialog,
   type PuestoForm
 } from '@/components/admin/convocatorias'
 import { usePostulaciones } from '@/components/admin/postulaciones'
+import type { PuestoDatabase } from '@/types/database'
 
 export default function ConvocatoriasPage() {
+  const [puestoResultados, setPuestoResultados] = useState<PuestoDatabase | null>(null)
   const {
     items: puestos,
     estadoPuestoOptions,
@@ -114,6 +118,7 @@ export default function ConvocatoriasPage() {
         onEdit={openEditDialog}
         onDelete={handleDelete}
         onToggleEstado={handleToggleEstado}
+        onManageResults={setPuestoResultados}
         onCambiarEstadoPostulacion={handleCambiarEstado}
         onEliminarPostulacion={handleEliminar}
       />
@@ -128,6 +133,12 @@ export default function ConvocatoriasPage() {
         onSubmit={handleSubmit}
         loading={loading}
         error={error}
+      />
+
+      <ResultadosDialog
+        puesto={puestoResultados}
+        open={!!puestoResultados}
+        onOpenChange={(open) => !open && setPuestoResultados(null)}
       />
     </div>
   )
