@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, useReducedMotion } from "framer-motion"
@@ -40,7 +39,7 @@ const trustLogos = [
 const capabilities = [
   { code: "ANL", title: "Análisis fisicoquímicos y microbiológicos", description: "Agua, alimentos, ambiente, superficies y sanidad vegetal.", image: "/research/research-lab.png", href: "/servicios", icon: TestTubes },
   { code: "GEN", title: "Biología molecular y genómica", description: "PCR, identificación molecular, secuenciamiento y WGS.", image: "/new/bannerasnuevo.webp", href: "/excellent", icon: Dna },
-  { code: "CUL", title: "Cepas microbianas CULTIQ", description: "Colección identificada molecularmente y con trazabilidad.", image: "/cepas/identified/escherichia-coli.jpg", href: "/cepas/identificadas", icon: Microscope },
+  { code: "CUL", title: "Cepas microbianas CULTIQ", description: "Colección identificada molecularmente y con trazabilidad.", image: "/cepas/identified/escherichia-coli.png", href: "/cepas/identificadas", icon: Microscope },
   { code: "INV", title: "Plantines in vitro", description: "Material clonal uniforme y producido bajo control técnico.", image: "/new/HEADER.webp", href: "/plantines", icon: Sprout },
   { code: "SUP", title: "Kits, reactivos y medios de cultivo", description: "Suministros seleccionados para rutinas de laboratorio.", image: "/offer/insumosLab.jpeg", href: "/kits-reactivos", icon: FlaskConical },
   { code: "EQP", title: "Equipos de laboratorio", description: "Instrumentación y consumibles para investigación y control.", image: "/lab-equipment.png", href: "/kits-reactivos/equipos-de-laboratorio", icon: Gauge },
@@ -50,36 +49,9 @@ const capabilities = [
 
 const divisions = [
   { name: "exCELLent", label: "Molecular diagnostics", text: "Análisis moleculares, genómica e identificación para investigación y decisiones de alta precisión.", href: "/excellent", image: "/research/research-lab.png" },
-  { name: "CULTIQ", label: "Microbial culture collection", text: "Cepas identificadas molecularmente, trazables y preparadas para investigación aplicada.", href: "/cepas/identificadas", image: "/cepas/identified/escherichia-coli.jpg" },
+  { name: "CULTIQ", label: "Microbial culture collection", text: "Cepas identificadas molecularmente, trazables y preparadas para investigación aplicada.", href: "/cepas/identificadas", image: "/cepas/identified/escherichia-coli.png" },
   { name: "In Vitro Solutions", label: "Plant biotechnology", text: "Programas de propagación clonal para cultivos que necesitan uniformidad, sanidad y escala.", href: "/plantines", image: "/new/HEADER.webp" },
 ]
-
-function InteractiveDna({ reduceMotion }: { reduceMotion: boolean }) {
-  const [active, setActive] = useState(false)
-  const rungs = [
-    [46, 36, 104, 36], [25, 72, 125, 72], [20, 108, 130, 108], [40, 144, 110, 144],
-    [54, 180, 96, 180], [39, 216, 111, 216], [20, 252, 130, 252], [26, 288, 124, 288],
-    [47, 324, 103, 324],
-  ]
-
-  return (
-    <motion.div
-      aria-hidden="true"
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-      className="group absolute right-[5%] top-1/2 z-10 hidden h-[390px] w-[150px] -translate-y-1/2 cursor-crosshair lg:block"
-      animate={reduceMotion ? undefined : { y: active ? [-4, 4, -4] : [-2, 2, -2], scale: active ? 1.055 : 1 }}
-      transition={{ duration: active ? 2.4 : 5.5, repeat: Infinity, ease: "easeInOut" }}
-    >
-      <svg viewBox="0 0 150 360" className="h-full w-full overflow-visible drop-shadow-[0_0_22px_rgba(175,235,207,.2)]">
-        <motion.path d="M42 8 C142 52 142 96 42 136 C-16 160 -16 200 42 224 C142 264 142 308 42 352" fill="none" stroke={active ? "#e4b866" : "#b8d8c8"} strokeWidth="2" strokeLinecap="round" animate={reduceMotion ? undefined : { pathLength: active ? [0.72, 1, 0.72] : [0.9, 1, 0.9], opacity: active ? [0.55, 1, 0.55] : [0.35, 0.62, 0.35] }} transition={{ duration: active ? 1.9 : 4.8, repeat: Infinity, ease: "easeInOut" }} />
-        <motion.path d="M108 8 C8 52 8 96 108 136 C166 160 166 200 108 224 C8 264 8 308 108 352" fill="none" stroke={active ? "#7fe0ad" : "#6fa98d"} strokeWidth="2" strokeLinecap="round" animate={reduceMotion ? undefined : { pathLength: active ? [1, 0.72, 1] : [1, 0.9, 1], opacity: active ? [1, 0.55, 1] : [0.62, 0.35, 0.62] }} transition={{ duration: active ? 1.9 : 4.8, repeat: Infinity, ease: "easeInOut" }} />
-        {rungs.map(([x1, y1, x2, y2], index) => <motion.line key={y1} x1={x1} y1={y1} x2={x2} y2={y2} stroke={active ? (index % 2 ? "#d5a34f" : "#8ee3b7") : "rgba(255,255,255,.28)"} strokeWidth="1.25" animate={reduceMotion ? undefined : { opacity: active ? [0.35, 0.95, 0.35] : [0.18, 0.42, 0.18] }} transition={{ duration: active ? 1.25 : 3.8, repeat: Infinity, delay: index * 0.08 }} />)}
-      </svg>
-      <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap border-t px-3 pt-2 text-[8px] font-medium transition-colors ${active ? "border-[#d5a34f]/70 text-[#e7c982]" : "border-white/15 text-white/38"}`}>DNA · WGS · 16S</div>
-    </motion.div>
-  )
-}
 
 function EvidenceItem({ icon: Icon, title, children }: { icon: typeof BadgeCheck; title: string; children: React.ReactNode }) {
   return (
@@ -98,30 +70,25 @@ export default function ClientPage() {
       <Navbar overlay />
 
       <section data-navbar-theme="dark" className="relative min-h-[690px] overflow-hidden bg-[#062b22] text-white lg:min-h-[720px]">
-        <div className="home-lab-grid absolute inset-0 opacity-40" aria-hidden="true" />
-        <div className="relative mx-auto grid min-h-[690px] max-w-[1480px] lg:min-h-[720px] lg:grid-cols-[0.94fr_1.06fr]">
-          <div className="relative z-10 flex flex-col justify-center px-5 pb-44 pt-28 sm:px-8 lg:px-12 lg:pb-40 lg:pt-32 xl:px-16">
+        <motion.div initial={reduceMotion ? false : { opacity: 0, scale: 1.025 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0" aria-hidden="true">
+          <video className="h-full w-full object-cover object-center" autoPlay muted loop playsInline preload="auto">
+            <source src="/videos/aslabs-header-film-8s.mp4" type="video/mp4" />
+          </video>
+        </motion.div>
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(4,28,22,.9)_0%,rgba(4,28,22,.76)_23%,rgba(4,28,22,.38)_46%,rgba(4,28,22,.08)_70%,rgba(4,28,22,.03)_100%)] max-lg:bg-[linear-gradient(90deg,rgba(4,28,22,.9)_0%,rgba(4,28,22,.7)_58%,rgba(4,28,22,.28)_100%)]" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(3,24,19,.68)_0%,rgba(3,24,19,0)_32%,rgba(3,24,19,.12)_100%)]" aria-hidden="true" />
+        <div className="home-lab-grid absolute inset-0 opacity-20" aria-hidden="true" />
+        <div className="relative mx-auto flex min-h-[690px] max-w-[1480px] lg:min-h-[720px]">
+          <div className="relative z-10 flex w-full flex-col justify-center px-5 pb-44 pt-28 sm:px-8 lg:px-12 lg:pb-40 lg:pt-32 xl:px-16">
             <motion.div initial={reduceMotion ? false : { opacity: 0, x: -22 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }} className="max-w-[700px]">
               <div className="mb-6 flex items-center gap-3 text-[11px] font-medium text-[#b8d8c8]"><span className="h-2 w-2 bg-[#d5a34f]" aria-hidden="true" />Ciencia aplicada desde 1997<span className="h-px max-w-28 flex-1 bg-white/15" aria-hidden="true" /></div>
               <HomeRotatingHeadline />
-              <p className="mt-6 max-w-[580px] text-[13px] leading-6 text-white/66 sm:text-sm sm:leading-7">Integramos laboratorio, biotecnología vegetal, microbiología y genómica para convertir una muestra en una decisión técnica y una decisión en producción confiable.</p>
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Link href="#capacidades" className="group inline-flex h-11 items-center gap-3 bg-[#d5a34f] px-5 text-xs font-semibold text-[#10251e] transition-colors hover:bg-[#e4b866] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Explorar capacidades <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
                 <Link href="/servicios" className="inline-flex h-11 items-center border border-white/24 px-5 text-xs font-semibold text-white transition-colors hover:bg-white hover:text-[#062b22] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Ver servicios</Link>
               </div>
             </motion.div>
           </div>
-
-          <motion.div initial={reduceMotion ? false : { opacity: 0, scale: 1.025 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0 min-h-[410px] lg:relative lg:min-h-0">
-            <Image src="/new/HEADER.webp" alt="Laboratorio de biotecnología vegetal de AS Laboratorios" fill priority className="object-cover object-[58%_center] lg:object-center" sizes="(min-width:1024px) 55vw, 100vw" />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,43,34,.98)_0%,rgba(6,43,34,.88)_52%,rgba(6,43,34,.4)_100%)] lg:hidden" />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,#062b22_0%,rgba(6,43,34,.35)_18%,rgba(6,43,34,0)_48%)] max-lg:hidden" />
-            <div className="absolute inset-0 bg-[linear-gradient(0deg,#062b22_0%,rgba(6,43,34,0)_44%)] lg:bg-[linear-gradient(0deg,rgba(6,43,34,.72)_0%,rgba(6,43,34,0)_35%)]" />
-            <div className="absolute bottom-9 left-5 right-5 border-y border-white/25 bg-[#062b22]/68 px-4 py-3 backdrop-blur-md sm:left-8 sm:right-8 lg:bottom-12 lg:left-auto lg:right-10 lg:w-[330px]">
-              <div className="flex items-center justify-between gap-4"><div><p className="text-[9px] font-semibold text-[#b8d8c8]">Unidad activa</p><p className="mt-1 text-xs font-medium text-white">Biotecnología vegetal · Trujillo</p></div><span className="flex items-center gap-2 text-[9px] text-white/65"><span className="h-2 w-2 bg-[#6ed29b] shadow-[0_0_0_4px_rgba(110,210,155,.14)]" /> Operativa</span></div>
-            </div>
-            <InteractiveDna reduceMotion={Boolean(reduceMotion)} />
-          </motion.div>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 z-20 border-t border-white/15 bg-[#082f25]/94 backdrop-blur-lg">
