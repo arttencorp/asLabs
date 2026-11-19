@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { MoreExplorer } from "@/components/public/more-explorer"
 import Image from "next/image"
+import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -15,6 +16,7 @@ import {
   Building2,
   BookOpen,
   FileText,
+  FileCheck2,
   FlaskConical,
   Microscope,
   Leaf,
@@ -248,6 +250,9 @@ export default function TrabajaConNosotrosClient() {
               <a href="#estado" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/[0.1] px-6 py-3.5 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/[0.18]">
                 Consultar postulación <Search className="h-4 w-4" />
               </a>
+              <Link href="/trabaja-con-nosotros/resultados" className="inline-flex items-center gap-2 rounded-full border border-[#f1b35a]/55 bg-[#f1b35a]/10 px-6 py-3.5 text-sm font-bold text-[#ffd79d] backdrop-blur-md transition hover:bg-[#f1b35a]/20">
+                Resultados oficiales <FileCheck2 className="h-4 w-4" />
+              </Link>
             </div>
             <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-6 text-xs font-semibold text-white/60">
               <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4 text-[#a9d4b3]" /> Trujillo, La Libertad</span>
