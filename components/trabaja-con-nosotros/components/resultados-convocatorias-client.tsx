@@ -12,7 +12,8 @@ import {
   Loader2,
   MapPin,
 } from 'lucide-react'
-import { CONVOCATORIA_ETAPAS, obtenerConvocatoriasConResultadosPublicados } from '@/lib/supabase/convocatorias'
+import { CONVOCATORIA_ETAPAS } from '@/lib/convocatorias-resultados'
+import { obtenerConvocatoriasConResultadosPublicados } from '@/lib/convocatorias-publicas'
 import type { ConvocatoriaPublica } from '@/types/database'
 
 export default function ResultadosConvocatoriasClient() {
