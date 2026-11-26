@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   Beaker,
+  Microscope,
   ChevronLeft,
   ChevronRight,
   Dna,
@@ -89,14 +90,63 @@ export type CatalogPageConfig = {
   noticeTitle?: string;
 };
 
-const familyPages = [
-  {
-    scope: "medios",
-    label: "Medios de cultivo",
-    href: "/kits-reactivos/medios-de-cultivo",
-    description: "Agares y medios deshidratados",
-  },
+const catalogFamilies = [
+  [
+    "Biología molecular",
+    "PCR, qPCR, extracción y análisis",
+    "biologia-molecular",
+    "molecular",
+  ],
+  [
+    "Microbiología",
+    "Identificación y pruebas bacterianas",
+    "microbiologia",
+    "microbiologia",
+  ],
+  [
+    "Medios de cultivo",
+    "Agares y medios deshidratados",
+    "medios-de-cultivo",
+    "medios",
+  ],
+  [
+    "Equipos y consumibles",
+    "Instrumentos y materiales de laboratorio",
+    "equipos-consumibles",
+    "equipos",
+  ],
+  [
+    "Bacteriófagos",
+    "Mezclas y controles para investigación",
+    "bacteriofagos",
+    "bacteriofagos",
+  ],
+  [
+    "Equipos de laboratorio",
+    "50 referencias de importación",
+    "equipos-de-laboratorio",
+    "laboratorio",
+  ],
 ] as const;
+
+const heroHighlights = [
+  { icon: Dna, title: "Biología molecular", text: "PCR, qPCR y extracción" },
+  {
+    icon: Microscope,
+    title: "Microbiología",
+    text: "Identificación y cultivo",
+  },
+  {
+    icon: Beaker,
+    title: "Equipamiento",
+    text: "Instrumentación y consumibles",
+  },
+  {
+    icon: MessageCircle,
+    title: "Asesoría técnica",
+    text: "Selección por aplicación",
+  },
+];
 
 function matchesCategory(product: MolecularProduct, selected: string) {
   if (selected === "Todos") return true;
@@ -135,20 +185,20 @@ function ProductCard({
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.42, delay: Math.min(index * 0.045, 0.25) }}
       whileHover={{ y: -5 }}
-      className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#dfe9e2] bg-white shadow-[0_10px_28px_rgba(8,48,33,.05)] transition-shadow hover:shadow-[0_16px_36px_rgba(8,48,33,.11)]"
+      className="group flex h-full flex-col overflow-hidden border border-[#cfd9d2] bg-white transition-colors hover:border-[#8eaa99]"
     >
-      <div className="relative h-32 overflow-hidden border-b border-[#edf1ee] bg-white sm:h-36">
+      <div className="relative h-36 overflow-hidden border-b border-[#e2e8e3] bg-[#fafcfb] sm:h-40">
         <Image
           src={product.image}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-contain p-3 transition duration-500 group-hover:scale-[1.04]"
+          className="object-contain p-4 transition duration-500 group-hover:scale-[1.025]"
         />
-        <span className="absolute left-3 top-3 rounded-full border border-[#dfe9e2] bg-white/95 px-2.5 py-1 text-[8px] font-bold uppercase tracking-[.08em] text-[#285d42] shadow-sm backdrop-blur-md">
+        <span className="absolute left-3 top-3 border border-[#d9e2dc] bg-white/[.92] px-2.5 py-1 text-[8px] font-semibold text-[#285d42] backdrop-blur-md">
           {product.category}
         </span>
-        <span className="absolute bottom-2.5 right-2.5 rounded-full bg-[#123e2d] px-2.5 py-1 text-[8px] font-bold text-white">
+        <span className="absolute bottom-2.5 right-2.5 bg-[#123e2d] px-2.5 py-1 text-[8px] font-semibold text-white">
           {product.catalogNumber}
         </span>
         {product.researchUseOnly && (
@@ -158,11 +208,11 @@ function ProductCard({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <p className="text-[11px] font-bold uppercase tracking-[.14em] text-[#4d7d60]">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <p className="text-[9px] font-semibold text-[#4d7d60]">
           {product.brand}
         </p>
-        <h2 className="mt-1.5 line-clamp-2 text-base font-bold leading-5 tracking-[-.02em] text-[#123e2d]">
+        <h2 className="mt-1.5 line-clamp-2 text-[14px] font-semibold leading-5 tracking-[-.015em] text-[#123e2d]">
           {product.name}
         </h2>
         <p className="mt-2 line-clamp-1 text-[10px] font-medium text-[#77877e]">
@@ -173,11 +223,11 @@ function ProductCard({
           <div>
             {price !== null ? (
               <>
-                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">
+                <p className="text-[8px] font-semibold text-[#718279]">
                   Precio referencial
                   {product.priceBasis ? ` · ${product.priceBasis}` : ""}
                 </p>
-                <p className="mt-0.5 text-lg font-black tracking-[-.03em] text-[#0b4a33]">
+                <p className="mt-0.5 text-lg font-semibold tracking-[-.03em] text-[#0b4a33]">
                   {product.priceBasis ? money(price) : `Desde ${money(price)}`}{" "}
                   {product.taxNote && (
                     <span className="text-[10px] font-bold text-[#5f7569]">
@@ -193,7 +243,7 @@ function ProductCard({
               </>
             ) : (
               <>
-                <p className="text-[9px] font-semibold uppercase tracking-[.08em] text-[#718279]">
+                <p className="text-[8px] font-semibold text-[#718279]">
                   Precio
                 </p>
                 <p className="mt-0.5 text-sm font-black tracking-[-.02em] text-[#0b4a33]">
@@ -205,14 +255,14 @@ function ProductCard({
           <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
               href={`/kits-reactivos/${product.id}`}
-              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-[#ceded3] px-2 text-[11px] font-bold text-[#285b41] transition hover:border-[#8eb19d] hover:bg-[#eff6f1]"
+              className="inline-flex min-h-9 items-center justify-center gap-1.5 border border-[#ceded3] px-2 text-[10px] font-semibold text-[#285b41] transition hover:border-[#8eb19d] hover:bg-[#eff6f1]"
             >
               Ver ficha <ArrowRight className="h-3.5 w-3.5" />
             </Link>
             {product.presentationOptions?.length ? (
               <Link
                 href={`/kits-reactivos/${product.id}`}
-                className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
+                className="inline-flex min-h-9 items-center justify-center gap-1.5 bg-[#14744d] px-2 text-[10px] font-semibold text-white transition hover:bg-[#0f5e3e]"
               >
                 <SlidersHorizontal className="h-4 w-4" /> Elegir
               </Link>
@@ -220,7 +270,7 @@ function ProductCard({
               <button
                 type="button"
                 onClick={() => onAdd(product)}
-                className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg bg-[#14744d] px-2 text-[11px] font-bold text-white shadow-md shadow-[#14744d]/15 transition hover:-translate-y-0.5 hover:bg-[#0f5e3e]"
+                className="inline-flex min-h-9 items-center justify-center gap-1.5 bg-[#14744d] px-2 text-[10px] font-semibold text-white transition hover:bg-[#0f5e3e]"
               >
                 <ShoppingCart className="h-4 w-4" />{" "}
                 {price !== null ? "Añadir" : "Cotizar"}
@@ -621,9 +671,11 @@ export default function KitsReactivosClient({
     (sum, quantity) => sum + quantity,
     0,
   );
-  const catalogPath = pageConfig
-    ? (familyPages.find((item) => item.scope === pageConfig.scope)?.href ??
-      "/kits-reactivos")
+  const currentFamily = catalogFamilies.find(
+    ([, , , scope]) => scope === pageConfig?.scope,
+  );
+  const catalogPath = currentFamily
+    ? `/kits-reactivos/${currentFamily[2]}`
     : "/kits-reactivos";
   const paginationHref = (page: number) =>
     `${catalogPath}${page > 1 ? `?pagina=${page}` : ""}#catalog-results`;
@@ -631,35 +683,27 @@ export default function KitsReactivosClient({
   return (
     <>
       <Navbar overlay />
-      <main className="overflow-hidden bg-[#f4f7f4] text-[#173f2d]">
+      <main className="overflow-x-clip bg-[#f4f6f3] text-[#173f2d]">
         <section
           data-navbar-theme="dark"
           className="relative isolate overflow-hidden bg-[#062b22] pb-12 pt-28 text-white sm:pt-32 lg:pb-14"
         >
-          <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_15%,rgba(76,195,132,.23),transparent_32%),linear-gradient(115deg,#05251b_0%,#0b4934_60%,#133b2e_100%)]" />
           <Image
             src={pageConfig?.image ?? "/lab-scientists.png"}
             alt={pageConfig?.title ?? "Kits y reactivos para laboratorio"}
             fill
             priority
-            className="-z-10 object-cover object-center opacity-25 mix-blend-luminosity"
+            className="-z-20 object-cover object-center opacity-[.38]"
           />
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(4,30,21,.97)_0%,rgba(4,30,21,.83)_55%,rgba(4,30,21,.34)_100%)]" />
-          <motion.div
-            aria-hidden="true"
-            className="absolute -right-16 top-12 h-52 w-52 rounded-full border border-white/10"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-          >
-            <span className="absolute left-8 top-1 h-3 w-3 rounded-full bg-[#c2f2cd] shadow-[0_0_24px_rgba(194,242,205,.7)]" />
-          </motion.div>
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(4,28,22,.97)_0%,rgba(4,28,22,.86)_45%,rgba(4,28,22,.36)_100%)]" />
+          <div className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:72px_72px]" />
 
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative mx-auto grid max-w-[1360px] gap-8 px-5 sm:px-8 lg:grid-cols-[1fr_420px] lg:items-end">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="max-w-4xl"
+              className="max-w-3xl"
             >
               {pageConfig && (
                 <nav
@@ -675,67 +719,82 @@ export default function KitsReactivosClient({
                   </span>
                 </nav>
               )}
-              <div className="inline-flex items-center gap-2 border border-white/20 bg-white/10 px-3 py-1.5 text-[9px] font-bold tracking-[.12em] text-[#d9f7df] backdrop-blur-md">
-                <HeroIcon className="h-3.5 w-3.5" />{" "}
+              <div className="flex items-center gap-3 text-[10px] font-medium text-[#b7d4c5]">
+                <HeroIcon className="h-3.5 w-3.5" />
                 {pageConfig?.eyebrow ?? "Suministros científicos"}
+                <span className="h-px w-24 bg-white/15" />
               </div>
-              <h1 className="mt-4 max-w-4xl text-balance text-4xl font-medium leading-[1.02] tracking-[-.045em] sm:text-6xl">
+              <h1 className="mt-5 max-w-3xl text-balance text-[clamp(2.3rem,4.4vw,4.5rem)] font-medium leading-[.99] tracking-[-.05em]">
                 {pageConfig?.title ??
                   "Kits, reactivos y equipos para trabajo científico."}
               </h1>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/72">
+              <p className="mt-5 max-w-2xl text-xs leading-6 text-white/68 sm:text-sm">
                 {pageConfig?.description ??
                   "Referencias para biología molecular, microbiología, cultivo, identificación y equipamiento de laboratorio con asesoría técnica."}
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-2.5">
+              <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a
                   href="#catalogo"
-                  className="inline-flex min-h-11 items-center gap-2 bg-[#efaa4a] px-5 text-xs font-bold text-[#173428] transition hover:bg-[#ffc875]"
+                  className="inline-flex min-h-10 items-center gap-2 bg-[#d5a34f] px-5 text-xs font-semibold text-[#173428] transition hover:bg-[#e4b866]"
                 >
                   Explorar catálogo <ArrowRight className="h-3.5 w-3.5" />
                 </a>
+                {!pageConfig && (
+                  <WhatsAppContact
+                    message="Hola, quisiera asesoría para elegir un kit de extracción de ADN."
+                    className="inline-flex min-h-10 items-center gap-2 border border-white/[.22] px-5 text-xs font-semibold text-white transition hover:bg-white hover:text-[#062b22]"
+                  >
+                    <Dna className="h-3.5 w-3.5" /> Extracción de ADN
+                  </WhatsAppContact>
+                )}
               </div>
             </motion.div>
-          </div>
-        </section>
-
-        {!pageConfig && (
-          <section className="scroll-mt-20 bg-white py-12 sm:py-16">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="grid border-l border-t border-[#cfd9d2] sm:grid-cols-2 lg:grid-cols-4">
-                {[
-                  ["Biología molecular", "PCR, qPCR, extracción y análisis"],
-                  ["Microbiología", "Identificación y pruebas bacterianas"],
-                  ["Medios de cultivo", "Agares y medios deshidratados"],
-                  [
-                    "Equipos y consumibles",
-                    "Instrumentos y materiales de laboratorio",
-                  ],
-                  ["Bacteriófagos", "Mezclas y controles para investigación"],
-                  ["Equipos de laboratorio", "50 referencias de importación"],
-                  ["Asesoría técnica", "Selección por aplicación"],
-                ].map(([title, copy]) => (
-                  <article
+            {!pageConfig && (
+              <div className="hidden border-l border-t border-white/[.18] lg:grid lg:grid-cols-2">
+                {heroHighlights.map(({ icon: Icon, title, text }) => (
+                  <div
                     key={title}
-                    className="min-h-[150px] border-b border-r border-[#cfd9d2] p-5"
+                    className="min-h-[130px] border-b border-r border-white/[.18] p-5"
                   >
-                <p className="text-sm font-semibold">{title}</p>
-                    <p className="mt-2 text-xs leading-5 text-[#687970]">
-                      {copy}
+                    <Icon className="h-5 w-5 text-[#b7d4c5]" />
+                    <p className="mt-7 text-xs font-medium text-white">
+                      {title}
                     </p>
-                  </article>
+                    <p className="mt-1 text-[9px] text-white/45">{text}</p>
+                  </div>
                 ))}
               </div>
-            </div>
-          </section>
-        )}
+            )}
+          </div>
+        </section>
 
         <section
           id="catalogo"
           data-navbar-theme="light"
-          className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
+          className="scroll-mt-20 py-12 sm:py-16"
         >
-          <div>
+          <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
+            {!pageConfig && (
+              <nav
+                aria-label="Familias del catálogo"
+                className="grid border-l border-t border-[#cfd9d2] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
+              >
+                {catalogFamilies.map(([title, description, slug]) => (
+                  <Link
+                    key={slug}
+                    href={`/kits-reactivos/${slug}`}
+                    className="group min-h-[76px] border-b border-r border-[#cfd9d2] bg-white px-4 py-3 text-[#264b39] transition hover:bg-[#eef3ef]"
+                  >
+                    <span className="block text-[10px] font-semibold leading-4 text-[#176844]">
+                      {title}
+                    </span>
+                    <span className="mt-1 block text-[8px] leading-3 text-[#718178]">
+                      {description}
+                    </span>
+                  </Link>
+                ))}
+              </nav>
+            )}
             {pageConfig?.notice && (
               <div
                 role="note"
@@ -750,29 +809,30 @@ export default function KitsReactivosClient({
                 </p>
               </div>
             )}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="mt-9 flex flex-col gap-4 border-b border-[#cbd5ce] pb-6 sm:flex-row sm:items-end sm:justify-between">
               <div className="max-w-2xl">
-                <p className="text-[9px] font-bold uppercase tracking-[.18em] text-[#4e7c61]">
-                  Catálogo AS Laboratorios
+                <p className="text-[10px] font-semibold text-[#0b7a55]">
+                  Índice de suministros
                 </p>
-                <h2 className="mt-1 text-2xl font-bold tracking-[-.03em] sm:text-3xl">
+                <h2 className="mt-2 text-[clamp(1.9rem,3vw,3.1rem)] font-medium tracking-[-.04em]">
                   Encuentra la referencia adecuada.
                 </h2>
                 <p className="mt-2 text-xs leading-5 text-[#687970]">
-                  Cotización validada según presentación, stock e importación.
+                  Filtra por aplicación, categoría o marca y revisa la ficha
+                  técnica antes de cotizar.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <WhatsAppContact
                   message="Hola, quisiera asesoría para elegir un kit, reactivo o medio de cultivo."
-                  className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full border border-[#b8cfc0] bg-white px-5 text-sm font-bold text-[#176844] shadow-sm transition hover:-translate-y-0.5 hover:border-[#76a88b]"
+                  className="inline-flex min-h-10 items-center justify-center gap-2 border border-[#b8cfc0] bg-white px-4 text-[11px] font-semibold text-[#176844] transition hover:border-[#76a88b]"
                 >
-                  <MessageCircle className="h-4 w-4" /> WhatsApp
+                  <MessageCircle className="h-4 w-4" /> Asesoría
                 </WhatsAppContact>
                 <button
                   type="button"
                   onClick={() => setCartOpen(true)}
-                  className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#173f2d] px-5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5"
+                  className="inline-flex min-h-10 items-center justify-center gap-2 bg-[#173f2d] px-4 text-[11px] font-semibold text-white"
                 >
                   <ShoppingCart className="h-4 w-4" /> Pedido{" "}
                   {itemCount > 0 && (
@@ -784,189 +844,216 @@ export default function KitsReactivosClient({
               </div>
             </div>
 
-            <div className="mt-5 rounded-[20px] border border-[#dce7df] bg-white p-3 shadow-sm">
-              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[minmax(260px,1fr)_220px_200px_170px]">
-                <label className="relative block">
-                  <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" />
-                  <span className="sr-only">Buscar producto</span>
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Buscar producto, marca o código…"
-                    className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-11 pr-4 text-sm font-medium outline-none transition focus:border-[#72a387] focus:ring-4 focus:ring-[#72a387]/10"
-                  />
-                </label>
-                <label>
-                  <span className="sr-only">Filtrar por categoría</span>
-                  <select
-                    value={category}
-                    onChange={(event) => setCategory(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"
-                  >
-                    <option
-                      value={pageConfig ? `grupo:${pageConfig.scope}` : "Todos"}
-                    >
-                      {pageConfig
-                        ? `Toda la familia: ${familyPages.find((item) => item.scope === pageConfig.scope)?.label}`
-                        : "Todas las categorías"}
-                    </option>
-                    {!pageConfig && (
-                      <optgroup label="Familias principales">
-                        <option value="grupo:molecular">
-                          Biología molecular
-                        </option>
-                        <option value="grupo:microbiologia">
-                          Microbiología
-                        </option>
-                        <option value="grupo:medios">Medios de cultivo</option>
-                        <option value="grupo:equipos">
-                          Equipos y consumibles
-                        </option>
-                        <option value="grupo:bacteriofagos">
-                          Bacteriófagos
-                        </option>
-                        <option value="grupo:laboratorio">
-                          Equipos de laboratorio
-                        </option>
-                      </optgroup>
-                    )}
-                    <optgroup label="Categorías específicas">
-                      {scopedCategories.map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))}
-                    </optgroup>
-                  </select>
-                </label>
-                <label className="relative">
-                  <span className="sr-only">Filtrar por marca</span>
-                  <SlidersHorizontal className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6c7f74]" />
-                  <select
-                    value={brand}
-                    onChange={(event) => setBrand(event.target.value)}
-                    className="h-11 w-full appearance-none rounded-xl border border-[#dfe8e2] bg-[#f8faf8] pl-10 pr-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"
-                  >
-                    <option value="Todas">Todas las marcas</option>
-                    {brandFilterOptions.slice(1).map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  <span className="sr-only">Ordenar productos</span>
-                  <select
-                    value={sort}
-                    onChange={(event) => setSort(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-[#dfe8e2] bg-[#f8faf8] px-3 text-xs font-bold text-[#385344] outline-none focus:border-[#72a387]"
-                  >
-                    <option value="featured">Destacados</option>
-                    <option value="name">Nombre A–Z</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-
-            <div
-              id="catalog-results"
-              className="mt-4 scroll-mt-28 flex items-center justify-between"
-            >
-              <p className="text-sm font-bold text-[#385344]">
-                {filtered.length}{" "}
-                {filtered.length === 1 ? "resultado" : "resultados"}
-              </p>
-              <span className="text-[10px] font-semibold text-[#829087]">
-                Página {currentPage} de {pageCount}
-              </span>
-            </div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              <AnimatePresence mode="popLayout">
-                {pageProducts.map((product, index) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    index={index}
-                    onAdd={add}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-            {filtered.length > PAGE_SIZE && (
-              <nav
-                aria-label="Paginación del catálogo"
-                className="mt-9 flex flex-wrap items-center justify-center gap-2"
+            <div className="mt-6 grid gap-7 lg:grid-cols-[250px_1fr]">
+              <aside
+                className="h-fit border border-[#cfd9d2] bg-white lg:sticky lg:top-24"
+                aria-label="Filtros del catálogo"
               >
-                {currentPage === 1 ? (
-                  <span
-                    aria-disabled="true"
-                    className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] opacity-35"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </span>
-                ) : (
-                  <Link
-                    href={paginationHref(currentPage - 1)}
-                    onClick={() => goToPage(currentPage - 1)}
-                    aria-label="Página anterior"
-                    className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1]"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Link>
-                )}
-                {pageItems.map((page, index) => (
-                  <div key={page} className="contents">
-                    {index > 0 && pageItems[index - 1] !== page - 1 && (
-                      <span className="px-1 text-[#8b9b91]">…</span>
-                    )}
-                    <Link
-                      href={paginationHref(page)}
-                      onClick={() => goToPage(page)}
-                      aria-current={page === currentPage ? "page" : undefined}
-                      className={`grid h-10 min-w-10 place-items-center rounded-xl px-3 text-xs font-bold transition ${page === currentPage ? "bg-[#14744d] text-white shadow-md shadow-[#14744d]/20" : "border border-[#ceded3] bg-white text-[#486052] hover:border-[#78a48a] hover:bg-[#eff6f1]"}`}
+                <div className="flex items-center gap-2 border-b border-[#dce3de] px-4 py-4">
+                  <SlidersHorizontal className="h-4 w-4 text-[#176844]" />
+                  <p className="text-[11px] font-semibold text-[#243a2f]">
+                    Filtrar catálogo
+                  </p>
+                </div>
+                <div className="space-y-4 p-4">
+                  <label className="block">
+                    <span className="mb-1.5 block text-[9px] font-medium text-[#67776e]">
+                      Buscar referencia
+                    </span>
+                    <span className="relative block">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6c7f74]" />
+                      <input
+                        value={query}
+                        onChange={(event) => setQuery(event.target.value)}
+                        placeholder="Producto, marca o código"
+                        className="h-10 w-full border border-[#dfe8e2] bg-[#f8faf8] pl-9 pr-3 text-[11px] outline-none transition focus:border-[#72a387]"
+                      />
+                    </span>
+                  </label>
+                  <label>
+                    <span className="mb-1.5 block text-[9px] font-medium text-[#67776e]">
+                      Categoría
+                    </span>
+                    <select
+                      value={category}
+                      onChange={(event) => setCategory(event.target.value)}
+                      className="h-10 w-full border border-[#dfe8e2] bg-[#f8faf8] px-3 text-[10px] font-medium text-[#385344] outline-none focus:border-[#72a387]"
                     >
-                      {page}
-                    </Link>
-                  </div>
-                ))}
-                {currentPage === pageCount ? (
-                  <span
-                    aria-disabled="true"
-                    className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] opacity-35"
-                  >
-                    <ChevronRight className="h-4 w-4" />
+                      <option
+                        value={
+                          pageConfig ? `grupo:${pageConfig.scope}` : "Todos"
+                        }
+                      >
+                        {pageConfig
+                          ? `Toda la familia: ${currentFamily?.[0]}`
+                          : "Todas las categorías"}
+                      </option>
+                      {!pageConfig && (
+                        <optgroup label="Familias principales">
+                          <option value="grupo:molecular">
+                            Biología molecular
+                          </option>
+                          <option value="grupo:microbiologia">
+                            Microbiología
+                          </option>
+                          <option value="grupo:medios">
+                            Medios de cultivo
+                          </option>
+                          <option value="grupo:equipos">
+                            Equipos y consumibles
+                          </option>
+                          <option value="grupo:bacteriofagos">
+                            Bacteriófagos
+                          </option>
+                          <option value="grupo:laboratorio">
+                            Equipos de laboratorio
+                          </option>
+                        </optgroup>
+                      )}
+                      <optgroup label="Categorías específicas">
+                        {scopedCategories.map((item) => (
+                          <option key={item} value={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </select>
+                  </label>
+                  <label className="relative">
+                    <span className="mb-1.5 block text-[9px] font-medium text-[#67776e]">
+                      Marca
+                    </span>
+                    <select
+                      value={brand}
+                      onChange={(event) => setBrand(event.target.value)}
+                      className="h-10 w-full border border-[#dfe8e2] bg-[#f8faf8] px-3 text-[10px] font-medium text-[#385344] outline-none focus:border-[#72a387]"
+                    >
+                      <option value="Todas">Todas las marcas</option>
+                      {brandFilterOptions.slice(1).map((item) => (
+                        <option key={item}>{item}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span className="mb-1.5 block text-[9px] font-medium text-[#67776e]">
+                      Orden
+                    </span>
+                    <select
+                      value={sort}
+                      onChange={(event) => setSort(event.target.value)}
+                      className="h-10 w-full border border-[#dfe8e2] bg-[#f8faf8] px-3 text-[10px] font-medium text-[#385344] outline-none focus:border-[#72a387]"
+                    >
+                      <option value="featured">Destacados</option>
+                      <option value="name">Nombre A–Z</option>
+                    </select>
+                  </label>
+                </div>
+                <div className="border-t border-[#dce3de] p-4">
+                  <p className="text-[9px] leading-4 text-[#76857c]">
+                    La presentación, stock y condiciones de importación se
+                    validan antes de confirmar el pedido.
+                  </p>
+                </div>
+              </aside>
+              <div className="min-w-0">
+                <div
+                  id="catalog-results"
+                  className="scroll-mt-28 flex items-center justify-between border-b border-[#d7dfd9] pb-3"
+                >
+                  <p className="text-[11px] font-semibold text-[#385344]">
+                    {filtered.length}{" "}
+                    {filtered.length === 1 ? "resultado" : "resultados"}
+                  </p>
+                  <span className="text-[9px] font-medium text-[#829087]">
+                    Página {currentPage} de {pageCount}
                   </span>
-                ) : (
-                  <Link
-                    href={paginationHref(currentPage + 1)}
-                    onClick={() => goToPage(currentPage + 1)}
-                    aria-label="Página siguiente"
-                    className="grid h-10 w-10 place-items-center rounded-xl border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1]"
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  <AnimatePresence mode="popLayout">
+                    {pageProducts.map((product, index) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        index={index}
+                        onAdd={add}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </div>
+                {filtered.length > PAGE_SIZE && (
+                  <nav
+                    aria-label="Paginación del catálogo"
+                    className="mt-9 flex flex-wrap items-center justify-center gap-1.5"
                   >
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
+                    {currentPage === 1 ? (
+                      <span
+                        aria-disabled="true"
+                        className="grid h-9 w-9 place-items-center border border-[#ceded3] bg-white text-[#285b41] opacity-35"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </span>
+                    ) : (
+                      <Link
+                        href={paginationHref(currentPage - 1)}
+                        onClick={() => goToPage(currentPage - 1)}
+                        aria-label="Página anterior"
+                        className="grid h-9 w-9 place-items-center border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1]"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Link>
+                    )}
+                    {pageItems.map((page, index) => (
+                      <div key={page} className="contents">
+                        {index > 0 && pageItems[index - 1] !== page - 1 && (
+                          <span className="px-1 text-[#8b9b91]">…</span>
+                        )}
+                        <Link
+                          href={paginationHref(page)}
+                          onClick={() => goToPage(page)}
+                          aria-current={
+                            page === currentPage ? "page" : undefined
+                          }
+                          className={`grid h-9 min-w-9 place-items-center px-3 text-xs font-semibold transition ${page === currentPage ? "bg-[#14744d] text-white" : "border border-[#ceded3] bg-white text-[#486052] hover:border-[#78a48a] hover:bg-[#eff6f1]"}`}
+                        >
+                          {page}
+                        </Link>
+                      </div>
+                    ))}
+                    {currentPage === pageCount ? (
+                      <span
+                        aria-disabled="true"
+                        className="grid h-9 w-9 place-items-center border border-[#ceded3] bg-white text-[#285b41] opacity-35"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </span>
+                    ) : (
+                      <Link
+                        href={paginationHref(currentPage + 1)}
+                        onClick={() => goToPage(currentPage + 1)}
+                        aria-label="Página siguiente"
+                        className="grid h-9 w-9 place-items-center border border-[#ceded3] bg-white text-[#285b41] transition hover:border-[#78a48a] hover:bg-[#eff6f1]"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Link>
+                    )}
+                  </nav>
                 )}
-              </nav>
-            )}
-            {!filtered.length && (
-              <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center">
-                <Search className="mx-auto h-8 w-8 text-[#84a08f]" />
-                <h3 className="mt-4 text-lg font-bold">
-                  No encontramos esa referencia
-                </h3>
-                <p className="mt-2 text-sm text-[#74857b]">
-                  Prueba con otro término o solicita una búsqueda especial.
-                </p>
-              </div>
-            )}
+                {!filtered.length && (
+                  <div className="mt-5 rounded-[28px] border border-dashed border-[#cbd9cf] bg-white px-6 py-16 text-center">
+                    <Search className="mx-auto h-8 w-8 text-[#84a08f]" />
+                    <h3 className="mt-4 text-lg font-bold">
+                      No encontramos esa referencia
+                    </h3>
+                    <p className="mt-2 text-sm text-[#74857b]">
+                      Prueba con otro término o solicita una búsqueda especial.
+                    </p>
+                  </div>
+                )}
 
-            <div className="mt-8 rounded-[26px] border border-[#ead9ba] bg-[#fff9ee] p-5 text-sm leading-6 text-[#715b35]">
-              <div className="flex gap-3">
-                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#9d6a1e]" />
-                <p>
-                  <strong>Precios referenciales desde.</strong> Cada ficha
-                  agrupa sus variables sin asignarles un precio individual. Un
-                  asesor confirmará presentación, impuestos, stock, cadena de
-                  frío y condiciones de importación antes de cualquier pedido.
+                <p className="mt-7 border-l-2 border-[#d5a34f] bg-[#fff9ee] px-4 py-3 text-[10px] leading-5 text-[#715b35]">
+                  <strong>Precios referenciales desde.</strong> Un asesor
+                  confirmará presentación, impuestos, stock, cadena de frío y
+                  condiciones de importación.
                 </p>
               </div>
             </div>
@@ -1014,9 +1101,9 @@ export default function KitsReactivosClient({
 
         <section
           data-navbar-theme="dark"
-          className="bg-[#0b3225] px-4 py-16 text-white sm:py-20"
+          className="bg-[#062b22] px-5 py-14 text-white sm:px-8 sm:py-16"
         >
-          <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mx-auto grid max-w-[1360px] border-l border-t border-white/15 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: Beaker,
@@ -1044,11 +1131,11 @@ export default function KitsReactivosClient({
             ].map((item) => (
               <article
                 key={item.title}
-                className="rounded-[26px] border border-white/10 bg-white/[.06] p-5"
+                className="min-h-[170px] border-b border-r border-white/15 p-5 sm:p-6"
               >
-                <item.icon className="h-5 w-5 text-[#bfe9c8]" />
-                <h3 className="mt-5 font-bold">{item.title}</h3>
-                <p className="mt-2 text-xs leading-5 text-white/55">
+                <item.icon className="h-5 w-5 text-[#d5a34f]" />
+                <h3 className="mt-7 text-sm font-medium">{item.title}</h3>
+                <p className="mt-2 text-[10px] leading-5 text-white/52">
                   {item.text}
                 </p>
               </article>
